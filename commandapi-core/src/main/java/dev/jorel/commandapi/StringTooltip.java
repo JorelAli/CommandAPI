@@ -21,7 +21,6 @@
 package dev.jorel.commandapi;
 
 import com.mojang.brigadier.Message;
-import dev.jorel.commandapi.abstractions.AbstractTooltip;
 
 import java.util.Arrays;
 import java.util.Collection;

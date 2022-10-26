@@ -1,8 +1,6 @@
 package dev.jorel.commandapi.commandsenders;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
-import dev.jorel.commandapi.abstractions.AbstractPlayer;
-
 public class SpongePlayer extends AbstractPlayer<ServerPlayer> implements SpongeCommandSender<ServerPlayer> {
 
 	private final ServerPlayer player;

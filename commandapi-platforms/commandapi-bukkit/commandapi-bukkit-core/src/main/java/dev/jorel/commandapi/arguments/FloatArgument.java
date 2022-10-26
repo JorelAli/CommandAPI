@@ -20,20 +20,24 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument extends AbstractFloatArgument<FloatArgument, CommandSender> implements BukkitExecutable<FloatArgument> {
+public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
 	/**
 	 * A float argument
 	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FloatArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, FloatArgumentType.floatArg(), String::valueOf);
 	}
 
 	/**
@@ -43,7 +47,7 @@ public class FloatArgument extends AbstractFloatArgument<FloatArgument, CommandS
 	 * @param min      The minimum value this argument can take (inclusive)
 	 */
 	public FloatArgument(String nodeName, float min) {
-		super(nodeName, min);
+		super(nodeName, FloatArgumentType.floatArg(min), String::valueOf);
 	}
 
 	/**
@@ -54,6 +58,25 @@ public class FloatArgument extends AbstractFloatArgument<FloatArgument, CommandS
 	 * @param max      The maximum value this argument can take (inclusive)
 	 */
 	public FloatArgument(String nodeName, float min, float max) {
-		super(nodeName, min, max);
+		super(nodeName, FloatArgumentType.floatArg(min, max), String::valueOf);
+		if (max < min) {
+			throw new InvalidRangeException();
+		}
+	}
+
+	@Override
+	public Class<Float> getPrimitiveType() {
+		return float.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_FLOAT;
+	}
+
+	@Override
+	public <Source> Float parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform,
+										CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

@@ -23,11 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractArgumentTree;
-import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfo;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import dev.jorel.commandapi.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,9 +36,10 @@ import java.util.function.Predicate;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  * @param <Impl> The class extending this class, used as the return type for chain calls
+ * @param <Argument> The implementation of Argument used by the class extending this class
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>, CommandSender> extends AbstractArgumentTree<Impl, CommandSender> {
+public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl, Argument, CommandSender>, Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends AbstractArgumentTree<Impl, Argument, CommandSender> {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -72,7 +69,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @param nodeName the name to assign to this argument node
 	 * @param rawType  the NMS or brigadier type to be used for this argument
 	 */
-	protected Argument(String nodeName, ArgumentType<?> rawType) {
+	protected AbstractArgument(String nodeName, ArgumentType<?> rawType) {
 		this.nodeName = nodeName;
 		this.rawType = rawType;
 	}
@@ -108,7 +105,7 @@ public abstract class Argument<T, Impl extends Argument<T, Impl, CommandSender>,
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <Source> T parseArgument(AbstractPlatform<CommandSender, Source> platform,
+	public abstract <Source> T parseArgument(AbstractPlatform<Argument, CommandSender, Source> platform,
 											 CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////

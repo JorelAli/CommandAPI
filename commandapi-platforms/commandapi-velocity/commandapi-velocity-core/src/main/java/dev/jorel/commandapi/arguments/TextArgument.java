@@ -20,62 +20,38 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.exceptions.InvalidRangeException;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.AbstractPlatform;
 
 /**
- * An argument that represents primitive Java longs
+ * An argument that represents text, encased in quotes
  */
-public abstract class AbstractLongArgument<Impl extends AbstractLongArgument<Impl, CommandSender>,CommandSender> extends SafeOverrideableArgument<Long, Long, Impl, CommandSender> {
+public class TextArgument extends Argument<String> {
+	/**
+	 * A string argument for one word, or multiple words encased in quotes
+	 *
+	 * @param nodeName the name of the node for this argument
+	 */
+	public TextArgument(String nodeName) {
+		super(nodeName, StringArgumentType.string());
+	}
 
-	/**
-	 * A long argument
-	 * @param nodeName the name of the node for this argument
-	 */
-	public AbstractLongArgument(String nodeName) {
-		super(nodeName, LongArgumentType.longArg(), String::valueOf);
-	}
-	
-	/**
-	 * A long argument with a minimum value
-	 * @param nodeName the name of the node for this argument
-	 * @param value The minimum value this argument can take (inclusive)
-	 */
-	public AbstractLongArgument(String nodeName, long value) {
-		super(nodeName, LongArgumentType.longArg(value), String::valueOf);
-	}
-	
-	/**
-	 * A long argument with a minimum and maximum value
-	 * @param nodeName the name of the node for this argument
-	 * @param min The minimum value this argument can take (inclusive)
-	 * @param max The maximum value this argument can take (inclusive)
-	 */
-	public AbstractLongArgument(String nodeName, long min, long max) {
-		super(nodeName, LongArgumentType.longArg(min, max), String::valueOf);
-		if(max < min) {
-			throw new InvalidRangeException();
-		}
-	}
-	
 	@Override
-	public Class<Long> getPrimitiveType() {
-		return long.class;
+	public Class<String> getPrimitiveType() {
+		return String.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_LONG;
+		return CommandAPIArgumentType.PRIMITIVE_TEXT;
 	}
-	
+
 	@Override
-	public <Source> Long parseArgument(AbstractPlatform<CommandSender, Source> platform,
-			CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(AbstractPlatform<Argument<?>, CommandSource, Source> platform,
+										 CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
-	
 }

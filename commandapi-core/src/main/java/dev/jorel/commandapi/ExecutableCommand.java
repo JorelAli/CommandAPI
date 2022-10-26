@@ -1,7 +1,5 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 

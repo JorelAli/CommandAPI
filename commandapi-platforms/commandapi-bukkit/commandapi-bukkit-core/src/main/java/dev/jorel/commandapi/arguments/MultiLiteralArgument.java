@@ -20,18 +20,55 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.exceptions.BadLiteralException;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents multiple LiteralArguments
  */
-public class MultiLiteralArgument extends AbstractMultiLiteralArgument<MultiLiteralArgument, CommandSender> implements BukkitExecutable<MultiLiteralArgument> {
+public class MultiLiteralArgument extends Argument<String> implements IMultiLiteralArgument<Argument<String>> {
+	private final String[] literals;
+
 	/**
 	 * A multiliteral argument. Takes in string literals which cannot be modified
 	 * @param literals the literals that this argument represents
 	 */
-	public MultiLiteralArgument(String... literals) {
-		super(literals);
+	public MultiLiteralArgument(final String... literals) {
+		super(null, null);
+		if(literals == null) {
+			throw new BadLiteralException(true);
+		}
+		if(literals.length == 0) {
+			throw new BadLiteralException(false);
+		}
+		this.literals = literals;
+	}
+
+	@Override
+	public Class<String> getPrimitiveType() {
+		return String.class;
+	}
+
+	/**
+	 * Returns the literals that are present in this argument
+	 * @return the literals that are present in this argument
+	 */
+	@Override
+	public String[] getLiterals() {
+		return literals;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.MULTI_LITERAL;
+	}
+
+	@Override
+	public <Source> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform,
+										 CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
 	}
 }

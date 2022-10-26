@@ -20,20 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
-import org.bukkit.scoreboard.Objective;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
+import org.bukkit.scoreboard.Objective;
 
 /**
  * An argument that represents the name of a scoreboard objective
  */
-public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective, ObjectiveArgument, CommandSender> implements BukkitExecutable<ObjectiveArgument> {
+public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective> {
 
 	/**
 	 * An Objective argument. Represents a scoreboard objective
@@ -54,8 +51,8 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	}
 	
 	@Override
-	public <CommandSourceStack> String parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+													 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getObjective(cmdCtx, key);
 	}
 }

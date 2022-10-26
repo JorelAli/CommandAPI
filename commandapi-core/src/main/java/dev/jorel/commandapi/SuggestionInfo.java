@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-
 /**
  * A class that represents information which you can use to generate
  * suggestions.

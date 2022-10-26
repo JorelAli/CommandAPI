@@ -20,25 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
-import dev.jorel.commandapi.nms.NMS_1_13;
-import dev.jorel.commandapi.nms.NMS_1_13_1;
-import dev.jorel.commandapi.nms.NMS_1_13_2;
-import dev.jorel.commandapi.nms.NMS_1_14;
-import dev.jorel.commandapi.nms.NMS_1_14_3;
-import dev.jorel.commandapi.nms.NMS_1_14_4;
-import dev.jorel.commandapi.nms.NMS_1_15;
-import dev.jorel.commandapi.nms.NMS_1_16_4_R3;
-import dev.jorel.commandapi.nms.NMS_1_16_R1;
-import dev.jorel.commandapi.nms.NMS_1_16_R2;
-import dev.jorel.commandapi.nms.NMS_1_16_R3;
-import dev.jorel.commandapi.nms.NMS_1_17;
-import dev.jorel.commandapi.nms.NMS_1_17_R1;
-import dev.jorel.commandapi.nms.NMS_1_18_R1;
-import dev.jorel.commandapi.nms.NMS_1_18_R2;
-import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
-import dev.jorel.commandapi.nms.NMS_1_19_R1;
+import dev.jorel.commandapi.nms.*;
 import org.bukkit.Bukkit;
 
 /**
@@ -65,7 +48,7 @@ public interface CommandAPIVersionHandler {
 	 *
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
-	static AbstractPlatform<?, ?> getPlatform() {
+	static AbstractPlatform<?, ?, ?> getPlatform() {
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
 			return new NMS_1_19_1_R1();
 		} else {

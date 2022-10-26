@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
@@ -35,7 +33,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatComponentArgument extends Argument<BaseComponent[], ChatComponentArgument, CommandSender> implements BukkitExecutable<ChatComponentArgument> {
+public class ChatComponentArgument extends Argument<BaseComponent[]> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw
@@ -66,8 +64,8 @@ public class ChatComponentArgument extends Argument<BaseComponent[], ChatCompone
 	}
 
 	@Override
-	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+															  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getChatComponent(cmdCtx, key);
 	}

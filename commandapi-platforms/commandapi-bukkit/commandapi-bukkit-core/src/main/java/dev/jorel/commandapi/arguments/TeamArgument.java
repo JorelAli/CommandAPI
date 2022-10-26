@@ -20,20 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
-import org.bukkit.scoreboard.Team;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
+import org.bukkit.scoreboard.Team;
 
 /**
  * An argument that represents the name of a scoreboard Team
  */
-public class TeamArgument extends SafeOverrideableArgument<String, Team, TeamArgument, CommandSender> implements BukkitExecutable<TeamArgument> {
+public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 
 	/**
 	 * A Team argument. Represents a scoreboard Team
@@ -54,8 +51,8 @@ public class TeamArgument extends SafeOverrideableArgument<String, Team, TeamArg
 	}
 	
 	@Override
-	public <CommandSourceStack> String parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+													 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getTeam(cmdCtx, key);
 	}
 }

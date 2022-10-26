@@ -1,7 +1,5 @@
 package dev.jorel.commandapi;
 
-import java.util.List;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -10,18 +8,17 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandSource;
-
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlayer;
-import dev.jorel.commandapi.arguments.*;
-import dev.jorel.commandapi.commandsenders.VelocityCommandSender;
-import dev.jorel.commandapi.commandsenders.VelocityConsoleCommandSender;
-import dev.jorel.commandapi.commandsenders.VelocityPlayer;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.*;
 
-public class VelocityPlatform extends AbstractPlatform<CommandSource, CommandSource> {
+import java.util.List;
+
+public class VelocityPlatform extends AbstractPlatform<Argument<?>, CommandSource, CommandSource> {
 	private CommandManager commandManager;
 	private static VelocityPlatform instance;
 
@@ -138,17 +135,17 @@ public class VelocityPlatform extends AbstractPlatform<CommandSource, CommandSou
 	}
 
 	@Override
-	public Execution<CommandSource> newConcreteExecution(List<Argument<?, ?, CommandSource>> argument, CustomCommandExecutor<CommandSource, AbstractCommandSender<? extends CommandSource>> executor) {
-		return new VelocityExecution(argument, executor);
-	}
-
-	@Override
-	public AbstractMultiLiteralArgument<?, CommandSource> newConcreteMultiLiteralArgument(String[] literals) {
+	public Argument<String> newConcreteMultiLiteralArgument(String[] literals) {
 		return new MultiLiteralArgument(literals);
 	}
 
 	@Override
-	public AbstractLiteralArgument<?, CommandSource> newConcreteLiteralArgument(String literal) {
+	public Argument<String> newConcreteLiteralArgument(String literal) {
 		return new LiteralArgument(literal);
+	}
+
+	@Override
+	public AbstractCommandAPICommand<?, Argument<?>, CommandSource> newConcreteCommandAPICommand(CommandMetaData<CommandSource> meta) {
+		return new CommandAPICommand(meta);
 	}
 }

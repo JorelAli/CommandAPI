@@ -20,19 +20,38 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents arbitrary strings
  */
-public class GreedyStringArgument extends AbstractGreedyStringArgument<GreedyStringArgument, CommandSender> implements BukkitExecutable<GreedyStringArgument> {
+public class GreedyStringArgument extends SafeOverrideableArgument<String, String> implements IGreedyArgument {
 	/**
 	 * A string argument for a string of any length
 	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public GreedyStringArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, StringArgumentType.greedyString(), s -> s);
+	}
+
+	@Override
+	public Class<String> getPrimitiveType() {
+		return String.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
+	}
+
+	@Override
+	public <Source> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform,
+										 CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

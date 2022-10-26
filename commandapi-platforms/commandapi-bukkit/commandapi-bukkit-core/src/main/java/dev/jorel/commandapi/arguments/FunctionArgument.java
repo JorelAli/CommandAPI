@@ -20,21 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.NamespacedKey;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey, FunctionArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<FunctionArgument> {
+public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument {
 
 	/**
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft
@@ -43,7 +40,7 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FunctionArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentTag(), BukkitPlatform.fromKey(n -> n));
+		super(nodeName, BukkitPlatform.get()._ArgumentTag(), fromKey(n -> n));
 	}
 
 	@Override
@@ -62,8 +59,8 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	}
 	
 	@Override
-	public <CommandSourceStack> FunctionWrapper[] parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> FunctionWrapper[] parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+																CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getFunction(cmdCtx, key);
 	}
 }

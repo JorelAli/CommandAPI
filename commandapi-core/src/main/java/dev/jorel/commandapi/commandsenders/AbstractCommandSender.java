@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.abstractions;
+package dev.jorel.commandapi.commandsenders;
 
 public interface AbstractCommandSender<Source> {
 	// TODO: figure out what features this and the subclasses of this class need

@@ -2,8 +2,6 @@ package dev.jorel.commandapi.commandsenders;
 
 import org.bukkit.command.ConsoleCommandSender;
 
-import dev.jorel.commandapi.abstractions.AbstractConsoleCommandSender;
-
 public class BukkitConsoleCommandSender extends AbstractConsoleCommandSender<ConsoleCommandSender> implements BukkitCommandSender<ConsoleCommandSender> {
 
 	private final ConsoleCommandSender sender;

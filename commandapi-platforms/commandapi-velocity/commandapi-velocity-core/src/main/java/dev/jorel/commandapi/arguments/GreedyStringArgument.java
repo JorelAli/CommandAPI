@@ -20,19 +20,38 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.VelocityExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 
 /**
  * An argument that represents arbitrary strings
  */
-public class GreedyStringArgument extends AbstractGreedyStringArgument<GreedyStringArgument, CommandSource> implements VelocityExecutable<GreedyStringArgument> {
+public class GreedyStringArgument extends SafeOverrideableArgument<String, String> implements IGreedyArgument {
 	/**
 	 * A string argument for a string of any length
 	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public GreedyStringArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, StringArgumentType.greedyString(), s -> s);
+	}
+
+	@Override
+	public Class<String> getPrimitiveType() {
+		return String.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
+	}
+
+	@Override
+	public <Source> String parseArgument(AbstractPlatform<Argument<?>, CommandSource, Source> platform,
+										 CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

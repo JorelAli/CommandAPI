@@ -20,19 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-
-import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPI;
+import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents any custom object
@@ -43,10 +40,10 @@ import dev.jorel.commandapi.abstractions.AbstractPlatform;
  *            {@link IntegerArgument}
  * @apiNote Returns a {@link T} object
  */
-public class CustomArgument<T, B> extends Argument<T, CustomArgument<T, B>, CommandSender> implements BukkitExecutable<CustomArgument<T, B>> {
+public class CustomArgument<T, B> extends Argument<T> {
 
 	private final CustomArgumentInfoParser<T, B> infoParser;
-	private final Argument<B, ?, CommandSender> base;
+	private final Argument<B> base;
 
 	/**
 	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
@@ -84,10 +81,10 @@ public class CustomArgument<T, B> extends Argument<T, CustomArgument<T, B>, Comm
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
 		super(nodeName, keyed ? StringArgumentType.string()
 				: BukkitPlatform.get()._ArgumentMinecraftKeyRegistered());
-		this.base = (Argument<B, ?, CommandSender>) new DummyArgument(nodeName, keyed);
+		this.base = (Argument<B>) new DummyArgument(nodeName, keyed);
 		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
 		CommandAPI.logWarning(
-				"Registering CustomArgument " + nodeName + " with legacy registeration method. This may not work!\n"
+				"Registering CustomArgument " + nodeName + " with legacy registration method. This may not work!\n"
 						+ "Consider using new CustomArgument(Argument, CustomArgumentInfoParser)");
 	}
 
@@ -111,7 +108,7 @@ public class CustomArgument<T, B> extends Argument<T, CustomArgument<T, B>, Comm
 	 *               {@code Integer} for an {@link IntegerArgument}
 	 *               </p>
 	 */
-	public CustomArgument(Argument<B, ?, CommandSender> base, CustomArgumentInfoParser<T, B> parser) {
+	public CustomArgument(Argument<B> base, CustomArgumentInfoParser<T, B> parser) {
 		super(base.getNodeName(), base.getRawType());
 		if (base instanceof LiteralArgument || base instanceof MultiLiteralArgument) {
 			throw new IllegalArgumentException(base.getClass().getSimpleName() + " is not a suitable base argument type for a CustomArgument");
@@ -131,8 +128,8 @@ public class CustomArgument<T, B> extends Argument<T, CustomArgument<T, B>, Comm
 	}
 
 	@Override
-	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+												CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = BaseHandler.getRawArgumentInput(cmdCtx, key);
@@ -359,7 +356,7 @@ public class CustomArgument<T, B> extends Argument<T, CustomArgument<T, B>, Comm
 	}
 
 	@Deprecated
-	private static class DummyArgument extends Argument<String, DummyArgument, CommandSender> {
+	private static class DummyArgument extends Argument<String> {
 
 		private final boolean keyed;
 
@@ -380,8 +377,8 @@ public class CustomArgument<T, B> extends Argument<T, CustomArgument<T, B>, Comm
 		}
 
 		@Override
-		public <Source> String parseArgument(AbstractPlatform<CommandSender, Source> platform,
-				CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
+		public <Source> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform,
+											 CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
 			return keyed ? ((BukkitPlatform<Source>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
 		}

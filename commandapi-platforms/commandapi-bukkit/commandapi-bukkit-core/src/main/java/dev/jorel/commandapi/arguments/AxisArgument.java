@@ -20,17 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.EnumSet;
-
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.Axis;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.Axis;
 import org.bukkit.command.CommandSender;
+
+import java.util.EnumSet;
 
 /**
  * An argument that represents x, y and z axes as an EnumSet of Axis
@@ -38,7 +35,7 @@ import org.bukkit.command.CommandSender;
  * @apiNote Returns a {@link EnumSet}{@code <}{@link Axis}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>, AxisArgument, CommandSender> implements BukkitExecutable<AxisArgument> {
+public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
 
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y
@@ -62,8 +59,8 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 	}
 
 	@Override
-	public <CommandSourceStack> EnumSet<Axis> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key,
-		Object[] previousArgs)
+	public <CommandSourceStack> EnumSet<Axis> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key,
+															Object[] previousArgs)
 		throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getAxis(cmdCtx, key);
 	}

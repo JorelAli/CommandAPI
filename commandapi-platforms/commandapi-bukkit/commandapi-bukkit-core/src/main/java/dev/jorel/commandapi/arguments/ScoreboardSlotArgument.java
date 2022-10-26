@@ -22,17 +22,15 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit ScoreboardSlot object
  */
-public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot, ScoreboardSlotArgument, CommandSender> implements BukkitExecutable<ScoreboardSlotArgument> {
+public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot> {
 
 	/**
 	 * A Display slot argument. Represents scoreboard slots
@@ -53,8 +51,8 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	}
 	
 	@Override
-	public <CommandSourceStack> ScoreboardSlot parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> ScoreboardSlot parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+															 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getScoreboardSlot(cmdCtx, key);
 	}
 }

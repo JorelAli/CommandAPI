@@ -1,20 +1,17 @@
 package dev.jorel.commandapi;
 
-import java.util.List;
-
-import org.spongepowered.api.command.manager.CommandManager;
-import org.spongepowered.api.entity.living.player.server.ServerPlayer;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlayer;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
+import org.spongepowered.api.command.manager.CommandManager;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+
+import java.util.List;
 
 // See https://docs.spongepowered.org/stable/en/plugin/migrating-from-7-to-8.html#command-creation-and-registration
 

@@ -22,10 +22,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BaseHandler;
-import dev.jorel.commandapi.BukkitExecutable;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
@@ -41,7 +40,7 @@ import java.util.Optional;
  * 
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatArgument extends Argument<Component, AdventureChatArgument, CommandSender> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component>, BukkitExecutable<AdventureChatArgument> {
+public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
 
 	private PreviewableFunction<Component> preview;
 	private boolean usePreview;
@@ -73,8 +72,8 @@ public class AdventureChatArgument extends Argument<Component, AdventureChatArgu
 	}
 
 	@Override
-	public <CommandSourceStack> Component parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Component parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		Component component = ((BukkitPlatform<CommandSourceStack>) platform).getAdventureChat(cmdCtx, key);
 

@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.abstractions.AbstractPlayer;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 
 public record PreviewInfo<T> (
 	/** @param player the Player typing this command */

@@ -20,27 +20,24 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.BukkitPlatform;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * An argument that represents a selection of entities
  * 
  * @apiNote The return type depends on the provided {@link EntitySelector}
  */
-public class EntitySelectorArgument<T> extends Argument<T, EntitySelectorArgument<T>, CommandSender> implements BukkitExecutable<EntitySelectorArgument<T>> {
+public class EntitySelectorArgument<T> extends Argument<T> {
 
 	private final EntitySelector selector;
 
@@ -92,8 +89,8 @@ public class EntitySelectorArgument<T> extends Argument<T, EntitySelectorArgumen
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandSourceStack> T parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> T parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+												CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return (T) ((BukkitPlatform<CommandSourceStack>) platform).getEntitySelector(cmdCtx, key, selector);
 	}

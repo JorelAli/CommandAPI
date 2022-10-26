@@ -1,6 +1,6 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 
 import java.util.Arrays;

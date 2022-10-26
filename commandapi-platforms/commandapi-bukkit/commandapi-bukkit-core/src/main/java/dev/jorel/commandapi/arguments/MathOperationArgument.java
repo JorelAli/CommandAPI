@@ -22,17 +22,15 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents Minecraft scoreboard math operations
  */
-public class MathOperationArgument extends SafeOverrideableArgument<MathOperation, MathOperation, MathOperationArgument, CommandSender> implements BukkitExecutable<MathOperationArgument> {
+public class MathOperationArgument extends SafeOverrideableArgument<MathOperation, MathOperation> {
 
 	/**
 	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)
@@ -53,8 +51,8 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	}
 	
 	@Override
-	public <CommandSourceStack> MathOperation parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> MathOperation parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+															CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getMathOperation(cmdCtx, key);
 	}
 }

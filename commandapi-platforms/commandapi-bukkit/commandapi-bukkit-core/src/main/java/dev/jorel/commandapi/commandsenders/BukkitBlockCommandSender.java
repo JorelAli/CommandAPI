@@ -1,6 +1,5 @@
 package dev.jorel.commandapi.commandsenders;
 
-import dev.jorel.commandapi.abstractions.AbstractBlockCommandSender;
 import org.bukkit.command.BlockCommandSender;
 
 public class BukkitBlockCommandSender extends AbstractBlockCommandSender<BlockCommandSender> implements BukkitCommandSender<BlockCommandSender> {

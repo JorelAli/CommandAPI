@@ -20,29 +20,26 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 
 /**
  * An argument that represents the Bukkit Enchantment object
  * 
  * @apiNote Returns an {@link Enchantment} object
  */
-public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment, EnchantmentArgument, CommandSender> implements BukkitExecutable<EnchantmentArgument> {
+public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment> {
 	
 	/**
 	 * An Enchantment argument. Represents an enchantment for items
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public EnchantmentArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentEnchantment(), BukkitPlatform.fromKey(Enchantment::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
 	}
 
 	@Override
@@ -56,8 +53,8 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	}
 	
 	@Override
-	public <CommandSourceStack> Enchantment parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Enchantment parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getEnchantment(cmdCtx, key);
 	}
 }

@@ -1,8 +1,6 @@
 package dev.jorel.commandapi.commandsenders;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 
-import dev.jorel.commandapi.abstractions.AbstractConsoleCommandSender;
-
 public class VelocityConsoleCommandSender extends AbstractConsoleCommandSender<ConsoleCommandSource> implements VelocityCommandSender<ConsoleCommandSource> {
 
 	private final ConsoleCommandSource source;

@@ -20,14 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.block.data.BlockData;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -36,7 +33,7 @@ import org.bukkit.command.CommandSender;
  * @apiNote Returns a {@link BlockData} object
  * 
  */
-public class BlockStateArgument extends Argument<BlockData, BlockStateArgument, CommandSender> implements BukkitExecutable<BlockStateArgument> {
+public class BlockStateArgument extends Argument<BlockData> {
 
 	/**
 	 * Constructs a BlockStateArgument with a given node name.
@@ -58,8 +55,8 @@ public class BlockStateArgument extends Argument<BlockData, BlockStateArgument, 
 	}
 
 	@Override
-	public <CommandSourceStack> BlockData parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> BlockData parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getBlockState(cmdCtx, key);
 	}

@@ -20,17 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Predicate;
-
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.block.Block;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+
+import java.util.function.Predicate;
 
 /**
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
@@ -38,7 +35,7 @@ import org.bukkit.command.CommandSender;
  * @apiNote Returns a {@link Predicate}{@code <}{@link Block}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class BlockPredicateArgument extends Argument<Predicate, BlockPredicateArgument, CommandSender> implements BukkitExecutable<BlockPredicateArgument> {
+public class BlockPredicateArgument extends Argument<Predicate> {
 
 	/**
 	 * Constructs a BlockPredicateArgument with a given node name. Represents a
@@ -61,8 +58,8 @@ public class BlockPredicateArgument extends Argument<Predicate, BlockPredicateAr
 	}
 
 	@Override
-	public <CommandSourceStack> Predicate<?> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> Predicate<?> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														   CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getBlockPredicate(cmdCtx, key);
 	}

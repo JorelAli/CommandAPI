@@ -20,22 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.Location;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.Location2D;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit {@link Location} object in x and z directions
  * @apiNote Returns a {@link Location2D} object
  */
-public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D, Location2DArgument, CommandSender> implements BukkitExecutable<Location2DArgument> {
+public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D> {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to {@link LocationType#PRECISE_POSITION}
@@ -79,8 +76,8 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	}
 	
 	@Override
-	public <CommandSourceStack> Location2D parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Location2D parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return isPrecise ? ((BukkitPlatform<CommandSourceStack>) platform).getLocation2DPrecise(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getLocation2DBlock(cmdCtx, key);
 	}
 }

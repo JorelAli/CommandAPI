@@ -1,12 +1,12 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 
 import java.util.ArrayList;
 
 /**
- * This class represents something that is executable. This is mostly, {@link AbstractCommandAPICommand} instances, or can also be {@link AbstractCommandTree} nodes and even {@link Argument} nodes in a tree
+ * This class represents something that is executable. This is mostly, {@link AbstractCommandAPICommand} instances, or can also be {@link AbstractCommandTree} nodes and even {@link AbstractArgument} nodes in a tree
  *
  * @param <Impl> The class extending this class, used as the return type for chain calls
  * @param <CommandSender> The CommandSender class used by the class extending this class

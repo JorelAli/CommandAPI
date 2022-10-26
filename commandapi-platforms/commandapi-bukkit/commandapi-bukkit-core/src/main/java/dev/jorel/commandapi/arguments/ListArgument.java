@@ -26,10 +26,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -42,7 +41,7 @@ import java.util.regex.Pattern;
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ListArgument<T> extends Argument<List, ListArgument<T>, CommandSender> implements IGreedyArgument, BukkitExecutable<ListArgument<T>> {
+public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
@@ -124,8 +123,8 @@ public class ListArgument<T> extends Argument<List, ListArgument<T>, CommandSend
 	}
 
 	@Override
-	public <CommandSourceStack> List<T> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> List<T> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+													  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
 		for (T object : supplier.apply(platform.getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource())) {

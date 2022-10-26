@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -37,7 +35,7 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link float}
  */
-public class AngleArgument extends SafeOverrideableArgument<Float, Float, AngleArgument, CommandSender> implements BukkitExecutable<AngleArgument> {
+public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
 
 	/**
 	 * Constructs an AngleArgument with a given node name
@@ -59,7 +57,7 @@ public class AngleArgument extends SafeOverrideableArgument<Float, Float, AngleA
 	}
 
 	@Override
-	public <CommandSourceStack> Float parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> Float parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 		throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getAngle(cmdCtx, key);
 	}

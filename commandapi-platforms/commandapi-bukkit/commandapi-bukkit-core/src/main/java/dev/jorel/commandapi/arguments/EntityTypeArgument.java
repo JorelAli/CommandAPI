@@ -20,27 +20,24 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 
 /**
  * An argument that represents the Bukkit EntityType object
  */
-public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType, EntityTypeArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<EntityTypeArgument> {
+public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType> implements ICustomProvidedArgument {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EntityTypeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentEntitySummon(), BukkitPlatform.fromKey(EntityType::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
 	}
 
 	@Override
@@ -59,8 +56,8 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	}
 	
 	@Override
-	public <CommandSourceStack> EntityType parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> EntityType parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getEntityType(cmdCtx, key);
 	}
 }

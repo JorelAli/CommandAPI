@@ -20,13 +20,20 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents primitive Java ints
  */
-public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, CommandSender> implements BukkitExecutable<IntegerArgument> {
+public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> {
+	private IntegerArgument(String nodeName, IntegerArgumentType type) {
+		super(nodeName, type, String::valueOf);
+	}
 
 	/**
 	 * An integer argument
@@ -34,7 +41,7 @@ public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, Co
 	 * @param nodeName the name of the node for this argument
 	 */
 	public IntegerArgument(String nodeName) {
-		super(nodeName);
+		this(nodeName, IntegerArgumentType.integer());
 	}
 
 	/**
@@ -44,7 +51,7 @@ public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, Co
 	 * @param min      The minimum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(String nodeName, int min) {
-		super(nodeName, min);
+		this(nodeName, IntegerArgumentType.integer(min));
 	}
 
 	/**
@@ -55,6 +62,25 @@ public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, Co
 	 * @param max      The maximum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(String nodeName, int min, int max) {
-		super(nodeName, min, max);
+		this(nodeName, IntegerArgumentType.integer(min, max));
+		if (max < min) {
+			throw new InvalidRangeException();
+		}
+	}
+
+	@Override
+	public Class<Integer> getPrimitiveType() {
+		return int.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_INTEGER;
+	}
+
+	@Override
+	public <Source> Integer parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform,
+										  CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

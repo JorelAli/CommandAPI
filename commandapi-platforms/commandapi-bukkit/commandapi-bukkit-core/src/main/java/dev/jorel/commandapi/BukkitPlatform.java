@@ -1,19 +1,19 @@
 package dev.jorel.commandapi;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.util.*;
-import java.util.function.Function;
-
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
-import dev.jorel.commandapi.abstractions.AbstractPlayer;
-import dev.jorel.commandapi.arguments.*;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -21,16 +21,6 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
-
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.LiteralCommandNode;
-
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
-import dev.jorel.commandapi.nms.NMS;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,6 +32,12 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.util.*;
+
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 
 // BukkitPlatform is an AbstractPlatform, but also needs all of the methods from
@@ -51,7 +47,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
-public abstract class BukkitPlatform<Source> extends AbstractPlatform<CommandSender, Source> implements NMS<Source> {
+public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?>, CommandSender, Source> implements NMS<Source> {
 	// References to utility classes
 	private static BukkitPlatform<?> instance;
 	private PaperImplementations paper;
@@ -457,39 +453,21 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<CommandSen
 	}
 
 	@Override
-	public Execution<CommandSender> newConcreteExecution(List<Argument<?, ?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
-		return new BukkitExecution(argument, executor);
-	}
-
-	@Override
-	public AbstractMultiLiteralArgument<?, CommandSender> newConcreteMultiLiteralArgument(String[] literals) {
+	public Argument<String> newConcreteMultiLiteralArgument(String[] literals) {
 		return new MultiLiteralArgument(literals);
 	}
 
 	@Override
-	public AbstractLiteralArgument<?, CommandSender> newConcreteLiteralArgument(String literal) {
+	public Argument<String> newConcreteLiteralArgument(String literal) {
 		return new LiteralArgument(literal);
 	}
 
-	// TODO: There's probably a much better place to put this, but I don't
-	//  really fancy subclassing SafeOverrideableArgument for Bukkit specifically,
-	//  so I'll dump it here and hope nobody cares because the CommandAPI doesn't
-	//  really have a centralized "utils" class or anything
-	/**
-	 * <p>
-	 * Composes a <code>S</code> to a <code>NamespacedKey</code> mapping function to
-	 * convert <code>S</code> to a <code>String</code>
-	 *
-	 * @param mapper the mapping function from <code>S</code> to
-	 *               <code>NamespacedKey</code>
-	 * @return a composed function that converts <code>S</code> to
-	 * <code>String</code>
-	 */
-	public static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
-		return mapper.andThen(NamespacedKey::toString);
+	@Override
+	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta) {
+		return new CommandAPICommand(meta);
 	}
 
-	// TODO: Same as above, not really sure where else these Bukkit-specific methods could go. Also, it sounds like
+	// TODO: Not really sure where else these Bukkit-specific methods should go. Also, it sounds like
 	//  everything supports Adventure Components, so that isn't truly Bukkit-specific. Also, backwards compatibility:
 	//  these methods are expected to be called as CommandAPI.failWith...
 	/**

@@ -20,30 +20,27 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.Optional;
-
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BaseHandler;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * An argument that represents chat with entity selectors
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[], ChatArgument, CommandSender> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]>, BukkitExecutable<ChatArgument> {
+public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
 
 	private PreviewableFunction<BaseComponent[]> preview;
 	private boolean usePreview;
@@ -75,8 +72,8 @@ public class ChatArgument extends Argument<BaseComponent[], ChatArgument, Comman
 	}
 
 	@Override
-	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+															  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		BaseComponent[] component = ((BukkitPlatform<CommandSourceStack>) platform).getChat(cmdCtx, key);
 

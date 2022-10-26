@@ -20,20 +20,24 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.VelocityExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
  * An argument that represents primitive Java ints
  */
-public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, CommandSource> implements VelocityExecutable<IntegerArgument> {
+public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> {
 	/**
 	 * An integer argument
 	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public IntegerArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, IntegerArgumentType.integer(), String::valueOf);
 	}
 
 	/**
@@ -43,7 +47,7 @@ public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, Co
 	 * @param min      The minimum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(String nodeName, int min) {
-		super(nodeName, min);
+		super(nodeName, IntegerArgumentType.integer(min), String::valueOf);
 	}
 
 	/**
@@ -54,6 +58,25 @@ public class IntegerArgument extends AbstractIntegerArgument<IntegerArgument, Co
 	 * @param max      The maximum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(String nodeName, int min, int max) {
-		super(nodeName, min, max);
+		super(nodeName, IntegerArgumentType.integer(min, max), String::valueOf);
+		if (max < min) {
+			throw new InvalidRangeException();
+		}
+	}
+
+	@Override
+	public Class<Integer> getPrimitiveType() {
+		return int.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_INTEGER;
+	}
+
+	@Override
+	public <Source> Integer parseArgument(AbstractPlatform<Argument<?>, CommandSource, Source> platform,
+										  CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

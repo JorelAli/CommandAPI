@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import org.bukkit.command.CommandSender;
 
@@ -33,7 +31,7 @@ import org.bukkit.command.CommandSender;
  * An argument that represents the Bukkit Particle object
  */
 @SuppressWarnings("rawtypes")
-public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>, ParticleArgument, CommandSender> implements BukkitExecutable<ParticleArgument> {
+public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>> {
 
 	/**
 	 * A Particle argument. Represents Minecraft particles
@@ -54,8 +52,8 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	}
 	
 	@Override
-	public <CommandSourceStack> ParticleData<?> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> ParticleData<?> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+															  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getParticle(cmdCtx, key);
 	}
 }

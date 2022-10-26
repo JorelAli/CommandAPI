@@ -20,21 +20,39 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.VelocityExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 
 /**
  * An argument that represents primitive Java booleans
  * 
  * @apiNote Returns a {@link boolean}
  */
-public class BooleanArgument extends AbstractBooleanArgument<BooleanArgument, CommandSource> implements VelocityExecutable<BooleanArgument> {
+public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> {
 	/**
 	 * Constructs a Boolean argument with a given node name
 	 *
 	 * @param nodeName the name of the node for argument
 	 */
 	public BooleanArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, BoolArgumentType.bool(), String::valueOf);
+	}
+
+	@Override
+	public Class<Boolean> getPrimitiveType() {
+		return boolean.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_BOOLEAN;
+	}
+
+	@Override
+	public <Source> Boolean parseArgument(AbstractPlatform<Argument<?>, CommandSource, Source> platform, CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

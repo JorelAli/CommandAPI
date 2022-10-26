@@ -1,6 +1,6 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import dev.jorel.commandapi.arguments.AbstractArgument;
 
 /**
  * This file handles loadeding the correct platform implementation. The CommandAPIVersionHandler
@@ -11,10 +11,13 @@ public interface CommandAPIVersionHandler {
 
 	/**
 	 * Returns an instance of the version's implementation of AbstractPlatform.
-	 * @param <Source> the command source type
+	 *
+	 * @param <Argument>      the implementation of AbstractArgument
+	 * @param <CommandSender> the command sender type
+	 * @param <Source>        the command source type
 	 * @return an instance of AbstractPlatform which can run on the specified server version
 	 */
-	static <CommandSender, Source> AbstractPlatform<CommandSender, Source> getPlatform() {
+	static <Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> AbstractPlatform<Argument, CommandSender, Source> getPlatform() {
 		throw new RuntimeException("You have the wrong copy of the CommandAPI! If you're shading, did you use commandapi-core instead of commandapi-{platform}-shade?");
 	}
 }

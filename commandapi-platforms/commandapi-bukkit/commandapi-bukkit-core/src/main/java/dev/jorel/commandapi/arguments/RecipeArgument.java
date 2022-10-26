@@ -20,28 +20,25 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.BukkitPlatform;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.Recipe;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
-
 /**
  * An argument that represents the Bukkit Recipe object
  */
-public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe, RecipeArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<RecipeArgument> {
+public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> implements ICustomProvidedArgument {
 
 	/**
 	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RecipeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), BukkitPlatform.fromKey((Recipe r) -> ((Keyed) r).getKey()));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
 	}
 
 	@Override
@@ -60,8 +57,8 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe, Rec
 	}	
 	
 	@Override
-	public <CommandSourceStack> Recipe parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Recipe parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+													 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getRecipe(cmdCtx, key);
 	}
 	

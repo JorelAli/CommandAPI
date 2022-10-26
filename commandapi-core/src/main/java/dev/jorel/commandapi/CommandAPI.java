@@ -3,9 +3,7 @@ package dev.jorel.commandapi;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlayer;
-import dev.jorel.commandapi.abstractions.AbstractTooltip;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 import java.util.ArrayList;
@@ -125,7 +123,7 @@ public class CommandAPI {
 			CommandAPI.logger = logger;
 
 			// Initialize handlers
-			AbstractPlatform<?, ?> platform = CommandAPIVersionHandler.getPlatform();
+			AbstractPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
 
 			final String platformClassHierarchy;
 			{
@@ -171,7 +169,7 @@ public class CommandAPI {
 
 		// This method is called automatically when the class loads to set up variables, in which case
 		// BaseHandler will not have been initialized
-		BaseHandler<?, ?> handler = BaseHandler.getInstance();
+		BaseHandler<?, ?, ?> handler = BaseHandler.getInstance();
 		if(handler != null) handler.onDisable();
 	}
 

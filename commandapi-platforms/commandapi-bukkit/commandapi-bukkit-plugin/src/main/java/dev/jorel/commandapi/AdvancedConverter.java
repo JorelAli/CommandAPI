@@ -20,74 +20,20 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
+import dev.jorel.commandapi.exceptions.InvalidNumberException;
+import dev.jorel.commandapi.exceptions.UnknownArgumentException;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import dev.jorel.commandapi.arguments.AdvancementArgument;
-import dev.jorel.commandapi.arguments.AdventureChatArgument;
-import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
-import dev.jorel.commandapi.arguments.AngleArgument;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.AxisArgument;
-import dev.jorel.commandapi.arguments.BiomeArgument;
-import dev.jorel.commandapi.arguments.BlockPredicateArgument;
-import dev.jorel.commandapi.arguments.BlockStateArgument;
-import dev.jorel.commandapi.arguments.BooleanArgument;
-import dev.jorel.commandapi.arguments.ChatArgument;
-import dev.jorel.commandapi.arguments.ChatColorArgument;
-import dev.jorel.commandapi.arguments.ChatComponentArgument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.DoubleArgument;
-import dev.jorel.commandapi.arguments.EnchantmentArgument;
-import dev.jorel.commandapi.arguments.EntitySelector;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.EntityTypeArgument;
-import dev.jorel.commandapi.arguments.EnvironmentArgument;
-import dev.jorel.commandapi.arguments.FloatArgument;
-import dev.jorel.commandapi.arguments.FloatRangeArgument;
-import dev.jorel.commandapi.arguments.FunctionArgument;
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.IntegerRangeArgument;
-import dev.jorel.commandapi.arguments.ItemStackArgument;
-import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
-import dev.jorel.commandapi.arguments.Location2DArgument;
-import dev.jorel.commandapi.arguments.LocationArgument;
-import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.LongArgument;
-import dev.jorel.commandapi.arguments.LootTableArgument;
-import dev.jorel.commandapi.arguments.MathOperationArgument;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.NBTCompoundArgument;
-import dev.jorel.commandapi.arguments.NamespacedKeyArgument;
-import dev.jorel.commandapi.arguments.ObjectiveArgument;
-import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
-import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
-import dev.jorel.commandapi.arguments.ParticleArgument;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.PotionEffectArgument;
-import dev.jorel.commandapi.arguments.RecipeArgument;
-import dev.jorel.commandapi.arguments.RotationArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
-import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
-import dev.jorel.commandapi.arguments.SoundArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.arguments.TeamArgument;
-import dev.jorel.commandapi.arguments.TextArgument;
-import dev.jorel.commandapi.arguments.TimeArgument;
-import dev.jorel.commandapi.arguments.UUIDArgument;
-import dev.jorel.commandapi.exceptions.InvalidNumberException;
-import dev.jorel.commandapi.exceptions.UnknownArgumentException;
 
 /**
  * A command parsing system that converts string arguments into something way
@@ -131,7 +77,7 @@ public class AdvancedConverter {
 
 	public void convert() {
 		String commandName = command.split(" ")[0];
-		List<Argument<?, ?, CommandSender>> arguments;
+		List<Argument<?>> arguments;
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
@@ -148,7 +94,7 @@ public class AdvancedConverter {
 
 	public void convertCommand() {
 		String commandName = command.split(" ")[0];
-		List<Argument<?, ?, CommandSender>> arguments;
+		List<Argument<?>> arguments;
 		try {
 			arguments = parseArguments(command);
 		} catch (UnknownArgumentException | InvalidNumberException e) {
@@ -172,11 +118,11 @@ public class AdvancedConverter {
 	 *     - speed (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
 	 * </pre>
 	 */
-	private List<Argument<?, ?, CommandSender>> parseArguments(String command) throws UnknownArgumentException, InvalidNumberException {
-		List<Argument<?, ?, CommandSender>> arguments = new ArrayList<>();
+	private List<Argument<?>> parseArguments(String command) throws UnknownArgumentException, InvalidNumberException {
+		List<Argument<?>> arguments = new ArrayList<>();
 		String[] parts = command.split(" ");
 		for (argumentIndex = 1; argumentIndex < parts.length; argumentIndex++) {
-			Argument<?, ?, CommandSender> argument = parseArgument(parts[argumentIndex]);
+			Argument<?> argument = parseArgument(parts[argumentIndex]);
 			if (argument != null) {
 				arguments.add(argument);
 			}
@@ -196,7 +142,7 @@ public class AdvancedConverter {
 		}
 	}
 
-	private Argument<?, ?, CommandSender> parseRange(String nodeName, String[] bounds) throws InvalidNumberException {
+	private Argument<?> parseRange(String nodeName, String[] bounds) throws InvalidNumberException {
 		if (bounds.length == 1) {
 			// x..
 			double value = parseValue(bounds[0]);
@@ -227,7 +173,7 @@ public class AdvancedConverter {
 
 	/*
 	 * CodeFactor will always complain about this method because it's really bulky
-	 * and adding a generator (i.e. Function<String, Argument<?, ?, CommandSender>>) inside the
+	 * and adding a generator (i.e. Function<String, Argument<?>>) inside the
 	 * CommandAPIArgumentType class would be better, EXCEPT in practice, this is
 	 * worse because then CommandAPIArgumentType would have to depend on every
 	 * argument and every argument depends on CommandAPIArgumentType, so that would
@@ -237,7 +183,7 @@ public class AdvancedConverter {
 	 * Additionally, we only need this for the plugin version of the CommandAPI, not
 	 * the main API.
 	 */
-	private Argument<?, ?, CommandSender> parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
+	private Argument<?> parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
 		return switch (CommandAPIArgumentType.fromInternal(argumentType)) {
 			case ADVANCEMENT -> new AdvancementArgument(nodeName);
 			case ADVENTURE_CHAT -> new AdventureChatArgument(nodeName);
@@ -292,7 +238,7 @@ public class AdvancedConverter {
 		};
 	}
 
-	private Argument<?, ?, CommandSender> parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
+	private Argument<?> parseArgument(String argument) throws UnknownArgumentException, InvalidNumberException {
 		Matcher literalMatcher = LITERAL_PATTERN.matcher(argument);
 		Matcher argumentMatcher = ARGUMENT_PATTERN.matcher(argument);
 		if (literalMatcher.matches()) {

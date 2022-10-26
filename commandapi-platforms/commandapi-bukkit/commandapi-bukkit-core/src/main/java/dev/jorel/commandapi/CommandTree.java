@@ -1,8 +1,9 @@
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.arguments.Argument;
 import org.bukkit.command.CommandSender;
 
-public class CommandTree extends AbstractCommandTree<CommandTree, CommandSender> implements BukkitExecutable<CommandTree> {
+public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, CommandSender> implements BukkitExecutable<CommandTree> {
 	/**
 	 * Creates a main root node for a command tree with a given command name
 	 *

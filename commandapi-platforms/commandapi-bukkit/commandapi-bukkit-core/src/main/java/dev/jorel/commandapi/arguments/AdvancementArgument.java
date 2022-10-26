@@ -22,9 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.command.CommandSender;
 
@@ -32,21 +31,22 @@ import org.bukkit.command.CommandSender;
  * An argument that represents the Bukkit Advancement object
  * @apiNote Returns an {@link Advancement} object
  */
-public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement, AdvancementArgument, CommandSender> implements ICustomProvidedArgument, BukkitExecutable<AdvancementArgument> {
-	
+public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
+
 	/**
 	 * Constructs an AdvancementArgument with a given node name
+	 *
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdvancementArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), BukkitPlatform.fromKey(Advancement::getKey));
+		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
 	}
 
 	@Override
 	public Class<Advancement> getPrimitiveType() {
 		return Advancement.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ADVANCEMENT;
@@ -58,8 +58,8 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 	}
 
 	@Override
-	public <CommandSourceStack> Advancement parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Advancement parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getAdvancement(cmdCtx, key);
 	}
 }

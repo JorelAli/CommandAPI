@@ -20,7 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -28,15 +32,14 @@ import org.bukkit.command.CommandSender;
  * 
  * @apiNote Returns a {@link double}
  */
-public class DoubleArgument extends AbstractDoubleArgument<DoubleArgument, CommandSender> implements BukkitExecutable<DoubleArgument> {
-
+public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 	/**
 	 * A double argument
 	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public DoubleArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, DoubleArgumentType.doubleArg(), String::valueOf);
 	}
 
 	/**
@@ -46,7 +49,7 @@ public class DoubleArgument extends AbstractDoubleArgument<DoubleArgument, Comma
 	 * @param min      The minimum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(String nodeName, double min) {
-		super(nodeName, min);
+		super(nodeName, DoubleArgumentType.doubleArg(min), String::valueOf);
 	}
 
 	/**
@@ -57,6 +60,24 @@ public class DoubleArgument extends AbstractDoubleArgument<DoubleArgument, Comma
 	 * @param max      The maximum value this argument can take (inclusive)
 	 */
 	public DoubleArgument(String nodeName, double min, double max) {
-		super(nodeName, min, max);
+		super(nodeName, DoubleArgumentType.doubleArg(min, max), String::valueOf);
+		if (max < min) {
+			throw new InvalidRangeException();
+		}
+	}
+
+	@Override
+	public Class<Double> getPrimitiveType() {
+		return double.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_DOUBLE;
+	}
+
+	@Override
+	public <Source> Double parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform, CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

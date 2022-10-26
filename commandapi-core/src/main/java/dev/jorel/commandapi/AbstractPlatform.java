@@ -1,25 +1,24 @@
-package dev.jorel.commandapi.abstractions;
+package dev.jorel.commandapi;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.CustomCommandExecutor;
-import dev.jorel.commandapi.Execution;
-import dev.jorel.commandapi.arguments.AbstractLiteralArgument;
-import dev.jorel.commandapi.arguments.AbstractMultiLiteralArgument;
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
+ * @param <Argument> The implementation of AbstractArgument used for the platform
  * @param <CommandSender> The class for running platforms commands
  * @param <Source> The class for running Brigadier commands
  */
-public abstract class AbstractPlatform<CommandSender, Source> {
+public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
 	// TODO: Add methods that need platform-specific implementations
 	// All methods in bukkit NMS will probably also need to be here
 
@@ -101,9 +100,9 @@ public abstract class AbstractPlatform<CommandSender, Source> {
 
 	public abstract void updateRequirements(AbstractPlayer<?> player);
 
-	public abstract Execution<CommandSender> newConcreteExecution(List<Argument<?, ?, CommandSender>> argument, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor);
+	public abstract AbstractCommandAPICommand<?, Argument, CommandSender> newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta);
 
-	public abstract AbstractMultiLiteralArgument<?, CommandSender> newConcreteMultiLiteralArgument(String[] literals);
+	public abstract Argument newConcreteMultiLiteralArgument(String[] literals);
 
-	public abstract AbstractLiteralArgument<?, CommandSender> newConcreteLiteralArgument(String literal);
+	public abstract Argument newConcreteLiteralArgument(String literal);
 }

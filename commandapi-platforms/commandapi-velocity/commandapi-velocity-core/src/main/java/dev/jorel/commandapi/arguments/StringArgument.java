@@ -20,19 +20,37 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.VelocityExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 
 /**
  * An argument that represents a simple String
  */
-public class StringArgument extends AbstractStringArgument<StringArgument, CommandSource> implements VelocityExecutable<StringArgument> {
+public class StringArgument extends Argument<String> {
 	/**
 	 * A string argument for one word
-	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public StringArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, StringArgumentType.word());
+	}
+
+	@Override
+	public Class<String> getPrimitiveType() {
+		return String.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_STRING;
+	}
+
+	@Override
+	public <Source> String parseArgument(AbstractPlatform<Argument<?>, CommandSource, Source> platform,
+										 CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

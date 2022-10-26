@@ -20,16 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.util.Collection;
-import java.util.function.Function;
-
 import com.mojang.brigadier.Message;
-
-import dev.jorel.commandapi.abstractions.AbstractTooltip;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+
+import java.util.Collection;
+import java.util.function.Function;
 
 /**
  * This class represents a suggestion for an argument with a hover tooltip text

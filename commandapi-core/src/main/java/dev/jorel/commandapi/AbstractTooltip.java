@@ -18,18 +18,16 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.abstractions;
+package dev.jorel.commandapi;
+
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.Message;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.Message;
-
-import dev.jorel.commandapi.StringTooltip;
 
 /**
  * This class represents a suggestion for an argument with a hover tooltip text

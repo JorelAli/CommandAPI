@@ -20,30 +20,34 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.VelocityExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
  * An argument that represents primitive Java longs
  */
-public class LongArgument extends AbstractLongArgument<LongArgument, CommandSource> implements VelocityExecutable<LongArgument> {
+public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	/**
 	 * A long argument
 	 *
 	 * @param nodeName the name of the node for this argument
 	 */
 	public LongArgument(String nodeName) {
-		super(nodeName);
+		super(nodeName, LongArgumentType.longArg(), String::valueOf);
 	}
 
 	/**
 	 * A long argument with a minimum value
 	 *
 	 * @param nodeName the name of the node for this argument
-	 * @param value    The minimum value this argument can take (inclusive)
+	 * @param min      The minimum value this argument can take (inclusive)
 	 */
-	public LongArgument(String nodeName, long value) {
-		super(nodeName, value);
+	public LongArgument(String nodeName, long min) {
+		super(nodeName, LongArgumentType.longArg(min), String::valueOf);
 	}
 
 	/**
@@ -54,6 +58,25 @@ public class LongArgument extends AbstractLongArgument<LongArgument, CommandSour
 	 * @param max      The maximum value this argument can take (inclusive)
 	 */
 	public LongArgument(String nodeName, long min, long max) {
-		super(nodeName, min, max);
+		super(nodeName, LongArgumentType.longArg(min, max), String::valueOf);
+		if(max < min) {
+			throw new InvalidRangeException();
+		}
+	}
+
+	@Override
+	public Class<Long> getPrimitiveType() {
+		return long.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_LONG;
+	}
+
+	@Override
+	public <Source> Long parseArgument(AbstractPlatform<Argument<?>, CommandSource, Source> platform,
+									   CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

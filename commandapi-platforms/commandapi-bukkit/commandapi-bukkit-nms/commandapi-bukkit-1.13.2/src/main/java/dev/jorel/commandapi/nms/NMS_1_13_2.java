@@ -1,10 +1,16 @@
 package dev.jorel.commandapi.nms;
 
-import java.util.Map;
-
-import dev.jorel.commandapi.abstractions.AbstractCommandSender;
+import com.mojang.brigadier.context.CommandContext;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.preprocessor.NMSMeta;
+import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -12,27 +18,7 @@ import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.help.SimpleHelpMap;
 
-import com.mojang.brigadier.context.CommandContext;
-
-import dev.jorel.commandapi.preprocessor.Differs;
-import dev.jorel.commandapi.preprocessor.NMSMeta;
-import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.FloatRange;
-import dev.jorel.commandapi.wrappers.IntegerRange;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
-import net.minecraft.server.v1_13_R2.ArgumentCriterionValue;
-import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R2.CriterionConditionValue;
-import net.minecraft.server.v1_13_R2.Entity;
-import net.minecraft.server.v1_13_R2.EntitySelector;
-import net.minecraft.server.v1_13_R2.IBlockData;
-import net.minecraft.server.v1_13_R2.ItemStack;
-import net.minecraft.server.v1_13_R2.LootTableRegistry;
-import net.minecraft.server.v1_13_R2.ParticleParamBlock;
-import net.minecraft.server.v1_13_R2.ParticleParamItem;
-import net.minecraft.server.v1_13_R2.ParticleParamRedstone;
-import net.minecraft.server.v1_13_R2.Vec2F;
-import net.minecraft.server.v1_13_R2.Vec3D;
+import java.util.Map;
 
 /**
  * NMS implementation for Minecraft 1.13.2

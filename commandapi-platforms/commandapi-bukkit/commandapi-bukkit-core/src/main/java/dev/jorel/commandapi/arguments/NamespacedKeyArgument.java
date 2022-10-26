@@ -20,14 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.NamespacedKey;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -37,7 +34,7 @@ import org.bukkit.command.CommandSender;
  * {@code .} (dot). The key can also contain {@code /} (forward slash)
  * @apiNote Returns a {@link NamespacedKey} object
  */
-public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey, NamespacedKeyArgument, CommandSender> implements BukkitExecutable<NamespacedKeyArgument> {
+public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey> {
 
 	/**
 	 * Constructs a MinecraftKeyArgument with a given node name.
@@ -60,8 +57,8 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 	}
 
 	@Override
-	public <CommandSourceStack> NamespacedKey parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> NamespacedKey parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+															CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key);
 	}

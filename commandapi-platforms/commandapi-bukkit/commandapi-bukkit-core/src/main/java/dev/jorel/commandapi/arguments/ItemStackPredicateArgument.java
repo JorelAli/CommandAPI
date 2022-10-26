@@ -20,23 +20,20 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Predicate;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.BukkitPlatform;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import java.util.function.Predicate;
 
 /**
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
  */
 @SuppressWarnings("rawtypes")
-public class ItemStackPredicateArgument extends Argument<Predicate, ItemStackPredicateArgument, CommandSender> implements BukkitExecutable<ItemStackPredicateArgument> {
+public class ItemStackPredicateArgument extends Argument<Predicate> {
 	
 	/**
 	 * A ItemStack Predicate argument. Represents a predicate for itemstacks
@@ -57,8 +54,8 @@ public class ItemStackPredicateArgument extends Argument<Predicate, ItemStackPre
 	}
 	
 	@Override
-	public <CommandSourceStack> Predicate<ItemStack> parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Predicate<ItemStack> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+																   CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getItemStackPredicate(cmdCtx, key);
 	}
 }

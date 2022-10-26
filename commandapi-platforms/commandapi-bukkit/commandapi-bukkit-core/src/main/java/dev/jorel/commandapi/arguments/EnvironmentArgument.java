@@ -20,22 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Function;
-
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.World.Environment;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
+
+import java.util.function.Function;
 
 /**
  * An argument that represents the Bukkit Environment object
  */
-public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment, EnvironmentArgument, CommandSender> implements BukkitExecutable<EnvironmentArgument> {
+public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment> {
 	
 	/**
 	 * An Environment argument. Represents Bukkit's Environment object
@@ -56,8 +53,8 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment, E
 	}
 	
 	@Override
-	public <CommandSourceStack> Environment parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Environment parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+														  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getDimension(cmdCtx, key);
 	}
 }

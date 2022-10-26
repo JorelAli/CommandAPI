@@ -1,6 +1,6 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import dev.jorel.commandapi.arguments.AbstractArgument;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +8,13 @@ import java.util.List;
 /**
  * This is the root node for creating a command as a tree
  * @param <Impl> The class extending this class, used as the return type for chain calls
+ * @param <Argument> The implementation of AbstractArgument being used by this class
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
+public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl, Argument, CommandSender>,
+	Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
-	private final List<AbstractArgumentTree<?, CommandSender>> arguments = new ArrayList<>();
+	private final List<AbstractArgumentTree<?, Argument, CommandSender>> arguments = new ArrayList<>();
 
 	/**
 	 * Creates a main root node for a command tree with a given command name
@@ -29,7 +31,7 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 	 * @param tree the child node
 	 * @return this root node
 	 */
-	public Impl then(final AbstractArgumentTree<?, CommandSender> tree) {
+	public Impl then(final AbstractArgumentTree<?, Argument, CommandSender> tree) {
 		this.arguments.add(tree);
 		return instance();
 	}
@@ -38,16 +40,15 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 	 * Registers the command
 	 */
 	public void register() {
-		List<Execution<CommandSender>> executions = new ArrayList<>();
+		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
 		if (this.executor.hasAnyExecutors()) {
-			// Cast platform so that it realizes we're using the same CommandSender and executor is accepted
-			AbstractPlatform<CommandSender, ?> platform = (AbstractPlatform<CommandSender, ?>) BaseHandler.getInstance().getPlatform();
-			executions.add(platform.newConcreteExecution(new ArrayList<>(), this.executor));
+			// For some reason, the compiler complains that it can't infer Execution's type if it isn't defined here
+			executions.add(new Execution<CommandSender, Argument>(new ArrayList<>(), this.executor));
 		}
-		for (AbstractArgumentTree<?, CommandSender> tree : arguments) {
+		for (AbstractArgumentTree<?, Argument, CommandSender> tree : arguments) {
 			executions.addAll(tree.getExecutions());
 		}
-		for (Execution<CommandSender> execution : executions) {
+		for (Execution<CommandSender, Argument> execution : executions) {
 			execution.register(this.meta);
 		}
 	}

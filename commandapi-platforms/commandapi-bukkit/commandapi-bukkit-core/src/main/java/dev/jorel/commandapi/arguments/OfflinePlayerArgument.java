@@ -20,20 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.BukkitExecutable;
-import org.bukkit.OfflinePlayer;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit Player object
  */
-public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlayer, OfflinePlayer, OfflinePlayerArgument, CommandSender> implements BukkitExecutable<OfflinePlayerArgument> {
+public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlayer, OfflinePlayer> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether
@@ -56,8 +53,8 @@ public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlaye
 	}
 	
 	@Override
-	public <CommandSourceStack> OfflinePlayer parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> OfflinePlayer parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+															CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getOfflinePlayer(cmdCtx, key);
 	}
 }

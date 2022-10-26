@@ -22,16 +22,14 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.BukkitExecutable;
+import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.BukkitPlatform;
-import dev.jorel.commandapi.abstractions.AbstractPlatform;
 import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the name of an objective criteria
  */
-public class ObjectiveCriteriaArgument extends Argument<String, ObjectiveCriteriaArgument, CommandSender> implements BukkitExecutable<ObjectiveCriteriaArgument> {
+public class ObjectiveCriteriaArgument extends Argument<String> {
 
 	/**
 	 * An Objective criteria argument. Represents an objective criteria
@@ -52,8 +50,8 @@ public class ObjectiveCriteriaArgument extends Argument<String, ObjectiveCriteri
 	}
 	
 	@Override
-	public <CommandSourceStack> String parseArgument(AbstractPlatform<CommandSender, CommandSourceStack> platform,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+													 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((BukkitPlatform<CommandSourceStack>) platform).getObjectiveCriteria(cmdCtx, key);
 	}
 }
