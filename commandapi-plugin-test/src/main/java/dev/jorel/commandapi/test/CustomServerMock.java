@@ -44,6 +44,23 @@ public class CustomServerMock extends ServerMock {
 		}
 	}
 	
+	public boolean isValidCommandAPICommand(CommandSender sender, String commandLine) {
+		String[] commands = commandLine.split(" ");
+		String commandLabel = commands[0];
+		Command command = getCommandMap().getCommand(commandLabel);
+		
+		if(command != null) {
+			return false;
+		} else {
+			AsyncCatcher.catchOp("command dispatch");
+			@SuppressWarnings("rawtypes")
+			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
+			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
+			ParseResults results = dispatcher.parse(commandLine, css);
+			return results.getExceptions().size() == 0;
+		}
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<String> getSuggestions(CommandSender sender, String commandLine) {
 		AsyncCatcher.catchOp("command tabcomplete");

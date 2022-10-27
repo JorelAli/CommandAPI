@@ -10,6 +10,10 @@ target
 build
 **/logs/*.log
 **/logs/*.log.gz
+logs/latest.log
+**/logs/*
+commandapi-plugin/dependency-reduced-pom.xml
+commandapi-shade/dependency-reduced-pom.xml
 .vscode
 .DS_Store
 docssrc/src/.markdownlint-cli2.yaml

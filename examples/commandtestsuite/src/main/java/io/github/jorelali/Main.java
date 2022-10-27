@@ -2,12 +2,23 @@ package io.github.jorelali;
 
 import java.io.File;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIConfig;
 
 public class Main extends JavaPlugin {
+
+	// Additional constructors required for MockBukkit
+	public Main() {
+		super();
+	}
+
+	public Main(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+		super(loader, description, dataFolder, file);
+	}
 
 	@Override
 	public void onLoad() {
@@ -27,7 +38,6 @@ public class Main extends JavaPlugin {
 		
 		MyCommands myCommands = new MyCommands(this);
 		myCommands.registerAllCommands();
-		myCommands.registerAllCommandTrees();
 	}
 
 }

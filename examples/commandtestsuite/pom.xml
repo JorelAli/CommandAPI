@@ -26,8 +26,10 @@
 		<!--This adds the Spigot API artifact to the build -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.18-R0.1-SNAPSHOT</version>
+			<!-- We need spigot because spigot has NMS implementations which we may indirectly access -->
+			<artifactId>spigot</artifactId>
+			 <!-- Must be 1.19 or above. Anything lower screws up potion effects -->
+			<version>1.19.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
