@@ -54,6 +54,18 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<!-- Remove commandapi-core's VersionHandler in favour of ours which
+								loads SpongePlatform -->
+							<filters>
+								<filter>
+									<artifact>dev.jorel:commandapi-core</artifact>
+									<excludes>
+										<exclude>dev/jorel/commandapi/CommandAPIVersionHandler**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
