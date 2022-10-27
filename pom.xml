@@ -70,6 +70,7 @@
 		<module>commandapi-plugin-test</module>
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
+		<module>commandapi-kotlin</module>
 	</modules>
 
 	<properties>
