@@ -412,6 +412,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 		return getBrigadierDispatcher().register(node);
 	}
 
+	// TODO: See note in AbstractPlatform. I'm not sure what this is supposed to do, or if it's needed anymore
 	@Override
 	public void registerHelp() {
 		// TODO Auto-generated method stub

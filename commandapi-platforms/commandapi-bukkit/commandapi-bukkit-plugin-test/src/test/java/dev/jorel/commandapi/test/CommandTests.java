@@ -107,7 +107,7 @@ public class CommandTests {
 	@Test
 	public void testNoExecutor() {
 		// TODO: Catch this case. Need to check if has no executor AND has no
-		// subcommand or otherwise when .register() called
+		//  subcommand or otherwise when .register() called
 		new CommandAPICommand("test")
 			.withArguments(new StringArgument("arg1"))
 			.register();

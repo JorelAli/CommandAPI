@@ -153,7 +153,6 @@ public class CommandAPI {
 	 *
 	 * @param plugin the plugin that this onEnable method is called from
 	 */
-	// TODO: Is an Object the best way to reference a generic plugin?
 	public static void onEnable(Object plugin) {
 		BaseHandler.getInstance().onEnable(plugin);
 	}
@@ -239,6 +238,8 @@ public class CommandAPI {
 	//  I think this one makes more sense, though I don't really understand what this requirement update is achieving
 	//  exactly, since I thought it was just a special permissions check? I just need a sanity check that it makes
 	//  sense to put this here, and if not, how should we handle that backwards-compatibility issue? - WillKroboth
+	// Actually, I realized that this isn't quite fully backwards compatible since AbstractPlayer is not directly
+	//  a Bukkit Player
 	/**
 	 * Updates the requirements required for a given player to execute a command.
 	 *

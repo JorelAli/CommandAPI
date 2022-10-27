@@ -43,6 +43,7 @@ import java.util.function.Predicate;
  * @param <CommandSender> The class for running platform commands
  * @param <Source> The class for running Brigadier commands
  */
+// TODO: Should we rename this back to CommandAPIHandler since it isn't subclassed anymore?
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
 	// TODO: Figure out what here gets moved to the common implementation and what
