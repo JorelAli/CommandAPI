@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>dev.jorel</groupId>
+	<artifactId>commandtestsuite</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<!-- This adds the Spigot Maven repository to the build -->
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		
+		<!-- Required for brigadier -->
+		<repository>
+			<id>minecraft-libraries</id>
+			<url>https://libraries.minecraft.net</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!--This adds the Spigot API artifact to the build -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.18-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-shade</artifactId>
+			<version>8.5.1</version>
+		</dependency>
+
+		<!-- CommandAPI plugin test suite -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-plugin-test</artifactId>
+			<version>8.6.0-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.19</artifactId>
+			<version>2.29.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.6.1</version>
+		</dependency>
+		<!-- Needed if we want to use CommandSyntaxException -->
+		<dependency>
+			<groupId>com.mojang</groupId>
+			<artifactId>brigadier</artifactId>
+			<version>1.0.17</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>clean package</defaultGoal>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<release>16</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+				<configuration>
+					<trimStackTrace>false</trimStackTrace>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>shade</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<relocations>
+								<relocation>
+									<pattern>dev.jorel.commandapi</pattern>
+									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
