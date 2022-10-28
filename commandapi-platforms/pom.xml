@@ -15,7 +15,8 @@
 
 	<modules>
 		<module>commandapi-bukkit</module>
-        <module>commandapi-velocity</module>
-		<module>commandapi-sponge</module>
-    </modules>
+		<!-- Coming soon! -->
+		<!-- <module>commandapi-velocity</module> -->
+		<!-- <module>commandapi-sponge</module> -->
+	</modules>
 </project>
