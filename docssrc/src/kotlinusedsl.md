@@ -77,6 +77,20 @@ Below, the `sendMessageTo` command is adding a broadcast option which should onl
 
 </div>
 
+### Adding requirements to commands
+
+Previously, we've taken a look at how to restrict arguments to certain players by using requirements.
+
+You can also restrict the use of a whole command by using requirements:
+
+<div class="multi-pre">
+
+```kotlin,Kotlin
+{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslCommandRequirements}}
+```
+
+</div>
+
 -----
 
 ## More examples

@@ -14,6 +14,7 @@ import org.bukkit.entity.Player
 import java.util.function.Predicate
 
 inline fun command(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
+inline fun command(name: String, requirement: Predicate<CommandSender>, tree: CommandTree.() -> Unit = {}) = CommandTree(name).withRequirement(requirement).apply(tree).register()
 
 // CommandTree start
 inline fun CommandTree.argument(base: Argument<*>, block: ArgumentTree.() -> Unit = {}): CommandTree = then(base.apply(block))
@@ -72,7 +73,7 @@ inline fun CommandTree.entityTypeArgument(nodeName: String, block: ArgumentTree.
 
 // Scoreboard arguments
 inline fun CommandTree.scoreHolderArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<String>(nodeName).apply(block))
-inline fun <T: ScoreHolderType> CommandTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
+inline fun <T : ScoreHolderType> CommandTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
 inline fun CommandTree.scoreboardSlotArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreboardSlotArgument(nodeName).apply(block))
 inline fun CommandTree.objectiveArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ObjectiveArgument(nodeName).apply(block))
 inline fun CommandTree.objectiveCriteriaArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ObjectiveCriteriaArgument(nodeName).apply(block))
@@ -165,7 +166,7 @@ inline fun ArgumentTree.entityTypeArgument(nodeName: String, block: ArgumentTree
 
 // Scoreboard arguments
 inline fun ArgumentTree.scoreHolderArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreHolderArgument<String>(nodeName).apply(block))
-inline fun <T: ScoreHolderType> ArgumentTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
+inline fun <T : ScoreHolderType> ArgumentTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
 inline fun ArgumentTree.scoreboardSlotArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreboardSlotArgument(nodeName).apply(block))
 inline fun ArgumentTree.objectiveArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ObjectiveArgument(nodeName).apply(block))
 inline fun ArgumentTree.objectiveCriteriaArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ObjectiveCriteriaArgument(nodeName).apply(block))
@@ -203,6 +204,15 @@ inline fun ArgumentTree.multiLiteralArgument(vararg literals: String, block: Arg
 inline fun CommandTree.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: ArgumentTree.() -> Unit = {}): CommandTree = then(base.withRequirement(predicate).apply(block))
 inline fun ArgumentTree.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(base.withRequirement(predicate).apply(block))
 
+// CommandTree execution
+fun CommandTree.anyExecutor(any: (CommandSender, Array<Any>) -> Unit) = Executions().any(any).executes(this)
+fun CommandTree.playerExecutor(player: (Player, Array<Any>) -> Unit) = Executions().player(player).executes(this)
+fun CommandTree.consoleExecutor(console: (ConsoleCommandSender, Array<Any>) -> Unit) = Executions().console(console).executes(this)
+fun CommandTree.commandBlockExecutor(block: (BlockCommandSender, Array<Any>) -> Unit) = Executions().block(block).executes(this)
+fun CommandTree.proxyExecutor(proxy: (ProxiedCommandSender, Array<Any>) -> Unit) = Executions().proxy(proxy).executes(this)
+fun CommandTree.nativeExecutor(native: (NativeProxyCommandSender, Array<Any>) -> Unit) = Executions().native(native).executes(this)
+
+// ArgumentTree execution
 fun ArgumentTree.anyExecutor(any: (CommandSender, Array<Any>) -> Unit) = Executions().any(any).executes(this)
 fun ArgumentTree.playerExecutor(player: (Player, Array<Any>) -> Unit) = Executions().player(player).executes(this)
 fun ArgumentTree.consoleExecutor(console: (ConsoleCommandSender, Array<Any>) -> Unit) = Executions().console(console).executes(this)
@@ -251,6 +261,45 @@ class Executions {
 	}
 
 	fun executes(tree: ArgumentTree) {
+		if (any != null) {
+			tree.executes(CommandExecutor { sender, args ->
+				any?.invoke(sender, args)
+			})
+			return
+		}
+		if (player != null) {
+			tree.executesPlayer(PlayerCommandExecutor { player, args ->
+				this.player?.invoke(player, args)
+			})
+			return
+		}
+		if (console != null) {
+			tree.executesConsole(ConsoleCommandExecutor { console, args ->
+				this.console?.invoke(console, args)
+			})
+			return
+		}
+		if (block != null) {
+			tree.executesCommandBlock(CommandBlockCommandExecutor { block, args ->
+				this.block?.invoke(block, args)
+			})
+			return
+		}
+		if (proxy != null) {
+			tree.executesProxy(ProxyCommandExecutor { proxy, args ->
+				this.proxy?.invoke(proxy, args)
+			})
+			return
+		}
+		if (native != null) {
+			tree.executesNative(NativeCommandExecutor { native, args ->
+				this.native?.invoke(native, args)
+			})
+			return
+		}
+	}
+
+	fun executes(tree: CommandTree) {
 		if (any != null) {
 			tree.executes(CommandExecutor { sender, args ->
 				any?.invoke(sender, args)

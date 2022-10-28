@@ -43,6 +43,14 @@ command("sendMessageTo") {
     }
 }
 /* ANCHOR_END: dslSendMessageToCommandRequirement */
+
+/* ANCHOR: dslCommandRequirements */
+command("commandRequirement", {sender: CommandSender -> (sender is Player) && sender.isOp}) {
+    playerExecutor { player, _ ->
+        player.sendMessage("This command can only be executed by players who are server operators.")
+    }
+}
+/* ANCHOR_END: dslCommandRequirements */
 }
 
 fun moreExamples() {
