@@ -31,8 +31,7 @@ import java.util.function.Function;
  */
 public class CommandAPIConfig {
 
-	// The default configuration. This should mirror the commandapi-plugin
-	// config.yml file.
+	// The default configuration. This should mirror the commandapi-plugin config.yml file.
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
 	boolean useLatestNMSVersion = false;

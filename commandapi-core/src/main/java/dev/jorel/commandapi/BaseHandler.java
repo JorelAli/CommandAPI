@@ -28,9 +28,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 
-// For all intents and purposes (all platforms), we can use all of
-// Brigadier's API (definitely the case for Spigot/Paper and Velocity).
-//
 // TODO: We can use the Adventure API on Paper and Velocity (NOT SPIGOT)
 //  and I'm not sure if we can use the Adventure API on Fabric, so let's
 //  assume we can't until we figure that out.
@@ -46,9 +43,6 @@ import java.util.function.Predicate;
 // TODO: Should we rename this back to CommandAPIHandler since it isn't subclassed anymore?
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
-	// TODO: Figure out what here gets moved to the common implementation and what
-	//  is platform-specific
-
 	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
 
 	// Compute all var handles all in one go so we don't do this during main server

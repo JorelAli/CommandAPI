@@ -19,15 +19,6 @@ import java.util.List;
  * @param <Source> The class for running Brigadier commands
  */
 public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
-	// TODO: Add methods that need platform-specific implementations
-	// All methods in bukkit NMS will probably also need to be here
-
-	// ^ I don't think all bukkit NMS methods will have to be in here.
-	// Almost all Bukkit NMS methods should be implemented in Bukkit's
-	// AbstractPlatform implementation. The only things in here are going
-	// to be supppppppppper low-level stuff
-
-
 	// Platform-specific loading, enabling, and disabling tasks
 	public abstract void onLoad();
 
@@ -52,10 +43,7 @@ public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, A
 	// before they can be used.
 	public abstract void registerPermission(String string);
 
-	// Some commands have existing suggestion providers.
-	// TODO: We can PROBABLY avoid this by
-	//  implementing the relevant NMS SuggestionProviders implementation on the platform-specific
-	//  argument, but I CBA to think about that now so I'll dump it here
+	// Some commands have existing suggestion providers
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
 
