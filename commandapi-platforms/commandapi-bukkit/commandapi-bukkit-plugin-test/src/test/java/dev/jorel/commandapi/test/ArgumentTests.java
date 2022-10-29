@@ -1,5 +1,5 @@
 package dev.jorel.commandapi.test;
-import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.executors.CommandExecutor;
@@ -44,7 +45,7 @@ public class ArgumentTests {
 
 	private String getDispatcherString() {
 		try {
-			return Files.readString(new File("command_registration.json").toPath());
+			return Files.readString(CommandAPI.getConfiguration().getDispatcherFile().toPath());
 		} catch (IOException e) {
 			return "";
 		}

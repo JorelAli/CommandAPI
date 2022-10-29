@@ -17,7 +17,7 @@ public class Main extends JavaPlugin {
 		CommandAPI.onLoad(new CommandAPIConfig()
 			.useLatestNMSVersion(true)
 			.silentLogs(true)
-			.dispatcherFile(new File("command_registration.json"))
+			.dispatcherFile(new File(getDataFolder(), "command_registration.json"))
 			.initializeNBTAPI(NBTContainer.class, NBTContainer::new),
 
 			new CommandAPIJavaLogger(getLogger())

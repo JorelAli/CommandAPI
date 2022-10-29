@@ -19,8 +19,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-shade</artifactId>
-			<version>8.4.1</version>
+			<artifactId>commandapi-bukkit-shade</artifactId>
+			<version>9.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<!--This adds the Spigot API artifact to the build -->

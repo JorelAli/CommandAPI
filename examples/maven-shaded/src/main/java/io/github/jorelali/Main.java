@@ -2,6 +2,7 @@ package io.github.jorelali;
 
 import java.io.File;
 
+import dev.jorel.commandapi.CommandAPIJavaLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.CommandAPI;
@@ -16,7 +17,8 @@ public class Main extends JavaPlugin {
 		CommandAPI.onLoad(
 			new CommandAPIConfig()
 				.verboseOutput(true)
-				.dispatcherFile(new File(getDataFolder(), "command_registration.json"))
+				.dispatcherFile(new File(getDataFolder(), "command_registration.json")),
+			new CommandAPIJavaLogger(getLogger())
 		);
 	}
 	

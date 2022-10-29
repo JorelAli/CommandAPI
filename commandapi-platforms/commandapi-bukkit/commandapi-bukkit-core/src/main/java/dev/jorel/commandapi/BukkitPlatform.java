@@ -397,7 +397,9 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	private void generateDispatcherFile() throws IOException {
 		File file = CommandAPI.getConfiguration().getDispatcherFile();
 		if (file != null) {
+			CommandAPI.logInfo(file.getAbsolutePath());
 			try {
+				file.getParentFile().mkdirs();
 				file.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace(System.out);
