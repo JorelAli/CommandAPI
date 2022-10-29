@@ -86,14 +86,26 @@ public class CommandAPI {
 		return logger;
 	}
 
-	private static class DefaultLogger extends Logger implements CommandAPILogger {
-		protected DefaultLogger() {
-			super("CommandAPI", null);
-			// TODO: Do we need to set the parent?
-//			setParent(Bukkit.getServer().getLogger());
-			setLevel(Level.ALL);
+	private static class DefaultLogger implements CommandAPILogger {
+		private static final String PREFIX = "[CommandAPI] ";
+		private static final String YELLOW = "\u001B[33m";
+		private static final String RED = "\u001B[31m";
+		private static final String RESET = "\u001B[0m";
+
+		@Override
+		public void info(String message) {
+			System.out.println(PREFIX + message);
 		}
 
+		@Override
+		public void warning(String message) {
+			System.out.println(YELLOW + PREFIX + message + RESET);
+		}
+
+		@Override
+		public void severe(String message) {
+			System.out.println(RED + PREFIX + message + RESET);
+		}
 	}
 
 	// Loading, enabling, and disabling
