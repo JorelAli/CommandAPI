@@ -39,7 +39,8 @@ public class CommandAPIMain implements CommandAPIVelocityPluginWrapper {
 			.dispatcherFile()
 			.initializeNBTAPI();
 
-		CommandAPI.onLoad(config, new CommandAPIJavaLogger(this.logger));
+		CommandAPI.setLogger(new CommandAPIJavaLogger(this.logger));
+		CommandAPI.onLoad(config);
 	}
 
 	@Override

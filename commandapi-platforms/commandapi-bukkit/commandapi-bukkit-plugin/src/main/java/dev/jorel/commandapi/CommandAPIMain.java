@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -60,7 +61,8 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		// Main CommandAPI loading
-		CommandAPI.onLoad(config, new CommandAPIJavaLogger(getLogger()));
+		CommandAPI.setLogger(new CommandAPIJavaLogger(getLogger()));
+		CommandAPI.onLoad(config);
 
 		// Configure the NBT API - we're not allowing tracking at all, according
 		// to the CommandAPI's design principles. The CommandAPI isn't used very

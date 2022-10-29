@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 
@@ -397,7 +399,6 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	private void generateDispatcherFile() throws IOException {
 		File file = CommandAPI.getConfiguration().getDispatcherFile();
 		if (file != null) {
-			CommandAPI.logInfo(file.getAbsolutePath());
 			try {
 				file.getParentFile().mkdirs();
 				file.createNewFile();
@@ -444,6 +445,19 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 		commandNodeChildren.remove(commandName);
 		((Map<String, CommandNode<?>>) COMMANDNODE_LITERALS.get(getBrigadierDispatcher().getRoot())).remove(commandName);
 		((Map<String, CommandNode<?>>) COMMANDNODE_ARGUMENTS.get(getBrigadierDispatcher().getRoot())).remove(commandName);
+	}
+
+	@Override
+	public CommandAPILogger getLogger() {
+		return new DefaultLogger();
+	}
+
+	private static class DefaultLogger extends Logger implements CommandAPILogger {
+		protected DefaultLogger() {
+			super("CommandAPI", null);
+			setParent(Bukkit.getServer().getLogger());
+			setLevel(Level.ALL);
+		}
 	}
 
 	@Override

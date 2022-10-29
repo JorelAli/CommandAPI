@@ -14,13 +14,12 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onLoad() {
+		CommandAPI.setLogger(new CommandAPIJavaLogger(getLogger()));
 		CommandAPI.onLoad(new CommandAPIConfig()
 			.useLatestNMSVersion(true)
 			.silentLogs(true)
 			.dispatcherFile(new File(getDataFolder(), "command_registration.json"))
-			.initializeNBTAPI(NBTContainer.class, NBTContainer::new),
-
-			new CommandAPIJavaLogger(getLogger())
+			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
 		);
 	}
 

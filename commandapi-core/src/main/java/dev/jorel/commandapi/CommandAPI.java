@@ -9,8 +9,6 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class to register commands with the 1.13 command UI
@@ -34,7 +32,7 @@ public class CommandAPI {
 
 	/**
 	 * Returns whether the CommandAPI is currently loaded. This should be true when
-	 * {@link CommandAPI#onLoad(CommandAPIConfig, CommandAPILogger)} is called. If the CommandAPI is
+	 * {@link CommandAPI#onLoad(CommandAPIConfig)} is called. If the CommandAPI is
 	 * loaded, commands are available to register.
 	 *
 	 * @return whether the CommandAPI has been loaded properly
@@ -73,39 +71,18 @@ public class CommandAPI {
 		return config;
 	}
 
+	public static void setLogger(CommandAPILogger logger) {
+		CommandAPI.logger = logger;
+	}
+
 	/**
-	 * Returns the CommandAPI's logger
-	 *
 	 * @return the CommandAPI's logger
 	 */
 	public static CommandAPILogger getLogger() {
 		if (logger == null) {
-			logger = new DefaultLogger();
-			logWarning("Could not find a logger for the CommandAPI. Using built-in logger. Did you forget to call CommandAPI.onLoad(config, logger)?");
+			logger = BaseHandler.getInstance().getPlatform().getLogger();
 		}
 		return logger;
-	}
-
-	private static class DefaultLogger implements CommandAPILogger {
-		private static final String PREFIX = "[CommandAPI] ";
-		private static final String YELLOW = "\u001B[33m";
-		private static final String RED = "\u001B[31m";
-		private static final String RESET = "\u001B[0m";
-
-		@Override
-		public void info(String message) {
-			System.out.println(PREFIX + message);
-		}
-
-		@Override
-		public void warning(String message) {
-			System.out.println(YELLOW + PREFIX + message + RESET);
-		}
-
-		@Override
-		public void severe(String message) {
-			System.out.println(RED + PREFIX + message + RESET);
-		}
 	}
 
 	// Loading, enabling, and disabling
@@ -115,28 +92,17 @@ public class CommandAPI {
 	 * your <code>onLoad()</code> method.
 	 *
 	 * @param config the configuration to use for the CommandAPI
-	 * @deprecated Please use {@link CommandAPI#onLoad(CommandAPIConfig, CommandAPILogger)} instead
 	 */
 	public static void onLoad(CommandAPIConfig config) {
-		onLoad(config, null);
-	}
-
-	/**
-	 * Initializes the CommandAPI for loading. This should be placed at the start of
-	 * your <code>onLoad()</code> method.
-	 *
-	 * @param config the configuration to use for the CommandAPI
-	 * @param logger the object to use to send messages
-	 */
-	public static void onLoad(CommandAPIConfig config, CommandAPILogger logger) {
 		if (!loaded) {
 			// Setup variables
 			CommandAPI.config = new InternalConfig(config);
-			CommandAPI.logger = logger;
 
 			// Initialize handlers
 			AbstractPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
+			new BaseHandler<>(platform);
 
+			// Log platform load
 			final String platformClassHierarchy;
 			{
 				List<String> platformClassHierarchyList = new ArrayList<>();
@@ -149,9 +115,8 @@ public class CommandAPI {
 			}
 			logNormal("Loaded platform " + platformClassHierarchy);
 
-			new BaseHandler<>(platform);
+			// Finish loading
 			BaseHandler.getInstance().onLoad();
-
 
 			loaded = true;
 		} else {

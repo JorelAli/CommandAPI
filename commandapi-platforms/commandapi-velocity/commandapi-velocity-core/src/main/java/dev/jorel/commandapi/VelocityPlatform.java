@@ -17,6 +17,8 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.*;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class VelocityPlatform extends AbstractPlatform<Argument<?>, CommandSource, CommandSource> {
 	private CommandManager commandManager;
@@ -67,6 +69,23 @@ public class VelocityPlatform extends AbstractPlatform<Argument<?>, CommandSourc
 	public CommandDispatcher<CommandSource> getBrigadierDispatcher() {
 		// TODO: How do we get this? Do we need access to velocity internals?
 		return null;
+	}
+
+	// Comment out this method if you want logging to work without fixing DefaultLogger
+	@Override
+	public CommandAPILogger getLogger() {
+		return new DefaultLogger();
+	}
+
+	private static class DefaultLogger extends Logger implements CommandAPILogger {
+		protected DefaultLogger() {
+			super("CommandAPI", null);
+			// TODO: How do we get the parent Logger for a Velocity server
+			//  Note: Using this logger might not work because the parent isn't set
+			//  If you'd like to run the plugin and have logging work, comment out the getDefaultLogger method so it isn't overridden anymore
+//			setParent(Bukkit.getServer().getLogger());
+			setLevel(Level.ALL);
+		}
 	}
 
 	@Override

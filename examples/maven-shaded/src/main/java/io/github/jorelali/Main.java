@@ -14,11 +14,11 @@ public class Main extends JavaPlugin {
 	public void onLoad() {
 		// Load the CommandAPI. We enable verbose logging and allow the CommandAPI
 		// to generate a file command_registration.json for debugging purposes
+		CommandAPI.setLogger(new CommandAPIJavaLogger(getLogger()));
 		CommandAPI.onLoad(
 			new CommandAPIConfig()
 				.verboseOutput(true)
-				.dispatcherFile(new File(getDataFolder(), "command_registration.json")),
-			new CommandAPIJavaLogger(getLogger())
+				.dispatcherFile(new File(getDataFolder(), "command_registration.json"))
 		);
 	}
 	

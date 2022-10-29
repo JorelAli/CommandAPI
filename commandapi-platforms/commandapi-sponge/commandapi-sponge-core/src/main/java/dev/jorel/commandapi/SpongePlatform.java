@@ -15,6 +15,7 @@ import java.util.List;
 
 // See https://docs.spongepowered.org/stable/en/plugin/migrating-from-7-to-8.html#command-creation-and-registration
 
+// TODO: How does Sponge send commands and interact with Brigadier?
 public class SpongePlatform extends AbstractPlatform<Object> {
 	private CommandManager commandManager;
 
@@ -55,6 +56,12 @@ public class SpongePlatform extends AbstractPlatform<Object> {
 	public CommandDispatcher<Object> getBrigadierDispatcher() {
 		// TODO: How do we get this? Do we need access to sponge internals?
 		return null;
+	}
+
+	@Override
+	public CommandAPILogger getLogger() {
+		// TODO: Make a default Logger
+		return super.getLogger();
 	}
 
 	@Override
