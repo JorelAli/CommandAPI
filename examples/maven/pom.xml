@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dev.jorel</groupId>
-	<artifactId>maven-shaded</artifactId>
+	<artifactId>maven</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -24,14 +24,15 @@
 	</repositories>
 
 	<dependencies>
-		<!-- The CommandAPI dependency used when shading -->
+		<!-- The CommandAPI dependency used for Bukkit and it's forks -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-shade</artifactId>
+			<artifactId>commandapi-bukkit-plugin</artifactId>
 			<version>9.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 
-		<!--This adds the Spigot API artifact to the build -->
+		<!-- This adds the Spigot API artifact to the build -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
@@ -39,50 +40,25 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- The NBT API -->
-		<dependency>
-			<groupId>de.tr7zw</groupId>
-			<artifactId>item-nbt-api</artifactId>
-			<version>2.10.0</version>
-		</dependency>
+<!--		&lt;!&ndash; The NBT API, provided through the CommandAPI plugin &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>de.tr7zw</groupId>-->
+<!--			<artifactId>item-nbt-api</artifactId>-->
+<!--			<version>2.10.0</version>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>
 		<defaultGoal>clean package</defaultGoal>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<release>16</release>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>shade</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<relocations>
-								<relocation>
-									<pattern>dev.jorel.commandapi</pattern>
-									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>de.tr7zw.changeme.nbtapi</pattern>
-									<shadedPattern>io.github.jorelali.nbtapi</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>8</source>
+					<target>8</target>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
