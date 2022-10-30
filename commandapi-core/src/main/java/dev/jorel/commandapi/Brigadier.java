@@ -41,7 +41,7 @@ import java.util.function.BiPredicate;
  * The Brigadier class is used to access some of the internals of the CommandAPI
  * so you can use the CommandAPI alongside Mojang's com.mojang.brigadier package
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+//@SuppressWarnings({ "unchecked", "rawtypes" })
 public final class Brigadier {
 
 	// Cannot be instantiated
@@ -80,7 +80,8 @@ public final class Brigadier {
 	 * @param literalArgument the LiteralArgument to convert from
 	 * @return a LiteralArgumentBuilder that represents the literal
 	 */
-	public static <CommandSender> LiteralArgumentBuilder fromLiteralArgument(ILiteralArgument<AbstractArgument<String, ?, ?, CommandSender>> literalArgument) {
+	public static <CommandSender, Argument extends AbstractArgument<String, ?, ?, CommandSender>>
+	LiteralArgumentBuilder fromLiteralArgument(ILiteralArgument<Argument> literalArgument) {
 		BaseHandler<?, CommandSender, ?> handler = (BaseHandler<?, CommandSender, ?>) BaseHandler.getInstance();
 		return handler.getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), literalArgument.instance().getArgumentPermission(), literalArgument.instance().getRequirements());
 	}
@@ -101,7 +102,8 @@ public final class Brigadier {
 	 * @param args      the arguments that the sender has filled in
 	 * @return a RedirectModifier that encapsulates the provided predicate
 	 */
-	public static <CommandSender> RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<AbstractArgument> args) {
+	public static <CommandSender, Argument extends AbstractArgument<?, ?, Argument, CommandSender>>
+	RedirectModifier fromPredicate(BiPredicate<CommandSender, Object[]> predicate, List<Argument> args) {
 		return cmdCtx -> {
 			if (predicate.test(getCommandSenderFromContext(cmdCtx), parseArguments(cmdCtx, args))) {
 				return Collections.singleton(cmdCtx.getSource());
@@ -117,7 +119,8 @@ public final class Brigadier {
 	 * @param command the command to convert
 	 * @return a Brigadier Command object that represents the provided command
 	 */
-	public static <Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> Command fromCommand(AbstractCommandAPICommand<?, Argument, CommandSender> command) {
+	public static <Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender>
+	Command fromCommand(AbstractCommandAPICommand<?, Argument, CommandSender> command) {
 		try {
 			// Need to cast base handler to make it realize we're using the same CommandSender class
 			BaseHandler<Argument, CommandSender, ?> handler = (BaseHandler<Argument, CommandSender, ?>) BaseHandler.getInstance();
