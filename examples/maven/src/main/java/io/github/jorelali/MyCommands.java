@@ -1,6 +1,8 @@
 package io.github.jorelali;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
+// TODO: This works on compile, but it is not recognized when coding
+//  Mess with commandapi-bukkit-plugin's pom to make this work
+import dev.jorel.commandapi.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Location;
