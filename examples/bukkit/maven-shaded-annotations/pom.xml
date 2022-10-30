@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dev.jorel</groupId>
-	<artifactId>maven-shaded</artifactId>
+	<artifactId>maven-shaded-annotations</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -31,30 +31,42 @@
 			<version>9.0.0-SNAPSHOT</version>
 		</dependency>
 
-		<!--This adds the Spigot API artifact to the build -->
+		<!-- The CommandAPI dependency used for building commands with annotations -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-annotations</artifactId>
+			<version>9.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- This adds the Spigot API artifact to the build -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.18-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- The NBT API -->
-		<dependency>
-			<groupId>de.tr7zw</groupId>
-			<artifactId>item-nbt-api</artifactId>
-			<version>2.10.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<defaultGoal>clean package</defaultGoal>
+
 		<plugins>
+			<!-- Run the annotations processor-->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<release>16</release>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>dev.jorel</groupId>
+							<artifactId>commandapi-annotations</artifactId>
+							<version>8.5.1</version>
+						</path>
+					</annotationProcessorPaths>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 			<!-- Add necessary classes into our plugin jar -->
@@ -78,11 +90,6 @@
 								<relocation>
 									<pattern>dev.jorel.commandapi</pattern>
 									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
-								</relocation>
-								<!-- Relocate the NBT API to avoid conflicts with other projects -->
-								<relocation>
-									<pattern>de.tr7zw.changeme.nbtapi</pattern>
-									<shadedPattern>io.github.jorelali.nbtapi</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>
