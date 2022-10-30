@@ -71,10 +71,13 @@
 						<configuration>
 							<createDependencyReducedPom>false</createDependencyReducedPom>
 							<relocations>
+								<!-- Relocate the CommandAPI to avoid conflicts with other
+									projects that shade a different version of the CommandAPI -->
 								<relocation>
 									<pattern>dev.jorel.commandapi</pattern>
 									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
 								</relocation>
+								<!-- Relocate the NBT API to avoid conflicts with other projects -->
 								<relocation>
 									<pattern>de.tr7zw.changeme.nbtapi</pattern>
 									<shadedPattern>io.github.jorelali.nbtapi</shadedPattern>
