@@ -14,6 +14,13 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+
+		<!-- CodeMC repository for the NBT API -->
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -29,6 +36,13 @@
 			<artifactId>spigot-api</artifactId>
 			<version>1.18-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- The NBT API -->
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.10.0</version>
 		</dependency>
 	</dependencies>
 
@@ -59,6 +73,10 @@
 								<relocation>
 									<pattern>dev.jorel.commandapi</pattern>
 									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>de.tr7zw.changeme.nbtapi</pattern>
+									<shadedPattern>io.github.jorelali.nbtapi</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>

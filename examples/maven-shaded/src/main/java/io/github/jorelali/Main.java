@@ -2,6 +2,7 @@ package io.github.jorelali;
 
 import java.io.File;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIJavaLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,27 +10,32 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIConfig;
 
 public class Main extends JavaPlugin {
-
 	@Override
 	public void onLoad() {
-		// Load the CommandAPI. We enable verbose logging and allow the CommandAPI
-		// to generate a file command_registration.json for debugging purposes
+		// Set CommandAPI to use this plugin's logger
 		CommandAPI.setLogger(new CommandAPIJavaLogger(getLogger()));
+
+		// Load the CommandAPI
 		CommandAPI.onLoad(
+			// Configure the CommandAPI
 			new CommandAPIConfig()
+				// Turn on verbose output for command registration logs
 				.verboseOutput(true)
+				// Give file where Brigadier's command registration tree should be dumped
 				.dispatcherFile(new File(getDataFolder(), "command_registration.json"))
+				// Point to the NBT API we want to use
+				.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
 		);
 	}
-	
+
 	@Override
 	public void onEnable() {
 		// Enable the CommandAPI
 		CommandAPI.onEnable(this);
-		
+
+		// Register commands using our MyCommands class
 		MyCommands myCommands = new MyCommands(this);
 		myCommands.registerAllCommands();
 		myCommands.registerAllCommandTrees();
 	}
-
 }

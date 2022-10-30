@@ -1,6 +1,8 @@
 package io.github.jorelali;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -8,10 +10,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.LocationArgument;
-import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.PotionEffectArgument;
 
 public class MyCommands {
 
@@ -46,6 +44,18 @@ public class MyCommands {
 				PotionEffectType potionEffectType = (PotionEffectType) args[1];
 				target.addPotionEffect(new PotionEffect(potionEffectType, 300 * 20, 1));
 			})
+			.register();
+
+		// An example of the NBTCompoundArgument
+		// We need to give CommandAPI the NBT API we're using during
+		// CommandAPI.onLoad(CommandAPIConfig) to use this Argument
+		new CommandAPICommand("nbt")
+			.withArguments(new NBTCompoundArgument<>("nbt"))
+			.executes(((sender, args) -> {
+				NBTContainer nbt = (NBTContainer) args[0];
+
+				sender.sendMessage(nbt.toString());
+			}))
 			.register();
 	}
 
