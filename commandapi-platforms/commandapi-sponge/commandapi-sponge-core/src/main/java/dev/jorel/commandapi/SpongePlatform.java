@@ -5,6 +5,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.AbstractPlayer;
@@ -16,8 +19,17 @@ import java.util.List;
 // See https://docs.spongepowered.org/stable/en/plugin/migrating-from-7-to-8.html#command-creation-and-registration
 
 // TODO: How does Sponge send commands and interact with Brigadier?
-public class SpongePlatform extends AbstractPlatform<Object> {
+public class SpongePlatform extends AbstractPlatform<Argument<?>, Object, Object> {
 	private CommandManager commandManager;
+	private static SpongePlatform instance;
+
+	public SpongePlatform() {
+		instance = this;
+	}
+
+	public static SpongePlatform get() {
+		return instance;
+	}
 
 	@Override
 	public void onLoad() {
@@ -78,6 +90,12 @@ public class SpongePlatform extends AbstractPlatform<Object> {
 	}
 
 	@Override
+	public AbstractCommandSender<?> wrapCommandSender(Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public SuggestionProvider<Object> getSuggestionProvider(SuggestionProviders suggestionProvider) {
 		// TODO Auto-generated method stub
 		return null;
@@ -109,6 +127,21 @@ public class SpongePlatform extends AbstractPlatform<Object> {
 	@Override
 	public void updateRequirements(AbstractPlayer<?> player) {
 		commandManager.updateCommandTreeForPlayer((ServerPlayer) player.getSource());
+	}
+
+	@Override
+	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<Object> meta) {
+		return null;
+	}
+
+	@Override
+	public Argument<String> newConcreteMultiLiteralArgument(String[] literals) {
+		return new MultiLiteralArgument(literals);
+	}
+
+	@Override
+	public Argument<String> newConcreteLiteralArgument(String literal) {
+		return new LiteralArgument(literal);
 	}
 
 }
