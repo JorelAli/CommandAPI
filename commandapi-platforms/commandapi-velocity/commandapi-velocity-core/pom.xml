@@ -53,10 +53,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- Annotations processor -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-preprocessor</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

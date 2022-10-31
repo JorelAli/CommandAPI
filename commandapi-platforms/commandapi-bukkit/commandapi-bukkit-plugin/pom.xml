@@ -53,24 +53,12 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
 			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>dev.jorel</groupId>
-					<artifactId>commandapi-preprocessor</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>dev.jorel</groupId>
-					<artifactId>commandapi-preprocessor</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
@@ -83,6 +71,7 @@
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
+
 		<dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api</artifactId>
