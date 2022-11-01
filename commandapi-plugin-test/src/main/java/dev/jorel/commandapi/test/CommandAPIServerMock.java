@@ -16,7 +16,7 @@ import be.seeseemelk.mockbukkit.AsyncCatcher;
 import be.seeseemelk.mockbukkit.ServerMock;
 import dev.jorel.commandapi.Brigadier;
 
-public class CustomServerMock extends ServerMock {
+public class CommandAPIServerMock extends ServerMock {
 
 	@SuppressWarnings("unchecked")
 	public boolean dispatchThrowableCommand(CommandSender sender, String commandLine) throws CommandSyntaxException{

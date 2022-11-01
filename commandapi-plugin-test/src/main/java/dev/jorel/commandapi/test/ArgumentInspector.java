@@ -9,25 +9,16 @@ import java.util.Optional;
  *
  * @param <T>
  */
-public class Mut<T> {
+public class ArgumentInspector<T> {
 	
-	public static <T> Mut<T> of() {
-		return new Mut<T>();
-	}
-
-	public static <T> Mut<T> of(T obj) {
-		return new Mut<T>(obj);
+	public static <T> ArgumentInspector<T> of() {
+		return new ArgumentInspector<T>();
 	}
 	
 	private final Deque<Optional<T>> value;
 	
-	private Mut() {
+	private ArgumentInspector() {
 		value = new ArrayDeque<>();
-	}
-	
-	private Mut(T obj) {
-		this();
-		set(obj);
 	}
 	
 	public void set(T obj) {

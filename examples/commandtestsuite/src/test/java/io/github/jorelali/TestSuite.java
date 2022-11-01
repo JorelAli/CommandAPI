@@ -21,12 +21,12 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.nms.NMS_1_19_R1;
-import dev.jorel.commandapi.test.CustomServerMock;
+import dev.jorel.commandapi.test.CommandAPIServerMock;
 import dev.jorel.commandapi.test.MockNMS;
 
 public class TestSuite {
 
-	private CustomServerMock server;
+	private CommandAPIServerMock server;
 	private Main plugin;
 
 	private String getDispatcherString() {
@@ -43,7 +43,7 @@ public class TestSuite {
 
 	@BeforeEach
 	public void setUp() {
-		server = MockBukkit.mock(new CustomServerMock());
+		server = MockBukkit.mock(new CommandAPIServerMock());
 		
 		// Pre-load the CommandAPI, using a specified NMS
 		CommandAPI.onLoad(new CommandAPIConfig().setCustomNMS(new MockNMS(new NMS_1_19_R1())));
