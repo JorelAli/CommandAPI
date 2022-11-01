@@ -1,5 +1,47 @@
 # Upgrading guide
 
+## From 8.5.1 to 8.6.0
+
+### Tooltips
+
+In 8.6.0, tooltips have been reworked to provide support for Spigot's `BaseComponent[]`s, and Adventure's `Component`s. As a result, the default method `StringTooltip.of()` and `Tooltip.of()` have been deprecated in favour of the better named `StringTooltip.ofString()` and `Tooltip.ofString()` methods:
+
+```java
+StringTooltip.of("wave", "Waves at a player")
+
+Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn")
+```
+
+\\[\downarrow\\]
+
+```java
+StringTooltip.ofString("wave", "Waves at a player")
+
+Tooltip.ofString(player.getWorld().getSpawnLocation(), "World spawn")
+```
+
+Additionally, the `IStringTooltip` interface's `getTooltip` method was changed to return a Brigadier `Message` object instead of a `String`. To use the `IStringTooltip` directly, you now have to add Brigadier to your project's dependencies (info on how to do that can be found [here](https://github.com/Mojang/brigadier#installation)).
+
+You can use the `Tooltip.messageFromString(String)` to easily upgrade to the new `Message` return type:
+
+```java
+@Override
+public String getTooltip() {
+    return this.itemstack.getItemMeta().getLore().get(0);
+}
+```
+
+\\[\downarrow\\]
+
+```java
+@Override
+public Message getTooltip() {
+    return Tooltip.messageFromString(this.itemstack.getItemMeta().getLore().get(0));
+}
+```
+
+-----
+
 ## From 8.5.0 to 8.5.1
 
 ### Brigadier arguments
