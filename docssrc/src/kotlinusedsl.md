@@ -1,20 +1,32 @@
 # Using the DSL
 
+
 ## Defining a simple message command
 
-As a first example and to take a first look at it, we will first create a simple command to send messages to a player:
+As a first example and to take a first look at the Kotlin DSL syntax, we will first create a simple command to send messages to a player.
 
-<div class="multi-pre">
+<div class="example">
 
-```kotlin,Kotlin
+### Example - Sending a message to a player using the Kotlin DSL
+
+We want to create a command that lets us send a message to a player. To do this, we want to register a command with the following syntax:
+
+```mccmd
+/sendmessageto <player> <msg>
+```
+
+We can then use the following command registration:
+
+```kotlin
 {{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommand}}
 ```
 
-</div>
-
 Here you can see some interesting things:
+
 1. You do not need to call the `.register()` method when using the DSL
 2. You do not need to initialise any arguments
+
+</div>
 
 -----
 
@@ -24,14 +36,14 @@ The CommandTree DSL also provides executors to execute your command. You've seen
 
 To find out, which DSL executor corresponds to "normal" executors, you can refer to the table below:
 
-| DSL Executor           | "normal" Executor      |
-|------------------------|------------------------|
-| anyExecutor()          | executes()             |
-| playerExecutor()       | executesPlayer()       |
-| consoleExecutor()      | executesConsole()      |
-| commandBlockExecutor() | executesCommandBlock() |
-| proxyExecutor()        | executesProxy()        |
-| nativeExecutor()       | executesNative()       |
+| DSL Executor             | "normal" Executor        |
+|--------------------------|--------------------------|
+| `anyExecutor()`          | `executes()`             |
+| `playerExecutor()`       | `executesPlayer()`       |
+| `consoleExecutor()`      | `executesConsole()`      |
+| `commandBlockExecutor()` | `executesCommandBlock()` |
+| `proxyExecutor()`        | `executesProxy()`        |
+| `nativeExecutor()`       | `executesNative()`       |
 
 -----
 
