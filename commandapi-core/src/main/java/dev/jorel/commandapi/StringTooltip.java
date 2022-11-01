@@ -40,8 +40,6 @@ public class StringTooltip implements IStringTooltip {
 	private final String suggestion;
 	private final Message tooltip;
 
-
-
 	/**
 	 * Constructs a StringTooltip with a suggestion and a string tooltip
 	 *

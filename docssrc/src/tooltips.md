@@ -11,7 +11,7 @@ Tooltips _can_ have formatting to change how the text is displayed by using the 
 
 -----
 
-## Tooltips with normal (String) suggestions
+## Tooltips with normal (String-based) suggestions
 
 To use these features, the CommandAPI includes the `stringsWithTooltips` methods for arguments, that accept `IStringTooltip` objects instead of `String` objects:
 
@@ -20,14 +20,17 @@ ArgumentSuggestions stringsWithTooltips(IStringTooltip... suggestions);
 ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, IStringTooltip[]> suggestions);
 ```
 
-The `StringTooltip` class is the CommandAPI's default implementation of `IStringTooltip`, which has two static methods to construct it easily:
+The `StringTooltip` class is the CommandAPI's default implementation of `IStringTooltip`, which has some static methods to construct tooltips easily:
 
 ```java
 StringTooltip none(String suggestion);
-StringTooltip of(String suggestion, String tooltip);
+StringTooltip ofString(String suggestion, String tooltip);
+StringTooltip ofMessage(String suggestion, Message tooltip);
+StringTooltip ofBaseComponents(String suggestion, BaseComponent... tooltip);
+StringTooltip ofAdventureComponent(String suggestion, Component tooltip);
 ```
 
-The first method, `StringTooltip.none(String)` creates a normal suggestion entry with no tooltip, whereas the `StringTooltip.of(String, String)` method creates a suggestion with the provided tooltip text.
+The first method, `StringTooltip.none(String)` creates a normal suggestion entry with no tooltip. The other methods create a suggestion with the provided tooltip text in either `String`, Brigadier `Message`, Spigot `BaseComponent[]` or Adventure `Component` format.
 
 <div class="example">
 
@@ -39,7 +42,7 @@ Say we want to create a simple command to provide in-game emotes between players
 /emote <emote> <target>
 ```
 
-First, we'll declare our arguments. Here, we'll use the `stringsWithTooltips` method, along with the `StringTooltip.of(String, String)` method to create emote suggestions and include suitable descriptions:
+First, we'll declare our arguments. Here, we'll use the `stringsWithTooltips` method, along with the `StringTooltip.ofString(String, String)` method to create emote suggestions and include suitable descriptions:
 
 <div class="multi-pre">
 
@@ -69,14 +72,20 @@ Finally, we declare our command as normal:
 
 </div>
 
+-----
+
+## Using `IStringTooltip` directly
+
 The `IStringTooltip` interface can be implemented by any other class to provide tooltips for custom objects. The `IStringTooltip` interface has the following methods:
 
 ```java
 public interface IStringTooltip {
     public String getSuggestion();
-    public String getTooltip();
+    public Message getTooltip();
 }
 ```
+
+> Note that the `Message` class is from the Brigadier library, which you will have to add as a dependency to your plugin. Information on how to do that can be found [here](https://github.com/Mojang/brigadier#installation).
 
 This is incredibly useful if you are using suggestions with custom objects, such as a plugin that has custom items.
 
@@ -97,6 +106,8 @@ public {{#include ../../commandapi-core/src/test/java/Examples.java:Tooltips3}}
 ```
 
 </div>
+
+We make use of the `Tooltip.messageFromString()` method to generate a Brigadier `Message` object from our string tooltip.
 
 Let's also say that our plugin has registered lots of `CustomItem`s and has this stored in a `CustomItem[]` in our plugin. We could then use this as our input for suggestions:
 
@@ -133,7 +144,11 @@ Just like the `StringTooltip` class, the `Tooltip<S>` class provides the followi
 
 ```java
 Tooltip<S> none(S object);
-Tooltip<S> of(S object, String tooltip);
+Tooltip<S> ofString(S object, String tooltip);
+Tooltip<S> ofMessage(S object, Message tooltip);
+Tooltip<S> ofBaseComponents(S object, BaseComponent... tooltip);
+Tooltip<S> ofAdventureComponent(S object, Component tooltip);
+
 Tooltip<S>[] arrayOf(Tooltip<S>... tooltips);
 ```
 
@@ -149,7 +164,7 @@ Say we wanted to create a custom teleport command which suggestions a few key lo
 /warp <location>
 ```
 
-First, we'll declare our arguments. Here, we use a `LocationArgument` and use the `tooltips` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.of(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
+First, we'll declare our arguments. Here, we use a `LocationArgument` and use the `tooltips` method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using `Tooltip.ofString(Location, String)` and collate them together with `Tooltip.arrayOf(Tooltip<Location>...)`:
 
 <div class="multi-pre">
 

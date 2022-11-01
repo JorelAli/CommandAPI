@@ -236,20 +236,20 @@ new CommandAPICommand("searchrange")
         List<Location> locations = new ArrayList<>();
 
         // Iterate through all chunks, and then all tile entities within each chunk
-        for(Chunk chunk : player.getWorld().getLoadedChunks()) {
-            for(BlockState blockState : chunk.getTileEntities()) {
+        for (Chunk chunk : player.getWorld().getLoadedChunks()) {
+            for (BlockState blockState : chunk.getTileEntities()) {
 
                 // The distance between the block and the player
                 int distance = (int) blockState.getLocation().distance(player.getLocation());
 
                 // Check if the distance is within the specified range 
-                if(range.isInRange(distance)) {
+                if (range.isInRange(distance)) {
 
                     // Check if the tile entity is a chest
-                    if(blockState instanceof Chest chest) {
+                    if (blockState instanceof Chest chest) {
                         
                         // Check if the chest contains the item specified by the player
-                        if(chest.getInventory().contains(itemStack.getType())) {
+                        if (chest.getInventory().contains(itemStack.getType())) {
                             locations.add(chest.getLocation());
                         }
                     }
@@ -259,7 +259,7 @@ new CommandAPICommand("searchrange")
         }
 
         // Output the locations of the chests, or whether no chests were found
-        if(locations.isEmpty()) {
+        if (locations.isEmpty()) {
             player.sendMessage("No chests were found");
         } else {
             player.sendMessage("Found " + locations.size() + " chests:");
@@ -308,7 +308,7 @@ new CommandAPICommand("rotate")
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];
 
-        if(target instanceof ArmorStand armorStand) {
+        if (target instanceof ArmorStand armorStand) {
             armorStand.setHeadPose(new EulerAngle(Math.toRadians(rotation.getPitch()), Math.toRadians(rotation.getYaw() - 90), 0));
         }
     })
@@ -483,7 +483,7 @@ new CommandAPICommand("remove")
         Collection<Entity> entities = (Collection<Entity>) args[0];
         
         sender.sendMessage("Removed " + entities.size() + " entities");
-        for(Entity e : entities) {
+        for (Entity e : entities) {
             e.remove();
         }
     })
@@ -497,7 +497,7 @@ new CommandAPICommand("spawnmob")
     .withArguments(new EntityTypeArgument("entity"))
     .withArguments(new IntegerArgument("amount", 1, 100)) // Prevent spawning too many entities
     .executesPlayer((Player player, Object[] args) -> {
-        for(int i = 0; i < (int) args[1]; i++) {
+        for (int i = 0; i < (int) args[1]; i++) {
             player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
         }
     })
@@ -515,7 +515,7 @@ new CommandAPICommand("reward")
         @SuppressWarnings("unchecked")
         Collection<String> players = (Collection<String>) args[0];
         
-        for(String playerName : players) {
+        for (String playerName : players) {
             Bukkit.getPlayer(playerName).getInventory().addItem(new ItemStack(Material.DIAMOND, 3));
         }
     })
@@ -582,7 +582,7 @@ new CommandAPICommand("unregisterall")
         Set<Objective> objectives = Bukkit.getScoreboardManager().getMainScoreboard().getObjectivesByCriteria(objectiveCriteria);
         
         // Unregister the objectives
-        for(Objective objective : objectives) {
+        for (Objective objective : objectives) {
             objective.unregister();
         }
     })
@@ -619,7 +619,7 @@ new CommandAPICommand("award")
         
         // Award all criteria for the advancement
         AdvancementProgress progress = target.getAdvancementProgress(advancement);
-        for(String criteria : advancement.getCriteria()) {
+        for (String criteria : advancement.getCriteria()) {
             progress.awardCriteria(criteria);
         }
     })
@@ -713,7 +713,7 @@ new CommandAPICommand("giveloottable")
         BlockState state = location.getBlock().getState();
 
         // Check if the input block is a container (e.g. chest)
-        if(state instanceof Container container && state instanceof Lootable lootable) {
+        if (state instanceof Container container && state instanceof Lootable lootable) {
             // Apply the loot table to the chest
             lootable.setLootTable(lootTable);
             container.update();
@@ -832,7 +832,7 @@ new CommandAPICommand("bigmsg")
         int duration = (int) args[0];
         String message = (String) args[1];
 
-        for(Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             // Display the message to all players, with the default fade in/out times (10 and 20).
             player.sendTitle(message, "", 10, duration, 20);
         }
@@ -870,7 +870,7 @@ new CommandAPICommand("replace")
                         Block block = center.getWorld().getBlockAt(x + center.getBlockX(), y + center.getBlockY(), z + center.getBlockZ());
                         
                         // If that block matches a block from the predicate, set it
-                        if(predicate.test(block)) {
+                        if (predicate.test(block)) {
                             block.setType(blockData.getMaterial());
                             block.setBlockData(blockData);
                         }
@@ -895,8 +895,8 @@ new CommandAPICommand("rem")
         @SuppressWarnings("unchecked")
         Predicate<ItemStack> predicate = (Predicate<ItemStack>) args[0];
         
-        for(ItemStack item : player.getInventory()) {
-            if(predicate.test(item)) {
+        for (ItemStack item : player.getInventory()) {
+            if (predicate.test(item)) {
                 player.getInventory().remove(item);
             }
         }
@@ -1038,7 +1038,7 @@ public Argument<World> worldArgument(String nodeName) {
         // Parse the world from our input
         World world = Bukkit.getWorld(info.input());
     
-        if(world == null) {
+        if (world == null) {
             throw new CustomArgumentException(new MessageBuilder("Unknown world: ").appendArgInput());
         } else {
             return world;
@@ -1056,7 +1056,7 @@ new CommandAPICommand("runfunc")
     .withArguments(new FunctionArgument("function"))
     .executes((sender, args) -> {
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
-        for(FunctionWrapper function : functions) {
+        for (FunctionWrapper function : functions) {
             function.run(); // The command executor in this case is 'sender'
         }
     })
@@ -1072,7 +1072,7 @@ new CommandAPICommand("runfunction")
         FunctionWrapper[] functions = (FunctionWrapper[]) args[0];
 
         // Run all functions in our FunctionWrapper[]
-        for(FunctionWrapper function : functions) {
+        for (FunctionWrapper function : functions) {
             function.run();
         }
     })
@@ -1181,7 +1181,7 @@ new CommandAPICommand("suicide")
 new CommandAPICommand("suicide")
     .executes((sender, args) -> {
         LivingEntity entity;
-        if(sender instanceof ProxiedCommandSender proxy) {
+        if (sender instanceof ProxiedCommandSender proxy) {
             entity = (LivingEntity) proxy.getCallee();
         } else {
             entity = (LivingEntity) sender;
@@ -1226,7 +1226,7 @@ new CommandAPICommand("killme")
     })
     .executesProxy((proxy, args) -> {
         // Check if the callee (target) is an Entity and kill it
-        if(proxy.getCallee() instanceof LivingEntity target) {
+        if (proxy.getCallee() instanceof LivingEntity target) {
             target.setHealth(0);
         }
     })
@@ -1239,7 +1239,7 @@ new CommandAPICommand("killme")
 new CommandAPICommand("break")
     .executesNative((sender, args) -> {
         Location location = sender.getLocation();
-        if(location != null) {
+        if (location != null) {
             location.getBlock().breakNaturally();
         }
     })
@@ -1294,11 +1294,11 @@ new CommandAPICommand("getfruit")
     .executes((sender, args) -> {
         String inputFruit = (String) args[0];
         
-        if(Arrays.stream(fruit).anyMatch(inputFruit::equals)) {
+        if (Arrays.stream(fruit).anyMatch(inputFruit::equals)) {
             // Do something with inputFruit
         } else {
             // The sender's input is not in the list of fruit
-            throw CommandAPI.fail("That fruit doesn't exist!");
+            throw CommandAPI.failWithString("That fruit doesn't exist!");
         }
     })
     .register();
@@ -1383,7 +1383,7 @@ new CommandAPICommand("repair")
         // Repair the item back to full durability
         ItemStack is = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = is.getItemMeta();
-        if(itemMeta instanceof Damageable) {
+        if (itemMeta instanceof Damageable) {
             ((Damageable) itemMeta).setDamage(0);
             is.setItemMeta(itemMeta);
         }
@@ -1441,16 +1441,16 @@ arguments.add(new PlayerArgument("player")
         String partyName = partyMembers.get(((Player) info.sender()).getUniqueId());
         
         // Find the party members
-        for(UUID uuid : partyMembers.keySet()) {
+        for (UUID uuid : partyMembers.keySet()) {
             
             // Ignore yourself
-            if(uuid.equals(((Player) info.sender()).getUniqueId())) {
+            if (uuid.equals(((Player) info.sender()).getUniqueId())) {
                 continue;
             } else {
                 // If the party member is in the same party as you
-                if(partyMembers.get(uuid).equals(partyName)) {
+                if (partyMembers.get(uuid).equals(partyName)) {
                     Player target = Bukkit.getPlayer(uuid);
-                    if(target.isOnline()) {
+                    if (target.isOnline()) {
                         // Add them if they are online
                         playersToTeleportTo.add(target);
                     }
@@ -1714,7 +1714,8 @@ new CommandAPICommand("mycommand")
 /* ANCHOR: Tooltips1 */
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
-    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
+    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info ->
+        new IStringTooltip[] {
             StringTooltip.ofString("wave", "Waves at a player"),
             StringTooltip.ofString("hug", "Gives a player a hug"),
             StringTooltip.ofString("glare", "Gives a player the death glare")
@@ -1759,8 +1760,8 @@ new CommandAPICommand("giveitem")
         String itemName = (String) args[0];
         
         // Give them the item
-        for(CustomItem item : customItems) {
-            if(item.getName().equals(itemName)) {
+        for (CustomItem item : customItems) {
+            if (item.getName().equals(itemName)) {
                 player.getInventory().addItem(item.getItem());
                 break;
             }
@@ -1921,7 +1922,7 @@ allowedMobs.removeAll(Arrays.asList(forbiddenMobs)); // Now contains everything 
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest(
     info -> {
-        if(info.sender().isOp()) {
+        if (info.sender().isOp()) {
             // All entity types
             return EntityType.values();
         } else {
@@ -2042,7 +2043,7 @@ new CommandAPICommand("multigive")
         int amount = (int) args[0];
         List<Material> theList = (List<Material>) args[1];
         
-        for(Material item : theList) {
+        for (Material item : theList) {
             player.getInventory().addItem(new ItemStack(item, amount));
         }
     })
@@ -2060,7 +2061,7 @@ ArgumentSuggestions commandSuggestions = (info, builder) -> {
 
     // Identify the position of the current argument
     int start;
-    if(arg.contains(" ")) {
+    if (arg.contains(" ")) {
         // Current argument contains spaces - it starts after the last space and after the start of this argument.
         start = builder.getStart() + arg.lastIndexOf(' ') + 1;
     } else {
@@ -2073,7 +2074,7 @@ ArgumentSuggestions commandSuggestions = (info, builder) -> {
         .parse(info.currentArg(), Brigadier.getBrigadierSourceFromCommandSender(info.sender()));
     
     // Intercept any parsing errors indicating an invalid command
-    for(CommandSyntaxException exception : parseResults.getExceptions().values()) {
+    for (CommandSyntaxException exception : parseResults.getExceptions().values()) {
         // Raise the error, with the cursor offset to line up with the argument
         throw new CommandSyntaxException(exception.getType(), exception.getRawMessage(), exception.getInput(), exception.getCursor() + start);
     }
@@ -2202,10 +2203,10 @@ new CommandTree("signedit")
 
 public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
     Block block = player.getTargetBlock(null, 256);
-    if(block != null && block.getState() instanceof Sign sign) {
+    if (block != null && block.getState() instanceof Sign sign) {
         return sign;
     } else {
-        throw CommandAPI.fail("You're not looking at a sign!");
+        throw CommandAPI.failWithString("You're not looking at a sign!");
     }
 }
 
@@ -2218,7 +2219,7 @@ class Friends {
     static Map<UUID, String[]> friends = new HashMap<>();
     
     public static String[] getFriends(CommandSender sender) {
-        if(sender instanceof Player player) {
+        if (sender instanceof Player player) {
             // Look up friends in a database or file
             return friends.get(player.getUniqueId());
         } else {
