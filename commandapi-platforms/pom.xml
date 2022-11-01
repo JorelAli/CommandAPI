@@ -13,10 +13,25 @@
 	<artifactId>commandapi-platforms</artifactId>
 	<packaging>pom</packaging>
 
-	<modules>
-		<module>commandapi-bukkit</module>
-		<!-- Coming soon! -->
-		<!-- <module>commandapi-velocity</module> -->
-		<!-- <module>commandapi-sponge</module> -->
-	</modules>
+	<profiles>
+		<!-- Choose which platforms get built -->
+		<profile>
+			<id>Platform.Bukkit</id>
+			<modules>
+				<module>commandapi-bukkit</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>Platform.Sponge</id>
+			<modules>
+				<module>commandapi-sponge</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>Platform.Velocity</id>
+			<modules>
+				<module>commandapi-velocity</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
