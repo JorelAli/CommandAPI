@@ -2,7 +2,7 @@
 
 The CommandAPI also provides an alternative way of making commands when using Kotlin to develop your plugins: A DSL!
 
-This DSL provides many methods to easily add arguments to your command structure. Examples of the DSL can be found [here](./kotlinusedsl.md)
+This DSL provides many methods to easily add arguments to your command structure. Examples of the DSL can be found [here](./kotlinusedsl.md).
 
 > **Developer's Note:**
 > 

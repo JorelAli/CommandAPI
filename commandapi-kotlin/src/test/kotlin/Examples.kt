@@ -33,7 +33,7 @@ command("sendMessageTo") {
             }
         }
     }
-    requirement(of("broadcast"), { sender: CommandSender -> (sender is Player) && sender.isOp }) { // Define a new LiteralArgument("broadcast") that requires the CommandSender to be a player who is a server operator
+    requirement(of("broadcast"), { sender: CommandSender -> sender.isOp }) { // Define a new LiteralArgument("broadcast") that requires the CommandSender to be a player who is a server operator
         greedyArgument("msg") {
             playerExecutor { _, args ->
                 val message: String = args[0] as String
@@ -45,7 +45,7 @@ command("sendMessageTo") {
 /* ANCHOR_END: dslSendMessageToCommandRequirement */
 
 /* ANCHOR: dslCommandRequirements */
-command("commandRequirement", {sender: CommandSender -> (sender is Player) && sender.isOp}) {
+command("commandRequirement", {sender: CommandSender -> sender.isOp}) {
     playerExecutor { player, _ ->
         player.sendMessage("This command can only be executed by players who are server operators.")
     }

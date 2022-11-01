@@ -47,7 +47,7 @@ One thing to note is that the DSL also features every existing constructor. This
 
 However, when using this DSL it is implemented like this: 
 
-`integerArgument("integer", 0, 10) { // new arguments, execution goes in here }`
+`integerArgument("integer", 0, 10) { /* new arguments, execution goes in here */ }`
 
 <div class="warning">
 
