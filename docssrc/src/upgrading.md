@@ -40,6 +40,20 @@ public Message getTooltip() {
 }
 ```
 
+### Command failures
+
+To support Spigot's `BaseComponent[]`s and Adventure's `Component`s, the `CommandAPI.fail()` method has now been deprecated in favour of the better named `CommandAPI.failWithString()` method:
+
+```java
+throw CommandAPI.fail("Error message");
+```
+
+\\[\downarrow\\]
+
+```java
+throw CommandAPI.failWithString("Error message");
+```
+
 -----
 
 ## From 8.5.0 to 8.5.1
