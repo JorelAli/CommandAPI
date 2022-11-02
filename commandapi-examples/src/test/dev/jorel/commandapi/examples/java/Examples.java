@@ -1452,7 +1452,7 @@ new CommandAPICommand("party")
         
         partyMembers.put(player.getUniqueId(), partyName);
         
-        CommandAPI.updateRequirements(new BukkitPlayer(player));
+        CommandAPI.updateRequirements(player);
     })
     .register();
 /* ANCHOR_END: updatingrequirements */
@@ -1526,8 +1526,8 @@ LiteralCommandNode randomChance = Brigadier.fromLiteralArgument(new LiteralArgum
 
 /* ANCHOR: declarearguments */
 // Declare arguments like normal
-IntegerArgument numeratorArgument = new IntegerArgument("numerator", 0);
-IntegerArgument denominatorArgument = new IntegerArgument("denominator", 1);
+Argument<Integer> numeratorArgument = new IntegerArgument("numerator", 0);
+Argument<Integer> denominatorArgument = new IntegerArgument("denominator", 1);
 
 List<Argument> arguments = new ArrayList<>();
 arguments.add(numeratorArgument);

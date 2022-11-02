@@ -222,8 +222,9 @@ public class CommandAPI {
 	 *
 	 * @param player the player whos requirements to update
 	 */
-	public static void updateRequirements(AbstractPlayer<?> player) {
-		BaseHandler.getInstance().getPlatform().updateRequirements(player);
+	public static <CommandSender, Player extends CommandSender> void updateRequirements(Player player) {
+		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) BaseHandler.getInstance().getPlatform();
+		platform.updateRequirements((AbstractPlayer<?>) platform.wrapCommandSender(player));
 	}
 
 	// Produce WrapperCommandSyntaxException

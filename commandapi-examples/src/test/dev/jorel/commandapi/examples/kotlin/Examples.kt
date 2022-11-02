@@ -1389,7 +1389,7 @@ CommandAPICommand("party")
 
         partyMembers.put(player.uniqueId, partyName)
 
-        CommandAPI.updateRequirements(BukkitPlayer(player))
+        CommandAPI.updateRequirements(player)
     })
     .register()
 /* ANCHOR_END: updatingrequirements */
