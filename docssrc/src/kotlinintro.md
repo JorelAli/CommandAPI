@@ -21,6 +21,37 @@ To install the DSL, you need to add the `commandapi-kotlin` dependency into your
 </dependencies>
 ```
 
+Next, to shade it into your project easily, you need to add the `maven-shade-plugin`:
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.3.0</version>
+            <executions>
+                <execution>
+                    <id>shade</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <relocations>
+                    <relocation>
+                        <pattern>dev.jorel.commandapi</pattern>
+                        <!-- TODO: Change this to my own package name -->
+                        <shadedPattern>my.custom.package.commandapi</shadedPattern>
+                    </relocation>
+                </relocations>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
 ### Adding the dependency with Gradle
 
 First, you need to add the repository:
