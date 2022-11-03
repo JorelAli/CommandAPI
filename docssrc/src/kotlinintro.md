@@ -217,7 +217,7 @@ tasks.withType<KotlinCompile> {
 
 </div>
 
-Finally, you need to add it to the `shadowJar` configuration task and relocate it to your desired location:
+Finally, you need to add it to the `shadowJar` configuration task:
 
 <div class="multi-pre">
 
