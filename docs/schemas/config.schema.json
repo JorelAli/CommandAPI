@@ -62,6 +62,9 @@
                     "$comment": "Plugin property name from: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/bukkit-plugin.json",
                     "type": [ "object", "null" ],
                     "title": "Plugin name",
+                    "examples": [
+                        "Essentials:"
+                    ],
                     "description": "The plugin name, as specified in the plugin's 'plugin.yml' file",
                     "patternProperties": {
                         ".*": {
@@ -72,9 +75,6 @@
                             "properties": {
                                 "arguments": {
                                     "$ref": "#/$defs/arguments"
-                                },
-                                "args": {
-                                    "$ref": "#/$defs/argument-type"
                                 },
                                 "aliases": {
                                     "type": "array",
@@ -96,8 +96,7 @@
             "default": [],
             "description": "A list of other commands to convert. This should be used for commands which are not declared in a plugin.yml file.",
             "examples": [
-                "/set",
-                "mycommand"
+                [ "/set", "mycommand"]
             ],
             "items": {
                 "type": "string"
@@ -108,7 +107,7 @@
             "default": [],
             "description": "Determines whether the proxy sender should be skipped when converting a command. If you are having issues with plugin command conversion, add the plugin name to this list.",
             "examples": [
-                "SkinsRestorer"
+                [ "SkinsRestorer" ]
             ],
             "items": {
                 "type": "string",
