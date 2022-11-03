@@ -72,6 +72,7 @@ plugins-to-convert:
         - <target>[minecraft:game_profile]
         - (walk|fly) <speed>[0..10]
         - (walk|fly) <speed>[0..10] <target>[minecraft:game_profile]
+      args: "minecraft:vec3"
     hat:
       aliases:
         - myhat

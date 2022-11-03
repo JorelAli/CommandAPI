@@ -1,0 +1,194 @@
+{
+    "$id": "https://commandapi.jorel.dev/schemas/config.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Config",
+    "description": "The CommandAPI configuration",
+    "type": "object",
+
+    "additionalProperties": false,
+    "required": [
+        "verbose-outputs",
+        "silent-logs",
+        "messages",
+        "create-dispatcher-json",
+        "use-latest-nms-version",
+        "plugins-to-convert",
+        "other-commands-to-convert",
+        "skip-sender-proxy"
+    ],
+
+    "properties": {
+        "verbose-outputs": {
+            "type": "boolean",
+            "description": "Verbose outputs. If set to 'true', outputs command registration and unregistration logs in the console",
+            "default": false
+        },
+        "silent-logs": {
+            "type": "boolean",
+            "description": "If 'true', turns off all logging from the CommandAPI, except for errors.",
+            "default": false
+        },
+        "messages": {
+            "type": "object",
+            "description": "Controls messages that the CommandAPI displays to players",
+            "properties": {
+                "missing-executor-implementation": {
+                    "type": "string",
+                    "default": "This command has no implementations for %s",
+                    "description": "Missing executor implementation (default: 'This command has no implementations for %s')\nThe message to display to senders when a command has no executor. Available parameters are:\n%s - the executor class (lowercase)\n%S - the executor class (normal case)",
+                    "title": "Missing executor implementation"
+                }
+            }
+        },
+        "create-dispatcher-json": {
+            "type": "boolean",
+            "description": "If 'true', the CommandAPI creates a command_registration.json file showing the mapping of registered commands. This is designed to be used by developers - setting this to 'false' will improve command registration performance.",
+            "default": false
+        },
+        "use-latest-nms-version": {
+            "type": "boolean",
+            "description": "If 'true', the CommandAPI will use the latest available NMS implementation when the CommandAPI is used. This avoids all checks to see if the latest NMS implementation is actually compatible with the current Minecraft version.",
+            "default": false,
+            "title": "Use latest NMS version"
+        },
+        "plugins-to-convert": {
+            "type": "object",
+            "default": [],
+            "title": "Plugins to convert",
+            "description": "A collection of plugins to convert.",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^[A-Za-z0-9_\\.-]+$": {
+                    "$comment": "Plugin property name from: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/bukkit-plugin.json",
+                    "type": [ "object", "null" ],
+                    "title": "Plugin name",
+                    "description": "The plugin name, as specified in the plugin's 'plugin.yml' file",
+                    "patternProperties": {
+                        ".*": {
+                            "type": [ "object", "null" ],
+                            "title": "Command name",
+                            "description": "The name of the command to register",
+                            "additionalProperties": false,
+                            "properties": {
+                                "arguments": {
+                                    "$ref": "#/$defs/arguments"
+                                },
+                                "args": {
+                                    "$ref": "#/$defs/argument-type"
+                                },
+                                "aliases": {
+                                    "type": "array",
+                                    "title": "Aliases",
+                                    "description": "A list of aliases which can be used to run this command. Alias values cannot contain spaces",
+                                    "items": {
+                                        "type": "string",
+                                        "pattern": "^\\S+$"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "other-commands-to-convert": {
+            "type": "array",
+            "default": [],
+            "description": "A list of other commands to convert. This should be used for commands which are not declared in a plugin.yml file.",
+            "examples": [
+                "/set",
+                "mycommand"
+            ],
+            "items": {
+                "type": "string"
+            }
+        },
+        "skip-sender-proxy": {
+            "type": "array",
+            "default": [],
+            "description": "Determines whether the proxy sender should be skipped when converting a command. If you are having issues with plugin command conversion, add the plugin name to this list.",
+            "examples": [
+                "SkinsRestorer"
+            ],
+            "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_\\.-]+$"
+            }
+        }
+    },
+
+    "$defs": {
+        "arguments": {
+            "type": "array",
+            "title": "Command arguments",
+            "description": "A list of arguments that follow from the base command. These should use the CommandAPI's argument syntax, which can be found in more detail in the documentation here: https://commandapi.jorel.dev/latest \n== Literal arguments ==\nLiteral arguments have fixed values, such as 'walk' or 'fly'. These should be surrounded in brackets, such as:\n(walk)\nMultiple values can be provided by separating them with a pipe | symbol:\n(walk|fly)\n== Named arguments ==\nThese are arguments with a specific type, and follow the syntax:\n&lt;name&gt;[type]\nA list of types can be found in the documentation.",
+            "examples": [
+                "<speed>[0..10]",
+                "<target>[minecraft:game_profile]",
+                "(walk|fly) <speed>[0..10]",
+                "(walk|fly) <speed>[0..10] <target>[minecraft:game_profile]"
+            ],
+            "items": {
+                "type": [ "string", "null" ],
+                "title": "Command arguments",
+                "description": "A list of arguments that follow from the base command. These should use the CommandAPI's argument syntax, which can be found in more detail in the documentation here: https://commandapi.jorel.dev/latest \n== Literal arguments ==\nLiteral arguments have fixed values, such as 'walk' or 'fly'. These should be surrounded in brackets, such as:\n(walk)\nMultiple values can be provided by separating them with a pipe | symbol:\n(walk|fly)\n== Named arguments ==\nThese are arguments with a specific type, and follow the syntax:\n&lt;name&gt;[type]\nA list of types can be found in the documentation.",
+                "pattern": "^((<(\\w+)>\\[([a-z:_]+|(?:[0-9\\.]+)?\\.\\.(?:[0-9\\.]+)?)\\] ?)|(\\((\\w+(?:\\|\\w+)*)\\)) ?)+$"
+            }
+        },
+        "argument-type": {
+            "type": "string",
+            "enum": [
+                "api:advancement",
+                "api:biome",
+                "api:entity",
+                "api:entities",
+                "api:greedy_string",
+                "api:loot_table",
+                "api:player",
+                "api:players",
+                "api:recipe",
+                "api:sound",
+                "api:text",
+                "brigadier:bool",
+                "brigadier:double",
+                "brigadier:float",
+                "brigadier:integer",
+                "brigadier:long",
+                "brigadier:string",
+                "minecraft:angle",
+                "minecraft:block_pos",
+                "minecraft:block_predicate",
+                "minecraft:block_state",
+                "minecraft:color",
+                "minecraft:column_pos",
+                "minecraft:component",
+                "minecraft:dimension",
+                "minecraft:entity",
+                "minecraft:entity_summon",
+                "minecraft:float_range",
+                "minecraft:function",
+                "minecraft:game_profile",
+                "minecraft:int_range",
+                "minecraft:item_enchantment",
+                "minecraft:item_predicate",
+                "minecraft:item_stack",
+                "minecraft:message",
+                "minecraft:mob_effect",
+                "minecraft:nbt_compound_tag",
+                "minecraft:objective",
+                "minecraft:objective_criteria",
+                "minecraft:operation",
+                "minecraft:particle",
+                "minecraft:rotation",
+                "minecraft:score_holder",
+                "minecraft:scoreboard_slot",
+                "minecraft:swizzle",
+                "minecraft:team",
+                "minecraft:time",
+                "minecraft:uuid",
+                "minecraft:vec2",
+                "minecraft:vec3"
+            ]
+        }
+    }
+}
