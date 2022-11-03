@@ -30,8 +30,8 @@ We can then use the following command registration:
 
 Here you can see some interesting things:
 
-1. You do not need to call the `.register()` method when using the DSL
-2. You do not need to initialise any arguments
+- You do not need to call the `.register()` method when using the DSL
+- You do not need to initialise any arguments
 
 </div>
 
@@ -60,13 +60,13 @@ The DSL implements almost every argument with a method. You've seen the `playerA
 
 The way arguments are implemented is pretty straight forward: It's basically the argument class' name, but as a method. So if you wanted to use a `ItemStackArgument` in your command, you would use the `itemStackArgument()` method of the DSL.
 
-One thing to note is that the DSL also features every existing constructor. This means if you want to use an `IntegerArgument` with a minimum of `0` and a maximum of `10`, you normally would implement it like this: 
+One thing to note is that the DSL also features every existing constructor. This means if you want to use an `IntegerArgument` with a minimum of `0` and a maximum of `10`, you normally would implement it like this:
 
 ```java
 new IntegerArgument("integer", 0, 10)
 ```
 
-However, when using this DSL it is implemented like this: 
+However, when using this DSL it is implemented like this:
 
 ```kotlin
 integerArgument("integer", 0, 10)
@@ -74,12 +74,12 @@ integerArgument("integer", 0, 10)
 
 <div class="warning">
 
-**Developer's Note**
+**Developer's Note:**
 
 There are two arguments not having a method which directly corresponds to their respective argument.
- 
+
 These two arguments are the `CustomArgument` and the `ListArgument` as they require further implementation by the user.
- 
+
 To use these arguments, the DSL also provides the `argument()` method. This takes in any argument as parameter which is why you can also use this method when you need to replace suggestions of any argument or do something else with arguments.
 
 </div>
@@ -128,7 +128,19 @@ You can also restrict the use of a whole command by using requirements:
 
 Now, a few more examples are shown to demonstrate the use of this DSL a little more:
 
-1. How to implement optional arguments:
+<div class="example">
+
+### Example - Implementing optional arguments with the Kotlin DSL
+
+We want to create a `/give` command with the following syntax:
+
+```mccmd
+/optionalArgument give <item>
+/optionalArgument give <item> <amount>
+```
+
+As with the Java method of registering commands, with a CommandTree you can declare the command tree to include the additional argument `<amount>`, and with the CommandAPICommand you have to declare the two branching commands separately:
+
 <div class="multi-pre">
 
 ```kotlin,CommandTree
@@ -141,7 +153,20 @@ Now, a few more examples are shown to demonstrate the use of this DSL a little m
 
 </div>
 
-2. How to replace suggestions
+</div>
+
+<div class="example">
+
+### Example - Replacing suggestions using the Kotlin DSL
+
+We want to create a command with the following syntax to demonstrate replacing suggestions using the Kotlin DSL:
+
+```mccmd
+/replaceSuggestions <strings>
+```
+
+We make use of the `argument()` method to provide an argument implementation and use the `replaceSuggestions` method as normal to provide suggestions for the argument:
+
 <div class="multi-pre">
 
 ```kotlin,CommandTree
@@ -151,5 +176,7 @@ Now, a few more examples are shown to demonstrate the use of this DSL a little m
 ```kotlin,CommandAPICommand
 {{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:replaceSuggestions2}}
 ```
+
+</div>
 
 </div>

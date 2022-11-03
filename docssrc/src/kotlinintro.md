@@ -7,6 +7,7 @@ This DSL provides many methods to easily add arguments to your command structure
 -----
 
 ## Installing the DSL
+
 To install the DSL, you need to add the `commandapi-kotlin` dependency into your `pom.xml` or your `build.gradle`:
 
 ### Adding the dependency with Maven
@@ -22,6 +23,7 @@ To install the DSL, you need to add the `commandapi-kotlin` dependency into your
 ```
 
 Next, to shade it into your project easily, you need to add the `maven-shade-plugin`:
+
 ```xml
 <build>
     <plugins>
@@ -41,9 +43,9 @@ Next, to shade it into your project easily, you need to add the `maven-shade-plu
             <configuration>
                 <relocations>
                     <relocation>
-                        <pattern>dev.jorel.commandapi</pattern>
+                        <pattern>dev.jorel.commandapi.kotlindsl</pattern>
                         <!-- TODO: Change this to my own package name -->
-                        <shadedPattern>my.custom.package.commandapi</shadedPattern>
+                        <shadedPattern>my.custom.package.commandapi.kotlindsl</shadedPattern>
                     </relocation>
                 </relocations>
             </configuration>
@@ -53,45 +55,47 @@ Next, to shade it into your project easily, you need to add the `maven-shade-plu
 ```
 
 Next, you need to add Kotlin to your project. For this, you first need to add the dependency:
+
 ```xml
 <dependencies>
-	<dependency>
-		<groupId>org.jetbrains.kotlin</groupId>
-		<artifactId>kotlin-stdlib</artifactId>
-		<version>1.7.20</version>
-	</dependency>
+    <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-stdlib</artifactId>
+        <version>1.7.20</version>
+    </dependency>
 </dependencies>
 ```
 
 Finally, you need to add the `kotlin-maven-plugin`:
+
 ```xml
 <build>
-	<plugins>
-		<plugin>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-maven-plugin</artifactId>
-			<version>1.7.20</version>
-			<executions>
-				<execution>
-					<id>compile</id>
-					<phase>compile</phase>
-					<goals>
-						<goal>compile</goal>
-					</goals>
-				</execution>
-				<execution>
-					<id>test-compile</id>
-					<phase>test-compile</phase>
-					<goals>
-						<goal>test-compile</goal>
-					</goals>
-				</execution>
-			</executions>
-			<configuration>
-				<jvmTarget>16</jvmTarget>
-			</configuration>
-		</plugin>
-	</plugins>
+    <plugins>
+        <plugin>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-plugin</artifactId>
+            <version>1.7.20</version>
+            <executions>
+                <execution>
+                    <id>compile</id>
+                    <phase>compile</phase>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>test-compile</id>
+                    <phase>test-compile</phase>
+                    <goals>
+                        <goal>test-compile</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <jvmTarget>16</jvmTarget>
+            </configuration>
+        </plugin>
+    </plugins>
 </build>
 ```
 
