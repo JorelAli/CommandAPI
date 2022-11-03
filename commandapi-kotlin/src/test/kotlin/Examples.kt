@@ -1,4 +1,5 @@
 import dev.jorel.commandapi.*
+import dev.jorel.commandapi.kotlindsl.*
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.LiteralArgument.of
 import dev.jorel.commandapi.arguments.StringArgument

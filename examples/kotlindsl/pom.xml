@@ -28,6 +28,7 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
 			<version>8.6.0-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!--This adds the Paper API artifact to the build -->
@@ -67,8 +68,8 @@
 							<createDependencyReducedPom>false</createDependencyReducedPom>
 							<relocations>
 								<relocation>
-									<pattern>dev.jorel.commandapi</pattern>
-									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
+									<pattern>dev.jorel.commandapi.kotlindsl</pattern>
+									<shadedPattern>io.github.jorelali.commandapi.kotlindsl</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>

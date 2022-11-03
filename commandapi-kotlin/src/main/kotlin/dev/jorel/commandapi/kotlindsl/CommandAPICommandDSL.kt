@@ -1,5 +1,6 @@
-package dev.jorel.commandapi
+package dev.jorel.commandapi.kotlindsl
 
+import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor
 import dev.jorel.commandapi.executors.CommandExecutor

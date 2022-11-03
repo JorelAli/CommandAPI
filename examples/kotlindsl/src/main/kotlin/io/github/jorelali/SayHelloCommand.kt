@@ -1,6 +1,6 @@
 package io.github.jorelali
 
-import dev.jorel.commandapi.*
+import dev.jorel.commandapi.kotlindsl.*
 import org.bukkit.entity.Player
 
 class SayHelloCommand {
