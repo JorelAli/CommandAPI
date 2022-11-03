@@ -1,6 +1,5 @@
 # Using the DSL
 
-
 ## Defining a simple message command
 
 As a first example and to take a first look at the Kotlin DSL syntax, we will first create a simple command to send messages to a player.
@@ -17,9 +16,17 @@ We want to create a command that lets us send a message to a player. To do this,
 
 We can then use the following command registration:
 
-```kotlin
+<div class="multi-pre">
+
+```kotlin,CommandTree
 {{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommand}}
 ```
+
+```kotlin,CommandAPICommand
+{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommand2}}
+```
+
+</div>
 
 Here you can see some interesting things:
 
@@ -49,17 +56,21 @@ To find out, which DSL executor corresponds to "normal" executors, you can refer
 
 ## Arguments
 
-The CommandTree DSL implements almost every argument with a method. You've seen the `playerArgument()` and the `greedyArgument()` method in the example at the top of this page.
+The DSL implements almost every argument with a method. You've seen the `playerArgument()` and the `greedyArgument()` method in the example at the top of this page.
 
 The way arguments are implemented is pretty straight forward: It's basically the argument class' name, but as a method. So if you wanted to use a `ItemStackArgument` in your command, you would use the `itemStackArgument()` method of the DSL.
 
 One thing to note is that the DSL also features every existing constructor. This means if you want to use an `IntegerArgument` with a minimum of `0` and a maximum of `10`, you normally would implement it like this: 
 
-`new IntegerArgument("integer", 0, 10)`
+```java
+new IntegerArgument("integer", 0, 10)
+```
 
 However, when using this DSL it is implemented like this: 
 
-`integerArgument("integer", 0, 10) { /* new arguments, execution goes in here */ }`
+```kotlin
+integerArgument("integer", 0, 10)
+```
 
 <div class="warning">
 
@@ -69,7 +80,7 @@ There are two arguments not having a method which directly corresponds to their 
  
 These two arguments are the `CustomArgument` and the `ListArgument` as they require further implementation by the user.
  
-To use these arguments, the CommandTree DSL also provides the `argument()` method. This takes in any argument as parameter which is why you can also use this method when you need to replace suggestions of any argument or do something else with arguments.
+To use these arguments, the DSL also provides the `argument()` method. This takes in any argument as parameter which is why you can also use this method when you need to replace suggestions of any argument or do something else with arguments.
 
 </div>
 
@@ -83,8 +94,12 @@ Below, the `sendMessageTo` command is adding a broadcast option which should onl
 
 <div class="multi-pre">
 
-```kotlin,Kotlin
+```kotlin,CommandTree
 {{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommandRequirement}}
+```
+
+```kotlin,CommandAPICommand
+{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommandRequirement2}}
 ```
 
 </div>
@@ -97,8 +112,12 @@ You can also restrict the use of a whole command by using requirements:
 
 <div class="multi-pre">
 
-```kotlin,Kotlin
+```kotlin,CommandTree
 {{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslCommandRequirements}}
+```
+
+```kotlin,CommandAPICommand
+{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslCommandRequirements2}}
 ```
 
 </div>
@@ -112,8 +131,12 @@ Now, a few more examples are shown to demonstrate the use of this DSL a little m
 1. How to implement optional arguments:
 <div class="multi-pre">
 
-```kotlin,Kotlin
+```kotlin,CommandTree
 {{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:optionalArgument}}
+```
+
+```kotlin,CommandAPICommand
+{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:optionalArgument2}}
 ```
 
 </div>
@@ -121,8 +144,12 @@ Now, a few more examples are shown to demonstrate the use of this DSL a little m
 2. How to replace suggestions
 <div class="multi-pre">
 
-```kotlin,Kotlin
+```kotlin,CommandTree
 {{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:replaceSuggestions}}
+```
+
+```kotlin,CommandAPICommand
+{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:replaceSuggestions2}}
 ```
 
 </div>

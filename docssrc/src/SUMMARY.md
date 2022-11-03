@@ -102,7 +102,7 @@
 
 # Kotlin-based Commands
 - [Kotlin-based commands](./kotlinintro.md)
-- [Using the DSL](./kotlinusedsl.md)
+- [Using the DSL](./kotlindsl.md)
 
 # CommandAPI Utilities
 

@@ -13,8 +13,8 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.function.Predicate
 
-inline fun command(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
-inline fun command(name: String, requirement: Predicate<CommandSender>, tree: CommandTree.() -> Unit = {}) = CommandTree(name).withRequirement(requirement).apply(tree).register()
+inline fun commandTree(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
+inline fun commandTree(name: String, requirement: Predicate<CommandSender>, tree: CommandTree.() -> Unit = {}) = CommandTree(name).withRequirement(requirement).apply(tree).register()
 
 // CommandTree start
 inline fun CommandTree.argument(base: Argument<*>, block: ArgumentTree.() -> Unit = {}): CommandTree = then(base.apply(block))
