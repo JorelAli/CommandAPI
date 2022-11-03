@@ -98,6 +98,16 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 
 	private void checkDependencies() {
 		// Log successful hooks
+		Class<?> nbtContainerClass = CommandAPI.getConfiguration().getNBTContainerClass();
+		if (nbtContainerClass != null && CommandAPI.getConfiguration().getNBTContainerConstructor() != null) {
+			CommandAPI.logNormal("Hooked into an NBT API with class " + nbtContainerClass.getName());
+		} else {
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning(
+					"Could not hook into the NBT API for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
+			}
+		}
+
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
 			CommandAPI.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");

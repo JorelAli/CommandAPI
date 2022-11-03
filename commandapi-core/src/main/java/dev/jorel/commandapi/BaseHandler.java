@@ -109,17 +109,6 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 			new ClassNotFoundException("Could not hook into Brigadier (Are you running Minecraft 1.13 or above?)")
 				.printStackTrace();
 		}
-
-		// TODO: Should this be moved to Bukkit? Maybe just the message pointing to a Spigot resource page
-		Class<?> nbtContainerClass = CommandAPI.getConfiguration().getNBTContainerClass();
-		if (nbtContainerClass != null && CommandAPI.getConfiguration().getNBTContainerConstructor() != null) {
-			CommandAPI.logNormal("Hooked into an NBT API with class " + nbtContainerClass.getName());
-		} else {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning(
-					"Could not hook into the NBT API for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
-			}
-		}
 	}
 
 	public void onEnable(Object plugin) {
