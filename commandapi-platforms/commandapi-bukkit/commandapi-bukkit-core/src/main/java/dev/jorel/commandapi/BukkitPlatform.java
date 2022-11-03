@@ -186,47 +186,43 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	private void fixPermissions() {
 		// Get the command map to find registered commands
 		CommandMap map = paper.getCommandMap();
-		// TODO: Does this make sense? Currently, BaseHandler is filling up PERMISSIONS_TO_FIX, but fixing permissions
-		//  seems to be a platform-specific operation, at least given that isVanillaCommandWrapper is used here. Should
-		//  the PERMISSIONS_TO_FIX stuff be moved entirely to platforms, or can this method be mostly abstracted back
-		//  up to BaseHandler?
-		final Map<String, CommandPermission> PERMISSIONS_TO_FIX = BaseHandler.getInstance().PERMISSIONS_TO_FIX;
+		final Map<String, CommandPermission> PERMISSIONS_TO_FIX = BaseHandler.getInstance().REGISTERED_PERMISSIONS;
 
 		if (!PERMISSIONS_TO_FIX.isEmpty()) {
 			CommandAPI.logInfo("Linking permissions to commands:");
-		}
 
-		for (Map.Entry<String, CommandPermission> entry : PERMISSIONS_TO_FIX.entrySet()) {
-			String cmdName = entry.getKey();
-			CommandPermission perm = entry.getValue();
-			CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
+			for (Map.Entry<String, CommandPermission> entry : PERMISSIONS_TO_FIX.entrySet()) {
+				String cmdName = entry.getKey();
+				CommandPermission perm = entry.getValue();
+				CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
 
-			final String permNode;
-			if (perm.isNegated() || perm.equals(CommandPermission.NONE) || perm.equals(CommandPermission.OP)) {
-				permNode = "";
-			} else if (perm.getPermission().isPresent()) {
-				permNode = perm.getPermission().get();
-			} else {
-				// This case should never occur. Worth testing this with some assertion
-				permNode = null;
-			}
+				final String permNode;
+				if (perm.isNegated() || perm.equals(CommandPermission.NONE) || perm.equals(CommandPermission.OP)) {
+					permNode = "";
+				} else if (perm.getPermission().isPresent()) {
+					permNode = perm.getPermission().get();
+				} else {
+					// This case should never occur. Worth testing this with some assertion
+					permNode = null;
+				}
 
-			/*
-			 * Sets the permission. If you have to be OP to run this command, we set the
-			 * permission to null. Doing so means that Bukkit's "testPermission" will always
-			 * return true, however since the command's permission check occurs internally
-			 * via the CommandAPI, this isn't a problem.
-			 *
-			 * If anyone dares tries to use testPermission() on this command, seriously,
-			 * what are you doing and why?
-			 */
-			Command command = map.getCommand(cmdName);
-			if (command != null && isVanillaCommandWrapper(command)) {
-				command.setPermission(permNode);
-			}
-			command = map.getCommand("minecraft:" + cmdName);
-			if (command != null && isVanillaCommandWrapper(command)) {
-				command.setPermission(permNode);
+				/*
+				 * Sets the permission. If you have to be OP to run this command, we set the
+				 * permission to null. Doing so means that Bukkit's "testPermission" will always
+				 * return true, however since the command's permission check occurs internally
+				 * via the CommandAPI, this isn't a problem.
+				 *
+				 * If anyone dares tries to use testPermission() on this command, seriously,
+				 * what are you doing and why?
+				 */
+				Command command = map.getCommand(cmdName);
+				if (command != null && isVanillaCommandWrapper(command)) {
+					command.setPermission(permNode);
+				}
+				command = map.getCommand("minecraft:" + cmdName);
+				if (command != null && isVanillaCommandWrapper(command)) {
+					command.setPermission(permNode);
+				}
 			}
 		}
 		CommandAPI.logNormal("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");

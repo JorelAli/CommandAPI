@@ -81,7 +81,7 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 	// but this IS a generic class caching system and we don't want derpy memory leaks
 	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
 
-	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
+	final TreeMap<String, CommandPermission> REGISTERED_PERMISSIONS = new TreeMap<>();
 	final AbstractPlatform<Argument, CommandSender, Source>  platform;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, IPreviewable<?, ?>> previewableArguments; // Arguments with previewable chat
@@ -258,22 +258,20 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 	 */
 	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
 			Predicate<CommandSender> requirements) {
-		// If we've already registered a permission, set it to the "parent" permission.
-		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
-			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
-				permission = PERMISSIONS_TO_FIX.get(commandName.toLowerCase());
+		// If commandName was already registered, always use the first permission used
+		if (REGISTERED_PERMISSIONS.containsKey(commandName.toLowerCase())) {
+			if (!REGISTERED_PERMISSIONS.get(commandName.toLowerCase()).equals(permission)) {
+				permission = REGISTERED_PERMISSIONS.get(commandName.toLowerCase());
 			}
 		} else {
-			// Add permission to a list to fix conflicts with minecraft:permissions
-			PERMISSIONS_TO_FIX.put(commandName.toLowerCase(), permission);
+			REGISTERED_PERMISSIONS.put(commandName.toLowerCase(), permission);
 		}
 
-		final CommandPermission finalPermission = permission;
+		// Register permission to the platform's registry, if both exist
+		permission.getPermission().ifPresent(platform::registerPermission);
 
-		// Register it to the Bukkit permissions registry
-		Optional<String> permissionString = finalPermission.getPermission();
-		permissionString.ifPresent(platform::registerPermission);
-
+		// Generate predicate for the permission and requirement check
+		CommandPermission finalPermission = permission;
 		return (Source css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css), finalPermission,
 				requirements);
 	}
