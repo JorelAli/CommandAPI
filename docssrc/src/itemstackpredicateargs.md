@@ -17,11 +17,11 @@ We implement this with a simple for loop over the player's inventory and remove 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:itemstackpredicatearguments}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:itemstackpredicatearguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:itemstackpredicatearguments}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:itemstackpredicatearguments}}
 ```
 
 </div>

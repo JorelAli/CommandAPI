@@ -53,11 +53,11 @@ As you can see, this command takes no arguments. This is fine, since our "argume
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:nativesender}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:nativesender}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:nativesender}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:nativesender}}
 ```
 
 </div>

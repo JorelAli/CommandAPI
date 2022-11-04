@@ -23,11 +23,11 @@ And then we can simply set our block using `setBlockData()`:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:blockstateargument}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:blockstateargument}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockstateargument}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockstateargument}}
 ```
 
 </div>

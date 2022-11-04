@@ -19,11 +19,11 @@ In this example, we utilize some of the other arguments that we've described ear
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:potioneffectarguments}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:potioneffectarguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:potioneffectarguments}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:potioneffectarguments}}
 ```
 
 </div>

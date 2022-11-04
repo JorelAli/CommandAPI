@@ -19,11 +19,11 @@ And we can set the biome of the current chunk as expected:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/java/Examples.java:biomearguments}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:biomearguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-examples/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:biomearguments}}
+{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:biomearguments}}
 ```
 
 </div>

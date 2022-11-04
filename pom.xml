@@ -67,8 +67,8 @@
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
 
-		<!-- Documentation examples -->
-        <module>commandapi-examples</module>
+		<!-- Documentation code -->
+        <module>commandapi-documentation-code</module>
     </modules>
 
 	<properties>
