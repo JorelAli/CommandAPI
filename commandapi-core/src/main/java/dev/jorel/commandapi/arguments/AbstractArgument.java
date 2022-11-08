@@ -28,7 +28,6 @@ import dev.jorel.commandapi.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -128,38 +127,6 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	}
 
 	/**
-	 * Include suggestions to add to the list of default suggestions represented by
-	 * this argument.
-	 *
-	 * @param suggestions a function that takes in SuggestionInfo which includes
-	 *                    information about the current state at the time the
-	 *                    suggestions are run and returns a String[] of suggestions
-	 *                    to add
-	 * @return the current argument
-	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Impl includeSuggestions(Function<SuggestionInfo<CommandSender>, String[]> suggestions) {
-		return includeSuggestions(ArgumentSuggestions.strings(suggestions));
-	}
-
-	/**
-	 * Include suggestions to add to the list of default suggestions represented by
-	 * this argument.
-	 *
-	 * @param suggestions a function that takes in SuggestionInfo which includes
-	 *                    information about the current state at the time the
-	 *                    suggestions are run and returns an IStringTooltip[] of
-	 *                    suggestions (with tooltips) to add
-	 * @return the current argument
-	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Impl includeSuggestionsT(Function<SuggestionInfo<CommandSender>, IStringTooltip[]> suggestions) {
-		return includeSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
-	}
-
-	/**
 	 * Returns an optional function which produces an array of suggestions which should be added
 	 * to existing suggestions.
 	 *
@@ -181,30 +148,6 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	public Impl replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return instance();
-	}
-
-	/**
-	 * Replaces the suggestions of this argument with an array of suggestions.
-	 *
-	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link String[]} of suggestions
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Impl replaceSuggestions(Function<SuggestionInfo<CommandSender>, String[]> suggestions) {
-		return replaceSuggestions(ArgumentSuggestions.strings(suggestions));
-	}
-
-	/**
-	 * Replaces the suggestions of this argument with an array of suggestions with tooltips.
-	 *
-	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link IStringTooltip[]} of suggestions
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Impl replaceSuggestionsT(Function<SuggestionInfo<CommandSender>, IStringTooltip[]> suggestions) {
-		return replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
 	/**
