@@ -11,6 +11,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -531,17 +532,7 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 		// Handle previewable arguments
 		handlePreviewableArguments(commandName, args, aliases);
 
-		// Warn if the command we're registering already exists in this plugin's
-		// plugin.yml file
-		// TODO: We might need a "pre-register" method call for something like this?
-//		{
-//			final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
-//			if (pluginCommand != null) {
-////				CommandAPI.logWarning(
-////						"Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?"
-////								.formatted(commandName, pluginCommand.getPlugin().getName()));
-//			}
-//		}
+		platform.preCommandRegistration(commandName);
 
 		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
 
@@ -588,7 +579,18 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 						.requires(generatePermissions(alias, permission, requirements)).then(commandArguments)));
 			}
 		}
-		
+
+//		TODO: Do something when ambiguities are found
+//		platform.getBrigadierDispatcher().findAmbiguities(
+//			(CommandNode<Source> parent,
+//			 CommandNode<Source> child,
+//			 CommandNode<Source> sibling,
+//			 Collection<String> inputs) -> {
+//				if(resultantNode.equals(parent)) {
+//					// Byeeeeeeeeeeeeeeeeeeeee~
+//				}
+//			});
+
 		platform.postCommandRegistration(resultantNode, aliasNodes);
 	}
 

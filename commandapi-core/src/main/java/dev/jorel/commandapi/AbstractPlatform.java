@@ -48,13 +48,20 @@ public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, A
 
 
 	/**
+	 * Stuff to run before a command is generated. For Bukkit, this involves checking
+	 * if a command was declared in the plugin.yml when it isn't supposed to be.
+	 *
+	 * @param commandName The name of the command about to be registered
+	 */
+	public abstract void preCommandRegistration(String commandName);
+
+	/**
 	 * Stuff to run after a command has been generated. For Bukkit, this involves
 	 * finding command ambiguities for logging and generating the command JSON
-	 * dispatcher file. If we're being fancy, we could also create a "registered
-	 * a command" event (which can't be cancelled)
+	 * dispatcher file.
 	 *
-	 * @param aliasNodes    any alias nodes that were also registered as a part of this registration process
 	 * @param resultantNode the node that was registered
+	 * @param aliasNodes    any alias nodes that were also registered as a part of this registration process
 	 */
 	public abstract void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException;
 

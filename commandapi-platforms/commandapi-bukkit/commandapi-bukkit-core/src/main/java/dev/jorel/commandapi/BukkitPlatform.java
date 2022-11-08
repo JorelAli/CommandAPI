@@ -384,25 +384,22 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException {
-		getBrigadierDispatcher().findAmbiguities(
-			(CommandNode<Source> parent,
-			 CommandNode<Source> child,
-			 CommandNode<Source> sibling,
-			 Collection<String> inputs) -> {
-				if(resultantNode.equals(parent)) {
-					// Byeeeeeeeeeeeeeeeeeeeee~
-				}
-			});
+	public void preCommandRegistration(String commandName) {
+		// Warn if the command we're registering already exists in this plugin's
+		// plugin.yml file
+		final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
+		if (pluginCommand != null) {
+			CommandAPI.logWarning(
+				"Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?"
+					.formatted(commandName, pluginCommand.getPlugin().getName()));
+		}
+	}
 
+	@Override
+	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException {
 		// We never know if this is "the last command" and we want dynamic (even if
 		// partial)
 		// command registration. Generate the dispatcher file!
-		generateDispatcherFile();
-	}
-
-	// Produce the commandDispatch.json file for debug purposes
-	private void generateDispatcherFile() throws IOException {
 		File file = CommandAPI.getConfiguration().getDispatcherFile();
 		if (file != null) {
 			try {

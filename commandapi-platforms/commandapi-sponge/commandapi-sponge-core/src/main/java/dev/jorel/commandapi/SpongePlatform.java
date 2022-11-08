@@ -96,9 +96,13 @@ public class SpongePlatform extends AbstractPlatform<Argument<?>, Object, Object
 	}
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<Object> resultantNode,
-			List<LiteralCommandNode<Object>> aliasNodes) {
-		return; // Say hi, do checks etc.
+	public void preCommandRegistration(String commandName) {
+		// Nothing to do?
+	}
+
+	@Override
+	public void postCommandRegistration(LiteralCommandNode<Object> resultantNode, List<LiteralCommandNode<Object>> aliasNodes) {
+		// Nothing to do?
 	}
 
 	@Override

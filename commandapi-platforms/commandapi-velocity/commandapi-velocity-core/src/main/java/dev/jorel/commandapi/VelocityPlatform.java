@@ -122,9 +122,13 @@ public class VelocityPlatform extends AbstractPlatform<Argument<?>, CommandSourc
 	}
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<CommandSource> resultantNode,
-			List<LiteralCommandNode<CommandSource>> aliasNodes) {
-		return; // Nothing left to do
+	public void preCommandRegistration(String commandName) {
+		// Nothing to do?
+	}
+
+	@Override
+	public void postCommandRegistration(LiteralCommandNode<CommandSource> resultantNode, List<LiteralCommandNode<CommandSource>> aliasNodes) {
+		// Nothing to do?
 	}
 
 	@SuppressWarnings("unchecked")
