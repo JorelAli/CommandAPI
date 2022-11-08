@@ -72,22 +72,6 @@ public class AbstractTooltip<S> {
 	 * @param tooltip    the tooltip to show to the user when they hover over the
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
-	 *
-	 * @deprecated Please use {@link AbstractTooltip#ofString(Object, String)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public static <S> AbstractTooltip<S> of(S object, String tooltip) {
-		return ofString(object, tooltip);
-	}
-
-	/**
-	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a tooltip
-	 *
-	 * @param <S> the object that the argument suggestions use
-	 * @param object the suggestion to provide to the user
-	 * @param tooltip    the tooltip to show to the user when they hover over the
-	 *                   suggestion
-	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
 	public static <S> AbstractTooltip<S> ofString(S object, String tooltip) {
 		return ofMessage(object, messageFromString(tooltip));
@@ -103,7 +87,7 @@ public class AbstractTooltip<S> {
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
 	public static <S> AbstractTooltip<S> ofMessage(S object, Message tooltip) {
-		return new AbstractTooltip<S>(object, tooltip);
+		return new AbstractTooltip<>(object, tooltip);
 	}
 
 	/**
