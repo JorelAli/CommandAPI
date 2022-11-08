@@ -10,7 +10,7 @@
 		<version>9.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>commandapi-documentation-examples</artifactId>
+	<artifactId>commandapi-documentation-code</artifactId>
 
 	<repositories>
 		<repository>
