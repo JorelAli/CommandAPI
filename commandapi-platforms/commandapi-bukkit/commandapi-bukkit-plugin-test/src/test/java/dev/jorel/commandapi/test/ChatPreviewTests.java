@@ -43,7 +43,7 @@ public class ChatPreviewTests {
 		new CommandAPICommand("chatarg")
 			.withArguments(new AdventureChatArgument("str").withPreview(info -> {
 				if(info.input().contains("hello")) {
-					throw CommandAPI.fail(ChatColor.RED + "Input cannot contain the word 'hello'");
+					throw CommandAPI.failWithString(ChatColor.RED + "Input cannot contain the word 'hello'");
 					// return Component.text("Input cannot contain the word 'hello'").color(NamedTextColor.RED);
 				} else {
 					return Component.text(info.input()).decorate(TextDecoration.BOLD);

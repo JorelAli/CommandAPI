@@ -63,14 +63,6 @@ public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, A
 	 */
 	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node);
 
-	// TODO: I'm not sure what this is supposed to do. Currently, Bukkit help is handled in onEnable
-	//  and private methods, so is this method obsolete now? Other platforms could conceivably do the same,
-	//  or do nothing if they don't have help (like Velocity might?). Maybe there's something that can be done
-	//  with this registerHelp method that makes more sense?
-	// We probabbbbbbbbly need to register some form of help for commands? I'm not
-	// sure if 
-	public abstract void registerHelp();
-
 
 	/**
 	 * Unregisters a command from the CommandGraph so it can't be run anymore.

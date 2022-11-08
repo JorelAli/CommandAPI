@@ -54,12 +54,6 @@ public class VelocityPlatform extends AbstractPlatform<Argument<?>, CommandSourc
 		return; // Unsurprisingly, Velocity doesn't have a dumb permission system!
 	}
 
-
-	@Override
-	public void registerHelp() {
-		return; // Nothing to do here - TODO: Velocity doesn't have help?
-	}
-
 	@Override
 	public void unregister(String commandName, boolean force) {
 		commandManager.unregister(commandName);
@@ -144,13 +138,11 @@ public class VelocityPlatform extends AbstractPlatform<Argument<?>, CommandSourc
 	@Override
 	public void reloadDataPacks() {
 		// TODO Auto-generated method stub
-		//  See note for CommandAPI#reloadDatapacks
 	}
 
 	@Override
 	public void updateRequirements(AbstractPlayer<?> player) {
 		// TODO Auto-generated method stub
-		//  See note for CommandAPI#updateRequirements
 	}
 
 	@Override

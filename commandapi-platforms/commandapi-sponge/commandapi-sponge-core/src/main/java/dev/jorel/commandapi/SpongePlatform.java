@@ -53,12 +53,6 @@ public class SpongePlatform extends AbstractPlatform<Argument<?>, Object, Object
 		return; // Unsurprisingly, Sponge doesn't have a dumb permission system!
 	}
 
-
-	@Override
-	public void registerHelp() {
-		return; // Nothing to do here - TODO: Sponge doesn't have help?
-	}
-
 	@Override
 	public void unregister(String commandName, boolean force) {
 //		commandManager.unregister(commandName);
@@ -131,7 +125,7 @@ public class SpongePlatform extends AbstractPlatform<Argument<?>, Object, Object
 
 	@Override
 	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<Object> meta) {
-		return null;
+		return new CommandAPICommand(meta);
 	}
 
 	@Override
