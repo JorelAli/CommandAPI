@@ -179,7 +179,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
 
 		// Create a MultiLiteralArgument using the subcommand information
-		Argument literal = (Argument) BaseHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
+		Argument literal = (Argument) CommandAPIHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
 
 		literal.withPermission(subcommand.meta.permission)
 			.withRequirement(subcommand.meta.requirements)
@@ -234,7 +234,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 			if (executor.hasAnyExecutors()) {
 				// Need to cast handler to the right CommandSender type so that argumentsArr and executor are accepted
-				BaseHandler<Argument, CommandSender, ?> handler = (BaseHandler<Argument, CommandSender, ?>) BaseHandler.getInstance();
+				CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
 				handler.register(meta, argumentsArr, executor, isConverted);
 			}
 

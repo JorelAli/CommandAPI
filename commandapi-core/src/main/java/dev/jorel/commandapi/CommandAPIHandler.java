@@ -11,7 +11,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -41,9 +40,8 @@ import java.util.function.Predicate;
  * @param <CommandSender> The class for running platform commands
  * @param <Source> The class for running Brigadier commands
  */
-// TODO: Should we rename this back to CommandAPIHandler since it isn't subclassed anymore?
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
+public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
 	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
 
 	// Compute all var handles all in one go so we don't do this during main server
@@ -87,9 +85,9 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, IPreviewable<?, ?>> previewableArguments; // Arguments with previewable chat
 
-	private static BaseHandler<?, ?, ?> instance;
+	private static CommandAPIHandler<?, ?, ?> instance;
 
-	protected BaseHandler(AbstractPlatform<Argument, CommandSender, Source> platform) {
+	protected CommandAPIHandler(AbstractPlatform<Argument, CommandSender, Source> platform) {
 		this.platform = platform;
 		this.registeredCommands = new ArrayList<>();
 		this.previewableArguments = new HashMap<>();
@@ -121,7 +119,7 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 		instance = null;
 	}
 
-	public static BaseHandler<?, ?, ?> getInstance() {
+	public static CommandAPIHandler<?, ?, ?> getInstance() {
 		return instance;
 	}
 
@@ -436,7 +434,7 @@ public class BaseHandler<Argument extends AbstractArgument<?, ?, Argument, Comma
 
 	/**
 	 * Handles previewable arguments. This stores the path to previewable arguments
-	 * in {@link BaseHandler#previewableArguments} for runtime resolving
+	 * in {@link CommandAPIHandler#previewableArguments} for runtime resolving
 	 * 
 	 * @param commandName the name of the command
 	 * @param args        the declared arguments

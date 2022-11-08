@@ -8,7 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
-import dev.jorel.commandapi.BaseHandler;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -476,7 +476,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 			throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			BaseHandler.getField(EntitySelector.class, "checkPermissions").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -623,7 +623,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 			throws CommandSyntaxException {
 		// We run this to ensure the argument exists/parses properly
 		ArgumentMathOperation.a(cmdCtx, key);
-		return MathOperation.fromString(BaseHandler.getRawArgumentInput(cmdCtx, key));
+		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -764,7 +764,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
 		for (CraftSound sound : CraftSound.values()) {
 			try {
-				if (BaseHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
 						.equals(minecraftKey.getKey())) {
 					return Sound.valueOf(sound.name());
 				}

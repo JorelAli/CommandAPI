@@ -29,7 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.inventory.Recipe;
 
-import dev.jorel.commandapi.BaseHandler;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import net.minecraft.Util;
@@ -61,7 +61,7 @@ public class NMS_1_17 extends NMS_1_17_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			BaseHandler.getField(ServerFunctionLibrary.class, "i")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i")
 				.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

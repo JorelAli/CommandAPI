@@ -196,7 +196,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	private void fixPermissions() {
 		// Get the command map to find registered commands
 		CommandMap map = paper.getCommandMap();
-		final Map<String, CommandPermission> PERMISSIONS_TO_FIX = BaseHandler.getInstance().REGISTERED_PERMISSIONS;
+		final Map<String, CommandPermission> PERMISSIONS_TO_FIX = CommandAPIHandler.getInstance().REGISTERED_PERMISSIONS;
 
 		if (!PERMISSIONS_TO_FIX.isEmpty()) {
 			CommandAPI.logInfo("Linking permissions to commands:");
@@ -250,7 +250,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 
 		// Generate usages
 		List<String> usages = new ArrayList<>();
-		for (RegisteredCommand rCommand : BaseHandler.getInstance().registeredCommands) {
+		for (RegisteredCommand rCommand : CommandAPIHandler.getInstance().registeredCommands) {
 			if (rCommand.commandName().equals(command.commandName())) {
 				StringBuilder usageString = new StringBuilder();
 				usageString.append("/").append(command.commandName()).append(" ");
@@ -274,7 +274,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	void updateHelpForCommands() {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 
-		for (RegisteredCommand command : BaseHandler.getInstance().registeredCommands) {
+		for (RegisteredCommand command : CommandAPIHandler.getInstance().registeredCommands) {
 			// Generate short description
 			final String shortDescription;
 			if (command.shortDescription().isPresent()) {

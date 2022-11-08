@@ -57,7 +57,7 @@ public final class Brigadier {
 	 * @return The CommandAPI's internal CommandDispatcher instance
 	 */
 	public static CommandDispatcher getCommandDispatcher() {
-		return BaseHandler.getInstance().getPlatform().getBrigadierDispatcher();
+		return CommandAPIHandler.getInstance().getPlatform().getBrigadierDispatcher();
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class Brigadier {
 	 */
 	public static <CommandSender, Argument extends AbstractArgument<String, ?, ?, CommandSender>>
 	LiteralArgumentBuilder fromLiteralArgument(ILiteralArgument<Argument> literalArgument) {
-		BaseHandler<?, CommandSender, ?> handler = (BaseHandler<?, CommandSender, ?>) BaseHandler.getInstance();
+		CommandAPIHandler<?, CommandSender, ?> handler = (CommandAPIHandler<?, CommandSender, ?>) CommandAPIHandler.getInstance();
 		return handler.getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), literalArgument.instance().getArgumentPermission(), literalArgument.instance().getRequirements());
 	}
 
@@ -123,7 +123,7 @@ public final class Brigadier {
 	Command fromCommand(AbstractCommandAPICommand<?, Argument, CommandSender> command) {
 		try {
 			// Need to cast base handler to make it realize we're using the same CommandSender class
-			BaseHandler<Argument, CommandSender, ?> handler = (BaseHandler<Argument, CommandSender, ?>) BaseHandler.getInstance();
+			CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
 			return handler.generateCommand((Argument[]) command.getArguments().toArray(AbstractArgument[]::new), command.getExecutor(), command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
@@ -150,7 +150,7 @@ public final class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static <Argument extends AbstractArgument<?, ?, Argument, ?>> RequiredArgumentBuilder fromArgument(List<Argument> args, Argument argument) {
-		BaseHandler<Argument, ?, ?> handler = (BaseHandler<Argument, ?, ?>) BaseHandler.getInstance();
+		CommandAPIHandler<Argument, ?, ?> handler = (CommandAPIHandler<Argument, ?, ?>) CommandAPIHandler.getInstance();
 		return handler.getRequiredArgumentBuilderDynamic((Argument[]) args.toArray(AbstractArgument[]::new), argument);
 	}
 
@@ -161,7 +161,7 @@ public final class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static <Argument extends AbstractArgument<?, ?, Argument, ?>> RequiredArgumentBuilder fromArgument(Argument argument) {
-		BaseHandler<Argument, ?, ?> handler = (BaseHandler<Argument, ?, ?>) BaseHandler.getInstance();
+		CommandAPIHandler<Argument, ?, ?> handler = (CommandAPIHandler<Argument, ?, ?>) CommandAPIHandler.getInstance();
 		return handler.getRequiredArgumentBuilderDynamic((Argument[]) new AbstractArgument[] { argument }, argument);
 	}
 
@@ -175,7 +175,7 @@ public final class Brigadier {
 	 *         specified argument
 	 */
 	public static <Argument extends AbstractArgument<?, ?, Argument, ?>> SuggestionProvider toSuggestions(Argument argument, List<Argument> args) {
-		BaseHandler<Argument, ?, ?> handler = (BaseHandler<Argument, ?, ?>) BaseHandler.getInstance();
+		CommandAPIHandler<Argument, ?, ?> handler = (CommandAPIHandler<Argument, ?, ?>) CommandAPIHandler.getInstance();
 		return handler.toSuggestions(argument, (Argument[]) args.toArray(AbstractArgument[]::new), true);
 	}
 
@@ -192,7 +192,7 @@ public final class Brigadier {
 	 * @throws CommandSyntaxException if there was an error during parsing
 	 */
 	public static <Argument extends AbstractArgument<?, ?, Argument, ?>> Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
-		BaseHandler<Argument, ?, ?> handler = (BaseHandler<Argument, ?, ?>) BaseHandler.getInstance();
+		CommandAPIHandler<Argument, ?, ?> handler = (CommandAPIHandler<Argument, ?, ?>) CommandAPIHandler.getInstance();
 		return handler.argsToObjectArr(cmdCtx, (Argument[]) args.toArray(AbstractArgument[]::new));
 	}
 
@@ -207,7 +207,7 @@ public final class Brigadier {
 	 *         CommandSender
 	 */
 	public static <CommandSender> Object getBrigadierSourceFromCommandSender(CommandSender sender) {
-		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) BaseHandler.getInstance().getPlatform();
+		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		return platform.getBrigadierSourceFromCommandSender(platform.wrapCommandSender(sender));
 	}
 
@@ -219,7 +219,7 @@ public final class Brigadier {
 	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
 	 */
 	public static <CommandSender> CommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
-		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) BaseHandler.getInstance().getPlatform();
+		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		// For some reason putting this on one line doesn't work - very weird
 		AbstractCommandSender<CommandSender> abstractSender = platform.getSenderForCommand(cmdCtx, false);
 		return abstractSender.getSource();

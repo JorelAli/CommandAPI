@@ -26,7 +26,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
-import dev.jorel.commandapi.BaseHandler;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -488,7 +488,7 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	public final MathOperation getMathOperation(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		// We run this to ensure the argument exists/parses properly
 		OperationArgument.getOperation(cmdCtx, key);
-		return MathOperation.fromString(BaseHandler.getRawArgumentInput(cmdCtx, key));
+		return MathOperation.fromString(CommandAPIHandler.getRawArgumentInput(cmdCtx, key));
 	}
 
 	@Override

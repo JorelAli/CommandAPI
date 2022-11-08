@@ -4,7 +4,7 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.BaseHandler;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
@@ -83,7 +83,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 		Object component;
 		try {
 			@SuppressWarnings("rawtypes") final PreviewInfo previewInfo;
-			if (BaseHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
+			if (CommandAPIHandler.getInstance().lookupPreviewableLegacyStatus(path)) {
 				BaseComponent[] parsedInput;
 				try {
 					parsedInput = platform.getChat(results.getContext().build(fullInput), path.get(path.size() - 1));
@@ -141,7 +141,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			for (ParsedCommandNode<CommandSourceStack> commandNode : results.getContext().getNodes()) {
 				path.add(commandNode.getNode().getName());
 			}
-			Optional<PreviewableFunction<?>> preview = BaseHandler.getInstance().lookupPreviewable(path);
+			Optional<PreviewableFunction<?>> preview = CommandAPIHandler.getInstance().lookupPreviewable(path);
 
 			cachedResult = new InitialParse(fullInput, results, path, preview);
 			return cachedResult;

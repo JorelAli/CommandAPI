@@ -80,7 +80,7 @@ public class CommandAPI {
 	 */
 	public static CommandAPILogger getLogger() {
 		if (logger == null) {
-			logger = BaseHandler.getInstance().getPlatform().getLogger();
+			logger = CommandAPIHandler.getInstance().getPlatform().getLogger();
 		}
 		return logger;
 	}
@@ -100,7 +100,7 @@ public class CommandAPI {
 
 			// Initialize handlers
 			AbstractPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
-			new BaseHandler<>(platform);
+			new CommandAPIHandler<>(platform);
 
 			// Log platform load
 			final String platformClassHierarchy;
@@ -116,7 +116,7 @@ public class CommandAPI {
 			logNormal("Loaded platform " + platformClassHierarchy);
 
 			// Finish loading
-			BaseHandler.getInstance().onLoad();
+			CommandAPIHandler.getInstance().onLoad();
 
 			loaded = true;
 		} else {
@@ -131,7 +131,7 @@ public class CommandAPI {
 	 * @param plugin the plugin that this onEnable method is called from
 	 */
 	public static void onEnable(Object plugin) {
-		BaseHandler.getInstance().onEnable(plugin);
+		CommandAPIHandler.getInstance().onEnable(plugin);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class CommandAPI {
 
 		// This method is called automatically when the class loads to set up variables, in which case
 		// BaseHandler will not have been initialized
-		BaseHandler<?, ?, ?> handler = BaseHandler.getInstance();
+		CommandAPIHandler<?, ?, ?> handler = CommandAPIHandler.getInstance();
 		if(handler != null) handler.onDisable();
 	}
 
@@ -203,7 +203,7 @@ public class CommandAPI {
 	 * running /minecraft:reload, NOT before.
 	 */
 	public static void reloadDatapacks() {
-		BaseHandler.getInstance().getPlatform().reloadDataPacks();
+		CommandAPIHandler.getInstance().getPlatform().reloadDataPacks();
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class CommandAPI {
 	 * @param player the player whos requirements to update
 	 */
 	public static <CommandSender, Player extends CommandSender> void updateRequirements(Player player) {
-		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) BaseHandler.getInstance().getPlatform();
+		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		platform.updateRequirements((AbstractPlayer<?>) platform.wrapCommandSender(player));
 	}
 
@@ -261,7 +261,7 @@ public class CommandAPI {
 	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
-		BaseHandler.getInstance().getPlatform().unregister(command, false);
+		CommandAPIHandler.getInstance().getPlatform().unregister(command, false);
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class CommandAPI {
 			getLogger().warning("Unexpected unregistering of /" + command
 				+ ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
 		}
-		BaseHandler.getInstance().getPlatform().unregister(command, force);
+		CommandAPIHandler.getInstance().getPlatform().unregister(command, force);
 	}
 
 	/**
@@ -297,6 +297,6 @@ public class CommandAPI {
 	 * registered by the CommandAPI so far. The returned list is immutable.
 	 */
 	public static List<RegisteredCommand> getRegisteredCommands() {
-		return Collections.unmodifiableList(BaseHandler.getInstance().registeredCommands);
+		return Collections.unmodifiableList(CommandAPIHandler.getInstance().registeredCommands);
 	}
 }
