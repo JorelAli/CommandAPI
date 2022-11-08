@@ -197,11 +197,6 @@ public class CommandAPI {
 		getLogger().severe(message);
 	}
 
-
-	// TODO: For backwards compatibility, I put this method here and added reloadDataPacks to AbstractPlatform
-	//  (https://commandapi.jorel.dev/8.5.1/internal.html?highlight=reload#reloading-datapacks). How should this be
-	//  handled? I guess datapack reloading might be something that can be done on all platforms, and if not just make
-	//  that platform's implementation do nothing like in pre 1.16 Bukkit NMS? - WillKroboth
 	/**
 	 * Reloads all of the datapacks that are on the server. This should be used if
 	 * you change a datapack and want to reload a server. Execute this method after
@@ -211,10 +206,6 @@ public class CommandAPI {
 		BaseHandler.getInstance().getPlatform().reloadDataPacks();
 	}
 
-	// TODO: Same as above: (https://commandapi.jorel.dev/8.5.1/requirements.html?highlight=par#updating-requirements).
-	//  I think this one makes more sense, though I don't really understand what this requirement update is achieving
-	//  exactly, since I thought it was just a special permissions check? I just need a sanity check that it makes
-	//  sense to put this here, and if not, how should we handle that backwards-compatibility issue? - WillKroboth
 	/**
 	 * Updates the requirements required for a given player to execute a command.
 	 *

@@ -367,7 +367,6 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftBlockData")
 	public abstract BlockData getBlockState(CommandContext<CommandSourceStack> cmdCtx, String key);
 
-	@SuppressWarnings("resource")
 	@Override
 	public CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
 		return getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
@@ -597,7 +596,7 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 	public abstract Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
-	// this doesn't blow up, but it should be covered by the default case (empty)
+	//  this doesn't blow up, but it should be covered by the default case (empty)
 	@Override
 	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
 	public final SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {

@@ -41,6 +41,8 @@ public interface ISafeOverrideableArgument<T, S, Impl extends AbstractArgument<T
 		return includeSuggestions(suggestions.toSuggestions(getMapper()));
 	}
 
+	// TODO: Now's might a good time to remove these methods, since a project using them would need to recompile
+	//  anyways since they're held in a different class now. Dunno though, do deprecated methods ever get removed anyways?
 	// Deprecated legacy methods
 	/**
 	 * Replaces the suggestions of this argument with an array of suggestions.
