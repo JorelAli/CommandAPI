@@ -204,13 +204,13 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	}
 
 	/**
-	 * Parses an argument and converts it into its object (as defined in platform.java)
+	 * Parses an argument and converts it into its object
 	 *
 	 * @param cmdCtx the command context
 	 * @param key    the key (declared in arguments)
 	 * @param value  the value (the argument declared in arguments)
-	 * @return the standard Bukkit type
-	 * @throws CommandSyntaxException when an argument isn't formatted correctly
+	 * @return the Argument's corresponding object
+	 * @throws CommandSyntaxException when the input for the argument isn't formatted correctly
 	 */
 	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, Object[] previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
@@ -458,8 +458,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		}
 	}
 
-	// Builds our platform command using the given arguments for this method, then
-	// registers it
+	// Builds a command then registers it
 	void register(CommandMetaData<CommandSender> meta, final Argument[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 

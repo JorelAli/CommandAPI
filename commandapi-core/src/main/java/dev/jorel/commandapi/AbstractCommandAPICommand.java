@@ -168,8 +168,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	}
 
 	// Expands subcommands into arguments. This method should be static (it
-	// shouldn't
-	// be accessing/depending on any of the contents of the current class instance)
+	// shouldn't be accessing/depending on any of the contents of the current class instance)
 	private static <Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>, Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender>
 	void flatten(Impl rootCommand, List<Argument> prevArguments, Impl subcommand) {
 		// Get the list of literals represented by the current subcommand. This

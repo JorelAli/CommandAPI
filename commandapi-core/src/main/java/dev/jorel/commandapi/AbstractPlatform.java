@@ -20,23 +20,59 @@ import java.util.List;
  */
 public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
 	// Platform-specific loading, enabling, and disabling tasks
+
+	/**
+	 * Platform-specific stuff that should happen when the CommandAPI is loaded,
+	 * such as checking dependencies and initializing helper classes.
+	 */
 	public abstract void onLoad();
 
+	/**
+	 * Platform-specific stuff that should happen when the CommandAPI is enabled,
+	 * such as registering event listeners.
+	 *
+	 * @param plugin The plugin providing the CommandAPI. This should have a specific class depending on the platform.
+	 */
 	public abstract void onEnable(Object plugin);
 
+	/**
+	 * Platform-specific stuff that should happen when the CommandAPI is disabled.
+	 */
 	public abstract void onDisable();
 
-	// "Source" in this case (for CommandContext<Source>) is something like a
-	// CommandListenerWrapper (Spigot mappings) or CommandSourceStack (Mojang mappings).
-	// over
+	// Converting between CommandSender, AbstractCommandSender, and Brigadier Sources
+
+	/**
+	 * Converts a Brigadier CommandContext into an AbstractCommandSender wrapping the platform's CommandSender
+	 *
+	 * @param cmdCtx      A Brigadier CommandContext
+	 * @param forceNative True if the CommandSender should be forced into a native CommandSender
+	 * @return An AbstractCommandSender wrapping the CommandSender represented by the CommandContext
+	 */
 	public abstract AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
-	// Converts a command source into its source.
-	public abstract AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
+	/**
+	 * Converts the class used by Brigadier when running commands into an AbstractCommandSender wrapping the platform's CommandSender
+	 *
+	 * @param source The Brigadier source object
+	 * @return An AbstractCommandSender wrapping the CommandSender represented by the source object
+	 */
+	public abstract AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source source);
 
-	// Converts a CommandSender to a Brigadier Source
+	/**
+	 * Converts a CommandSender wrapped in an AbstractCommandSender to an object Brigadier can use when running its commands
+	 *
+	 * @param sender The CommandSender to convert, wrapped in an AbstractCommandSender
+	 * @return The Brigadier Source object represented by the sender
+	 */
 	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
 
+	/**
+	 * Wraps a CommandSender in an AbstractCommandSender class, the inverse operation to {@link AbstractCommandSender#getSource()}
+	 *
+	 * @param sender The CommandSender to wrap
+	 * @return An AbstractCommandSender with a class appropriate to the underlying class of the CommandSender
+	 */
 	public abstract AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender);
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
@@ -45,7 +81,6 @@ public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, A
 
 	// Some commands have existing suggestion providers
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
-
 
 	/**
 	 * Stuff to run before a command is generated. For Bukkit, this involves checking
@@ -81,15 +116,16 @@ public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, A
 	 */
 	public abstract void unregister(String commandName, boolean force);
 
+	/**
+	 * @return The Brigadier CommandDispatcher tree being used by the platform's server
+	 */
 	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
 
 	/**
-	 * Creates a default Logger for the CommandAPI
-	 *
-	 * @return A new Logger meant for the CommandAPI to use
+	 * @return A new default Logger meant for the CommandAPI to use
 	 */
 	public CommandAPILogger getLogger() {
-		return new CommandAPILogger(){
+		return new CommandAPILogger() {
 			private static final String PREFIX = "[CommandAPI] ";
 			private static final String YELLOW = "\u001B[33m";
 			private static final String RED = "\u001B[31m";
@@ -112,10 +148,19 @@ public abstract class AbstractPlatform<Argument extends AbstractArgument<?, ?, A
 		};
 	}
 
+	/**
+	 * Reloads the server's data packs to include CommandAPI commands
+	 */
 	public abstract void reloadDataPacks();
 
+	/**
+	 * Updates the requirements required for a given player to execute a command.
+	 *
+	 * @param player the player to update
+	 */
 	public abstract void updateRequirements(AbstractPlayer<?> player);
 
+	// Create the concrete instances of objects implemented by the platform
 	public abstract AbstractCommandAPICommand<?, Argument, CommandSender> newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta);
 
 	public abstract Argument newConcreteMultiLiteralArgument(String[] literals);

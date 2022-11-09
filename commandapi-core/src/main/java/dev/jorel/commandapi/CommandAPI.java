@@ -66,7 +66,7 @@ public class CommandAPI {
 	public static InternalConfig getConfiguration() {
 		if (config == null) {
 			CommandAPI.config = new InternalConfig(new CommandAPIConfig());
-			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config, logger)?");
+			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
 		}
 		return config;
 	}
@@ -146,7 +146,7 @@ public class CommandAPI {
 		// This method is called automatically when the class loads to set up variables, in which case
 		// BaseHandler will not have been initialized
 		CommandAPIHandler<?, ?, ?> handler = CommandAPIHandler.getInstance();
-		if(handler != null) handler.onDisable();
+		if (handler != null) handler.onDisable();
 	}
 
 	// Logging
@@ -198,7 +198,7 @@ public class CommandAPI {
 	}
 
 	/**
-	 * Reloads all of the datapacks that are on the server. This should be used if
+	 * Reloads all the datapacks that are on the server. This should be used if
 	 * you change a datapack and want to reload a server. Execute this method after
 	 * running /minecraft:reload, NOT before.
 	 */
@@ -209,7 +209,7 @@ public class CommandAPI {
 	/**
 	 * Updates the requirements required for a given player to execute a command.
 	 *
-	 * @param player the player whos requirements to update
+	 * @param player the player whose requirements should be updated
 	 */
 	public static <CommandSender, Player extends CommandSender> void updateRequirements(Player player) {
 		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();

@@ -41,7 +41,7 @@ import java.util.function.BiPredicate;
  * The Brigadier class is used to access some of the internals of the CommandAPI
  * so you can use the CommandAPI alongside Mojang's com.mojang.brigadier package
  */
-//@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public final class Brigadier {
 
 	// Cannot be instantiated

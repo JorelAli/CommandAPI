@@ -164,19 +164,19 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 		}, plugin);
 
 		// On 1.19+, enable chat preview if the server allows it
-		if(canUseChatPreview()) {
+		if (canUseChatPreview()) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
 
 				@EventHandler
 				public void onPlayerJoin(PlayerJoinEvent e) {
-					if(Bukkit.shouldSendChatPreviews()) {
+					if (Bukkit.shouldSendChatPreviews()) {
 						hookChatPreview(plugin, e.getPlayer());
 					}
 				}
 
 				@EventHandler
 				public void onPlayerQuit(PlayerQuitEvent e) {
-					if(Bukkit.shouldSendChatPreviews()) {
+					if (Bukkit.shouldSendChatPreviews()) {
 						unhookChatPreview(e.getPlayer());
 					}
 				}
@@ -333,7 +333,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 
 	@Override
 	public void onDisable() {
-		for(Player player : Bukkit.getOnlinePlayers()) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
 			unhookChatPreview(player);
 		}
 	}
@@ -365,10 +365,6 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 			return new BukkitProxiedCommandSender(proxy);
 		return null;
 	}
-
-	@Override
-	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
-	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
 
 	@Override
 	public void registerPermission(String string) {
@@ -444,6 +440,11 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	}
 
 	@Override
+	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
+	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
+
+
+	@Override
 	public CommandAPILogger getLogger() {
 		return new DefaultLogger();
 	}
@@ -483,12 +484,13 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	// TODO: Not really sure where else these Bukkit-specific methods should go. Also, it sounds like
 	//  everything supports Adventure Components, so that isn't truly Bukkit-specific. Also, backwards compatibility:
 	//  these methods are expected to be called as CommandAPI.failWith...
+
 	/**
 	 * Forces a command to return a success value of 0
 	 *
 	 * @param message Description of the error message, formatted as an array of base components
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
-	 *         {@link CommandSyntaxException}
+	 * {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException failWithBaseComponents(BaseComponent... message) {
 		return CommandAPI.failWithMessage(Tooltip.messageFromBaseComponents(message));
@@ -499,7 +501,7 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	 *
 	 * @param message Description of the error message, formatted as an adventure chat component
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
-	 *         {@link CommandSyntaxException}
+	 * {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
 		return CommandAPI.failWithMessage(Tooltip.messageFromAdventureComponent(message));

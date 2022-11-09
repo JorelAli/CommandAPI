@@ -26,11 +26,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * A class to contain information about how to configure the CommandAPI during
- * its loading step.
+ * A class to contain information about how to configure the CommandAPI during its loading step.
  */
 public class CommandAPIConfig {
-
 	// The default configuration. This should mirror the commandapi-plugin config.yml file.
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
@@ -47,7 +45,7 @@ public class CommandAPIConfig {
 
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
-	 * 
+	 *
 	 * @param value whether verbose output should be enabled
 	 * @return this CommandAPIConfig
 	 */
@@ -59,7 +57,7 @@ public class CommandAPIConfig {
 	/**
 	 * Silences all logs (including warnings, but not errors) for the CommandAPI if
 	 * true.
-	 * 
+	 *
 	 * @param value whether logging suppression should be enabled
 	 * @return this CommandAPIConfig
 	 */
@@ -74,7 +72,7 @@ public class CommandAPIConfig {
 	 * if the latest NMS version is not supported by the CommandAPI. This can be
 	 * used to potentially provide compatibility with future Minecraft versions
 	 * before the CommandAPI pushes a release to support it.
-	 * 
+	 *
 	 * @param value whether the latest version of NMS should be used
 	 * @return this CommandAPIConfig
 	 */
@@ -86,12 +84,12 @@ public class CommandAPIConfig {
 	/**
 	 * Sets the message to display to users when a command has no executor.
 	 * Available formatting parameters are:
-	 * 
+	 *
 	 * <ul>
 	 * <li>%s - the executor class (lowercase)</li>
 	 * <li>%S - the executor class (normal case)</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param value the message to display when a command has no executor
 	 * @return this CommandAPIConfig
 	 */
@@ -127,7 +125,7 @@ public class CommandAPIConfig {
 
 	/**
 	 * Initializes the CommandAPI's implementation of an NBT API.
-	 * 
+	 *
 	 * @param <T>                     the type that the NBT compound container class
 	 *                                is
 	 * @param nbtContainerClass       the NBT compound container class. For example,
@@ -140,7 +138,7 @@ public class CommandAPIConfig {
 	 * @return this CommandAPIConfig
 	 */
 	public <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass,
-			Function<Object, T> nbtContainerConstructor) {
+												 Function<Object, T> nbtContainerConstructor) {
 		this.nbtContainerClass = nbtContainerClass;
 		this.nbtContainerConstructor = nbtContainerConstructor;
 		return this;

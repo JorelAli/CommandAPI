@@ -22,7 +22,7 @@ public abstract class AbstractArgumentTree<Impl extends AbstractArgumentTree<Imp
 	 * that extends this is an {@link AbstractArgument}
 	 */
 	protected AbstractArgumentTree() {
-		if (this instanceof AbstractArgument<?, ?, ?, CommandSender>) {
+		if (this instanceof AbstractArgument<?, ?, Argument, CommandSender>) {
 			this.argument = (Argument) this;
 		} else {
 			throw new IllegalArgumentException("Implicit inherited constructor must be from Argument");
@@ -56,7 +56,6 @@ public abstract class AbstractArgumentTree<Impl extends AbstractArgumentTree<Imp
 		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
 		// If this is executable, add its execution
 		if (this.executor.hasAnyExecutors()) {
-			// Cast platform to make it realize we're using the same CommandSender
 			executions.add(new Execution<>(List.of(this.argument), this.executor));
 		}
 		// Add all executions from all arguments
