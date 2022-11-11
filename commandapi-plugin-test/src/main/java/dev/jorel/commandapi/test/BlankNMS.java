@@ -45,11 +45,6 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	// TODO: All of this stuff needs to be implemented at some point
 
-	@Override
-	public SimpleCommandMap getSimpleCommandMap() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
@@ -82,19 +77,7 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public void reloadDataPacks() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public Set<NamespacedKey> getFunctions() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}
@@ -105,128 +88,9 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 		throw new RuntimeException("unimplemented");
 	}
 
-	@Override
-	public Set<NamespacedKey> getTags() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentAngle() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentAxis() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentChatFormat() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentDimension() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentEnchantment() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentEntitySummon() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentFloatRange() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentIntRange() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentMathOperation() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentNBTCompound() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentParticle() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentRotation() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardCriteria() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardObjective() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardSlot() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardTeam() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentTag() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentTime() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentUUID() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}
@@ -334,6 +198,145 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 
 	@Override
 	public UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public SimpleCommandMap getSimpleCommandMap() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public void reloadDataPacks() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+
+	@Override
+	public Set<NamespacedKey> getFunctions() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public Set<NamespacedKey> getTags() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentAngle() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentAxis() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentChatFormat() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentDimension() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEntitySummon() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentFloatRange() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentIntRange() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMathOperation() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentNBTCompound() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentParticle() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRotation() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardCriteria() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardObjective() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardSlot() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardTeam() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentTag() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentTime() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentUUID() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}
