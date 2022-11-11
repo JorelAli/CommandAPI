@@ -455,7 +455,6 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 
 	@Override
 	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		/* TODO: Requires testing */
 		return Enchantment.getByKey(fromResourceLocation(Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key))));
 	}
 
@@ -644,8 +643,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
 	public abstract Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key);
 
-	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
-	// this doesn't blow up, but it should be covered by the default case (empty)
+	// This differs from 1.18 -> 1.18.2 due to biome suggestions, but it should be covered by the default case (empty)
 	@Override
 	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
 	public final SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {

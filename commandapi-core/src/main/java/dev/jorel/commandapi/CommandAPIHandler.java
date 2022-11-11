@@ -809,16 +809,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 		}
 
-		DISPATCHER.findAmbiguities(
-			(CommandNode<CommandSourceStack> parent,
-				CommandNode<CommandSourceStack> child,
-				CommandNode<CommandSourceStack> sibling,
-				Collection<String> inputs) -> {
-					if(resultantNode.equals(parent)) {
-						// Byeeeeeeeeeeeeeeeeeeeee~
-					}
-			});
-
 		// We never know if this is "the last command" and we want dynamic (even if
 		// partial)
 		// command registration. Generate the dispatcher file!

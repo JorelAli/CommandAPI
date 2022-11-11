@@ -216,6 +216,7 @@ public class MockNMS extends ArgumentNMS {
 			field.setAccessible(true);
 			field.set(null, true);
 		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -233,6 +234,7 @@ public class MockNMS extends ArgumentNMS {
 			field.setAccessible(true);
 			field.set(null, true);
 		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
 	}
 
