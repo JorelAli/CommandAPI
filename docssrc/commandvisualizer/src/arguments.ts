@@ -60,9 +60,9 @@ class SuggestionsHelper {
 	}
 
 	public static suggestMatching(reader: StringReader, suggestions: string[]): string[] {
-		let newSuggestions: string[] = [];
+		const newSuggestions: string[] = [];
 		const remaining: string = reader.getRemaining().toLocaleLowerCase();
-		for(let suggestion of suggestions) {
+		for(const suggestion of suggestions) {
 			if(!SuggestionsHelper.shouldSuggest(remaining, suggestion.toLocaleLowerCase())) {
 				continue;
 			}
@@ -114,7 +114,7 @@ export class TimeArgument implements ArgumentType<TimeArgument> {
 	}
 
 	public listSuggestions(_context: CommandContext<any>, builder: SuggestionsBuilder): Promise<Suggestions> {
-		let reader: StringReader = new StringReader(builder.getRemaining());
+		const reader: StringReader = new StringReader(builder.getRemaining());
 		try {
 			reader.readFloat();
 		} catch (ex) {
@@ -1027,7 +1027,7 @@ export class EntitySelectorArgument implements ArgumentType<EntitySelectorArgume
 
 		const parseNameOrUUID: () => void = () => {
 			let i: number = reader.getCursor();
-			let s: string = reader.readString();
+			const s: string = reader.readString();
 
 			// Regex for a UUID: https://stackoverflow.com/a/13653180/4779071
 			if(s.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i) !== null) {

@@ -126,7 +126,7 @@ enum ChatColor {
 	LIGHT_PURPLE = "\u00A7d",
 	YELLOW = "\u00A7e",
 	WHITE = "\u00A7f"
-};
+}
 
 const ChatColorCSS: Map<string, string> = new Map([
 	["0", "black"],
@@ -481,7 +481,7 @@ function setText(minecraftCodedText: string, target: HTMLElement | null = null) 
 
 	function writeBuffer(target: HTMLElement): void {
 		if (buffer.length > 0) {
-			let elem: HTMLSpanElement = document.createElement("span");
+			const elem: HTMLSpanElement = document.createElement("span");
 			elem.className = currentColor;
 			elem.innerText = buffer;
 			target.appendChild(elem);
