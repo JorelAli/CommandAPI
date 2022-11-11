@@ -39,7 +39,7 @@ span {
 
 .bg {
 	background-color: #7daaff;
-	padding: 20px 5px 5px 5px;
+	padding: 20px 5px 5px;
 	height: 500px;
 	position: relative;
 }
@@ -90,8 +90,6 @@ span {
 }
 
 #valid-box, #app-error-box {
-	bottom: calc(49px + 49px);
-	width: unset;
 	background-color: #161e2c;
 	padding-left: 8px;
 	/* 8px padding left */
@@ -113,7 +111,7 @@ span {
 /* From https://codepen.io/joexmdq/pen/EOMLzg */
 #register-commands-button {
 	background: #999 url('./bgbtn.png');
-	padding: 10px 30px 10px 30px;
+	padding: 10px 30px;
 	margin-top: 8px;
 	font-family: CustomFont;
 	color: #DDD;
