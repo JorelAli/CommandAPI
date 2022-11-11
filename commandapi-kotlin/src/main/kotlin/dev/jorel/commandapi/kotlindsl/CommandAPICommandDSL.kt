@@ -21,7 +21,7 @@ inline fun commandAPICommand(name: String, command: CommandAPICommand.() -> Unit
 inline fun commandAPICommand(name: String, predicate: Predicate<CommandSender>, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).withRequirement(predicate).apply(command).register()
 
 inline fun CommandAPICommand.argument(base: Argument<*>, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(base.apply(block))
-inline fun CommandAPICommand.subcommand(name: String, command: CommandAPICommand.() -> Unit = {}): CommandAPICommand = withSubcommand(CommandAPICommand(name)).apply(command)
+inline fun CommandAPICommand.subcommand(name: String, command: CommandAPICommand.() -> Unit = {}): CommandAPICommand = withSubcommand(CommandAPICommand(name).apply(command))
 
 // Integer arguments
 inline fun CommandAPICommand.integerArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(IntegerArgument(nodeName).apply(block))
@@ -88,6 +88,7 @@ inline fun CommandAPICommand.angleArgument(nodeName: String, block: Argument<*>.
 inline fun CommandAPICommand.advancementArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(AdvancementArgument(nodeName).apply(block))
 inline fun CommandAPICommand.biomeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(BiomeArgument(nodeName).apply(block))
 inline fun CommandAPICommand.blockStateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(BlockStateArgument(nodeName).apply(block))
+inline fun CommandAPICommand.commandArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(CommandArgument(nodeName).apply(block))
 inline fun CommandAPICommand.enchantmentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EnchantmentArgument(nodeName).apply(block))
 inline fun CommandAPICommand.environmentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EnvironmentArgument(nodeName).apply(block))
 inline fun CommandAPICommand.itemStackArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(ItemStackArgument(nodeName).apply(block))
