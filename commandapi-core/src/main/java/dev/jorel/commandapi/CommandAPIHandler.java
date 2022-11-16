@@ -738,8 +738,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
-		for (RegisteredCommand rCommand : registeredCommands) {
-			hasRegisteredCommand |= rCommand.commandName().equals(commandName);
+		for (int i = 0, size = registeredCommands.size(); i < size && !hasRegisteredCommand; i++) {
+			hasRegisteredCommand |= registeredCommands.get(i).commandName().equals(commandName);
 		}
 		if (hasRegisteredCommand && hasCommandConflict(commandName, args, humanReadableCommandArgSyntax)) {
 			return;
