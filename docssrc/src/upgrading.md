@@ -54,6 +54,26 @@ throw CommandAPI.fail("Error message");
 throw CommandAPI.failWithString("Error message");
 ```
 
+### List arguments
+
+List arguments can now be implemented using an underlying text argument, instead of requiring it to be a greedy string. This allows you to use multiple lists in a command, in any position. As such, the `ListArgumentBuilder.build()` method has been deprecated and replaced with `ListArgumentBuilder.buildGreedy()` instead:
+
+```java
+new ListArgumentBuilder<Material>("materials")
+    .withList(List.of(Material.values()))
+    .withMapper(material -> material.name().toLowerCase())
+    .build();
+```
+
+\\[\downarrow\\]
+
+```java
+new ListArgumentBuilder<Material>("materials")
+    .withList(List.of(Material.values()))
+    .withMapper(material -> material.name().toLowerCase())
+    .buildGreedy();
+```
+
 -----
 
 ## From 8.5.0 to 8.5.1

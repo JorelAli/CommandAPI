@@ -104,10 +104,11 @@ In order to display suggestions, the `ListArgument` needs to know how to convert
 
 ### Building the `ListArgumentBuilder`
 
-To finish building the `ListArgument`, call the `build()` method:
+To finish building the `ListArgument`, call the `buildGreedy()` or `buildText()` method. The `buildGreedy()` method will treat the list argument as a greedy string, which means you can only use this list argument at the end of the list of arguments you are declaring for the command. If you use the `buildText()` instead, you can use the list argument anywhere (and multiple times), but the list must be surrounded with quotation characters (`"`).
 
 ```java
-public ListArgument<T> build();
+public ListArgument<T> buildGreedy();
+public ListArgument<T> buildText();
 ```
 
 -----
