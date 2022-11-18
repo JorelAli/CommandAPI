@@ -307,7 +307,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
 	Command<CommandSourceStack> generateCommand(Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException {
+												CommandAPIExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
@@ -526,7 +526,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * multiliteral arguments were not present.
 	 */
 	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
+			CommandAPIExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -684,7 +684,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
+			CommandAPIExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
