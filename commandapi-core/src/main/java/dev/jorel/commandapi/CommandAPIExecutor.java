@@ -42,19 +42,19 @@ import dev.jorel.commandapi.executors.IExecutorResulting;
 import dev.jorel.commandapi.executors.IExecutorTyped;
 
 /**
- * CustomCommandExecutor is the main executor implementation for command
+ * CommandAPIExecutor is the main executor implementation for command
  * executors. It contains a list of all executors (normal and resulting
  * executors) and switches its execution implementation based on the provided
  * command executor types.
  *
  * @param <T> a command sender
  */
-public class CustomCommandExecutor<T extends CommandSender> {
+public class CommandAPIExecutor<T extends CommandSender> {
 
 	private List<IExecutorNormal<T>> normalExecutors;
 	private List<IExecutorResulting<T>> resultingExecutors;
 
-	public CustomCommandExecutor() {
+	public CommandAPIExecutor() {
 		normalExecutors = new ArrayList<>();
 		resultingExecutors = new ArrayList<>();
 	}
@@ -154,8 +154,8 @@ public class CustomCommandExecutor<T extends CommandSender> {
 		return false;
 	}
 
-	CustomCommandExecutor<T> mergeExecutor(CustomCommandExecutor<T> executor) {
-		CustomCommandExecutor<T> result = new CustomCommandExecutor<>();
+	CommandAPIExecutor<T> mergeExecutor(CommandAPIExecutor<T> executor) {
+		CommandAPIExecutor<T> result = new CommandAPIExecutor<>();
 		result.normalExecutors = new ArrayList<>(normalExecutors);
 		result.resultingExecutors = new ArrayList<>(resultingExecutors);
 		result.normalExecutors.addAll(executor.normalExecutors);

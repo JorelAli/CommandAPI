@@ -30,9 +30,9 @@ import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 abstract class Executable<T extends Executable<T>> {
 
 	/**
-	 * The CustomCommandExecutor for this executable implementation
+	 * The CommandAPIExecutor for this executable implementation
 	 */
-	protected CustomCommandExecutor<?> executor = new CustomCommandExecutor<>();
+	protected CommandAPIExecutor<?> executor = new CommandAPIExecutor<>();
 
 	// Regular command executor
 
@@ -240,7 +240,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * Returns the executors that this command has
 	 * @return the executors that this command has
 	 */
-	public CustomCommandExecutor<? extends CommandSender> getExecutor() {
+	public CommandAPIExecutor<? extends CommandSender> getExecutor() {
 		return executor;
 	}
 
@@ -248,7 +248,7 @@ abstract class Executable<T extends Executable<T>> {
 	 * Sets the executors for this command
 	 * @param executor the executors for this command
 	 */
-	public void setExecutor(CustomCommandExecutor<? extends CommandSender> executor) {
+	public void setExecutor(CommandAPIExecutor<? extends CommandSender> executor) {
 		this.executor = executor;
 	}
 
