@@ -38,19 +38,27 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 			if (!command.contains(" ")) {
 				// Suggesting command name
 				ArgumentSuggestions replacement = replacements.getNextSuggestion(sender);
-				if (replacement != null)
+				if (replacement != null) {
 					return replacement.suggest(new SuggestionInfo(sender, new Object[0], command, command), builder);
+				}
 
 				List<String> results = commandMap.tabComplete(sender, command);
 				// No applicable commands
-				if (results == null)
+				if (results == null) {
 					throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
+				}
 
 				// Remove / that gets prefixed to command name if the sender is a player
-				if (sender instanceof Player)
-					results.stream().map(s -> s.substring(1)).forEach(builder::suggest);
-				else
-					results.forEach(builder::suggest);
+				if (sender instanceof Player) {
+					for(String result : results) {
+						builder.suggest(result.substring(1));
+					}
+				}
+				else {
+					for(String result : results) {
+						builder.suggest(result);
+					}
+				}
 
 				return builder.buildFuture();
 			}
@@ -59,9 +67,10 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 			// Verify commandLabel
 			String commandLabel = command.substring(0, command.indexOf(" "));
 			Command target = commandMap.getCommand(commandLabel);
-			if (target == null)
+			if (target == null) {
 				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
-
+			}
+			
 			// Get arguments
 			String[] arguments = command.split(" ");
 			if (!arguments[0].isEmpty() && command.endsWith(" ")) {
@@ -76,19 +85,24 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 			int lastIndex = arguments.length - 1;
 			String[] previousArguments = Arrays.copyOf(arguments, lastIndex);
 			ArgumentSuggestions replacement = replacements.getNextSuggestion(sender, previousArguments);
-			if (replacement != null)
+			if (replacement != null) {
 				return replacement.suggest(new SuggestionInfo(sender, previousArguments, command, arguments[lastIndex]), builder);
+			}
 
 			// Get location sender is looking at if they are a Player, matching vanilla behavior
 			// No builtin Commands use the location parameter, but they could
 			Location location = null;
 			if (sender instanceof Player player) {
 				Block block = player.getTargetBlockExact(5, FluidCollisionMode.NEVER);
-				if (block != null) location = block.getLocation();
+				if (block != null) {
+					location = block.getLocation();
+				}
 			}
 
 			// Build suggestions for new argument
-			target.tabComplete(sender, commandLabel, arguments, location).forEach(builder::suggest);
+			for(String tabCompletion : target.tabComplete(sender, commandLabel, arguments, location)) {
+				builder.suggest(tabCompletion);
+			}
 			return builder.buildFuture();
 		});
 	}
@@ -96,12 +110,14 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	SuggestionsBranch replacements = SuggestionsBranch.suggest();
 
 	/**
-	 * Replaces the default command suggestions provided by the server with custom suggestions for each argument in the
-	 * command, starting with the command's name. If a suggestion is null or there isn't any suggestions given for that
+	 * Replaces the default command suggestions provided by the server with custom
+	 * suggestions for each argument in the command, starting with the command's
+	 * name. If a suggestion is null or there isn't any suggestions given for that
 	 * argument, the suggestions will not be overridden.
 	 *
-	 * @param suggestions An array of {@link ArgumentSuggestions} representing the suggestions. Use the static methods in
-	 *                    ArgumentSuggestions to create these.
+	 * @param suggestions An array of {@link ArgumentSuggestions} representing the
+	 *                    suggestions. Use the static methods in ArgumentSuggestions
+	 *                    to create these.
 	 * @return the current argument
 	 */
 	public CommandArgument replaceSuggestions(ArgumentSuggestions... suggestions) {
@@ -110,25 +126,31 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	}
 
 	/**
-	 * Replaces the default command suggestions provided by the server with custom suggestions for each argument in the
-	 * command, starting with the command's name. If a suggestion is null or there isn't any suggestions given for that
+	 * Replaces the default command suggestions provided by the server with custom
+	 * suggestions for each argument in the command, starting with the command's
+	 * name. If a suggestion is null or there isn't any suggestions given for that
 	 * argument, the suggestions will not be overridden.
 	 *
-	 * @param suggestions An array of {@link ArgumentSuggestions} representing the suggestions. Use the static methods in
-	 *                    ArgumentSuggestions to create these.
+	 * @param suggestions An array of {@link ArgumentSuggestions} representing the
+	 *                    suggestions. Use the static methods in ArgumentSuggestions
+	 *                    to create these.
 	 * @return the current argument
 	 */
 	@Override
 	public CommandArgument replaceSuggestions(ArgumentSuggestions suggestions) {
-		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
+		return replaceSuggestions(new ArgumentSuggestions[] { suggestions });
 	}
 
 	/**
-	 * Adds {@link SuggestionsBranch} to this CommandArgument. After going through the suggestions provided by
-	 * {@link CommandArgument#replaceSuggestions(ArgumentSuggestions...)} the suggestions of these branches will be used.
+	 * Adds {@link SuggestionsBranch} to this CommandArgument. After going through
+	 * the suggestions provided by
+	 * {@link CommandArgument#replaceSuggestions(ArgumentSuggestions...)} the
+	 * suggestions of these branches will be used.
 	 *
-	 * @param branches An array of {@link SuggestionsBranch} representing the branching suggestions. Use
-	 *                 {@link SuggestionsBranch#suggest(ArgumentSuggestions...)} to start creating these.
+	 * @param branches An array of {@link SuggestionsBranch} representing the
+	 *                 branching suggestions. Use
+	 *                 {@link SuggestionsBranch#suggest(ArgumentSuggestions...)} to
+	 *                 start creating these.
 	 * @return the current argument
 	 */
 	public Argument<CommandResult> branchSuggestions(SuggestionsBranch... branches) {
@@ -159,8 +181,9 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		String[] arguments = command.split(" ");
 		String commandLabel = arguments[0];
 		Command target = commandMap.getCommand(commandLabel);
-		if (target == null)
+		if (target == null) {
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
+		}
 
 		// Check all replacements
 		replacements.enforceReplacements(sender, arguments);
