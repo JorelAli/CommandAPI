@@ -50,12 +50,11 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 				// Remove / that gets prefixed to command name if the sender is a player
 				if (sender instanceof Player) {
-					for(String result : results) {
+					for (String result : results) {
 						builder.suggest(result.substring(1));
 					}
-				}
-				else {
-					for(String result : results) {
+				} else {
+					for (String result : results) {
 						builder.suggest(result);
 					}
 				}
@@ -70,7 +69,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 			if (target == null) {
 				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(context);
 			}
-			
+
 			// Get arguments
 			String[] arguments = command.split(" ");
 			if (!arguments[0].isEmpty() && command.endsWith(" ")) {
@@ -89,6 +88,9 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 				return replacement.suggest(new SuggestionInfo(sender, previousArguments, command, arguments[lastIndex]), builder);
 			}
 
+			// Remove command name from arguments for normal tab-completion
+			arguments = Arrays.copyOfRange(arguments, 1, arguments.length);
+
 			// Get location sender is looking at if they are a Player, matching vanilla behavior
 			// No builtin Commands use the location parameter, but they could
 			Location location = null;
@@ -100,7 +102,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 			}
 
 			// Build suggestions for new argument
-			for(String tabCompletion : target.tabComplete(sender, commandLabel, arguments, location)) {
+			for (String tabCompletion : target.tabComplete(sender, commandLabel, arguments, location)) {
 				builder.suggest(tabCompletion);
 			}
 			return builder.buildFuture();
@@ -138,7 +140,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	 */
 	@Override
 	public CommandArgument replaceSuggestions(ArgumentSuggestions suggestions) {
-		return replaceSuggestions(new ArgumentSuggestions[] { suggestions });
+		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
 	}
 
 	/**
