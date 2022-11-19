@@ -296,7 +296,12 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The UUIDArgument
 	 */
-	UUID("minecraft:uuid");
+	UUID("minecraft:uuid"),
+
+	/**
+	 * The WorldArgument
+	 */
+	WORLD("api:world");
 
 	/**
 	 * Converts an internal name (e.g. minecraft:time) to a CommandAPIArgumentType

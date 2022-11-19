@@ -235,6 +235,7 @@ public class AdvancedConverter {
 			case PRIMITIVE_LONG -> new LongArgument(nodeName);
 			case PRIMITIVE_STRING -> new StringArgument(nodeName);
 			case PRIMITIVE_TEXT -> new TextArgument(nodeName);
+			case WORLD -> new WorldArgument(nodeName);
 			case LITERAL, MULTI_LITERAL, CUSTOM -> throw new UnknownArgumentException(argumentType);
 			default -> throw new UnknownArgumentException(argumentType);
 		};
