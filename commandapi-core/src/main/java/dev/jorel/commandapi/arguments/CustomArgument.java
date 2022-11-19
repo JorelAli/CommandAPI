@@ -134,7 +134,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 			throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
-		final B parsedInput = base.parseArgument(nms, cmdCtx, key, previousArgs);
+		final B parsedInput = base.parseArgumentHandleError(nms, cmdCtx, key, previousArgs);
 
 		try {
 			return infoParser.apply(new CustomArgumentInfo<B>(nms.getCommandSenderFromCSS(cmdCtx.getSource()),

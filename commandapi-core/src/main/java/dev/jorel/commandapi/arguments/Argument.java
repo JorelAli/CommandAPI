@@ -27,6 +27,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import dev.jorel.commandapi.ArgumentTree;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -94,6 +95,21 @@ public abstract class Argument<T> extends ArgumentTree {
 	public final String getNodeName() {
 		return this.nodeName;
 	}
+
+	public final <CommandSourceStack> T parseArgumentHandleError(NMS<CommandSourceStack> nms,
+																 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		try {
+			return parseArgument(nms, cmdCtx, key, previousArgs);
+		} catch (CommandSyntaxException original) {
+			try {
+				return exceptionHandler.handleException(new ArgumentParseExceptionContext(
+					new WrapperCommandSyntaxException(original)
+				));
+			} catch (WrapperCommandSyntaxException newException) {
+				throw newException.getException();
+			}
+		}
+	}
 	
 	/**
 	 * Parses an argument, returning the specific Bukkit object that the argument
@@ -109,7 +125,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @throws CommandSyntaxException if parsing fails
 	 */
 	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack> nms,
-			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
+														 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //
@@ -304,6 +320,21 @@ public abstract class Argument<T> extends ArgumentTree {
 		this.isListed = listed;
 		return this;
 	}
+
+	////////////////////////
+	// Exception Handling //
+	///////////////////////
+
+	private ArgumentParseExceptionHandler<T> exceptionHandler = context -> {throw context.exception();};
+
+	public final Argument<T> withExceptionHandler(ArgumentParseExceptionHandler<T> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	public final ArgumentParseExceptionHandler<T> getExceptionHandler() {
+		return this.exceptionHandler;
+	}
 	
 	///////////
 	// Other //
@@ -327,5 +358,4 @@ public abstract class Argument<T> extends ArgumentTree {
 	public String toString() {
 		return this.getNodeName() + "<" + this.getClass().getSimpleName() + ">";
 	}
-
 }

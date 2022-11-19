@@ -388,7 +388,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument<?> value, Object[] previousArgs)
 			throws CommandSyntaxException {
 		if (value.isListed()) {
-			return value.parseArgument(NMS, cmdCtx, key, previousArgs);
+			return value.parseArgumentHandleError(NMS, cmdCtx, key, previousArgs);
 		} else {
 			return null;
 		}
