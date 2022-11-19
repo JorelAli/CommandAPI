@@ -12,7 +12,7 @@ fun sendMessageToCommand() {
 /* ANCHOR: dslSendMessageToCommand */
 commandTree("sendmessageto") {
     playerArgument("player") { // Defines a new PlayerArgument("player")
-        greedyArgument("msg") { // Defines a new GreedyStringArgument("msg)
+        greedyStringArgument("msg") { // Defines a new GreedyStringArgument("msg)
             anyExecutor { _, args -> // Command can be executed by anyone and anything (such as entities, the console, etc.)
                 val player: Player = args[0] as Player
                 val message: String = args[1] as String
@@ -26,7 +26,7 @@ commandTree("sendmessageto") {
 /* ANCHOR: dslSendMessageToCommand2 */
 commandAPICommand("sendmessageto") {
     playerArgument("player") // Defines a new PlayerArgument("player")
-    greedyArgument("msg") // Defines a new GreedyStringArgument("msg)
+    greedyStringArgument("msg") // Defines a new GreedyStringArgument("msg)
     anyExecutor { _, args -> // Command can be executed by anyone and anything (such as entities, the console, etc.)
         val player: Player = args[0] as Player
         val message: String = args[1] as String
@@ -38,7 +38,7 @@ commandAPICommand("sendmessageto") {
 /* ANCHOR: dslSendMessageToCommandRequirement */
 commandTree("sendMessageTo") {
     playerArgument("player") {
-        greedyArgument("msg") {
+        greedyStringArgument("msg") {
             playerExecutor { _, args ->
                 val player: Player = args[0] as Player
                 val message: String = args[1] as String
@@ -47,7 +47,7 @@ commandTree("sendMessageTo") {
         }
     }
     requirement(of("broadcast"), { sender: CommandSender -> sender.isOp }) { // Define a new LiteralArgument("broadcast") that requires the CommandSender to be a player who is a server operator
-        greedyArgument("msg") {
+        greedyStringArgument("msg") {
             playerExecutor { _, args ->
                 val message: String = args[0] as String
                 Bukkit.broadcastMessage(message)
@@ -60,7 +60,7 @@ commandTree("sendMessageTo") {
 /* ANCHOR: dslSendMessageToCommandRequirement2 */
 commandAPICommand("sendMessageTo") {
     playerArgument("player")
-    greedyArgument("msg")
+    greedyStringArgument("msg")
     playerExecutor { _, args ->
         val player: Player = args[0] as Player
         val message: String = args[1] as String
@@ -70,7 +70,7 @@ commandAPICommand("sendMessageTo") {
 
 commandAPICommand("sendMessageTo") {
     requirement(of("broadcast"), { sender: CommandSender -> sender.isOp }) // Define a new LiteralArgument("broadcast") that requires the CommandSender to be a player who is a server operator
-    greedyArgument("msg")
+    greedyStringArgument("msg")
     playerExecutor { _, args ->
         val message: String = args[0] as String
         Bukkit.broadcastMessage(message)

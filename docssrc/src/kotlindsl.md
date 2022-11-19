@@ -56,7 +56,7 @@ To find out, which DSL executor corresponds to "normal" executors, you can refer
 
 ## Arguments
 
-The DSL implements almost every argument with a method. You've seen the `playerArgument()` and the `greedyArgument()` method in the example at the top of this page.
+The DSL implements almost every argument with a method. You've seen the `playerArgument()` and the `greedyStringArgument()` method in the example at the top of this page.
 
 The way arguments are implemented is pretty straight forward: It's basically the argument class' name, but as a method. So if you wanted to use a `ItemStackArgument` in your command, you would use the `itemStackArgument()` method of the DSL.
 
