@@ -49,14 +49,14 @@ public abstract class Argument<T> extends ArgumentTree {
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
 	 * command, this argument should yield an object of this returned class.
-	 * 
+	 *
 	 * @return the type that this argument yields when the command is run
 	 */
 	public abstract Class<T> getPrimitiveType();
 
 	/**
 	 * Returns the argument type for this argument.
-	 * 
+	 *
 	 * @return the argument type for this argument
 	 */
 	public abstract CommandAPIArgumentType getArgumentType();
@@ -70,8 +70,8 @@ public abstract class Argument<T> extends ArgumentTree {
 
 	/**
 	 * Constructs an argument with a given NMS/brigadier type.
-	 * 
-	 * @param nodeName the name to assign to this argument node 
+	 *
+	 * @param nodeName the name to assign to this argument node
 	 * @param rawType the NMS or brigadier type to be used for this argument
 	 */
 	protected Argument(String nodeName, ArgumentType<?> rawType) {
@@ -81,13 +81,13 @@ public abstract class Argument<T> extends ArgumentTree {
 
 	/**
 	 * Returns the NMS or brigadier type for this argument.
-	 * 
+	 *
 	 * @return the NMS or brigadier type for this argument
 	 */
 	public final ArgumentType<?> getRawType() {
 		return this.rawType;
 	}
-	
+
 	/**
 	 * Returns the name of this argument's node
 	 * @return the name of this argument's node
@@ -96,8 +96,27 @@ public abstract class Argument<T> extends ArgumentTree {
 		return this.nodeName;
 	}
 
+	/**
+	 * Parses an argument using {@link Argument#parseArgument(NMS, CommandContext, String, Object[])}.
+	 * If the initial parse fails, the exception is passed to
+	 * the active {@link ArgumentParseExceptionHandler} for
+	 * this argument, which can be changed by the developers
+	 * using {@link Argument#withExceptionHandler(ArgumentParseExceptionHandler)}.
+	 * This is intended for use by the internals of the CommandAPI
+	 * and isn't expected to be used outside the CommandAPI
+	 *
+	 * @param <CommandSourceStack> the command source type
+	 * @param nms                  an instance of NMS
+	 * @param cmdCtx               the context which ran this command
+	 * @param key                  the name of the argument node
+	 * @param previousArgs         an array of previously declared arguments
+	 * @return the parsed object represented by this argument, or the object returned by
+	 * the active {@link ArgumentParseExceptionHandler} if parsing fails
+	 * @throws CommandSyntaxException if parsing fails and
+	 * the active {@link ArgumentParseExceptionHandler} throws an exception as well
+	 */
 	public final <CommandSourceStack> T parseArgumentHandleError(NMS<CommandSourceStack> nms,
-																 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		try {
 			return parseArgument(nms, cmdCtx, key, previousArgs);
 		} catch (CommandSyntaxException original) {
@@ -110,12 +129,12 @@ public abstract class Argument<T> extends ArgumentTree {
 			}
 		}
 	}
-	
+
 	/**
 	 * Parses an argument, returning the specific Bukkit object that the argument
 	 * represents. This is intended for use by the internals of the CommandAPI and
 	 * isn't expected to be used outside the CommandAPI
-	 * 
+	 *
 	 * @param <CommandSourceStack> the command source type
 	 * @param nms                  an instance of NMS
 	 * @param cmdCtx               the context which ran this command
@@ -125,7 +144,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @throws CommandSyntaxException if parsing fails
 	 */
 	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack> nms,
-														 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
+			CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //
@@ -150,7 +169,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by
 	 * this argument.
-	 * 
+	 *
 	 * @param suggestions a function that takes in SuggestionInfo which includes
 	 *                    information about the current state at the time the
 	 *                    suggestions are run and returns a String[] of suggestions
@@ -166,7 +185,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by
 	 * this argument.
-	 * 
+	 *
 	 * @param suggestions a function that takes in SuggestionInfo which includes
 	 *                    information about the current state at the time the
 	 *                    suggestions are run and returns an IStringTooltip[] of
@@ -195,7 +214,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * ArgumentSuggestions to create these.
 	 * @return the current argument
 	 */
-  
+
 	public Argument<T> replaceSuggestions(ArgumentSuggestions suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
@@ -226,7 +245,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	/**
 	 * Returns an optional function that maps the command sender to an IStringTooltip array of
 	 * suggestions for the current command
-	 * 
+	 *
 	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there
 	 *         are no overridden suggestions.
 	 */
@@ -242,7 +261,7 @@ public abstract class Argument<T> extends ArgumentTree {
 
 	/**
 	 * Assigns the given permission as a requirement to execute this command.
-	 * 
+	 *
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
@@ -250,10 +269,10 @@ public abstract class Argument<T> extends ArgumentTree {
 		this.permission = permission;
 		return this;
 	}
-	
+
 	/**
 	 * Assigns the given permission as a requirement to execute this command.
-	 * 
+	 *
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
@@ -269,13 +288,13 @@ public abstract class Argument<T> extends ArgumentTree {
 	public final CommandPermission getArgumentPermission() {
 		return permission;
 	}
-	
+
 	//////////////////
 	// Requirements //
 	//////////////////
-	
+
 	private Predicate<CommandSender> requirements = s -> true;
-		
+
 	/**
 	 * Returns the requirements required to run this command
 	 * @return the requirements required to run this command
@@ -283,12 +302,12 @@ public abstract class Argument<T> extends ArgumentTree {
 	public final Predicate<CommandSender> getRequirements() {
 		return this.requirements;
 	}
-	
+
 	/**
 	 * Adds a requirement that has to be satisfied to use this argument. This method
 	 * can be used multiple times and each use of this method will AND its
 	 * requirement with the previously declared ones
-	 * 
+	 *
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
@@ -296,13 +315,13 @@ public abstract class Argument<T> extends ArgumentTree {
 		this.requirements = this.requirements.and(requirement);
 		return this;
 	}
-	
+
 	/////////////////
 	// Listability //
 	/////////////////
-	
+
 	private boolean isListed = true;
-	
+
 	/**
 	 * Returns true if this argument will be listed in the Object args[] of the command executor
 	 * @return true if this argument will be listed in the Object args[] of the command executor
@@ -310,7 +329,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	public boolean isListed() {
 		return this.isListed;
 	}
-	
+
 	/**
 	 * Sets whether this argument will be listed in the Object args[] of the command executor
 	 * @param listed if true, this argument will be included in the Object args[] of the command executor
@@ -325,26 +344,36 @@ public abstract class Argument<T> extends ArgumentTree {
 	// Exception Handling //
 	///////////////////////
 
-	private ArgumentParseExceptionHandler<T> exceptionHandler = context -> {throw context.exception();};
+	private ArgumentParseExceptionHandler<T> exceptionHandler = context -> { throw context.exception(); };
 
+	/**
+	 * Sets the {@link ArgumentParseExceptionHandler} this Argument should use when it fails to parse its input.
+	 *
+	 * @param exceptionHandler The new {@link ArgumentParseExceptionHandler} this argument should use
+	 * @return this current argument
+	 */
 	public final Argument<T> withExceptionHandler(ArgumentParseExceptionHandler<T> exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 		return this;
 	}
 
+	/**
+	 * Returns the {@link ArgumentParseExceptionHandler} this argument is using
+	 * @return The {@link ArgumentParseExceptionHandler} this argument is using
+	 */
 	public final ArgumentParseExceptionHandler<T> getExceptionHandler() {
 		return this.exceptionHandler;
 	}
-	
+
 	///////////
 	// Other //
 	///////////
-	
+
 	/**
 	 * Gets a list of entity names for the current provided argument. This is
 	 * expected to be implemented by EntitySelectorArgument, see
 	 * {@link EntitySelectorArgument#getEntityNames(Object)}
-	 * 
+	 *
 	 * @param argument a parsed (Bukkit) object representing the entity selector
 	 *                 type. This is either a List, an Entity or a Player
 	 * @return a list of strings representing the names of the entity or entities
@@ -353,7 +382,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	public List<String> getEntityNames(Object argument) {
 		return Arrays.asList(new String[] { null });
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getNodeName() + "<" + this.getClass().getSimpleName() + ">";
