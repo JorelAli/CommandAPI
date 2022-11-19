@@ -73,6 +73,7 @@
       - [Sound arguments](./soundargument.md)
       - [Time arguments](./timeargs.md)
       - [UUID arguments](./uuidargs.md)
+      - [World arguments](./worldargs.md)
     - [Predicate arguments](./predicateargs.md)
       - [Block predicate arguments](./blockpredicateargs.md)
       - [ItemStack predicate arguments](./itemstackpredicateargs.md)
