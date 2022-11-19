@@ -1755,7 +1755,7 @@ getServer().addRecipe(emeraldSwordRecipe)
 // Safely override with the recipe we've defined
 val arguments = listOf<Argument<*>>(
     RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest {
-        arrayOf(emeraldSwordRecipe /* Other recipes here */)
+        arrayOf(emeraldSwordRecipe, /* Other recipes here */)
     })
 )
 
