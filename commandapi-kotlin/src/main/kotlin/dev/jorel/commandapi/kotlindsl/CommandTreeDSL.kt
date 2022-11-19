@@ -98,6 +98,7 @@ inline fun CommandTree.recipeArgument(nodeName: String, block: ArgumentTree.() -
 inline fun CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
 inline fun CommandTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(TimeArgument(nodeName).apply(block))
 inline fun CommandTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(UUIDArgument(nodeName).apply(block))
+inline fun CommandTree.worldArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(WorldArgument(nodeName).apply(block))
 
 // Predicate arguments
 inline fun CommandTree.blockPredicateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(BlockPredicateArgument(nodeName).apply(block))
@@ -192,6 +193,7 @@ inline fun ArgumentTree.recipeArgument(nodeName: String, block: ArgumentTree.() 
 inline fun ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument(nodeName).apply(block))
 inline fun ArgumentTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(TimeArgument(nodeName).apply(block))
 inline fun ArgumentTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(UUIDArgument(nodeName).apply(block))
+inline fun ArgumentTree.worldArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(WorldArgument(nodeName).apply(block))
 
 // Predicate arguments
 inline fun ArgumentTree.blockPredicateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(BlockPredicateArgument(nodeName).apply(block))

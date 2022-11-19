@@ -101,6 +101,7 @@ inline fun CommandAPICommand.recipeArgument(nodeName: String, block: Argument<*>
 inline fun CommandAPICommand.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(SoundArgument(nodeName).apply(block))
 inline fun CommandAPICommand.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(TimeArgument(nodeName).apply(block))
 inline fun CommandAPICommand.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(UUIDArgument(nodeName).apply(block))
+inline fun CommandAPICommand.worldArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(WorldArgument(nodeName).apply(block))
 
 // Predicate arguments
 inline fun CommandAPICommand.blockPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(BlockPredicateArgument(nodeName).apply(block))
