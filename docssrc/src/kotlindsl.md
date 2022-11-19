@@ -39,7 +39,7 @@ Here you can see some interesting things:
 
 ## Executors
 
-The CommandTree DSL also provides executors to execute your command. You've seen the `anyExecutor` in the example above.
+The Kotlin DSL also provides executors to execute your command. You've seen the `anyExecutor` in the example above.
 
 To find out, which DSL executor corresponds to "normal" executors, you can refer to the table below:
 
