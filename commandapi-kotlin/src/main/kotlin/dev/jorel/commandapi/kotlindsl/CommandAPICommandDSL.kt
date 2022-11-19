@@ -51,7 +51,7 @@ inline fun CommandAPICommand.booleanArgument(nodeName: String, block: Argument<*
 // String arguments
 inline fun CommandAPICommand.stringArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(StringArgument(nodeName).apply(block))
 inline fun CommandAPICommand.textArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(TextArgument(nodeName).apply(block))
-inline fun CommandAPICommand.greedyArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(GreedyStringArgument(nodeName).apply(block))
+inline fun CommandAPICommand.greedyStringArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(GreedyStringArgument(nodeName).apply(block))
 
 // Positional arguments
 inline fun CommandAPICommand.locationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LocationArgument(nodeName).apply(block))

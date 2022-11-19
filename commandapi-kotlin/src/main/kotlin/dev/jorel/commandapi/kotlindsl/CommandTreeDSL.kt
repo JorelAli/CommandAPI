@@ -48,7 +48,7 @@ inline fun CommandTree.booleanArgument(nodeName: String, block: ArgumentTree.() 
 // String arguments
 inline fun CommandTree.stringArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(StringArgument(nodeName).apply(block))
 inline fun CommandTree.textArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(TextArgument(nodeName).apply(block))
-inline fun CommandTree.greedyArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(GreedyStringArgument(nodeName).apply(block))
+inline fun CommandTree.greedyStringArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(GreedyStringArgument(nodeName).apply(block))
 
 // Positional arguments
 inline fun CommandTree.locationArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName).apply(block))
@@ -142,7 +142,7 @@ inline fun ArgumentTree.booleanArgument(nodeName: String, block: ArgumentTree.()
 // String arguments
 inline fun ArgumentTree.stringArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(StringArgument(nodeName).apply(block))
 inline fun ArgumentTree.textArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(TextArgument(nodeName).apply(block))
-inline fun ArgumentTree.greedyArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(GreedyStringArgument(nodeName).apply(block))
+inline fun ArgumentTree.greedyStringArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(GreedyStringArgument(nodeName).apply(block))
 
 // Positional arguments
 inline fun ArgumentTree.locationArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(LocationArgument(nodeName).apply(block))
