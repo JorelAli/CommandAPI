@@ -28,21 +28,11 @@ public class WorldArgument extends Argument<World> {
 		super.replaceSuggestions((info, builder) -> {
 			String currentArg = info.currentArg();
 
-			String[] worlds = new String[Bukkit.getWorlds().size()];
-			List<World> worldsList = Bukkit.getWorlds();
-			for (World world : worldsList) {
-				worlds[worldsList.indexOf(world)] = world.getName();
-			}
-
-			List<String> worldSuggestions = new ArrayList<>();
-			for (String world : worlds) {
-				if (world.startsWith(currentArg)) {
-					worldSuggestions.add(world);
+			for (World world : Bukkit.getWorlds()) {
+				String worldName = world.getName();
+				if (worldName.startsWith(currentArg)) {
+					builder.suggest(worldName);
 				}
-			}
-
-			for (String result : worldSuggestions) {
-				builder.suggest(result);
 			}
 
 			return builder.buildFuture();
