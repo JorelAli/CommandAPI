@@ -21,11 +21,16 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.ArgumentTree;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.command.CommandSender;
@@ -76,7 +81,42 @@ public abstract class Argument<T> extends ArgumentTree {
 	 */
 	protected Argument(String nodeName, ArgumentType<?> rawType) {
 		this.nodeName = nodeName;
-		this.rawType = rawType;
+		this.rawType = wrapRawTypeForExceptions(rawType);
+	}
+
+	private <RawClass> ArgumentType<RawClass> wrapRawTypeForExceptions(ArgumentType<RawClass> rawType) {
+		return new ArgumentType<>() {
+			@Override
+			public RawClass parse(StringReader stringReader) throws CommandSyntaxException {
+				try {
+					return rawType.parse(stringReader);
+				} catch (CommandSyntaxException original) {
+					try {
+						// TODO: It would be cool if this part could return a substitute value if the parse failed
+						//  Unfortunately, exceptionHandler cannot do this since T dose not necessarily equal RawClass
+						//  To do this, I think an additional exceptionHandler for RawClass would need to be added
+						//  This measn Argument would need to be parameterized over RawClass , giving it 2 type
+						//  parameters and ruining backwards compatibility :(
+						exceptionHandler.handleException(new ArgumentParseExceptionContext(
+							new WrapperCommandSyntaxException(original)
+						));
+						throw original;
+					} catch (WrapperCommandSyntaxException newException) {
+						throw newException.getException();
+					}
+				}
+			}
+
+			@Override
+			public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+				return rawType.listSuggestions(context, builder);
+			}
+
+			@Override
+			public Collection<String> getExamples() {
+				return rawType.getExamples();
+			}
+		};
 	}
 
 	/**
@@ -122,9 +162,7 @@ public abstract class Argument<T> extends ArgumentTree {
 		} catch (CommandSyntaxException original) {
 			try {
 				return exceptionHandler.handleException(new ArgumentParseExceptionContext(
-					new WrapperCommandSyntaxException(original),
-					nms.getCommandSenderFromCSS(cmdCtx.getSource()),
-					cmdCtx.getArgument(key, Object.class)
+					new WrapperCommandSyntaxException(original)
 				));
 			} catch (WrapperCommandSyntaxException newException) {
 				throw newException.getException();
