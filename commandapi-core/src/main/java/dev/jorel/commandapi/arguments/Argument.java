@@ -122,7 +122,9 @@ public abstract class Argument<T> extends ArgumentTree {
 		} catch (CommandSyntaxException original) {
 			try {
 				return exceptionHandler.handleException(new ArgumentParseExceptionContext(
-					new WrapperCommandSyntaxException(original)
+					new WrapperCommandSyntaxException(original),
+					nms.getCommandSenderFromCSS(cmdCtx.getSource()),
+					cmdCtx.getArgument(key, Object.class)
 				));
 			} catch (WrapperCommandSyntaxException newException) {
 				throw newException.getException();
