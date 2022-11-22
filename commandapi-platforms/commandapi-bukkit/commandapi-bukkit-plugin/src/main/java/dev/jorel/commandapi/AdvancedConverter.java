@@ -35,18 +35,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dev.jorel.commandapi.arguments.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
-import dev.jorel.commandapi.exceptions.InvalidNumberException;
-import dev.jorel.commandapi.exceptions.UnknownArgumentException;
-
-// TODO: check imports merged correctly
-
 /**
  * A command parsing system that converts string arguments into something way
  * more useful

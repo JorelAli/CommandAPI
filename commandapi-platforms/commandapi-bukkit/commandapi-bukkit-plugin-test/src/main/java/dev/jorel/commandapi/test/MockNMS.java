@@ -1,18 +1,8 @@
 package dev.jorel.commandapi.test;
 
+import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
-import be.seeseemelk.mockbukkit.ServerMock;
-import org.bukkit.*;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-import org.mockito.Mockito;
-
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
@@ -50,6 +40,7 @@ import net.minecraft.server.players.UserCache;
 import net.minecraft.world.phys.Vec3D;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -67,8 +58,6 @@ import java.util.function.Supplier;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-
-// TODO: Ensure imports merged correctly
 
 public class MockNMS extends ArgumentNMS {
 

@@ -4,9 +4,9 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.BukkitPlatform;
 import dev.jorel.commandapi.SuggestionInfo;
-import dev.jorel.commandapi.nms.NMS;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -29,7 +29,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		super.replaceSuggestions((info, builder) -> {
 			// Extract information
 			CommandSender sender = info.sender();
-			CommandMap commandMap = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap();
+			CommandMap commandMap = BukkitPlatform.get().getSimpleCommandMap();
 			String command = info.currentArg();
 
 			// Setup context for errors
@@ -37,9 +37,9 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 			if (!command.contains(" ")) {
 				// Suggesting command name
-				ArgumentSuggestions replacement = replacements.getNextSuggestion(sender);
+				ArgumentSuggestions<CommandSender> replacement = replacements.getNextSuggestion(sender);
 				if (replacement != null) {
-					return replacement.suggest(new SuggestionInfo(sender, new Object[0], command, command), builder);
+					return replacement.suggest(new SuggestionInfo<>(sender, new Object[0], command, command), builder);
 				}
 
 				List<String> results = commandMap.tabComplete(sender, command);
@@ -83,9 +83,9 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 
 			int lastIndex = arguments.length - 1;
 			String[] previousArguments = Arrays.copyOf(arguments, lastIndex);
-			ArgumentSuggestions replacement = replacements.getNextSuggestion(sender, previousArguments);
+			ArgumentSuggestions<CommandSender> replacement = replacements.getNextSuggestion(sender, previousArguments);
 			if (replacement != null) {
-				return replacement.suggest(new SuggestionInfo(sender, previousArguments, command, arguments[lastIndex]), builder);
+				return replacement.suggest(new SuggestionInfo<>(sender, previousArguments, command, arguments[lastIndex]), builder);
 			}
 
 			// Remove command name from arguments for normal tab-completion
@@ -109,7 +109,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		});
 	}
 
-	SuggestionsBranch replacements = SuggestionsBranch.suggest();
+	SuggestionsBranch<CommandSender> replacements = SuggestionsBranch.suggest();
 
 	/**
 	 * Replaces the default command suggestions provided by the server with custom
@@ -122,7 +122,8 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	 *                    to create these.
 	 * @return the current argument
 	 */
-	public CommandArgument replaceSuggestions(ArgumentSuggestions... suggestions) {
+	@SafeVarargs
+	public final CommandArgument replaceSuggestions(ArgumentSuggestions<CommandSender>... suggestions) {
 		replacements = SuggestionsBranch.suggest(suggestions);
 		return this;
 	}
@@ -139,7 +140,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	 * @return the current argument
 	 */
 	@Override
-	public CommandArgument replaceSuggestions(ArgumentSuggestions suggestions) {
+	public CommandArgument replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
 		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
 	}
 
@@ -155,7 +156,8 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	 *                 start creating these.
 	 * @return the current argument
 	 */
-	public Argument<CommandResult> branchSuggestions(SuggestionsBranch... branches) {
+	@SafeVarargs
+	public final Argument<CommandResult> branchSuggestions(SuggestionsBranch<CommandSender>... branches) {
 		replacements.branch(branches);
 		return this;
 	}
@@ -171,11 +173,12 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	}
 
 	@Override
-	public <CommandSourceStack> CommandResult parseArgument(NMS<CommandSourceStack> nms, CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> CommandResult parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Extract information
 		String command = cmdCtx.getArgument(key, String.class);
-		CommandMap commandMap = nms.getSimpleCommandMap();
-		CommandSender sender = nms.getSenderForCommand(cmdCtx, false);
+		CommandMap commandMap = ((BukkitPlatform<CommandSourceStack>) platform).getSimpleCommandMap();
+		CommandSender sender = platform.getSenderForCommand(cmdCtx, false).getSource();
 
 		StringReader context = new StringReader(command);
 

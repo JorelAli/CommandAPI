@@ -16,7 +16,7 @@ abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandS
 	/**
 	 * The CommandAPIExecutor for this executable implementation
 	 */
-	protected CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor = new CustomCommandExecutor<>();
+	protected CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor = new CommandAPIExecutor<>();
 
 	/**
 	 * Returns the executors that this command has

@@ -7,11 +7,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.executors.CommandExecutor;
-import dev.jorel.commandapi.CommandAPIHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
@@ -32,14 +30,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.wrappers.Location2D;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-
-// TODO: Ensure imports merged correctly
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
@@ -724,7 +719,7 @@ public class ArgumentTests {
 		Mut<CommandResult> results = Mut.of();
 
 		PlayerMock player = server.addPlayer("APlayer");
-		CommandMap commandMap = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap();
+		CommandMap commandMap = BukkitPlatform.get().getSimpleCommandMap();
 
 		// CommandArgument expects to find commands in the commandMap
 		commandMap.registerAll("test", List.of(
@@ -794,7 +789,7 @@ public class ArgumentTests {
 			.withArguments(
 				new CommandArgument("command")
 					.branchSuggestions(
-						SuggestionsBranch.suggest(
+						SuggestionsBranch.<CommandSender>suggest(
 							ArgumentSuggestions.strings("give"),
 							ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
 						).branch(

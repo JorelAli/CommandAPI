@@ -186,9 +186,10 @@ public interface ArgumentSuggestions<CommandSender> {
 	 * @param suggestions The {@link ArgumentSuggestions} to be merged
 	 * @return an {@link ArgumentSuggestions} object suggesting everything suggested by the input suggestions
 	 */
-	static ArgumentSuggestions merge(ArgumentSuggestions... suggestions) {
+	@SafeVarargs
+	static <CommandSender> ArgumentSuggestions<CommandSender> merge(ArgumentSuggestions<CommandSender>... suggestions) {
 		return (info, builder) -> {
-			for(ArgumentSuggestions suggestion : suggestions) {
+			for(ArgumentSuggestions<CommandSender> suggestion : suggestions) {
 				suggestion.suggest(info, builder);
 			}
 			return builder.buildFuture();
