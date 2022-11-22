@@ -36,7 +36,7 @@ Say we want a command that returns a random number as a result. This can then be
 
 </div>
 
-This returns a **success value of 1** _(Because no errors or `CommandAPI.fail(String)` was thrown)_ and a **result value of a random number**.
+This returns a **success value of 1** _(Because no errors or `CommandAPI.failWithString(String)` was thrown)_ and a **result value of a random number**.
 
 </div>
 

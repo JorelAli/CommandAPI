@@ -66,10 +66,11 @@
 
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
+		<module>commandapi-kotlin</module>
 
 		<!-- Documentation code -->
         <module>commandapi-documentation-code</module>
-    </modules>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

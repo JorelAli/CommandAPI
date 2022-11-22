@@ -406,7 +406,6 @@ public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
 
 	@Override
 	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		/* TODO: Requires testing */
 		return Enchantment.getByKey(fromResourceLocation(Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key))));
 	}
 

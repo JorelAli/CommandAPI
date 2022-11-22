@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * CustomCommandExecutor is the main executor implementation for command
+ * CommandAPIExecutor is the main executor implementation for command
  * executors. It contains a list of all executors (normal and resulting
  * executors) and switches its execution implementation based on the provided
  * command executor types.
@@ -43,12 +43,12 @@ import java.util.NoSuchElementException;
  * @param <CommandSender> The CommandSender for this executor
  * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public class CustomCommandExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
+public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
 
 	private List<IExecutorNormal<CommandSender, WrapperType>> normalExecutors;
 	private List<IExecutorResulting<CommandSender, WrapperType>> resultingExecutors;
 
-	public CustomCommandExecutor() {
+	public CommandAPIExecutor() {
 		normalExecutors = new ArrayList<>();
 		resultingExecutors = new ArrayList<>();
 	}
@@ -148,8 +148,8 @@ public class CustomCommandExecutor<CommandSender, WrapperType extends AbstractCo
 		return false;
 	}
 
-	CustomCommandExecutor<CommandSender, WrapperType> mergeExecutor(CustomCommandExecutor<CommandSender, WrapperType> executor) {
-		CustomCommandExecutor<CommandSender, WrapperType> result = new CustomCommandExecutor<>();
+	CommandAPIExecutor<CommandSender, WrapperType> mergeExecutor(CommandAPIExecutor<CommandSender, WrapperType> executor) {
+		CommandAPIExecutor<CommandSender, WrapperType> result = new CommandAPIExecutor<>();
 		result.normalExecutors = new ArrayList<>(normalExecutors);
 		result.resultingExecutors = new ArrayList<>(resultingExecutors);
 		result.normalExecutors.addAll(executor.normalExecutors);

@@ -11,12 +11,16 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.executors.CommandExecutor;
+import dev.jorel.commandapi.CommandAPIHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -35,6 +39,8 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
+// TODO: Ensure imports merged correctly
+
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
  */
@@ -49,6 +55,14 @@ public class ArgumentTests {
 		} catch (IOException e) {
 			return "";
 		}
+	}
+
+	public <T> void assertStoresResult(CommandSender sender, String command, Mut<T> queue, T expected) {
+		assertDoesNotThrow(() -> assertTrue(
+			server.dispatchThrowableCommand(sender, command),
+			"Expected command dispatch to return true, but it gave false")
+		);
+		assertEquals(expected, queue.get());
 	}
 
 	public void assertInvalidSyntax(CommandSender sender, String command) {
@@ -534,6 +548,110 @@ public class ArgumentTests {
 		assertEquals(List.of("axolotl", "wolf", sender.getName()), type.get());
 	}
 
+	@SuppressWarnings("unchecked")
+	@Test
+	public void executionTestWithListTextArgument() {
+		Mut<List<String>> type = Mut.of();
+
+		PlayerMock sender = server.addPlayer("APlayer");
+
+		// Typical usage of a list argument
+
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildText())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "list \"cat, wolf, axolotl\""); // normal list
+		assertInvalidSyntax(sender, "list \"cat, wolf, axolotl, wolf\""); // don't allow duplicates
+		assertInvalidSyntax(sender, "list \"axolotl, wolf, chicken, cat\""); // don't allow unknown items
+
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+
+		// List argument, with duplicates
+
+		new CommandAPICommand("listdup")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.allowDuplicates(true)
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildText())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "listdup \"cat, wolf, axolotl, cat, wolf\""); // allow duplicates
+		assertInvalidSyntax(sender, "listdup \"cat, wolf, axolotl, chicken, cat\""); // don't allow unknown items
+
+		assertEquals(List.of("cat", "wolf", "axolotl", "cat", "wolf"), type.get());
+
+		// List argument, with a constant list (not using a supplier)
+
+		new CommandAPICommand("listconst")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildText())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "listconst \"cat, wolf, axolotl\""); // normal list
+		assertInvalidSyntax(sender, "listconst \"cat, wolf, axolotl, wolf\""); // don't allow duplicates
+		assertInvalidSyntax(sender, "listconst \"axolotl, wolf, chicken, cat\""); // don't allow unknown items
+
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+
+		// List argument using a function
+
+		new CommandAPICommand("listfunc")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(player -> List.of("cat", "wolf", "axolotl", player.getName()))
+				.withStringMapper()
+				.buildText())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "listfunc \"cat, wolf, axolotl\""); // normal list
+		assertInvalidSyntax(sender, "listfunc \"cat, wolf, axolotl, wolf\""); // don't allow duplicates
+		assertInvalidSyntax(sender, "listfunc \"axolotl, wolf, chicken, cat\""); // don't allow unknown items
+		server.dispatchCommand(sender, "listfunc \"axolotl, wolf, " + sender.getName() + "\""); // sender name
+
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("axolotl", "wolf", sender.getName()), type.get());
+
+		// List argument followed by another list argument
+
+		new CommandAPICommand("list2")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(player -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildText())
+			.withArguments(new ListArgumentBuilder<>("morevalues", ", ")
+				.withList(player -> List.of("pumpkin", "melon", "cake"))
+				.withStringMapper()
+				.buildText())
+			.executesPlayer((player, args) -> {
+				type.set((List<String>) args[0]);
+				type.set((List<String>) args[1]);
+			})
+			.register();
+
+		server.dispatchCommand(sender, "list2 \"cat, wolf, axolotl\" \"pumpkin, melon\"");
+
+		assertEquals(List.of("cat", "wolf", "axolotl"), type.get());
+		assertEquals(List.of("pumpkin", "melon"), type.get());
+	}
+
 	@Test
 	public void executionTestWithPlayerArgument() {
 		Mut<Player> type = Mut.of();
@@ -600,7 +718,138 @@ public class ArgumentTests {
 		assertArrayEquals(ComponentSerializer.parse(json), spigot.get());
 		assertEquals(GsonComponentSerializer.gson().deserialize(json), adventure.get());
 	}
-	
+
+	@Test
+	public void executionTestWithCommandArgument() {
+		Mut<CommandResult> results = Mut.of();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		CommandMap commandMap = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap();
+
+		// CommandArgument expects to find commands in the commandMap
+		commandMap.registerAll("test", List.of(
+			new Command("give") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
+			},
+			new Command("data") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
+			},
+			new Command("tp") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
+			}
+		));
+
+		// Check command retrieval from CommandMap
+		new CommandAPICommand("commandargument")
+			.withArguments(new CommandArgument("command"))
+			.executesPlayer((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+
+		assertStoresResult(player, "commandargument version",
+			results, new CommandResult(commandMap.getCommand("version"), new String[]{}));
+
+		// Check replaceSuggestions
+		new CommandAPICommand("restrictedcommand")
+			.withArguments(new CommandArgument("command")
+				.replaceSuggestions(
+					ArgumentSuggestions.strings("give"),
+					ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+					ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+					ArgumentSuggestions.empty()
+				)
+			).executesPlayer((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+
+		server.addPlayer("BPlayer");
+
+		// Valid commands
+		assertStoresResult(player, "restrictedcommand give APlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}));
+		assertStoresResult(player, "restrictedcommand give BPlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"BPlayer", "diamond"}));
+		assertStoresResult(player, "restrictedcommand give APlayer minecraft:diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}));
+
+		// Invalid commands
+		assertInvalidSyntax(player, "restrictedcommand data APlayer diamond");
+		assertInvalidSyntax(player, "restrictedcommand notacommand APlayer diamond");
+		assertInvalidSyntax(player, "restrictedcommand give CPlayer diamond");
+		assertInvalidSyntax(player, "restrictedcommand give APlayer dirt");
+		assertInvalidSyntax(player, "restrictedcommand give APlayer diamond 64");
+		assertInvalidSyntax(player, "restrictedcommand give APlayer");
+
+		// Check branching suggestions
+		new CommandAPICommand("multiplecommands")
+			.withArguments(
+				new CommandArgument("command")
+					.branchSuggestions(
+						SuggestionsBranch.suggest(
+							ArgumentSuggestions.strings("give"),
+							ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+						).branch(
+							SuggestionsBranch.suggest(
+								ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+								ArgumentSuggestions.empty()
+							),
+							SuggestionsBranch.suggest(
+								ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+								null,
+								ArgumentSuggestions.empty()
+							)
+						),
+						SuggestionsBranch.suggest(
+							ArgumentSuggestions.strings("tp"),
+							ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+							ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+						)
+					)
+			).executes((sender, args) -> {
+				results.set((CommandResult) args[0]);
+			}).register();
+
+		// Valid commands
+		assertStoresResult(player, "multiplecommands give APlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "diamond"}));
+		assertStoresResult(player, "multiplecommands give BPlayer diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"BPlayer", "diamond"}));
+		assertStoresResult(player, "multiplecommands give APlayer minecraft:diamond",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "minecraft:diamond"}));
+		assertStoresResult(player, "multiplecommands give APlayer dirt",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "dirt"}));
+		assertStoresResult(player, "multiplecommands give APlayer dirt 64",
+			results, new CommandResult(commandMap.getCommand("give"), new String[]{"APlayer", "dirt", "64"}));
+
+		assertStoresResult(player, "multiplecommands tp APlayer BPlayer",
+			results, new CommandResult(commandMap.getCommand("tp"), new String[]{"APlayer", "BPlayer"}));
+		assertStoresResult(player, "multiplecommands tp BPlayer APlayer",
+			results, new CommandResult(commandMap.getCommand("tp"), new String[]{"BPlayer", "APlayer"}));
+
+		// Invalid commands
+		assertInvalidSyntax(player, "multiplecommands data get entity APlayer");
+		assertInvalidSyntax(player, "multiplecommands notacommand APlayer diamond");
+		assertInvalidSyntax(player, "multiplecommands give CPlayer diamond");
+		assertInvalidSyntax(player, "multiplecommands give APlayer stone");
+		assertInvalidSyntax(player, "multiplecommands give APlayer diamond 64");
+		assertInvalidSyntax(player, "multiplecommands give APlayer");
+		assertInvalidSyntax(player, "multiplecommands tp APlayer CPlayer");
+		assertInvalidSyntax(player, "multiplecommands tp CPlayer APlayer");
+		assertInvalidSyntax(player, "multiplecommands tp APlayer");
+
+
+		assertNull(results.get(), "Expected there to be no results left, but at least one was found");
+	}
+
 	@Test // Pre-#321 
 	public void executionTwoCommandsSameArgumentDifferentName() {
 		Mut<String> str1 = Mut.of();

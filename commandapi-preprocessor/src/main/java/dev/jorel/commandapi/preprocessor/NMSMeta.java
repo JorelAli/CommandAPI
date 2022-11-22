@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * Annotation that describes the target Minecraft versions of this NMS class
  */
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.SOURCE) // TODO: Change to CLASS for future testing
+@Retention(RetentionPolicy.SOURCE)
 public @interface NMSMeta {
 	
 	/**

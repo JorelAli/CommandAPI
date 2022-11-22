@@ -83,6 +83,11 @@ public enum CommandAPIArgumentType {
 	CHATCOLOR("minecraft:color"),
 
 	/**
+	 * The CommandArgument
+	 */
+	COMMAND("api:command"),
+
+	/**
 	 * The CustomArgument
 	 */
 	CUSTOM,
@@ -137,6 +142,11 @@ public enum CommandAPIArgumentType {
 	 * The ListArgument
 	 */
 	LIST,
+
+	/**
+	 * The ListTextArgument
+	 */
+	LIST_TEXT,
 
 	/**
 	 * The LiteralArgument

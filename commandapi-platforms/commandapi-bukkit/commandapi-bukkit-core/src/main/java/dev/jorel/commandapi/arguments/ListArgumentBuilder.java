@@ -158,9 +158,30 @@ public class ListArgumentBuilder<T> {
 			 * Builds this list argument.
 			 * 
 			 * @return a {@link ListArgument}
+			 * 
+			 * @deprecated Use {@link #buildGreedy()} instead
 			 */
+			@Deprecated(since = "8.6.0", forRemoval = false)
 			public ListArgument<T> build() {
+				return buildGreedy();
+			}
+			
+			/**
+			 * Builds this list argument.
+			 * 
+			 * @return a {@link ListArgument}
+			 */
+			public ListArgument<T> buildGreedy() {
 				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
+			}
+			
+			/**
+			 * Builds this list argument using a {@link TextArgument} as the underlying implementation.
+			 * 
+			 * @return a {@link ListTextArgument}
+			 */
+			public ListTextArgument<T> buildText() {
+				return new ListTextArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
 			}
 		}
 	}

@@ -35,6 +35,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.jorel.commandapi.arguments.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
+import dev.jorel.commandapi.exceptions.InvalidNumberException;
+import dev.jorel.commandapi.exceptions.UnknownArgumentException;
+
+// TODO: check imports merged correctly
+
 /**
  * A command parsing system that converts string arguments into something way
  * more useful
@@ -196,6 +208,7 @@ public class AdvancedConverter {
 			case CHAT -> new ChatArgument(nodeName);
 			case CHATCOLOR -> new ChatColorArgument(nodeName);
 			case CHAT_COMPONENT -> new ChatComponentArgument(nodeName);
+			case COMMAND -> new CommandArgument(nodeName);
 			case ENCHANTMENT -> new EnchantmentArgument(nodeName);
 			case ENTITY_SELECTOR -> new EntitySelectorArgument<Entity>(nodeName, EntitySelector.ONE_ENTITY);
 			case ENTITY_TYPE -> new EntityTypeArgument(nodeName);

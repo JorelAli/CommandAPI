@@ -14,15 +14,15 @@ import java.util.ArrayList;
 abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandSender> implements IChainableBuilder<Impl> {
 
 	/**
-	 * The CustomCommandExecutor for this executable implementation
+	 * The CommandAPIExecutor for this executable implementation
 	 */
-	protected CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor = new CustomCommandExecutor<>();
+	protected CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor = new CustomCommandExecutor<>();
 
 	/**
 	 * Returns the executors that this command has
 	 * @return the executors that this command has
 	 */
-	public CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> getExecutor() {
+	public CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> getExecutor() {
 		return executor;
 	}
 
@@ -30,7 +30,7 @@ abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandS
 	 * Sets the executors for this command
 	 * @param executor the executors for this command
 	 */
-	public void setExecutor(CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
+	public void setExecutor(CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
 		this.executor = executor;
 	}
 

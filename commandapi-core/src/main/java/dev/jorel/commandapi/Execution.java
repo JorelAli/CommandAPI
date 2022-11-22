@@ -12,9 +12,9 @@ import java.util.List;
 public class Execution<CommandSender, Argument extends AbstractArgument<?, ?, Argument, CommandSender>> {
 
 	private final List<Argument> arguments;
-	private final CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor;
+	private final CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor;
 
-	public Execution(List<Argument> arguments, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
+	public Execution(List<Argument> arguments, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
 		this.arguments = arguments;
 		this.executor = executor;
 	}

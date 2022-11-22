@@ -100,6 +100,10 @@
 - [Annotations](./annotations.md)
 - [Registering annotation-based commands](./registeringannotations.md)
 
+# Kotlin-based Commands
+- [Kotlin-based commands](./kotlinintro.md)
+- [Using the DSL](./kotlindsl.md)
+
 # CommandAPI Utilities
 
 - [Command conversion](./conversion.md)

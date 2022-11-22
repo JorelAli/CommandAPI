@@ -1,4 +1,51 @@
+/*******************************************************************************
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************/
 package dev.jorel.commandapi;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -26,7 +73,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-
+// TODO: Make sure imports merged correctly
 
 // TODO: We can use the Adventure API on Paper and Velocity (NOT SPIGOT)
 //  and I'm not sure if we can use the Adventure API on Fabric, so let's
@@ -137,7 +184,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<Source> generateCommand(Argument[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) throws CommandSyntaxException {
+	Command<Source> generateCommand(Argument[] args, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
@@ -300,7 +347,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * multiliteral arguments were present (and expanded) and returns false if
 	 * multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(CommandMetaData<CommandSender> meta, final Argument[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
+	private boolean expandMultiLiterals(CommandMetaData<CommandSender> meta, final Argument[] args,
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -435,7 +483,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	/**
 	 * Handles previewable arguments. This stores the path to previewable arguments
 	 * in {@link CommandAPIHandler#previewableArguments} for runtime resolving
-	 * 
+	 *
 	 * @param commandName the name of the command
 	 * @param args        the declared arguments
 	 * @param aliases     the command's aliases
@@ -459,7 +507,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	}
 
 	// Builds a command then registers it
-	void register(CommandMetaData<CommandSender> meta, final Argument[] args, CustomCommandExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
+	void register(CommandMetaData<CommandSender> meta, final Argument[] args,
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -512,8 +561,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
-		for (RegisteredCommand rCommand : registeredCommands) {
-			hasRegisteredCommand |= rCommand.commandName().equals(commandName);
+		for (int i = 0, size = registeredCommands.size(); i < size && !hasRegisteredCommand; i++) {
+			hasRegisteredCommand |= registeredCommands.get(i).commandName().equals(commandName);
 		}
 		if (hasRegisteredCommand && hasCommandConflict(commandName, args, humanReadableCommandArgSyntax)) {
 			return;

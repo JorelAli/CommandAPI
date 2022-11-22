@@ -35,7 +35,7 @@ import org.bukkit.command.CommandSender;
 public class AdventureChatComponentArgument extends Argument<Component> {
 
 	/**
-	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
+	 * Constructs a ChatComponent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
 	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw JSON text</a> 
 	 * @param nodeName the name of the node for argument
 	 */
