@@ -70,7 +70,8 @@
 
 		<!-- Documentation code -->
         <module>commandapi-documentation-code</module>
-	</modules>
+        <module>commandapi-kotlin</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
