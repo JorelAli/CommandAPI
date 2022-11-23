@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -68,7 +68,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-abstract class NMSWrapper_1_13_1 extends BukkitPlatform<CommandListenerWrapper> {}
+abstract class NMSWrapper_1_13_1 extends CommandAPIBukkit<CommandListenerWrapper> {}
 
 /**
  * NMS implementation for Minecraft 1.13.1

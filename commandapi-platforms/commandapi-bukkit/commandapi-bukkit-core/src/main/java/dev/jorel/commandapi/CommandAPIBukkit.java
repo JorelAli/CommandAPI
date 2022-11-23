@@ -42,8 +42,8 @@ import java.util.logging.Logger;
 
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 
-// BukkitPlatform is an AbstractPlatform, but also needs all of the methods from
-// NMS, so it implements NMS. Our implementation of BukkitPlatform is now derived
+// CommandAPIBukkit is an AbstractPlatform, but also needs all of the methods from
+// NMS, so it implements NMS. Our implementation of CommandAPIBukkit is now derived
 // using the version handler (and thus, deferred to our NMS-specific implementations)
 
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)

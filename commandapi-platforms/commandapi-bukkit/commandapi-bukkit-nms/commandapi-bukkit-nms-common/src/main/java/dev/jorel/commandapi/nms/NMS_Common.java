@@ -27,7 +27,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -94,7 +94,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
  * Any of these that do not work should be removed or implemented otherwise
  * (introducing another NMS_Common module perhaps?
  */
-public abstract class NMS_Common extends BukkitPlatform<CommandSourceStack> {
+public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());

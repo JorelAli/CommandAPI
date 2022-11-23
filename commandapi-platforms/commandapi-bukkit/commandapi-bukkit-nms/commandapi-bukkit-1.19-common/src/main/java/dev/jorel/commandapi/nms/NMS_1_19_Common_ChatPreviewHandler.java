@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
@@ -32,12 +32,12 @@ import java.util.Optional;
 
 public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHandler {
 
-	protected final BukkitPlatform<CommandSourceStack> platform;
+	protected final CommandAPIBukkit<CommandSourceStack> platform;
 	protected final Plugin plugin;
 	protected final Player player;
 	protected final Connection connection;
 
-	public NMS_1_19_Common_ChatPreviewHandler(BukkitPlatform<CommandSourceStack> platform, Plugin plugin, Player player) {
+	public NMS_1_19_Common_ChatPreviewHandler(CommandAPIBukkit<CommandSourceStack> platform, Plugin plugin, Player player) {
 		this.platform = platform;
 		this.plugin = plugin;
 		this.player = player;
@@ -127,7 +127,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 
 	private record InitialParse(String fullInput, ParseResults<CommandSourceStack> results, List<String> path, Optional<PreviewableFunction<?>> preview){
 		private static InitialParse cachedResult = null;
-		public static InitialParse processChatPreviewQuery(String chatPreviewQuery, BukkitPlatform<CommandSourceStack> platform, Player player){
+		public static InitialParse processChatPreviewQuery(String chatPreviewQuery, CommandAPIBukkit<CommandSourceStack> platform, Player player){
 			// Substring 1 to get rid of the leading /
 			final String fullInput = chatPreviewQuery.substring(1);
 
