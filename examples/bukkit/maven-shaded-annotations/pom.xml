@@ -65,8 +65,8 @@
 							<version>8.5.1</version>
 						</path>
 					</annotationProcessorPaths>
-					<source>8</source>
-					<target>8</target>
+					<source>16</source>
+					<target>16</target>
 				</configuration>
 			</plugin>
 			<!-- Add necessary classes into our plugin jar -->
