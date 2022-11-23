@@ -32,5 +32,6 @@ public class Main extends JavaPlugin {
 		// Register commands using a reference to their class
 		CommandAPI.registerCommand(BreakCommand.class);
 		CommandAPI.registerCommand(EffectCommand.class);
+		CommandAPI.registerCommand(WarpCommand.class)
 	}
 }

@@ -18,7 +18,7 @@ import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 
 @Command("warp")
 @Help(value = "Manages all warps on the server", shortDescription = "Manages warps")
-public class TestCommand {
+public class WarpCommand {
 
 	// List of warp names and their locations
 	static Map<String, Location> warps = new HashMap<>();
