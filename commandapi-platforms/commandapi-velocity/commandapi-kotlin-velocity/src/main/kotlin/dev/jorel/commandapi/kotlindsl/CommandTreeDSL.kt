@@ -18,13 +18,11 @@ inline fun CommandTree.argument(base: Argument<*>, block: Argument<*>.() -> Unit
 inline fun CommandTree.integerArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(IntegerArgument(nodeName).apply(block))
 inline fun CommandTree.integerArgument(nodeName: String, min: Int, block: Argument<*>.() -> Unit = {}): CommandTree = then(IntegerArgument(nodeName, min).apply(block))
 inline fun CommandTree.integerArgument(nodeName: String, min: Int, max: Int, block: Argument<*>.() -> Unit = {}): CommandTree = then(IntegerArgument(nodeName, min, max).apply(block))
-// inline fun CommandTree.integerRangeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(IntegerRangeArgument(nodeName).apply(block))
 
 // Float arguments
 inline fun CommandTree.floatArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(FloatArgument(nodeName).apply(block))
 inline fun CommandTree.floatArgument(nodeName: String, min: Float, block: Argument<*>.() -> Unit = {}): CommandTree = then(FloatArgument(nodeName, min).apply(block))
 inline fun CommandTree.floatArgument(nodeName: String, min: Float, max: Float, block: Argument<*>.() -> Unit = {}): CommandTree = then(FloatArgument(nodeName, min, max).apply(block))
-// inline fun CommandTree.floatRangeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(FloatRangeArgument(nodeName).apply(block))
 
 // Double arguments
 inline fun CommandTree.doubleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(DoubleArgument(nodeName).apply(block))
@@ -44,62 +42,6 @@ inline fun CommandTree.stringArgument(nodeName: String, block: Argument<*>.() ->
 inline fun CommandTree.textArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(TextArgument(nodeName).apply(block))
 inline fun CommandTree.greedyArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(GreedyStringArgument(nodeName).apply(block))
 
-// Positional arguments
-// inline fun CommandTree.locationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName).apply(block))
-// inline fun CommandTree.locationArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName, locationType).apply(block))
-// inline fun CommandTree.location2DArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(Location2DArgument(nodeName).apply(block))
-// inline fun CommandTree.location2DArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): CommandTree = then(Location2DArgument(nodeName, locationType).apply(block))
-// inline fun CommandTree.rotationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(RotationArgument(nodeName).apply(block))
-// inline fun CommandTree.axisArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(AxisArgument(nodeName).apply(block))
-
-// Chat arguments
-// inline fun CommandTree.chatColorArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatColorArgument(nodeName).apply(block))
-// inline fun CommandTree.chatComponentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatComponentArgument(nodeName).apply(block))
-// inline fun CommandTree.chatArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatArgument(nodeName).apply(block))
-// inline fun CommandTree.adventureChatComponentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatComponentArgument(nodeName).apply(block))
-// inline fun CommandTree.adventureChatArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatArgument(nodeName).apply(block))
-
-// Entity & Player arguments
-// inline fun CommandTree.entitySelectorArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument<Entity>(nodeName).apply(block))
-// inline fun <T : EntitySelector> CommandTree.entitySelectorArgument(nodeName: String, entitySelector: T, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument<T>(nodeName, entitySelector).apply(block))
-// inline fun CommandTree.playerArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(PlayerArgument(nodeName).apply(block))
-// inline fun CommandTree.offlinePlayerArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(OfflinePlayerArgument(nodeName).apply(block))
-// inline fun CommandTree.entityTypeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntityTypeArgument(nodeName).apply(block))
-
-// Scoreboard arguments
-// inline fun CommandTree.scoreHolderArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<String>(nodeName).apply(block))
-// inline fun <T : ScoreHolderType> CommandTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: Argument<*>.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
-// inline fun CommandTree.scoreboardSlotArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ScoreboardSlotArgument(nodeName).apply(block))
-// inline fun CommandTree.objectiveArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ObjectiveArgument(nodeName).apply(block))
-// inline fun CommandTree.objectiveCriteriaArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ObjectiveCriteriaArgument(nodeName).apply(block))
-// inline fun CommandTree.teamArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(TeamArgument(nodeName).apply(block))
-
-// Miscellaneous arguments
-// inline fun CommandTree.angleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(AngleArgument(nodeName).apply(block))
-// inline fun CommandTree.advancementArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdvancementArgument(nodeName).apply(block))
-// inline fun CommandTree.biomeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(BiomeArgument(nodeName).apply(block))
-// inline fun CommandTree.blockStateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(BlockStateArgument(nodeName).apply(block))
-// inline fun CommandTree.commandArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(CommandArgument(nodeName).apply(block))
-// inline fun CommandTree.enchantmentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(EnchantmentArgument(nodeName).apply(block))
-// inline fun CommandTree.environmentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(EnvironmentArgument(nodeName).apply(block))
-// inline fun CommandTree.itemStackArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ItemStackArgument(nodeName).apply(block))
-// inline fun CommandTree.lootTableArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(LootTableArgument(nodeName).apply(block))
-// inline fun CommandTree.mathOperationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(MathOperationArgument(nodeName).apply(block))
-// inline fun CommandTree.namespacedKeyArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(NamespacedKeyArgument(nodeName).apply(block))
-// inline fun CommandTree.particleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ParticleArgument(nodeName).apply(block))
-// inline fun CommandTree.potionEffectArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(PotionEffectArgument(nodeName).apply(block))
-// inline fun CommandTree.recipeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).apply(block))
-// inline fun CommandTree.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
-// inline fun CommandTree.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(TimeArgument(nodeName).apply(block))
-// inline fun CommandTree.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(UUIDArgument(nodeName).apply(block))
-
-// Predicate arguments
-// inline fun CommandTree.blockPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(BlockPredicateArgument(nodeName).apply(block))
-// inline fun CommandTree.itemStackPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ItemStackPredicateArgument(nodeName).apply(block))
-
-// NBT arguments
-// inline fun <NBTContainer> CommandTree.nbtCompoundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(NBTCompoundArgument<NBTContainer>(nodeName).apply(block))
-
 // Literal arguments
 inline fun CommandTree.literalArgument(literal: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(LiteralArgument.of(literal).apply(block))
 inline fun CommandTree.multiLiteralArgument(vararg literals: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(MultiLiteralArgument(*literals).apply(block))
@@ -112,13 +54,11 @@ inline fun Argument<*>.argument(base: Argument<*>, block: Argument<*>.() -> Unit
 inline fun Argument<*>.integerArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(IntegerArgument(nodeName).apply(block))
 inline fun Argument<*>.integerArgument(nodeName: String, min: Int, block: Argument<*>.() -> Unit = {}): Argument<*> = then(IntegerArgument(nodeName, min).apply(block))
 inline fun Argument<*>.integerArgument(nodeName: String, min: Int, max: Int, block: Argument<*>.() -> Unit = {}): Argument<*> = then(IntegerArgument(nodeName, min, max).apply(block))
-// inline fun Argument<*>.integerRangeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(IntegerRangeArgument(nodeName).apply(block))
 
 // Float arguments
 inline fun Argument<*>.floatArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(FloatArgument(nodeName).apply(block))
 inline fun Argument<*>.floatArgument(nodeName: String, min: Float, block: Argument<*>.() -> Unit = {}): Argument<*> = then(FloatArgument(nodeName, min).apply(block))
 inline fun Argument<*>.floatArgument(nodeName: String, min: Float, max: Float, block: Argument<*>.() -> Unit = {}): Argument<*> = then(FloatArgument(nodeName, min, max).apply(block))
-// inline fun Argument<*>.floatRangeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(FloatRangeArgument(nodeName).apply(block))
 
 // Double arguments
 inline fun Argument<*>.doubleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(DoubleArgument(nodeName).apply(block))
@@ -137,62 +77,6 @@ inline fun Argument<*>.booleanArgument(nodeName: String, block: Argument<*>.() -
 inline fun Argument<*>.stringArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(StringArgument(nodeName).apply(block))
 inline fun Argument<*>.textArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(TextArgument(nodeName).apply(block))
 inline fun Argument<*>.greedyArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(GreedyStringArgument(nodeName).apply(block))
-
-// Positional arguments
-// inline fun Argument<*>.locationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LocationArgument(nodeName).apply(block))
-// inline fun Argument<*>.locationArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LocationArgument(nodeName, locationType).apply(block))
-// inline fun Argument<*>.location2DArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(Location2DArgument(nodeName).apply(block))
-// inline fun Argument<*>.location2DArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): Argument<*> = then(Location2DArgument(nodeName, locationType).apply(block))
-// inline fun Argument<*>.rotationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(RotationArgument(nodeName).apply(block))
-// inline fun Argument<*>.axisArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AxisArgument(nodeName).apply(block))
-
-// Chat arguments
-// inline fun Argument<*>.chatColorArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatColorArgument(nodeName).apply(block))
-// inline fun Argument<*>.chatComponentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatComponentArgument(nodeName).apply(block))
-// inline fun Argument<*>.chatArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatArgument(nodeName).apply(block))
-// inline fun Argument<*>.adventureChatComponentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatComponentArgument(nodeName).apply(block))
-// inline fun Argument<*>.adventureChatArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatArgument(nodeName).apply(block))
-
-// Entity & Player arguments
-// inline fun Argument<*>.entitySelectorArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument<Entity>(nodeName).apply(block))
-// inline fun <T : EntitySelector> Argument<*>.entitySelectorArgument(nodeName: String, entitySelector: T, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument<T>(nodeName, entitySelector).apply(block))
-// inline fun Argument<*>.playerArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(PlayerArgument(nodeName).apply(block))
-// inline fun Argument<*>.offlinePlayerArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(OfflinePlayerArgument(nodeName).apply(block))
-// inline fun Argument<*>.entityTypeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntityTypeArgument(nodeName).apply(block))
-
-// Scoreboard arguments
-// inline fun Argument<*>.scoreHolderArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ScoreHolderArgument<String>(nodeName).apply(block))
-// inline fun <T : ScoreHolderType> Argument<*>.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
-// inline fun Argument<*>.scoreboardSlotArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ScoreboardSlotArgument(nodeName).apply(block))
-// inline fun Argument<*>.objectiveArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ObjectiveArgument(nodeName).apply(block))
-// inline fun Argument<*>.objectiveCriteriaArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ObjectiveCriteriaArgument(nodeName).apply(block))
-// inline fun Argument<*>.teamArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(TeamArgument(nodeName).apply(block))
-
-// Miscellaneous arguments
-// inline fun Argument<*>.angleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AngleArgument(nodeName).apply(block))
-// inline fun Argument<*>.advancementArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdvancementArgument(nodeName).apply(block))
-// inline fun Argument<*>.biomeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(BiomeArgument(nodeName).apply(block))
-// inline fun Argument<*>.blockStateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(BlockStateArgument(nodeName).apply(block))
-// inline fun Argument<*>.commandArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(CommandArgument(nodeName).apply(block))
-// inline fun Argument<*>.enchantmentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EnchantmentArgument(nodeName).apply(block))
-// inline fun Argument<*>.environmentArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EnvironmentArgument(nodeName).apply(block))
-// inline fun Argument<*>.itemStackArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ItemStackArgument(nodeName).apply(block))
-// inline fun Argument<*>.lootTableArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LootTableArgument(nodeName).apply(block))
-// inline fun Argument<*>.mathOperationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MathOperationArgument(nodeName).apply(block))
-// inline fun Argument<*>.namespacedKeyArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(NamespacedKeyArgument(nodeName).apply(block))
-// inline fun Argument<*>.particleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ParticleArgument(nodeName).apply(block))
-// inline fun Argument<*>.potionEffectArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(PotionEffectArgument(nodeName).apply(block))
-// inline fun Argument<*>.recipeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(RecipeArgument(nodeName).apply(block))
-// inline fun Argument<*>.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(SoundArgument(nodeName).apply(block))
-// inline fun Argument<*>.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(TimeArgument(nodeName).apply(block))
-// inline fun Argument<*>.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(UUIDArgument(nodeName).apply(block))
-
-// Predicate arguments
-// inline fun Argument<*>.blockPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(BlockPredicateArgument(nodeName).apply(block))
-// inline fun Argument<*>.itemStackPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ItemStackPredicateArgument(nodeName).apply(block))
-
-// NBT arguments
-// inline fun <NBTContainer> Argument<*>.nbtCompoundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(NBTCompoundArgument<NBTContainer>(nodeName).apply(block))
 
 // Literal arguments
 inline fun Argument<*>.literalArgument(literal: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument.of(literal).apply(block))
