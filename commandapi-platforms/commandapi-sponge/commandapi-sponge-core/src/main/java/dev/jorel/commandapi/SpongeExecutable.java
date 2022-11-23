@@ -25,7 +25,7 @@ public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends I
 
 					@Override
 					public void run(CommandSource sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(SpongePlatform.get().wrapCommandSender(sender), args);
+						executor.executeWith(CommandAPISponge.get().wrapCommandSender(sender), args);
 					}
 
 					@Override
@@ -54,7 +54,7 @@ public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends I
 
 					@Override
 					public int run(CommandSource sender, Object[] args) throws WrapperCommandSyntaxException {
-						return executor.executeWith(SpongePlatform.get().wrapCommandSender(sender), args);
+						return executor.executeWith(CommandAPISponge.get().wrapCommandSender(sender), args);
 					}
 
 					@Override
