@@ -56,6 +56,29 @@ public class LiteralArgument extends Argument<String> implements ILiteralArgumen
 		this.setListed(false);
 	}
 
+	/**
+	 * A utility method to create a literal argument. Works as an alternative to {@link dev.jorel.commandapi.arguments.LiteralArgument#literal(String)}
+	 * <p>
+	 * To provide easier use of this method you can statically import this: {@code import static dev.jorel.commandapi.arguments.LiteralArgument.of;}
+	 *
+	 * @param literal the string literal that this argument will represent
+	 * @return the literal argument created by this method
+	 */
+	public static LiteralArgument of(final String literal) {
+		return new LiteralArgument(literal);
+	}
+
+	/**
+	 * A utility method to create a literal argument. Works as an alternative to {@link dev.jorel.commandapi.arguments.LiteralArgument#of(String)}
+	 * <p>
+	 * To provide easier use of this method you can statically import this: {@code import static dev.jorel.commandapi.arguments.LiteralArgument.literal;}
+	 *
+	 * @param literal the string literal that this argument will represent
+	 * @return the literal argument created by this method
+	 */
+	public static LiteralArgument literal(final String literal) {
+		return new LiteralArgument(literal);
+	}
 
 	@Override
 	public Class<String> getPrimitiveType() {

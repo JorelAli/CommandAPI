@@ -21,5 +21,6 @@
 		<module>commandapi-velocity-plugin</module>
 		<module>commandapi-velocity-plugin-test</module>
 		<module>commandapi-velocity-shade</module>
+		<module>commandapi-kotlin-velocity</module>
 	</modules>
 </project>
