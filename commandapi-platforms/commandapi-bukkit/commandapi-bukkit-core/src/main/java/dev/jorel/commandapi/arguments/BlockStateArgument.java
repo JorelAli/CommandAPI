@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 
@@ -41,7 +41,7 @@ public class BlockStateArgument extends Argument<BlockData> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public BlockStateArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentBlockState());
+		super(nodeName, CommandAPIBukkit.get()._ArgumentBlockState());
 	}
 
 	@Override
@@ -58,6 +58,6 @@ public class BlockStateArgument extends Argument<BlockData> {
 	public <CommandSourceStack> BlockData parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getBlockState(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getBlockState(cmdCtx, key);
 	}
 }

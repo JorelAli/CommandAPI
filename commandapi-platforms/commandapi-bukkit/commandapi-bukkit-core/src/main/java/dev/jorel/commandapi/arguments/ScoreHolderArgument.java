@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
@@ -50,7 +50,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	 * @param type whether this argument represents a single score holder or a collection of score holders
 	 */
 	public ScoreHolderArgument(String nodeName, ScoreHolderType type) {
-		super(nodeName, BukkitPlatform.get()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
 		single = (type == ScoreHolderType.SINGLE);
 	}
 	
@@ -77,7 +77,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	@Override
 	public <CommandSourceStack> T parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 												CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return (T) (single ? ((BukkitPlatform<CommandSourceStack>) platform).getScoreHolderSingle(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getScoreHolderMultiple(cmdCtx, key));
+		return (T) (single ? ((CommandAPIBukkit<CommandSourceStack>) platform).getScoreHolderSingle(cmdCtx, key) : ((CommandAPIBukkit<CommandSourceStack>) platform).getScoreHolderMultiple(cmdCtx, key));
 	}
 
 	/**

@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 
@@ -37,7 +37,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), BukkitPlatform.get()::convert);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), CommandAPIBukkit.get()::convert);
 	}
 
 	@Override
@@ -58,6 +58,6 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	@Override
 	public <CommandSourceStack> Sound parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 													CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getSound(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getSound(cmdCtx, key);
 	}
 }

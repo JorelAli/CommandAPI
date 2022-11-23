@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -58,7 +58,7 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 	 * @param selector the entity selector for this argument
 	 */
 	public EntitySelectorArgument(String nodeName, EntitySelector selector) {
-		super(nodeName, BukkitPlatform.get()._ArgumentEntity(selector));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentEntity(selector));
 		this.selector = selector;
 	}
 
@@ -92,7 +92,7 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 	public <CommandSourceStack> T parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 												CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return (T) ((BukkitPlatform<CommandSourceStack>) platform).getEntitySelector(cmdCtx, key, selector);
+		return (T) ((CommandAPIBukkit<CommandSourceStack>) platform).getEntitySelector(cmdCtx, key, selector);
 	}
 
 	@Override

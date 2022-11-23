@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.Axis;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -13,7 +13,6 @@ import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -36,7 +35,7 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentChatComponent;
 import net.minecraft.network.chat.IChatBaseComponent;
 
-public abstract class BlankNMS extends BukkitPlatform<CommandListenerWrapper> {
+public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> {
 
 	public final NMS<?> BASE_NMS;
 

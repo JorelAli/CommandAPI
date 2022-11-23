@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scoreboard.Team;
 
@@ -37,7 +37,7 @@ public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public TeamArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentScoreboardTeam(), Team::getName);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentScoreboardTeam(), Team::getName);
 	}
 
 	@Override
@@ -53,6 +53,6 @@ public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 	@Override
 	public <CommandSourceStack> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 													 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getTeam(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getTeam(cmdCtx, key);
 	}
 }

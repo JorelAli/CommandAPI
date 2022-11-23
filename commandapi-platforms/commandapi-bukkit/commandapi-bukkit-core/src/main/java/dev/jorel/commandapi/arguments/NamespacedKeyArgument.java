@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 
@@ -42,7 +42,7 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 	 * @param nodeName the name of the node for argument
 	 */
 	public NamespacedKeyArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(),
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(),
 				NamespacedKey::toString);
 	}
 
@@ -60,6 +60,6 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 	public <CommandSourceStack> NamespacedKey parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 															CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key);
 	}
 }

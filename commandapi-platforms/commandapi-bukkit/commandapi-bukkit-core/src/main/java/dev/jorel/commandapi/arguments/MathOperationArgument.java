@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import org.bukkit.command.CommandSender;
 
@@ -37,7 +37,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	 * @param nodeName the name of the node for this argument
 	 */
 	public MathOperationArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMathOperation(), MathOperation::toString);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMathOperation(), MathOperation::toString);
 	}
 	
 	@Override
@@ -53,6 +53,6 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	@Override
 	public <CommandSourceStack> MathOperation parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 															CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getMathOperation(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getMathOperation(cmdCtx, key);
 	}
 }

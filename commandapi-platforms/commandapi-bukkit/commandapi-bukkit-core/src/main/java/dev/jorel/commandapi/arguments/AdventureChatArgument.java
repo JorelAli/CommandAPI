@@ -24,7 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
@@ -52,7 +52,7 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdventureChatArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentChat());
+		super(nodeName, CommandAPIBukkit.get()._ArgumentChat());
 
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
@@ -74,8 +74,8 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	@Override
 	public <CommandSourceStack> Component parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = ((BukkitPlatform<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
-		Component component = ((BukkitPlatform<CommandSourceStack>) platform).getAdventureChat(cmdCtx, key);
+		final CommandSender sender = ((CommandAPIBukkit<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
+		Component component = ((CommandAPIBukkit<CommandSourceStack>) platform).getAdventureChat(cmdCtx, key);
 
 		if (this.usePreview && getPreview().isPresent() && sender instanceof Player player) {
 			try {

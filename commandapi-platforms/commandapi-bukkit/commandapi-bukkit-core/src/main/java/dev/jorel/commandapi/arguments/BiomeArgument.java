@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 
@@ -42,7 +42,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	 * @param nodeName the name of the node for argument
 	 */
 	public BiomeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentSyntheticBiome(),
+		super(nodeName, CommandAPIBukkit.get()._ArgumentSyntheticBiome(),
 				((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}
 
@@ -65,6 +65,6 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	public <CommandSourceStack> Biome parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 													CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getBiome(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getBiome(cmdCtx, key);
 	}
 }

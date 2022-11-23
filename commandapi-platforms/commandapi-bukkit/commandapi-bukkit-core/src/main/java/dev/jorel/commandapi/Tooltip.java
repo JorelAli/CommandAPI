@@ -144,7 +144,7 @@ public class Tooltip<S> extends AbstractTooltip<S> {
 	 * @return native minecraft message object which can be used natively by brigadier.
 	 */
 	public static Message messageFromBaseComponents(BaseComponent... components) {
-		return BukkitPlatform.get().generateMessageFromJson(ComponentSerializer.toString(components));
+		return CommandAPIBukkit.get().generateMessageFromJson(ComponentSerializer.toString(components));
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class Tooltip<S> extends AbstractTooltip<S> {
 	 * @return native minecraft message object which can be used natively by brigadier.
 	 */
 	public static Message messageFromAdventureComponent(Component component) {
-		return BukkitPlatform.get().generateMessageFromJson(GsonComponentSerializer.gson().serialize(component));
+		return CommandAPIBukkit.get().generateMessageFromJson(GsonComponentSerializer.gson().serialize(component));
 	}
 
 }

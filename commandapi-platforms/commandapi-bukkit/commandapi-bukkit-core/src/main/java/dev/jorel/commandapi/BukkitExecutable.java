@@ -24,7 +24,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends I
 
 					@Override
 					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(BukkitPlatform.get().wrapCommandSender(sender), args);
+						executor.executeWith(CommandAPIBukkit.get().wrapCommandSender(sender), args);
 					}
 
 					@Override
@@ -53,7 +53,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends I
 
 					@Override
 					public int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						return executor.executeWith(BukkitPlatform.get().wrapCommandSender(sender), args);
+						return executor.executeWith(CommandAPIBukkit.get().wrapCommandSender(sender), args);
 					}
 
 					@Override

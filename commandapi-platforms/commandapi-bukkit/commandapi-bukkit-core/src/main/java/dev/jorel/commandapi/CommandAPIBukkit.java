@@ -49,9 +49,9 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
-public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?>, CommandSender, Source> implements NMS<Source> {
+public abstract class CommandAPIBukkit<Source> extends AbstractPlatform<Argument<?>, CommandSender, Source> implements NMS<Source> {
 	// References to utility classes
-	private static BukkitPlatform<?> instance;
+	private static CommandAPIBukkit<?> instance;
 	private PaperImplementations paper;
 
 	// Static VarHandles
@@ -79,11 +79,11 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 		COMMANDNODE_ARGUMENTS = commandNodeArguments;
 	}
 
-	public BukkitPlatform() {
+	public CommandAPIBukkit() {
 		instance = this;
 	}
 
-	public static BukkitPlatform<?> get() {
+	public static CommandAPIBukkit<?> get() {
 		return instance;
 	}
 
@@ -480,10 +480,6 @@ public abstract class BukkitPlatform<Source> extends AbstractPlatform<Argument<?
 	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta) {
 		return new CommandAPICommand(meta);
 	}
-
-	// TODO: Not really sure where else these Bukkit-specific methods should go. Also, it sounds like
-	//  everything supports Adventure Components, so that isn't truly Bukkit-specific. Also, backwards compatibility:
-	//  these methods are expected to be called as CommandAPI.failWith...
 
 	/**
 	 * Forces a command to return a success value of 0

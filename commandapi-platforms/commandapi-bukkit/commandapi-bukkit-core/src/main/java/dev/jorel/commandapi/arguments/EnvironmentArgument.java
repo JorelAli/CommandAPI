@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
@@ -39,7 +39,7 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment, E
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EnvironmentArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
 	}
 	
 	@Override
@@ -55,6 +55,6 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment, E
 	@Override
 	public <CommandSourceStack> Environment parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getDimension(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getDimension(cmdCtx, key);
 	}
 }

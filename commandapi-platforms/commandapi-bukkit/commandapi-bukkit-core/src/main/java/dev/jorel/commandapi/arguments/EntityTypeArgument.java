@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
@@ -37,7 +37,7 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EntityTypeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentEntitySummon(), fromKey(EntityType::getKey));
 	}
 
 	@Override
@@ -58,6 +58,6 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	@Override
 	public <CommandSourceStack> EntityType parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getEntityType(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getEntityType(cmdCtx, key);
 	}
 }

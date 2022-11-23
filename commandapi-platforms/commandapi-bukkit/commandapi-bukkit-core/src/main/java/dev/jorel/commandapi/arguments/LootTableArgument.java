@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.loot.LootTable;
@@ -38,7 +38,7 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootT
 	 * @param nodeName the name of the node for this argument
 	 */
 	public LootTableArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), fromKey(Keyed::getKey));
 	}
 	
 	@Override
@@ -59,6 +59,6 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootT
 	@Override
 	public <CommandSourceStack> LootTable parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getLootTable(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getLootTable(cmdCtx, key);
 	}
 }

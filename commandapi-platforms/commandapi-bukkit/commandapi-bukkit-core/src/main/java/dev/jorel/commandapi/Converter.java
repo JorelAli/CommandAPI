@@ -189,7 +189,7 @@ public final class Converter {
 			org.bukkit.command.Command command = plugin.getCommand(commandName);
 			
 			if (command == null) {
-				command = BukkitPlatform.get().getSimpleCommandMap()
+				command = CommandAPIBukkit.get().getSimpleCommandMap()
 						.getCommand(commandName);
 			}
 

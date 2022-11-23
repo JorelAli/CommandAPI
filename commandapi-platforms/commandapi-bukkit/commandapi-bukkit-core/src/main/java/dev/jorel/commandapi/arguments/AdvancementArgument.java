@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.command.CommandSender;
 
@@ -39,7 +39,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdvancementArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), fromKey(Advancement::getKey));
 	}
 
 	@Override
@@ -60,6 +60,6 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 	@Override
 	public <CommandSourceStack> Advancement parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getAdvancement(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getAdvancement(cmdCtx, key);
 	}
 }

@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.Time;
 import org.bukkit.command.CommandSender;
 
@@ -37,7 +37,7 @@ public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public TimeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentTime(), Time::toString);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentTime(), Time::toString);
 	}
 
 	@Override
@@ -53,6 +53,6 @@ public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
 	@Override
 	public <CommandSourceStack> Integer parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 													  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getTime(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getTime(cmdCtx, key);
 	}
 }

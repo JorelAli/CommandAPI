@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +39,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PlayerArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentProfile(), Player::getName);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentProfile(), Player::getName);
 	}
 
 	@Override
@@ -55,6 +55,6 @@ public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 	@Override
 	public <CommandSourceStack> Player parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 													 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getPlayer(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getPlayer(cmdCtx, key);
 	}
 }

@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 
@@ -39,7 +39,7 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public EnchantmentArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
 	}
 
 	@Override
@@ -55,6 +55,6 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	@Override
 	public <CommandSourceStack> Enchantment parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getEnchantment(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getEnchantment(cmdCtx, key);
 	}
 }

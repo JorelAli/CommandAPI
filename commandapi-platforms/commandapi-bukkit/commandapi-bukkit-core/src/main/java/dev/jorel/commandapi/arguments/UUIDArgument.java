@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
@@ -38,7 +38,7 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public UUIDArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentUUID(), UUID::toString);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentUUID(), UUID::toString);
 	}
 
 	@Override
@@ -54,6 +54,6 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	@Override
 	public <CommandSourceStack> UUID parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 												   CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getUUID(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getUUID(cmdCtx, key);
 	}
 }

@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.Recipe;
@@ -38,7 +38,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> imp
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RecipeArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> imp
 	@Override
 	public <CommandSourceStack> Recipe parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 													 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getRecipe(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getRecipe(cmdCtx, key);
 	}
 	
 }

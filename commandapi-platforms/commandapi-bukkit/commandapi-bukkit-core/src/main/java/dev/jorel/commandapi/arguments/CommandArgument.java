@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SuggestionInfo;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -29,7 +29,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		super.replaceSuggestions((info, builder) -> {
 			// Extract information
 			CommandSender sender = info.sender();
-			CommandMap commandMap = BukkitPlatform.get().getSimpleCommandMap();
+			CommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
 			String command = info.currentArg();
 
 			// Setup context for errors
@@ -177,7 +177,7 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 		CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Extract information
 		String command = cmdCtx.getArgument(key, String.class);
-		CommandMap commandMap = ((BukkitPlatform<CommandSourceStack>) platform).getSimpleCommandMap();
+		CommandMap commandMap = ((CommandAPIBukkit<CommandSourceStack>) platform).getSimpleCommandMap();
 		CommandSender sender = platform.getSenderForCommand(cmdCtx, false).getSource();
 
 		StringReader context = new StringReader(command);

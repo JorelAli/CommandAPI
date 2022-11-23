@@ -27,7 +27,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.AbstractPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPI;
 import org.bukkit.command.CommandSender;
 
@@ -80,7 +80,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	@Deprecated(forRemoval = true)
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
 		super(nodeName, keyed ? StringArgumentType.string()
-				: BukkitPlatform.get()._ArgumentMinecraftKeyRegistered());
+				: CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered());
 		this.base = (Argument<B>) new DummyArgument(nodeName, keyed);
 		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
 		CommandAPI.logWarning(
@@ -362,7 +362,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 
 		private DummyArgument(String nodeName, boolean keyed) {
 			super(nodeName, keyed ? StringArgumentType.string()
-					: BukkitPlatform.get()._ArgumentMinecraftKeyRegistered());
+					: CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered());
 			this.keyed = keyed;
 		}
 
@@ -380,7 +380,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		public <Source> String parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform,
 											 CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
-			return keyed ? ((BukkitPlatform<Source>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
+			return keyed ? ((CommandAPIBukkit<Source>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
 		}
 	}
 }

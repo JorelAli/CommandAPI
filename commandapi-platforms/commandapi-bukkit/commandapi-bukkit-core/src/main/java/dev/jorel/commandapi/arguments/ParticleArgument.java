@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import org.bukkit.command.CommandSender;
 
@@ -38,7 +38,7 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ParticleArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentParticle(), BukkitPlatform.get()::convert);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentParticle(), CommandAPIBukkit.get()::convert);
 	}
 
 	@Override
@@ -54,6 +54,6 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	@Override
 	public <CommandSourceStack> ParticleData<?> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 															  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getParticle(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getParticle(cmdCtx, key);
 	}
 }

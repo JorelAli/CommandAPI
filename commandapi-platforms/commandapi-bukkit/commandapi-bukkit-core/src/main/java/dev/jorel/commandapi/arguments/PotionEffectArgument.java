@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffectType;
 
@@ -37,7 +37,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PotionEffectArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentMobEffect(), BukkitPlatform.get()::convert);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMobEffect(), CommandAPIBukkit.get()::convert);
 	}
 
 	@Override
@@ -53,6 +53,6 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	@Override
 	public <CommandSourceStack> PotionEffectType parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 															   CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getPotionEffect(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getPotionEffect(cmdCtx, key);
 	}
 }

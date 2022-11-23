@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
@@ -37,7 +37,7 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemS
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ItemStackArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentItemStack(), BukkitPlatform.get()::convert);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentItemStack(), CommandAPIBukkit.get()::convert);
 	}
 
 	@Override
@@ -53,6 +53,6 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemS
 	@Override
 	public <CommandSourceStack> ItemStack parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getItemStack(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getItemStack(cmdCtx, key);
 	}
 }

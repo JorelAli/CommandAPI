@@ -27,7 +27,7 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 
 /**
  * A wrapper class for Minecraft 1.12's functions
@@ -63,7 +63,7 @@ public class SimpleFunctionWrapper implements Keyed {
 	 * @return a SimpleFunctionWrapper[], which is an array of all of the functions that this tag contains
 	 */
 	public static SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		return BukkitPlatform.get().getTag(key);
+		return CommandAPIBukkit.get().getTag(key);
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class SimpleFunctionWrapper implements Keyed {
 	 * @return a SimpleFunctionWrapper representation of the Minecraft function for the provided NamespacedKey
 	 */
 	public static SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return BukkitPlatform.get().getFunction(key);
+		return CommandAPIBukkit.get().getFunction(key);
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class SimpleFunctionWrapper implements Keyed {
 	 * @return a set of all functions that the server has registered
 	 */
 	public static Set<NamespacedKey> getFunctions() {
-		return BukkitPlatform.get().getFunctions();
+		return CommandAPIBukkit.get().getFunctions();
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class SimpleFunctionWrapper implements Keyed {
 	 * @return a set of all tags that the server has registered
 	 */
 	public static Set<NamespacedKey> getTags() {
-		return BukkitPlatform.get().getTags();
+		return CommandAPIBukkit.get().getTags();
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public class SimpleFunctionWrapper implements Keyed {
 	 * @return the result of running this command
 	 */
 	public int run(CommandSender sender) {
-		BukkitPlatform<?> platform = BukkitPlatform.get();
+		CommandAPIBukkit<?> platform = CommandAPIBukkit.get();
 		return runInternal(platform.getBrigadierSourceFromCommandSender(platform.wrapCommandSender(sender)));
 	}
 	

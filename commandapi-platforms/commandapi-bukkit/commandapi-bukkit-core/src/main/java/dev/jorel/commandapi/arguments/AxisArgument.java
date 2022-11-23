@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.Axis;
 import org.bukkit.command.CommandSender;
 
@@ -44,7 +44,7 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 	 * @param nodeName the name of the node for argument
 	 */
 	public AxisArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentAxis(),
+		super(nodeName, CommandAPIBukkit.get()._ArgumentAxis(),
 			e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get());
 	}
 
@@ -62,6 +62,6 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 	public <CommandSourceStack> EnumSet<Axis> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key,
 															Object[] previousArgs)
 		throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getAxis(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getAxis(cmdCtx, key);
 	}
 }

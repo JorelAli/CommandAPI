@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
@@ -44,7 +44,7 @@ public class ChatComponentArgument extends Argument<BaseComponent[]> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatComponentArgument(String nodeName) {
-		super(nodeName, BukkitPlatform.get()._ArgumentChatComponent());
+		super(nodeName, CommandAPIBukkit.get()._ArgumentChatComponent());
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
@@ -67,6 +67,6 @@ public class ChatComponentArgument extends Argument<BaseComponent[]> {
 	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 															  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return ((BukkitPlatform<CommandSourceStack>) platform).getChatComponent(cmdCtx, key);
+		return ((CommandAPIBukkit<CommandSourceStack>) platform).getChatComponent(cmdCtx, key);
 	}
 }

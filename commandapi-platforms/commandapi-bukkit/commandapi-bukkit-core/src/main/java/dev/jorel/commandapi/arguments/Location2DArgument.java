@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractPlatform;
-import dev.jorel.commandapi.BukkitPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.Location2D;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -48,8 +48,8 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 */
 	public Location2DArgument(String nodeName, LocationType type) {
-		super(nodeName, type == LocationType.BLOCK_POSITION ? BukkitPlatform.get()._ArgumentPosition2D()
-				: BukkitPlatform.get()._ArgumentVec2(),
+		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIBukkit.get()._ArgumentPosition2D()
+				: CommandAPIBukkit.get()._ArgumentVec2(),
 				type == LocationType.BLOCK_POSITION ? (Location2D l) -> l.getBlockX() + " " + l.getBlockZ()
 						: (Location2D l) -> l.getX() + " " + l.getZ());
 		isPrecise = type == LocationType.PRECISE_POSITION;
@@ -78,6 +78,6 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	@Override
 	public <CommandSourceStack> Location2D parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
 														 CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return isPrecise ? ((BukkitPlatform<CommandSourceStack>) platform).getLocation2DPrecise(cmdCtx, key) : ((BukkitPlatform<CommandSourceStack>) platform).getLocation2DBlock(cmdCtx, key);
+		return isPrecise ? ((CommandAPIBukkit<CommandSourceStack>) platform).getLocation2DPrecise(cmdCtx, key) : ((CommandAPIBukkit<CommandSourceStack>) platform).getLocation2DBlock(cmdCtx, key);
 	}
 }

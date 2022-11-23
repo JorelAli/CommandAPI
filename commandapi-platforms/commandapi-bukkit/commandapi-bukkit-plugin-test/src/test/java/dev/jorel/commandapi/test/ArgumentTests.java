@@ -719,7 +719,7 @@ public class ArgumentTests {
 		Mut<CommandResult> results = Mut.of();
 
 		PlayerMock player = server.addPlayer("APlayer");
-		CommandMap commandMap = BukkitPlatform.get().getSimpleCommandMap();
+		CommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
 
 		// CommandArgument expects to find commands in the commandMap
 		commandMap.registerAll("test", List.of(
