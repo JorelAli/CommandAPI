@@ -23,7 +23,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 
 					@Override
 					public void run(CommandSource sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(VelocityPlatform.get().wrapCommandSender(sender), args);
+						executor.executeWith(CommandAPIVelocity.get().wrapCommandSender(sender), args);
 					}
 
 					@Override
@@ -52,7 +52,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 
 					@Override
 					public int run(CommandSource sender, Object[] args) throws WrapperCommandSyntaxException {
-						return executor.executeWith(VelocityPlatform.get().wrapCommandSender(sender), args);
+						return executor.executeWith(CommandAPIVelocity.get().wrapCommandSender(sender), args);
 					}
 
 					@Override

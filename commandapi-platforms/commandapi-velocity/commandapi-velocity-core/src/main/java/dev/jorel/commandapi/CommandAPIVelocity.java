@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class VelocityPlatform extends AbstractPlatform<Argument<?>, CommandSource, CommandSource> {
+public class CommandAPIVelocity extends AbstractPlatform<Argument<?>, CommandSource, CommandSource> {
 	private CommandManager commandManager;
-	private static VelocityPlatform instance;
+	private static CommandAPIVelocity instance;
 
-	public VelocityPlatform() {
+	public CommandAPIVelocity() {
 		instance = this;
 	}
 
-	public static VelocityPlatform get() {
+	public static CommandAPIVelocity get() {
 		return instance;
 	}
 
