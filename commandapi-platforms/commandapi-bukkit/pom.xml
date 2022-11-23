@@ -27,5 +27,6 @@
 		<module>commandapi-bukkit-plugin</module>
 		<module>commandapi-bukkit-plugin-test</module>
 		<module>commandapi-bukkit-shade</module>
+		<module>commandapi-kotlin-bukkit</module>
 	</modules>
 </project>

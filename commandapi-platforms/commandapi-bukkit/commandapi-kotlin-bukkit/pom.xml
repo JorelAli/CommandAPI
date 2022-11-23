@@ -6,39 +6,43 @@
 
 	<parent>
 		<groupId>dev.jorel</groupId>
-		<artifactId>commandapi</artifactId>
+		<artifactId>commandapi-bukkit</artifactId>
 		<version>9.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>commandapi-kotlin</artifactId>
+	<packaging>pom</packaging>
+	<artifactId>commandapi-kotlin-bukkit</artifactId>
 
 	<properties>
 		<kotlin.version>1.7.20</kotlin.version>
 	</properties>
 
 	<build>
-		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+		<sourceDirectory>src/main/kotlin</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
 				<version>${kotlin.version}</version>
-
 				<executions>
 					<execution>
 						<id>compile</id>
+						<phase>compile</phase>
 						<goals>
 							<goal>compile</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>test-compile</id>
+						<phase>test-compile</phase>
 						<goals>
 							<goal>test-compile</goal>
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<jvmTarget>16</jvmTarget>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -75,7 +79,7 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-core</artifactId>
+			<artifactId>commandapi-bukkit-core</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
