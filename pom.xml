@@ -66,11 +66,9 @@
 
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
-		<module>commandapi-kotlin</module>
 
 		<!-- Documentation code -->
         <module>commandapi-documentation-code</module>
-        <module>commandapi-kotlin</module>
     </modules>
 
 	<properties>
