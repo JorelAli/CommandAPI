@@ -57,4 +57,4 @@ jobs:
             !commandapi-shade/target/*sources.jar
             !commandapi-shade/target/*javadoc.jar
       - name: build CommandAPI examples in examples/
-        run: ./examples/build.sh
+        run: cd ./examples; ./build.sh;
