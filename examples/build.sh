@@ -1,4 +1,5 @@
 #!/bin/sh
+
 build() {
     for folder in ./*/; do
     	echo $folder
