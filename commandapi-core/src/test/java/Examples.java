@@ -111,6 +111,8 @@ import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.CommandArgument;
+import dev.jorel.commandapi.arguments.CommandResult;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -2223,6 +2225,21 @@ public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
     } else {
         throw CommandAPI.failWithString("You're not looking at a sign!");
     }
+}
+
+{
+/* ANCHOR: command_argument_sudo */
+new CommandAPICommand("sudo")
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new CommandArgument("command"))
+    .executes((sender, args) -> {
+        Player target = (Player) args[0];
+        CommandResult command = (CommandResult) args[1];
+
+        command.command().execute(target, command.command().getLabel(), command.args());
+    })
+    .register();
+/* ANCHOR_END: command_argument_sudo */
 }
 
 

@@ -2110,6 +2110,21 @@ fun getTargetSign(player: Player): Sign {
     }
 }
 
+fun sudoCommandArgument() {
+/* ANCHOR: command_argument_sudo */
+CommandAPICommand("sudo")
+    .withArguments(PlayerArgument("target"))
+    .withArguments(CommandArgument("command"))
+    .executes(CommandExecutor { sender, args ->
+        val target = args[0] as Player
+        val command = args[1] as CommandResult
+
+        command.command().execute(target, command.command().getLabel(), command.args())
+    })
+    .register()
+/* ANCHOR_END: command_argument_sudo */
+}
+
 
 } // Examples class end // /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// ///
 
