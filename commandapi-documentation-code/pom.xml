@@ -102,6 +102,9 @@
 						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<jvmTarget>16</jvmTarget>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
