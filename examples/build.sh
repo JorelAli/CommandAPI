@@ -8,6 +8,7 @@ build() {
 		else
 			build
 		fi
+		cd ..
     done
 }
 
