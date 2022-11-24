@@ -57,6 +57,4 @@ jobs:
             !commandapi-shade/target/*sources.jar
             !commandapi-shade/target/*javadoc.jar
       - name: build CommandAPI examples in examples/
-        # TODO: Can this be a recursive scan through the examples folder, where directories
-        #  without a pom.xml get their subdirectories looped through, while directories with a pom.xml get built?
-        run: for folder in examples/bukkit/*/; do ( cd $folder; mvn clean package ); done
+        run: ./examples/build.sh
