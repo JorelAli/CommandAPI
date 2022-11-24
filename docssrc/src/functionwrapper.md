@@ -35,11 +35,11 @@ The `run()` method runs the function. The command executor that runs this functi
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:functionarguments}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:functionarguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionarguments}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionarguments}}
 ```
 
 </div>

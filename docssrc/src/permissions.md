@@ -30,11 +30,11 @@ Say we created a command `/god` that sets a player as being invulnerable. Since 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:permissions}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:permissions}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions}}
 ```
 
 </div>
@@ -44,11 +44,11 @@ As stated above, it is possible to assign a permission using a String instead of
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:permissions2}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:permissions2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions2}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions2}}
 ```
 
 </div>
@@ -85,11 +85,11 @@ We first declare the command as normal. Nothing fancy is going on here:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:permissions3_1}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:permissions3_1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3_1}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3_1}}
 ```
 
 </div>
@@ -99,11 +99,11 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:permissions3_2}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:permissions3_2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3_2}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3_2}}
 ```
 
 </div>

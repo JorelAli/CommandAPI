@@ -67,11 +67,11 @@ We can do this by adding a `PlayerArgument` to our command. As described above, 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:CommandTree_sayhi1}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:CommandTree_sayhi1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandTree_sayhi1}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandTree_sayhi1}}
 ```
 
 </div>
@@ -102,11 +102,11 @@ Say we wanted to create a plugin to let a user edit signs. We have a single comm
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:CommandTree_signedit}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:CommandTree_signedit}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandTree_signedit}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandTree_signedit}}
 ```
 
 </div>

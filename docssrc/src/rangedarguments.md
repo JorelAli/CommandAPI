@@ -56,11 +56,11 @@ Now, we simply create our arguments using `IntegerRangeArgument` for our range a
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/java/Examples.java:rangedarguments}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:rangedarguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/test/dev/jorel/commandapi/examples/kotlin/Examples.kt:rangedarguments}}
+{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:rangedarguments}}
 ```
 
 </div>

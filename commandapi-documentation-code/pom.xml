@@ -70,18 +70,16 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- Testing -->
+		<!-- Other -->
 		<dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api</artifactId>
 			<version>2.10.0</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib</artifactId>
 			<version>1.7.10</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -100,7 +98,7 @@
 						</goals>
 						<configuration>
 							<sourceDirs>
-								<sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+								<sourceDir>${project.basedir}/src/main/dev/jorel/commandapi/examples/kotlin</sourceDir>
 							</sourceDirs>
 						</configuration>
 					</execution>
