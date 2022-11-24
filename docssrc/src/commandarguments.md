@@ -46,7 +46,39 @@ String[] args();
 
 ## Arbitrary commands
 
-Blah blah blah, /sudo example here
+Arbitrary commands let the user enter any command that they have permission to execute. To use arbitrary commands, you just need to use the `CommandArgument` normally.
+
+<div class="example">
+
+### Example - A /sudo command
+
+We want to create a `/sudo` command which lets you execute a command as another online player.
+
+![Sudo command example](./images/sudocommand.gif)
+
+To do this, we want to use the following command syntax:
+
+```mccmd
+/sudo <target> <command>
+```
+
+In this example, we want to be able to run any arbitrary command, so we will simply use the `CommandArgument` on its own (without using suggestions). Using the `CommandArgument` generates a `CommandResult` and we can use the `.command()` and `.args()` methods above to access the command and arguments. We can make use of the `Command.execute()` method to execute our command and use the target player as the command sender.
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:command_argument_sudo}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:command_argument_sudo}}
+```
+
+</div>
+
+</div>
+
+-----
 
 ## Restricted commands
 
