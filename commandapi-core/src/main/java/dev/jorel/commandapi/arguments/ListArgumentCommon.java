@@ -6,7 +6,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
@@ -43,12 +42,10 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	private void applySuggestions() {
 		this.replaceSuggestions((info, builder) -> {
 			String currentArg = info.currentArg();
-			CommandAPI.logNormal("CurrentArg: " + currentArg);
 			if(text && currentArg.startsWith("\"")) {
 				// Ignore initial " when suggesting for TextArgument
 				currentArg = currentArg.substring(1);
 				builder = builder.createOffset(builder.getStart() + 1);
-				CommandAPI.logNormal("CurrentArg trimmed to: " + currentArg);
 			}
 
 			// This need not be a sorted map because entries in suggestions are
