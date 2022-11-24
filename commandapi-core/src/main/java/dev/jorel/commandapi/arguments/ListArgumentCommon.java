@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
@@ -26,13 +27,15 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	private final boolean allowDuplicates;
 	private final Function<CommandSender, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
+	private final boolean text;
 
-	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, StringArgumentType rawType) {
-		super(nodeName, rawType);
+	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text) {
+		super(nodeName, text ? StringArgumentType.string() : StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
 		this.supplier = supplier;
 		this.mapper = suggestionsMapper;
+		this.text = text;
 
 		applySuggestions();
 	}
@@ -40,6 +43,13 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	private void applySuggestions() {
 		this.replaceSuggestions((info, builder) -> {
 			String currentArg = info.currentArg();
+			CommandAPI.logNormal("CurrentArg: " + currentArg);
+			if(text && currentArg.startsWith("\"")) {
+				// Ignore initial " when suggesting for TextArgument
+				currentArg = currentArg.substring(1);
+				builder = builder.createOffset(builder.getStart() + 1);
+				CommandAPI.logNormal("CurrentArg trimmed to: " + currentArg);
+			}
 
 			// This need not be a sorted map because entries in suggestions are
 			// automatically sorted anyway

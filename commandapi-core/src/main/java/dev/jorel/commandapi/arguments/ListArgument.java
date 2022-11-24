@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.jorel.commandapi.IStringTooltip;
 import org.bukkit.command.CommandSender;
 
@@ -35,6 +34,6 @@ import java.util.function.Function;
 public class ListArgument<T> extends ListArgumentCommon<T> implements IGreedyArgument {
 
 	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
-		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, StringArgumentType.greedyString());
+		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, false);
 	}
 }
