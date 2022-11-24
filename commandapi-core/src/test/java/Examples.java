@@ -31,7 +31,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-import com.mojang.brigadier.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -80,6 +79,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.StringRange;
@@ -149,6 +149,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.arguments.WorldArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -688,6 +689,20 @@ new CommandAPICommand("createworld")
     })
     .register();
 /* ANCHOR_END: environmentarguments */
+}
+
+{
+/* ANCHOR: worldarguments */
+new CommandAPICommand("unloadworld")
+    .withArguments(new WorldArgument("world"))
+    .executes((sender, args) -> {
+        World world = (World) args[0];
+
+        // Unload the world (and save the world's chunks)
+        Bukkit.getServer().unloadWorld(world, true);
+    })
+    .register();
+/* ANCHOR_END: worldarguments */
 }
 
 {

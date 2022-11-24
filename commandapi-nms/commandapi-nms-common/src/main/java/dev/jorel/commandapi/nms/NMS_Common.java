@@ -182,7 +182,12 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentDimension() {
+	public ArgumentType<?> _ArgumentDimension() {
+		return DimensionArgument.dimension();
+	}
+
+	@Override
+	public final ArgumentType<?> _ArgumentEnvironment() {
 		return DimensionArgument.dimension();
 	}
 
@@ -449,7 +454,12 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final Environment getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
+	}
+
+	@Override
+	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 

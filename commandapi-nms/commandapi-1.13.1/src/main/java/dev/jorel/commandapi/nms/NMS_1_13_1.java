@@ -16,7 +16,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import com.mojang.brigadier.Message;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -62,6 +61,7 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -75,6 +75,7 @@ import dev.jorel.commandapi.exceptions.AngleArgumentException;
 import dev.jorel.commandapi.exceptions.BiomeArgumentException;
 import dev.jorel.commandapi.exceptions.TimeArgumentException;
 import dev.jorel.commandapi.exceptions.UUIDArgumentException;
+import dev.jorel.commandapi.exceptions.UnimplementedArgumentException;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -244,9 +245,15 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		return ArgumentChatFormat.a();
 	}
 
-	@Differs(from = "1.13", by = "Not throwing EnvironmentArgumentException")
+	@Differs(from = "1.13", by = "Not throwing UnimplementedArgumentException")
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
+		return ArgumentDimension.a();
+	}
+
+	@Differs(from = "1.13", by = "Not throwing EnvironmentArgumentException")
+	@Override
+	public ArgumentType<?> _ArgumentEnvironment() {
 		return ArgumentDimension.a();
 	}
 
@@ -558,9 +565,15 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		}
 	}
 
-	@Differs(from = "1.13", by = "Implements getDimension for EnvironmentArgument")
+	@Differs(from = "1.13", by = "Implements getDimension for DimensionArgument")
 	@Override
-	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return MINECRAFT_SERVER.getWorldServer(ArgumentDimension.a(cmdCtx, key)).getWorld();
+	}
+
+	@Differs(from = "1.13", by = "Implements getEnvironment for EnvironmentArgument")
+	@Override
+	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
 		return switch (manager.getDimensionID()) {
 			case 0 -> Environment.NORMAL;

@@ -91,6 +91,11 @@ public enum CommandAPIArgumentType {
 	 * The CustomArgument
 	 */
 	CUSTOM,
+	
+	/**
+	 * The DimensionArgument
+	 */
+	DIMENSION("minecraft:dimension"),
 
 	/**
 	 * The EnchantmentArgument
@@ -111,7 +116,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The EnvironmentArgument
 	 */
-	ENVIRONMENT("minecraft:dimension"),
+	ENVIRONMENT("api:environment"),
 
 	/**
 	 * The FloatRangeArgument

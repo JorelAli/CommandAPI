@@ -659,6 +659,20 @@ CommandAPICommand("createworld")
 /* ANCHOR_END: environmentarguments */
 }
 
+fun worldarguments() {
+/* ANCHOR: worldarguments */
+new CommandAPICommand("unloadworld")
+    .withArguments(WorldArgument("world"))
+    .executes(CommandExecutor { sender, args ->
+        val world = args[0] as World
+
+        // Unload the world (and save the world's chunks)
+        Bukkit.getServer().unloadWorld(world, true)
+    })
+    .register()
+/* ANCHOR_END: worldarguments */
+}
+
 fun itemstackarguments() {
 /* ANCHOR: itemstackarguments */
 CommandAPICommand("item")
