@@ -25,6 +25,29 @@ import net.minecraft.server.v1_13_R1.*;
 import net.minecraft.server.v1_13_R1.CriterionConditionValue.c;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import java.io.File;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import org.bukkit.Axis;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.*;
 import org.bukkit.World;
@@ -62,6 +85,96 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+import com.mojang.brigadier.Message;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
+
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.exceptions.AngleArgumentException;
+import dev.jorel.commandapi.exceptions.BiomeArgumentException;
+import dev.jorel.commandapi.exceptions.EnvironmentArgumentException;
+import dev.jorel.commandapi.exceptions.TimeArgumentException;
+import dev.jorel.commandapi.exceptions.UUIDArgumentException;
+import dev.jorel.commandapi.exceptions.UnimplementedArgumentException;
+import dev.jorel.commandapi.preprocessor.NMSMeta;
+import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.FunctionWrapper;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.Location2D;
+import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.Rotation;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.v1_13_R1.Advancement;
+import net.minecraft.server.v1_13_R1.ArgumentBlockPredicate;
+import net.minecraft.server.v1_13_R1.ArgumentChat;
+import net.minecraft.server.v1_13_R1.ArgumentChatComponent;
+import net.minecraft.server.v1_13_R1.ArgumentChatFormat;
+import net.minecraft.server.v1_13_R1.ArgumentCriterionValue;
+import net.minecraft.server.v1_13_R1.ArgumentEnchantment;
+import net.minecraft.server.v1_13_R1.ArgumentEntity;
+import net.minecraft.server.v1_13_R1.ArgumentEntitySummon;
+import net.minecraft.server.v1_13_R1.ArgumentItemPredicate;
+import net.minecraft.server.v1_13_R1.ArgumentItemStack;
+import net.minecraft.server.v1_13_R1.ArgumentMathOperation;
+import net.minecraft.server.v1_13_R1.ArgumentMinecraftKeyRegistered;
+import net.minecraft.server.v1_13_R1.ArgumentMobEffect;
+import net.minecraft.server.v1_13_R1.ArgumentNBTTag;
+import net.minecraft.server.v1_13_R1.ArgumentParticle;
+import net.minecraft.server.v1_13_R1.ArgumentPosition;
+import net.minecraft.server.v1_13_R1.ArgumentProfile;
+import net.minecraft.server.v1_13_R1.ArgumentRotation;
+import net.minecraft.server.v1_13_R1.ArgumentRotationAxis;
+import net.minecraft.server.v1_13_R1.ArgumentScoreboardCriteria;
+import net.minecraft.server.v1_13_R1.ArgumentScoreboardObjective;
+import net.minecraft.server.v1_13_R1.ArgumentScoreboardSlot;
+import net.minecraft.server.v1_13_R1.ArgumentScoreboardTeam;
+import net.minecraft.server.v1_13_R1.ArgumentScoreholder;
+import net.minecraft.server.v1_13_R1.ArgumentTag;
+import net.minecraft.server.v1_13_R1.ArgumentTile;
+import net.minecraft.server.v1_13_R1.ArgumentVec2;
+import net.minecraft.server.v1_13_R1.ArgumentVec3;
+import net.minecraft.server.v1_13_R1.BlockPosition;
+import net.minecraft.server.v1_13_R1.CommandListenerWrapper;
+import net.minecraft.server.v1_13_R1.CompletionProviders;
+import net.minecraft.server.v1_13_R1.CriterionConditionValue;
+import net.minecraft.server.v1_13_R1.CriterionConditionValue.c;
+import net.minecraft.server.v1_13_R1.CustomFunction;
+import net.minecraft.server.v1_13_R1.CustomFunctionData;
+import net.minecraft.server.v1_13_R1.DedicatedServer;
+import net.minecraft.server.v1_13_R1.Entity;
+import net.minecraft.server.v1_13_R1.EntityPlayer;
+import net.minecraft.server.v1_13_R1.EntitySelector;
+import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
+import net.minecraft.server.v1_13_R1.IBlockData;
+import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R1.ICompletionProvider;
+import net.minecraft.server.v1_13_R1.ItemStack;
+import net.minecraft.server.v1_13_R1.LootTable;
+import net.minecraft.server.v1_13_R1.LootTableRegistry;
+import net.minecraft.server.v1_13_R1.MinecraftKey;
+import net.minecraft.server.v1_13_R1.MinecraftServer;
+import net.minecraft.server.v1_13_R1.ParticleParam;
+import net.minecraft.server.v1_13_R1.ParticleParamBlock;
+import net.minecraft.server.v1_13_R1.ParticleParamItem;
+import net.minecraft.server.v1_13_R1.ParticleParamRedstone;
+import net.minecraft.server.v1_13_R1.ShapeDetectorBlock;
+import net.minecraft.server.v1_13_R1.Vec2F;
+import net.minecraft.server.v1_13_R1.Vec3D;
+// TODO: Make sure imports merged correctly
 
 /**
  * NMS implementation for Minecraft 1.13
@@ -154,6 +267,11 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
+		throw new UnimplementedArgumentException("DimensionArgument", "1.13.1");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEnvironment() {
 		throw new EnvironmentArgumentException();
 	}
 
@@ -466,7 +584,12 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		throw new UnimplementedArgumentException("DimensionArgument", "1.13.1");
+	}
+
+	@Override
+	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		throw new EnvironmentArgumentException();
 	}
 

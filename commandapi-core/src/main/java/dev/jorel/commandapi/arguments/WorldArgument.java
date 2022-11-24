@@ -20,20 +20,47 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import dev.jorel.commandapi.IStringTooltip;
-import org.bukkit.command.CommandSender;
-
-import java.util.Collection;
 import java.util.function.Function;
 
+import org.bukkit.World;
+
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
+
 /**
- * An argument that accepts a list of objects
- * 
- * @param <T> the type that this list argument generates a list of.
+ * An argument that represents the Bukkit World object
  */
-public class ListTextArgument<T> extends ListArgumentCommon<T> {
-	ListTextArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
-		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, StringArgumentType.string());
+public class WorldArgument extends SafeOverrideableArgument<World, World> {
+
+	/**
+	 * A World argument. Represents Bukkit's World object
+	 * 
+	 * @param nodeName the name of the node for this argument
+	 */
+	public WorldArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), ((Function<World, String>) World::getName).andThen(String::toLowerCase));
+	}
+
+	@Override
+	public Class<World> getPrimitiveType() {
+		return World.class;
+	}
+
+	@Override
+	public CommandAPIArgumentType getArgumentType() {
+		// We're keeping this underlying internal name as Dimension. The only thing
+		// that differs is the name of this class which is "WorldArgument", because
+		// the CommandAPI argument class names represent Bukkit objects wherever
+		// possible
+		return CommandAPIArgumentType.DIMENSION;
+	}
+
+	@Override
+	public <CommandListenerWrapper> World parseArgument(NMS<CommandListenerWrapper> nms,
+		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return nms.getDimension(cmdCtx, key);
 	}
 }

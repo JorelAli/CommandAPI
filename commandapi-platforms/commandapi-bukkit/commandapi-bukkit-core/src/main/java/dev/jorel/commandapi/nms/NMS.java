@@ -95,6 +95,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	ArgumentType<?> _ArgumentDimension();
 
+	ArgumentType<?> _ArgumentEnvironment();
+
 	ArgumentType<?> _ArgumentEnchantment();
 
 	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
@@ -233,7 +235,9 @@ public interface NMS<CommandListenerWrapper> {
 //	 */
 //	CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw);
 
-	Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+
+	Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

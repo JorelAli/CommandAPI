@@ -56,50 +56,9 @@ import com.mojang.brigadier.tree.LiteralCommandNode
 
 import de.tr7zw.changeme.nbtapi.NBTContainer
 import dev.jorel.commandapi.*
-import dev.jorel.commandapi.arguments.AdvancementArgument
-import dev.jorel.commandapi.arguments.AdventureChatArgument
-import dev.jorel.commandapi.arguments.AdventureChatComponentArgument
-import dev.jorel.commandapi.arguments.AngleArgument
-import dev.jorel.commandapi.arguments.Argument
-import dev.jorel.commandapi.arguments.ArgumentSuggestions
-import dev.jorel.commandapi.arguments.BiomeArgument
-import dev.jorel.commandapi.arguments.BlockPredicateArgument
-import dev.jorel.commandapi.arguments.BlockStateArgument
-import dev.jorel.commandapi.arguments.BooleanArgument
-import dev.jorel.commandapi.arguments.ChatArgument
-import dev.jorel.commandapi.arguments.ChatColorArgument
-import dev.jorel.commandapi.arguments.ChatComponentArgument
-import dev.jorel.commandapi.arguments.CustomArgument
+import dev.jorel.commandapi.arguments.*
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
-import dev.jorel.commandapi.arguments.EnchantmentArgument
-import dev.jorel.commandapi.arguments.EntitySelector
-import dev.jorel.commandapi.arguments.EntitySelectorArgument
-import dev.jorel.commandapi.arguments.EntityTypeArgument
-import dev.jorel.commandapi.arguments.EnvironmentArgument
-import dev.jorel.commandapi.arguments.FunctionArgument
-import dev.jorel.commandapi.arguments.GreedyStringArgument
-import dev.jorel.commandapi.arguments.IntegerArgument
-import dev.jorel.commandapi.arguments.IntegerRangeArgument
-import dev.jorel.commandapi.arguments.ItemStackArgument
-import dev.jorel.commandapi.arguments.ItemStackPredicateArgument
-import dev.jorel.commandapi.arguments.ListArgumentBuilder
-import dev.jorel.commandapi.arguments.LiteralArgument
-import dev.jorel.commandapi.arguments.LocationArgument
-import dev.jorel.commandapi.arguments.LocationType
-import dev.jorel.commandapi.arguments.LootTableArgument
-import dev.jorel.commandapi.arguments.MathOperationArgument
-import dev.jorel.commandapi.arguments.MultiLiteralArgument
-import dev.jorel.commandapi.arguments.NBTCompoundArgument
-import dev.jorel.commandapi.arguments.ObjectiveArgument
-import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument
-import dev.jorel.commandapi.arguments.ParticleArgument
-import dev.jorel.commandapi.arguments.PlayerArgument
-import dev.jorel.commandapi.arguments.PotionEffectArgument
-import dev.jorel.commandapi.arguments.RecipeArgument
-import dev.jorel.commandapi.arguments.RotationArgument
-import dev.jorel.commandapi.arguments.SafeSuggestions
-import dev.jorel.commandapi.arguments.ScoreHolderArgument
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument
 import dev.jorel.commandapi.arguments.SoundArgument
@@ -129,6 +88,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
+// TODO: Make sure imports merged correctly
 
 class Examples : JavaPlugin() {
 
@@ -641,6 +601,20 @@ CommandAPICommand("createworld")
     })
     .register()
 /* ANCHOR_END: environmentarguments */
+}
+
+fun worldarguments() {
+/* ANCHOR: worldarguments */
+CommandAPICommand("unloadworld")
+    .withArguments(WorldArgument("world"))
+    .executes(CommandExecutor { sender, args ->
+        val world = args[0] as World
+
+        // Unload the world (and save the world's chunks)
+        Bukkit.getServer().unloadWorld(world, true)
+    })
+    .register()
+/* ANCHOR_END: worldarguments */
 }
 
 fun itemstackarguments() {

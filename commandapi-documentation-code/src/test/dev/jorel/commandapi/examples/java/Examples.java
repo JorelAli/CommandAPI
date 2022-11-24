@@ -32,7 +32,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-import com.mojang.brigadier.Message;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import org.bukkit.Bukkit;
@@ -83,6 +82,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.StringRange;
@@ -142,6 +142,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.arguments.WorldArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -156,6 +157,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+
+// TODO: Make sure imports merged correctly
 
 public class Examples extends JavaPlugin {
 
@@ -681,6 +684,20 @@ new CommandAPICommand("createworld")
     })
     .register();
 /* ANCHOR_END: environmentarguments */
+}
+
+{
+/* ANCHOR: worldarguments */
+new CommandAPICommand("unloadworld")
+    .withArguments(new WorldArgument("world"))
+    .executes((sender, args) -> {
+        World world = (World) args[0];
+
+        // Unload the world (and save the world's chunks)
+        Bukkit.getServer().unloadWorld(world, true);
+    })
+    .register();
+/* ANCHOR_END: worldarguments */
 }
 
 {

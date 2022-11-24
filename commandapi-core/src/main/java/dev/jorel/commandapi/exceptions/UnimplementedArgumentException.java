@@ -18,22 +18,18 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
-
-import com.mojang.brigadier.arguments.StringArgumentType;
-import dev.jorel.commandapi.IStringTooltip;
-import org.bukkit.command.CommandSender;
-
-import java.util.Collection;
-import java.util.function.Function;
+package dev.jorel.commandapi.exceptions;
 
 /**
- * An argument that accepts a list of objects
- * 
- * @param <T> the type that this list argument generates a list of.
+ * An exception caused when using an argument which hasn't been implemented in this Minecraft version
  */
-public class ListTextArgument<T> extends ListArgumentCommon<T> {
-	ListTextArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
-		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, StringArgumentType.string());
+public class UnimplementedArgumentException extends RuntimeException {
+
+	/**
+	 * Creates an EnvironmentArgumentException
+	 */
+	public UnimplementedArgumentException(String type, String versionSupportedIn) {
+		super("The " + type + " is only compatible with Minecraft " + versionSupportedIn + " or later");
 	}
+	
 }
