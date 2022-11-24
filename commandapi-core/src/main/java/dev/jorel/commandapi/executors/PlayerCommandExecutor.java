@@ -24,23 +24,32 @@ import org.bukkit.entity.Player;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+import java.util.Map;
+
 /**
  * A normal command executor for a Player
  */
-@FunctionalInterface
 public interface PlayerCommandExecutor extends IExecutorNormal<Player> {
 
 	/**
 	 * The code to run when this command is performed
 	 * 
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
 	 */
 	void run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
+	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 */
+	@Override
+	default void run(Player sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+		this.run(sender, args);
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

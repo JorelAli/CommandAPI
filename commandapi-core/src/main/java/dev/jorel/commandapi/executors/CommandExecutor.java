@@ -24,10 +24,11 @@ import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+import java.util.Map;
+
 /**
  * A normal command executor for a CommandSender
  */
-@FunctionalInterface
 public interface CommandExecutor extends IExecutorNormal<CommandSender> {
 
 	/**
@@ -41,6 +42,21 @@ public interface CommandExecutor extends IExecutorNormal<CommandSender> {
 	 *            insertion into the hashmap
 	 */
 	void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param sender
+	 *            The sender of this command (a player, the console etc.)
+	 * @param args
+	 *            The arguments given to this command. The objects are
+	 *            determined by the hashmap of arguments IN THE ORDER of
+	 *            insertion into the hashmap
+	 */
+	@Override
+	default void run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+		this.run(sender, args);
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

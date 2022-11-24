@@ -1,26 +1,14 @@
 package dev.jorel.commandapi;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import dev.jorel.commandapi.executors.*;
 import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
-import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
-import dev.jorel.commandapi.executors.CommandExecutor;
-import dev.jorel.commandapi.executors.ConsoleCommandExecutor;
-import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor;
-import dev.jorel.commandapi.executors.EntityCommandExecutor;
-import dev.jorel.commandapi.executors.EntityResultingCommandExecutor;
-import dev.jorel.commandapi.executors.ExecutorType;
-import dev.jorel.commandapi.executors.NativeCommandExecutor;
-import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
-import dev.jorel.commandapi.executors.PlayerCommandExecutor;
-import dev.jorel.commandapi.executors.PlayerResultingCommandExecutor;
-import dev.jorel.commandapi.executors.ProxyCommandExecutor;
-import dev.jorel.commandapi.executors.ProxyResultingCommandExecutor;
-import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 
 /**
  * This class represents something that is executable. This is mostly, {@link CommandAPICommand} instances, or can also be {@link CommandTree} nodes and even {@link Argument} nodes in a tree
@@ -52,9 +40,43 @@ abstract class Executable<T extends Executable<T>> {
 
 					@Override
 					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(sender, args);
+						run(sender, args, new LinkedHashMap<>());
 					}
-					
+
+					@Override
+					public void run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+						executor.executeWith(sender, args, argsMap);
+					}
+
+					@Override
+					public ExecutorType getType() {
+						return type;
+					}
+				});
+			}
+		}
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param types A list of executor types to use this executes method for.
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executes(CommandExecutionInfo executor, ExecutorType... types) {
+		if(types == null || types.length == 0) {
+			this.executor.addNormalExecutor(executor);
+		} else {
+			for(ExecutorType type : types) {
+				this.executor.addNormalExecutor(new CommandExecutionInfo() {
+
+					@Override
+					public void run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+						executor.executeWith(sender, args, argsMap);
+					}
+
 					@Override
 					public ExecutorType getType() {
 						return type;
@@ -81,9 +103,43 @@ abstract class Executable<T extends Executable<T>> {
 
 					@Override
 					public int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						return executor.executeWith(sender, args);
+						return run(sender, args, new LinkedHashMap<>());
 					}
-					
+
+					@Override
+					public int run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+						return executor.executeWith(sender, args, argsMap);
+					}
+
+					@Override
+					public ExecutorType getType() {
+						return type;
+					}
+				});
+			}
+		}
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param types A list of executor types to use this executes method for.
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executes(ResultingCommandExecutionInfo executor, ExecutorType... types) {
+		if(types == null || types.length == 0) {
+			this.executor.addResultingExecutor(executor);
+		} else {
+			for(ExecutorType type : types) {
+				this.executor.addResultingExecutor(new ResultingCommandExecutionInfo() {
+
+					@Override
+					public int run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+						return executor.executeWith(sender, args, argsMap);
+					}
+
 					@Override
 					public ExecutorType getType() {
 						return type;
@@ -109,12 +165,34 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(Player, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesPlayer(PlayerExecutionInfo info) {
+		this.executor.addNormalExecutor(info);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
 	public T executesPlayer(PlayerResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(Player, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesPlayer(PlayerResultingExecutionInfo info) {
+		this.executor.addResultingExecutor(info);
 		return (T) this;
 	}
 
@@ -133,12 +211,34 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesEntity(EntityExecutionInfo info) {
+		this.executor.addNormalExecutor(info);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
 	public T executesEntity(EntityResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesEntity(EntityResultingExecutionInfo info) {
+		this.executor.addResultingExecutor(info);
 		return (T) this;
 	}
 
@@ -157,12 +257,34 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesProxy(ProxyExecutionInfo info) {
+		this.executor.addNormalExecutor(info);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
 	public T executesProxy(ProxyResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesProxy(ProxyResultingExecutionInfo info) {
+		this.executor.addResultingExecutor(info);
 		return (T) this;
 	}
 
@@ -181,6 +303,17 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(BlockCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesCommandBlock(CommandBlockExecutionInfo info) {
+		this.executor.addNormalExecutor(info);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -190,11 +323,22 @@ abstract class Executable<T extends Executable<T>> {
 		return (T) this;
 	}
 
+	/**
+	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(BlockCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesCommandBlock(CommandBlockResultingExecutionInfo info) {
+		this.executor.addResultingExecutor(info);
+		return (T) this;
+	}
+
 	// Console command sender
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(ConsoleCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -205,7 +349,18 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ConsoleCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesConsole(ConsoleExecutionInfo info) {
+		this.executor.addNormalExecutor(info);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(ConsoleCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -213,6 +368,19 @@ abstract class Executable<T extends Executable<T>> {
 		this.executor.addResultingExecutor(executor);
 		return (T) this;
 	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(ConsoleCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesConsole(ConsoleResultingExecutionInfo info) {
+		this.executor.addResultingExecutor(info);
+		return (T) this;
+	}
+
+	// Native command sender
 
 	/**
 	 * Adds an executor to the current command builder
@@ -227,12 +395,34 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(NativeCommandExecutor, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesNative(NativeExecutionInfo info) {
+		this.executor.addNormalExecutor(info);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
 	public T executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
+		return (T) this;
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param info A lambda of type <code>(NativeCommandExecutor, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T executesNative(NativeResultingExecutionInfo info) {
+		this.executor.addResultingExecutor(info);
 		return (T) this;
 	}
 

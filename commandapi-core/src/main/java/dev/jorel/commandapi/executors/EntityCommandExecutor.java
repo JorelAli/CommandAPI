@@ -20,9 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import org.bukkit.entity.Player;
+
+import java.util.Map;
 
 /**
  * A normal command executor for an Entity
@@ -33,14 +37,23 @@ public interface EntityCommandExecutor extends IExecutorNormal<Entity> {
 	/**
 	 * The code to run when this command is performed
 	 * 
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
 	 */
 	void run(Entity sender, Object[] args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * Executes the command.
+	 *
+	 * @param sender  the command sender for this command
+	 * @param args    the arguments provided to this command
+	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
+	 */
+	@Override
+	default void run(Entity sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+		this.run(sender, args);
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

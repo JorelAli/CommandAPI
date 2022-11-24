@@ -23,11 +23,7 @@ package dev.jorel.commandapi;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -210,7 +206,7 @@ public final class Converter {
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> {
-				executor.executeWith(sender, new String[0]);
+				executor.executeWith(sender, new String[0], new LinkedHashMap<>());
 			})
 			.register();
 

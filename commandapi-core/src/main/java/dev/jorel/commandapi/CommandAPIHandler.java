@@ -25,16 +25,8 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
@@ -301,19 +293,21 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * 
 	 * @param args       set of ordered argument pairs which contain the prompt text
 	 *                   and their argument types
-	 * @param actualArgs
 	 * @param executor   code to be ran when the command is executed
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
+	@SuppressWarnings("unchecked")
 	Command<CommandSourceStack> generateCommand(Argument<?>[] args,
-												CommandAPIExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException {
+		CommandAPIExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
+			Map<Integer, Object> arguments = argsToObjectArr(cmdCtx, args);
+			Object[] argObjs = (Object[]) arguments.get(0);
+			Map<String, Object> argsMap = (LinkedHashMap<String, Object>) arguments.get(1);
 			if (converted) {
-				Object[] argObjs = argsToObjectArr(cmdCtx, args);
 				int resultValue = 0;
 
 				// Return a String[] of arguments for converted commands
@@ -340,12 +334,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 							}
 						}
 					}
-					resultValue += executor.execute(sender, result);
+					resultValue += executor.execute(sender, result, argsMap);
 				}
 
 				return resultValue;
 			} else {
-				return executor.execute(sender, argsToObjectArr(cmdCtx, args));
+				return executor.execute(sender, argObjs, argsMap);
 			}
 		};
 	}
@@ -358,30 +352,35 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @return an Object[] which can be used in (sender, args) ->
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument<?>[] args)
+	Map<Integer, Object> argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument<?>[] args)
 			throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
+
+		// LinkedHashMap for arguments for executor
+		Map<String, Object> argsMap = new LinkedHashMap<>();
 
 		// Populate array
 		for (Argument<?> argument : args) {
 			if (argument.isListed()) {
 				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
+				argsMap.put(argument.getNodeName(), parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
 			}
 		}
 
-		return argList.toArray();
+		Map<Integer, Object> arguments = new HashMap<>();
+		arguments.put(0, argList.toArray());
+		arguments.put(1, argsMap);
+		return arguments;
 	}
 
 	/**
 	 * Parses an argument and converts it into its standard Bukkit type (as defined
 	 * in NMS.java)
-	 * 
-	 * @param type   the argument type
+	 *
 	 * @param cmdCtx the command context
 	 * @param key    the key (declared in arguments)
 	 * @param value  the value (the argument declared in arguments)
-	 * @param sender the command sender
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */

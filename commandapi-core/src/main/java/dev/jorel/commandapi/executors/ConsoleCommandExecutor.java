@@ -24,6 +24,8 @@ import org.bukkit.command.ConsoleCommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+import java.util.Map;
+
 /**
  * A normal command executor for a ConsoleCommandSender
  */
@@ -41,6 +43,21 @@ public interface ConsoleCommandExecutor extends IExecutorNormal<ConsoleCommandSe
 	 *            insertion into the hashmap
 	 */
 	void run(ConsoleCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param sender
+	 *            The sender of this command (a player, the console etc.)
+	 * @param args
+	 *            The arguments given to this command. The objects are
+	 *            determined by the hashmap of arguments IN THE ORDER of
+	 *            insertion into the hashmap
+	 */
+	@Override
+	default void run(ConsoleCommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
+		this.run(sender, args);
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

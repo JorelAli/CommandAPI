@@ -24,6 +24,8 @@ import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+import java.util.Map;
+
 /**
  * An interface that includes the type of an executor (what command senders it
  * can execute) and has a method that executes an executor with a given command
@@ -38,14 +40,15 @@ public interface IExecutorTyped {
 	default ExecutorType getType() {
 		return ExecutorType.ALL;
 	}
-	
+
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
 	 * @param sender the command sender for this command
 	 * @param args the arguments provided to this command
+	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int executeWith(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException;
 
 }
