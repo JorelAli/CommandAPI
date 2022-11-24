@@ -97,7 +97,7 @@
 						</goals>
 						<configuration>
 							<sourceDirs>
-								<sourceDir>${project.basedir}/src/main/dev/jorel/commandapi/examples/kotlin</sourceDir>
+								<sourceDir>${project.basedir}/src/main/kotlin/</sourceDir>
 							</sourceDirs>
 						</configuration>
 					</execution>

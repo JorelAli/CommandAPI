@@ -23,11 +23,11 @@ First, we declare our arguments. We want to use the `BlockPredicateArgument` sin
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:blockpredicatearguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:blockpredicatearguments}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockpredicatearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockpredicatearguments}}
 ```
 
 </div>
@@ -41,11 +41,11 @@ Lastly, we register our command as normal using the `register()` method.
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/java/Examples.java:blockpredicatearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:blockpredicatearguments2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockpredicatearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockpredicatearguments2}}
 ```
 
 </div>
