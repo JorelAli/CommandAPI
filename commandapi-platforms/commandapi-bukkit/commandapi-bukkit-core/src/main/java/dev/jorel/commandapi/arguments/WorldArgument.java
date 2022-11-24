@@ -20,15 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Function;
-
-import org.bukkit.World;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import java.util.function.Function;
 
 /**
  * An argument that represents the Bukkit World object
@@ -41,7 +40,7 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public WorldArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), ((Function<World, String>) World::getName).andThen(String::toLowerCase));
+		super(nodeName, CommandAPIBukkit.get()._ArgumentDimension(), ((Function<World, String>) World::getName).andThen(String::toLowerCase));
 	}
 
 	@Override
@@ -59,8 +58,8 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> World parseArgument(NMS<CommandListenerWrapper> nms,
-		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getDimension(cmdCtx, key);
+	public <CommandListenerWrapper> World parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandListenerWrapper> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return ((CommandAPIBukkit<CommandListenerWrapper>) nms).getDimension(cmdCtx, key);
 	}
 }
