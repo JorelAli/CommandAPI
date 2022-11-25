@@ -200,6 +200,7 @@ public final class CommandAPI {
 			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 			CommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
+		CommandAPIHandler.getInstance().getNMS().registerCustomArgumentType();
 
 		// (Re)send command graph packet to players when they join
 		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {

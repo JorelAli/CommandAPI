@@ -23,6 +23,11 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.ArgumentParseExceptionContext;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -67,5 +72,23 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new StringArgument("string").withExceptionHandler(this::printInfo),
+				new IntegerArgument("int").withExceptionHandler(this::printInfo),
+				new PlayerArgument("player").withExceptionHandler(this::printInfo)
+			)
+			.executes((sender, args) -> {
+				sender.sendMessage(args[0].toString());
+				sender.sendMessage(args[1].toString());
+				sender.sendMessage(args[2].toString());
+			})
+			.register();
+	}
+
+	private <T> T printInfo(ArgumentParseExceptionContext context) throws WrapperCommandSyntaxException {
+		CommandAPI.logNormal("Intercepted error with message: " + context.exception().getMessage());
+		throw CommandAPI.failWithString("Parse failed");
 	}
 }

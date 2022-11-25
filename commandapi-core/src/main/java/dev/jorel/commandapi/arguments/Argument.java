@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import dev.jorel.commandapi.ArgumentTree;
+import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.command.CommandSender;
 
@@ -39,9 +39,6 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -81,44 +78,8 @@ public abstract class Argument<T> extends ArgumentTree {
 	 */
 	protected Argument(String nodeName, ArgumentType<?> rawType) {
 		this.nodeName = nodeName;
-		this.rawType = wrapRawTypeForExceptions(rawType);
+		this.rawType = new ExceptionHandlingArgumentType<>(rawType);
 	}
-
-	private <RawClass> ArgumentType<RawClass> wrapRawTypeForExceptions(ArgumentType<RawClass> rawType) {
-		return new ArgumentType<>() {
-			@Override
-			public RawClass parse(StringReader stringReader) throws CommandSyntaxException {
-				try {
-					return rawType.parse(stringReader);
-				} catch (CommandSyntaxException original) {
-					try {
-						// TODO: It would be cool if this part could return a substitute value if the parse failed
-						//  Unfortunately, exceptionHandler cannot do this since T dose not necessarily equal RawClass
-						//  To do this, I think an additional exceptionHandler for RawClass would need to be added
-						//  This measn Argument would need to be parameterized over RawClass , giving it 2 type
-						//  parameters and ruining backwards compatibility :(
-						exceptionHandler.handleException(new ArgumentParseExceptionContext(
-							new WrapperCommandSyntaxException(original)
-						));
-						throw original;
-					} catch (WrapperCommandSyntaxException newException) {
-						throw newException.getException();
-					}
-				}
-			}
-
-			@Override
-			public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-				return rawType.listSuggestions(context, builder);
-			}
-
-			@Override
-			public Collection<String> getExamples() {
-				return rawType.getExamples();
-			}
-		};
-	}
-
 	/**
 	 * Returns the NMS or brigadier type for this argument.
 	 *

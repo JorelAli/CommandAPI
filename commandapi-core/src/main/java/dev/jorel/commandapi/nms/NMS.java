@@ -397,4 +397,5 @@ public interface NMS<CommandListenerWrapper> {
 		return false;
 	}
 
+    default void registerCustomArgumentType() { }
 }
