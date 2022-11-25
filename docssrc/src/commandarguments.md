@@ -82,4 +82,83 @@ In this example, we want to be able to run any arbitrary command, so we will sim
 
 ## Restricted commands
 
-Blah blah blah blah, something something replace suggestions and branching.
+Restricted commands allows you to restrict what commands a user is allowed to submit in the `CommandArgument`. Commands can be restricted by replacing the `CommandArgument`'s suggestions using the `replaceSuggestions()` method. For better fine-tuning of what commands a user can submit, commands can also be restricted by using _suggestion branches_.
+
+<!-- TODO: Give an example using .replaceSuggestions(). Need to explain null as well! -->
+
+<div class="example">
+
+### Example - Restricting commands using suggestion branches
+
+To demonstrate restricting commands, let's create a command argument that allows players to enter one of the following commands:
+
+```mccmd
+/tp <player> <target>
+/give <player> <item> <amount>
+```
+
+Let's also add a restriction that the player can only use diamonds or dirt for the `/give` command, and they can only specify an amount if they selected dirt. Overall, our command argument should allow players to follow this path:
+
+<div style="position: relative; left: -50px;">
+
+\\[
+\texttt{(start)}\\\\
+\swarrow\hspace{2cm}\searrow\\\\
+\swarrow\hspace{3.4cm}\searrow\\\\
+\texttt{tp}\hspace{4cm}\texttt{give}\\\\
+\swarrow\hspace{6cm}\searrow\\\\
+\texttt{player}\hspace{6cm}\texttt{player}\\\\
+\swarrow\hspace{7cm}\swarrow\hspace{2cm}\searrow\\\\
+\texttt{target}\hspace{5cm}\texttt{diamond}\hspace{3cm}\texttt{dirt}\\\\
+\hspace{6.7cm}\texttt{minecraft:diamond}\hspace{3cm}\texttt{minecraft:dirt}\\\\
+\hspace{7.5cm}\hspace{4cm}\downarrow\\\\
+\hspace{7.5cm}\hspace{4cm}\texttt{(amount)}\\\\
+\\]
+
+</div>
+
+In our diagram above, we have two main branches: `/tp` and `/give`. The `/tp` branch has `player` followed by `target`, and the `/give` branch has `player` and then that branches off into two new sections.
+
+We can implement our `/tp` branch using the `SuggestionsBranch.suggest()` method, then provide argument suggestions for our options. In this case, we have `tp` and then a list of online players. We include the list of online players twice, because we need suggestions for `<player>` as well as `<target>`:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:command_argument_branch_tp}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:command_argument_branch_tp}}
+```
+
+</div>
+
+For the `/give` branch, we can use a similar thing, but we need to tell the CommandArgument that the `/give` command branches into "diamond" and "dirt" suggestions. We can do this by using the `.branch()` method to add a new nested list of suggestions:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:command_argument_branch_give}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:command_argument_branch_give}}
+```
+
+</div>
+
+Adding everything together, we get this fully completed CommandArgument:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:command_argument_branch}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:command_argument_branch}}
+```
+
+</div>
+
+</div>
