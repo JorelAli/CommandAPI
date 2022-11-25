@@ -28,6 +28,7 @@ import java.util.Map;
 /**
  * A resulting command executor for a NativeProxyCommandSender
  */
+@FunctionalInterface
 public interface NativeResultingCommandExecutor extends IExecutorResulting<NativeProxyCommandSender> {
 
 	/**
@@ -42,14 +43,12 @@ public interface NativeResultingCommandExecutor extends IExecutorResulting<Nativ
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender The sender of this command (a player, the console etc.)
-	 * @param args The arguments given to this command.
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 */
 	@Override
-	default int run(NativeProxyCommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-		return this.run(sender, args);
+	default int run(ExecutionInfo<NativeProxyCommandSender> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
 	}
 
 	/**

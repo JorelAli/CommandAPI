@@ -29,6 +29,7 @@ import java.util.Map;
 /**
  * A normal command executor for a BlockCommandSender
  */
+@FunctionalInterface
 public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockCommandSender> {
 
 	/**
@@ -42,13 +43,11 @@ public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockComman
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender The sender of this command (a player, the console etc.)
-	 * @param args The arguments given to this command.
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 */
 	@Override
-	default void run(BlockCommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-		this.run(sender, args);
+	default void run(ExecutionInfo<BlockCommandSender> info) throws WrapperCommandSyntaxException {
+		this.run(info.sender(), info.args());
 	}
 
 	/**

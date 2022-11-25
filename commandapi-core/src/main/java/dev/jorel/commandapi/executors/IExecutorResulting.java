@@ -34,25 +34,21 @@ public interface IExecutorResulting<T extends CommandSender> extends IExecutorTy
 
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param sender the command sender for this command
-	 * @param args the arguments provided to this command
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	default int executeWith(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-		return this.run((T) sender, args, argsMap);
+	default int executeWith(ExecutionInfo<CommandSender> info) throws WrapperCommandSyntaxException {
+		return this.run((ExecutionInfo<T>) info);
 	}
 
 	/**
 	 * Executes the command.
-	 * @param sender the command sender for this command
-	 * @param args the arguments provided to this command
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @return the value returned by this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int run(T sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException;
+	int run(ExecutionInfo<T> info) throws WrapperCommandSyntaxException;
 }

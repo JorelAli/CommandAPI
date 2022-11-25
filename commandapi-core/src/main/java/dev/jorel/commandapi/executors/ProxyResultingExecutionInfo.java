@@ -5,19 +5,17 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 import java.util.Map;
 
+@FunctionalInterface
 public interface ProxyResultingExecutionInfo extends IExecutorResulting<NativeProxyCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender  the command sender for this command
-	 * @param args    the arguments provided to this command
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
-	 * @return
+	 * @param info The ExecutionInfo for this command
+	 * @return the command result
 	 * @throws WrapperCommandSyntaxException
 	 */
-	@Override
-	int run(NativeProxyCommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException;
+	int run(ExecutionInfo<NativeProxyCommandSender> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

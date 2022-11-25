@@ -40,12 +40,12 @@ abstract class Executable<T extends Executable<T>> {
 
 					@Override
 					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						run(sender, args, new LinkedHashMap<>());
+						executor.executeWith(new ExecutionInfo<>(sender, args, new LinkedHashMap<>()));
 					}
 
 					@Override
-					public void run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-						executor.executeWith(sender, args, argsMap);
+					public void run(ExecutionInfo<CommandSender> info) throws WrapperCommandSyntaxException {
+						executor.executeWith(info);
 					}
 
 					@Override
@@ -72,9 +72,10 @@ abstract class Executable<T extends Executable<T>> {
 			for(ExecutorType type : types) {
 				this.executor.addNormalExecutor(new CommandExecutionInfo() {
 
+
 					@Override
-					public void run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-						executor.executeWith(sender, args, argsMap);
+					public void run(ExecutionInfo<CommandSender> info) throws WrapperCommandSyntaxException {
+						executor.executeWith(info);
 					}
 
 					@Override
@@ -103,12 +104,12 @@ abstract class Executable<T extends Executable<T>> {
 
 					@Override
 					public int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						return run(sender, args, new LinkedHashMap<>());
+						return run(new ExecutionInfo<>(sender, args, new LinkedHashMap<>()));
 					}
 
 					@Override
-					public int run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-						return executor.executeWith(sender, args, argsMap);
+					public int run(ExecutionInfo<CommandSender> info) throws WrapperCommandSyntaxException {
+						return executor.executeWith(info);
 					}
 
 					@Override
@@ -136,8 +137,8 @@ abstract class Executable<T extends Executable<T>> {
 				this.executor.addResultingExecutor(new ResultingCommandExecutionInfo() {
 
 					@Override
-					public int run(CommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-						return executor.executeWith(sender, args, argsMap);
+					public int run(ExecutionInfo<CommandSender> info) throws WrapperCommandSyntaxException {
+						return executor.executeWith(info);
 					}
 
 					@Override
@@ -165,7 +166,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(Player, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")

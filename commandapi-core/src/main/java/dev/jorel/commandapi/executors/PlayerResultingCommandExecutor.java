@@ -31,6 +31,7 @@ import java.util.Map;
 /**
  * A resulting command executor for a Player
  */
+@FunctionalInterface
 public interface PlayerResultingCommandExecutor extends IExecutorResulting<Player> {
 
 	/**
@@ -45,15 +46,13 @@ public interface PlayerResultingCommandExecutor extends IExecutorResulting<Playe
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender  the command sender for this command
-	 * @param args    the arguments provided to this command
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 * @throws WrapperCommandSyntaxException
 	 */
 	@Override
-	default int run(Player sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-		return this.run(sender, args);
+	default int run(ExecutionInfo<Player> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
 	}
 
 	/**

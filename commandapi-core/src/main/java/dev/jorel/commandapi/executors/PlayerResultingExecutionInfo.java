@@ -8,14 +8,11 @@ import java.util.Map;
 public interface PlayerResultingExecutionInfo extends IExecutorResulting<Player> {
 
 	/**
-	 * @param sender  the command sender for this command
-	 * @param args    the arguments provided to this command
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 * @throws WrapperCommandSyntaxException
 	 */
-	@Override
-	int run(Player sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException;
+	int run(ExecutionInfo<Player> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

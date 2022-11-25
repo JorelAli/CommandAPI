@@ -43,14 +43,12 @@ public interface NativeCommandExecutor extends IExecutorNormal<NativeProxyComman
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender  the command sender for this command
-	 * @param args    the arguments provided to this command
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
 	@Override
-	default void run(NativeProxyCommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-		this.run(sender, args);
+	default void run(ExecutionInfo<NativeProxyCommandSender> info) throws WrapperCommandSyntaxException {
+		this.run(info.sender(), info.args());
 	}
 
 	/**

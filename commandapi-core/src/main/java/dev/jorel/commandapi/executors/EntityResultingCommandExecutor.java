@@ -29,6 +29,7 @@ import java.util.Map;
 /**
  * A resulting command executor for an Entity
  */
+@FunctionalInterface
 public interface EntityResultingCommandExecutor extends IExecutorResulting<Entity> {
 
 	/**
@@ -43,14 +44,12 @@ public interface EntityResultingCommandExecutor extends IExecutorResulting<Entit
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender The sender of this command (a player, the console etc.)
-	 * @param args The arguments given to this command.
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 */
 	@Override
-	default int run(Entity sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-		return this.run(sender, args);
+	default int run(ExecutionInfo<Entity> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
 	}
 
 	/**

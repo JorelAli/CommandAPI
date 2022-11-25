@@ -5,18 +5,16 @@ import org.bukkit.entity.Entity;
 
 import java.util.Map;
 
+@FunctionalInterface
 public interface EntityResultingExecutionInfo extends IExecutorResulting<Entity> {
 
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender The sender of this command (a player, the console etc.)
-	 * @param args The arguments given to this command.
-	 * @param argsMap the arguments provided to this command mapped to their node names. This uses a LinkedHashMap
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 */
-	@Override
-	int run(Entity sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException;
+	int run(ExecutionInfo<Entity> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

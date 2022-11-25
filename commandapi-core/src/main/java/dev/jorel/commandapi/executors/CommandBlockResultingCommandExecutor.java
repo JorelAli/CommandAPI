@@ -23,12 +23,14 @@ package dev.jorel.commandapi.executors;
 import org.bukkit.command.BlockCommandSender;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import org.bukkit.command.CommandSender;
 
 import java.util.Map;
 
 /**
  * A resulting command executor for a BlockCommandSender
  */
+@FunctionalInterface
 public interface CommandBlockResultingCommandExecutor extends IExecutorResulting<BlockCommandSender> {
 
 	/**
@@ -48,18 +50,13 @@ public interface CommandBlockResultingCommandExecutor extends IExecutorResulting
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 * @param info The ExecutionInfo for this command
 	 *
 	 * @return the result of this command
 	 */
 	@Override
-	default int run(BlockCommandSender sender, Object[] args, Map<String, Object> argsMap) throws WrapperCommandSyntaxException {
-		return this.run(sender, args);
+	default int run(ExecutionInfo<BlockCommandSender> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
 	}
 
 	/**
