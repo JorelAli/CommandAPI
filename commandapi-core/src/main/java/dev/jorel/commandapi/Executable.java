@@ -188,7 +188,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(Player, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -212,7 +212,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -234,7 +234,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -258,7 +258,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -280,7 +280,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(Entity, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -304,7 +304,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(BlockCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -326,7 +326,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(BlockCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -350,7 +350,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(ConsoleCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -372,7 +372,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(ConsoleCommandSender, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -396,7 +396,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(NativeCommandExecutor, Object[], Map&lt;String, Object&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -418,7 +418,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param info A lambda of type <code>(NativeCommandExecutor, Object[], Map&lt;String, Object&gt;) -&gt; int</code> that will be executed when the command is run
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
