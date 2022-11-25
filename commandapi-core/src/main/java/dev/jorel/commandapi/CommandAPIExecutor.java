@@ -117,10 +117,11 @@ public class CommandAPIExecutor<T extends CommandSender> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private <Sender extends CommandSender> int execute(List<? extends IExecutorTyped> executors, ExecutionInfo<Sender> info, ExecutorType type) throws WrapperCommandSyntaxException {
 		for (IExecutorTyped executor : executors) {
 			if (executor.getType() == type) {
-				return executor.executeWith(info);
+				return executor.executeWith((ExecutionInfo<CommandSender>) info);
 			}
 		}
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());

@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
+import dev.jorel.commandapi.executors.ExecutionInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -206,7 +207,7 @@ public final class Converter {
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> {
-				executor.executeWith(sender, new String[0], new LinkedHashMap<>());
+				executor.executeWith(new ExecutionInfo<>(sender, new String[0], new LinkedHashMap<>()));
 			})
 			.register();
 
