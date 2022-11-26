@@ -379,6 +379,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>https://github.com/JorelAli/CommandAPI/issues/340 Adds Kotlin examples in the documentation</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/341 Fix incorrect code block in normal executors documentation page</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/351 Adds support for a ListArgument with the TextArgument backend, to allow inline lists</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/358 Adds a new WorldArgument argument that lets you get a list of Minecraft dimensions</li>
                 </ul>
             </td>
         </tr>

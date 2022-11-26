@@ -9,10 +9,10 @@ import org.bukkit.Axis;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -128,9 +128,15 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}
-
+	
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEnvironment() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}
@@ -267,7 +273,13 @@ public abstract class BlankNMS implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}

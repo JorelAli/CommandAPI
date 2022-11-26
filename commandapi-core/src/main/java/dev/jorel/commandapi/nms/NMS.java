@@ -30,7 +30,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import com.mojang.brigadier.Message;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -58,6 +57,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -95,6 +95,8 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentChatFormat();
 
 	ArgumentType<?> _ArgumentDimension();
+
+	ArgumentType<?> _ArgumentEnvironment();
 
 	ArgumentType<?> _ArgumentEnchantment();
 
@@ -232,7 +234,9 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw);
 
-	Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+
+	Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

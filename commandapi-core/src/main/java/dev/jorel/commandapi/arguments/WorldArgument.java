@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ * Copyright 2022 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -22,7 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
-import org.bukkit.World.Environment;
+import org.bukkit.World;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -31,37 +31,36 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents the Bukkit Environment object
- * 
- * @deprecated Use {@link WorldArgument} instead.
+ * An argument that represents the Bukkit World object
  */
-@Deprecated
-public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment> {
-	
+public class WorldArgument extends SafeOverrideableArgument<World, World> {
+
 	/**
-	 * An Environment argument. Represents Bukkit's Environment object
-	 * @param nodeName the name of the node for this argument
+	 * A World argument. Represents Bukkit's World object
 	 * 
-	 * @deprecated Use {@link WorldArgument#WorldArgument(String)} instead.
+	 * @param nodeName the name of the node for this argument
 	 */
-	@Deprecated
-	public EnvironmentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEnvironment(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
+	public WorldArgument(String nodeName) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), ((Function<World, String>) World::getName).andThen(String::toLowerCase));
 	}
-	
+
 	@Override
-	public Class<Environment> getPrimitiveType() {
-		return Environment.class;
+	public Class<World> getPrimitiveType() {
+		return World.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.ENVIRONMENT;
+		// We're keeping this underlying internal name as Dimension. The only thing
+		// that differs is the name of this class which is "WorldArgument", because
+		// the CommandAPI argument class names represent Bukkit objects wherever
+		// possible
+		return CommandAPIArgumentType.DIMENSION;
 	}
-	
+
 	@Override
-	public <CommandListenerWrapper> Environment parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getEnvironment(cmdCtx, key);
+	public <CommandListenerWrapper> World parseArgument(NMS<CommandListenerWrapper> nms,
+		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return nms.getDimension(cmdCtx, key);
 	}
 }

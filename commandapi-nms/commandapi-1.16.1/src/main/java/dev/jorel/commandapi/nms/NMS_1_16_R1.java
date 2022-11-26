@@ -22,7 +22,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import com.mojang.brigadier.Message;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -68,6 +67,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -254,6 +254,11 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
+		return ArgumentDimension.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEnvironment() {
 		return ArgumentDimension.a();
 	}
 
@@ -554,9 +559,15 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		}
 	}
 
+	@Differs(from = "1.15", by = "Implement DimensionArgument")
+	@Override
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentDimension.a(cmdCtx, key).getWorld();
+	}
+
 	@Differs(from = "1.15", by = "Implement EnvironmentArgument for all environments")
 	@Override
-	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
 	}

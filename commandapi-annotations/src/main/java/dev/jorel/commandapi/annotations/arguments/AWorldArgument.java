@@ -18,21 +18,20 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.annotations.arguments;
 
-import dev.jorel.commandapi.IStringTooltip;
-import org.bukkit.command.CommandSender;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.util.Collection;
-import java.util.function.Function;
+import dev.jorel.commandapi.arguments.WorldArgument;
 
 /**
- * An argument that accepts a list of objects
- * 
- * @param <T> the type that this list argument generates a list of.
+ * Annotation equivalent of the {@link WorldArgument}
  */
-public class ListTextArgument<T> extends ListArgumentCommon<T> {
-	ListTextArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
-		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, true);
-	}
+@Primitive("org.bukkit.World")
+@Retention(RetentionPolicy.SOURCE)
+@Target(ElementType.PARAMETER)
+public @interface AWorldArgument {
 }

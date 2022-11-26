@@ -166,7 +166,7 @@ The list of types are based on [the list of argument types from the Minecraft Wi
 | `minecraft:color`              | A chat color (e.g. `red`, `green`)                           |
 | `minecraft:column_pos`         | A location of x and z coordinates (whole numbers)            |
 | `minecraft:component`          | Raw JSON text                                                |
-| `minecraft:dimension`          | A dimension, (e.g. `minecraft:overworld`)                    |
+| `minecraft:dimension`          | A dimension/world, (e.g. `minecraft:overworld`)              |
 | `minecraft:entity`             | An entity (e.g. `Notch`)                                     |
 | `minecraft:entity_summon`      | An entity type (e.g. `cow`, `wither`)                        |
 | `minecraft:float_range`        | A range of decimal numbers                                   |
@@ -192,3 +192,5 @@ The list of types are based on [the list of argument types from the Minecraft Wi
 | `minecraft:uuid`               | A UUID (e.g. `dd12be42-52a9-4a91-a8a1-11c01849e498`)         |
 | `minecraft:vec2`               | A location of x and z coordinates (decimal numbers)          |
 | `minecraft:vec3`               | A location of x, y and z coordinates (decimal numbers)       |
+
+<!-- api:environment exists, but is deprecated and shouldn't be used anymore! -->

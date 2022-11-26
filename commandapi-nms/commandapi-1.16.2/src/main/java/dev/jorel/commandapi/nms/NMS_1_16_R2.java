@@ -259,6 +259,11 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEnvironment() {
+		return ArgumentDimension.a();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}
@@ -554,7 +559,13 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
-	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return ArgumentDimension.a(cmdCtx, key).getWorld();
+	}
+
+	@Override
+	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
 	}

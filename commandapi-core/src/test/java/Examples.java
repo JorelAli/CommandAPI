@@ -31,7 +31,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-import com.mojang.brigadier.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -80,6 +79,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.StringRange;
@@ -111,6 +111,8 @@ import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.CommandArgument;
+import dev.jorel.commandapi.arguments.CommandResult;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -146,9 +148,11 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.SoundArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.SuggestionsBranch;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.arguments.WorldArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -688,6 +692,20 @@ new CommandAPICommand("createworld")
     })
     .register();
 /* ANCHOR_END: environmentarguments */
+}
+
+{
+/* ANCHOR: worldarguments */
+new CommandAPICommand("unloadworld")
+    .withArguments(new WorldArgument("world"))
+    .executes((sender, args) -> {
+        World world = (World) args[0];
+
+        // Unload the world (and save the world's chunks)
+        Bukkit.getServer().unloadWorld(world, true);
+    })
+    .register();
+/* ANCHOR_END: worldarguments */
 }
 
 {
@@ -2208,6 +2226,75 @@ public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
     } else {
         throw CommandAPI.failWithString("You're not looking at a sign!");
     }
+}
+
+{
+/* ANCHOR: command_argument_sudo */
+new CommandAPICommand("sudo")
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new CommandArgument("command"))
+    .executes((sender, args) -> {
+        Player target = (Player) args[0];
+        CommandResult command = (CommandResult) args[1];
+
+        command.command().execute(target, command.command().getLabel(), command.args());
+    })
+    .register();
+/* ANCHOR_END: command_argument_sudo */
+}
+
+{
+
+/* ANCHOR: command_argument_branch_give */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("give"),
+    ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+).branch(
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+        ArgumentSuggestions.empty()
+    ),
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+        null,
+        ArgumentSuggestions.empty()
+    )
+)
+/* ANCHOR_END: command_argument_branch_give */
+;
+/* ANCHOR: command_argument_branch_tp */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("tp"),
+    ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+    ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+)
+/* ANCHOR_END: command_argument_branch_tp */
+;
+
+/* ANCHOR: command_argument_branch */
+new CommandArgument("command")
+    .branchSuggestions(
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("give"),
+            ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+        ).branch(
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+                ArgumentSuggestions.empty()
+            ),
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+                null,
+                ArgumentSuggestions.empty()
+            )
+        ),
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("tp"),
+            ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+            ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+        )
+    );
+/* ANCHOR_END: command_argument_branch */
 }
 
 
