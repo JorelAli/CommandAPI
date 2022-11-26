@@ -9,7 +9,7 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class CustomArgumentInfo<T> implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, CustomArgumentInfo<T>.Template> {
+public class ExceptionHandlingArgumentInfo_Common<T> implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, ExceptionHandlingArgumentInfo_Common<T>.Template> {
 	@Override
 	public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {
 		ArgumentType<T> baseType = template.baseType;
@@ -34,7 +34,7 @@ public class CustomArgumentInfo<T> implements ArgumentTypeInfo<ExceptionHandling
 		// be called to deserialize the ArgumentType info that wasn't put into the packet
 		// anyway. Also, the server shouldn't ever deserialize a *ClientBound*CommandPacket
 		// either. If this method ever gets called, either you or I are doing something very wrong!
-		throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.CustomArgumentInfo#deserializeFromNetwork for more information");
+		throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_Common#deserializeFromNetwork for more information");
 		// Including a mini-stacktrace here in case this exception shows up
 		// on a client-disconnected screen, which is not very helpful
 	}
@@ -70,14 +70,14 @@ public class CustomArgumentInfo<T> implements ArgumentTypeInfo<ExceptionHandling
 			// Same as CustomArgumentInfo#deserializeFromNetwork. An
 			// ExceptionHandlingArgumentType should never be built
 			// from a packet, so this method shouldn't be used
-			throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.CustomArgumentInfo.Template#instantiate for more information");
+			throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_Common.Template#instantiate for more information");
 			// Including a mini-stacktrace here in case this exception shows up
 			// on a client-disconnected screen, which is not very helpful
 		}
 
 		@Override
 		public ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, ?> type() {
-			return CustomArgumentInfo.this;
+			return ExceptionHandlingArgumentInfo_Common.this;
 		}
 	}
 }

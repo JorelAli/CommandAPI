@@ -27,6 +27,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -38,6 +39,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.core.MappedRegistry;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -721,4 +726,23 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftPlayer")
 	public abstract void resendPackets(Player player);
+
+	@Override
+	@Differs(from = {"1.14, 1.15, 1.16"}, by = "Using ArgumentTypeInfos and Registry.COMMAND_ARGUMENT_TYPE instead of ArgumentRegistry")
+	public void registerCustomArgumentType() {
+		try {
+			Field mapField = CommandAPIHandler.getInstance().getField(ArgumentTypeInfos.class, "a");
+			Map infoMap = (Map) mapField.get(null);
+
+			ExceptionHandlingArgumentInfo_Common info = new ExceptionHandlingArgumentInfo_Common();
+			infoMap.put(ExceptionHandlingArgumentType.class, info);
+
+			Field isFrozen = CommandAPIHandler.getInstance().getField(MappedRegistry.class, "ca");
+			isFrozen.set(Registry.COMMAND_ARGUMENT_TYPE, false);
+
+			Registry.<ArgumentTypeInfo<?, ?>>register(Registry.COMMAND_ARGUMENT_TYPE, "commandapi:exception_handler", info);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -20,26 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import com.google.gson.JsonObject;
-import com.mojang.brigadier.arguments.ArgumentType;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
-import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Either;
-
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -47,9 +29,9 @@ import io.netty.channel.Channel;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
-
-import java.lang.reflect.Field;
-import java.util.Map;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 // Mojang-Mapped reflection
 /**
@@ -72,24 +54,6 @@ public class NMS_1_19_1_R1 extends NMS_1_19_Common {
 		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
 		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
 			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_1_R1_ChatPreviewHandler(this, plugin, player));
-		}
-	}
-
-	@Override
-	public void registerCustomArgumentType() {
-		try {
-			Field mapField = CommandAPIHandler.getInstance().getField(ArgumentTypeInfos.class, "a");
-			Map infoMap = (Map) mapField.get(null);
-
-			CustomArgumentInfo info = new CustomArgumentInfo();
-			infoMap.put(ExceptionHandlingArgumentType.class, info);
-
-			Field isFrozen = CommandAPIHandler.getInstance().getField(MappedRegistry.class, "ca");
-			isFrozen.set(Registry.COMMAND_ARGUMENT_TYPE, false);
-
-			Registry.<ArgumentTypeInfo<?, ?>>register(Registry.COMMAND_ARGUMENT_TYPE, "commandapi:argument", info);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
 		}
 	}
 }

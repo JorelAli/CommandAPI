@@ -386,6 +386,8 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	void resendPackets(Player player);
 
+	void registerCustomArgumentType();
+
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
@@ -400,6 +402,4 @@ public interface NMS<CommandListenerWrapper> {
 	default boolean canUseChatPreview() {
 		return false;
 	}
-
-	default void registerCustomArgumentType() {};
 }

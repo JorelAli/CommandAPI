@@ -16,6 +16,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import be.seeseemelk.mockbukkit.ServerMock;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_Common;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -423,6 +425,7 @@ public class MockNMS extends ArgumentNMS {
 		map.put(TemplateMirrorArgument.class, SingletonArgumentInfo.a(TemplateMirrorArgument::a));
 		map.put(TemplateRotationArgument.class, SingletonArgumentInfo.a(TemplateRotationArgument::a));
 		map.put(ArgumentUUID.class, SingletonArgumentInfo.a(ArgumentUUID::a));
+		map.put(ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentInfo_Common());
 	}
 
 	@Override
@@ -436,4 +439,8 @@ public class MockNMS extends ArgumentNMS {
 		return;
 	}
 
+	@Override
+	public void registerCustomArgumentType() {
+		// Already done by initializeArgumentsInArgumentTypeInfos
+	}
 }

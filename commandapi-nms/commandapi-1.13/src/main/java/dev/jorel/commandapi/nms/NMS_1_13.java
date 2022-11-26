@@ -16,6 +16,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -93,63 +95,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_13_R1.Advancement;
-import net.minecraft.server.v1_13_R1.ArgumentBlockPredicate;
-import net.minecraft.server.v1_13_R1.ArgumentChat;
-import net.minecraft.server.v1_13_R1.ArgumentChatComponent;
-import net.minecraft.server.v1_13_R1.ArgumentChatFormat;
-import net.minecraft.server.v1_13_R1.ArgumentCriterionValue;
-import net.minecraft.server.v1_13_R1.ArgumentEnchantment;
-import net.minecraft.server.v1_13_R1.ArgumentEntity;
-import net.minecraft.server.v1_13_R1.ArgumentEntitySummon;
-import net.minecraft.server.v1_13_R1.ArgumentItemPredicate;
-import net.minecraft.server.v1_13_R1.ArgumentItemStack;
-import net.minecraft.server.v1_13_R1.ArgumentMathOperation;
-import net.minecraft.server.v1_13_R1.ArgumentMinecraftKeyRegistered;
-import net.minecraft.server.v1_13_R1.ArgumentMobEffect;
-import net.minecraft.server.v1_13_R1.ArgumentNBTTag;
-import net.minecraft.server.v1_13_R1.ArgumentParticle;
-import net.minecraft.server.v1_13_R1.ArgumentPosition;
-import net.minecraft.server.v1_13_R1.ArgumentProfile;
-import net.minecraft.server.v1_13_R1.ArgumentRotation;
-import net.minecraft.server.v1_13_R1.ArgumentRotationAxis;
-import net.minecraft.server.v1_13_R1.ArgumentScoreboardCriteria;
-import net.minecraft.server.v1_13_R1.ArgumentScoreboardObjective;
-import net.minecraft.server.v1_13_R1.ArgumentScoreboardSlot;
-import net.minecraft.server.v1_13_R1.ArgumentScoreboardTeam;
-import net.minecraft.server.v1_13_R1.ArgumentScoreholder;
-import net.minecraft.server.v1_13_R1.ArgumentTag;
-import net.minecraft.server.v1_13_R1.ArgumentTile;
-import net.minecraft.server.v1_13_R1.ArgumentVec2;
-import net.minecraft.server.v1_13_R1.ArgumentVec3;
-import net.minecraft.server.v1_13_R1.BlockPosition;
-import net.minecraft.server.v1_13_R1.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R1.CompletionProviders;
-import net.minecraft.server.v1_13_R1.CriterionConditionValue;
 import net.minecraft.server.v1_13_R1.CriterionConditionValue.c;
-import net.minecraft.server.v1_13_R1.CustomFunction;
-import net.minecraft.server.v1_13_R1.CustomFunctionData;
-import net.minecraft.server.v1_13_R1.DedicatedServer;
-import net.minecraft.server.v1_13_R1.Entity;
-import net.minecraft.server.v1_13_R1.EntityPlayer;
-import net.minecraft.server.v1_13_R1.EntitySelector;
-import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.EnumDirection.EnumAxis;
-import net.minecraft.server.v1_13_R1.IBlockData;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R1.ICompletionProvider;
-import net.minecraft.server.v1_13_R1.ItemStack;
-import net.minecraft.server.v1_13_R1.LootTable;
-import net.minecraft.server.v1_13_R1.LootTableRegistry;
-import net.minecraft.server.v1_13_R1.MinecraftKey;
-import net.minecraft.server.v1_13_R1.MinecraftServer;
-import net.minecraft.server.v1_13_R1.ParticleParam;
-import net.minecraft.server.v1_13_R1.ParticleParamBlock;
-import net.minecraft.server.v1_13_R1.ParticleParamItem;
-import net.minecraft.server.v1_13_R1.ParticleParamRedstone;
-import net.minecraft.server.v1_13_R1.ShapeDetectorBlock;
-import net.minecraft.server.v1_13_R1.Vec2F;
-import net.minecraft.server.v1_13_R1.Vec3D;
 
 /**
  * NMS implementation for Minecraft 1.13
@@ -959,6 +907,6 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 
 	@Override
 	public void registerCustomArgumentType() {
-
+		ArgumentRegistry.a(new MinecraftKey("commandapi:exception_handler"), ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentSerializer_1_13());
 	}
 }

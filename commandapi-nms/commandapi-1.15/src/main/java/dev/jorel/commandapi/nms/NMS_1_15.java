@@ -18,6 +18,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -946,6 +947,11 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
+	}
+
+	@Override
+	public void registerCustomArgumentType() {
+		ArgumentRegistry.a("commandapi:exception_handler", ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentSerializer_1_15());
 	}
 
 	@Override

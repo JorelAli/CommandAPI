@@ -16,6 +16,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -93,66 +95,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_13_R2.Advancement;
-import net.minecraft.server.v1_13_R2.ArgumentBlockPredicate;
-import net.minecraft.server.v1_13_R2.ArgumentChat;
-import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
-import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
-import net.minecraft.server.v1_13_R2.ArgumentCriterionValue;
-import net.minecraft.server.v1_13_R2.ArgumentDimension;
-import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
-import net.minecraft.server.v1_13_R2.ArgumentEntity;
-import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
-import net.minecraft.server.v1_13_R2.ArgumentItemPredicate;
-import net.minecraft.server.v1_13_R2.ArgumentItemStack;
-import net.minecraft.server.v1_13_R2.ArgumentMathOperation;
-import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
-import net.minecraft.server.v1_13_R2.ArgumentMobEffect;
-import net.minecraft.server.v1_13_R2.ArgumentNBTTag;
-import net.minecraft.server.v1_13_R2.ArgumentParticle;
-import net.minecraft.server.v1_13_R2.ArgumentPosition;
-import net.minecraft.server.v1_13_R2.ArgumentProfile;
-import net.minecraft.server.v1_13_R2.ArgumentRotation;
-import net.minecraft.server.v1_13_R2.ArgumentRotationAxis;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardCriteria;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardObjective;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
-import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
-import net.minecraft.server.v1_13_R2.ArgumentScoreholder;
-import net.minecraft.server.v1_13_R2.ArgumentTag;
-import net.minecraft.server.v1_13_R2.ArgumentTile;
-import net.minecraft.server.v1_13_R2.ArgumentVec2;
-import net.minecraft.server.v1_13_R2.ArgumentVec2I;
-import net.minecraft.server.v1_13_R2.ArgumentVec3;
-import net.minecraft.server.v1_13_R2.BlockPosition;
-import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R2.CompletionProviders;
-import net.minecraft.server.v1_13_R2.CriterionConditionValue;
 import net.minecraft.server.v1_13_R2.CriterionConditionValue.c;
-import net.minecraft.server.v1_13_R2.CustomFunction;
-import net.minecraft.server.v1_13_R2.CustomFunctionData;
-import net.minecraft.server.v1_13_R2.DedicatedServer;
-import net.minecraft.server.v1_13_R2.DimensionManager;
-import net.minecraft.server.v1_13_R2.Entity;
-import net.minecraft.server.v1_13_R2.EntityPlayer;
-import net.minecraft.server.v1_13_R2.EntitySelector;
 import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
-import net.minecraft.server.v1_13_R2.IBlockData;
 import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_13_R2.ICompletionProvider;
-import net.minecraft.server.v1_13_R2.IRegistry;
-import net.minecraft.server.v1_13_R2.ItemStack;
-import net.minecraft.server.v1_13_R2.LootTable;
-import net.minecraft.server.v1_13_R2.LootTableRegistry;
-import net.minecraft.server.v1_13_R2.MinecraftKey;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
-import net.minecraft.server.v1_13_R2.ParticleParam;
-import net.minecraft.server.v1_13_R2.ParticleParamBlock;
-import net.minecraft.server.v1_13_R2.ParticleParamItem;
-import net.minecraft.server.v1_13_R2.ParticleParamRedstone;
-import net.minecraft.server.v1_13_R2.ShapeDetectorBlock;
-import net.minecraft.server.v1_13_R2.Vec2F;
-import net.minecraft.server.v1_13_R2.Vec3D;
 
 abstract class NMSWrapper_1_13_1 implements NMS<CommandListenerWrapper> {}
 
@@ -970,6 +915,11 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
+	}
+
+	@Override
+	public void registerCustomArgumentType() {
+		ArgumentRegistry.a(new MinecraftKey("commandapi:exception_handler"), ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentSerializer_1_13_1());
 	}
 
 	@Override
