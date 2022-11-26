@@ -22,12 +22,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.Time;
-
-import java.util.Optional;
 
 /**
  * An argument that represents a duration of time in ticks
@@ -56,18 +53,5 @@ public class TimeArgument extends SafeOverrideableArgument<Integer, Time> implem
 	public <CommandListenerWrapper> Integer parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getTime(cmdCtx, key);
-	}
-
-	private InitialParseExceptionHandler<Integer> exceptionHandler;
-
-	@Override
-	public Argument<Integer> withInitialParseExceptionHandler(InitialParseExceptionHandler<Integer> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Integer>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -23,11 +23,8 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.nms.NMS;
-
-import java.util.Optional;
 
 /**
  * An argument that represents primitive Java doubles
@@ -84,18 +81,5 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double> imp
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
-	}
-
-	private InitialParseExceptionHandler<Double> exceptionHandler;
-
-	@Override
-	public Argument<Double> withInitialParseExceptionHandler(InitialParseExceptionHandler<Double> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return null;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Double>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -20,15 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.potion.PotionEffectType;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
-
-import java.util.Optional;
+import org.bukkit.potion.PotionEffectType;
 
 /**
  * An argument that represents the Bukkit PotionEffectType object
@@ -57,18 +53,5 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	public <CommandListenerWrapper> PotionEffectType parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getPotionEffect(cmdCtx, key);
-	}
-
-	private InitialParseExceptionHandler<Object> exceptionHandler;
-
-	@Override
-	public Argument<PotionEffectType> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

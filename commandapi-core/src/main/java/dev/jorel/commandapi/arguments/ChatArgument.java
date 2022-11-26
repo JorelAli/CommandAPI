@@ -20,20 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.Optional;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * An argument that represents chat with entity selectors
@@ -112,18 +110,5 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	public ChatArgument usePreview(boolean usePreview) {
 		this.usePreview = usePreview;
 		return this;
-	}
-
-	private InitialParseExceptionHandler<Object> exceptionHandler;
-
-	@Override
-	public Argument<BaseComponent[]> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -20,15 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.Location;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
-
-import java.util.Optional;
+import org.bukkit.Location;
 
 /**
  * An argument that represents the Bukkit {@link Location} object
@@ -82,18 +78,5 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	public <CommandListenerWrapper> Location parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return isPrecise ? nms.getLocationPrecise(cmdCtx, key) : nms.getLocationBlock(cmdCtx, key);
-	}
-
-	private InitialParseExceptionHandler<Object> exceptionHandler;
-
-	@Override
-	public Argument<Location> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -20,16 +20,12 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.NamespacedKey;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
-
-import java.util.Optional;
+import org.bukkit.NamespacedKey;
 
 /**
  * An argument that represents Minecraft functions and tags
@@ -65,18 +61,5 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	public <CommandListenerWrapper> FunctionWrapper[] parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getFunction(cmdCtx, key);
-	}
-
-	private InitialParseExceptionHandler<Object> exceptionHandler;
-
-	@Override
-	public Argument<FunctionWrapper[]> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

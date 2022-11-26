@@ -20,16 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.EnumSet;
-import java.util.Optional;
-
-import org.bukkit.Axis;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
+import org.bukkit.Axis;
+
+import java.util.EnumSet;
 
 /**
  * An argument that represents x, y and z axes as an EnumSet of Axis
@@ -65,18 +62,5 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return nms.getAxis(cmdCtx, key);
-	}
-
-	private InitialParseExceptionHandler<Object> exceptionHandler;
-
-	@Override
-	public Argument<EnumSet> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

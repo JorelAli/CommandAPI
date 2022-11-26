@@ -20,19 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.NMS;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.NMS;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * An argument that represents a selection of entities
@@ -125,18 +122,5 @@ public class EntitySelectorArgument<T> extends Argument<T> implements InitialPar
 			default:
 				throw new IllegalStateException("Invalid selector " + selector.name());
 		};
-	}
-
-	private InitialParseExceptionHandler<Object> exceptionHandler;
-
-	@Override
-	public Argument<T> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

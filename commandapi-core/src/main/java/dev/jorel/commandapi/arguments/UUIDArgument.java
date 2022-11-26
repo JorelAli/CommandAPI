@@ -20,14 +20,12 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
+
+import java.util.UUID;
 
 /**
  * An argument that represents a UUID
@@ -56,18 +54,5 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> implement
 	public <CommandListenerWrapper> UUID parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getUUID(cmdCtx, key);
-	}
-
-	private InitialParseExceptionHandler<UUID> exceptionHandler;
-
-	@Override
-	public Argument<UUID> withInitialParseExceptionHandler(InitialParseExceptionHandler<UUID> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<UUID>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

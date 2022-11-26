@@ -23,11 +23,8 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.nms.NMS;
-
-import java.util.Optional;
 
 /**
  * An argument that represents primitive Java floats
@@ -78,18 +75,5 @@ public class FloatArgument extends SafeOverrideableArgument<Float, Float> implem
 	public <CommandListenerWrapper> Float parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
-	}
-
-	private InitialParseExceptionHandler<Float> exceptionHandler;
-
-	@Override
-	public Argument<Float> withInitialParseExceptionHandler(InitialParseExceptionHandler<Float> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<Float>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }
