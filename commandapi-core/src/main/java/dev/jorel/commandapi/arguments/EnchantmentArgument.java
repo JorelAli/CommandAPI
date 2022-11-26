@@ -28,12 +28,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit Enchantment object
  * 
  * @apiNote Returns an {@link Enchantment} object
  */
-public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment> {
+public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment> implements InitialParseExceptionArgument<Object, Argument<Enchantment>>{
 	
 	/**
 	 * An Enchantment argument. Represents an enchantment for items
@@ -57,5 +59,18 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	public <CommandListenerWrapper> Enchantment parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getEnchantment(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<Enchantment> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

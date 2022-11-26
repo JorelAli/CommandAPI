@@ -27,10 +27,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 
+import java.util.Optional;
+
 /**
  * An argument that represents a range of float values
  */
-public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange> {
+public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange> implements InitialParseExceptionArgument<Object, Argument<FloatRange>> {
 
 	/**
 	 * A FloatRange argument that represents a range of floating-point values
@@ -54,5 +56,18 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, Flo
 	public <CommandListenerWrapper> FloatRange parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getFloatRange(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<FloatRange> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

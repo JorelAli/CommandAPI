@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.bukkit.World;
@@ -33,7 +34,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit World object
  */
-public class WorldArgument extends SafeOverrideableArgument<World, World> {
+public class WorldArgument extends SafeOverrideableArgument<World, World> implements InitialParseExceptionArgument<Object, Argument<World>> {
 
 	/**
 	 * A World argument. Represents Bukkit's World object
@@ -62,5 +63,18 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> {
 	public <CommandListenerWrapper> World parseArgument(NMS<CommandListenerWrapper> nms,
 		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getDimension(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<World> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

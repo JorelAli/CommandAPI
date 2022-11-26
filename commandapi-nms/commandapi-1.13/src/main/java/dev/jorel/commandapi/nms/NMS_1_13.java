@@ -957,4 +957,8 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 		return ChatSerializer.a(json);
 	}
 
+	@Override
+	public void registerCustomArgumentType() {
+
+	}
 }

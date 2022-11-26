@@ -27,10 +27,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.Rotation;
 
+import java.util.Optional;
+
 /**
  * An argument that represents rotation as pitch and yaw
  */
-public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotation> {
+public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotation> implements InitialParseExceptionArgument<Object, Argument<Rotation>> {
 
 	/**
 	 * A Rotation argument. Represents pitch and yaw
@@ -54,5 +56,18 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotatio
 	public <CommandListenerWrapper> Rotation parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getRotation(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<Rotation> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

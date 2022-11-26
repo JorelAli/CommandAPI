@@ -28,6 +28,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents a Minecraft resource location (or namespaced key)
  * in the form namespace:key. The namespace and path can contain characters
@@ -35,7 +37,7 @@ import dev.jorel.commandapi.nms.NMS;
  * {@code .} (dot). The key can also contain {@code /} (forward slash)
  * @apiNote Returns a {@link NamespacedKey} object
  */
-public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey> {
+public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKey, NamespacedKey> implements InitialParseExceptionArgument<Object, Argument<NamespacedKey>> {
 
 	/**
 	 * Constructs a MinecraftKeyArgument with a given node name.
@@ -62,5 +64,18 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return nms.getMinecraftKey(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<NamespacedKey> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -29,10 +29,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit LootTable object
  */
-public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements ICustomProvidedArgument {
+public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<LootTable>> {
 	
 	/**
 	 * A LootTable argument that represents a Bukkit LootTable.
@@ -61,5 +63,18 @@ public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootT
 	public <CommandListenerWrapper> LootTable parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getLootTable(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<LootTable> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

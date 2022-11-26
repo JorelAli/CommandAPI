@@ -27,10 +27,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.Time;
 
+import java.util.Optional;
+
 /**
  * An argument that represents a duration of time in ticks
  */
-public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
+public class TimeArgument extends SafeOverrideableArgument<Integer, Time> implements InitialParseExceptionArgument<Integer, Argument<Integer>> {
 	
 	/**
 	 * A Time argument. Represents the number of in game ticks
@@ -54,5 +56,18 @@ public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
 	public <CommandListenerWrapper> Integer parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getTime(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Integer> exceptionHandler;
+
+	@Override
+	public Argument<Integer> withInitialParseExceptionHandler(InitialParseExceptionHandler<Integer> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Integer>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

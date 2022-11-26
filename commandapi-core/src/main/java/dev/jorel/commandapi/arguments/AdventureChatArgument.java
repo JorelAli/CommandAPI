@@ -40,7 +40,7 @@ import net.kyori.adventure.text.Component;
  * 
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
+public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component>, InitialParseExceptionArgument<Object, Argument<Component>> {
 
 	private PreviewableFunction<Component> preview;
 	private boolean usePreview;
@@ -111,6 +111,19 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	public AdventureChatArgument usePreview(boolean usePreview) {
 		this.usePreview = usePreview;
 		return this;
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<Component> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 
 }

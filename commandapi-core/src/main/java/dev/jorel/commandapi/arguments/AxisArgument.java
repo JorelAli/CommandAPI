@@ -21,6 +21,7 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import org.bukkit.Axis;
 
@@ -36,7 +37,7 @@ import dev.jorel.commandapi.nms.NMS;
  * @apiNote Returns a {@link EnumSet}{@code <}{@link Axis}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
+public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis>> implements InitialParseExceptionArgument<Object, Argument<EnumSet>> {
 
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y
@@ -64,5 +65,18 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return nms.getAxis(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<EnumSet> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

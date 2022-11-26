@@ -29,11 +29,13 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.Location2D;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit {@link Location} object in x and z directions
  * @apiNote Returns a {@link Location2D} object
  */
-public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D> {
+public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D> implements InitialParseExceptionArgument<Object, Argument<Location2D>> {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to {@link LocationType#PRECISE_POSITION}
@@ -80,5 +82,18 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	public <CommandListenerWrapper> Location2D parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return isPrecise ? nms.getLocation2DPrecise(cmdCtx, key) : nms.getLocation2DBlock(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<Location2D> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

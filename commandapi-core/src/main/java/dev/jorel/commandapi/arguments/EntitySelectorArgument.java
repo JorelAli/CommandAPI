@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -38,7 +39,7 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @apiNote The return type depends on the provided {@link EntitySelector}
  */
-public class EntitySelectorArgument<T> extends Argument<T> {
+public class EntitySelectorArgument<T> extends Argument<T> implements InitialParseExceptionArgument<Object, Argument<T>> {
 
 	private final EntitySelector selector;
 
@@ -124,5 +125,18 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 			default:
 				throw new IllegalStateException("Invalid selector " + selector.name());
 		};
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<T> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

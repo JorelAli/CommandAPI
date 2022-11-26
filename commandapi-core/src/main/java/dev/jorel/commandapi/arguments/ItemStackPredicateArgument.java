@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +35,7 @@ import dev.jorel.commandapi.nms.NMS;
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
  */
 @SuppressWarnings("rawtypes")
-public class ItemStackPredicateArgument extends Argument<Predicate> {
+public class ItemStackPredicateArgument extends Argument<Predicate> implements InitialParseExceptionArgument<Predicate, Argument<Predicate>>{
 	
 	/**
 	 * A ItemStack Predicate argument. Represents a predicate for itemstacks
@@ -58,5 +59,18 @@ public class ItemStackPredicateArgument extends Argument<Predicate> {
 	public <CommandListenerWrapper> Predicate<ItemStack> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getItemStackPredicate(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Predicate> exceptionHandler;
+
+	@Override
+	public Argument<Predicate> withInitialParseExceptionHandler(InitialParseExceptionHandler<Predicate> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Predicate>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

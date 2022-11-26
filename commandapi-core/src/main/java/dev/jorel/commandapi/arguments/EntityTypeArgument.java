@@ -28,10 +28,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit EntityType object
  */
-public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType> implements ICustomProvidedArgument {
+public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<EntityType>> {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity
@@ -60,5 +62,18 @@ public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, Ent
 	public <CommandListenerWrapper> EntityType parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getEntityType(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<EntityType> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

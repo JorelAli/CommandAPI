@@ -21,6 +21,7 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -31,7 +32,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
  */
-public class ScoreHolderArgument<T> extends Argument<T> {
+public class ScoreHolderArgument<T> extends Argument<T> implements InitialParseExceptionArgument<Object, Argument<T>> {
 		
 	private final boolean single;
 	
@@ -93,5 +94,18 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 		 * A collection of score holder names
 		 */
 		MULTIPLE;
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<T> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

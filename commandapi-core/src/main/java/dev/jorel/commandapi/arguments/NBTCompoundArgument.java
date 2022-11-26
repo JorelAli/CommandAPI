@@ -27,10 +27,12 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents an NBTContainer from the NBT API
  */
-public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
+public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer> implements InitialParseExceptionArgument<Object, Argument<NBTContainer>> {
 
 	/**
 	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the
@@ -63,5 +65,18 @@ public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return (NBTContainer) nms.getNBTCompound(cmdCtx, key, CommandAPI.getConfiguration().getNBTContainerConstructor());
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<NBTContainer> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

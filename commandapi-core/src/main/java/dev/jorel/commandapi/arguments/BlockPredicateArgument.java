@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.bukkit.block.Block;
@@ -36,7 +37,7 @@ import dev.jorel.commandapi.nms.NMS;
  * @apiNote Returns a {@link Predicate}{@code <}{@link Block}{@code >} object
  */
 @SuppressWarnings("rawtypes")
-public class BlockPredicateArgument extends Argument<Predicate> {
+public class BlockPredicateArgument extends Argument<Predicate> implements InitialParseExceptionArgument<Object, Argument<Predicate>> {
 
 	/**
 	 * Constructs a BlockPredicateArgument with a given node name. Represents a
@@ -63,5 +64,18 @@ public class BlockPredicateArgument extends Argument<Predicate> {
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return nms.getBlockPredicate(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<Predicate> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

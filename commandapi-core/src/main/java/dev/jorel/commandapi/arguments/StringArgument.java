@@ -31,7 +31,7 @@ import java.util.Optional;
 /**
  * An argument that represents a simple String
  */
-public class StringArgument extends Argument<String> implements InitialParseExceptionArgument<String, Argument<String>> {
+public class StringArgument extends Argument<String> {
 
 	/**
 	 * A string argument for one word
@@ -55,18 +55,5 @@ public class StringArgument extends Argument<String> implements InitialParseExce
 	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
-	}
-
-	private InitialParseExceptionHandler<String> exceptionHandler;
-
-	@Override
-	public Argument<String> withInitialParseExceptionHandler(InitialParseExceptionHandler<String> exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
-		return this;
-	}
-
-	@Override
-	public Optional<InitialParseExceptionHandler<String>> getInitialParseExceptionHandler() {
-		return Optional.ofNullable(exceptionHandler);
 	}
 }

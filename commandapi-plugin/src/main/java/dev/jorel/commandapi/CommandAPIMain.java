@@ -76,7 +76,7 @@ public class CommandAPIMain extends JavaPlugin {
 		new CommandAPICommand("test")
 			.withArguments(
 				new MultiLiteralArgument("a", "b", "c"),
-				new StringArgument("string")
+				new TextArgument("string")
 					.withInitialParseExceptionHandler(this::printInfo)
 					.withArgumentParseExceptionHandler(this::printInfo),
 				new IntegerArgument("int", 0, 10)
@@ -97,11 +97,11 @@ public class CommandAPIMain extends JavaPlugin {
 
 	private <T> T printInfo(InitialParseExceptionContext context) throws WrapperCommandSyntaxException {
 		CommandAPI.logNormal("Intercepted error with message: " + context.exception().getMessage());
-		throw CommandAPI.failWithString("Haha! Custom Error has intercepted " + context.exception().getMessage());
+		throw CommandAPI.failWithString("Haha! InitialParseExceptionHandler has intercepted " + context.exception().getMessage());
 	}
 
 	private <T> T printInfo(ArgumentParseExceptionContext context) throws WrapperCommandSyntaxException {
 		CommandAPI.logNormal("Intercepted error with message: " + context.exception().getMessage());
-		throw CommandAPI.failWithString("Haha! Custom Error has intercepted " + context.exception().getMessage());
+		throw CommandAPI.failWithString("Haha! ArgumentParseExceptionHandler has intercepted " + context.exception().getMessage());
 	}
 }

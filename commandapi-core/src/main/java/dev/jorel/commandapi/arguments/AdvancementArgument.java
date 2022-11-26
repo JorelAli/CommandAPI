@@ -28,11 +28,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit Advancement object
  * @apiNote Returns an {@link Advancement} object
  */
-public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
+public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<Advancement>> {
 	
 	/**
 	 * Constructs an AdvancementArgument with a given node name
@@ -63,4 +65,16 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 		return nms.getAdvancement(cmdCtx, key);
 	}
 
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<Advancement> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
+	}
 }

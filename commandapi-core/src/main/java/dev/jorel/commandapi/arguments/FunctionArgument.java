@@ -29,10 +29,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
+import java.util.Optional;
+
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument {
+public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<FunctionWrapper[]>> {
 
 	/**
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft
@@ -63,5 +65,18 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	public <CommandListenerWrapper> FunctionWrapper[] parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getFunction(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<FunctionWrapper[]> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

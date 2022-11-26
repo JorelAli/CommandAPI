@@ -41,6 +41,7 @@ import dev.jorel.commandapi.nms.NMS;
  *            {@link IntegerArgument}
  * @apiNote Returns a {@link T} object
  */
+// TODO: Can this be an InitialParseExceptionArgument?
 public class CustomArgument<T, B> extends Argument<T> {
 
 	private final CustomArgumentInfoParser<T, B> infoParser;

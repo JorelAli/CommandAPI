@@ -78,7 +78,6 @@ public class NMS_1_19_1_R1 extends NMS_1_19_Common {
 	@Override
 	public void registerCustomArgumentType() {
 		try {
-			System.out.println("Registering custom ArgumentType");
 			Field mapField = CommandAPIHandler.getInstance().getField(ArgumentTypeInfos.class, "a");
 			Map infoMap = (Map) mapField.get(null);
 

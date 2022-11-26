@@ -24,6 +24,8 @@ import dev.jorel.commandapi.IStringTooltip;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -31,8 +33,22 @@ import java.util.function.Function;
  * 
  * @param <T> the type that this list argument generates a list of.
  */
-public class ListTextArgument<T> extends ListArgumentCommon<T> {
+@SuppressWarnings("rawtypes")
+public class ListTextArgument<T> extends ListArgumentCommon<T> implements InitialParseExceptionArgument<String, Argument<List>> {
 	ListTextArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, true);
+	}
+
+	private InitialParseExceptionHandler<String> exceptionHandler;
+
+	@Override
+	public Argument<List> withInitialParseExceptionHandler(InitialParseExceptionHandler<String> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<String>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -27,10 +27,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit ScoreboardSlot object
  */
-public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot> {
+public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot> implements InitialParseExceptionArgument<Object, Argument<ScoreboardSlot>>{
 
 	/**
 	 * A Display slot argument. Represents scoreboard slots
@@ -54,5 +56,18 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	public <CommandListenerWrapper> ScoreboardSlot parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getScoreboardSlot(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<ScoreboardSlot> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

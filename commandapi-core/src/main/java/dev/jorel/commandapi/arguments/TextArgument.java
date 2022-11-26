@@ -26,10 +26,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents text, encased in quotes
  */
-public class TextArgument extends Argument<String> {
+public class TextArgument extends Argument<String> implements InitialParseExceptionArgument<String, Argument<String>> {
 
 	/**
 	 * A string argument for one word, or multiple words encased in quotes
@@ -53,5 +55,18 @@ public class TextArgument extends Argument<String> {
 	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	private InitialParseExceptionHandler<String> exceptionHandler;
+
+	@Override
+	public Argument<String> withInitialParseExceptionHandler(InitialParseExceptionHandler<String> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<String>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -40,7 +40,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
+public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]>, InitialParseExceptionArgument<Object, Argument<BaseComponent[]>> {
 
 	private PreviewableFunction<BaseComponent[]> preview;
 	private boolean usePreview;
@@ -112,5 +112,18 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	public ChatArgument usePreview(boolean usePreview) {
 		this.usePreview = usePreview;
 		return this;
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<BaseComponent[]> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

@@ -27,10 +27,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents primitive Java longs
  */
-public class LongArgument extends SafeOverrideableArgument<Long, Long> {
+public class LongArgument extends SafeOverrideableArgument<Long, Long> implements InitialParseExceptionArgument<Long, Argument<Long>> {
 
 	/**
 	 * A long argument
@@ -76,6 +78,19 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	public <CommandListenerWrapper> Long parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	private InitialParseExceptionHandler<Long> exceptionHandler;
+
+	@Override
+	public Argument<Long> withInitialParseExceptionHandler(InitialParseExceptionHandler<Long> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Long>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 	
 }

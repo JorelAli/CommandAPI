@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.bukkit.ChatColor;
@@ -35,7 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @apiNote Returns a {@link ChatColor} object
  */
-public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor> {
+public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor> implements InitialParseExceptionArgument<Object, Argument<ChatColor>>{
 
 	/**
 	 * Constructs a ChatColor argument with a given node name. Represents a color or
@@ -61,5 +62,18 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	public <CommandListenerWrapper> ChatColor parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getChatColor(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<ChatColor> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

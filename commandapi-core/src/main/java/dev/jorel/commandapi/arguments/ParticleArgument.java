@@ -27,11 +27,13 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit Particle object
  */
 @SuppressWarnings("rawtypes")
-public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>> {
+public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>> implements InitialParseExceptionArgument<Object, Argument<ParticleData>> {
 
 	/**
 	 * A Particle argument. Represents Minecraft particles
@@ -55,5 +57,18 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	public <CommandListenerWrapper> ParticleData<?> parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getParticle(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<ParticleData> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

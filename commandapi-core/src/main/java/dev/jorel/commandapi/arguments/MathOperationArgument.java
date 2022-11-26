@@ -27,10 +27,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.MathOperation;
 
+import java.util.Optional;
+
 /**
  * An argument that represents Minecraft scoreboard math operations
  */
-public class MathOperationArgument extends SafeOverrideableArgument<MathOperation, MathOperation> {
+public class MathOperationArgument extends SafeOverrideableArgument<MathOperation, MathOperation> implements InitialParseExceptionArgument<Object, Argument<MathOperation>> {
 
 	/**
 	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)
@@ -54,5 +56,18 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	public <CommandListenerWrapper> MathOperation parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getMathOperation(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<MathOperation> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

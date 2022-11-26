@@ -27,12 +27,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents primitive Java doubles
  * 
  * @apiNote Returns a {@link double}
  */
-public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
+public class DoubleArgument extends SafeOverrideableArgument<Double, Double> implements InitialParseExceptionArgument<Double, Argument<Double>> {
 
 	/**
 	 * A double argument
@@ -84,4 +86,16 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 
+	private InitialParseExceptionHandler<Double> exceptionHandler;
+
+	@Override
+	public Argument<Double> withInitialParseExceptionHandler(InitialParseExceptionHandler<Double> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return null;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Double>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
+	}
 }

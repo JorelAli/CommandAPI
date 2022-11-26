@@ -28,10 +28,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents the Bukkit ItemStack object
  */
-public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack> {
+public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack> implements InitialParseExceptionArgument<Object, Argument<ItemStack>> {
 
 	/**
 	 * An ItemStack argument. Always returns an itemstack of size 1
@@ -55,5 +57,18 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemS
 	public <CommandListenerWrapper> ItemStack parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getItemStack(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<ItemStack> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

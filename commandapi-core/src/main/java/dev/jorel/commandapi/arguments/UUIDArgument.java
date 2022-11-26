@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -31,7 +32,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents a UUID
  */
-public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
+public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> implements InitialParseExceptionArgument<UUID, Argument<UUID>> {
 	
 	/**
 	 * A UUID argument. Represents an in-game entity UUID
@@ -55,5 +56,18 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	public <CommandListenerWrapper> UUID parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getUUID(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<UUID> exceptionHandler;
+
+	@Override
+	public Argument<UUID> withInitialParseExceptionHandler(InitialParseExceptionHandler<UUID> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<UUID>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

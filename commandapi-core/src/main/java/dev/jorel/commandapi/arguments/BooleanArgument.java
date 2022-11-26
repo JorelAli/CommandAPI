@@ -26,12 +26,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.nms.NMS;
 
+import java.util.Optional;
+
 /**
  * An argument that represents primitive Java booleans
  * 
  * @apiNote Returns a {@link boolean}
  */
-public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> {
+public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> implements InitialParseExceptionArgument<Boolean, Argument<Boolean>> {
 
 	/**
 	 * Constructs a Boolean argument with a given node name
@@ -59,4 +61,16 @@ public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> 
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 
+	private InitialParseExceptionHandler<Boolean> exceptionHandler;
+
+	@Override
+	public Argument<Boolean> withInitialParseExceptionHandler(InitialParseExceptionHandler<Boolean> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Boolean>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
+	}
 }

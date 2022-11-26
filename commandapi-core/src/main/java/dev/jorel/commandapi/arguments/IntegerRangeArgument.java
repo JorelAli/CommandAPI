@@ -27,10 +27,12 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 
+import java.util.Optional;
+
 /**
  * An argument that represents a range of integer values
  */
-public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange> {
+public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange> implements InitialParseExceptionArgument<Object, Argument<IntegerRange>> {
 
 	/**
 	 * An IntegerRange argument. Represents a range of whole numbers
@@ -54,5 +56,18 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange,
 	public <CommandListenerWrapper> IntegerRange parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return nms.getIntRange(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<IntegerRange> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }

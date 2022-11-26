@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.bukkit.block.Biome;
@@ -35,7 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @apiNote Returns a {@link Biome} object
  */
-public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument {
+public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<Biome>> {
 
 	/**
 	 * Constructs a BiomeArgument with a given node name.
@@ -67,5 +68,18 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return nms.getBiome(cmdCtx, key);
+	}
+
+	private InitialParseExceptionHandler<Object> exceptionHandler;
+
+	@Override
+	public Argument<Biome> withInitialParseExceptionHandler(InitialParseExceptionHandler<Object> exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+		return this;
+	}
+
+	@Override
+	public Optional<InitialParseExceptionHandler<Object>> getInitialParseExceptionHandler() {
+		return Optional.ofNullable(exceptionHandler);
 	}
 }
