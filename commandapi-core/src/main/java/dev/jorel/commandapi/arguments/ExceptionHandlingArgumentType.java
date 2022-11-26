@@ -30,7 +30,7 @@ public class ExceptionHandlingArgumentType<T> implements ArgumentType<T> {
 			//  This means Argument would need to be parameterized over RawClass, giving it 2 type
 			//  parameters and ruining backwards compatibility :(
 			CommandAPI.logNormal("Intercepted exception with message: " + original.getMessage());
-			throw original;
+			throw CommandAPI.failWithString("Haha! Custom Error has intercepted " + original.getMessage()).getException();
 		}
 	}
 

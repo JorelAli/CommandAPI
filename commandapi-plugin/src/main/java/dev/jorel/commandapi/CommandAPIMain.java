@@ -23,10 +23,7 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
-import dev.jorel.commandapi.arguments.ArgumentParseExceptionContext;
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,6 +48,7 @@ public class CommandAPIMain extends JavaPlugin {
 
 		// Check dependencies for CommandAPI
 		CommandAPIHandler.getInstance().checkDependencies();
+		CommandAPIHandler.getInstance().getNMS().registerCustomArgumentType();
 
 		// Convert all plugins to be converted
 		for (Entry<JavaPlugin, String[]> pluginToConvert : CommandAPI.config.getPluginsToConvert()) {
@@ -67,6 +65,8 @@ public class CommandAPIMain extends JavaPlugin {
 		for (String commandName : CommandAPI.config.getCommandsToConvert()) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
+
+		new CommandAPICommand("veryearly").withArguments(new LiteralArgument("Hello")).executes((sender, args) -> {sender.sendMessage("Did I register?");}).register();
 	}
 
 	@Override
@@ -75,20 +75,22 @@ public class CommandAPIMain extends JavaPlugin {
 
 		new CommandAPICommand("test")
 			.withArguments(
+				new MultiLiteralArgument("a", "b", "c"),
 				new StringArgument("string").withExceptionHandler(this::printInfo),
-				new IntegerArgument("int").withExceptionHandler(this::printInfo),
+				new IntegerArgument("int", 0, 10).withExceptionHandler(this::printInfo),
 				new PlayerArgument("player").withExceptionHandler(this::printInfo)
 			)
 			.executes((sender, args) -> {
 				sender.sendMessage(args[0].toString());
 				sender.sendMessage(args[1].toString());
 				sender.sendMessage(args[2].toString());
+				sender.sendMessage(args[3].toString());
 			})
 			.register();
 	}
 
 	private <T> T printInfo(ArgumentParseExceptionContext context) throws WrapperCommandSyntaxException {
 		CommandAPI.logNormal("Intercepted error with message: " + context.exception().getMessage());
-		throw CommandAPI.failWithString("Parse failed");
+		throw CommandAPI.failWithString("Haha! Custom Error has intercepted " + context.exception().getMessage());
 	}
 }

@@ -178,6 +178,7 @@ public final class CommandAPI {
 		if (!loaded) {
 			CommandAPI.config = new InternalConfig(config);
 			CommandAPIHandler.getInstance().checkDependencies();
+			CommandAPIHandler.getInstance().getNMS().registerCustomArgumentType();
 			loaded = true;
 		} else {
 			getLogger().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
@@ -200,7 +201,6 @@ public final class CommandAPI {
 			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 			CommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
-		CommandAPIHandler.getInstance().getNMS().registerCustomArgumentType();
 
 		// (Re)send command graph packet to players when they join
 		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
@@ -208,6 +208,7 @@ public final class CommandAPI {
 			// For some reason, any other priority doesn't work
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
+				logInfo("Sending commands to: " + e.getPlayer().getName());
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
 			}
 

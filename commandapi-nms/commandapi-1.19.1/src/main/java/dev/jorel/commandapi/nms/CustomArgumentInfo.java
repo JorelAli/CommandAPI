@@ -8,9 +8,6 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-
-import java.nio.charset.Charset;
 
 public class CustomArgumentInfo implements ArgumentTypeInfo<ExceptionHandlingArgumentType<?>, CustomArgumentInfo.CustomTemplate> {
 
@@ -18,24 +15,39 @@ public class CustomArgumentInfo implements ArgumentTypeInfo<ExceptionHandlingArg
 	public void serializeToNetwork(CustomTemplate template, FriendlyByteBuf friendlyByteBuf) {
 		ArgumentType baseType = template.baseType;
 		ArgumentTypeInfo baseInfo = ArgumentTypeInfos.byClass(baseType);
-		String baseKey = Registry.COMMAND_ARGUMENT_TYPE.getKey(baseInfo).toString();
-		friendlyByteBuf.writeInt(baseKey.length());
-		friendlyByteBuf.writeCharSequence(baseKey, Charset.defaultCharset());
+
+		// Overwrite my id with the base type's. Since there are less than
+		// 128 argument types by default, assume index will always fill 1 byte.
+		int baseId = Registry.COMMAND_ARGUMENT_TYPE.getId(baseInfo);
+		friendlyByteBuf.writerIndex(friendlyByteBuf.writerIndex() - 1);
+		friendlyByteBuf.writeVarInt(baseId);
+
+		// Add the base type to the packet
 		baseInfo.serializeToNetwork(baseInfo.unpack(baseType), friendlyByteBuf);
 	}
 
 	@Override
 	public CustomTemplate deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
-		int keyLength = friendlyByteBuf.readInt();
-		String baseKey = friendlyByteBuf.readCharSequence(keyLength, Charset.defaultCharset()).toString();
-		ArgumentTypeInfo baseInfo = Registry.COMMAND_ARGUMENT_TYPE.get(ResourceLocation.of(baseKey, ':'));
-		Template baseTemplate = baseInfo.deserializeFromNetwork(friendlyByteBuf);
-		return new CustomTemplate(baseTemplate);
+		// Since this class overrides its COMMAND_ARGUMENT_TYPE id with the baseType's,
+		// this class's id should never show up in a packet and this method should never
+		// be called to deserialize the ArgumentType info that wasn't put into the packet
+		// anyway. Also, the server shouldn't ever deserialize a *ClientBound*CommandPacket
+		// either. If this method ever gets called, either you or I are doing something very wrong!
+		throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.CustomArgumentInfo#deserializeFromNetwork for more information");
+		// Including a mini-stacktrace here in case this exception shows up
+		// on a client-disconnected screen, which is not very helpful
 	}
 
 	@Override
-	public void serializeToJson(CustomTemplate template, JsonObject jsonObject) {
-		jsonObject.addProperty("baseType", "TODO: Set this!");
+	public void serializeToJson(CustomTemplate template, JsonObject properties) {
+		ArgumentType baseType = template.baseType;
+		ArgumentTypeInfo baseInfo = ArgumentTypeInfos.byClass(baseType);
+		properties.addProperty("baseType", Registry.COMMAND_ARGUMENT_TYPE.getKey(baseInfo).toString());
+		JsonObject subProperties = new JsonObject();
+		baseInfo.serializeToJson(baseInfo.unpack(baseType), subProperties);
+		if(subProperties.size() > 0) {
+			properties.add("baseProperties", subProperties);
+		}
 	}
 
 	@Override
@@ -51,11 +63,6 @@ public class CustomArgumentInfo implements ArgumentTypeInfo<ExceptionHandlingArg
 		public CustomTemplate(ArgumentType<?> baseType) {
 			this.baseType = baseType;
 			baseTemplate = ArgumentTypeInfos.unpack(baseType);
-		}
-
-		public CustomTemplate(Template<?> baseTemplate) {
-			this.baseTemplate = baseTemplate;
-			baseType = null;
 		}
 
 		@Override
