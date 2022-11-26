@@ -76,9 +76,15 @@ public class CommandAPIMain extends JavaPlugin {
 		new CommandAPICommand("test")
 			.withArguments(
 				new MultiLiteralArgument("a", "b", "c"),
-				new StringArgument("string").withArgumentParseExceptionHandler(this::printInfo),
-				new IntegerArgument("int", 0, 10).withArgumentParseExceptionHandler(this::printInfo),
-				new PlayerArgument("player").withArgumentParseExceptionHandler(this::printInfo)
+				new StringArgument("string")
+					.withInitialParseExceptionHandler(this::printInfo)
+					.withArgumentParseExceptionHandler(this::printInfo),
+				new IntegerArgument("int", 0, 10)
+					.withInitialParseExceptionHandler(this::printInfo)
+					.withArgumentParseExceptionHandler(this::printInfo),
+				new PlayerArgument("player")
+					.withInitialParseExceptionHandler(this::printInfo)
+					.withArgumentParseExceptionHandler(this::printInfo)
 			)
 			.executes((sender, args) -> {
 				sender.sendMessage(args[0].toString());
@@ -87,6 +93,11 @@ public class CommandAPIMain extends JavaPlugin {
 				sender.sendMessage(args[3].toString());
 			})
 			.register();
+	}
+
+	private <T> T printInfo(InitialParseExceptionContext context) throws WrapperCommandSyntaxException {
+		CommandAPI.logNormal("Intercepted error with message: " + context.exception().getMessage());
+		throw CommandAPI.failWithString("Haha! Custom Error has intercepted " + context.exception().getMessage());
 	}
 
 	private <T> T printInfo(ArgumentParseExceptionContext context) throws WrapperCommandSyntaxException {
