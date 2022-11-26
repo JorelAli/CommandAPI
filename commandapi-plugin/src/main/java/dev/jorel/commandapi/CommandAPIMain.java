@@ -76,9 +76,9 @@ public class CommandAPIMain extends JavaPlugin {
 		new CommandAPICommand("test")
 			.withArguments(
 				new MultiLiteralArgument("a", "b", "c"),
-				new StringArgument("string").withExceptionHandler(this::printInfo),
-				new IntegerArgument("int", 0, 10).withExceptionHandler(this::printInfo),
-				new PlayerArgument("player").withExceptionHandler(this::printInfo)
+				new StringArgument("string").withArgumentParseExceptionHandler(this::printInfo),
+				new IntegerArgument("int", 0, 10).withArgumentParseExceptionHandler(this::printInfo),
+				new PlayerArgument("player").withArgumentParseExceptionHandler(this::printInfo)
 			)
 			.executes((sender, args) -> {
 				sender.sendMessage(args[0].toString());

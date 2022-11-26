@@ -20,26 +20,22 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import dev.jorel.commandapi.*;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import dev.jorel.commandapi.ArgumentTree;
+import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
+import org.bukkit.command.CommandSender;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * The core abstract class for Command API arguments
@@ -78,8 +74,9 @@ public abstract class Argument<T> extends ArgumentTree {
 	 */
 	protected Argument(String nodeName, ArgumentType<?> rawType) {
 		this.nodeName = nodeName;
-		this.rawType = new ExceptionHandlingArgumentType<>(rawType);
+		this.rawType = rawType;
 	}
+
 	/**
 	 * Returns the NMS or brigadier type for this argument.
 	 *
@@ -99,12 +96,11 @@ public abstract class Argument<T> extends ArgumentTree {
 
 	/**
 	 * Parses an argument using {@link Argument#parseArgument(NMS, CommandContext, String, Object[])}.
-	 * If the initial parse fails, the exception is passed to
-	 * the active {@link ArgumentParseExceptionHandler} for
-	 * this argument, which can be changed by the developers
-	 * using {@link Argument#withExceptionHandler(ArgumentParseExceptionHandler)}.
-	 * This is intended for use by the internals of the CommandAPI
-	 * and isn't expected to be used outside the CommandAPI
+	 * If the parse fails and a {@link CommandSyntaxException} is thrown, the exception is passed to
+	 * the active {@link ArgumentParseExceptionHandler} for this argument, which can be defined by
+	 * developer using {@link Argument#withArgumentParseExceptionHandler(ArgumentParseExceptionHandler)}.
+	 * This is intended for use by the internals of the CommandAPI and isn't expected to be used outside
+	 * the CommandAPI
 	 *
 	 * @param <CommandSourceStack> the command source type
 	 * @param nms                  an instance of NMS
@@ -353,7 +349,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param exceptionHandler The new {@link ArgumentParseExceptionHandler} this argument should use
 	 * @return this current argument
 	 */
-	public final Argument<T> withExceptionHandler(ArgumentParseExceptionHandler<T> exceptionHandler) {
+	public final Argument<T> withArgumentParseExceptionHandler(ArgumentParseExceptionHandler<T> exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 		return this;
 	}
@@ -362,7 +358,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * Returns the {@link ArgumentParseExceptionHandler} this argument is using
 	 * @return The {@link ArgumentParseExceptionHandler} this argument is using
 	 */
-	public final ArgumentParseExceptionHandler<T> getExceptionHandler() {
+	public final ArgumentParseExceptionHandler<T> getArgumentParseExceptionHandler() {
 		return this.exceptionHandler;
 	}
 

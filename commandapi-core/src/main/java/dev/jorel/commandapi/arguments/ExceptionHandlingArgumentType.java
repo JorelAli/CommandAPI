@@ -6,31 +6,33 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-public class ExceptionHandlingArgumentType<T> implements ArgumentType<T> {
-
-	private final ArgumentType<T> baseType;
-
-	public ExceptionHandlingArgumentType(ArgumentType<T> baseType) {
-		this.baseType = baseType;
-	}
+/**
+ * An {@link ArgumentType} that wraps another {@link ArgumentType} and intercepts any
+ * {@link CommandSyntaxException} to send to a developer-specified {@link InitialParseExceptionHandler}
+ *
+ * @param baseType The {@link ArgumentType} this object is wrapping
+ * @param errorHandler The {@link InitialParseExceptionHandler} that handles intercepted {@link CommandSyntaxException}
+ * @param <T> The object returned when the wrapped {@link ArgumentType} is parsed
+ */
+public record ExceptionHandlingArgumentType<T>(ArgumentType<T> baseType, InitialParseExceptionHandler<T> errorHandler) implements ArgumentType<T> {
 
 	@Override
 	public T parse(StringReader stringReader) throws CommandSyntaxException {
 		try {
 			return baseType.parse(stringReader);
 		} catch (CommandSyntaxException original) {
-			// TODO: It would be cool if this part could return a substitute value if the parse failed
-			//  Unfortunately, exceptionHandler cannot do this since T dose not necessarily equal RawClass
-			//  To do this, I think an additional exceptionHandler for RawClass would need to be added
-			//  This means Argument would need to be parameterized over RawClass, giving it 2 type
-			//  parameters and ruining backwards compatibility :(
-			CommandAPI.logNormal("Intercepted exception with message: " + original.getMessage());
-			throw CommandAPI.failWithString("Haha! Custom Error has intercepted " + original.getMessage()).getException();
+			try {
+				return errorHandler.handleException(new InitialParseExceptionContext(
+					new WrapperCommandSyntaxException(original)
+				));
+			} catch (WrapperCommandSyntaxException newException) {
+				throw newException.getException();
+			}
 		}
 	}
 
@@ -42,9 +44,5 @@ public class ExceptionHandlingArgumentType<T> implements ArgumentType<T> {
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 		return baseType.listSuggestions(context, builder);
-	}
-
-	public ArgumentType<T> getBaseType() {
-		return baseType;
 	}
 }

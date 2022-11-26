@@ -38,6 +38,8 @@ import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
@@ -62,13 +64,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
-import dev.jorel.commandapi.arguments.IPreviewable;
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
@@ -903,10 +898,19 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 
 		RequiredArgumentBuilder<CommandSourceStack, ?> requiredArgumentBuilder = RequiredArgumentBuilder
-				.argument(argument.getNodeName(), argument.getRawType());
+				.argument(argument.getNodeName(), wrapArgumentType(argument, argument.getRawType()));
 
 		return requiredArgumentBuilder.requires(css -> permissionCheck(NMS.getCommandSenderFromCSS(css),
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
+	}
+
+	<T> ArgumentType<T> wrapArgumentType(Argument<?> argument, ArgumentType<T> rawType) {
+		if (!(argument instanceof InitialParseExceptionArgument)) return rawType;
+
+		InitialParseExceptionArgument<T, ?> iPEA = (InitialParseExceptionArgument<T, ?>) argument;
+
+		if (iPEA.getInitialParseExceptionHandler().isEmpty()) return rawType;
+		return new ExceptionHandlingArgumentType<>(rawType, iPEA.getInitialParseExceptionHandler().get());
 	}
 
 	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, Argument<?>[] args, String nodeName)

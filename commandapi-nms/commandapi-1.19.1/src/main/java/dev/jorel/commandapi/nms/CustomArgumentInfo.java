@@ -9,15 +9,16 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class CustomArgumentInfo implements ArgumentTypeInfo<ExceptionHandlingArgumentType<?>, CustomArgumentInfo.CustomTemplate> {
-
+public class CustomArgumentInfo<T> implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, CustomArgumentInfo<T>.Template> {
 	@Override
-	public void serializeToNetwork(CustomTemplate template, FriendlyByteBuf friendlyByteBuf) {
-		ArgumentType baseType = template.baseType;
-		ArgumentTypeInfo baseInfo = ArgumentTypeInfos.byClass(baseType);
+	public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {
+		ArgumentType<T> baseType = template.baseType;
+		ArgumentTypeInfo<ArgumentType<T>, ArgumentTypeInfo.Template<ArgumentType<T>>> baseInfo =
+			(ArgumentTypeInfo<ArgumentType<T>, ArgumentTypeInfo.Template<ArgumentType<T>>>) ArgumentTypeInfos.byClass(baseType);
 
 		// Overwrite my id with the base type's. Since there are less than
 		// 128 argument types by default, assume index will always fill 1 byte.
+		// If you get a garbage packet, check this assumption
 		int baseId = Registry.COMMAND_ARGUMENT_TYPE.getId(baseInfo);
 		friendlyByteBuf.writerIndex(friendlyByteBuf.writerIndex() - 1);
 		friendlyByteBuf.writeVarInt(baseId);
@@ -27,7 +28,7 @@ public class CustomArgumentInfo implements ArgumentTypeInfo<ExceptionHandlingArg
 	}
 
 	@Override
-	public CustomTemplate deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
+	public Template deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
 		// Since this class overrides its COMMAND_ARGUMENT_TYPE id with the baseType's,
 		// this class's id should never show up in a packet and this method should never
 		// be called to deserialize the ArgumentType info that wasn't put into the packet
@@ -39,9 +40,10 @@ public class CustomArgumentInfo implements ArgumentTypeInfo<ExceptionHandlingArg
 	}
 
 	@Override
-	public void serializeToJson(CustomTemplate template, JsonObject properties) {
-		ArgumentType baseType = template.baseType;
-		ArgumentTypeInfo baseInfo = ArgumentTypeInfos.byClass(baseType);
+	public void serializeToJson(Template template, JsonObject properties) {
+		ArgumentType<T> baseType = template.baseType;
+		ArgumentTypeInfo<ArgumentType<T>, ArgumentTypeInfo.Template<ArgumentType<T>>> baseInfo =
+			(ArgumentTypeInfo<ArgumentType<T>, ArgumentTypeInfo.Template<ArgumentType<T>>>) ArgumentTypeInfos.byClass(baseType);
 		properties.addProperty("baseType", Registry.COMMAND_ARGUMENT_TYPE.getKey(baseInfo).toString());
 		JsonObject subProperties = new JsonObject();
 		baseInfo.serializeToJson(baseInfo.unpack(baseType), subProperties);
@@ -51,27 +53,30 @@ public class CustomArgumentInfo implements ArgumentTypeInfo<ExceptionHandlingArg
 	}
 
 	@Override
-	public CustomTemplate unpack(ExceptionHandlingArgumentType<?> exceptionHandlingArgumentType) {
-		ArgumentType baseType = exceptionHandlingArgumentType.getBaseType();
-		return new CustomTemplate(baseType);
+	public Template unpack(ExceptionHandlingArgumentType<T> exceptionHandlingArgumentType) {
+		ArgumentType<T> baseType = exceptionHandlingArgumentType.baseType();
+		return new Template(baseType);
 	}
 
-	public final class CustomTemplate implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<?>> {
-		final ArgumentType baseType;
-		final Template baseTemplate;
+	public final class Template implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<T>> {
+		final ArgumentType<T> baseType;
 
-		public CustomTemplate(ArgumentType<?> baseType) {
+		public Template(ArgumentType<T> baseType) {
 			this.baseType = baseType;
-			baseTemplate = ArgumentTypeInfos.unpack(baseType);
 		}
 
 		@Override
-		public ExceptionHandlingArgumentType<?> instantiate(CommandBuildContext commandBuildContext) {
-			return new ExceptionHandlingArgumentType<>(baseType == null ? baseTemplate.instantiate(commandBuildContext) : baseType);
+		public ExceptionHandlingArgumentType<T> instantiate(CommandBuildContext commandBuildContext) {
+			// Same as CustomArgumentInfo#deserializeFromNetwork. An
+			// ExceptionHandlingArgumentType should never be built
+			// from a packet, so this method shouldn't be used
+			throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.CustomArgumentInfo.Template#instantiate for more information");
+			// Including a mini-stacktrace here in case this exception shows up
+			// on a client-disconnected screen, which is not very helpful
 		}
 
 		@Override
-		public ArgumentTypeInfo<ExceptionHandlingArgumentType<?>, ?> type() {
+		public ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, ?> type() {
 			return CustomArgumentInfo.this;
 		}
 	}
