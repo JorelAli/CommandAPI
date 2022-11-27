@@ -28,18 +28,6 @@ public class ExceptionHandlingArgumentInfo_Common<T> implements ArgumentTypeInfo
 	}
 
 	@Override
-	public Template deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
-		// Since this class overrides its COMMAND_ARGUMENT_TYPE id with the baseType's,
-		// this class's id should never show up in a packet and this method should never
-		// be called to deserialize the ArgumentType info that wasn't put into the packet
-		// anyway. Also, the server shouldn't ever deserialize a *ClientBound*CommandPacket
-		// either. If this method ever gets called, either you or I are doing something very wrong!
-		throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_Common#deserializeFromNetwork for more information");
-		// Including a mini-stacktrace here in case this exception shows up
-		// on a client-disconnected screen, which is not very helpful
-	}
-
-	@Override
 	public void serializeToJson(Template template, JsonObject properties) {
 		ArgumentType<T> baseType = template.baseType;
 		ArgumentTypeInfo<ArgumentType<T>, ArgumentTypeInfo.Template<ArgumentType<T>>> baseInfo =
@@ -58,11 +46,28 @@ public class ExceptionHandlingArgumentInfo_Common<T> implements ArgumentTypeInfo
 		return new Template(baseType);
 	}
 
+	@Override
+	public Template deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
+		// Since this class overrides its COMMAND_ARGUMENT_TYPE id with the baseType's,
+		// this class's id should never show up in a packet and this method should never
+		// be called to deserialize the ArgumentType info that wasn't put into the packet
+		// anyway. Also, the server shouldn't ever deserialize a *ClientBound*CommandPacket
+		// either. If this method ever gets called, either you or I are doing something very wrong!
+		throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_Common#deserializeFromNetwork for more information");
+		// Including a mini-stacktrace here in case this exception shows up
+		// on a client-disconnected screen, which is not very helpful
+	}
+
 	public final class Template implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<T>> {
 		final ArgumentType<T> baseType;
 
 		public Template(ArgumentType<T> baseType) {
 			this.baseType = baseType;
+		}
+
+		@Override
+		public ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, ?> type() {
+			return ExceptionHandlingArgumentInfo_Common.this;
 		}
 
 		@Override
@@ -73,11 +78,6 @@ public class ExceptionHandlingArgumentInfo_Common<T> implements ArgumentTypeInfo
 			throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_Common.Template#instantiate for more information");
 			// Including a mini-stacktrace here in case this exception shows up
 			// on a client-disconnected screen, which is not very helpful
-		}
-
-		@Override
-		public ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, ?> type() {
-			return ExceptionHandlingArgumentInfo_Common.this;
 		}
 	}
 }

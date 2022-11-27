@@ -45,18 +45,6 @@ public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentS
 	}
 
 	@Override
-	public ExceptionHandlingArgumentType<T> b(PacketDataSerializer packetDataSerializer) {
-		// Since this class overrides its ArgumentRegistry key with the baseType's,
-		// this class's key should never show up in a packet and this method should never
-		// be called to deserialize the ArgumentType info that wasn't put into the packet
-		// anyway. Also, the server shouldn't ever deserialize a PacketPlay*Out*Commands
-		// either. If this method ever gets called, either you or I are doing something very wrong!
-		throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentSerializer_1_16_R1#b for more information");
-		// Including a mini-stacktrace here in case this exception shows up
-		// on a client-disconnected screen, which is not very helpful
-	}
-
-	@Override
 	public void a(ExceptionHandlingArgumentType<T> argument, JsonObject properties) {
 		try {
 			ArgumentType<T> baseType = argument.baseType();
@@ -78,5 +66,17 @@ public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentS
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public ExceptionHandlingArgumentType<T> b(PacketDataSerializer packetDataSerializer) {
+		// Since this class overrides its ArgumentRegistry key with the baseType's,
+		// this class's key should never show up in a packet and this method should never
+		// be called to deserialize the ArgumentType info that wasn't put into the packet
+		// anyway. Also, the server shouldn't ever deserialize a PacketPlay*Out*Commands
+		// either. If this method ever gets called, either you or I are doing something very wrong!
+		throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentSerializer_1_16_R1#b for more information");
+		// Including a mini-stacktrace here in case this exception shows up
+		// on a client-disconnected screen, which is not very helpful
 	}
 }
