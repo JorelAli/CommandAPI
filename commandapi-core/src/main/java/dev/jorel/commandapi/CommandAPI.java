@@ -208,7 +208,6 @@ public final class CommandAPI {
 			// For some reason, any other priority doesn't work
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
-				logInfo("Sending commands to: " + e.getPlayer().getName());
 				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
 			}
 

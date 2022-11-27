@@ -905,6 +905,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 	}
 
 	<T> ArgumentType<T> wrapArgumentType(Argument<?> argument, ArgumentType<T> rawType) {
+		if (argument instanceof CustomArgument<?, ?> ca) {
+			argument = ca.getBaseArgument();
+			// CustomArgument sets its raw type to baseArgument's raw type, so that is already correct
+		}
+
 		if (!(argument instanceof InitialParseExceptionArgument)) return rawType;
 
 		InitialParseExceptionArgument<T, ?> iPEA = (InitialParseExceptionArgument<T, ?>) argument;

@@ -23,8 +23,6 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
-import dev.jorel.commandapi.arguments.*;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -65,43 +63,10 @@ public class CommandAPIMain extends JavaPlugin {
 		for (String commandName : CommandAPI.config.getCommandsToConvert()) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
-
-		new CommandAPICommand("veryearly").withArguments(new LiteralArgument("Hello")).executes((sender, args) -> {sender.sendMessage("Did I register?");}).register();
 	}
 
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
-
-		new CommandAPICommand("test")
-			.withArguments(
-				new MultiLiteralArgument("a", "b", "c"),
-				new TextArgument("string")
-					.withInitialParseExceptionHandler(this::printInfo)
-					.withArgumentParseExceptionHandler(this::printInfo),
-				new IntegerArgument("int", 0, 10)
-					.withInitialParseExceptionHandler(this::printInfo)
-					.withArgumentParseExceptionHandler(this::printInfo),
-				new PlayerArgument("player")
-					.withInitialParseExceptionHandler(this::printInfo)
-					.withArgumentParseExceptionHandler(this::printInfo)
-			)
-			.executes((sender, args) -> {
-				sender.sendMessage(args[0].toString());
-				sender.sendMessage(args[1].toString());
-				sender.sendMessage(args[2].toString());
-				sender.sendMessage(args[3].toString());
-			})
-			.register();
-	}
-
-	private <T> T printInfo(InitialParseExceptionContext context) throws WrapperCommandSyntaxException {
-		CommandAPI.logNormal("Intercepted error with message: " + context.exception().getMessage());
-		throw CommandAPI.failWithString("Haha! InitialParseExceptionHandler has intercepted " + context.exception().getMessage());
-	}
-
-	private <T> T printInfo(ArgumentParseExceptionContext context) throws WrapperCommandSyntaxException {
-		CommandAPI.logNormal("Intercepted error with message: " + context.exception().getMessage());
-		throw CommandAPI.failWithString("Haha! ArgumentParseExceptionHandler has intercepted " + context.exception().getMessage());
 	}
 }
