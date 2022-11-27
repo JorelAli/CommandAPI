@@ -37,6 +37,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.Message;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
@@ -583,6 +584,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+	}
+
+	@Override
+	public void registerCustomArgumentType() {
+		ArgumentTypes.register("commandapi:exception_handler", ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentSerializer_1_18_R1());
 	}
 
 	@Override

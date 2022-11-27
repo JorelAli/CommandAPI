@@ -728,7 +728,6 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	public abstract void resendPackets(Player player);
 
 	@Override
-	@Differs(from = {"1.14, 1.15, 1.16"}, by = "Using ArgumentTypeInfos and Registry.COMMAND_ARGUMENT_TYPE instead of ArgumentRegistry")
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
-	public void registerCustomArgumentType() {}; // TODO: Make abstract
+	public abstract void registerCustomArgumentType();
 }

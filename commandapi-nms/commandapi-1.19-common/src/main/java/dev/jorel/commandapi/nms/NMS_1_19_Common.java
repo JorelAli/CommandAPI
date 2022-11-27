@@ -771,6 +771,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
+	@Differs(from = {"1.14, 1.15, 1.16", "1.17", "1.18"},
+		by = "Using ArgumentTypeInfos and Registry.COMMAND_ARGUMENT_TYPE instead of ArgumentRegistry")
 	public void registerCustomArgumentType() {
 		try {
 			// Unfreeze registry
