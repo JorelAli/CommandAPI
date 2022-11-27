@@ -22,7 +22,10 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> implements ArgumentS
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
 			// Remove this key from packet
-			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
+			if(getInfo == null) {
+				getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
+				getInfo.setAccessible(true);
+			}
 			Object myInfo = getInfo.invoke(null, argument);
 
 			Field keyField = CommandAPIHandler.getInstance().getField(myInfo.getClass(), "c");
@@ -52,7 +55,10 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> implements ArgumentS
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
+			if(getInfo == null) {
+				getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
+				getInfo.setAccessible(true);
+			}
 			Object baseInfo = getInfo.invoke(null, baseType);
 
 			Field keyField = CommandAPIHandler.getInstance().getField(baseInfo.getClass(), "c");
