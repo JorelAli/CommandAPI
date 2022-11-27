@@ -32,6 +32,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -520,13 +521,17 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public void registerCustomArgumentType() {
+		ArgumentTypes.register("commandapi:exception_handler", ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentSerializer_1_17_Common());
+	}
+
+	@Override
 	public Message generateMessageFromJson(String json) {
 		return Serializer.fromJson(json);
 	}
 
-  @Override
+	@Override
 	public MinecraftServer getMinecraftServer() {
 		return MINECRAFT_SERVER;
 	}
-
 }
