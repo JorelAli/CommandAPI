@@ -20,7 +20,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
 			// Remove this key from packet
-			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("a", ArgumentType.class);
+			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
 			Object myInfo = getInfo.invoke(null, argument);
 
 			Field keyField = CommandAPIHandler.getInstance().getField(myInfo.getClass(), "c");
@@ -49,7 +49,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("a", ArgumentType.class);
+			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
 			Object baseInfo = getInfo.invoke(null, baseType);
 
 			Field keyField = CommandAPIHandler.getInstance().getField(baseInfo.getClass(), "c");

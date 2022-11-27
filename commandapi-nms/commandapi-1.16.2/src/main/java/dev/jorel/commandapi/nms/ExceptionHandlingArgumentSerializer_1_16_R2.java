@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import dev.jorel.commandapi.preprocessor.Differs;
 import net.minecraft.server.v1_16_R2.ArgumentRegistry;
 import net.minecraft.server.v1_16_R2.ArgumentSerializer;
 import net.minecraft.server.v1_16_R2.PacketDataSerializer;
@@ -17,10 +18,11 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> implements ArgumentS
 	private static Method getInfo = null;
 
 	@Override
+	@Differs(from = {"1.13", "1.14", "1.15", "1.16.1"}, by = "ArgumentRegistry.a -> ArgumentRegistry.b")
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
 			// Remove this key from packet
-			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("a", ArgumentType.class);
+			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
 			Object myInfo = getInfo.invoke(null, argument);
 
 			Field keyField = CommandAPIHandler.getInstance().getField(myInfo.getClass(), "c");
@@ -45,11 +47,12 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> implements ArgumentS
 	}
 
 	@Override
+	@Differs(from = {"1.13", "1.14", "1.15", "1.16.1"}, by = "ArgumentRegistry.a -> ArgumentRegistry.b")
 	public void a(ExceptionHandlingArgumentType<T> argument, JsonObject properties) {
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("a", ArgumentType.class);
+			if(getInfo == null) getInfo = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class);
 			Object baseInfo = getInfo.invoke(null, baseType);
 
 			Field keyField = CommandAPIHandler.getInstance().getField(baseInfo.getClass(), "c");
