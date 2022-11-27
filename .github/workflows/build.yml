@@ -29,6 +29,12 @@ jobs:
           cache: maven
       - name: build CommandAPI using maven
         run: mvn clean install --batch-mode
+      - name: check NMS Common works on all versions
+        run: |
+          mvn clean package -pl :commandapi-nms-common -P Spigot_1_17_R1
+          mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_R1
+          mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_2_R2
+          mvn clean package -pl :commandapi-nms-common -P Spigot_1_19_R1;
       - name: CommandAPI plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v2
