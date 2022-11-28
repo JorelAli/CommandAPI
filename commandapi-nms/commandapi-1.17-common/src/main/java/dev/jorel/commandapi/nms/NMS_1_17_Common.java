@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import net.minecraft.commands.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -90,11 +91,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -129,6 +125,8 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.potion.PotionEffectType;
+// TODO: Make sure imports merged correctly
 
 // Mojang-Mapped reflection
 /**
@@ -463,6 +461,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return PotionEffectType.getById(Registry.MOB_EFFECT.getId(MobEffectArgument.getEffect(cmdCtx, key)));
+	}
+
+	@Override
 	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
@@ -534,4 +537,5 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	public MinecraftServer getMinecraftServer() {
 		return MINECRAFT_SERVER;
 	}
+
 }
