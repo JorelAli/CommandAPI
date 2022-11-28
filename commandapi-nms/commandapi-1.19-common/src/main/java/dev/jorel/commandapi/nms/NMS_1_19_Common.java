@@ -160,7 +160,6 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.potion.PotionEffectType;
-// TODO: Make sure imports merged correctly
 
 // Mojang-Mapped reflection
 /**
