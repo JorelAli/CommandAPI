@@ -41,6 +41,7 @@ import java.util.function.ToIntFunction;
 import com.mojang.brigadier.Message;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.commands.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Keyed;
@@ -102,12 +103,6 @@ import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -154,6 +149,7 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.potion.PotionEffectType;
 
 // Mojang-Mapped reflection
 /**
@@ -516,6 +512,11 @@ public class NMS_1_18_R2 extends NMS_Common {
 		}
 		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
+	}
+
+	@Override
+	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return PotionEffectType.getByKey(fromResourceLocation(Registry.MOB_EFFECT.getKey(MobEffectArgument.getEffect(cmdCtx, key))));
 	}
 
 	@Override
