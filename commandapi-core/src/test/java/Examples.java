@@ -830,12 +830,21 @@ new CommandAPICommand("unlockrecipe")
 {
 /* ANCHOR: soundarguments */
 new CommandAPICommand("sound")
-    .withArguments(new SoundArgument("sound"))
+    .withArguments(new SoundArgument<Sound>("sound"))
     .executesPlayer((player, args) -> {
         player.getWorld().playSound(player.getLocation(), (Sound) args[0], 100.0f, 1.0f);
     })
     .register();
 /* ANCHOR_END: soundarguments */
+
+/* ANCHOR: soundarguments2 */
+new CommandAPICommand("sound")
+    .withArguments(new SoundArgument<NamespacedKey>("sound").asNamespacedKey())
+    .executesPlayer((player, args) -> {
+        player.getWorld().playSound(player.getLocation(), ((NamespacedKey) args[0]).asString(), 100.0f, 1.0f);
+    })
+    .register();
+/* ANCHOR_END: soundarguments2 */
 }
 
 

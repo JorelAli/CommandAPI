@@ -754,6 +754,15 @@ CommandAPICommand("sound")
     })
     .register()
 /* ANCHOR_END: soundarguments */
+
+/* ANCHOR: soundarguments2 */
+CommandAPICommand("sound")
+    .withArguments(SoundArgument<NamespacedKey>("sound").asNamespacedKey())
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        player.world.playSound(player.location, (args[0] as NamespacedKey).asString(), 100.0f, 1.0f)
+    })
+    .register()
+/* ANCHOR_END: soundarguments2 */
 }
 
 fun timearg() {

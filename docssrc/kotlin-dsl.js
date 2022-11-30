@@ -33,7 +33,9 @@ for (const multiPreNode of document.getElementsByClassName("multi-pre")) {
         //   ```
         //
         // then the class name is "language-groovy build.gradle hljs"
-        const buttonText = child.querySelector("code.hljs").classList[1];
+        //
+        // If we want to have spaces, use an underscore
+        const buttonText = child.querySelector("code.hljs").classList[1].replace(/_/g, " ");
         const button = document.createElement("button");
         button.className = "language-selector";
         button.innerText = buttonText;

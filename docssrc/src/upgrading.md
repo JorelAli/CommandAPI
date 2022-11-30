@@ -2,6 +2,20 @@
 
 ## From 8.5.1 to 8.6.0
 
+### Sound arguments
+
+In 8.6.0, the `SoundArgument` now supports returning a `Sound` or `NamespacedKey` object. More information on how to use this can be found in the [Sound arguments](./soundargument.md) page. `SoundArgument` objects now require a generic type parameter to specify what the return type will be (either `Sound` or `NamespacedKey`). For the default behaviour, use `Sound` as the generic type parameter:
+
+```java
+new SoundArgument("sound")
+```
+
+\\[\downarrow\\]
+
+```java
+new SoundArgument<Sound>("sound")
+```
+
 ### Tooltips
 
 In 8.6.0, tooltips have been reworked to provide support for Spigot's `BaseComponent[]`s, and Adventure's `Component`s. As a result, the default method `StringTooltip.of()` and `Tooltip.of()` have been deprecated in favour of the better named `StringTooltip.ofString()` and `Tooltip.ofString()` methods:
