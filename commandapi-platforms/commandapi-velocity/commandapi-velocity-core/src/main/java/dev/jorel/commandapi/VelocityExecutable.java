@@ -4,7 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.*;
 
-public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> extends IPlatformExecutable<Impl, CommandSource> {
+public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> extends PlatformExecutable<Impl, CommandSource> {
 	// Regular command executor
 
 	/**

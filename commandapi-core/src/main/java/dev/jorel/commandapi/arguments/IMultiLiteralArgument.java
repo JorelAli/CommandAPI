@@ -1,8 +1,8 @@
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.IChainableBuilder;
+import dev.jorel.commandapi.ChainableBuilder;
 
-public interface IMultiLiteralArgument<Impl extends AbstractArgument<String, ?, ?, ?>> extends IChainableBuilder<Impl> {
+public interface IMultiLiteralArgument<Impl extends AbstractArgument<String, ?, ?, ?>> extends ChainableBuilder<Impl> {
 	// MultiLiteral specific information
 
 	/**

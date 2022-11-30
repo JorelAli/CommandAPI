@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @param <Impl> The class extending this class, used as the return type for chain calls
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandSender> implements IChainableBuilder<Impl> {
+abstract class Executable<Impl extends Executable<Impl, CommandSender>, CommandSender> implements ChainableBuilder<Impl> {
 
 	/**
 	 * The CommandAPIExecutor for this executable implementation

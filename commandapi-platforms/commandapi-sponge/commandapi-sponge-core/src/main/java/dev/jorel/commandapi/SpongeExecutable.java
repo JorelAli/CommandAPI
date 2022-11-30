@@ -6,7 +6,7 @@ import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 
 // TODO: Replace CommandSource with the class Sponge uses to send commands
-public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends IPlatformExecutable<Impl, CommandSource> {
+public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends PlatformExecutable<Impl, CommandSource> {
 	// Regular command executor
 
 	/**

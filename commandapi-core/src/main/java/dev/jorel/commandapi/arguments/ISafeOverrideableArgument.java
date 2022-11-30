@@ -1,11 +1,11 @@
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.IChainableBuilder;
+import dev.jorel.commandapi.ChainableBuilder;
 
 import java.util.function.Function;
 
 public interface ISafeOverrideableArgument<T, S, Impl extends AbstractArgument<T, Impl, Argument, CommandSender>,
-	Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends IChainableBuilder<Impl> {
+	Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends ChainableBuilder<Impl> {
 	// Links to methods in AbstractArgument (make sure they have the same signature)
 	Impl replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions);
 
