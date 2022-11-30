@@ -217,24 +217,6 @@ public interface NMS<CommandListenerWrapper> {
 
 	BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-//	Replaced by AbstractPlatform#getBrigadierSourceFromCommandSender
-//	/**
-//	 * Converts a CommandSender into a CLW
-//	 *
-//	 * @param sender the command sender to convert
-//	 * @return a CLW.
-//	 */
-//	CommandListenerWrapper getCLWFromCommandSender(CommandSender sender);
-
-//	Replaced by AbstractPlatform#getCommandSenderFromCommandSource
-//	/**
-//	 * Returns a CommandSender of a given CommandListenerWrapper object
-//	 *
-//	 * @param clw The CommandListenerWrapper object
-//	 * @return A CommandSender (not proxied) from the command listener wrapper
-//	 */
-//	CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw);
-
 	World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
@@ -309,21 +291,6 @@ public interface NMS<CommandListenerWrapper> {
 
 	String getScoreHolderSingle(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
-
-//	Replaced by AbstractPlatform#getSenderForCommand
-//	/**
-//	 * Retrieves a CommandSender, given some CommandContext. This method should
-//	 * handle Proxied CommandSenders for entities if a Proxy is being used.
-//	 *
-//	 * @param cmdCtx      The
-//	 *                    <code>CommandContext&lt;CommandListenerWrapper&gt;</code>
-//	 *                    for a given command
-//	 * @param forceNative whether or not the CommandSender should be a
-//	 *                    NativeProxyCommandSender or not
-//	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or
-//	 *         Player)
-//	 */
-	// CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative);
 
 	/**
 	 * Returns the Server's internal (OBC) CommandMap

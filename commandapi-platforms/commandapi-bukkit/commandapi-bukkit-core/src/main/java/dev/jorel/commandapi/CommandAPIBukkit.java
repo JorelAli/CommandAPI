@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 
-// CommandAPIBukkit is an AbstractPlatform, but also needs all of the methods from
+// CommandAPIBukkit is an CommandAPIPlatform, but also needs all of the methods from
 // NMS, so it implements NMS. Our implementation of CommandAPIBukkit is now derived
 // using the version handler (and thus, deferred to our NMS-specific implementations)
 
