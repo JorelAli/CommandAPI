@@ -650,7 +650,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
-	public abstract Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key);
+	public abstract <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
 
 	// This differs from 1.18 -> 1.18.2 due to biome suggestions, but it should be covered by the default case (empty)
 	@Override

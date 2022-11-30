@@ -42,7 +42,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import com.mojang.brigadier.Message;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -87,6 +86,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -177,6 +177,7 @@ import net.minecraft.server.v1_16_R3.ParticleParamBlock;
 import net.minecraft.server.v1_16_R3.ParticleParamItem;
 import net.minecraft.server.v1_16_R3.ParticleParamRedstone;
 import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
+import net.minecraft.server.v1_16_R3.SoundEffect;
 import net.minecraft.server.v1_16_R3.SystemUtils;
 import net.minecraft.server.v1_16_R3.Vec2F;
 import net.minecraft.server.v1_16_R3.Vec3D;
@@ -888,9 +889,22 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	}
 
 	@Differs(from = "1.16.2", by = "Use of CraftSound.getBukkit()")
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return CraftSound.getBukkit(IRegistry.SOUND_EVENT.get(ArgumentMinecraftKeyRegistered.e(cmdCtx, key)));
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final MinecraftKey soundResource = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) fromMinecraftKey(soundResource);
+		} else {
+			// Otherwise, if null return null else Sound
+			final SoundEffect soundEffect = IRegistry.SOUND_EVENT.get(soundResource);
+			if(soundEffect == null) {
+				return null;
+			} else {
+				return (SoundOrNamespacedKey) CraftSound.getBukkit(soundEffect);
+			}
+		}
 	}
 
 	@Override

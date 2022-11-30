@@ -748,7 +748,7 @@ CommandAPICommand("unlockrecipe")
 fun soundarguments() {
 /* ANCHOR: soundarguments */
 CommandAPICommand("sound")
-    .withArguments(SoundArgument("sound"))
+    .withArguments(SoundArgument<Sound>("sound"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         player.world.playSound(player.location, args[0] as Sound, 100.0f, 1.0f)
     })

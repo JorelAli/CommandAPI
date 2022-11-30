@@ -12,6 +12,7 @@ import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.command.ProxiedCommandSender
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.Sound
 import java.util.function.Predicate
 
 inline fun commandTree(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
@@ -95,7 +96,7 @@ inline fun CommandTree.namespacedKeyArgument(nodeName: String, block: ArgumentTr
 inline fun CommandTree.particleArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ParticleArgument(nodeName).apply(block))
 inline fun CommandTree.potionEffectArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(PotionEffectArgument(nodeName).apply(block))
 inline fun CommandTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).apply(block))
-inline fun CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
+inline fun CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument<Sound>(nodeName).apply(block))
 inline fun CommandTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(TimeArgument(nodeName).apply(block))
 inline fun CommandTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(UUIDArgument(nodeName).apply(block))
 
@@ -189,7 +190,7 @@ inline fun ArgumentTree.namespacedKeyArgument(nodeName: String, block: ArgumentT
 inline fun ArgumentTree.particleArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ParticleArgument(nodeName).apply(block))
 inline fun ArgumentTree.potionEffectArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(PotionEffectArgument(nodeName).apply(block))
 inline fun ArgumentTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(RecipeArgument(nodeName).apply(block))
-inline fun ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument(nodeName).apply(block))
+inline fun ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument<Sound>(nodeName).apply(block))
 inline fun ArgumentTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(TimeArgument(nodeName).apply(block))
 inline fun ArgumentTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(UUIDArgument(nodeName).apply(block))
 

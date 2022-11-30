@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -31,19 +32,34 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
+public class SoundArgument<SoundOrNamespacedKey> extends SafeOverrideableArgument<SoundOrNamespacedKey, SoundOrNamespacedKey> implements ICustomProvidedArgument {
+	
+	private boolean useNamespacedKey = false;
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getInstance().getNMS()::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), null);
+		super.setMapper(soundOrNamespacedKey -> {
+			if(useNamespacedKey) {
+				return ((NamespacedKey) soundOrNamespacedKey).toString();
+			} else {
+				return CommandAPIHandler.getInstance().getNMS().convert((Sound) soundOrNamespacedKey);
+			}
+		});
+	}
+	
+	public SoundArgument<SoundOrNamespacedKey> asNamespacedKey() {
+		this.useNamespacedKey = true;
+		return this;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Class<Sound> getPrimitiveType() {
-		return Sound.class;
+	public Class<SoundOrNamespacedKey> getPrimitiveType() {
+		return (Class<SoundOrNamespacedKey>) (useNamespacedKey ? NamespacedKey.class : Sound.class);
 	}
 
 	@Override
@@ -57,8 +73,8 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Sound parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> SoundOrNamespacedKey parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getSound(cmdCtx, key);
+		return nms.getSound(cmdCtx, key, getPrimitiveType());
 	}
 }
