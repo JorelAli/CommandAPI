@@ -19,7 +19,7 @@ import java.util.List;
 // See https://docs.spongepowered.org/stable/en/plugin/migrating-from-7-to-8.html#command-creation-and-registration
 
 // TODO: How does Sponge send commands and interact with Brigadier?
-public class CommandAPISponge extends AbstractPlatform<Argument<?>, Object, Object> {
+public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Object> {
 	private CommandManager commandManager;
 	private static CommandAPISponge instance;
 

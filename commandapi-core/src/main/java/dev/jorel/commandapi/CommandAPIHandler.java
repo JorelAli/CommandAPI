@@ -100,13 +100,13 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
 
 	final TreeMap<String, CommandPermission> REGISTERED_PERMISSIONS = new TreeMap<>();
-	final AbstractPlatform<Argument, CommandSender, Source>  platform;
+	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, IPreviewable<?, ?>> previewableArguments; // Arguments with previewable chat
 
 	private static CommandAPIHandler<?, ?, ?> instance;
 
-	protected CommandAPIHandler(AbstractPlatform<Argument, CommandSender, Source> platform) {
+	protected CommandAPIHandler(CommandAPIPlatform<Argument, CommandSender, Source> platform) {
 		this.platform = platform;
 		this.registeredCommands = new ArrayList<>();
 		this.previewableArguments = new HashMap<>();
@@ -142,7 +142,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		return instance;
 	}
 
-	public AbstractPlatform<Argument, CommandSender, Source> getPlatform() {
+	public CommandAPIPlatform<Argument, CommandSender, Source> getPlatform() {
 		return this.platform;
 	}
 

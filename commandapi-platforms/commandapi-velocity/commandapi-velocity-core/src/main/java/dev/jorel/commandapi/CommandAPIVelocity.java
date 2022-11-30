@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CommandAPIVelocity extends AbstractPlatform<Argument<?>, CommandSource, CommandSource> {
+public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandSource, CommandSource> {
 	private CommandManager commandManager;
 	private static CommandAPIVelocity instance;
 

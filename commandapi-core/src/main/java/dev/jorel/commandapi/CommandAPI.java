@@ -99,7 +99,7 @@ public class CommandAPI {
 			CommandAPI.config = new InternalConfig(config);
 
 			// Initialize handlers
-			AbstractPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
+			CommandAPIPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
 			new CommandAPIHandler<>(platform);
 
 			// Log platform load
@@ -107,7 +107,7 @@ public class CommandAPI {
 			{
 				List<String> platformClassHierarchyList = new ArrayList<>();
 				Class<?> platformClass = platform.getClass();
-				while (platformClass != AbstractPlatform.class) {
+				while (platformClass != CommandAPIPlatform.class) {
 					platformClassHierarchyList.add(platformClass.getSimpleName());
 					platformClass = platformClass.getSuperclass();
 				}
@@ -212,7 +212,7 @@ public class CommandAPI {
 	 * @param player the player whose requirements should be updated
 	 */
 	public static <CommandSender, Player extends CommandSender> void updateRequirements(Player player) {
-		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
+		CommandAPIPlatform<?, CommandSender, ?> platform = (CommandAPIPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		platform.updateRequirements((AbstractPlayer<?>) platform.wrapCommandSender(player));
 	}
 

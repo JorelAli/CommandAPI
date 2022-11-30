@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import org.bukkit.command.CommandSender;
@@ -109,8 +109,8 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> List<T> parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandListenerWrapper> List<T> parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandListenerWrapper> nms,
+                                                          CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
 		for (T object : supplier.apply(nms.getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource())) {

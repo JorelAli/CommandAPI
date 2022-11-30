@@ -22,7 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import org.bukkit.NamespacedKey;
@@ -59,8 +59,8 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	}
 	
 	@Override
-	public <CommandSourceStack> FunctionWrapper[] parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-																CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> FunctionWrapper[] parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+                                                                CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((CommandAPIBukkit<CommandSourceStack>) platform).getFunction(cmdCtx, key);
 	}
 }

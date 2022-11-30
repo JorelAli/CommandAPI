@@ -207,7 +207,7 @@ public final class Brigadier {
 	 *         CommandSender
 	 */
 	public static <CommandSender> Object getBrigadierSourceFromCommandSender(CommandSender sender) {
-		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
+		CommandAPIPlatform<?, CommandSender, ?> platform = (CommandAPIPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		return platform.getBrigadierSourceFromCommandSender(platform.wrapCommandSender(sender));
 	}
 
@@ -219,7 +219,7 @@ public final class Brigadier {
 	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
 	 */
 	public static <CommandSender> CommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
-		AbstractPlatform<?, CommandSender, ?> platform = (AbstractPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
+		CommandAPIPlatform<?, CommandSender, ?> platform = (CommandAPIPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		// For some reason putting this on one line doesn't work - very weird
 		AbstractCommandSender<CommandSender> abstractSender = platform.getSenderForCommand(cmdCtx, false);
 		return abstractSender.getSource();

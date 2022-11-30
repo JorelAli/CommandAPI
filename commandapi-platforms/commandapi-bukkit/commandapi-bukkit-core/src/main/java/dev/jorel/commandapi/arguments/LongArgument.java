@@ -23,7 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import org.bukkit.command.CommandSender;
 
@@ -75,8 +75,8 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	}
 
 	@Override
-	public <Source> Long parseArgument(AbstractPlatform<Argument<?>, CommandSender, Source> platform,
-									   CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Long parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, Source> platform,
+                                       CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

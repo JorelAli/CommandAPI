@@ -22,7 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import org.bukkit.command.CommandSender;
@@ -51,8 +51,8 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	}
 	
 	@Override
-	public <CommandSourceStack> MathOperation parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-															CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> MathOperation parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+                                                            CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((CommandAPIBukkit<CommandSourceStack>) platform).getMathOperation(cmdCtx, key);
 	}
 }

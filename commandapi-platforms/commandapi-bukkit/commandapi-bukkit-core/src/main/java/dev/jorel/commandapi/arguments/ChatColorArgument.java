@@ -22,7 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -57,8 +57,8 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	}
 	
 	@Override
-	public <CommandSourceStack> ChatColor parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-														CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> ChatColor parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+                                                        CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((CommandAPIBukkit<CommandSourceStack>) platform).getChatColor(cmdCtx, key);
 	}
 }

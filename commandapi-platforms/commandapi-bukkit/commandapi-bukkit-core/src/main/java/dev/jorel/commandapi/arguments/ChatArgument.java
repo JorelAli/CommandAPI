@@ -22,7 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
@@ -72,8 +72,8 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	}
 
 	@Override
-	public <CommandSourceStack> BaseComponent[] parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-															  CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> BaseComponent[] parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+                                                              CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = ((CommandAPIBukkit<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		BaseComponent[] component = ((CommandAPIBukkit<CommandSourceStack>) platform).getChat(cmdCtx, key);
 

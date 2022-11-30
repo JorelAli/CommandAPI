@@ -1,7 +1,7 @@
 package dev.jorel.commandapi;
 
 public interface CommandAPIVersionHandler {
-	static AbstractPlatform<?, ?, ?> getPlatform() {
+	static CommandAPIPlatform<?, ?, ?> getPlatform() {
 		return new CommandAPISponge();
 	}
 }

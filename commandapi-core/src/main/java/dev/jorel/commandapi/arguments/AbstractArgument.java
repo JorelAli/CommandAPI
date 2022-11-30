@@ -104,8 +104,8 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <Source> T parseArgument(AbstractPlatform<Argument, CommandSender, Source> platform,
-											 CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
+	public abstract <Source> T parseArgument(CommandAPIPlatform<Argument, CommandSender, Source> platform,
+                                             CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //

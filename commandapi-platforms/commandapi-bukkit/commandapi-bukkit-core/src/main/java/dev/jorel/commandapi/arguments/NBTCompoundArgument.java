@@ -22,7 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPI;
 import org.bukkit.command.CommandSender;
@@ -59,8 +59,8 @@ public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandSourceStack> NBTContainer parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-														   CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> NBTContainer parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
+                                                           CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		return (NBTContainer) ((CommandAPIBukkit<CommandSourceStack>) platform).getNBTCompound(cmdCtx, key, CommandAPI.getConfiguration().getNBTContainerConstructor());
 	}

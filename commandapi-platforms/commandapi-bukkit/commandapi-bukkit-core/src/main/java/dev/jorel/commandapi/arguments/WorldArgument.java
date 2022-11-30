@@ -22,7 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.AbstractPlatform;
+import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -58,8 +58,8 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> {
 	}
 
 	@Override
-	public <CommandListenerWrapper> World parseArgument(AbstractPlatform<Argument<?>, CommandSender, CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandListenerWrapper> World parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandListenerWrapper> nms,
+                                                        CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return ((CommandAPIBukkit<CommandListenerWrapper>) nms).getDimension(cmdCtx, key);
 	}
 }
