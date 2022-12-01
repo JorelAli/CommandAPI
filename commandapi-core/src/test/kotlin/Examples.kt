@@ -109,10 +109,10 @@ CommandAPICommand("broadcastmsg")
     .withAliases("broadcast", "broadcastmessage")   // Command aliases
     .withPermission(CommandPermission.OP)           // Required permissions
     .executes(CommandExecutor { sender, args ->
-        val message = args[0] as String;
-        Bukkit.getServer().broadcastMessage(message);
+        val message = args[0] as String
+        Bukkit.getServer().broadcastMessage(message)
     })
-    .register();
+    .register()
 /* ANCHOR_END: commandregistration */
 }
 
@@ -469,7 +469,7 @@ fun scoreboardslotargument() {
 CommandAPICommand("clearobjectives")
     .withArguments(ScoreboardSlotArgument("slot"))
     .executes(CommandExecutor { _, args ->
-        val scoreboard = Bukkit.getScoreboardManager().mainScoreboard
+        val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
         val slot = (args[0] as ScoreboardSlot).displaySlot
         scoreboard.clearSlot(slot)
     })
@@ -486,7 +486,7 @@ CommandAPICommand("sidebar")
         val objectiveName = args[0] as String
 
         // An objective name can be turned into an Objective using getObjective(String)
-        val objective = Bukkit.getScoreboardManager().mainScoreboard.getObjective(objectiveName)
+        val objective = Bukkit.getScoreboardManager()?.mainScoreboard.getObjective(objectiveName)
 
         // Set display slot
         objective?.setDisplaySlot(DisplaySlot.SIDEBAR)
@@ -501,7 +501,7 @@ CommandAPICommand("unregisterall")
     .withArguments(ObjectiveCriteriaArgument("objective criteria"))
     .executes(CommandExecutor { _, args ->
         val objectiveCriteria = args[0] as String
-        val objectives = Bukkit.getScoreboardManager().mainScoreboard.getObjectivesByCriteria(objectiveCriteria)
+        val objectives = Bukkit.getScoreboardManager()?.mainScoreboard.getObjectivesByCriteria(objectiveCriteria)
 
         // Unregister the objectives
         for (objective in objectives) {
@@ -521,7 +521,7 @@ CommandAPICommand("togglepvp")
         val teamName = args[0] as String
 
         // A team name can be turned into a Team using getTeam(String)
-        val team = Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)!!
+        val team = Bukkit.getScoreboardManager()?.mainScoreboard.getTeam(teamName)!!
 
         // Toggle pvp
         team.setAllowFriendlyFire(team.allowFriendlyFire())
@@ -772,7 +772,7 @@ CommandAPICommand("bigmsg")
     .withArguments(GreedyStringArgument("message"))
     .executes(CommandExecutor { _, args ->
         // Duration in ticks
-        val duration = args[0] as Int
+        val duration = args[0] as Int 
         val message = args[1] as String
 
         for (player in Bukkit.getOnlinePlayers()) {
@@ -809,7 +809,7 @@ CommandAPICommand("replace")
             for (y in -radius until radius + 1) {
                 for (z in -radius until radius + 1) {
                     if (Math.sqrt((x * x + y * y + z * z).toDouble()) <= radius) {
-                        val block = center.world.getBlockAt(x + center.blockX, y + center.blockY, z + center.blockZ)
+                        val block = center.world?.getBlockAt(x + center.blockX, y + center.blockY, z + center.blockZ)
 
                         // If that block matches a block from the predicate, set it
                         if (predicate.test(block)) {
@@ -1788,8 +1788,8 @@ fun SafeRecipeArguments() {
 // Create our itemstack
 val emeraldSword = ItemStack(Material.DIAMOND_SWORD)
 val meta = emeraldSword.getItemMeta()
-meta.setDisplayName("Emerald Sword")
-meta.setUnbreakable(true)
+meta?.setDisplayName("Emerald Sword")
+meta?.setUnbreakable(true)
 emeraldSword.setItemMeta(meta)
 
 // Create and register our recipe
@@ -2115,7 +2115,7 @@ fun getTargetSign(player: Player): Sign {
     if (block != null && block.state is Sign) {
         return block.state as Sign
     } else {
-        throw CommandAPI.fail("You're not looking at a sign!")
+        throw CommandAPI.failWithString("You're not looking at a sign!")
     }
 }
 
@@ -2124,7 +2124,7 @@ fun sudoCommandArgument() {
 CommandAPICommand("sudo")
     .withArguments(PlayerArgument("target"))
     .withArguments(CommandArgument("command"))
-    .executes(CommandExecutor { sender, args ->
+    .executes(CommandExecutor { _, args ->
         val target = args[0] as Player
         val command = args[1] as CommandResult
 
@@ -2132,6 +2132,60 @@ CommandAPICommand("sudo")
     })
     .register()
 /* ANCHOR_END: command_argument_sudo */
+}
+
+fun giveCommandArgument() {
+
+/* ANCHOR: command_argument_branch_give */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("give"),
+    ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+).branch(
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+        ArgumentSuggestions.empty()
+    ),
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+        null,
+        ArgumentSuggestions.empty()
+    )
+)
+/* ANCHOR_END: command_argument_branch_give */
+
+/* ANCHOR: command_argument_branch_tp */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("tp"),
+    ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() },
+    ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+)
+/* ANCHOR_END: command_argument_branch_tp */
+
+
+/* ANCHOR: command_argument_branch */
+CommandArgument("command")
+    .branchSuggestions(
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("give"),
+            ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+        ).branch(
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+                ArgumentSuggestions.empty()
+            ),
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+                null,
+                ArgumentSuggestions.empty()
+            )
+        ),
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("tp"),
+            ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() },
+            ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+        )
+    )
+/* ANCHOR_END: command_argument_branch */
 }
 
 
@@ -2159,20 +2213,20 @@ class Friends {
 /* ANCHOR_END: ArgumentSuggestions2_1 */
 
 
-/* ANCHOR: Tooltips3 */
 @Suppress("deprecation")
+/* ANCHOR: Tooltips3 */
 class CustomItem(val item: ItemStack, val name: String, lore: String): IStringTooltip {
 
     init {
         val meta = item.itemMeta
-        meta.setDisplayName(name)
-        meta.setLore(listOf(lore))
+        meta?.setDisplayName(name)
+        meta?.setLore(listOf(lore))
         item.setItemMeta(meta)
     }
 
-    override fun getSuggestion(): String = this.item.itemMeta.displayName
+    override fun getSuggestion(): String = this.item.itemMeta?.displayName
 
-    override fun getTooltip(): Message = Tooltip.messageFromString(this.item.itemMeta.lore?.get(0) ?: "")
+    override fun getTooltip(): Message = Tooltip.messageFromString(this.item.itemMeta?.lore?.get(0) ?: "")
 
 }
 /* ANCHOR_END: Tooltips3 */
@@ -2218,7 +2272,7 @@ class MyPlugin : JavaPlugin() {
     }
 
     override fun onDisable() {
-        CommandAPI.onDisable();
+        CommandAPI.onDisable()
     }
 
 }

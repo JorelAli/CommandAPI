@@ -84,7 +84,7 @@ In this example, we want to be able to run any arbitrary command, so we will sim
 
 Restricted commands allows you to restrict what commands a user is allowed to submit in the `CommandArgument`. Commands can be restricted by replacing the `CommandArgument`'s suggestions using the `replaceSuggestions()` method. For better fine-tuning of what commands a user can submit, commands can also be restricted by using _suggestion branches_.
 
-<!-- TODO: Give an example using .replaceSuggestions(). Need to explain null as well! -->
+<!-- TODO: Give an example using .replaceSuggestions(). -->
 
 <div class="example">
 
@@ -162,3 +162,66 @@ Adding everything together, we get this fully completed CommandArgument:
 </div>
 
 </div>
+
+### Null and empty suggestions
+
+In the above example about restricted commands, we used `null` and `ArgumentSuggestions.empty()` in our `SuggestionsBranch.suggest()` method. These special suggestions have specific effects when used in suggestions for the `CommandArgument`.
+
+#### Null suggestions
+
+Null suggestions ensure that the suggestions at the current position will not be overridden. In the case of the `CommandArgument`, this means that no suggestions will be provided, but the user is still allowed to enter a value for the command argument. For example, if we have the following `null` entry in our suggestions, users are allowed to enter a value if they choose to do so, meaning that the examples below are both valid:
+
+```java
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("give"),
+    ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+    null,
+    ArgumentSuggestions.empty()
+)
+```
+
+```mccmd
+/give dirt
+/give dirt 10
+```
+
+Ending the command argument with nothing is also equivalent to using `null`, for example the following suggestion branch allows any of the following commands:
+
+```java
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("give"),
+    ArgumentSuggestions.strings("dirt", "minecraft:dirt")
+)
+```
+
+```mccmd
+/give dirt
+/give dirt 10
+/give dirt 10 name:Hello
+```
+
+#### Empty suggestions
+
+Empty suggestions that are provided using `ArgumentSuggestions.empty()` tell the `CommandArgument` to stop accepting further suggestions. This "ends" the command. Using the following example, this allows the user to enter `/give diamond` and only `/give diamond` - users cannot enter any other commands.
+
+```java
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("give"),
+    ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+    ArgumentSuggestions.empty()
+)
+```
+
+These commands are valid:
+
+```mccmd
+/give diamond
+/give minecraft:diamond
+```
+
+These commands are not valid:
+
+```mccmd
+/give
+/give diamond 10
+```
