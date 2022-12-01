@@ -24,7 +24,6 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
@@ -77,7 +76,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 	}
 
 	@Override
-	public <Source> Double parseArgument(CommandAPIPlatform<Argument<?>, CommandSource, Source> platform, CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Double parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

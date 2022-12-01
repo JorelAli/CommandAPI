@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents a Minecraft resource location (or namespaced key)
@@ -57,9 +55,8 @@ public class NamespacedKeyArgument extends SafeOverrideableArgument<NamespacedKe
 	}
 
 	@Override
-	public <CommandSourceStack> NamespacedKey parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                            CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getMinecraftKey(cmdCtx, key);
+		return CommandAPIBukkit.<CommandSourceStack>get().getMinecraftKey(cmdCtx, key);
 	}
 }

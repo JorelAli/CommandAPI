@@ -23,8 +23,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
@@ -75,8 +73,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> 
 	}
 
 	@Override
-	public <Source> Integer parseArgument(CommandAPIPlatform<Argument<?>, CommandSource, Source> platform,
-                                          CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Integer parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

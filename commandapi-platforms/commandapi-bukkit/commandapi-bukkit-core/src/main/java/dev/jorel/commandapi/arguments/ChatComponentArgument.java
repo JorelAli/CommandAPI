@@ -22,11 +22,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import net.md_5.bungee.api.chat.BaseComponent;
-import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents raw JSON text
@@ -64,9 +62,8 @@ public class ChatComponentArgument extends Argument<BaseComponent[]> {
 	}
 
 	@Override
-	public <CommandSourceStack> BaseComponent[] parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                              CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> BaseComponent[] parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getChatComponent(cmdCtx, key);
+		return CommandAPIBukkit.<CommandSourceStack>get().getChatComponent(cmdCtx, key);
 	}
 }

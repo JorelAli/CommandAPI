@@ -97,15 +97,13 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * isn't expected to be used outside the CommandAPI
 	 *
 	 * @param <Source>     the command source type
-	 * @param platform     a reference to the platform
 	 * @param cmdCtx       the context which ran this command
 	 * @param key          the name of the argument node
 	 * @param previousArgs an array of previously declared arguments
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <Source> T parseArgument(CommandAPIPlatform<Argument, CommandSender, Source> platform,
-                                             CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
+	public abstract <Source> T parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //

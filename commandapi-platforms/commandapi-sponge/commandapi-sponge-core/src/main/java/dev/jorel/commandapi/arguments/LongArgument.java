@@ -24,7 +24,6 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
@@ -75,8 +74,7 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	}
 
 	@Override
-	public <Source> Long parseArgument(CommandAPIPlatform<Argument<?>, CommandSource, Source> platform,
-                                       CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Long parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

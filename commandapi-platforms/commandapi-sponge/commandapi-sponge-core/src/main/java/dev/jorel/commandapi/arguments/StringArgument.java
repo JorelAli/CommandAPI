@@ -24,7 +24,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.CommandAPIPlatform;
 
 /**
  * An argument that represents a simple String
@@ -49,8 +48,7 @@ public class StringArgument extends Argument<String> {
 	}
 
 	@Override
-	public <Source> String parseArgument(CommandAPIPlatform<Argument<?>, CommandSource, Source> platform,
-                                         CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

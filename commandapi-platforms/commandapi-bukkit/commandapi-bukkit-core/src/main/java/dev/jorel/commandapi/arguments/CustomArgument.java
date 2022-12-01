@@ -25,7 +25,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPI;
@@ -128,15 +127,14 @@ public class CustomArgument<T, B> extends Argument<T> {
 	}
 
 	@Override
-	public <CommandSourceStack> T parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
-		final B parsedInput = base.parseArgument(platform, cmdCtx, key, previousArgs);
+		final B parsedInput = base.parseArgument(cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo<B>(platform.getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
+			return infoParser.apply(new CustomArgumentInfo<B>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
 					previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
@@ -377,8 +375,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		}
 
 		@Override
-		public <Source> String parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, Source> platform,
-                                             CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
+		public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
 			return keyed ? ((CommandAPIBukkit<Source>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
 		}

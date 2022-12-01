@@ -4,7 +4,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SuggestionInfo;
 import org.bukkit.FluidCollisionMode;
@@ -173,12 +172,11 @@ public class CommandArgument extends Argument<CommandResult> implements IGreedyA
 	}
 
 	@Override
-	public <CommandSourceStack> CommandResult parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                            CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> CommandResult parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		// Extract information
 		String command = cmdCtx.getArgument(key, String.class);
-		CommandMap commandMap = ((CommandAPIBukkit<CommandSourceStack>) platform).getSimpleCommandMap();
-		CommandSender sender = platform.getSenderForCommand(cmdCtx, false).getSource();
+		CommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
+		CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getSenderForCommand(cmdCtx, false).getSource();
 
 		StringReader context = new StringReader(command);
 

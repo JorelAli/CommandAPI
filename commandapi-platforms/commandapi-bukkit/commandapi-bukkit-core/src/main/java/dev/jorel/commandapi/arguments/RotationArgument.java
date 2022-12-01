@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.Rotation;
-import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents rotation as pitch and yaw
@@ -51,8 +49,7 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotatio
 	}
 	
 	@Override
-	public <CommandSourceStack> Rotation parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                       CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getRotation(cmdCtx, key);
+	public <CommandSourceStack> Rotation parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getRotation(cmdCtx, key);
 	}
 }

@@ -22,9 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
-import org.bukkit.command.CommandSender;
 
 /**
  * A pseudo-argument representing a single literal string
@@ -102,8 +100,7 @@ public class LiteralArgument extends Argument<String> implements ILiteralArgumen
 	}
 
 	@Override
-	public <Source> String parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, Source> platform,
-                                         CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return literal;
 	}
 }

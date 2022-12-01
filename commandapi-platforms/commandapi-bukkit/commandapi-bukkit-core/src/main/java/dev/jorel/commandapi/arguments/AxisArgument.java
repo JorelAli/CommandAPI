@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.Axis;
-import org.bukkit.command.CommandSender;
 
 import java.util.EnumSet;
 
@@ -59,9 +57,9 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 	}
 
 	@Override
-	public <CommandSourceStack> EnumSet<Axis> parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform, CommandContext<CommandSourceStack> cmdCtx, String key,
+	public <CommandSourceStack> EnumSet<Axis> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key,
                                                             Object[] previousArgs)
 		throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getAxis(cmdCtx, key);
+		return CommandAPIBukkit.<CommandSourceStack>get().getAxis(cmdCtx, key);
 	}
 }

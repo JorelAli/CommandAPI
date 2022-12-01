@@ -83,8 +83,8 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 		instance = this;
 	}
 
-	public static CommandAPIBukkit<?> get() {
-		return instance;
+	public static <Source> CommandAPIBukkit<Source> get() {
+		return (CommandAPIBukkit<Source>) instance;
 	}
 
 	public PaperImplementations getPaper() {

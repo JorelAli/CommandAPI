@@ -22,11 +22,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents Minecraft functions and tags
@@ -59,8 +57,7 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	}
 	
 	@Override
-	public <CommandSourceStack> FunctionWrapper[] parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                                CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getFunction(cmdCtx, key);
+	public <CommandSourceStack> FunctionWrapper[] parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getFunction(cmdCtx, key);
 	}
 }

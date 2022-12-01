@@ -22,11 +22,9 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.wrappers.Location2D;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit {@link Location} object in x and z directions
@@ -76,8 +74,9 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	}
 	
 	@Override
-	public <CommandSourceStack> Location2D parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                         CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return isPrecise ? ((CommandAPIBukkit<CommandSourceStack>) platform).getLocation2DPrecise(cmdCtx, key) : ((CommandAPIBukkit<CommandSourceStack>) platform).getLocation2DBlock(cmdCtx, key);
+	public <CommandSourceStack> Location2D parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return isPrecise ?
+			CommandAPIBukkit.<CommandSourceStack>get().getLocation2DPrecise(cmdCtx, key) :
+			CommandAPIBukkit.<CommandSourceStack>get().getLocation2DBlock(cmdCtx, key);
 	}
 }

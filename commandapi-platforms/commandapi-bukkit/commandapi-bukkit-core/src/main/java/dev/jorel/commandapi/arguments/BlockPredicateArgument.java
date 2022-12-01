@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 
 import java.util.function.Predicate;
 
@@ -58,9 +56,8 @@ public class BlockPredicateArgument extends Argument<Predicate> {
 	}
 
 	@Override
-	public <CommandSourceStack> Predicate<?> parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                           CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> Predicate<?> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
 			throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getBlockPredicate(cmdCtx, key);
+		return CommandAPIBukkit.<CommandSourceStack>get().getBlockPredicate(cmdCtx, key);
 	}
 }

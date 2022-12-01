@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.World.Environment;
-import org.bukkit.command.CommandSender;
 
 import java.util.function.Function;
 
@@ -59,8 +57,7 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment, E
 	}
 	
 	@Override
-	public <CommandSourceStack> Environment parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                          CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getEnvironment(cmdCtx, key);
+	public <CommandSourceStack> Environment parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getEnvironment(cmdCtx, key);
 	}
 }

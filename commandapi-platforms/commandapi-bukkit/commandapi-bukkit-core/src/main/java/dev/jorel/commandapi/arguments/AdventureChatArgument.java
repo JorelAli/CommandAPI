@@ -22,7 +22,6 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
@@ -72,10 +71,9 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	}
 
 	@Override
-	public <CommandSourceStack> Component parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                        CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = ((CommandAPIBukkit<CommandSourceStack>) platform).getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
-		Component component = ((CommandAPIBukkit<CommandSourceStack>) platform).getAdventureChat(cmdCtx, key);
+	public <CommandSourceStack> Component parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		final CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
+		Component component = CommandAPIBukkit.<CommandSourceStack>get().getAdventureChat(cmdCtx, key);
 
 		if (this.usePreview && getPreview().isPresent() && sender instanceof Player player) {
 			try {

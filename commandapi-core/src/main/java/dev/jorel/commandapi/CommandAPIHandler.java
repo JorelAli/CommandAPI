@@ -233,7 +233,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 */
 	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, Object[] previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
-			return value.parseArgument(platform, cmdCtx, key, previousArgs);
+			return value.parseArgument(cmdCtx, key, previousArgs);
 		} else {
 			return null;
 		}

@@ -22,10 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 
 /**
  * An argument that represents the Bukkit Player object
@@ -53,8 +51,7 @@ public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlaye
 	}
 	
 	@Override
-	public <CommandSourceStack> OfflinePlayer parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                            CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return ((CommandAPIBukkit<CommandSourceStack>) platform).getOfflinePlayer(cmdCtx, key);
+	public <CommandSourceStack> OfflinePlayer parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getOfflinePlayer(cmdCtx, key);
 	}
 }

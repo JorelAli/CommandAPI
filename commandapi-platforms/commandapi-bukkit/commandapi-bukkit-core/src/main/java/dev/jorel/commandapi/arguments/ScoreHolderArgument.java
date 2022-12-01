@@ -22,9 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIPlatform;
 import dev.jorel.commandapi.CommandAPIBukkit;
-import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
 
@@ -75,9 +73,10 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandSourceStack> T parseArgument(CommandAPIPlatform<Argument<?>, CommandSender, CommandSourceStack> platform,
-                                                CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return (T) (single ? ((CommandAPIBukkit<CommandSourceStack>) platform).getScoreHolderSingle(cmdCtx, key) : ((CommandAPIBukkit<CommandSourceStack>) platform).getScoreHolderMultiple(cmdCtx, key));
+	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return (T) (single ?
+			CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderSingle(cmdCtx, key) :
+			CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderMultiple(cmdCtx, key));
 	}
 
 	/**
