@@ -469,7 +469,7 @@ fun scoreboardslotargument() {
 CommandAPICommand("clearobjectives")
     .withArguments(ScoreboardSlotArgument("slot"))
     .executes(CommandExecutor { _, args ->
-        val scoreboard = Bukkit.getScoreboardManager()?.mainScoreboard
+        val scoreboard = Bukkit.getScoreboardManager().mainScoreboard
         val slot = (args[0] as ScoreboardSlot).displaySlot
         scoreboard.clearSlot(slot)
     })
@@ -486,7 +486,7 @@ CommandAPICommand("sidebar")
         val objectiveName = args[0] as String
 
         // An objective name can be turned into an Objective using getObjective(String)
-        val objective = Bukkit.getScoreboardManager()?.mainScoreboard.getObjective(objectiveName)
+        val objective = Bukkit.getScoreboardManager().mainScoreboard.getObjective(objectiveName)
 
         // Set display slot
         objective?.setDisplaySlot(DisplaySlot.SIDEBAR)
@@ -501,7 +501,7 @@ CommandAPICommand("unregisterall")
     .withArguments(ObjectiveCriteriaArgument("objective criteria"))
     .executes(CommandExecutor { _, args ->
         val objectiveCriteria = args[0] as String
-        val objectives = Bukkit.getScoreboardManager()?.mainScoreboard.getObjectivesByCriteria(objectiveCriteria)
+        val objectives = Bukkit.getScoreboardManager().mainScoreboard.getObjectivesByCriteria(objectiveCriteria)
 
         // Unregister the objectives
         for (objective in objectives) {
@@ -521,7 +521,7 @@ CommandAPICommand("togglepvp")
         val teamName = args[0] as String
 
         // A team name can be turned into a Team using getTeam(String)
-        val team = Bukkit.getScoreboardManager()?.mainScoreboard.getTeam(teamName)!!
+        val team = Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)!!
 
         // Toggle pvp
         team.setAllowFriendlyFire(team.allowFriendlyFire())
@@ -809,7 +809,7 @@ CommandAPICommand("replace")
             for (y in -radius until radius + 1) {
                 for (z in -radius until radius + 1) {
                     if (Math.sqrt((x * x + y * y + z * z).toDouble()) <= radius) {
-                        val block = center.world?.getBlockAt(x + center.blockX, y + center.blockY, z + center.blockZ)
+                        val block = center.world.getBlockAt(x + center.blockX, y + center.blockY, z + center.blockZ)
 
                         // If that block matches a block from the predicate, set it
                         if (predicate.test(block)) {
@@ -2219,14 +2219,14 @@ class CustomItem(val item: ItemStack, val name: String, lore: String): IStringTo
 
     init {
         val meta = item.itemMeta
-        meta?.setDisplayName(name)
-        meta?.setLore(listOf(lore))
+        meta.setDisplayName(name)
+        meta.setLore(listOf(lore))
         item.setItemMeta(meta)
     }
 
-    override fun getSuggestion(): String = this.item.itemMeta?.displayName
+    override fun getSuggestion(): String = this.item.itemMeta.displayName
 
-    override fun getTooltip(): Message = Tooltip.messageFromString(this.item.itemMeta?.lore?.get(0) ?: "")
+    override fun getTooltip(): Message = Tooltip.messageFromString(this.item.itemMeta.lore?.get(0) ?: "")
 
 }
 /* ANCHOR_END: Tooltips3 */
