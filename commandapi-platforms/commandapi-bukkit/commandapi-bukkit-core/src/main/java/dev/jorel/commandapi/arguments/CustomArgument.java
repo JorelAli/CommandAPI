@@ -377,7 +377,9 @@ public class CustomArgument<T, B> extends Argument<T> {
 		@Override
 		public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
 				throws CommandSyntaxException {
-			return keyed ? ((CommandAPIBukkit<Source>) platform).getMinecraftKey(cmdCtx, key).toString() : cmdCtx.getArgument(key, String.class);
+			return keyed ?
+				CommandAPIBukkit.<Source>get().getMinecraftKey(cmdCtx, key).toString() :
+				cmdCtx.getArgument(key, String.class);
 		}
 	}
 }
