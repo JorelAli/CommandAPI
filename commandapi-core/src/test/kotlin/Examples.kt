@@ -2181,7 +2181,7 @@ CommandAPICommand("sudo")
         val target = args[0] as Player
         val command = args[1] as CommandResult
 
-        command.command().execute(target, command.command().getLabel(), command.args())
+        command.execute(target)
     })
     .register()
 /* ANCHOR_END: command_argument_sudo */

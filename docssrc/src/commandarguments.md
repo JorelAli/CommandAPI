@@ -44,6 +44,14 @@ String[] args();
 
 -----
 
+```java
+boolean execute(CommandSender target);
+```
+
+`execute(CommandSender)` runs the Bukkit `Command` using the arguments contained in the `CommandResult` as the given `CommandSender`. It returns true if the command dispatch succeeded, and false if it failed. Using this method is equivalent to running `result.command().execute(target, result.command().getLabel(), result.args());`.
+
+-----
+
 ## Arbitrary commands
 
 Arbitrary commands let the user enter any command that they have permission to execute. To use arbitrary commands, you just need to use the `CommandArgument` normally.

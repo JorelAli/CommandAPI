@@ -2302,7 +2302,7 @@ new CommandAPICommand("sudo")
         Player target = (Player) args[0];
         CommandResult command = (CommandResult) args[1];
 
-        command.command().execute(target, command.command().getLabel(), command.args());
+        command.execute(target);
     })
     .register();
 /* ANCHOR_END: command_argument_sudo */
