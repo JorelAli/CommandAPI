@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.wrappers.WrapperStringReader;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +29,8 @@ public record ExceptionHandlingArgumentType<T>(ArgumentType<T> baseType, Initial
 		} catch (CommandSyntaxException original) {
 			try {
 				return errorHandler.handleException(new InitialParseExceptionContext(
-					new WrapperCommandSyntaxException(original)
+					new WrapperCommandSyntaxException(original),
+					new WrapperStringReader(stringReader)
 				));
 			} catch (WrapperCommandSyntaxException newException) {
 				throw newException.getException();
