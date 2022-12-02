@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 
@@ -34,32 +36,33 @@ import dev.jorel.commandapi.nms.NMS;
  */
 public class SoundArgument<SoundOrNamespacedKey> extends SafeOverrideableArgument<SoundOrNamespacedKey, SoundOrNamespacedKey> implements ICustomProvidedArgument {
 	
-	private boolean useNamespacedKey = false;
+	private final SoundType soundType;
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), null);
-		super.setMapper(soundOrNamespacedKey -> {
-			if(useNamespacedKey) {
-				return ((NamespacedKey) soundOrNamespacedKey).toString();
-			} else {
-				return CommandAPIHandler.getInstance().getNMS().convert((Sound) soundOrNamespacedKey);
-			}
-		});
+		this(nodeName, SoundType.SOUND);
 	}
 	
-	public SoundArgument<SoundOrNamespacedKey> asNamespacedKey() {
-		this.useNamespacedKey = true;
-		return this;
+	/**
+	 * A Sound argument. Represents Bukkit's Sound object
+	 * @param nodeName the name of the node for this argument
+	 */
+	@SuppressWarnings("unchecked")
+	public SoundArgument(String nodeName, SoundType soundType) {
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), (Function<SoundOrNamespacedKey, String>) soundType.getMapper());
+		this.soundType = soundType;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Class<SoundOrNamespacedKey> getPrimitiveType() {
-		return (Class<SoundOrNamespacedKey>) (useNamespacedKey ? NamespacedKey.class : Sound.class);
+		return (Class<SoundOrNamespacedKey>) switch (soundType) {
+			case SOUND -> Sound.class;
+			case NAMESPACED_KEY -> NamespacedKey.class;
+		};
 	}
 
 	@Override

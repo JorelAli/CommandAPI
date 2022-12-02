@@ -12,6 +12,37 @@ This allows you to use Brigadier's `SuggestionsBuilder` and `Suggestions` classe
 
 In order to use this, you will need the Brigadier dependency, which you can find under the [Brigadier installation instructions](https://github.com/Mojang/brigadier#installation).
 
+<!--
+
+Map<String, String> emojis = new HashMap<>();
+emojis.put("😀", "smile");
+emojis.put("💖", "heart");
+
+Argument<String> arg = new GreedyStringArgument("message")
+    .replaceSuggestions((info, builder) -> {
+        String currentArg = info.currentArg();
+
+        // Offset builder to just after the last argument
+        if (currentArg.contains(" ")) {
+            builder = builder.createOffset(builder.getStart() + currentArg.lastIndexOf(" ") + " ".length());
+        }
+
+        for (Entry<String, String> str : emojis.entrySet()) {
+            builder.suggest(str.getKey(), new LiteralMessage(str.getValue()));
+        }
+
+        return builder.buildFuture();
+    }); 
+
+new CommandAPICommand("emoji")
+.withArguments(arg)
+.executes((sender, args) -> {
+    // Code here
+})
+.register();
+
+-->
+
 <div class="example">
 
 ### Example - Using a Minecraft command as an argument

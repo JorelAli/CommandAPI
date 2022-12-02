@@ -39,11 +39,7 @@ import dev.jorel.commandapi.Tooltip;
  */
 public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 
-	/** For all intents and purposes, assume this is final. We can't make this
-	 * final because we need to defer the setting of the mapper for certain
-	 * arguments which need an instance before invoking itself. This can be
-	 * seen in the {@code SoundArgument} */
-	private /*final*/ Function<S, String> mapper;
+	private final Function<S, String> mapper;
 
 	/**
 	 * Instantiates this argument and assigns the mapper to the provided mapper
@@ -55,10 +51,6 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 */
 	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
 		super(nodeName, rawType);
-		this.mapper = mapper;
-	}
-	
-	protected void setMapper(Function<S, String> mapper) {
 		this.mapper = mapper;
 	}
 

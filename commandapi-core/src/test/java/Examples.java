@@ -147,6 +147,7 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.SoundArgument;
+import dev.jorel.commandapi.arguments.SoundType;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.SuggestionsBranch;
 import dev.jorel.commandapi.arguments.TeamArgument;
@@ -839,7 +840,7 @@ new CommandAPICommand("sound")
 
 /* ANCHOR: soundarguments2 */
 new CommandAPICommand("sound")
-    .withArguments(new SoundArgument<NamespacedKey>("sound").asNamespacedKey())
+    .withArguments(new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY))
     .executesPlayer((player, args) -> {
         player.getWorld().playSound(player.getLocation(), ((NamespacedKey) args[0]).asString(), 100.0f, 1.0f);
     })
@@ -2064,7 +2065,7 @@ new CommandAPICommand("multigive")
     .withArguments(new ListArgumentBuilder<Material>("materials")
         .withList(List.of(Material.values()))
         .withMapper(material -> material.name().toLowerCase())
-        .build()
+        .buildGreedy()
     )
     .executesPlayer((player, args) -> {
         int amount = (int) args[0];

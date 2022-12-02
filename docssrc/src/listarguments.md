@@ -2,7 +2,10 @@
 
 ![A list argument with the command "/multigive @p stone grass_block dirt" and Minecraft suggestions with a list of Minecraft items](./images/arguments/listargument.png)
 
-List arguments allows users to provide a list of values. This argument uses an underlying `GreedyStringArgument`, so the greedy string argument rule applies - **this argument can only be used at the end of an argument list**.
+List arguments allows users to provide a list of values. This argument can take on two forms:
+
+- Using an underlying `GreedyStringArgument`, so the greedy string argument rule applies - **this argument can only be used at the end of an argument list**.
+- Using an underlying `TextArgument`, so this argument can be used anywhere in an argument list, but its contents must be surrounded with quotes (`"`).
 
 -----
 

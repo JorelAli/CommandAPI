@@ -757,7 +757,7 @@ CommandAPICommand("sound")
 
 /* ANCHOR: soundarguments2 */
 CommandAPICommand("sound")
-    .withArguments(SoundArgument<NamespacedKey>("sound").asNamespacedKey())
+    .withArguments(SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         player.world.playSound(player.location, (args[0] as NamespacedKey).asString(), 100.0f, 1.0f)
     })
@@ -1949,7 +1949,7 @@ CommandAPICommand("multigive")
     .withArguments(ListArgumentBuilder<Material>("materials")
         .withList(Material.values().toList())
         .withMapper { material -> material.name.lowercase() }
-        .build()
+        .buildGreedy()
     )
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val amount = args[0] as Int

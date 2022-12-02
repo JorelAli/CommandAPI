@@ -169,12 +169,11 @@ In the above example about restricted commands, we used `null` and `ArgumentSugg
 
 #### Null suggestions
 
-Null suggestions ensure that the suggestions at the current position will not be overridden. In the case of the `CommandArgument`, this means that no suggestions will be provided, but the user is still allowed to enter a value for the command argument. For example, if we have the following `null` entry in our suggestions, users are allowed to enter a value if they choose to do so, meaning that the examples below are both valid:
+Null suggestions ensure that the suggestions at the current position will not be overridden. In the case of the `CommandArgument`, this means that the default command suggestions will be provided. For example, if we have the following `null` entry in our suggestions, users are allowed to enter a value if they choose to do so, meaning that the examples below are both valid:
 
 ```java
 SuggestionsBranch.suggest(
     ArgumentSuggestions.strings("give"),
-    ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
     null,
     ArgumentSuggestions.empty()
 )
