@@ -370,7 +370,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
     <tbody>
         <tr>
             <td valign="top"><b>8.6.0</b></td>
-            <td valign="top">November 2022</td>
+            <td valign="top">December 2022</td>
             <td valign="top">
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/307 Adds a <code>CommandArgument</code> to let users submit commands as an argument</li>
