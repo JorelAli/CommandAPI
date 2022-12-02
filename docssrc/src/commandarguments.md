@@ -19,6 +19,8 @@ The `CommandResult` record contains the following methods:
 public record CommandResult {
     Command command();
     String[] args();
+
+    boolean execute(CommandSender target);
 }
 ```
 
@@ -48,7 +50,11 @@ String[] args();
 boolean execute(CommandSender target);
 ```
 
-`execute(CommandSender)` runs the Bukkit `Command` using the arguments contained in the `CommandResult` as the given `CommandSender`. It returns true if the command dispatch succeeded, and false if it failed. Using this method is equivalent to running `result.command().execute(target, result.command().getLabel(), result.args());`.
+`execute(CommandSender)` runs the Bukkit `Command` using the arguments contained in the `CommandResult` as the given `CommandSender`. It returns true if the command dispatch succeeded, and false if it failed. Using this method is equivalent to running the following:
+
+```java
+result.command().execute(target, result.command().getLabel(), result.args());
+```
 
 -----
 
