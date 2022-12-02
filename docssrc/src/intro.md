@@ -43,6 +43,8 @@ Here's the list of changes to the documentation between each update. You can vie
 - Adds a Kotlin tab to all Java code blocks which displays the equivalent code, but in Kotlin
 - Adds the new [Command arguments](./commandarguments.md) section
 - Adds the new [World arguments](./worldarguments.md) section
+- Mentions the new `LiteralArgument.of()` and `LiteralArgument.literal()` methods in [Literal arguments](./literalarguments.md)
+- Adds a really cool new example to the [Brigadier Suggestions](./brigadiersuggestions.md) page
 - Updated various sections (a summary of this can be found in the [Upgrading guide](./upgrading.md)):
   - Update [List arguments](./listarguments.md) to include the new `buildGreedy()` and `buildText()` methods
   - Update [Handling command failures](./commandfailures.md) with new methods

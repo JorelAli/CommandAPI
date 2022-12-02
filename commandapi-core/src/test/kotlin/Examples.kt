@@ -59,6 +59,7 @@ import com.mojang.brigadier.context.StringRange
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.tree.LiteralCommandNode
+import com.mojang.brigadier.LiteralMessage
 
 import de.tr7zw.changeme.nbtapi.NBTContainer
 import dev.jorel.commandapi.Brigadier
@@ -2011,6 +2012,58 @@ CommandAPICommand("commandargument")
         Bukkit.dispatchCommand(sender, args[0] as String)
     }).register()
 /* ANCHOR_END: BrigadierSuggestions2 */
+}
+
+fun brigadiersuggestionsemoji() {
+/* ANCHOR: BrigadierSuggestions3 */
+val emojis = mapOf(
+    "☻" to "smile",
+    "❤" to "heart",
+    "🔥" to "fire",
+    "★" to "star",
+    "☠" to "death",
+    "⚠" to "warning",
+    "☀" to "sun",
+    "☺" to "smile",
+    "☹" to "frown",
+    "✉" to "mail",
+    "☂" to "umbrella",
+    "✘" to "cross",
+    "♪" to "music note (eighth)",
+    "♬" to "music note (beamed sixteenth)",
+    "♩" to "music note (quarter)",
+    "♫" to "music note (beamed eighth)",
+    "☄" to "comet",
+    "✦" to "star",
+    "🗡" to "sword",
+    "🪓" to "axe",
+    "🔱" to "trident",
+    "🎣" to "fishing rod",
+    "🏹" to "bow",
+    "⛏" to "pickaxe",
+    "🍖" to "food"
+)
+
+val messageArgument = GreedyStringArgument("message")
+    .replaceSuggestions { info, builder ->
+        // Only display suggestions at the very end character
+        val newBuilder = builder.createOffset(builder.getStart() + info.currentArg().length);
+
+        // Suggest all the emojis!
+        emojis.forEach { (emoji, description) ->
+            newBuilder.suggest(emoji, LiteralMessage(description));
+        }
+
+        newBuilder.buildFuture()
+    }
+
+CommandAPICommand("emoji")
+    .withArguments(messageArgument)
+    .executes(CommandExecutor { _, args ->
+        Bukkit.broadcastMessage(args[0] as String);
+    })
+    .register()
+/* ANCHOR_END: BrigadierSuggestions3 */
 }
 
 // TODO: This example isn't used in the documentation!
