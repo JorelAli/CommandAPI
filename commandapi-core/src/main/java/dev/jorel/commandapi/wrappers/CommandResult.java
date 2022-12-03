@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.wrappers;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
