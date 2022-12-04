@@ -1,11 +1,10 @@
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Function;
-
+import dev.jorel.commandapi.CommandAPIBukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 
-import dev.jorel.commandapi.CommandAPIHandler;
+import java.util.function.Function;
 
 /**
  * An enum that represents the type that a {@link SoundArgument} should return
@@ -16,7 +15,7 @@ public enum SoundType {
 	/**
 	 * Returns a Bukkit {@link Sound} object
 	 */
-	SOUND(soundOrNamespacedKey -> CommandAPIHandler.getInstance().getNMS().convert((Sound) soundOrNamespacedKey)),
+	SOUND(soundOrNamespacedKey -> CommandAPIBukkit.get().convert((Sound) soundOrNamespacedKey)),
 
 	/**
 	 * Returns a Bukkit {@link NamespacedKey} object. Can be used with

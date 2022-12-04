@@ -62,7 +62,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
-// TODO: Make sure imports merged correctly
 
 /**
  * NMS implementation for Minecraft 1.13

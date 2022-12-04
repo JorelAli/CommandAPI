@@ -26,14 +26,7 @@ Say we want a simple command that plays a specific sound at your location. To do
 ```
 
 This command simply plays the provided sound to the current player:
-TODO: Make sure all docs reference Examples in the right place
-```
-From {{#include ../../commandapi-core/src/test/java/Examples.java
-To {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java
 
-From {{#include ../../commandapi-core/src/test/kotlin/Examples.kt
-To {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt
-```
 <div class="multi-pre">
 
 ```java,Java_(Sound)

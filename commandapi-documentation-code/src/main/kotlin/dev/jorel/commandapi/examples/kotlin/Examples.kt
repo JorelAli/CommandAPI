@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.examples.kotlin
 
+import com.mojang.brigadier.LiteralMessage
 import com.mojang.brigadier.Message
 import com.mojang.brigadier.ParseResults
 import com.mojang.brigadier.context.StringRange
@@ -23,22 +24,8 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.GameMode
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
-import org.bukkit.Server
-import org.bukkit.Sound
-import org.bukkit.World
 import org.bukkit.World.Environment
 import org.bukkit.advancement.Advancement
-import org.bukkit.block.Biome
-import org.bukkit.block.Block
-import org.bukkit.block.Chest
-import org.bukkit.block.Container
-import org.bukkit.block.Sign
 import org.bukkit.block.*
 import org.bukkit.block.data.BlockData
 import org.bukkit.command.CommandSender
@@ -59,51 +46,10 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.util.EulerAngle
-
-import com.mojang.brigadier.ParseResults
-import com.mojang.brigadier.context.StringRange
-import com.mojang.brigadier.exceptions.CommandSyntaxException
-import com.mojang.brigadier.suggestion.Suggestions
-import com.mojang.brigadier.tree.LiteralCommandNode
-import com.mojang.brigadier.LiteralMessage
-
-import de.tr7zw.changeme.nbtapi.NBTContainer
-import dev.jorel.commandapi.Brigadier
-import dev.jorel.commandapi.CommandAPI
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.CommandAPIConfig
-import dev.jorel.commandapi.CommandPermission
-import dev.jorel.commandapi.CommandTree
-import dev.jorel.commandapi.Converter
-import dev.jorel.commandapi.IStringTooltip
-import dev.jorel.commandapi.StringTooltip
-import dev.jorel.commandapi.SuggestionInfo
-import dev.jorel.commandapi.Tooltip
-import dev.jorel.commandapi.arguments.*
-import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
-import dev.jorel.commandapi.executors.CommandBlockCommandExecutor
-import dev.jorel.commandapi.executors.CommandExecutor
-import dev.jorel.commandapi.executors.EntityCommandExecutor
-import dev.jorel.commandapi.executors.ExecutorType
-import dev.jorel.commandapi.executors.NativeCommandExecutor
-import dev.jorel.commandapi.executors.PlayerCommandExecutor
-import dev.jorel.commandapi.executors.ProxyCommandExecutor
-import dev.jorel.commandapi.executors.ResultingCommandExecutor
-import dev.jorel.commandapi.wrappers.*
-import net.kyori.adventure.inventory.Book
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import net.md_5.bungee.api.chat.BaseComponent
-import net.md_5.bungee.api.chat.TextComponent
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
 import kotlin.random.Random
-// TODO: Clean up merged imports
 
 class Examples : JavaPlugin() {
 
@@ -2195,7 +2141,7 @@ CommandAPICommand("sudo")
 fun giveCommandArgument() {
 
 /* ANCHOR: command_argument_branch_give */
-SuggestionsBranch.suggest(
+SuggestionsBranch.suggest<CommandSender>(
     ArgumentSuggestions.strings("give"),
     ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
 ).branch(
@@ -2212,7 +2158,7 @@ SuggestionsBranch.suggest(
 /* ANCHOR_END: command_argument_branch_give */
 
 /* ANCHOR: command_argument_branch_tp */
-SuggestionsBranch.suggest(
+SuggestionsBranch.suggest<CommandSender>(
     ArgumentSuggestions.strings("tp"),
     ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() },
     ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
@@ -2223,7 +2169,7 @@ SuggestionsBranch.suggest(
 /* ANCHOR: command_argument_branch */
 CommandArgument("command")
     .branchSuggestions(
-        SuggestionsBranch.suggest(
+        SuggestionsBranch.suggest<CommandSender>(
             ArgumentSuggestions.strings("give"),
             ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
         ).branch(

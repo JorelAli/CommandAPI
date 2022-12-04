@@ -61,7 +61,7 @@
 		<!-- Main core code -->
 		<module>commandapi-core</module>
 
-		<!-- Platform implementions -->
+		<!-- Platform implementations -->
 		<module>commandapi-platforms</module>
 
 		<!-- Outputs -->

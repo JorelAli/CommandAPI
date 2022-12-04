@@ -19,20 +19,8 @@ package dev.jorel.commandapi.examples.java;
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Predicate;
 
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -85,101 +73,11 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.Message;
-import com.mojang.brigadier.ParseResults;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.context.StringRange;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.tree.LiteralCommandNode;
-
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import dev.jorel.commandapi.Brigadier;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandAPIConfig;
-import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.Converter;
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.StringTooltip;
-import dev.jorel.commandapi.Tooltip;
-import dev.jorel.commandapi.arguments.AdvancementArgument;
-import dev.jorel.commandapi.arguments.AdventureChatArgument;
-import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
-import dev.jorel.commandapi.arguments.AngleArgument;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.BiomeArgument;
-import dev.jorel.commandapi.arguments.BlockPredicateArgument;
-import dev.jorel.commandapi.arguments.BlockStateArgument;
-import dev.jorel.commandapi.arguments.BooleanArgument;
-import dev.jorel.commandapi.arguments.ChatArgument;
-import dev.jorel.commandapi.arguments.ChatColorArgument;
-import dev.jorel.commandapi.arguments.ChatComponentArgument;
-import dev.jorel.commandapi.arguments.CommandArgument;
-import dev.jorel.commandapi.wrappers.CommandResult;
-import dev.jorel.commandapi.arguments.CustomArgument;
-import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
-import dev.jorel.commandapi.arguments.EnchantmentArgument;
-import dev.jorel.commandapi.arguments.EntitySelector;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
-import dev.jorel.commandapi.arguments.EntityTypeArgument;
-import dev.jorel.commandapi.arguments.EnvironmentArgument;
-import dev.jorel.commandapi.arguments.FunctionArgument;
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.IntegerRangeArgument;
-import dev.jorel.commandapi.arguments.ItemStackArgument;
-import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
-import dev.jorel.commandapi.arguments.ListArgumentBuilder;
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.LocationArgument;
-import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.LootTableArgument;
-import dev.jorel.commandapi.arguments.MathOperationArgument;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.NBTCompoundArgument;
-import dev.jorel.commandapi.arguments.ObjectiveArgument;
-import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
-import dev.jorel.commandapi.arguments.ParticleArgument;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.PotionEffectArgument;
-import dev.jorel.commandapi.arguments.RecipeArgument;
-import dev.jorel.commandapi.arguments.RotationArgument;
-import dev.jorel.commandapi.arguments.SafeSuggestions;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
-import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
-import dev.jorel.commandapi.arguments.SoundArgument;
-import dev.jorel.commandapi.arguments.SoundType;
-import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.arguments.SuggestionsBranch;
-import dev.jorel.commandapi.arguments.TeamArgument;
-import dev.jorel.commandapi.arguments.TextArgument;
-import dev.jorel.commandapi.arguments.TimeArgument;
-import dev.jorel.commandapi.arguments.WorldArgument;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.executors.ExecutorType;
-import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.IntegerRange;
-import dev.jorel.commandapi.wrappers.MathOperation;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.Rotation;
-import dev.jorel.commandapi.wrappers.ScoreboardSlot;
-import net.kyori.adventure.inventory.Book;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
-// TODO: Clean up merged imports
 
 public class Examples extends JavaPlugin {
 
@@ -2319,7 +2217,7 @@ new CommandAPICommand("sudo")
 }
 
 {
-// TODO: Make sure SuggestionsBranch still works with CommandSender parameter
+
 /* ANCHOR: command_argument_branch_give */
 SuggestionsBranch.suggest(
     ArgumentSuggestions.strings("give"),
@@ -2349,7 +2247,7 @@ SuggestionsBranch.suggest(
 /* ANCHOR: command_argument_branch */
 new CommandArgument("command")
     .branchSuggestions(
-        SuggestionsBranch.suggest(
+        SuggestionsBranch.<CommandSender>suggest(
             ArgumentSuggestions.strings("give"),
             ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
         ).branch(

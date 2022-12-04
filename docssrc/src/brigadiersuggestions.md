@@ -25,11 +25,11 @@ For this command, we'll use a `GreedyStringArgument` as if we were making a gene
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:BrigadierSuggestions3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:BrigadierSuggestions3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:BrigadierSuggestions3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:BrigadierSuggestions3}}
 ```
 
 </div>

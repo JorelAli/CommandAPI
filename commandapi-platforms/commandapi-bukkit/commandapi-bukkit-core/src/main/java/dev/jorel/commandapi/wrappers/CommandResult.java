@@ -1,4 +1,3 @@
-// TODO: Move updates for CommandResult
 package dev.jorel.commandapi.wrappers;
 
 import org.bukkit.command.Command;
@@ -34,7 +33,7 @@ public record CommandResult(
 	/**
 	 * Executes this command with a provided {@link CommandSender}. This is equivalent to running
 	 * {@code result.command().execute(sender, result.command().getLabel(), result.args());}
-	 * 
+	 *
 	 * @param sender the command sender that will be used to execute this command
 	 */
 	public boolean execute(CommandSender sender) {

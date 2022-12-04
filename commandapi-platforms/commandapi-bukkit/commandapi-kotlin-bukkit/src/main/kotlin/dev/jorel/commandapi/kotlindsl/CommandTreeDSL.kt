@@ -94,9 +94,11 @@ inline fun CommandTree.namespacedKeyArgument(nodeName: String, block: Argument<*
 inline fun CommandTree.particleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(ParticleArgument(nodeName).apply(block))
 inline fun CommandTree.potionEffectArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(PotionEffectArgument(nodeName).apply(block))
 inline fun CommandTree.recipeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).apply(block))
-inline fun CommandTree.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
+inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName).apply(block))
+inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, soundType: SoundType, block: Argument<*>.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 inline fun CommandTree.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(TimeArgument(nodeName).apply(block))
 inline fun CommandTree.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(UUIDArgument(nodeName).apply(block))
+inline fun CommandTree.worldArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(WorldArgument(nodeName).apply(block))
 
 // Predicate arguments
 inline fun CommandTree.blockPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(BlockPredicateArgument(nodeName).apply(block))
@@ -188,9 +190,11 @@ inline fun Argument<*>.namespacedKeyArgument(nodeName: String, block: Argument<*
 inline fun Argument<*>.particleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ParticleArgument(nodeName).apply(block))
 inline fun Argument<*>.potionEffectArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(PotionEffectArgument(nodeName).apply(block))
 inline fun Argument<*>.recipeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(RecipeArgument(nodeName).apply(block))
-inline fun Argument<*>.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(SoundArgument(nodeName).apply(block))
+inline fun <SoundOrNamespacedKey> Argument<*>.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(SoundArgument<SoundOrNamespacedKey>(nodeName).apply(block))
+inline fun <SoundOrNamespacedKey> Argument<*>.soundArgument(nodeName: String, soundType: SoundType, block: Argument<*>.() -> Unit = {}): Argument<*> = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 inline fun Argument<*>.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(TimeArgument(nodeName).apply(block))
 inline fun Argument<*>.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(UUIDArgument(nodeName).apply(block))
+inline fun Argument<*>.worldArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(WorldArgument(nodeName).apply(block))
 
 // Predicate arguments
 inline fun Argument<*>.blockPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(BlockPredicateArgument(nodeName).apply(block))
