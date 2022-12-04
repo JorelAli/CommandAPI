@@ -20,60 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Keyed;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Particle.DustOptions;
-import org.bukkit.Particle.DustTransition;
-import org.bukkit.Vibration;
-import org.bukkit.Vibration.Destination;
-import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_18_R2.CraftLootTable;
-import org.bukkit.craftbukkit.v1_18_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_18_R2.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R2.help.CustomHelpTopic;
-import org.bukkit.craftbukkit.v1_18_R2.help.SimpleHelpMap;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffectType;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -97,13 +43,6 @@ import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.*;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.MobEffectArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -185,7 +124,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
-// TODO: Clean up import merge
 
 // Mojang-Mapped reflection
 /**

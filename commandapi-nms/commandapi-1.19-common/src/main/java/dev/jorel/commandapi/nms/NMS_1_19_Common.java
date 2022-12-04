@@ -167,7 +167,6 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-// TODO: Clean up import merge
 
 // Mojang-Mapped reflection
 /**
