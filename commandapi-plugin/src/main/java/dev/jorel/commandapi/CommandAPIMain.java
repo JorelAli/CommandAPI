@@ -40,9 +40,9 @@ public class CommandAPIMain extends JavaPlugin {
 		MinecraftVersion.disableUpdateCheck();
 
 		// Config loading
+		CommandAPI.logger = getLogger();
 		saveDefaultConfig();
 		CommandAPI.config = new InternalConfig(getConfig(), NBTContainer.class, NBTContainer::new, new File(getDataFolder(), "command_registration.json"));
-		CommandAPI.logger = getLogger();
 
 		// Check dependencies for CommandAPI
 		CommandAPIHandler.getInstance().checkDependencies();

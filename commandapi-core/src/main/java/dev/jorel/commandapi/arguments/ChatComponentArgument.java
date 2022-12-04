@@ -36,7 +36,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public class ChatComponentArgument extends Argument<BaseComponent[]> {
 
 	/**
-	 * Constructs a ChatComponnent argument with a given node name. Represents raw
+	 * Constructs a ChatComponent argument with a given node name. Represents raw
 	 * JSON text, used in Book MetaData, Chat and other various areas of Minecraft
 	 * 
 	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw

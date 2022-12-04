@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.6.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -149,7 +149,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8ab1c1059619e96153e6619cae9f8382"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces the suggestions of this argument with an array of suggestions with tooltips.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a8ab1c1059619e96153e6619cae9f8382">More...</a><br /></td></tr>
 <tr class="separator:a8ab1c1059619e96153e6619cae9f8382"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bfff4945cfc596936135dccdb628345"><td class="memItemLeft" align="right" valign="top">final Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2bfff4945cfc596936135dccdb628345">getOverriddenSuggestions</a> ()</td></tr>
-<tr class="memdesc:a2bfff4945cfc596936135dccdb628345"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2bfff4945cfc596936135dccdb628345">More...</a><br /></td></tr>
+<tr class="memdesc:a2bfff4945cfc596936135dccdb628345"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di...">IStringTooltip</a> array of suggestions for the current command.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a2bfff4945cfc596936135dccdb628345">More...</a><br /></td></tr>
 <tr class="separator:a2bfff4945cfc596936135dccdb628345"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e0dfcdc521df4985e79cd592b64cbec"><td class="memItemLeft" align="right" valign="top">final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a0e0dfcdc521df4985e79cd592b64cbec">withPermission</a> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> permission)</td></tr>
 <tr class="memdesc:a0e0dfcdc521df4985e79cd592b64cbec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns the given permission as a requirement to execute this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a0e0dfcdc521df4985e79cd592b64cbec">More...</a><br /></td></tr>
@@ -378,7 +378,7 @@ Protected Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command. </p>
+<p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di...">IStringTooltip</a> array of suggestions for the current command. </p>
 <dl class="section return"><dt>Returns</dt><dd>a function that provides suggestions, or <code>Optional.empty()</code> if there are no overridden suggestions. </dd></dl>
 
 </div>
@@ -528,7 +528,7 @@ Protected Member Functions</h2></td></tr>
 <p>Include suggestions to add to the list of default suggestions represented by this argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a>[] of suggestions (with tooltips) to add </td></tr>
+    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di...">IStringTooltip</a>[] of suggestions (with tooltips) to add </td></tr>
   </table>
   </dd>
 </dl>
@@ -858,7 +858,7 @@ Protected Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a></li>
-    <li class="footer">Generated on Thu Aug 11 2022 21:39:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun Dec 4 2022 10:49:51 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

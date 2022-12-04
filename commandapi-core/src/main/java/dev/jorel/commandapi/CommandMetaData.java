@@ -3,6 +3,7 @@ package dev.jorel.commandapi;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -53,6 +54,15 @@ final class CommandMetaData {
 		}
 
 		this.commandName = commandName;
+	}
+	
+	public CommandMetaData(CommandMetaData original) {
+		this(original.commandName);
+		this.permission = original.permission;
+		this.aliases = Arrays.copyOf(original.aliases, original.aliases.length);
+		this.requirements = original.requirements;
+		this.shortDescription = original.shortDescription.isPresent() ? Optional.of(original.shortDescription.get()) : Optional.empty();
+		this.fullDescription = original.fullDescription.isPresent() ? Optional.of(original.fullDescription.get()) : Optional.empty();
 	}
 
 }

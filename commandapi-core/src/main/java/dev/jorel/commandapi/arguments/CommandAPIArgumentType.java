@@ -83,9 +83,19 @@ public enum CommandAPIArgumentType {
 	CHATCOLOR("minecraft:color"),
 
 	/**
+	 * The CommandArgument
+	 */
+	COMMAND("api:command"),
+
+	/**
 	 * The CustomArgument
 	 */
 	CUSTOM,
+	
+	/**
+	 * The DimensionArgument
+	 */
+	DIMENSION("minecraft:dimension"),
 
 	/**
 	 * The EnchantmentArgument
@@ -106,7 +116,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The EnvironmentArgument
 	 */
-	ENVIRONMENT("minecraft:dimension"),
+	ENVIRONMENT("api:environment"),
 
 	/**
 	 * The FloatRangeArgument
@@ -137,6 +147,11 @@ public enum CommandAPIArgumentType {
 	 * The ListArgument
 	 */
 	LIST,
+
+	/**
+	 * The ListTextArgument
+	 */
+	LIST_TEXT,
 
 	/**
 	 * The LiteralArgument

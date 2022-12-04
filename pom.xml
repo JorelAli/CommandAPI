@@ -25,7 +25,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>8.5.1</version>
+	<version>8.6.0</version>
 	<packaging>pom</packaging>
 
 	<name>commandapi</name>
@@ -70,6 +70,7 @@
 		<module>commandapi-plugin-test</module>
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
+		<module>commandapi-kotlin</module>
 	</modules>
 
 	<properties>

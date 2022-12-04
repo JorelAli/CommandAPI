@@ -20,8 +20,16 @@ Say we have a command `bigmsg` that displays a title message to all players for 
 /bigmsg <duration> <message>
 ```
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:timearguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:timearguments}}
+```
+
+</div>
 
 </div>

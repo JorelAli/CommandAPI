@@ -57,6 +57,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -94,6 +95,8 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentChatFormat();
 
 	ArgumentType<?> _ArgumentDimension();
+
+	ArgumentType<?> _ArgumentEnvironment();
 
 	ArgumentType<?> _ArgumentEnchantment();
 
@@ -231,7 +234,9 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw);
 
-	Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+
+	Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
@@ -325,7 +330,20 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	SimpleCommandMap getSimpleCommandMap();
 
-	Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	/**
+	 * Gets the sound from an argument.
+	 * 
+	 * @param <SoundOrNamespacedKey>        A type parameter of the return type. The only valid options
+	 *                   are {@code org.bukkit.Sound} or
+	 *                   {@code org.bukkit.NamespacedKey}. Any other option will
+	 *                   throw an exception
+	 * @param cmdCtx     the command context
+	 * @param key        the argument key
+	 * @param returnType the class type to return. Either a {@code org.bukkit.Sound}
+	 *                   or {@code org.bukkit.NamespacedKey}
+	 * @return A {@code Sound} or {@code org.bukkit.NamespacedKey}
+	 */
+	<SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
 
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider
@@ -384,6 +402,8 @@ public interface NMS<CommandListenerWrapper> {
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
+
+	Message generateMessageFromJson(String json);
 	
 	/**
 	 * @return Whether the server can use chat preview. This is always false for

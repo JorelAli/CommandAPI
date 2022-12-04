@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="bg">
+            <div id="suggestions-box"></div>
+            <div id="error-box"></div>
+            <div id="chatbox">
+                <span>
+                    <span contenteditable="true" spellcheck="false" id="cmd-input">/</span>
+                    <span id="cmd-input-autocomplete"></span>
+                </span>
+            </div>
+        </div>
+        <div id="valid-box"></div>
+        <div id="app-error-box"></div>
+        <textarea id="commands" spellcheck="false"></textarea>
+        <button id="register-commands-button">Press to register commands</button>
+
+        <script>
+            // Error.captureStackTrace is a V8 function only, and doesn't exist on Firefox
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#static_methods
+            // https://github.com/remtori/brigadier/issues/2
+            if(!Error.hasOwnProperty("captureStackTrace")) {
+                Error.captureStackTrace = function() {};
+            }
+        </script>
+
+        <!-- From index.ts, built using webpack -->
+        <script type="module" src="./main.js"></script>
+    </body>
+</html>

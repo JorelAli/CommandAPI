@@ -73,6 +73,7 @@
       - [Sound arguments](./soundargument.md)
       - [Time arguments](./timeargs.md)
       - [UUID arguments](./uuidargs.md)
+      - [World arguments](./worldarguments.md)
     - [Predicate arguments](./predicateargs.md)
       - [Block predicate arguments](./blockpredicateargs.md)
       - [ItemStack predicate arguments](./itemstackpredicateargs.md)
@@ -80,8 +81,9 @@
     - [Literal arguments](./litargs.md)
       - [Literal arguments](./literalarguments.md)
       - [Multi literal arguments](./multilitargs.md)
-    - [Custom arguments](./customarguments.md)
     - [List arguments](./listarguments.md)
+    - [Command arguments](./commandarguments.md)
+    - [Custom arguments](./customarguments.md)
 - [Functions & Tags](./functions.md)
   - [Setting up functions & tags](./functionsetup.md)
   - [The SimpleFunctionWrapper class](./simplefunctionwrapper.md)
@@ -99,6 +101,10 @@
 - [Annotation-based commands](./annotationsintro.md)
 - [Annotations](./annotations.md)
 - [Registering annotation-based commands](./registeringannotations.md)
+
+# Kotlin-based Commands
+- [Kotlin-based commands](./kotlinintro.md)
+- [Using the DSL](./kotlindsl.md)
 
 # CommandAPI Utilities
 

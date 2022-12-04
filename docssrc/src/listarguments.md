@@ -2,7 +2,10 @@
 
 ![A list argument with the command "/multigive @p stone grass_block dirt" and Minecraft suggestions with a list of Minecraft items](./images/arguments/listargument.png)
 
-List arguments allows users to provide a list of values. This argument uses an underlying `GreedyStringArgument`, so the greedy string argument rule applies - **this argument can only be used at the end of an argument list**.
+List arguments allows users to provide a list of values. This argument can take on two forms:
+
+- Using an underlying `GreedyStringArgument`, so the greedy string argument rule applies - **this argument can only be used at the end of an argument list**.
+- Using an underlying `TextArgument`, so this argument can be used anywhere in an argument list, but its contents must be surrounded with quotes (`"`).
 
 -----
 
@@ -104,10 +107,11 @@ In order to display suggestions, the `ListArgument` needs to know how to convert
 
 ### Building the `ListArgumentBuilder`
 
-To finish building the `ListArgument`, call the `build()` method:
+To finish building the `ListArgument`, call the `buildGreedy()` or `buildText()` method. The `buildGreedy()` method will treat the list argument as a greedy string, which means you can only use this list argument at the end of the list of arguments you are declaring for the command. If you use the `buildText()` instead, you can use the list argument anywhere (and multiple times), but the list must be surrounded with quotation characters (`"`).
 
 ```java
-public ListArgument<T> build();
+public ListArgument<T> buildGreedy();
+public ListArgument<T> buildText();
 ```
 
 -----
@@ -126,9 +130,17 @@ Say you wanted to give yourself multiple items in a single command. For this com
 
 To do this, we create a command with an `IntegerArgument` to specify the amount (between 1 and 64), and a `ListArgument` that accepts a list of `Material` objects. We use the `ListArgumentBuilder` to provide a list of materials as well as a mapping function that converts the material's name to a lowercase string. By default, we use a space delimiter (separator) for arguments in the list.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:ListArgument_MultiGive}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ListArgument_MultiGive}}
+```
+
+</div>
 
 ![A /multigive argument gif where a user types "/multigive 64 stone dirt cobblestone grass_block" and suggestions appear automatically. Running the command gives the player 64 stone, dirt, cobblestone and grass_block items in their hotbar](./images/arguments/listargument_multigive.gif)
 

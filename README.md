@@ -44,22 +44,22 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 
 | Minecraft version  | Compatible versions         | Latest compatible<br>version | Minimum Java<br>version required<br>to run latest version |
 |--------------------|-----------------------------|------------------------------|-----------------------------------------------------------|
-| **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 8.5.1 | 8.5.1                        | 16                                                        |
-| **1.17**           | 6.0.x - 8.5.1               | 8.5.1                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 8.5.1               | 8.5.1                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 8.5.1               | 8.5.1                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 8.5.1               | 8.5.1                        | 16                                                        |
-| **1.19**           | 8.3.0 - 8.5.1               | 8.5.1                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 8.5.1               | 8.5.1                        | 16                                                        |
-| **1.19.2**         | 8.5.1                       | 8.5.1                        | 16                                                        |
+| **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 8.6.0 | 8.6.0                        | 16                                                        |
+| **1.17**           | 6.0.x - 8.6.0               | 8.6.0                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 8.6.0               | 8.6.0                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 8.6.0               | 8.6.0                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 8.6.0               | 8.6.0                        | 16                                                        |
+| **1.19**           | 8.3.0 - 8.6.0               | 8.6.0                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 8.6.0               | 8.6.0                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 8.6.0               | 8.6.0                        | 16                                                        |
 
 -----
 
@@ -329,17 +329,23 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 
 ## CommandAPI Project Timeline
 
-This is the current roadmap for the CommandAPI (as of 28th July 2022):
+This is the current roadmap for the CommandAPI (as of 2nd November 2022):
+
+- **9.0.0:**
+
+  Project refactor in preparation for supporting Velocity, Sponge, Fabric etc.
+
+- **After 9.0.0:**
+
+  **Annotation improvements**
+
+  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.
 
 - **Future:**
 
   **Optional arguments**
 
   One of the most requested features: adding support for optional arguments! This isn't a simple task, but development has begun into looking at how optional arguments can be incorporated into the CommandAPI.
-
-  **Annotation improvements**
-
-  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.
 
   **Argument conflict detection**
 
@@ -362,6 +368,25 @@ This is the current roadmap for the CommandAPI (as of 28th July 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>8.6.0</b></td>
+            <td valign="top">December 2022</td>
+            <td valign="top">
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/307 Adds a <code>CommandArgument</code> to let users submit commands as an argument</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/330 Improve the documentation for disabling the CommandAPI gracefully with <code>CommandAPI.onDisable()</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/334 Adds support for chat components in <code>CommandAPI.fail()</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/338 Adds a way to clone a <code>CommandAPICommand</code> instance using <code>instance.copy()</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/340 Adds Kotlin examples in the documentation</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/341 Fix incorrect code block in normal executors documentation page</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/351 Adds support for a ListArgument with the TextArgument backend, to allow inline lists</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/358 Adds a new WorldArgument argument that lets you get a list of Minecraft dimensions</li>
+                    <li>Adds support for <code>SoundArgument</code> to return string-based sounds via the <code>NamespacedKey</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/352 Adds some helper methods to the LiteralArgument to make it easier to use via a static import</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/357 Adds a Kotlin DSL to register commands in Kotlin!</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.5.1</b></td>
             <td valign="top">August 2022</td>

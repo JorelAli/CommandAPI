@@ -40,9 +40,17 @@ We can declare a simple command to break a block:
 
 Simply put, given the coordinates provided to the command, "break" the block by setting it's type to `Material.AIR`. For this example, we're referring to block specific coordinates, so we want to use `LocationType.BLOCK_POSITION`:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:locationarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:locationarguments}}
+```
+
+</div>
 
 </div>
 

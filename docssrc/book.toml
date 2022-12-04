@@ -2,14 +2,15 @@
 authors = ["JorelAli"]
 multilingual = false
 src = "src"
-title = "CommandAPI Documentation v8.5.1"
+title = "CommandAPI Documentation v8.6.0"
 
 [build]
-build-dir = "./../docs/8.5.1"
+build-dir = "./../docs/8.6.0"
 
 [output.html]
 git-repository-url = "https://github.com/JorelAli/CommandAPI"
 default-theme = "rust"
+no-section-label = true
 additional-css = ["style.css"]
 additional-js = [
     "sidebar.js",

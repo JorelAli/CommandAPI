@@ -2,6 +2,10 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i =
 [
     [ "canRegister", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a492dcfa8422d9dee82d4afcac4646454", null ],
     [ "fail", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#aa76a6d0e9b23045d3ee78879d020f04f", null ],
+    [ "failWithAdventureComponent", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#aea9da679f88f6807de7836646f6718b0", null ],
+    [ "failWithBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ae39b08c570f6d8c0bbe8d3e1f5affcdb", null ],
+    [ "failWithMessage", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ac65bdae09efea47d7181803d254e4c49", null ],
+    [ "failWithString", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a72723e2ed5d0356f6efefa46d70246b4", null ],
     [ "getConfiguration", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ac395d73bf69a6ecec3420149190de18b", null ],
     [ "getLogger", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a7c44f16402b8dec659697b2a48f2a7e5", null ],
     [ "getRegisteredCommands", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ab52fa3db0a7451a94da8517f8d225ad3", null ],

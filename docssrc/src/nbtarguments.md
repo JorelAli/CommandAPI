@@ -37,9 +37,17 @@ Say we want to use the [NBT API](https://www.spigotmc.org/resources/nbt-api.7939
 
 Now, we can configure the CommandAPI using the `CommandAPI.onLoad()` method to use the `NBTContainer` class, and the [`NBTContainer` constructor that takes in an `Object`](https://tr7zw.github.io/Item-NBT-API/v2-api/de/tr7zw/changeme/nbtapi/NBTContainer.html#NBTContainer-java.lang.Object-):
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:nbtcompoundargumentonload}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:nbtcompoundargumentonload}}
+```
+
+</div>
 
 > _Confused with the `::new` syntax? Read more about method references to a constructor [here](https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html)._
 
@@ -55,9 +63,17 @@ We're now able to use the `NBTContainer` as our implemented type for the `NBTCom
 
 Since the underlying implementation of the `NBTCompoundArgument` can change (e.g. `NBTContainer` if you're using the NBT API or `NBTCompound` if you're using PowerNBT), the type of your NBT compound implementation has to be declared in angle brackets.
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:nbtcompoundarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:nbtcompoundarguments}}
+```
+
+</div>
 
 </div>
 

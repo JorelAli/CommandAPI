@@ -61,6 +61,7 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -243,9 +244,15 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		return ArgumentChatFormat.a();
 	}
 
-	@Differs(from = "1.13", by = "Not throwing EnvironmentArgumentException")
+	@Differs(from = "1.13", by = "Not throwing UnimplementedArgumentException")
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
+		return ArgumentDimension.a();
+	}
+
+	@Differs(from = "1.13", by = "Not throwing EnvironmentArgumentException")
+	@Override
+	public ArgumentType<?> _ArgumentEnvironment() {
 		return ArgumentDimension.a();
 	}
 
@@ -557,9 +564,15 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		}
 	}
 
-	@Differs(from = "1.13", by = "Implements getDimension for EnvironmentArgument")
+	@Differs(from = "1.13", by = "Implements getDimension for DimensionArgument")
 	@Override
-	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return MINECRAFT_SERVER.getWorldServer(ArgumentDimension.a(cmdCtx, key)).getWorld();
+	}
+
+	@Differs(from = "1.13", by = "Implements getEnvironment for EnvironmentArgument")
+	@Override
+	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
 		return switch (manager.getDimensionID()) {
 			case 0 -> Environment.NORMAL;
@@ -862,20 +875,26 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final MinecraftKey soundResource = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) fromMinecraftKey(soundResource);
+		} else {
+			for (CraftSound sound : CraftSound.values()) {
+				try {
+					if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
+							.equals(soundResource.getKey())) {
+						return (SoundOrNamespacedKey) Sound.valueOf(sound.name());
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e1) {
+					e1.printStackTrace();
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
 			}
+			return null;
 		}
-		return null;
 	}
 
 	@Differs(from = "1.13", by = "use of getLootTableRegistry() instead of .aP(). No use of ::iterator for advancements")
@@ -957,4 +976,10 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
+
+	@Override
+	public Message generateMessageFromJson(String json) {
+		return ChatSerializer.a(json);
+	}
+
 }

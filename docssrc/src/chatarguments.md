@@ -28,8 +28,16 @@ Say we want to create a plugin to change the color of a player's username. We wa
 
 We then use the `ChatColorArgument` to change the player's name color:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:chatcolorarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:chatcolorarguments}}
+```
+
+</div>
 
 </div>

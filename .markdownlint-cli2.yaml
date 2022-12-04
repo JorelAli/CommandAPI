@@ -29,3 +29,6 @@ config:
 
   # MD034/no-bare-urls - Bare URL used
   MD034: false
+
+  # MD036/no-emphasis-as-heading/no-emphasis-as-header - We need certain headings that aren't anchored
+  MD036: false

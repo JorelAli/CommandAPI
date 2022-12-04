@@ -16,8 +16,16 @@ Say we want to create a command that gives you items. For this command, we will 
 
 With this syntax, we can easily create our command:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:itemstackarguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:itemstackarguments}}
+```
+
+</div>
 
 </div>

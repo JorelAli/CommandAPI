@@ -67,6 +67,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -253,6 +254,11 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
+		return ArgumentDimension.a();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEnvironment() {
 		return ArgumentDimension.a();
 	}
 
@@ -553,9 +559,15 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		}
 	}
 
+	@Differs(from = "1.15", by = "Implement DimensionArgument")
+	@Override
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return ArgumentDimension.a(cmdCtx, key).getWorld();
+	}
+
 	@Differs(from = "1.15", by = "Implement EnvironmentArgument for all environments")
 	@Override
-	public Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
 	}
@@ -856,20 +868,27 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@Differs(from = "1.15", by = "ArgumentMinecraftKeyRegistered.d() -> ArgumentMinecraftKeyRegistered.e()")
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final MinecraftKey soundResource = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) fromMinecraftKey(soundResource);
+		} else {
+			for (CraftSound sound : CraftSound.values()) {
+				try {
+					if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
+							.equals(soundResource.getKey())) {
+						return (SoundOrNamespacedKey) Sound.valueOf(sound.name());
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e1) {
+					e1.printStackTrace();
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
 			}
+			return null;
 		}
-		return null;
 	}
 
 	@Differs(from = "1.15", by = """
@@ -1019,4 +1038,10 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	public void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
+
+	@Override
+	public Message generateMessageFromJson(String json) {
+		return ChatSerializer.a(json);
+	}
+
 }

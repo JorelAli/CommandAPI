@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "outDir": "./public/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "ESNext",
+        "target": "ESNext",
+        "allowJs": false,
+        "moduleResolution": "node",
+        "alwaysStrict": true,
+        "declaration": false,
+        "noImplicitOverride": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "strictNullChecks": true,
+        "allowUnreachableCode": false
+    }
+}

@@ -47,9 +47,17 @@ Say we wanted to have a command that displayed particles at a player's location.
 
 With this, we can simply spawn the particle using the `World.spawnParticle(Particle, Location, int)` method:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:particlearguments}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:particlearguments}}
+```
+
+</div>
 
 Running this can result in errors due to missing requirements. If you provide a particle that has additional requirements, Bukkit will throw an error and the particle will not be displayed. Instead, the example below should be used.
 
@@ -67,9 +75,17 @@ We can fix the issues with the example above by providing the data of the argume
 
 In this case, we'll use the `World.spawnParticle(Particle particle, Location location, int count, T data)` method which accepts some particle data:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:particlearguments2}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:particlearguments2}}
+```
+
+</div>
 
 This can be used with commands such as:
 

@@ -30,28 +30,60 @@ add <permission> <groupName>
 
 We can implement this by creating a `CommandAPICommand` with the command name `add`:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:subcommandspart}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:subcommandspart}}
+```
+
+</div>
+
 Similarly, we have another part `remove <permission> <groupName>`. We can declare this similar to our `add` command. Once we've done that, we can now join everything up together. Here, we create a command `group` which adds the two other subcommands:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:subcommands}}
 ```
 
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:subcommands}}
+```
+
+</div>
+
 Finally, we can link everything up together to the `perm` command and register the whole thing together:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:subcommandsend}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:subcommandsend}}
+```
+
+</div>
 
 -----
 
 Another, more intuitive method, is to shove everything in one go without creating lots of variables all over the place:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:subcommands1}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:subcommands1}}
+```
+
+</div>
 
 </div>

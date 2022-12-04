@@ -70,11 +70,11 @@ public class InternalConfig {
 
 	private final Class<?> nbtContainerClass;
 	private final Function<Object, ?> nbtContainerConstructor;
-	
+
 	private final NMS<?> customNMS;
 
 	InternalConfig(FileConfiguration fileConfig, Class<?> nbtContainerClass,
-			Function<Object, ?> nbtContainerConstructor, File dispatcherFile) {
+		Function<Object, ?> nbtContainerConstructor, File dispatcherFile) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		this.silentLogs = fileConfig.getBoolean("silent-logs");
 		this.useLatestNMSVersion = fileConfig.getBoolean("use-latest-nms-version");
@@ -88,9 +88,9 @@ public class InternalConfig {
 		this.customNMS = null;
 
 		if (!fileConfig.getList("plugins-to-convert").isEmpty()
-				&& fileConfig.getMapList("plugins-to-convert").isEmpty()) {
+			&& fileConfig.getMapList("plugins-to-convert").isEmpty()) {
 			CommandAPI.getLogger()
-					.severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
+				.severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
 		}
 
 		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
@@ -113,7 +113,7 @@ public class InternalConfig {
 				}
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
-						.printStackTrace();
+					.printStackTrace();
 			}
 		}
 
@@ -122,7 +122,7 @@ public class InternalConfig {
 				this.skipSenderProxy.add(pluginName);
 			} else {
 				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
-						.printStackTrace();
+					.printStackTrace();
 			}
 		}
 

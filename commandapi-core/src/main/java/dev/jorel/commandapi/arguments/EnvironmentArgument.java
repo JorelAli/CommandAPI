@@ -32,15 +32,21 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that represents the Bukkit Environment object
+ * 
+ * @deprecated Use {@link WorldArgument} instead.
  */
+@Deprecated
 public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment> {
 	
 	/**
 	 * An Environment argument. Represents Bukkit's Environment object
 	 * @param nodeName the name of the node for this argument
+	 * 
+	 * @deprecated Use {@link WorldArgument#WorldArgument(String)} instead.
 	 */
+	@Deprecated
 	public EnvironmentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEnvironment(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
 	}
 	
 	@Override
@@ -56,6 +62,6 @@ public class EnvironmentArgument extends SafeOverrideableArgument<Environment, E
 	@Override
 	public <CommandListenerWrapper> Environment parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return nms.getDimension(cmdCtx, key);
+		return nms.getEnvironment(cmdCtx, key);
 	}
 }

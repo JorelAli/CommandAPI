@@ -42,6 +42,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
@@ -147,7 +148,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		return instance;
 	}
 	
-	static void onDisable() {
+	public static void onDisable() {
 		if(instance != null) {
 			for(Player player : Bukkit.getOnlinePlayers()) {
 				instance.NMS.unhookChatPreview(player);
@@ -306,7 +307,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
 	Command<CommandSourceStack> generateCommand(Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException {
+												CommandAPIExecutor<? extends CommandSender> executor, boolean converted) throws CommandSyntaxException {
 
 		// Generate our command from executor
 		return (cmdCtx) -> {
@@ -525,7 +526,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * multiliteral arguments were not present.
 	 */
 	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
+			CommandAPIExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -683,7 +684,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
+			CommandAPIExecutor<? extends CommandSender> executor, boolean converted)
 			throws CommandSyntaxException, IOException {
 
 		// "Expands" our MultiLiterals into Literals
@@ -736,8 +737,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
-		for (RegisteredCommand rCommand : registeredCommands) {
-			hasRegisteredCommand |= rCommand.commandName().equals(commandName);
+		for (int i = 0, size = registeredCommands.size(); i < size && !hasRegisteredCommand; i++) {
+			hasRegisteredCommand |= registeredCommands.get(i).commandName().equals(commandName);
 		}
 		if (hasRegisteredCommand && hasCommandConflict(commandName, args, humanReadableCommandArgSyntax)) {
 			return;
@@ -752,10 +753,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Handle previewable arguments
 		handlePreviewableArguments(commandName, args, aliases);
 
-		if (Bukkit.getPluginCommand(commandName) != null) {
-			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
-					+ Bukkit.getPluginCommand(commandName).getPlugin().getName()
-					+ "). Did you forget to remove this from your plugin.yml file?");
+		// Warn if the command we're registering already exists in this plugin's
+		// plugin.yml file
+		{
+			final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
+			if (pluginCommand != null) {
+				CommandAPI.logWarning("Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?".formatted(commandName,
+					pluginCommand.getPlugin().getName()));
+			}
 		}
 
 		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);

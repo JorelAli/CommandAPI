@@ -41,27 +41,41 @@ public class CommandAPIConfig {
 
 The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances. For example, to load the CommandAPI with all logging disabled, you can use the following:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 {{#include ../../commandapi-core/src/test/java/Examples.java:CommandAPIConfigSilent}}
 ```
 
-### Enabling
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:CommandAPIConfigSilent}}
+```
+
+</div>
+
+### Enabling & Disabling
 
 The `onEnable(Plugin)` method initializes the CommandAPI's enabling sequence. As with the `onLoad(boolean)` method, this one must be placed in your plugin's `onEnable()` method. This isn't as strict as the `onLoad(boolean)` method, and can be placed anywhere in your `onEnable()` method. The argument `plugin` is your current plugin instance.
+
+The `onDisable()` method disables the CommandAPI gracefully. This should be placed in your plugin's `onDisable()` method. This doesn't unregister commands, so commands may persist during reloads - this can be mitigated using the `CommandAPI.unregister()` method.
 
 <div class="example">
 
 ### Example - Setting up the CommandAPI in your plugin
 
-```java
+<div class="multi-pre">
+
+```java,Java
 public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:shading}}
 ```
 
 </div>
 
-### Disabling
-
-The `onDisable()` method disables the CommandAPI gracefully. This should be placed in your plugin's `onDisable()` method. This doesn't unregister commands, so commands may persist during reloads - this can be mitigated using the `CommandAPI.unregister()` method.
+</div>
 
 -----
 
@@ -86,7 +100,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>8.5.1</version>
+        <version>8.6.0</version>
     </dependency>
 </dependencies>
 ```
@@ -180,13 +194,13 @@ Next, we declare our dependencies:
 
 ```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-shade:8.5.1"
+    implementation "dev.jorel:commandapi-shade:8.6.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-shade:8.5.1")
+    implementation("dev.jorel:commandapi-shade:8.6.0")
 }
 ```
 
@@ -199,7 +213,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```groovy,build.gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.5.1")
+        include dependency("dev.jorel:commandapi-shade:8.6.0")
     }
 
     // TODO: Change this to my own package name
@@ -210,7 +224,7 @@ shadowJar {
 ```kotlin,build.gradle.kts
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.5.1")
+        include dependency("dev.jorel:commandapi-shade:8.6.0")
     }
 
     // TODO: Change this to my own package name
