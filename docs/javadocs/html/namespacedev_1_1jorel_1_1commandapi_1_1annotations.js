@@ -51,6 +51,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1annotations =
       [ "ATextArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_text_argument.html", null ],
       [ "ATimeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_time_argument.html", null ],
       [ "AUUIDArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_u_u_i_d_argument.html", null ],
+      [ "AWorldArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_world_argument.html", null ],
       [ "Primitive", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive.html", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive" ]
     ] ],
     [ "Alias", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_alias.html", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_alias" ],

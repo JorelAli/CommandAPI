@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.6.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -135,6 +135,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a3e22f59d9d40595d7733a203f285aa18"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a3e22f59d9d40595d7733a203f285aa18">CommandResult</a> (Command command, String[] args)</td></tr>
+<tr class="memdesc:a3e22f59d9d40595d7733a203f285aa18"><td class="mdescLeft">&#160;</td><td class="mdescRight">CommandResult represents an executable command.  <a href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a3e22f59d9d40595d7733a203f285aa18">More...</a><br /></td></tr>
+<tr class="separator:a3e22f59d9d40595d7733a203f285aa18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ff6e31ed1b0773fb119c3a61cefbe81"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a4ff6e31ed1b0773fb119c3a61cefbe81">ComplexRecipeImpl</a> (NamespacedKey key, Recipe recipe) implements ComplexRecipe</td></tr>
 <tr class="memdesc:a4ff6e31ed1b0773fb119c3a61cefbe81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a ComplexRecipe based on a NamespacedKey and a Recipe object.  <a href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a4ff6e31ed1b0773fb119c3a61cefbe81">More...</a><br /></td></tr>
 <tr class="separator:a4ff6e31ed1b0773fb119c3a61cefbe81"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,6 +148,58 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Classes that are wrappers for various vanilla-related command features. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a3e22f59d9d40595d7733a203f285aa18" name="a3e22f59d9d40595d7733a203f285aa18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e22f59d9d40595d7733a203f285aa18">&#9670;&nbsp;</a></span>CommandResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">record dev.jorel.commandapi.wrappers.CommandResult </td>
+          <td>(</td>
+          <td class="paramtype">Command&#160;</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String[]&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>CommandResult represents an executable command. </p>
+<p >It contains the following methods: </p><ul>
+<li>
+<code><a class="el" href="">CommandResult#command</a></code> - the command which this <code class="JavaDocCode">CommandResult</code> contains </li>
+<li>
+<code><a class="el" href="">CommandResult#args</a></code> - the arguments that were provided to this command </li>
+<li>
+<code><a class="el" href="">CommandResult#execute(CommandSender)</a></code> - Run the command using the given CommandSender directly </li>
+</ul>
+<p >Executes this command with a provided <code><a class="el" href="">CommandSender</a></code>. This is equivalent to running <code class="JavaDocCode">result.command().execute(sender, result.command().getLabel(), result.args());</code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sender</td><td>the command sender that will be used to execute this command</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">command</td><td>The executable Bukkit <code><a class="el" href="">Command</a></code> that this <code><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a3e22f59d9d40595d7733a203f285aa18">CommandResult</a></code> contains. </td></tr>
+    <tr><td class="paramname">args</td><td>The arguments provided to this command. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a4ff6e31ed1b0773fb119c3a61cefbe81" name="a4ff6e31ed1b0773fb119c3a61cefbe81"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4ff6e31ed1b0773fb119c3a61cefbe81">&#9670;&nbsp;</a></span>ComplexRecipeImpl()</h2>
 
@@ -229,7 +284,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html">wrappers</a></li>
-    <li class="footer">Generated on Thu Aug 11 2022 21:39:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun Dec 4 2022 10:49:51 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

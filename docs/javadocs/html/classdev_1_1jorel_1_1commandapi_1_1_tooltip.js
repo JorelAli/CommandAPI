@@ -2,6 +2,25 @@ var classdev_1_1jorel_1_1commandapi_1_1_tooltip =
 [
     [ "arrayOf", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a6040a95bfe37d827a7adf916faffbf9d", null ],
     [ "build", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a1fd884e6214d788be750c0c4116c744d", null ],
+    [ "generateAdvenureComponents", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#ac0da10f9fb03d4645ed1fc1853448814", null ],
+    [ "generateAdvenureComponents", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a635eaa0fda10f85c6b0f1afbf3443e0c", null ],
+    [ "generateBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a6748b648fdbe9c5997e4dc2b7f8b89aa", null ],
+    [ "generateBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a5a1578e329b96500f0ec66983fd114f5", null ],
+    [ "generateMessages", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#ab604e278d930a22a721faa09d130e4a3", null ],
+    [ "generateMessages", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#aa9895fd0be5b7d72218c2ef3309d6f00", null ],
+    [ "generateStrings", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#abbba12ee07da270b906f411f94759139", null ],
+    [ "generateStrings", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a0678e50edd3dbf9a6ce45d29716238e0", null ],
+    [ "getSuggestion", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a90251434a471aecfbcca2588bd50647c", null ],
+    [ "getTooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a7dde3775c3f7c4a06083cf0decc20b79", null ],
+    [ "messageFromAdventureComponent", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#afabe3631c2c4b65543398e8aefa11b7d", null ],
+    [ "messageFromBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a3cee25032ce1a3395c362b8bbb775527", null ],
+    [ "messageFromString", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a10cc4844d8946dc6193da2a28f1246a9", null ],
+    [ "none", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a18050177972dc2c49f22d509a474146f", null ],
     [ "none", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a0c034d242238ebf0ff5a877d8be825e5", null ],
-    [ "of", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#ae380b85bfe0fcae1fa4165d53ef7a219", null ]
+    [ "none", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a87c0405e5f2416d1f5af248513e45ffa", null ],
+    [ "of", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#ae380b85bfe0fcae1fa4165d53ef7a219", null ],
+    [ "ofAdventureComponent", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#ac02f4d880b30f868a106cd5e7957ea9b", null ],
+    [ "ofBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#a3c6a41944fb45e5b681149a615a848d8", null ],
+    [ "ofMessage", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#aadb4b695cc51a0ab371a5ad6c7cdac76", null ],
+    [ "ofString", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html#ada9793447c054d0c08cf3658055e70f0", null ]
 ];
