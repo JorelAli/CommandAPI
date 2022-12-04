@@ -15,6 +15,7 @@ import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.command.ProxiedCommandSender
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
+import org.bukkit.Sound
 import java.util.function.Predicate
 
 inline fun commandAPICommand(name: String, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register()
@@ -98,9 +99,11 @@ inline fun CommandAPICommand.namespacedKeyArgument(nodeName: String, block: Argu
 inline fun CommandAPICommand.particleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(ParticleArgument(nodeName).apply(block))
 inline fun CommandAPICommand.potionEffectArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(PotionEffectArgument(nodeName).apply(block))
 inline fun CommandAPICommand.recipeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(RecipeArgument(nodeName).apply(block))
-inline fun CommandAPICommand.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(SoundArgument(nodeName).apply(block))
+inline fun <SoundOrNamespacedKey> CommandAPICommand.soundArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(SoundArgument<SoundOrNamespacedKey>(nodeName).apply(block))
+inline fun <SoundOrNamespacedKey> CommandAPICommand.soundArgument(nodeName: String, soundType: SoundType, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 inline fun CommandAPICommand.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(TimeArgument(nodeName).apply(block))
 inline fun CommandAPICommand.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(UUIDArgument(nodeName).apply(block))
+inline fun CommandAPICommand.worldArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(WorldArgument(nodeName).apply(block))
 
 // Predicate arguments
 inline fun CommandAPICommand.blockPredicateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(BlockPredicateArgument(nodeName).apply(block))

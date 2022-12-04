@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.6.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -101,19 +101,23 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
  <div class="center">
   <img src="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument.png" usemap="#dev.jorel.commandapi.arguments.ListArgument_3C_20T_20_3E_map" alt=""/>
   <map id="dev.jorel.commandapi.arguments.ListArgument_3C_20T_20_3E_map" name="dev.jorel.commandapi.arguments.ListArgument_3C_20T_20_3E_map">
-<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" alt="dev.jorel.commandapi.arguments.Argument&lt; List &gt;" shape="rect" coords="0,0,306,24"/>
-<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html" title="An interface indicating that an argument consumes all available characters." alt="dev.jorel.commandapi.arguments.IGreedyArgument" shape="rect" coords="316,0,622,24"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_common.html" title="An argument that accepts a list of objects." alt="dev.jorel.commandapi.arguments.ListArgumentCommon&lt; T &gt;" shape="rect" coords="0,56,362,80"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_i_greedy_argument.html" title="An interface indicating that an argument consumes all available characters." alt="dev.jorel.commandapi.arguments.IGreedyArgument" shape="rect" coords="372,56,734,80"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html" alt="dev.jorel.commandapi.arguments.Argument&lt; List &gt;" shape="rect" coords="0,0,362,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a008a2ecba6204be447b86c18f4fc4753"><td class="memItemLeft" align="right" valign="top"><a id="a008a2ecba6204be447b86c18f4fc4753" name="a008a2ecba6204be447b86c18f4fc4753"></a>
+<tr class="memitem:ace7b565de29122ba4442d5454253052e"><td class="memItemLeft" align="right" valign="top"><a id="ace7b565de29122ba4442d5454253052e" name="ace7b565de29122ba4442d5454253052e"></a>
 Class&lt; List &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPrimitiveType</b> ()</td></tr>
-<tr class="separator:a008a2ecba6204be447b86c18f4fc4753"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dbe7864c36c72360c4eb4399e003360"><td class="memItemLeft" align="right" valign="top"><a id="a0dbe7864c36c72360c4eb4399e003360" name="a0dbe7864c36c72360c4eb4399e003360"></a>
+<tr class="separator:ace7b565de29122ba4442d5454253052e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22fe38da540c3d74eedda60ab51206f6"><td class="memItemLeft" align="right" valign="top"><a id="a22fe38da540c3d74eedda60ab51206f6" name="a22fe38da540c3d74eedda60ab51206f6"></a>
 <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html">CommandAPIArgumentType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getArgumentType</b> ()</td></tr>
-<tr class="separator:a0dbe7864c36c72360c4eb4399e003360"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a22fe38da540c3d74eedda60ab51206f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab19ac2116452cbd12c502106d4803a03"><td class="memItemLeft" align="right" valign="top">abstract&lt; CommandSourceStack &gt; T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ab19ac2116452cbd12c502106d4803a03">parseArgument</a> (NMS&lt; CommandSourceStack &gt; nms, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandSourceStack &gt; cmdCtx, String key, Object[] previousArgs)  throws CommandSyntaxException</td></tr>
+<tr class="memdesc:ab19ac2116452cbd12c502106d4803a03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses an argument, returning the specific Bukkit object that the argument represents.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ab19ac2116452cbd12c502106d4803a03">More...</a><br /></td></tr>
+<tr class="separator:ab19ac2116452cbd12c502106d4803a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a226bf35233c235708220f359a3eadf52"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a226bf35233c235708220f359a3eadf52">isListed</a> ()</td></tr>
 <tr class="memdesc:a226bf35233c235708220f359a3eadf52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this argument will be listed in the Object args[] of the command executor.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#a226bf35233c235708220f359a3eadf52">More...</a><br /></td></tr>
 <tr class="separator:a226bf35233c235708220f359a3eadf52"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,9 +127,6 @@ Class&lt; List &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPri
 <tr class="memitem:abcf7ec6ba4643d45bd71c90cc481c731"><td class="memItemLeft" align="right" valign="top">final String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#abcf7ec6ba4643d45bd71c90cc481c731">getNodeName</a> ()</td></tr>
 <tr class="memdesc:abcf7ec6ba4643d45bd71c90cc481c731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of this argument's node.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#abcf7ec6ba4643d45bd71c90cc481c731">More...</a><br /></td></tr>
 <tr class="separator:abcf7ec6ba4643d45bd71c90cc481c731"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab19ac2116452cbd12c502106d4803a03"><td class="memItemLeft" align="right" valign="top">abstract&lt; CommandSourceStack &gt; T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ab19ac2116452cbd12c502106d4803a03">parseArgument</a> (NMS&lt; CommandSourceStack &gt; nms, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandSourceStack &gt; cmdCtx, String key, Object[] previousArgs)  throws CommandSyntaxException</td></tr>
-<tr class="memdesc:ab19ac2116452cbd12c502106d4803a03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses an argument, returning the specific Bukkit object that the argument represents.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ab19ac2116452cbd12c502106d4803a03">More...</a><br /></td></tr>
-<tr class="separator:ab19ac2116452cbd12c502106d4803a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9ce6d6539ff9a36ea80c940adb0f0d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ab9ce6d6539ff9a36ea80c940adb0f0d2">includeSuggestions</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> suggestions)</td></tr>
 <tr class="memdesc:ab9ce6d6539ff9a36ea80c940adb0f0d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Include suggestions to add to the list of default suggestions represented by this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html#ab9ce6d6539ff9a36ea80c940adb0f0d2">More...</a><br /></td></tr>
 <tr class="separator:ab9ce6d6539ff9a36ea80c940adb0f0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -327,7 +328,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 </table>
 </div><div class="memdoc">
 
-<p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command. </p>
+<p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di...">IStringTooltip</a> array of suggestions for the current command. </p>
 <dl class="section return"><dt>Returns</dt><dd>a function that provides suggestions, or <code>Optional.empty()</code> if there are no overridden suggestions. </dd></dl>
 
 </div>
@@ -486,7 +487,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 <p>Include suggestions to add to the list of default suggestions represented by this argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a>[] of suggestions (with tooltips) to add </td></tr>
+    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di...">IStringTooltip</a>[] of suggestions (with tooltips) to add </td></tr>
   </table>
   </dd>
 </dl>
@@ -845,7 +846,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument.html">ListArgument</a></li>
-    <li class="footer">Generated on Thu Aug 11 2022 21:39:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun Dec 4 2022 10:49:51 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

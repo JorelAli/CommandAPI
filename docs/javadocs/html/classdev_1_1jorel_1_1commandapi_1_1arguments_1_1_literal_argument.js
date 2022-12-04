@@ -13,6 +13,8 @@ var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument =
     [ "includeSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a936ec8464fe65642205e24bdbd827973", null ],
     [ "includeSuggestionsT", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a15dce222962f4c60c89df3c812a3c379", null ],
     [ "isListed", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a226bf35233c235708220f359a3eadf52", null ],
+    [ "literal", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a5e5410b1b3560fae316a19a22860edf4", null ],
+    [ "of", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#aaf9f98a576ea86f20b746ffe2d83859d", null ],
     [ "parseArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#ab19ac2116452cbd12c502106d4803a03", null ],
     [ "replaceSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a4b1028432eb0291ac8ae52d0a8daf82d", null ],
     [ "replaceSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a085b5f8ea1de970065bb9e1c62ce36f5", null ],

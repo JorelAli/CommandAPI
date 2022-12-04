@@ -37,6 +37,22 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.5.1 \\(\rightarrow\\) 8.6.0
+
+- Greatly improved the format and documentation for [Configuration for server owners](./config.md)
+- Adds a Kotlin tab to all Java code blocks which displays the equivalent code, but in Kotlin
+- Adds the new [Command arguments](./commandarguments.md) section
+- Adds the new [World arguments](./worldarguments.md) section
+- Mentions the new `LiteralArgument.of()` and `LiteralArgument.literal()` methods in [Literal arguments](./literalarguments.md)
+- Adds a really cool new example to the [Brigadier Suggestions](./brigadiersuggestions.md) page
+- Updated various sections (a summary of this can be found in the [Upgrading guide](./upgrading.md)):
+  - Update [List arguments](./listarguments.md) to include the new `buildGreedy()` and `buildText()` methods
+  - Update [Handling command failures](./commandfailures.md) with new methods
+  - Update [Argument suggestions with tooltips](./tooltips.md) with new tooltip methods for formatting text
+  - Update [Sound arguments](./soundargument.md) with support for namespaced keys
+- Adds documentation for [Kotlin-based commands](./kotlinintro.md) using the Kotlin DSL
+- Update the [Afterword](./afterword.md), giving special credits to some very special contributors!
+
 ### Documentation changes 8.5.0 \\(\rightarrow\\) 8.5.1
 
 - Update [Brigadier + CommandAPI](./brigadier.md) with function parameter changes. See [Upgrading](./upgrading.md) for more info.

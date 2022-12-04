@@ -15,5 +15,6 @@ var searchData=
   ['withsubcommand_12',['withSubcommand',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ae96b5e2ad2f71bc1cdd15ca223095919',1,'dev::jorel::commandapi::CommandAPICommand']]],
   ['withsubcommands_13',['withSubcommands',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a51dfdb1476c1e0d4eb8e66a87ea3d59e',1,'dev::jorel::commandapi::CommandAPICommand']]],
   ['word_14',['word',['../classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a5a0c815c677e9cdd1f4e840ccb1832c1',1,'com::mojang::brigadier::arguments::StringArgumentType']]],
-  ['wrappercommandsyntaxexception_15',['WrapperCommandSyntaxException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2',1,'dev::jorel::commandapi::exceptions::WrapperCommandSyntaxException']]]
+  ['worldargument_15',['WorldArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_world_argument.html#a19fb1fc8aa090de5836a864a4c429bc4',1,'dev::jorel::commandapi::arguments::WorldArgument']]],
+  ['wrappercommandsyntaxexception_16',['WrapperCommandSyntaxException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2',1,'dev::jorel::commandapi::exceptions::WrapperCommandSyntaxException']]]
 ];

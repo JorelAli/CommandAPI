@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.wrappers.CommandResult;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
@@ -46,7 +46,6 @@ import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.test.Main;
 import dev.jorel.commandapi.wrappers.Location2D;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;

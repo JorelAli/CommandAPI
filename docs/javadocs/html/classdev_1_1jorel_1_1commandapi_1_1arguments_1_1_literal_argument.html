@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.6.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1arg
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">dev.jorel.commandapi.arguments.LiteralArgument Class Reference</div></div>
 </div><!--header-->
@@ -179,6 +180,15 @@ Class&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getP
 <tr class="memitem:a6412999f82b4d166e58f105f769167ad"><td class="memItemLeft" align="right" valign="top"><a id="a6412999f82b4d166e58f105f769167ad" name="a6412999f82b4d166e58f105f769167ad"></a>
 String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td></tr>
 <tr class="separator:a6412999f82b4d166e58f105f769167ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aaf9f98a576ea86f20b746ffe2d83859d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html">LiteralArgument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#aaf9f98a576ea86f20b746ffe2d83859d">of</a> (final String literal)</td></tr>
+<tr class="memdesc:aaf9f98a576ea86f20b746ffe2d83859d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A utility method to create a literal argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#aaf9f98a576ea86f20b746ffe2d83859d">More...</a><br /></td></tr>
+<tr class="separator:aaf9f98a576ea86f20b746ffe2d83859d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e5410b1b3560fae316a19a22860edf4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html">LiteralArgument</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a5e5410b1b3560fae316a19a22860edf4">literal</a> (final String literal)</td></tr>
+<tr class="memdesc:a5e5410b1b3560fae316a19a22860edf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A utility method to create a literal argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a5e5410b1b3560fae316a19a22860edf4">More...</a><br /></td></tr>
+<tr class="separator:a5e5410b1b3560fae316a19a22860edf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >A pseudo-argument representing a single literal string. </p>
@@ -373,7 +383,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 </table>
 </div><div class="memdoc">
 
-<p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a> array of suggestions for the current command. </p>
+<p>Returns an optional function that maps the command sender to an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di...">IStringTooltip</a> array of suggestions for the current command. </p>
 <dl class="section return"><dt>Returns</dt><dd>a function that provides suggestions, or <code>Optional.empty()</code> if there are no overridden suggestions. </dd></dl>
 
 </div>
@@ -532,7 +542,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 <p>Include suggestions to add to the list of default suggestions represented by this argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a string tooltip text to displ...">IStringTooltip</a>[] of suggestions (with tooltips) to add </td></tr>
+    <tr><td class="paramname">suggestions</td><td>a function that takes in SuggestionInfo which includes information about the current state at the time the suggestions are run and returns an <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di...">IStringTooltip</a>[] of suggestions (with tooltips) to add </td></tr>
   </table>
   </dd>
 </dl>
@@ -566,6 +576,80 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 
 <p>Returns true if this argument will be listed in the Object args[] of the command executor. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if this argument will be listed in the Object args[] of the command executor </dd></dl>
+
+</div>
+</div>
+<a id="a5e5410b1b3560fae316a19a22860edf4" name="a5e5410b1b3560fae316a19a22860edf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e5410b1b3560fae316a19a22860edf4">&#9670;&nbsp;</a></span>literal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html">LiteralArgument</a> dev.jorel.commandapi.arguments.LiteralArgument.literal </td>
+          <td>(</td>
+          <td class="paramtype">final String&#160;</td>
+          <td class="paramname"><em>literal</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A utility method to create a literal argument. </p>
+<p >Works as an alternative to <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#aaf9f98a576ea86f20b746ffe2d83859d">dev.jorel.commandapi.arguments.LiteralArgument#of(String)</a></code> </p>
+<p >To provide easier use of this method you can statically import this: <code class="JavaDocCode">import static dev.jorel.commandapi.arguments.LiteralArgument.literal;</code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">literal</td><td>the string literal that this argument will represent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the literal argument created by this method </dd></dl>
+
+</div>
+</div>
+<a id="aaf9f98a576ea86f20b746ffe2d83859d" name="aaf9f98a576ea86f20b746ffe2d83859d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf9f98a576ea86f20b746ffe2d83859d">&#9670;&nbsp;</a></span>of()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html">LiteralArgument</a> dev.jorel.commandapi.arguments.LiteralArgument.of </td>
+          <td>(</td>
+          <td class="paramtype">final String&#160;</td>
+          <td class="paramname"><em>literal</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A utility method to create a literal argument. </p>
+<p >Works as an alternative to <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#a5e5410b1b3560fae316a19a22860edf4">dev.jorel.commandapi.arguments.LiteralArgument#literal(String)</a></code> </p>
+<p >To provide easier use of this method you can statically import this: <code class="JavaDocCode">import static dev.jorel.commandapi.arguments.LiteralArgument.of;</code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">literal</td><td>the string literal that this argument will represent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the literal argument created by this method </dd></dl>
 
 </div>
 </div>
@@ -891,7 +975,7 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html">LiteralArgument</a></li>
-    <li class="footer">Generated on Thu Aug 11 2022 21:39:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun Dec 4 2022 10:49:51 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

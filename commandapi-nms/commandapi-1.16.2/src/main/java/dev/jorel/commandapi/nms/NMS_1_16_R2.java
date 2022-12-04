@@ -22,8 +22,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import com.mojang.brigadier.Message;
-import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -68,6 +66,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -76,6 +75,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
@@ -866,20 +866,26 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final MinecraftKey soundResource = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) fromMinecraftKey(soundResource);
+		} else {
+			for (CraftSound sound : CraftSound.values()) {
+				try {
+					if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
+							.equals(soundResource.getKey())) {
+						return (SoundOrNamespacedKey) Sound.valueOf(sound.name());
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e1) {
+					e1.printStackTrace();
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
 			}
+			return null;
 		}
-		return null;
 	}
 
 	@Override

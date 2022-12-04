@@ -14,11 +14,41 @@ In order to use this, you will need the Brigadier dependency, which you can find
 
 <div class="example">
 
+### Example - Making an emoji broadcasting message
+
+Say we want to let users broadcast a message, but also allow them to enter emojis into the message they're typing:
+
+![A gif showcasing a command where emojis are suggested when typing a message](./images/emojimsg.gif)
+
+For this command, we'll use a `GreedyStringArgument` as if we were making a generic broadcasted message. We create a map of emojis to their descriptions to use as tooltips and then we use Brigadier to display the suggestions at the end of the message where the cursor is.
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-core/src/test/java/Examples.java:BrigadierSuggestions3}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:BrigadierSuggestions3}}
+```
+
+</div>
+
+In this example, we simply create the `GreedyStringArgument` and use `replaceSuggestions()` to specify our suggestion rules. We create an offset using the current builder to make suggestions start at the last character (the current builder start `builder.getStart()` and the current length of what the user has already typed `info.currentArg().length()`). Finally, we build the suggestions with `builder.buildFuture()` and then register our command as normal.
+
+</div>
+
+<div class="example">
+
 ### Example - Using a Minecraft command as an argument
+
+> **Developer's Note:**
+>
+> This example has been superseded by the [Command argument](./commandarguments.md). This example is still present as it gives an example of much more complicated brigadier suggestions which may be useful for readers!
 
 Courtesy of [469512345](https://github.com/469512345), the following example shows how using Brigadier's suggestions and parser can be combined with the CommandAPI to create an argument which suggests valid Minecraft commands. This could be used for example as a `sudo` command, to run a command as another player.
 
-![A gif showcasing the a command suggestion for the /give command](./images/commandargument.gif)
+![A gif showcasing a command suggestion for the /give command](./images/commandargument.gif)
 
 For this command, we'll use a `GreedyStringArgument` because that allows users to enter any combination of characters (which therefore, allows users to enter any command). First, we start by defining the suggestions that we'll use for the `GreedyStringArgument`. We'll use the `ArgumentSuggestions` functional interface described above:
 

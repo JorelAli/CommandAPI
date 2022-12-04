@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.wrappers;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,6 +14,8 @@ import java.util.Objects;
  * {@code CommandResult} contains</li>
  * <li>{@link CommandResult#args} - the arguments that were provided to this
  * command</li>
+ * <li>{@link CommandResult#execute(CommandSender)} - Run the command using
+ * the given CommandSender directly</li>
  * </ul>
  */
 public record CommandResult(
@@ -29,14 +31,13 @@ public record CommandResult(
 	String[] args) {
 
 	/**
-	 * Executes this command with a provided {@link CommandSender}. This is
-	 * analogous to running
-	 * {@code result.command().execute(sender, command.getLabel(), result.args());}
+	 * Executes this command with a provided {@link CommandSender}. This is equivalent to running
+	 * {@code result.command().execute(sender, result.command().getLabel(), result.args());}
 	 * 
 	 * @param sender the command sender that will be used to execute this command
 	 */
-	public void execute(CommandSender sender) {
-		command.execute(sender, command.getLabel(), args);
+	public boolean execute(CommandSender sender) {
+		return command.execute(sender, command.getLabel(), args);
 	}
 
 	@Override
