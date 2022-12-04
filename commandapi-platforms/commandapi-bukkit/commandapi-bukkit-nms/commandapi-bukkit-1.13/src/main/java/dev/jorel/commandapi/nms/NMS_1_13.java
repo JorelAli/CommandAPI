@@ -62,6 +62,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+// TODO: Make sure imports merged correctly
 
 /**
  * NMS implementation for Minecraft 1.13
@@ -770,20 +771,26 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final MinecraftKey soundResource = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) fromMinecraftKey(soundResource);
+		} else {
+			for (CraftSound sound : CraftSound.values()) {
+				try {
+					if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+							.equals(soundResource.getKey())) {
+						return (SoundOrNamespacedKey) Sound.valueOf(sound.name());
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e1) {
+					e1.printStackTrace();
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
 			}
+			return null;
 		}
-		return null;
 	}
 
 	@Override

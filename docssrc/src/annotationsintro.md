@@ -17,7 +17,7 @@ In short, the CommandAPI's annotation-based system:
 
 **Developer's Note:**
 
-As of the time of writing, annotation-based commands are **not** compatible with the Kotlin programming language! The CommandAPI does have plans to support Kotlin using annotations, or using a CommandAPI command Kotlin DSL instead.
+As of the time of writing, annotation-based commands are **not** compatible with the Kotlin programming language! The CommandAPI does have the [Kotlin DSL](./kotlinintro.md) instead, which is leaner, cleaner and provides a much more Kotliny experience!
 
 </div>
 

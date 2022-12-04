@@ -299,7 +299,20 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	SimpleCommandMap getSimpleCommandMap();
 
-	Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	/**
+	 * Gets the sound from an argument.
+	 * 
+	 * @param <SoundOrNamespacedKey>        A type parameter of the return type. The only valid options
+	 *                   are {@code org.bukkit.Sound} or
+	 *                   {@code org.bukkit.NamespacedKey}. Any other option will
+	 *                   throw an exception
+	 * @param cmdCtx     the command context
+	 * @param key        the argument key
+	 * @param returnType the class type to return. Either a {@code org.bukkit.Sound}
+	 *                   or {@code org.bukkit.NamespacedKey}
+	 * @return A {@code Sound} or {@code org.bukkit.NamespacedKey}
+	 */
+	<SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
 
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider

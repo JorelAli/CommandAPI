@@ -554,10 +554,9 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
-		throws CommandSyntaxException {
-		return PotionEffectType.getByKey(fromResourceLocation(Registry.MOB_EFFECT.getKey(MobEffectArgument.getEffect(cmdCtx, key))));
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.18")
+	public abstract PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException;
 
 	@Override
 	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
@@ -602,7 +601,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
-	public abstract Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key);
+	public abstract <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
 
 	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
 	//  this doesn't blow up, but it should be covered by the default case (empty)

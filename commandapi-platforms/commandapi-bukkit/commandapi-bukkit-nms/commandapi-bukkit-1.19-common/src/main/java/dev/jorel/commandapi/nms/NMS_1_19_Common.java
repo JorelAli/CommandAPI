@@ -20,6 +20,61 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Keyed;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.DustTransition;
+import org.bukkit.Vibration;
+import org.bukkit.Vibration.Destination;
+import org.bukkit.Vibration.Destination.BlockDestination;
+import org.bukkit.Vibration.Destination.EntityDestination;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_19_R1.CraftLootTable;
+import org.bukkit.craftbukkit.v1_19_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R1.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffectType;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -47,6 +102,13 @@ import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.*;
+import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.EntitySummonArgument;
+import net.minecraft.commands.arguments.MobEffectArgument;
+import net.minecraft.commands.arguments.ParticleArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -78,6 +140,7 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.SimpleReloadInstance;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -128,6 +191,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+// TODO: Clean up merged imports
 
 // Mojang-Mapped reflection
 /**
@@ -546,6 +610,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
+	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return PotionEffectType.getByKey(fromResourceLocation(Registry.MOB_EFFECT.getKey(MobEffectArgument.getEffect(cmdCtx, key))));
+	}
+
+	@Override
 	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
@@ -569,9 +638,22 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public final Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return CraftSound.getBukkit(Registry.SOUND_EVENT.get(ResourceLocationArgument.getId(cmdCtx, key)));
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final ResourceLocation soundResource = ResourceLocationArgument.getId(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
+		} else {
+			// Otherwise, if null return null else Sound
+			final SoundEvent soundEvent = Registry.SOUND_EVENT.get(soundResource);
+			if(soundEvent == null) {
+				return null;
+			} else {
+				return (SoundOrNamespacedKey) CraftSound.getBukkit(soundEvent);
+			}
+		}
 	}
 
 	@Override

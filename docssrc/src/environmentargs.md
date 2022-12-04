@@ -1,5 +1,17 @@
 # Environment arguments
 
+<div class="warning">
+
+**Developer's Note:**
+
+The `EnvironmentArgument` is deprecated and will be removed in a future version!
+
+If you still want some form of an "environment variable", you can implement it using a `MultiLiteralArgument` or a `CustomArgument` with the three values: `normal`, `nether`, `end`!
+
+For reference, the old documentation is outlined below:
+
+</div>
+
 ![An environment argument with the suggestions minecraft:overworld, minecraft:the_end and minecraft:the_nether](./images/arguments/environment.png)
 
 The `EnvironmentArgument` class allows a command sender to refer to a specific world environment, declared in Bukkit's `World.Environment` class. This includes the following three environments: `NORMAL`, `NETHER` and `THE_END`.

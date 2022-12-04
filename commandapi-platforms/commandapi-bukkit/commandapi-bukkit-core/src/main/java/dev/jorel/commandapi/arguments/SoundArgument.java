@@ -20,6 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
@@ -28,19 +33,35 @@ import org.bukkit.Sound;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
+public class SoundArgument<SoundOrNamespacedKey> extends SafeOverrideableArgument<SoundOrNamespacedKey, SoundOrNamespacedKey> implements ICustomProvidedArgument {
+
+	private final SoundType soundType;
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), CommandAPIBukkit.get()::convert);
+		this(nodeName, SoundType.SOUND);
 	}
 
+	/**
+	 * A Sound argument. Represents Bukkit's Sound object
+	 * @param nodeName the name of the node for this argument
+	 */
+	@SuppressWarnings("unchecked")
+	public SoundArgument(String nodeName, SoundType soundType) {
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), (Function<SoundOrNamespacedKey, String>) soundType.getMapper());
+		this.soundType = soundType;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public Class<Sound> getPrimitiveType() {
-		return Sound.class;
+	public Class<SoundOrNamespacedKey> getPrimitiveType() {
+		return (Class<SoundOrNamespacedKey>) switch (soundType) {
+			case SOUND -> Sound.class;
+			case NAMESPACED_KEY -> NamespacedKey.class;
+		};
 	}
 
 	@Override
@@ -54,7 +75,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	}
 	
 	@Override
-	public <CommandSourceStack> Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key);
+	public <CommandSourceStack> SoundOrNamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, getPrimitiveType());
 	}
 }

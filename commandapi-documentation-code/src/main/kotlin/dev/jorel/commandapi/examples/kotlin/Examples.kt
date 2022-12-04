@@ -23,8 +23,22 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.Server
+import org.bukkit.Sound
+import org.bukkit.World
 import org.bukkit.World.Environment
 import org.bukkit.advancement.Advancement
+import org.bukkit.block.Biome
+import org.bukkit.block.Block
+import org.bukkit.block.Chest
+import org.bukkit.block.Container
+import org.bukkit.block.Sign
 import org.bukkit.block.*
 import org.bukkit.block.data.BlockData
 import org.bukkit.command.CommandSender
@@ -45,10 +59,51 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.util.EulerAngle
+
+import com.mojang.brigadier.ParseResults
+import com.mojang.brigadier.context.StringRange
+import com.mojang.brigadier.exceptions.CommandSyntaxException
+import com.mojang.brigadier.suggestion.Suggestions
+import com.mojang.brigadier.tree.LiteralCommandNode
+import com.mojang.brigadier.LiteralMessage
+
+import de.tr7zw.changeme.nbtapi.NBTContainer
+import dev.jorel.commandapi.Brigadier
+import dev.jorel.commandapi.CommandAPI
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.CommandAPIConfig
+import dev.jorel.commandapi.CommandPermission
+import dev.jorel.commandapi.CommandTree
+import dev.jorel.commandapi.Converter
+import dev.jorel.commandapi.IStringTooltip
+import dev.jorel.commandapi.StringTooltip
+import dev.jorel.commandapi.SuggestionInfo
+import dev.jorel.commandapi.Tooltip
+import dev.jorel.commandapi.arguments.*
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
+import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
+import dev.jorel.commandapi.executors.CommandBlockCommandExecutor
+import dev.jorel.commandapi.executors.CommandExecutor
+import dev.jorel.commandapi.executors.EntityCommandExecutor
+import dev.jorel.commandapi.executors.ExecutorType
+import dev.jorel.commandapi.executors.NativeCommandExecutor
+import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.executors.ProxyCommandExecutor
+import dev.jorel.commandapi.executors.ResultingCommandExecutor
+import dev.jorel.commandapi.wrappers.*
+import net.kyori.adventure.inventory.Book
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.TextComponent
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
 import kotlin.random.Random
+// TODO: Clean up merged imports
 
 class Examples : JavaPlugin() {
 
@@ -60,10 +115,10 @@ CommandAPICommand("broadcastmsg")
     .withAliases("broadcast", "broadcastmessage")   // Command aliases
     .withPermission(CommandPermission.OP)           // Required permissions
     .executes(CommandExecutor { sender, args ->
-        val message = args[0] as String;
-        Bukkit.getServer().broadcastMessage(message);
+        val message = args[0] as String
+        Bukkit.getServer().broadcastMessage(message)
     })
-    .register();
+    .register()
 /* ANCHOR_END: commandregistration */
 }
 
@@ -699,12 +754,21 @@ CommandAPICommand("unlockrecipe")
 fun soundarguments() {
 /* ANCHOR: soundarguments */
 CommandAPICommand("sound")
-    .withArguments(SoundArgument("sound"))
+    .withArguments(SoundArgument<Sound>("sound"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         player.world.playSound(player.location, args[0] as Sound, 100.0f, 1.0f)
     })
     .register()
 /* ANCHOR_END: soundarguments */
+
+/* ANCHOR: soundarguments2 */
+CommandAPICommand("sound")
+    .withArguments(SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        player.world.playSound(player.location, (args[0] as NamespacedKey).asString(), 100.0f, 1.0f)
+    })
+    .register()
+/* ANCHOR_END: soundarguments2 */
 }
 
 fun timearg() {
@@ -1730,8 +1794,8 @@ fun SafeRecipeArguments() {
 // Create our itemstack
 val emeraldSword = ItemStack(Material.DIAMOND_SWORD)
 val meta = emeraldSword.getItemMeta()
-meta.setDisplayName("Emerald Sword")
-meta.setUnbreakable(true)
+meta?.setDisplayName("Emerald Sword")
+meta?.setUnbreakable(true)
 emeraldSword.setItemMeta(meta)
 
 // Create and register our recipe
@@ -1891,7 +1955,7 @@ CommandAPICommand("multigive")
     .withArguments(ListArgumentBuilder<Material>("materials")
         .withList(Material.values().toList())
         .withMapper { material -> material.name.lowercase() }
-        .build()
+        .buildGreedy()
     )
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val amount = args[0] as Int
@@ -1953,6 +2017,58 @@ CommandAPICommand("commandargument")
         Bukkit.dispatchCommand(sender, args[0] as String)
     }).register()
 /* ANCHOR_END: BrigadierSuggestions2 */
+}
+
+fun brigadiersuggestionsemoji() {
+/* ANCHOR: BrigadierSuggestions3 */
+val emojis = mapOf(
+    "☻" to "smile",
+    "❤" to "heart",
+    "🔥" to "fire",
+    "★" to "star",
+    "☠" to "death",
+    "⚠" to "warning",
+    "☀" to "sun",
+    "☺" to "smile",
+    "☹" to "frown",
+    "✉" to "mail",
+    "☂" to "umbrella",
+    "✘" to "cross",
+    "♪" to "music note (eighth)",
+    "♬" to "music note (beamed sixteenth)",
+    "♩" to "music note (quarter)",
+    "♫" to "music note (beamed eighth)",
+    "☄" to "comet",
+    "✦" to "star",
+    "🗡" to "sword",
+    "🪓" to "axe",
+    "🔱" to "trident",
+    "🎣" to "fishing rod",
+    "🏹" to "bow",
+    "⛏" to "pickaxe",
+    "🍖" to "food"
+)
+
+val messageArgument = GreedyStringArgument("message")
+    .replaceSuggestions { info, builder ->
+        // Only display suggestions at the very end character
+        val newBuilder = builder.createOffset(builder.getStart() + info.currentArg().length);
+
+        // Suggest all the emojis!
+        emojis.forEach { (emoji, description) ->
+            newBuilder.suggest(emoji, LiteralMessage(description));
+        }
+
+        newBuilder.buildFuture()
+    }
+
+CommandAPICommand("emoji")
+    .withArguments(messageArgument)
+    .executes(CommandExecutor { _, args ->
+        Bukkit.broadcastMessage(args[0] as String);
+    })
+    .register()
+/* ANCHOR_END: BrigadierSuggestions3 */
 }
 
 // TODO: This example isn't used in the documentation!
@@ -2057,7 +2173,7 @@ fun getTargetSign(player: Player): Sign {
     if (block != null && block.state is Sign) {
         return block.state as Sign
     } else {
-        throw CommandAPI.fail("You're not looking at a sign!")
+        throw CommandAPI.failWithString("You're not looking at a sign!")
     }
 }
 
@@ -2066,14 +2182,68 @@ fun sudoCommandArgument() {
 CommandAPICommand("sudo")
     .withArguments(PlayerArgument("target"))
     .withArguments(CommandArgument("command"))
-    .executes(CommandExecutor { sender, args ->
+    .executes(CommandExecutor { _, args ->
         val target = args[0] as Player
         val command = args[1] as CommandResult
 
-        command.command().execute(target, command.command().getLabel(), command.args())
+        command.execute(target)
     })
     .register()
 /* ANCHOR_END: command_argument_sudo */
+}
+
+fun giveCommandArgument() {
+
+/* ANCHOR: command_argument_branch_give */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("give"),
+    ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+).branch(
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+        ArgumentSuggestions.empty()
+    ),
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+        null,
+        ArgumentSuggestions.empty()
+    )
+)
+/* ANCHOR_END: command_argument_branch_give */
+
+/* ANCHOR: command_argument_branch_tp */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("tp"),
+    ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() },
+    ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+)
+/* ANCHOR_END: command_argument_branch_tp */
+
+
+/* ANCHOR: command_argument_branch */
+CommandArgument("command")
+    .branchSuggestions(
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("give"),
+            ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+        ).branch(
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+                ArgumentSuggestions.empty()
+            ),
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+                null,
+                ArgumentSuggestions.empty()
+            )
+        ),
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("tp"),
+            ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() },
+            ArgumentSuggestions.strings { _ -> Bukkit.getOnlinePlayers().map{ it.name }.toTypedArray() }
+        )
+    )
+/* ANCHOR_END: command_argument_branch */
 }
 
 
@@ -2101,8 +2271,8 @@ class Friends {
 /* ANCHOR_END: ArgumentSuggestions2_1 */
 
 
-/* ANCHOR: Tooltips3 */
 @Suppress("deprecation")
+/* ANCHOR: Tooltips3 */
 class CustomItem(val item: ItemStack, val name: String, lore: String): IStringTooltip {
 
     init {
@@ -2160,7 +2330,7 @@ class MyPlugin : JavaPlugin() {
     }
 
     override fun onDisable() {
-        CommandAPI.onDisable();
+        CommandAPI.onDisable()
     }
 
 }

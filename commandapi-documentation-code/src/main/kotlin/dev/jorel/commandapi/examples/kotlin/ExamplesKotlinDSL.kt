@@ -12,7 +12,7 @@ fun sendMessageToCommand() {
 /* ANCHOR: dslSendMessageToCommand */
 commandTree("sendmessageto") {
     playerArgument("player") { // Defines a new PlayerArgument("player")
-        greedyStringArgument("msg") { // Defines a new GreedyStringArgument("msg)
+        greedyStringArgument("msg") { // Defines a new GreedyStringArgument("msg")
             anyExecutor { _, args -> // Command can be executed by anyone and anything (such as entities, the console, etc.)
                 val player: Player = args[0] as Player
                 val message: String = args[1] as String
@@ -26,7 +26,7 @@ commandTree("sendmessageto") {
 /* ANCHOR: dslSendMessageToCommand2 */
 commandAPICommand("sendmessageto") {
     playerArgument("player") // Defines a new PlayerArgument("player")
-    greedyStringArgument("msg") // Defines a new GreedyStringArgument("msg)
+    greedyStringArgument("msg") // Defines a new GreedyStringArgument("msg")
     anyExecutor { _, args -> // Command can be executed by anyone and anything (such as entities, the console, etc.)
         val player: Player = args[0] as Player
         val message: String = args[1] as String

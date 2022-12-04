@@ -8,8 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import dev.jorel.commandapi.*;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.executors.CommandExecutor;
+import dev.jorel.commandapi.wrappers.CommandResult;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
@@ -30,11 +32,28 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.EntitySelector;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.ListArgumentBuilder;
+import dev.jorel.commandapi.arguments.Location2DArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.wrappers.Location2D;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+// TODO: Clean up merged imports
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments

@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.5.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.6.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('interfacedev_1_1jorel_1_1commandapi_1_
 </div><!--header-->
 <div class="contents">
 
-<p>A string-based tooltip interface that includes a string suggestion and a string tooltip text to display when hovering over the suggestion.  
+<p>A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to display when hovering over the suggestion.  
  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for dev.jorel.commandapi.IStringTooltip:</div>
@@ -110,12 +110,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a80ab73503a4ffdc503abbde7e2c33ec8"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a80ab73503a4ffdc503abbde7e2c33ec8">getSuggestion</a> ()</td></tr>
 <tr class="memdesc:a80ab73503a4ffdc503abbde7e2c33ec8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the suggestion that this object contains.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a80ab73503a4ffdc503abbde7e2c33ec8">More...</a><br /></td></tr>
 <tr class="separator:a80ab73503a4ffdc503abbde7e2c33ec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c9a691ae6d662a701a48567ef611f3f"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a2c9a691ae6d662a701a48567ef611f3f">getTooltip</a> ()</td></tr>
-<tr class="memdesc:a2c9a691ae6d662a701a48567ef611f3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tooltip text that this object contains.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a2c9a691ae6d662a701a48567ef611f3f">More...</a><br /></td></tr>
-<tr class="separator:a2c9a691ae6d662a701a48567ef611f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a422d0a263e1f16e0f289a8bc0e46d0c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a422d0a263e1f16e0f289a8bc0e46d0c2">getTooltip</a> ()</td></tr>
+<tr class="memdesc:a422d0a263e1f16e0f289a8bc0e46d0c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tooltip text that this object contains.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a422d0a263e1f16e0f289a8bc0e46d0c2">More...</a><br /></td></tr>
+<tr class="separator:a422d0a263e1f16e0f289a8bc0e46d0c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >A string-based tooltip interface that includes a string suggestion and a string tooltip text to display when hovering over the suggestion. </p>
+<div class="textblock"><p >A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to display when hovering over the suggestion. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a80ab73503a4ffdc503abbde7e2c33ec8" name="a80ab73503a4ffdc503abbde7e2c33ec8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80ab73503a4ffdc503abbde7e2c33ec8">&#9670;&nbsp;</a></span>getSuggestion()</h2>
@@ -139,14 +139,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2c9a691ae6d662a701a48567ef611f3f" name="a2c9a691ae6d662a701a48567ef611f3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c9a691ae6d662a701a48567ef611f3f">&#9670;&nbsp;</a></span>getTooltip()</h2>
+<a id="a422d0a263e1f16e0f289a8bc0e46d0c2" name="a422d0a263e1f16e0f289a8bc0e46d0c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a422d0a263e1f16e0f289a8bc0e46d0c2">&#9670;&nbsp;</a></span>getTooltip()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">String dev.jorel.commandapi.IStringTooltip.getTooltip </td>
+          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a> dev.jorel.commandapi.IStringTooltip.getTooltip </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -157,7 +157,7 @@ Public Member Functions</h2></td></tr>
 <p>Returns the tooltip text that this object contains. </p>
 <dl class="section return"><dt>Returns</dt><dd>the tooltip text that this object contains </dd></dl>
 
-<p>Implemented in <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a6189f95a0967d30c2a0b5f97549cc871">dev.jorel.commandapi.StringTooltip</a>.</p>
+<p>Implemented in <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ab319f9b24c376f0219e7fc2f6be5fac1">dev.jorel.commandapi.StringTooltip</a>.</p>
 
 </div>
 </div>
@@ -167,7 +167,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a></li>
-    <li class="footer">Generated on Thu Aug 11 2022 21:39:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun Dec 4 2022 10:49:51 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

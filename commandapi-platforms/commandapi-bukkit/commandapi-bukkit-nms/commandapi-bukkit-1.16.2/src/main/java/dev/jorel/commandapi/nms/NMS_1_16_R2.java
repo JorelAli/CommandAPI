@@ -27,6 +27,36 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_16_R2.*;
 import net.minecraft.server.v1_16_R2.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import org.bukkit.Axis;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Keyed;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.*;
 import org.bukkit.World;
@@ -72,6 +102,105 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+import com.google.common.io.Files;
+import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
+
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.preprocessor.NMSMeta;
+import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
+import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.FunctionWrapper;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.Location2D;
+import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.Rotation;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.v1_16_R2.Advancement;
+import net.minecraft.server.v1_16_R2.ArgumentAngle;
+import net.minecraft.server.v1_16_R2.ArgumentBlockPredicate;
+import net.minecraft.server.v1_16_R2.ArgumentChat;
+import net.minecraft.server.v1_16_R2.ArgumentChatComponent;
+import net.minecraft.server.v1_16_R2.ArgumentChatFormat;
+import net.minecraft.server.v1_16_R2.ArgumentCriterionValue;
+import net.minecraft.server.v1_16_R2.ArgumentDimension;
+import net.minecraft.server.v1_16_R2.ArgumentEnchantment;
+import net.minecraft.server.v1_16_R2.ArgumentEntity;
+import net.minecraft.server.v1_16_R2.ArgumentEntitySummon;
+import net.minecraft.server.v1_16_R2.ArgumentItemPredicate;
+import net.minecraft.server.v1_16_R2.ArgumentItemStack;
+import net.minecraft.server.v1_16_R2.ArgumentMathOperation;
+import net.minecraft.server.v1_16_R2.ArgumentMinecraftKeyRegistered;
+import net.minecraft.server.v1_16_R2.ArgumentMobEffect;
+import net.minecraft.server.v1_16_R2.ArgumentNBTTag;
+import net.minecraft.server.v1_16_R2.ArgumentParticle;
+import net.minecraft.server.v1_16_R2.ArgumentPosition;
+import net.minecraft.server.v1_16_R2.ArgumentProfile;
+import net.minecraft.server.v1_16_R2.ArgumentRegistry;
+import net.minecraft.server.v1_16_R2.ArgumentRotation;
+import net.minecraft.server.v1_16_R2.ArgumentRotationAxis;
+import net.minecraft.server.v1_16_R2.ArgumentScoreboardCriteria;
+import net.minecraft.server.v1_16_R2.ArgumentScoreboardObjective;
+import net.minecraft.server.v1_16_R2.ArgumentScoreboardSlot;
+import net.minecraft.server.v1_16_R2.ArgumentScoreboardTeam;
+import net.minecraft.server.v1_16_R2.ArgumentScoreholder;
+import net.minecraft.server.v1_16_R2.ArgumentTag;
+import net.minecraft.server.v1_16_R2.ArgumentTile;
+import net.minecraft.server.v1_16_R2.ArgumentTime;
+import net.minecraft.server.v1_16_R2.ArgumentUUID;
+import net.minecraft.server.v1_16_R2.ArgumentVec2;
+import net.minecraft.server.v1_16_R2.ArgumentVec2I;
+import net.minecraft.server.v1_16_R2.ArgumentVec3;
+import net.minecraft.server.v1_16_R2.BlockPosition;
+import net.minecraft.server.v1_16_R2.BlockPosition2D;
+import net.minecraft.server.v1_16_R2.CommandListenerWrapper;
+import net.minecraft.server.v1_16_R2.CompletionProviders;
+import net.minecraft.server.v1_16_R2.CriterionConditionValue;
+import net.minecraft.server.v1_16_R2.CustomFunction;
+import net.minecraft.server.v1_16_R2.CustomFunctionData;
+import net.minecraft.server.v1_16_R2.CustomFunctionManager;
+import net.minecraft.server.v1_16_R2.DataPackResources;
+import net.minecraft.server.v1_16_R2.Entity;
+import net.minecraft.server.v1_16_R2.EntityPlayer;
+import net.minecraft.server.v1_16_R2.EntitySelector;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.EnumDirection.EnumAxis;
+import net.minecraft.server.v1_16_R2.IBlockData;
+import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R2.ICompletionProvider;
+import net.minecraft.server.v1_16_R2.IRecipe;
+import net.minecraft.server.v1_16_R2.IRegistry;
+import net.minecraft.server.v1_16_R2.IReloadableResourceManager;
+import net.minecraft.server.v1_16_R2.ItemStack;
+import net.minecraft.server.v1_16_R2.MinecraftKey;
+import net.minecraft.server.v1_16_R2.MinecraftServer;
+import net.minecraft.server.v1_16_R2.ParticleParam;
+import net.minecraft.server.v1_16_R2.ParticleParamBlock;
+import net.minecraft.server.v1_16_R2.ParticleParamItem;
+import net.minecraft.server.v1_16_R2.ParticleParamRedstone;
+import net.minecraft.server.v1_16_R2.ShapeDetectorBlock;
+import net.minecraft.server.v1_16_R2.SystemUtils;
+import net.minecraft.server.v1_16_R2.Unit;
+import net.minecraft.server.v1_16_R2.Vec2F;
+import net.minecraft.server.v1_16_R2.Vec3D;
+// TODO: Clean up merged imports
 
 /**
  * NMS implementation for Minecraft 1.16.2 and 1.16.3
@@ -776,20 +905,26 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final MinecraftKey soundResource = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) fromMinecraftKey(soundResource);
+		} else {
+			for (CraftSound sound : CraftSound.values()) {
+				try {
+					if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+							.equals(soundResource.getKey())) {
+						return (SoundOrNamespacedKey) Sound.valueOf(sound.name());
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e1) {
+					e1.printStackTrace();
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
 			}
+			return null;
 		}
-		return null;
 	}
 
 	@Override
