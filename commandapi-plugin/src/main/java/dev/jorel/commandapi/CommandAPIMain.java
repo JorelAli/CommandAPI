@@ -67,5 +67,21 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+
+		new CommandTree("configcommands")
+			.withUsage(
+				"configcommands help",
+				"configcommands help <section>",
+				"configcommands <functions>",
+				"configcommands <functions> <addOn> <internalArgument> <(non)static> <function>",
+				"configcommands <build>",
+				"configcommands <reload> <commandName> <arguments>",
+				"configcommands <debug>",
+				"configcommands <debug> <enable/disable>",
+				"configcommands <debug> <local> <command>",
+				"configcommands <debug> <local> <command> <enable/disable>"
+			)
+			.executes((sender, args) -> {})
+			.register();
 	}
 }

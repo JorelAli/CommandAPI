@@ -191,6 +191,26 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 		this.meta.fullDescription = Optional.ofNullable(description);
 		return (T) this;
 	}
+	
+	/**
+	 * Returns the usage help text for this command
+	 * @return the usage help text for this command
+	 */
+	public String[] getUsage() {
+		return this.meta.usage.isPresent() ? this.meta.usage.get() : null;
+	}
+
+	/**
+	 * Sets the usage text for this command. This is shown in the help which is
+	 * shown in the specific /help page for this command (e.g. /help mycommand) and is designed to help users understand the syntax of your command.
+	 * @param usage a list entry of usage commands
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public T withUsage(String... usage) {
+		this.meta.usage = Optional.ofNullable(usage);
+		return (T) this;
+	}
 
 	/**
 	 * Sets the short and full description for this command. This is a short-hand

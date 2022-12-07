@@ -39,6 +39,11 @@ public record RegisteredCommand(
 		Optional<String> fullDescription,
 
 		/**
+		 * @return An {@link Optional} containing this command's usage text
+		 */
+		Optional<String[]> usage,
+
+		/**
 		 * @return a {@link String}{@code []} of aliases for this command
 		 */
 		String[] aliases,

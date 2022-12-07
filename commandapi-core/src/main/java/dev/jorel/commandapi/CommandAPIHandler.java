@@ -732,8 +732,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 		CommandPermission permission = meta.permission;
 		String[] aliases = meta.aliases;
 		Predicate<CommandSender> requirements = meta.requirements;
-		Optional<String> shortDescription = meta.shortDescription;
-		Optional<String> fullDescription = meta.fullDescription;
 
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
@@ -747,7 +745,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			for (Argument<?> arg : args) {
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
-			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, shortDescription, fullDescription, aliases, permission));
+			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, meta.shortDescription, meta.fullDescription, meta.usage, aliases, permission));
 		}
 		
 		// Handle previewable arguments
@@ -1032,14 +1030,18 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Generate usages
 		List<String> usages = new ArrayList<>();
-		for (RegisteredCommand rCommand : registeredCommands) {
-			if (rCommand.commandName().equals(command.commandName())) {
-				StringBuilder usageString = new StringBuilder();
-				usageString.append("/" + command.commandName() + " ");
-				for (String arg : rCommand.argsAsStr()) {
-					usageString.append("<" + arg.split(":")[0] + "> ");
+		if(command.usage().isPresent()) {
+			usages = Arrays.asList(command.usage().get());
+		} else {
+			for (RegisteredCommand rCommand : registeredCommands) {
+				if (rCommand.commandName().equals(command.commandName())) {
+					StringBuilder usageString = new StringBuilder();
+					usageString.append("/" + command.commandName() + " ");
+					for (String arg : rCommand.argsAsStr()) {
+						usageString.append("<" + arg.split(":")[0] + "> ");
+					}
+					usages.add(usageString.toString());
 				}
-				usages.add(usageString.toString());
 			}
 		}
 

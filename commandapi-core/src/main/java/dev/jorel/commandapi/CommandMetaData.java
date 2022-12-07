@@ -33,14 +33,19 @@ final class CommandMetaData {
 	Predicate<CommandSender> requirements = s -> true;
 	
 	/**
-	 * An optional short description for the command
+	 * An optional short description for the command's help
 	 */
 	Optional<String> shortDescription = Optional.empty();
 	
 	/**
-	 * An optional full description for the command
+	 * An optional full description for the command's help
 	 */
 	Optional<String> fullDescription = Optional.empty();
+	
+	/**
+	 * An optional usage text for the command's help
+	 */
+	Optional<String[]> usage = Optional.empty();;
 
 	/**
 	 * Create command metadata
@@ -63,6 +68,7 @@ final class CommandMetaData {
 		this.requirements = original.requirements;
 		this.shortDescription = original.shortDescription.isPresent() ? Optional.of(original.shortDescription.get()) : Optional.empty();
 		this.fullDescription = original.fullDescription.isPresent() ? Optional.of(original.fullDescription.get()) : Optional.empty();
+		this.usage = original.usage.isPresent() ? Optional.of(original.usage.get()) : Optional.empty();
 	}
 
 }
