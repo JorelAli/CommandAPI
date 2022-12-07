@@ -19,7 +19,7 @@
 	<parent>
 		<artifactId>commandapi-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.6.1</version>
+		<version>8.6.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -46,6 +46,11 @@
 		</dependency>
 
 		<!-- NMS-specific implementations -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.19.3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.19.1</artifactId>

@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIConfig;
-import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
+import dev.jorel.commandapi.nms.NMS_1_19_3_R2;
 
 public class Main extends JavaPlugin {
 	
@@ -19,7 +19,7 @@ public class Main extends JavaPlugin {
 			.silentLogs(true)
 			.dispatcherFile(new File("command_registration.json"))
 			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
-			.setCustomNMS(new MockNMS(new NMS_1_19_1_R1()))
+			.setCustomNMS(new MockNMS(new NMS_1_19_3_R2()))
 		);
 	}
 

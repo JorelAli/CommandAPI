@@ -205,7 +205,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	public abstract ArgumentType<?> _ArgumentEntity(EntitySelector selector);
 
 	@Override
-	public final ArgumentType<?> _ArgumentEntitySummon() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public ArgumentType<?> _ArgumentEntitySummon() { // TODO: Abstract
 		return EntitySummonArgument.id();
 	}
 
@@ -238,7 +239,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentMobEffect() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public ArgumentType<?> _ArgumentMobEffect() { // TODO: Abstract
 		return MobEffectArgument.effect();
 	}
 
