@@ -557,8 +557,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelector selector)
-			throws CommandSyntaxException {
+	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelector selector) throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
 			CommandAPIHandler.getInstance().getField(EntitySelector.class, "m").set(argument, false);
@@ -833,8 +832,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 		} else {
 			for (CraftSound sound : CraftSound.values()) {
 				try {
-					if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
-							.equals(soundResource.getKey())) {
+					if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound).equals(soundResource.getKey())) {
 						return (SoundOrNamespacedKey) Sound.valueOf(sound.name());
 					}
 				} catch (IllegalArgumentException | IllegalAccessException e1) {
