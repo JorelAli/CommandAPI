@@ -845,7 +845,7 @@ new CommandAPICommand("sound")
 new CommandAPICommand("sound")
     .withArguments(new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY))
     .executesPlayer((player, args) -> {
-        player.getWorld().playSound(player.getLocation(), ((NamespacedKey) args[0]).asString(), 100.0f, 1.0f);
+        player.getWorld().playSound(player.getLocation(), ((NamespacedKey) args.get(0)).asString(), 100.0f, 1.0f);
     })
     .register();
 /* ANCHOR_END: soundarguments2 */
@@ -2184,7 +2184,7 @@ Argument<String> messageArgument = new GreedyStringArgument("message")
 new CommandAPICommand("emoji")
     .withArguments(messageArgument)
     .executes((sender, args) -> {
-        Bukkit.broadcastMessage((String) args[0]);
+        Bukkit.broadcastMessage((String) args.get(0));
     })
     .register();
 /* ANCHOR_END: BrigadierSuggestions3 */
