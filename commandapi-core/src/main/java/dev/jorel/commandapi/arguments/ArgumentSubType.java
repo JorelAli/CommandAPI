@@ -3,6 +3,7 @@ package dev.jorel.commandapi.arguments;
 import java.util.Collection;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
