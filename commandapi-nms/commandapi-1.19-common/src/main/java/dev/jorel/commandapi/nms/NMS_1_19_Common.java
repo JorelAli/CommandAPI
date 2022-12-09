@@ -467,7 +467,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
-		final Level level = cmdCtx.getSource().getLevel();
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
 		if (particleOptions instanceof SimpleParticleType options) {
@@ -489,7 +488,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 				CraftItemStack.asBukkitCopy(options.getItem()));
 		}
 		else if (particleOptions instanceof VibrationParticleOption options) {
-			return getParticleDataAsVibrationParticleOption(cmdCtx, level, particle, options);
+			return getParticleDataAsVibrationParticleOption(cmdCtx, particle, options);
 		}
 		else if (particleOptions instanceof ShriekParticleOption options) {
 			// CraftBukkit implements shriek particles as a (boxed) Integer object
@@ -498,9 +497,10 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		else if (particleOptions instanceof SculkChargeParticleOptions options) {
 			// CraftBukkit implements sculk charge particles as a (boxed) Float object
 			return new ParticleData<Float>(particle, Float.valueOf(options.roll()));
+		} else {
+			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
+			return new ParticleData<Void>(particle, null);
 		}
-		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
-		return new ParticleData<Void>(particle, null);
 	}
 
 	private ParticleData<DustTransition> getParticleDataAsDustColorTransitionOption(Particle particle, DustColorTransitionOptions options) {
@@ -511,14 +511,12 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return new ParticleData<>(particle, new DustTransition(color, toColor, options.getScale()));
 	}
 
-	private ParticleData<?> getParticleDataAsVibrationParticleOption(CommandContext<CommandSourceStack> cmdCtx,
-	                                                                 Level level, Particle particle,
-	                                                                 VibrationParticleOption options) {
+	private ParticleData<?> getParticleDataAsVibrationParticleOption(CommandContext<CommandSourceStack> cmdCtx, Particle particle, VibrationParticleOption options) {
 		// The "from" part of the Vibration object in Bukkit is completely ignored now,
 		// so we just populate it with some "feasible" information
 		final Vec3 origin = cmdCtx.getSource().getPosition();
+		Level level = cmdCtx.getSource().getLevel();
 		Location from = new Location(level.getWorld(), origin.x, origin.y, origin.z);
-
 		final Destination destination;
 
 		if (options.getDestination() instanceof BlockPositionSource positionSource) {
