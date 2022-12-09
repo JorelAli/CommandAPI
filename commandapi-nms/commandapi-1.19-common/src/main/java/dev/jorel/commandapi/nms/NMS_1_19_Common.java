@@ -532,11 +532,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
 	}
 
-	private Destination getVibrationParticleOptionDestinationAsBlockPositionSource(BlockPositionSource positionSource, Level level) {
-		Vec3 to = positionSource.getPosition(level).get();
-		return new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
-	}
-
 	private Destination getVibrationParticleOptionDestinationAsEntityPositionSource(EntityPositionSource positionSource, Level level) {
 		positionSource.getPosition(level); // Populate Optional sourceEntity
 		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity
