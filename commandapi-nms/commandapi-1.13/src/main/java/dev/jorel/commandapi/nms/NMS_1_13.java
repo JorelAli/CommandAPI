@@ -241,9 +241,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentDimension() {
-		throw new UnimplementedArgumentException("DimensionArgument", "1.13.1");
-	}
+	public ArgumentType<?> _ArgumentDimension() { throw new UnimplementedArgumentException("DimensionArgument", "1.13.1"); }
 
 	@Override
 	public ArgumentType<?> _ArgumentEnvironment() {
@@ -390,8 +388,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
-				.get(Bukkit.getServer().getHelpMap());
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
@@ -603,9 +600,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 
 	@Override
 	public EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
-		return EntityTypes
-				.a(((CraftWorld) getWorldForCSS(cmdCtx.getSource())).getHandle(), ArgumentEntitySummon.a(cmdCtx, str))
-				.getBukkitEntity().getType();
+		return EntityTypes.a(((CraftWorld) getWorldForCSS(cmdCtx.getSource())).getHandle(), ArgumentEntitySummon.a(cmdCtx, str)).getBukkitEntity().getType();
 	}
 
 	@Override
@@ -623,9 +618,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 
 		for (CustomFunction customFunction : ArgumentTag.a(cmdCtx, str)) {
 			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction),
-					commandListenerWrapper, e -> {
-						return cmdCtx.getSource().a(((CraftEntity) e).getHandle());
-					}));
+					commandListenerWrapper, e -> cmdCtx.getSource().a(((CraftEntity) e).getHandle())));
 		}
 
 		return result.toArray(new FunctionWrapper[0]);
@@ -762,8 +755,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 		final float blue = Float.parseFloat(optionsArr[3]);
 
 		final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
-		return new ParticleData<DustOptions>(particle,
-			new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
+		return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
 	}
 
 	@Override
@@ -893,9 +885,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
-	}
+	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException { return ArgumentScoreboardTeam.a(cmdCtx, key).getName(); }
 
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
