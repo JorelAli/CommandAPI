@@ -76,6 +76,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.exceptions.AngleArgumentException;
 import dev.jorel.commandapi.preprocessor.Differs;
@@ -505,8 +506,12 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 
 	@Differs(from = "1.15", by = "Implement BiomeArgument")
 	@Override
-	public Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return Biome.valueOf(cmdCtx.getArgument(key, MinecraftKey.class).getKey().toUpperCase());
+	public Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch(subType) {
+			case BIOME_BIOME -> (Biome) Biome.valueOf(cmdCtx.getArgument(key, MinecraftKey.class).getKey().toUpperCase());
+			case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromMinecraftKey(cmdCtx.getArgument(key, MinecraftKey.class));
+			default -> null;
+		};
 	}
 
 	@Override
@@ -868,20 +873,27 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@Differs(from = "1.15", by = "ArgumentMinecraftKeyRegistered.d() -> ArgumentMinecraftKeyRegistered.e()")
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		for (CraftSound sound : CraftSound.values()) {
-			try {
-				if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
-						.equals(minecraftKey.getKey())) {
-					return Sound.valueOf(sound.name());
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final MinecraftKey soundResource = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) fromMinecraftKey(soundResource);
+		} else {
+			for (CraftSound sound : CraftSound.values()) {
+				try {
+					if (CommandAPIHandler.getInstance().getField(CraftSound.class, "minecraftKey").get(sound)
+							.equals(soundResource.getKey())) {
+						return (SoundOrNamespacedKey) Sound.valueOf(sound.name());
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e1) {
+					e1.printStackTrace();
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
 			}
+			return null;
 		}
-		return null;
 	}
 
 	@Differs(from = "1.15", by = """

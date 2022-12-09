@@ -25,7 +25,7 @@
 	<parent>
 		<artifactId>commandapi</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>8.6.0-SNAPSHOT</version>
+		<version>8.6.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -33,8 +33,8 @@
 	<artifactId>commandapi-plugin-test</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19.1-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19.1-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.19.3-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19.3-R0.1-SNAPSHOT</spigot.version>
 		<powermock.version>2.0.2</powermock.version>
 	</properties>
 

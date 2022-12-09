@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.jorel.commandapi.IStringTooltip;
 import org.bukkit.command.CommandSender;
 
@@ -34,6 +33,6 @@ import java.util.function.Function;
  */
 public class ListTextArgument<T> extends ListArgumentCommon<T> {
 	ListTextArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
-		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, StringArgumentType.string());
+		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, true);
 	}
 }

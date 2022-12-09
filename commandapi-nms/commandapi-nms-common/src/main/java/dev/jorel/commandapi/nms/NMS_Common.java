@@ -47,7 +47,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
@@ -70,6 +69,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
@@ -205,7 +205,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	public abstract ArgumentType<?> _ArgumentEntity(EntitySelector selector);
 
 	@Override
-	public final ArgumentType<?> _ArgumentEntitySummon() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public ArgumentType<?> _ArgumentEntitySummon() { // TODO: Abstract
 		return EntitySummonArgument.id();
 	}
 
@@ -238,7 +239,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentMobEffect() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public ArgumentType<?> _ArgumentMobEffect() { // TODO: Abstract
 		return MobEffectArgument.effect();
 	}
 
@@ -409,7 +411,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = NAME_CHANGED, from = "getWorld()", to = "f()", in = "1.19")
@@ -603,10 +605,9 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
-		throws CommandSyntaxException {
-		return PotionEffectType.getByKey(fromResourceLocation(Registry.MOB_EFFECT.getKey(MobEffectArgument.getEffect(cmdCtx, key))));
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.18")
+	public abstract PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException;
 
 	@Override
 	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
@@ -651,7 +652,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
-	public abstract Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key);
+	public abstract <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
 
 	// This differs from 1.18 -> 1.18.2 due to biome suggestions, but it should be covered by the default case (empty)
 	@Override

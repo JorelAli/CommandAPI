@@ -38,9 +38,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import com.mojang.brigadier.Message;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Keyed;
@@ -49,12 +46,11 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
-import org.bukkit.Sound;
 import org.bukkit.Vibration;
-import org.bukkit.World;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -76,11 +72,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -89,6 +87,7 @@ import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -105,6 +104,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.EntitySummonArgument;
+import net.minecraft.commands.arguments.MobEffectArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
@@ -144,6 +144,7 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.SimpleReloadInstance;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -289,7 +290,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 
 	@Differs(from = "1.18", by = "Implement biome argument which contains either a biome or a tag (instead of just a biome)")
 	@Override
-	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
 		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getBiome(cmdCtx, key);
 		if (biomeResult.unwrap().left().isPresent()) {
 			// It's a resource key. Unwrap the result, get the resource key (left)
@@ -313,7 +314,20 @@ public class NMS_1_18_R2 extends NMS_Common {
 			// This is the same registry that you'll find in registries.json and
 			// in the command_registration.json
 
-			return Biome.valueOf(biomeResult.unwrap().left().get().location().getPath().toUpperCase());
+			final ResourceLocation resourceLocation = biomeResult.unwrap().left().get().location();
+			return switch(subType) {
+				case BIOME_BIOME -> {
+					Biome biome = null;
+					try {
+						biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
+					} catch(IllegalArgumentException biomeNotFound) {
+						biome = null;
+					}
+					yield biome;
+				}
+				case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
+				default -> null;
+			};
 		} else {
 			// This isn't a biome, tell the user this.
 
@@ -519,6 +533,11 @@ public class NMS_1_18_R2 extends NMS_Common {
 	}
 
 	@Override
+	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return PotionEffectType.getByKey(fromResourceLocation(Registry.MOB_EFFECT.getKey(MobEffectArgument.getEffect(cmdCtx, key))));
+	}
+
+	@Override
 	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
@@ -542,9 +561,22 @@ public class NMS_1_18_R2 extends NMS_Common {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Sound getSound(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return CraftSound.getBukkit(Registry.SOUND_EVENT.get(ResourceLocationArgument.getId(cmdCtx, key)));
+	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		final ResourceLocation soundResource = ResourceLocationArgument.getId(cmdCtx, key);
+		if(returnType.equals(NamespacedKey.class)) {
+			// If we want a NamespacedKey, give it one
+			return (SoundOrNamespacedKey) NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
+		} else {
+			// Otherwise, if null return null else Sound
+			final SoundEvent soundEvent = Registry.SOUND_EVENT.get(soundResource);
+			if(soundEvent == null) {
+				return null;
+			} else {
+				return (SoundOrNamespacedKey) CraftSound.getBukkit(soundEvent);
+			}
+		}
 	}
 
 	@Override

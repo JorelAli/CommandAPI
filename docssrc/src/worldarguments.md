@@ -1,5 +1,7 @@
 # World arguments
 
+![A picture of world arguments in action](./images/arguments/worldargument.png)
+
 The `WorldArgument` class allows a command sender to refer to a loaded Bukkit `World`.
 
 <div class="example">

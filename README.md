@@ -370,9 +370,10 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
     <tbody>
         <tr>
             <td valign="top"><b>8.6.0</b></td>
-            <td valign="top">November 2022</td>
+            <td valign="top">December 2022</td>
             <td valign="top">
                 <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/307 Adds a <code>CommandArgument</code> to let users submit commands as an argument</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/330 Improve the documentation for disabling the CommandAPI gracefully with <code>CommandAPI.onDisable()</code></li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/334 Adds support for chat components in <code>CommandAPI.fail()</code></li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/338 Adds a way to clone a <code>CommandAPICommand</code> instance using <code>instance.copy()</code></li>
@@ -380,6 +381,9 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>https://github.com/JorelAli/CommandAPI/issues/341 Fix incorrect code block in normal executors documentation page</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/351 Adds support for a ListArgument with the TextArgument backend, to allow inline lists</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/358 Adds a new WorldArgument argument that lets you get a list of Minecraft dimensions</li>
+                    <li>Adds support for <code>SoundArgument</code> to return string-based sounds via the <code>NamespacedKey</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/352 Adds some helper methods to the LiteralArgument to make it easier to use via a static import</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/357 Adds a Kotlin DSL to register commands in Kotlin!</li>
                 </ul>
             </td>
         </tr>

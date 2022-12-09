@@ -2,11 +2,8 @@ package dev.jorel.commandapi.test;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import com.mojang.brigadier.Message;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -18,6 +15,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -259,8 +257,8 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
-	public Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return BASE_NMS.getSound((CommandContext) cmdCtx, key);
+	public <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+		return (SoundOrNamespacedKey) BASE_NMS.getSound((CommandContext) cmdCtx, key, returnType);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -80,6 +81,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -113,7 +115,7 @@ import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.CommandArgument;
-import dev.jorel.commandapi.arguments.CommandResult;
+import dev.jorel.commandapi.wrappers.CommandResult;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
@@ -148,7 +150,9 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.SoundArgument;
+import dev.jorel.commandapi.arguments.SoundType;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.SuggestionsBranch;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
@@ -830,12 +834,21 @@ new CommandAPICommand("unlockrecipe")
 {
 /* ANCHOR: soundarguments */
 new CommandAPICommand("sound")
-    .withArguments(new SoundArgument("sound"))
+    .withArguments(new SoundArgument<Sound>("sound"))
     .executesPlayer((player, args) -> {
         player.getWorld().playSound(player.getLocation(), (Sound) args.get(0), 100.0f, 1.0f);
     })
     .register();
 /* ANCHOR_END: soundarguments */
+
+/* ANCHOR: soundarguments2 */
+new CommandAPICommand("sound")
+    .withArguments(new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY))
+    .executesPlayer((player, args) -> {
+        player.getWorld().playSound(player.getLocation(), ((NamespacedKey) args[0]).asString(), 100.0f, 1.0f);
+    })
+    .register();
+/* ANCHOR_END: soundarguments2 */
 }
 
 
@@ -2055,7 +2068,7 @@ new CommandAPICommand("multigive")
     .withArguments(new ListArgumentBuilder<Material>("materials")
         .withList(List.of(Material.values()))
         .withMapper(material -> material.name().toLowerCase())
-        .build()
+        .buildGreedy()
     )
     .executesPlayer((player, args) -> {
         int amount = (int) args.get(0);
@@ -2122,6 +2135,59 @@ new CommandAPICommand("commandargument")
         Bukkit.dispatchCommand(sender, (String) args.get(0));
     }).register();
 /* ANCHOR_END: BrigadierSuggestions2 */
+
+}
+
+@SuppressWarnings("deprecation")
+void emojis() {
+/* ANCHOR: BrigadierSuggestions3 */
+Map<String, String> emojis = new HashMap<>();
+emojis.put("☻", "smile");
+emojis.put("❤", "heart");
+emojis.put("🔥", "fire");
+emojis.put("★", "star");
+emojis.put("☠", "death");
+emojis.put("⚠", "warning");
+emojis.put("☀", "sun");
+emojis.put("☺", "smile");
+emojis.put("☹", "frown");
+emojis.put("✉", "mail");
+emojis.put("☂", "umbrella");
+emojis.put("✘", "cross");
+emojis.put("♪", "music note (eighth)");
+emojis.put("♬", "music note (beamed sixteenth)");
+emojis.put("♩", "music note (quarter)");
+emojis.put("♫", "music note (beamed eighth)");
+emojis.put("☄", "comet");
+emojis.put("✦", "star");
+emojis.put("🗡", "sword");
+emojis.put("🪓", "axe");
+emojis.put("🔱", "trident");
+emojis.put("🎣", "fishing rod");
+emojis.put("🏹", "bow");
+emojis.put("⛏", "pickaxe");
+emojis.put("🍖", "food");
+
+Argument<String> messageArgument = new GreedyStringArgument("message")
+    .replaceSuggestions((info, builder) -> {
+        // Only display suggestions at the very end character
+        builder = builder.createOffset(builder.getStart() + info.currentArg().length());
+
+        // Suggest all the emojis!
+        for (Entry<String, String> str : emojis.entrySet()) {
+            builder.suggest(str.getKey(), new LiteralMessage(str.getValue()));
+        }
+
+        return builder.buildFuture();
+    });
+
+new CommandAPICommand("emoji")
+    .withArguments(messageArgument)
+    .executes((sender, args) -> {
+        Bukkit.broadcastMessage((String) args[0]);
+    })
+    .register();
+/* ANCHOR_END: BrigadierSuggestions3 */
 }
 
 {
@@ -2237,10 +2303,64 @@ new CommandAPICommand("sudo")
         Player target = (Player) args.get(0);
         CommandResult command = (CommandResult) args.get(1);
 
-        command.command().execute(target, command.command().getLabel(), command.args());
+        command.execute(target);
     })
     .register();
 /* ANCHOR_END: command_argument_sudo */
+}
+
+{
+
+/* ANCHOR: command_argument_branch_give */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("give"),
+    ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+).branch(
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+        ArgumentSuggestions.empty()
+    ),
+    SuggestionsBranch.suggest(
+        ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+        null,
+        ArgumentSuggestions.empty()
+    )
+)
+/* ANCHOR_END: command_argument_branch_give */
+;
+/* ANCHOR: command_argument_branch_tp */
+SuggestionsBranch.suggest(
+    ArgumentSuggestions.strings("tp"),
+    ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+    ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+)
+/* ANCHOR_END: command_argument_branch_tp */
+;
+
+/* ANCHOR: command_argument_branch */
+new CommandArgument("command")
+    .branchSuggestions(
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("give"),
+            ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+        ).branch(
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("diamond", "minecraft:diamond"),
+                ArgumentSuggestions.empty()
+            ),
+            SuggestionsBranch.suggest(
+                ArgumentSuggestions.strings("dirt", "minecraft:dirt"),
+                null,
+                ArgumentSuggestions.empty()
+            )
+        ),
+        SuggestionsBranch.suggest(
+            ArgumentSuggestions.strings("tp"),
+            ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)),
+            ArgumentSuggestions.strings(info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new))
+        )
+    );
+/* ANCHOR_END: command_argument_branch */
 }
 
 

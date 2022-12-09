@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.CommandResult;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
