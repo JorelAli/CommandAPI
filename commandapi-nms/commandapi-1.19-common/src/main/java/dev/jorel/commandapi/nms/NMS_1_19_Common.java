@@ -469,7 +469,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
-		if (particleOptions instanceof SimpleParticleType options) {
+		if (particleOptions instanceof SimpleParticleType) {
 			return new ParticleData<Void>(particle, null);
 		}
 		else if (particleOptions instanceof BlockParticleOption options) {
