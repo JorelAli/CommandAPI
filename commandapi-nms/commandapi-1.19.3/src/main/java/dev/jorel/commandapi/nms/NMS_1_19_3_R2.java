@@ -209,7 +209,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
-			arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
+			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
