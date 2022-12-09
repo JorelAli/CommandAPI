@@ -430,9 +430,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
 		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
 				.get(Bukkit.getServer().getHelpMap());
-		for (Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
-			helpTopics.put(entry.getKey(), entry.getValue());
-		}
+		helpTopics.putAll(helpTopicsToAdd);
 	}
 
 	@Override
@@ -549,10 +547,8 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	public Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a(cmdCtx, key);
-		return (Block block) -> {
-			return predicate.test(new ShapeDetectorBlock(cmdCtx.getSource().getWorld(),
-					new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
-		};
+		return (Block block) -> predicate.test(new ShapeDetectorBlock(cmdCtx.getSource().getWorld(),
+				new BlockPosition(block.getX(), block.getY(), block.getZ()), true));
 	}
 
 	@Override
@@ -680,9 +676,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 		for (CustomFunction customFunction : ArgumentTag.a(cmdCtx, str)) {
 			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(customFunction),
-					commandListenerWrapper, e -> {
-						return cmdCtx.getSource().a(((CraftEntity) e).getHandle());
-					}));
+					commandListenerWrapper, e -> cmdCtx.getSource().a(((CraftEntity) e).getHandle())));
 		}
 		return result.toArray(new FunctionWrapper[0]);
 	}
@@ -806,29 +800,34 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String str) {
 		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, str);
-
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
+
 		if (particleOptions instanceof ParticleParamBlock options) {
 			IBlockData blockData = (IBlockData) ParticleParamBlock_c.get(options);
 			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(blockData));
 		}
-		if (particleOptions instanceof ParticleParamRedstone options) {
-			String optionsStr = options.a(); // Of the format "particle_type float float float"
-			String[] optionsArr = optionsStr.split(" ");
-			final float red = Float.parseFloat(optionsArr[1]);
-			final float green = Float.parseFloat(optionsArr[2]);
-			final float blue = Float.parseFloat(optionsArr[3]);
-
-			final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
-			return new ParticleData<DustOptions>(particle,
-					new DustOptions(color, (float) ParticleParamRedstone_g.get(options)));
+		else if (particleOptions instanceof ParticleParamRedstone options) {
+			return getParticleDataAsDustOptions(particle, options);
 		}
-		if (particleOptions instanceof ParticleParamItem options) {
+		else if (particleOptions instanceof ParticleParamItem options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
 					CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
+		} else {
+			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
+			return new ParticleData<Void>(particle, null);
 		}
-		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
-		return new ParticleData<Void>(particle, null);
+	}
+
+	private ParticleData<DustOptions> getParticleDataAsDustOptions(Particle particle, ParticleParamRedstone options) {
+		String optionsStr = options.a(); // Of the format "particle_type float float float"
+		String[] optionsArr = optionsStr.split(" ");
+		final float red = Float.parseFloat(optionsArr[1]);
+		final float green = Float.parseFloat(optionsArr[2]);
+		final float blue = Float.parseFloat(optionsArr[3]);
+
+		final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
+		return new ParticleData<DustOptions>(particle,
+			new DustOptions(color, (float) ParticleParamRedstone_g.get(options)));
 	}
 
 	@Override
@@ -930,14 +929,10 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 			};
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return ICompletionProvider.a(
-						MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName),
-						builder);
-			};
-			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
-			};
+			case ADVANCEMENTS -> (cmdCtx, builder) -> ICompletionProvider.a(
+					MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName),
+					builder);
+			case LOOT_TABLES -> (cmdCtx, builder) -> ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
 			case BIOMES -> CompletionProviders.d;
 			case ENTITIES -> CompletionProviders.e;
 			default -> (context, builder) -> Suggestions.empty();
