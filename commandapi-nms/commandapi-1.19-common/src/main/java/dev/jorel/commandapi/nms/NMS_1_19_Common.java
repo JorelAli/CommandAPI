@@ -523,9 +523,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			Vec3 to = positionSource.getPosition(level).get();
 			destination = new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
 
-		} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
+		}
+		else if (options.getDestination() instanceof EntityPositionSource positionSource) {
 			destination = getVibrationParticleOptionDestinationAsEntityPositionSource(positionSource, level);
-		} else {
+		}
+		else {
 			CommandAPI.getLogger().warning("Unknown vibration destination " + options.getDestination());
 			return new ParticleData<Void>(particle, null);
 		}
