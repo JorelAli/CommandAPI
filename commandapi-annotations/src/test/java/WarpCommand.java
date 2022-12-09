@@ -124,7 +124,7 @@ new CommandAPICommand("warp")
         warps.keySet().toArray(new String[0])
     )))
     .executesPlayer((player, args) -> {
-        player.teleport(warps.get((String) args[0]));
+        player.teleport(warps.get((String) args.get(0)));
     })
     .register();
 
@@ -135,7 +135,7 @@ new CommandAPICommand("warp")
             .withPermission("warps.create")
             .withArguments(new StringArgument("warpname"))
             .executesPlayer((player, args) -> {
-                warps.put((String) args[0], player.getLocation());
+                warps.put((String) args.get(0), player.getLocation());
             })
     )
     .register();
