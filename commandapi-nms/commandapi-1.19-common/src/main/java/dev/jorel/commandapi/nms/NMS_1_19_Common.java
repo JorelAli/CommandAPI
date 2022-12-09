@@ -305,7 +305,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Override
 	public final HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
-		String permission) {
+	                                         String permission) {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
@@ -384,7 +384,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Override
 	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str,
-		dev.jorel.commandapi.arguments.EntitySelector selector)
+	                                      dev.jorel.commandapi.arguments.EntitySelector selector)
 		throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
@@ -456,7 +456,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Override
 	public final Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext<CommandSourceStack> cmdCtx,
-		String key) throws CommandSyntaxException {
+	                                                                             String key) throws CommandSyntaxException {
 		// Not inside the lambda because getItemPredicate throws CommandSyntaxException
 		Predicate<ItemStack> predicate = ItemPredicateArgument.getItemPredicate(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
@@ -630,7 +630,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			.getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
 		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
 	}
-	
+
 	@Override
 	public World getWorldForCSS(CommandSourceStack css) {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
