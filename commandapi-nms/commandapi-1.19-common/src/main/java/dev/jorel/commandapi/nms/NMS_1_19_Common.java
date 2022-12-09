@@ -160,6 +160,8 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 // Mojang-Mapped reflection
 /**
@@ -510,60 +512,17 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(options.getState()));
 		}
 		if (particleOptions instanceof DustColorTransitionOptions options) {
-			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
-				(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
-			final Color toColor = Color.fromRGB((int) (options.getToColor().x() * 255.0F),
-				(int) (options.getToColor().y() * 255.0F), (int) (options.getToColor().z() * 255.0F));
-			return new ParticleData<DustTransition>(particle, new DustTransition(color, toColor, options.getScale()));
+			return getParticleDataAsDustColorTransitionOption(particle, options);
 		}
 		if (particleOptions instanceof DustParticleOptions options) {
-			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
-				(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
-			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
+			return getParticleDataAsDustParticleOptions(particle, options);
 		}
 		if (particleOptions instanceof ItemParticleOption options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
 				CraftItemStack.asBukkitCopy(options.getItem()));
 		}
 		if (particleOptions instanceof VibrationParticleOption options) {
-			// The "from" part of the Vibration object in Bukkit is completely ignored now,
-			// so we just populate it with some "feasible" information
-			final Vec3 origin = cmdCtx.getSource().getPosition();
-			Location from = new Location(level.getWorld(), origin.x, origin.y, origin.z);
-			final Destination destination;
-			if (options.getDestination() instanceof BlockPositionSource positionSource) {
-				Vec3 to = positionSource.getPosition(level).get();
-				destination = new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
-			} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
-				positionSource.getPosition(level); // Populate Optional sourceEntity
-				Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity
-					.get(positionSource);
-				if (entity.left().isPresent()) {
-					destination = new EntityDestination(entity.left().get().getBukkitEntity());
-				} else {
-					Either<UUID, Integer> id = entity.right().get();
-					if (id.left().isPresent()) {
-						destination = new EntityDestination(Bukkit.getEntity(id.left().get()));
-					} else {
-						// Do an entity lookup by numerical ID. There's no "helper function"
-						// like Bukkit.getEntity() to do this for us, so we just have to do it
-						// manually
-						Entity foundEntity = null;
-						for (ServerLevel world : MINECRAFT_SERVER.getAllLevels()) {
-							Entity entityById = world.getEntity(id.right().get());
-							if (entityById != null) {
-								foundEntity = entityById;
-								break;
-							}
-						}
-						destination = new EntityDestination(foundEntity.getBukkitEntity());
-					}
-				}
-			} else {
-				CommandAPI.getLogger().warning("Unknown vibration destination " + options.getDestination());
-				return new ParticleData<Void>(particle, null);
-			}
-			return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
+			return getParticleDataAsVibrationParticleOption(cmdCtx, level, particle, options);
 		}
 		if (particleOptions instanceof ShriekParticleOption options) {
 			// CraftBukkit implements shriek particles as a (boxed) Integer object
@@ -575,6 +534,111 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		}
 		CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 		return new ParticleData<Void>(particle, null);
+	}
+
+	/**
+	 * {@link #getParticleDataAsDustColorTransitionOption(Particle, DustColorTransitionOptions) Parent Method}
+	 * @param particle
+	 * @param options
+	 * @return
+	 */
+	private ParticleData<DustTransition> getParticleDataAsDustColorTransitionOption(Particle particle, DustColorTransitionOptions options) {
+		final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
+			(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
+		final Color toColor = Color.fromRGB((int) (options.getToColor().x() * 255.0F),
+			(int) (options.getToColor().y() * 255.0F), (int) (options.getToColor().z() * 255.0F));
+		return new ParticleData<>(particle, new DustTransition(color, toColor, options.getScale()));
+	}
+
+	/**
+	 * {@link #getParticle(CommandContext, String)}  Parent Method}
+	 * @param particle
+	 * @param options
+	 * @return
+	 */
+	private ParticleData<DustOptions> getParticleDataAsDustParticleOptions(Particle particle, DustParticleOptions options) {
+		final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
+			(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
+		return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
+	}
+
+	/**
+	 * {@link #getParticleDataAsVibrationParticleOption(CommandContext, Level, Particle, VibrationParticleOption)
+	 * Parent Method}
+	 * @param
+	 * @param
+	 * @return
+	 */
+	private ParticleData<?> getParticleDataAsVibrationParticleOption(CommandContext<CommandSourceStack> cmdCtx,
+	                                                                 Level level, Particle particle,
+	                                                                 VibrationParticleOption options) {
+		// The "from" part of the Vibration object in Bukkit is completely ignored now,
+		// so we just populate it with some "feasible" information
+		final Vec3 origin = cmdCtx.getSource().getPosition();
+		Location from = new Location(level.getWorld(), origin.x, origin.y, origin.z);
+
+		final Destination destination;
+
+		if (options.getDestination() instanceof BlockPositionSource positionSource) {
+			destination = getVibrationParticleOptionDestinationAsBlockPositionSource(positionSource, level);
+		} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
+			destination = getVibrationParticleOptionDestinationAsEntityPositionSource(positionSource, level);
+		} else {
+			CommandAPI.getLogger().warning("Unknown vibration destination " + options.getDestination());
+			return new ParticleData<Void>(particle, null);
+		}
+		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
+	}
+	
+	/**
+	 * {@link #getParticleDataAsVibrationParticleOption(CommandContext, Level, Particle, VibrationParticleOption)
+	 * Parent Method}
+	 * @param positionSource {@link BlockPositionSource} the block position source to find the designation of.
+	 * @param level {@link Level} The level in which to find the destination
+	 * @return {@link Destination} the destination of the provided source in the given level.
+	 */
+	private @NotNull Destination getVibrationParticleOptionDestinationAsBlockPositionSource(@NotNull BlockPositionSource positionSource, Level level) {
+		Vec3 to = positionSource.getPosition(level).get();
+		return new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
+	}
+
+	/**
+	 * {@link #getParticleDataAsVibrationParticleOption(CommandContext, Level, Particle, VibrationParticleOption)
+	 * Parent Method}
+	 * @param positionSource {@link EntityPositionSource} the entity position source to find the designation of.
+	 * @param level {@link Level} The level in which to find the destination
+	 * @return {@link Destination} the destination of the provided source in the given level.
+	 */
+
+	private @NotNull Destination getVibrationParticleOptionDestinationAsEntityPositionSource(@NotNull EntityPositionSource positionSource, Level level) {
+		positionSource.getPosition(level); // Populate Optional sourceEntity
+		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity
+			.get(positionSource);
+		if (entity.left().isPresent()) {
+			return new EntityDestination(entity.left().get().getBukkitEntity());
+		}
+		Either<UUID, Integer> id = entity.right().get();
+		if (id.left().isPresent()) {
+			return new EntityDestination(Bukkit.getEntity(id.left().get()));
+		}
+
+		// Do an entity lookup by numerical ID. There's no "helper function"
+		// like Bukkit.getEntity() to do this for us, so we just have to do it
+		// manually
+		Entity foundEntity = null;
+
+		// Asset Minecraft Server is not null to stop null pointer exception.
+		assert MINECRAFT_SERVER != null;
+		for (ServerLevel world : MINECRAFT_SERVER.getAllLevels()) {
+			Entity entityById = world.getEntity(id.right().get());
+			if (entityById != null) {
+				foundEntity = entityById;
+				break;
+			}
+		}
+		// Asset found entity is not null to stop null pointer exception.
+		assert foundEntity != null;
+		return new EntityDestination(foundEntity.getBukkitEntity());
 	}
 
 	@Override
@@ -594,6 +658,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 		Entity proxyEntity = css.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
+
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new NativeProxyCommandSender(sender, proxy, location, world);
 		} else {
@@ -714,7 +779,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			return simpleReloadInstance.thenApply(x -> serverResources);
 		});
 
-		// Step 3: Actually load all of the resources
+		// Step 3: Actually load all the resources
 		CompletableFuture<Void> third = second.thenAcceptAsync(resources -> {
 			MINECRAFT_SERVER.resources.close();
 			MINECRAFT_SERVER.resources = serverResources;
@@ -726,12 +791,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			List<String> enabledIDs = ImmutableList.copyOf(selectedIDs);
 			List<String> disabledIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getAvailableIds());
 
-			ListIterator<String> disabledIDsIterator = disabledIDs.listIterator();
-			while (disabledIDsIterator.hasNext()) {
-				if (enabledIDs.contains(disabledIDsIterator.next())) {
-					disabledIDsIterator.remove();
-				}
-			}
+			disabledIDs.removeIf(enabledIDs::contains);
 
 			MINECRAFT_SERVER.getWorldData().setDataPackConfig(new DataPackConfig(enabledIDs, disabledIDs));
 			MINECRAFT_SERVER.resources.managers().updateRegistryTags(registryAccess);
