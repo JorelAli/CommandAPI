@@ -86,12 +86,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-test</artifactId>
-			<version>${kotlin.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-core</artifactId>
 			<version>${project.version}</version>
