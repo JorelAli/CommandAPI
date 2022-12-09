@@ -193,8 +193,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentEntity(
-		dev.jorel.commandapi.arguments.EntitySelector selector) {
+	public final ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelector selector) {
 		return switch (selector) {
 			case MANY_ENTITIES -> EntityArgument.entities();
 			case MANY_PLAYERS -> EntityArgument.players();
@@ -221,8 +220,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 	@Override
 	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
-			.get(Bukkit.getServer().getHelpMap());
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
 		helpTopics.putAll(helpTopicsToAdd);
@@ -251,8 +249,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private final SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions()
-			.execute(commandFunction, css);
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions().execute(commandFunction, css);
 
 		Entry[] cArr = commandFunction.getEntries();
 		String[] result = new String[cArr.length];
@@ -263,23 +260,20 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher)
-		throws IOException {
+	public final void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
 		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
 			.toJson(ArgumentUtils.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}
 
 	@Override
-	public final HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
-		String permission) {
+	public final HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
 	@SuppressWarnings("removal")
 	@Override
 	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return PaperComponents.gsonSerializer()
-			.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
 	@Differs(from = "1.19.2", by = "Now uses ResourceOrTagArgument instead of ResourceOrTagLocationArgument")
@@ -336,8 +330,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final Predicate<Block> getBlockPredicate(CommandContext<CommandSourceStack> cmdCtx, String key)
-		throws CommandSyntaxException {
+	public final Predicate<Block> getBlockPredicate(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		Predicate<BlockInWorld> predicate = BlockPredicateArgument.getBlockPredicate(cmdCtx, key);
 		return (Block block) -> predicate.test(new BlockInWorld(cmdCtx.getSource().getLevel(),
 			new BlockPos(block.getX(), block.getY(), block.getZ()), true));
@@ -359,9 +352,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str,
-		dev.jorel.commandapi.arguments.EntitySelector selector)
-		throws CommandSyntaxException {
+	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelector selector) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have
@@ -406,10 +397,8 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Differs(from = "1.19.2", by = "Use ResourceArgument")
 	@SuppressWarnings("deprecation")
 	@Override
-	public final EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String key)
-		throws CommandSyntaxException {
-		return EntityType.fromName(net.minecraft.world.entity.EntityType
-			.getKey(ResourceArgument.getSummonableEntityType(cmdCtx, key).value()).getPath());
+	public final EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return EntityType.fromName(net.minecraft.world.entity.EntityType.getKey(ResourceArgument.getSummonableEntityType(cmdCtx, key).value()).getPath());
 	}
 
 	@Override
@@ -426,8 +415,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String str)
-		throws CommandSyntaxException {
+	public final org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
 		return CraftItemStack.asBukkitCopy(ItemArgument.getItem(cmdCtx, str).createItemStack(1, false));
 	}
 
@@ -440,29 +428,25 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final Location2D getLocation2DBlock(CommandContext<CommandSourceStack> cmdCtx, String key)
-		throws CommandSyntaxException {
+	public final Location2D getLocation2DBlock(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		ColumnPos blockPos = ColumnPosArgument.getColumnPos(cmdCtx, key);
 		return new Location2D(getWorldForCSS(cmdCtx.getSource()), blockPos.x(), blockPos.z());
 	}
 
 	@Override
-	public final Location2D getLocation2DPrecise(CommandContext<CommandSourceStack> cmdCtx, String key)
-		throws CommandSyntaxException {
+	public final Location2D getLocation2DPrecise(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		Vec2 vecPos = Vec2Argument.getVec2(cmdCtx, key);
 		return new Location2D(getWorldForCSS(cmdCtx.getSource()), vecPos.x, vecPos.y);
 	}
 
 	@Override
-	public final Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String str)
-		throws CommandSyntaxException {
+	public final Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
 		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, str);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 
 	@Override
-	public final Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String str)
-		throws CommandSyntaxException {
+	public final Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
 		Vec3 vecPos = Vec3Argument.getCoordinates(cmdCtx, str).getPosition(cmdCtx.getSource());
 		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.x(), vecPos.y(), vecPos.z());
 	}
@@ -470,8 +454,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, str);
-		return new CraftLootTable(fromResourceLocation(resourceLocation),
-			MINECRAFT_SERVER.getLootTables().get(resourceLocation));
+		return new CraftLootTable(fromResourceLocation(resourceLocation), MINECRAFT_SERVER.getLootTables().get(resourceLocation));
 	}
 
 	@Override
@@ -493,7 +476,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 				(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
 			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
 		}
-
 		else if (particleOptions instanceof ItemParticleOption options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
 				CraftItemStack.asBukkitCopy(options.getItem()));
@@ -547,8 +529,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 	private Destination getVibrationParticleOptionDestinationAsEntityPositionSource(EntityPositionSource positionSource, Level level) {
 		positionSource.getPosition(level); // Populate Optional sourceEntity
-		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity
-			.get(positionSource);
+		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity.get(positionSource);
 		if (entity.left().isPresent()) {
 			return new EntityDestination(entity.left().get().getBukkitEntity());
 		}
@@ -608,7 +589,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
 		final ResourceLocation soundResource = ResourceLocationArgument.getId(cmdCtx, key);
-		if(returnType.equals(NamespacedKey.class)) {
+		if (returnType.equals(NamespacedKey.class)) {
 			// If we want a NamespacedKey, give it one
 			return (SoundOrNamespacedKey) NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
 		} else {
@@ -624,8 +605,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		Collection<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions()
-			.getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
+		Collection<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
 		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
 	}
 	
