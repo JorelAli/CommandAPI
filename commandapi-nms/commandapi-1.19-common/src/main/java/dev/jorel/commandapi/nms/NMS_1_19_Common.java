@@ -20,61 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Keyed;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Particle.DustOptions;
-import org.bukkit.Particle.DustTransition;
-import org.bukkit.Vibration;
-import org.bukkit.Vibration.Destination;
-import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_19_R1.CraftLootTable;
-import org.bukkit.craftbukkit.v1_19_R1.CraftParticle;
-import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R1.CraftSound;
-import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_19_R1.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R1.help.CustomHelpTopic;
-import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffectType;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -86,16 +31,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
-
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import dev.jorel.commandapi.wrappers.*;
 import io.netty.channel.Channel;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
@@ -103,13 +43,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.MobEffectArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.*;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -126,15 +60,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryAccess.Frozen;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustColorTransitionOptions;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.SculkChargeParticleOptions;
-import net.minecraft.core.particles.ShriekParticleOption;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.particles.VibrationParticleOption;
+import net.minecraft.core.particles.*;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -160,8 +86,47 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.*;
+import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.DustTransition;
+import org.bukkit.Vibration.Destination;
+import org.bukkit.Vibration.Destination.BlockDestination;
+import org.bukkit.Vibration.Destination.EntityDestination;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_19_R1.CraftLootTable;
+import org.bukkit.craftbukkit.v1_19_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R1.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_19_R1.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffectType;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
 // Mojang-Mapped reflection
 /**
@@ -503,32 +468,34 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	public final ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
 		final Level level = cmdCtx.getSource().getLevel();
-
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
+
 		if (particleOptions instanceof SimpleParticleType options) {
 			return new ParticleData<Void>(particle, null);
 		}
-		if (particleOptions instanceof BlockParticleOption options) {
+		else if (particleOptions instanceof BlockParticleOption options) {
 			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(options.getState()));
 		}
-		if (particleOptions instanceof DustColorTransitionOptions options) {
+		else if (particleOptions instanceof DustColorTransitionOptions options) {
 			return getParticleDataAsDustColorTransitionOption(particle, options);
 		}
-		if (particleOptions instanceof DustParticleOptions options) {
-			return getParticleDataAsDustParticleOptions(particle, options);
+		else if (particleOptions instanceof DustParticleOptions options) {
+			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
+				(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
+			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
 		}
-		if (particleOptions instanceof ItemParticleOption options) {
+		else if (particleOptions instanceof ItemParticleOption options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
 				CraftItemStack.asBukkitCopy(options.getItem()));
 		}
-		if (particleOptions instanceof VibrationParticleOption options) {
+		else if (particleOptions instanceof VibrationParticleOption options) {
 			return getParticleDataAsVibrationParticleOption(cmdCtx, level, particle, options);
 		}
-		if (particleOptions instanceof ShriekParticleOption options) {
+		else if (particleOptions instanceof ShriekParticleOption options) {
 			// CraftBukkit implements shriek particles as a (boxed) Integer object
 			return new ParticleData<Integer>(particle, Integer.valueOf(options.getDelay()));
 		}
-		if (particleOptions instanceof SculkChargeParticleOptions options) {
+		else if (particleOptions instanceof SculkChargeParticleOptions options) {
 			// CraftBukkit implements sculk charge particles as a (boxed) Float object
 			return new ParticleData<Float>(particle, Float.valueOf(options.roll()));
 		}
@@ -536,12 +503,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return new ParticleData<Void>(particle, null);
 	}
 
-	/**
-	 * {@link #getParticleDataAsDustColorTransitionOption(Particle, DustColorTransitionOptions) Parent Method}
-	 * @param particle
-	 * @param options
-	 * @return
-	 */
 	private ParticleData<DustTransition> getParticleDataAsDustColorTransitionOption(Particle particle, DustColorTransitionOptions options) {
 		final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
 			(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
@@ -550,25 +511,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return new ParticleData<>(particle, new DustTransition(color, toColor, options.getScale()));
 	}
 
-	/**
-	 * {@link #getParticle(CommandContext, String)}  Parent Method}
-	 * @param particle
-	 * @param options
-	 * @return
-	 */
-	private ParticleData<DustOptions> getParticleDataAsDustParticleOptions(Particle particle, DustParticleOptions options) {
-		final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
-			(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
-		return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
-	}
-
-	/**
-	 * {@link #getParticleDataAsVibrationParticleOption(CommandContext, Level, Particle, VibrationParticleOption)
-	 * Parent Method}
-	 * @param
-	 * @param
-	 * @return
-	 */
 	private ParticleData<?> getParticleDataAsVibrationParticleOption(CommandContext<CommandSourceStack> cmdCtx,
 	                                                                 Level level, Particle particle,
 	                                                                 VibrationParticleOption options) {
@@ -580,7 +522,9 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		final Destination destination;
 
 		if (options.getDestination() instanceof BlockPositionSource positionSource) {
-			destination = getVibrationParticleOptionDestinationAsBlockPositionSource(positionSource, level);
+			Vec3 to = positionSource.getPosition(level).get();
+			destination = new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
+
 		} else if (options.getDestination() instanceof EntityPositionSource positionSource) {
 			destination = getVibrationParticleOptionDestinationAsEntityPositionSource(positionSource, level);
 		} else {
@@ -589,28 +533,13 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		}
 		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
 	}
-	
-	/**
-	 * {@link #getParticleDataAsVibrationParticleOption(CommandContext, Level, Particle, VibrationParticleOption)
-	 * Parent Method}
-	 * @param positionSource {@link BlockPositionSource} the block position source to find the designation of.
-	 * @param level {@link Level} The level in which to find the destination
-	 * @return {@link Destination} the destination of the provided source in the given level.
-	 */
-	private @NotNull Destination getVibrationParticleOptionDestinationAsBlockPositionSource(@NotNull BlockPositionSource positionSource, Level level) {
+
+	private Destination getVibrationParticleOptionDestinationAsBlockPositionSource(BlockPositionSource positionSource, Level level) {
 		Vec3 to = positionSource.getPosition(level).get();
 		return new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
 	}
 
-	/**
-	 * {@link #getParticleDataAsVibrationParticleOption(CommandContext, Level, Particle, VibrationParticleOption)
-	 * Parent Method}
-	 * @param positionSource {@link EntityPositionSource} the entity position source to find the designation of.
-	 * @param level {@link Level} The level in which to find the destination
-	 * @return {@link Destination} the destination of the provided source in the given level.
-	 */
-
-	private @NotNull Destination getVibrationParticleOptionDestinationAsEntityPositionSource(@NotNull EntityPositionSource positionSource, Level level) {
+	private Destination getVibrationParticleOptionDestinationAsEntityPositionSource(EntityPositionSource positionSource, Level level) {
 		positionSource.getPosition(level); // Populate Optional sourceEntity
 		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity
 			.get(positionSource);
@@ -627,8 +556,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		// manually
 		Entity foundEntity = null;
 
-		// Asset Minecraft Server is not null to stop null pointer exception.
-		assert MINECRAFT_SERVER != null;
 		for (ServerLevel world : MINECRAFT_SERVER.getAllLevels()) {
 			Entity entityById = world.getEntity(id.right().get());
 			if (entityById != null) {
@@ -636,8 +563,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 				break;
 			}
 		}
-		// Asset found entity is not null to stop null pointer exception.
-		assert foundEntity != null;
 		return new EntityDestination(foundEntity.getBukkitEntity());
 	}
 
@@ -655,7 +580,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		Vec2 rot = css.getRotation();
 		World world = getWorldForCSS(css);
 		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.x, rot.y);
-
 		Entity proxyEntity = css.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 
@@ -779,7 +703,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			return simpleReloadInstance.thenApply(x -> serverResources);
 		});
 
-		// Step 3: Actually load all the resources
+		// Step 3: Actually load all of the resources
 		CompletableFuture<Void> third = second.thenAcceptAsync(resources -> {
 			MINECRAFT_SERVER.resources.close();
 			MINECRAFT_SERVER.resources = serverResources;
