@@ -317,6 +317,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
+				ExecutionInfo<CommandSender> convertedExecutionInfo = new ExecutionInfo<>(sender, new CommandArguments(result, new LinkedHashMap<>()));
+
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
 
 				// As stupid as it sounds, it's more performant and safer to use
@@ -338,7 +340,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 							}
 						}
 					}
-					resultValue += executor.execute(executionInfo);
+					resultValue += executor.execute(convertedExecutionInfo);
 				}
 
 				return resultValue;
