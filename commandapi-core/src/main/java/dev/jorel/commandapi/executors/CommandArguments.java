@@ -12,6 +12,10 @@ public class CommandArguments {
 		this.argsMap = argsMap;
 	}
 
+	public Object[] args() {
+		return args;
+	}
+
 	public Object get(int index) {
 		return args[index];
 	}

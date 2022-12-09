@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -135,7 +136,7 @@ public final class Converter {
 					// We know the args are a String[] because that's how converted things are
 					// handled in generateCommand()
 					CommandSender proxiedSender = mergeProxySender(sender);
-					Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", (String[]) args));
+					Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", (String[]) args.args()));
 				});
 
 		multiArgs.setConverted(true);
@@ -198,7 +199,7 @@ public final class Converter {
 					? sender.getCallee()
 					: mergeProxySender(sender);
 			
-			command.execute(proxiedSender, commandName, (String[]) args);
+			command.execute(proxiedSender, commandName, (String[]) args.args());
 		};
 
 		// No arguments
@@ -207,7 +208,7 @@ public final class Converter {
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> {
-				executor.executeWith(new ExecutionInfo<>(sender, new String[0], new LinkedHashMap<>()));
+				executor.executeWith(new ExecutionInfo<>(sender, new CommandArguments(new String[0], new LinkedHashMap<>())));
 			})
 			.register();
 
