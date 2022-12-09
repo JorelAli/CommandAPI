@@ -38,7 +38,7 @@ public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockComman
 	 * @param sender The sender of this command (a player, the console etc.)
 	 * @param args The arguments given to this command.
 	 */
-	void run(BlockCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(BlockCommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * The code to run when this command is performed

@@ -38,7 +38,7 @@ public interface NativeResultingCommandExecutor extends IExecutorResulting<Nativ
 	 * @param args The arguments given to this command.
 	 * @return the result of this command
 	 */
-	int run(NativeProxyCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(NativeProxyCommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * The code to run when this command is performed

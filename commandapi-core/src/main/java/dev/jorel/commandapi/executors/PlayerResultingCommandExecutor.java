@@ -41,7 +41,7 @@ public interface PlayerResultingCommandExecutor extends IExecutorResulting<Playe
 	 * @param args The arguments given to this command.
 	 * @return the result of this command
 	 */
-	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(Player sender, CommandArguments args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * The code to run when this command is performed

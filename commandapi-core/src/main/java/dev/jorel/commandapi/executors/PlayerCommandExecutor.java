@@ -38,7 +38,7 @@ public interface PlayerCommandExecutor extends IExecutorNormal<Player> {
 	 * @param sender The sender of this command (a player, the console etc.)
 	 * @param args The arguments given to this command.
 	 */
-	void run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(Player sender, CommandArguments args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * The code to run when this command is performed

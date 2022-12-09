@@ -115,7 +115,7 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new StringArgument("value"))
 			.executesPlayer((player, args) -> {
-				String value = (String) args[0];
+				String value = args.get(0);
 				player.sendMessage("success " + value);
 			})
 			.register();
@@ -168,7 +168,7 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new BooleanArgument("value"))
 			.executesPlayer((player, args) -> {
-				boolean value = (boolean) args[0];
+				boolean value = args.get(0);
 				player.sendMessage("success " + value);
 			})
 			.register();
@@ -186,7 +186,7 @@ public class ArgumentTests {
 		new CommandAPICommand("adv")
 			.withArguments(new AdvancementArgument("value"))
 			.executesPlayer((player, args) -> {
-				Advancement advancement = (Advancement) args[0];
+				Advancement advancement = args.get(0);
 				player.sendMessage(advancement.getKey().asString());
 			})
 			.register();
@@ -207,7 +207,7 @@ public class ArgumentTests {
 		new CommandAPICommand("loc3")
 			.withArguments(new LocationArgument("value", LocationType.PRECISE_POSITION))
 			.executesPlayer((player, args) -> {
-				Location value = (Location) args[0];
+				Location value = args.get(0);
 				player.sendMessage(value.getX() + ", " + value.getY() + ", " + value.getZ());
 			})
 			.register();
@@ -215,7 +215,7 @@ public class ArgumentTests {
 		new CommandAPICommand("loc3b")
 			.withArguments(new LocationArgument("value", LocationType.BLOCK_POSITION))
 			.executesPlayer((player, args) -> {
-				Location value = (Location) args[0];
+				Location value = args.get(0);
 				player.sendMessage(value.getX() + ", " + value.getY() + ", " + value.getZ());
 			})
 			.register();
@@ -223,7 +223,7 @@ public class ArgumentTests {
 		new CommandAPICommand("loc2")
 			.withArguments(new Location2DArgument("value", LocationType.PRECISE_POSITION))
 			.executesPlayer((player, args) -> {
-				Location2D value = (Location2D) args[0];
+				Location2D value = args.get(0);
 				player.sendMessage(value.getX() + ", " + value.getZ());
 			})
 			.register();
@@ -231,7 +231,7 @@ public class ArgumentTests {
 		new CommandAPICommand("loc2b")
 			.withArguments(new Location2DArgument("value", LocationType.BLOCK_POSITION))
 			.executesPlayer((player, args) -> {
-				Location2D value = (Location2D) args[0];
+				Location2D value = args.get(0);
 				player.sendMessage(value.getX() + ", " + value.getZ());
 			})
 			.register();
@@ -263,7 +263,7 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new EntitySelectorArgument<Player>("value", EntitySelector.ONE_PLAYER))
 			.executesPlayer((player, args) -> {
-				Player value = (Player) args[0];
+				Player value = args.get(0);
 				player.sendMessage(value.getName());
 			})
 			.register();
@@ -272,7 +272,7 @@ public class ArgumentTests {
 			.withArguments(new EntitySelectorArgument<Collection<Player>>("value", EntitySelector.MANY_PLAYERS))
 			.executesPlayer((player, args) -> {
 				@SuppressWarnings("unchecked")
-				Collection<Player> value = (Collection<Player>) args[0];
+				Collection<Player> value = args.get(0);
 				player.sendMessage(value.stream().map(Player::getName).collect(Collectors.joining(", ")));
 			})
 			.register();
@@ -296,7 +296,7 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new GreedyStringArgument("value"))
 			.executesPlayer((player, args) -> {
-				String value = (String) args[0];
+				String value = (String) args.get(0);
 				player.sendMessage(value);
 			})
 			.register();
@@ -319,7 +319,7 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new PotionEffectArgument("potion"))
 			.executesPlayer((player, args) -> {
-				type.set((PotionEffectType) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -348,7 +348,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.build())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -367,7 +367,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.build())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -384,7 +384,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.build())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -402,7 +402,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.build())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -430,7 +430,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.buildText())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -449,7 +449,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.buildText())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -466,7 +466,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.buildText())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -484,7 +484,7 @@ public class ArgumentTests {
 				.withStringMapper()
 				.buildText())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -508,8 +508,8 @@ public class ArgumentTests {
 				.withStringMapper()
 				.buildText())
 			.executesPlayer((player, args) -> {
-				type.set((List<String>) args[0]);
-				type.set((List<String>) args[1]);
+				type.set(args.get(0));
+				type.set(args.get(1));
 			})
 			.register();
 
@@ -526,7 +526,7 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new PlayerArgument("target"))
 			.executesPlayer((player, args) -> {
-				type.set((Player) args[0]);
+				type.set(args.get(0));
 			})
 			.register();
 
@@ -545,14 +545,14 @@ public class ArgumentTests {
 		new CommandAPICommand("spigot")
 			.withArguments(new ChatComponentArgument("text"))
 			.executesPlayer((player, args) -> {
-				spigot.set((BaseComponent[]) args[0]);
+				spigot.set(args.get(0));
 			})
 			.register();
 		
 		new CommandAPICommand("adventure")
 			.withArguments(new AdventureChatComponentArgument("text"))
 			.executesPlayer((player, args) -> {
-				adventure.set((Component) args[0]);
+				adventure.set(args.get(0));
 			})
 			.register();
 		
@@ -619,7 +619,7 @@ public class ArgumentTests {
 		new CommandAPICommand("commandargument")
 			.withArguments(new CommandArgument("command"))
 			.executesPlayer((sender, args) -> {
-				results.set((CommandResult) args[0]);
+				results.set(args.get(0));
 			}).register();
 
 		assertStoresResult(player, "commandargument version",
@@ -635,7 +635,7 @@ public class ArgumentTests {
 					ArgumentSuggestions.empty()
 				)
 			).executesPlayer((sender, args) -> {
-				results.set((CommandResult) args[0]);
+				results.set(args.get(0));
 			}).register();
 
 		server.addPlayer("BPlayer");
@@ -682,7 +682,7 @@ public class ArgumentTests {
 						)
 					)
 			).executes((sender, args) -> {
-				results.set((CommandResult) args[0]);
+				results.set(args.get(0));
 			}).register();
 
 		// Valid commands
@@ -725,14 +725,14 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new StringArgument("str_1"))
 			.executesPlayer((player, args) -> {
-				str1.set((String) args[0]);
+				str1.set(args.get(0));
 			})
 			.register();
 		
 		new CommandAPICommand("test")
 			.withArguments(new StringArgument("str_2"))
 			.executesPlayer((player, args) -> {
-				str2.set((String) args[0]);
+				str2.set(args.get(0));
 			})
 			.register();
 
@@ -751,14 +751,14 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("int_1", 1, 10))
 			.executesPlayer((player, args) -> {
-				int1.set((int) args[0]);
+				int1.set(args.get(0));
 			})
 			.register();
 		
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("str_2", 50, 100))
 			.executesPlayer((player, args) -> {
-				int2.set((int) args[0]);
+				int2.set(args.get(0));
 			})
 			.register();
 
@@ -777,14 +777,14 @@ public class ArgumentTests {
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("int_1", 1, 100))
 			.executesPlayer((player, args) -> {
-				int1.set((int) args[0]);
+				int1.set(args.get(0));
 			})
 			.register();
 		
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("str_2", 50, 100))
 			.executesPlayer((player, args) -> {
-				int2.set((int) args[0]);
+				int2.set(args.get(0));
 			})
 			.register();
 

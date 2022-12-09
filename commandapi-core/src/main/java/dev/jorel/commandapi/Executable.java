@@ -39,8 +39,8 @@ abstract class Executable<T extends Executable<T>> {
 				this.executor.addNormalExecutor(new CommandExecutor() {
 
 					@Override
-					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(new ExecutionInfo<>(sender, args, new LinkedHashMap<>()));
+					public void run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException {
+						executor.executeWith(new ExecutionInfo<>(sender, args));
 					}
 
 					@Override
@@ -60,7 +60,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @param types A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
@@ -90,7 +90,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @param types A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
@@ -103,8 +103,8 @@ abstract class Executable<T extends Executable<T>> {
 				this.executor.addResultingExecutor(new ResultingCommandExecutor() {
 
 					@Override
-					public int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-						return run(new ExecutionInfo<>(sender, args, new LinkedHashMap<>()));
+					public int run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException {
+						return run(new ExecutionInfo<>(sender, args));
 					}
 
 					@Override
@@ -124,7 +124,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @param types A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
@@ -155,7 +155,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Player, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -177,7 +177,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Player, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -201,7 +201,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -223,7 +223,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -247,7 +247,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -269,7 +269,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Entity, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -293,7 +293,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BlockCommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -315,7 +315,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(BlockCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BlockCommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -339,7 +339,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(ConsoleCommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(ConsoleCommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -361,7 +361,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(ConsoleCommandSender, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(ConsoleCommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -385,7 +385,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeCommandExecutor, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -407,7 +407,7 @@ abstract class Executable<T extends Executable<T>> {
 
 	/**
 	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(NativeCommandExecutor, Object[]) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(NativeCommandExecutor, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")

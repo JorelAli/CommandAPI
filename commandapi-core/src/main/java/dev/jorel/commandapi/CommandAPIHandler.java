@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -309,7 +310,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			Object[] argObjs = (Object[]) arguments.get(0);
 			Map<String, Object> argsMap = (LinkedHashMap<String, Object>) arguments.get(1);
 
-			ExecutionInfo<CommandSender> executionInfo = new ExecutionInfo<>(sender, argObjs, argsMap);
+			ExecutionInfo<CommandSender> executionInfo = new ExecutionInfo<>(sender, new CommandArguments(argObjs, argsMap));
 			if (converted) {
 				int resultValue = 0;
 

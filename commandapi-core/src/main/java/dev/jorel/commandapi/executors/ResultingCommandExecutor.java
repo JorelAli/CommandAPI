@@ -39,7 +39,7 @@ public interface ResultingCommandExecutor extends IExecutorResulting<CommandSend
 	 * @param args The arguments given to this command.
 	 * @return the result of this command
 	 */
-	int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException;
 
 	/**
 	 * The code to run when this command is performed
