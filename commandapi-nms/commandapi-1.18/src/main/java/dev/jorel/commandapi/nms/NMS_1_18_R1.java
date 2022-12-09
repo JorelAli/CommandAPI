@@ -82,6 +82,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -271,8 +272,20 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
-	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return Biome.valueOf(cmdCtx.getArgument(key, ResourceLocation.class).getPath().toUpperCase());
+	public Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch(subType) {
+			case BIOME_BIOME -> {
+				Biome biome = null;
+				try {
+					biome = Biome.valueOf(cmdCtx.getArgument(key, ResourceLocation.class).getPath().toUpperCase());
+				} catch(IllegalArgumentException biomeNotFound) {
+					biome = null;
+				}
+				yield biome;
+			}
+			case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(cmdCtx.getArgument(key, ResourceLocation.class));
+			default -> null;
+		};
 	}
 
 	@Override

@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>dev.jorel</groupId>
 		<artifactId>commandapi</artifactId>
-		<version>8.6.0</version>
+		<version>8.6.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>commandapi-kotlin</artifactId>
@@ -23,7 +23,6 @@
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
 				<version>${kotlin.version}</version>
-
 				<executions>
 					<execution>
 						<id>compile</id>
@@ -31,7 +30,6 @@
 							<goal>compile</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>test-compile</id>
 						<goals>
@@ -39,6 +37,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<jvmTarget>16</jvmTarget>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -83,12 +84,6 @@
 			<artifactId>kotlin-stdlib</artifactId>
 			<version>${kotlin.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-test</artifactId>
-			<version>${kotlin.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>

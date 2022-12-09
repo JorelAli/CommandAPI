@@ -493,6 +493,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 				(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
 			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
 		}
+
 		else if (particleOptions instanceof ItemParticleOption options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
 				CraftItemStack.asBukkitCopy(options.getItem()));

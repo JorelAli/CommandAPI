@@ -33,6 +33,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.*;
@@ -178,7 +179,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
-			arg -> net.minecraft.network.chat.Component.translatable("commands.locate.biome.invalid", arg));
+			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -285,7 +286,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Differs(from = "1.18.2", by = "Biomes now go via the registry. Also have to manually implement ERROR_BIOME_INVALID")
 	@Override
-	public final Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public final Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
 		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument
 			.getRegistryType(cmdCtx, key, Registry.BIOME_REGISTRY, ERROR_BIOME_INVALID);
 		if (biomeResult.unwrap().left().isPresent()) {
@@ -310,7 +311,20 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			// This is the same registry that you'll find in registries.json and
 			// in the command_registration.json
 
-			return Biome.valueOf(biomeResult.unwrap().left().get().location().getPath().toUpperCase());
+			final ResourceLocation resourceLocation = biomeResult.unwrap().left().get().location();
+			return switch(subType) {
+				case BIOME_BIOME -> {
+					Biome biome = null;
+					try {
+						biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
+					} catch(IllegalArgumentException biomeNotFound) {
+						biome = null;
+					}
+					yield biome;
+				}
+				case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
+				default -> null;
+			};
 		} else {
 			// This isn't a biome, tell the user this.
 
