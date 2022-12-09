@@ -87,6 +87,7 @@ import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -289,7 +290,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 
 	@Differs(from = "1.18", by = "Implement biome argument which contains either a biome or a tag (instead of just a biome)")
 	@Override
-	public Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
 		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagLocationArgument.getBiome(cmdCtx, key);
 		if (biomeResult.unwrap().left().isPresent()) {
 			// It's a resource key. Unwrap the result, get the resource key (left)
@@ -313,7 +314,20 @@ public class NMS_1_18_R2 extends NMS_Common {
 			// This is the same registry that you'll find in registries.json and
 			// in the command_registration.json
 
-			return Biome.valueOf(biomeResult.unwrap().left().get().location().getPath().toUpperCase());
+			final ResourceLocation resourceLocation = biomeResult.unwrap().left().get().location();
+			return switch(subType) {
+				case BIOME_BIOME -> {
+					Biome biome = null;
+					try {
+						biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
+					} catch(IllegalArgumentException biomeNotFound) {
+						biome = null;
+					}
+					yield biome;
+				}
+				case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
+				default -> null;
+			};
 		} else {
 			// This isn't a biome, tell the user this.
 

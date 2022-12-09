@@ -47,7 +47,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
@@ -70,6 +69,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
@@ -411,7 +411,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = NAME_CHANGED, from = "getWorld()", to = "f()", in = "1.19")

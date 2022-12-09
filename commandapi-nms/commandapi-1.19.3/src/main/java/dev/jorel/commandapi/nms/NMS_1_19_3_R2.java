@@ -89,6 +89,7 @@ import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -123,8 +124,6 @@ import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistryAccess.Frozen;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
@@ -154,7 +153,6 @@ import net.minecraft.server.packs.resources.SimpleReloadInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.Level;
@@ -318,9 +316,9 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 			.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
-	@Differs(from = "1.18.2", by = "Biomes now go via the registry. Also have to manually implement ERROR_BIOME_INVALID")
+	@Differs(from = "1.19.2", by = "Now uses ResourceOrTagArgument instead of ResourceOrTagLocationArgument")
 	@Override
-	public final Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public final Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
 		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagArgument.getResourceOrTag(cmdCtx, key, Registries.BIOME);
 		if (biomeResult.unwrap().left().isPresent()) {
 			// It's a resource key. Unwrap the result, get the resource key (left)
@@ -344,7 +342,20 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 			// This is the same registry that you'll find in registries.json and
 			// in the command_registration.json
 
-			return Biome.valueOf(biomeResult.unwrap().left().get().key().location().getPath().toUpperCase());
+			final ResourceLocation resourceLocation = biomeResult.unwrap().left().get().key().location();
+			return switch(subType) {
+				case BIOME_BIOME -> {
+					Biome biome = null;
+					try {
+						biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
+					} catch(IllegalArgumentException biomeNotFound) {
+						biome = null;
+					}
+					yield biome;
+				}
+				case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
+				default -> null;
+			};
 		} else {
 			// This isn't a biome, tell the user this.
 

@@ -76,6 +76,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.exceptions.AngleArgumentException;
 import dev.jorel.commandapi.preprocessor.Differs;
@@ -505,8 +506,12 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 
 	@Differs(from = "1.15", by = "Implement BiomeArgument")
 	@Override
-	public Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return Biome.valueOf(cmdCtx.getArgument(key, MinecraftKey.class).getKey().toUpperCase());
+	public Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch(subType) {
+			case BIOME_BIOME -> (Biome) Biome.valueOf(cmdCtx.getArgument(key, MinecraftKey.class).getKey().toUpperCase());
+			case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromMinecraftKey(cmdCtx.getArgument(key, MinecraftKey.class));
+			default -> null;
+		};
 	}
 
 	@Override
