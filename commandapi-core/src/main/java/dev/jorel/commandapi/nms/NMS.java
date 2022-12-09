@@ -63,6 +63,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -197,8 +198,8 @@ public interface NMS<CommandListenerWrapper> {
 	float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	
+	Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType biomeBiome) throws CommandSyntaxException;
 
 	Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;

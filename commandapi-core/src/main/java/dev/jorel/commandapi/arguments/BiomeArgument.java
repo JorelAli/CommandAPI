@@ -22,8 +22,6 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
-import org.bukkit.block.Biome;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -35,7 +33,7 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @apiNote Returns a {@link Biome} object
  */
-public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument {
+public class BiomeArgument extends SafeOverrideableArgument<org.bukkit.block.Biome, org.bukkit.block.Biome> implements ICustomProvidedArgument {
 
 	/**
 	 * Constructs a BiomeArgument with a given node name.
@@ -44,12 +42,12 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	 */
 	public BiomeArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentSyntheticBiome(),
-				((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
+			((Function<org.bukkit.block.Biome, String>) org.bukkit.block.Biome::name).andThen(String::toLowerCase));
 	}
 
 	@Override
-	public Class<Biome> getPrimitiveType() {
-		return Biome.class;
+	public Class<org.bukkit.block.Biome> getPrimitiveType() {
+		return org.bukkit.block.Biome.class;
 	}
 
 	@Override
@@ -63,9 +61,68 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	}
 
 	@Override
-	public <CommandListenerWrapper> Biome parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
-			throws CommandSyntaxException {
-		return nms.getBiome(cmdCtx, key);
+	public <CommandListenerWrapper> org.bukkit.block.Biome parseArgument(NMS<CommandListenerWrapper> nms,
+		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
+		throws CommandSyntaxException {
+		return (org.bukkit.block.Biome) nms.getBiome(cmdCtx, key, ArgumentSubType.BIOME_BIOME);
+	}
+
+	/**
+	 * An argument that represents the Bukkit Biome object
+	 * 
+	 * @apiNote Returns a {@link org.bukkit.block.Biome} object
+	 */
+	// For feature parity, BiomeArgument.Biome() is equivalent to BiomeArgument()
+	public static class Biome extends BiomeArgument {
+
+		/**
+		 * Constructs a BiomeArgument with a given node name.
+		 * 
+		 * @param nodeName the name of the node for argument
+		 */
+		public Biome(String nodeName) {
+			super(nodeName);
+		}
+
+	}
+
+	/**
+	 * An argument that represents the Bukkit Biome object
+	 * 
+	 * @apiNote Returns a {@link NamespacedKey} object
+	 */
+	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements ICustomProvidedArgument {
+
+		/**
+		 * Constructs a BiomeArgument with a given node name. This BiomeArgument will
+		 * return a {@link NamespacedKey}
+		 * 
+		 * @param nodeName the name of the node for argument
+		 */
+		public NamespacedKey(String nodeName) {
+			super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentSyntheticBiome(), org.bukkit.NamespacedKey::toString);
+		}
+
+		@Override
+		public SuggestionProviders getSuggestionProvider() {
+			return SuggestionProviders.BIOMES;
+		}
+
+		@Override
+		public Class<org.bukkit.NamespacedKey> getPrimitiveType() {
+			return org.bukkit.NamespacedKey.class;
+		}
+
+		@Override
+		public CommandAPIArgumentType getArgumentType() {
+			return CommandAPIArgumentType.BIOME;
+		}
+
+		@Override
+		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(NMS<CommandSourceStack> nms, CommandContext<CommandSourceStack> cmdCtx, String key,
+			Object[] previousArgs) throws CommandSyntaxException {
+			return (org.bukkit.NamespacedKey) nms.getBiome(cmdCtx, key, ArgumentSubType.BIOME_NAMESPACEDKEY);
+		}
+
 	}
 }
