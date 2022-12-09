@@ -250,8 +250,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 
 	@Differs(from = "1.13.2", by = "ArgumentEntity.b() -> ArgumentEntity.multipleEntities()")
 	@Override
-	public ArgumentType<?> _ArgumentEntity(
-			dev.jorel.commandapi.arguments.EntitySelector selector) {
+	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelector selector) {
 		return switch (selector) {
 			case MANY_ENTITIES -> ArgumentEntity.multipleEntities();
 			case MANY_PLAYERS -> ArgumentEntity.d();
@@ -386,8 +385,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics
-				.get(Bukkit.getServer().getHelpMap());
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
@@ -598,8 +596,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 
 	@Override
 	public FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		CriterionConditionValue.FloatRange range = cmdCtx.getArgument(key,
-				CriterionConditionValue.FloatRange.class);
+		CriterionConditionValue.FloatRange range = cmdCtx.getArgument(key, CriterionConditionValue.FloatRange.class);
 		float low = range.a() == null ? -Float.MAX_VALUE : range.a();
 		float high = range.b() == null ? Float.MAX_VALUE : range.b();
 		return new FloatRange(low, high);
@@ -735,8 +732,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 			return getParticleDataAsDustOptions(particle, options);
 		}
 		else if (particleOptions instanceof ParticleParamItem options) {
-			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
-					CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
 		}
 		else {
 			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
@@ -752,8 +748,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 		final float blue = Float.parseFloat(optionsArr[3]);
 
 		final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
-		return new ParticleData<DustOptions>(particle,
-			new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
+		return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
 	}
 
 	@Override
@@ -855,8 +850,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 			};
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> ICompletionProvider
-					.a(MINECRAFT_SERVER.getAdvancementData().b().stream().map(Advancement::getName), builder);
+			case ADVANCEMENTS -> (cmdCtx, builder) -> ICompletionProvider.a(MINECRAFT_SERVER.getAdvancementData().b().stream().map(Advancement::getName), builder);
 			case LOOT_TABLES -> (cmdCtx, builder) -> ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
 			case ENTITIES -> CompletionProviders.d;
 			default -> (context, builder) -> Suggestions.empty();
@@ -865,8 +859,7 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CustomFunction> customFunctions = new ArrayList<>(
-				MINECRAFT_SERVER.getFunctionData().g().b(new MinecraftKey(key.getNamespace(), key.getKey())).a());
+		List<CustomFunction> customFunctions = new ArrayList<>(MINECRAFT_SERVER.getFunctionData().g().b(new MinecraftKey(key.getNamespace(), key.getKey())).a());
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
