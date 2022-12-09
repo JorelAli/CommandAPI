@@ -12,13 +12,11 @@ public class CommandArguments {
 		this.argsMap = argsMap;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T get(int index) {
-		return (T) args[index];
+	public Object get(int index) {
+		return args[index];
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T get(String nodeName) {
-		return (T) argsMap.get(nodeName);
+	public Object get(String nodeName) {
+		return argsMap.get(nodeName);
  	}
 }
