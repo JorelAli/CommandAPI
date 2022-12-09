@@ -402,8 +402,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String str)
-		throws CommandSyntaxException {
+	public final FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
 		List<FunctionWrapper> result = new ArrayList<>();
 		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
 
@@ -420,8 +419,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext<CommandSourceStack> cmdCtx,
-		String key) throws CommandSyntaxException {
+	public final Predicate<org.bukkit.inventory.ItemStack> getItemStackPredicate(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		// Not inside the lambda because getItemPredicate throws CommandSyntaxException
 		Predicate<ItemStack> predicate = ItemPredicateArgument.getItemPredicate(cmdCtx, key);
 		return item -> predicate.test(CraftItemStack.asNMSCopy(item));
@@ -460,8 +458,8 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
-
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
+
 		if (particleOptions instanceof SimpleParticleType) {
 			return new ParticleData<Void>(particle, null);
 		}
