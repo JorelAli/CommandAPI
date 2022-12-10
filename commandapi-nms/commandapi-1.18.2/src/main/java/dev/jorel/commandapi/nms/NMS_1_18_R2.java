@@ -452,7 +452,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
 		}
 		else if (particleOptions instanceof ItemParticleOption options) {
-			return new ParticleData<>(particle,
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
 					CraftItemStack.asBukkitCopy(options.getItem()));
 		}
 		else if (particleOptions instanceof VibrationParticleOption options) {
