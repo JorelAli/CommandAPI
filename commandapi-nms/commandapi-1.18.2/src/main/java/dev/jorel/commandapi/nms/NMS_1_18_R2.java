@@ -449,7 +449,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 		else if (particleOptions instanceof DustParticleOptions options) {
 			final Color color = Color.fromRGB((int) (options.getColor().x() * 255.0F),
 					(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
-			return new ParticleData<>(particle, new DustOptions(color, options.getScale()));
+			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
 		}
 		else if (particleOptions instanceof ItemParticleOption options) {
 			return new ParticleData<>(particle,
@@ -469,7 +469,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 			(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
 		final Color toColor = Color.fromRGB((int) (options.getToColor().x() * 255.0F),
 			(int) (options.getToColor().y() * 255.0F), (int) (options.getToColor().z() * 255.0F));
-		return new ParticleData<>(particle, new DustTransition(color, toColor, options.getScale()));
+		return new ParticleData<DustTransition>(particle, new DustTransition(color, toColor, options.getScale()));
 	}
 
 	private ParticleData<?> getParticleDataAsVibrationParticleOption(CommandContext<CommandSourceStack> cmdCtx, Particle particle, VibrationParticleOption options) {
@@ -492,7 +492,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 				.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
 			return new ParticleData<Void>(particle, null);
 		}
-		return new ParticleData<>(particle, new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
+		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
 	}
 
 	@Override
