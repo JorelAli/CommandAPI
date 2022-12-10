@@ -500,7 +500,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			(int) (options.getColor().y() * 255.0F), (int) (options.getColor().z() * 255.0F));
 		final Color toColor = Color.fromRGB((int) (options.getToColor().x() * 255.0F),
 			(int) (options.getToColor().y() * 255.0F), (int) (options.getToColor().z() * 255.0F));
-		return new ParticleData<>(particle, new DustTransition(color, toColor, options.getScale()));
+		return new ParticleData<DustTransition>(particle, new DustTransition(color, toColor, options.getScale()));
 	}
 
 	private ParticleData<?> getParticleDataAsVibrationParticleOption(CommandContext<CommandSourceStack> cmdCtx, Particle particle, VibrationParticleOption options) {
