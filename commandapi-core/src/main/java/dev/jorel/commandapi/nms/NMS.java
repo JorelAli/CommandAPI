@@ -40,7 +40,6 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
@@ -64,7 +63,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -101,7 +99,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	ArgumentType<?> _ArgumentEnchantment();
 
-	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
+	ArgumentType<?> _ArgumentEntity(ArgumentSubType subType);
 
 	ArgumentType<?> _ArgumentEntitySummon();
 
@@ -241,7 +239,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, EntitySelector selector)
+	Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType)
 			throws CommandSyntaxException;
 
 	EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
@@ -331,20 +329,7 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	SimpleCommandMap getSimpleCommandMap();
 
-	/**
-	 * Gets the sound from an argument.
-	 * 
-	 * @param <SoundOrNamespacedKey>        A type parameter of the return type. The only valid options
-	 *                   are {@code org.bukkit.Sound} or
-	 *                   {@code org.bukkit.NamespacedKey}. Any other option will
-	 *                   throw an exception
-	 * @param cmdCtx     the command context
-	 * @param key        the argument key
-	 * @param returnType the class type to return. Either a {@code org.bukkit.Sound}
-	 *                   or {@code org.bukkit.NamespacedKey}
-	 * @return A {@code Sound} or {@code org.bukkit.NamespacedKey}
-	 */
-	<SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
+	Object getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType);
 
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider

@@ -48,7 +48,9 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	 * A Score Holder argument. Represents a single score holder or a collection of score holders
 	 * @param nodeName the name of the node for this argument
 	 * @param type whether this argument represents a single score holder or a collection of score holders
+	 * @deprecated Use {@code ScoreHolderArgument.}{@link Single} or {@code ScoreHolderArgument.}{@link Multiple} instead
 	 */
+	@Deprecated(forRemoval = true, since = "8.7.0")
 	public ScoreHolderArgument(String nodeName, ScoreHolderType type) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
 		single = (type == ScoreHolderType.SINGLE);
@@ -79,10 +81,66 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return (T) (single ? nms.getScoreHolderSingle(cmdCtx, key) : nms.getScoreHolderMultiple(cmdCtx, key));
 	}
+	
+
+	
+	/**
+	 * An argument that represents a scoreholder's name
+	 * 
+	 * @apiNote Returns a {@link String} object
+	 */
+	// For feature parity, ScoreHolderArgument.Single() is equivalent to ScoreHolderArgument()
+	public static class Single extends ScoreHolderArgument<Object> {
+
+		/**
+		 * A Score Holder argument. Represents a single score holder
+		 * @param nodeName the name of the node for this argument
+		 */
+		public Single(String nodeName) {
+			super(nodeName);
+		}
+
+	}
+
+	/**
+	 * An argument that represents a collection of scoreholder names
+	 * 
+	 * @apiNote Returns a {@link Collection<String>} object
+	 */
+	@SuppressWarnings("rawtypes")
+	public static class Multiple extends Argument<Collection> {
+
+		/**
+		 * A Score Holder argument. Represents a collection of score holders.
+		 * @param nodeName the name of the node for this argument
+		 */
+		public Multiple(String nodeName) {
+			super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(true));
+		}
+
+		@Override
+		public Class<Collection> getPrimitiveType() {
+			return Collection.class;
+		}
+
+		@Override
+		public CommandAPIArgumentType getArgumentType() {
+			return CommandAPIArgumentType.SCORE_HOLDER;
+		}
+
+		@Override
+		public <CommandSourceStack> Collection<String> parseArgument(NMS<CommandSourceStack> nms, CommandContext<CommandSourceStack> cmdCtx, String key,
+			Object[] previousArgs) throws CommandSyntaxException {
+			return nms.getScoreHolderMultiple(cmdCtx, key);
+		}
+
+	}
 
 	/**
 	 * An enum specifying whether a score holder consists of a single score holder or a collection of score holders
+	 * @deprecated 
 	 */
+	@Deprecated(forRemoval = true, since = "8.7.0")
 	public static enum ScoreHolderType {
 		/**
 		 * A single score holder name
