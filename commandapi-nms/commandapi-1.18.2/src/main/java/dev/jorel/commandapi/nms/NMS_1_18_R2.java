@@ -77,6 +77,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -452,7 +453,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 			return new ParticleData<DustOptions>(particle, new DustOptions(color, options.getScale()));
 		}
 		else if (particleOptions instanceof ItemParticleOption options) {
-			return new ParticleData<>(particle,
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
 					CraftItemStack.asBukkitCopy(options.getItem()));
 		}
 		else if (particleOptions instanceof VibrationParticleOption options) {
