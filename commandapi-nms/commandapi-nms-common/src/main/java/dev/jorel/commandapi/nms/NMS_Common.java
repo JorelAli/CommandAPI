@@ -202,7 +202,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	@Unimplemented(because = NAME_CHANGED, info = "multipleEntities (1.17) -> entities (1.18) -> b (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "c (1.17)                -> player   (1.18) -> c (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "d (1.17)                -> players  (1.18) -> d (1.19)")
-	public abstract ArgumentType<?> _ArgumentEntity(EntitySelector selector);
+	public abstract ArgumentType<?> _ArgumentEntity(ArgumentSubType subType);
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
@@ -295,8 +295,12 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreholder(boolean single) {
-		return single ? ScoreHolderArgument.scoreHolder() : ScoreHolderArgument.scoreHolders();
+	public final ArgumentType<?> _ArgumentScoreholder(ArgumentSubType subType) {
+		return switch(subType) {
+			case SCOREHOLDER_SINGLE -> ScoreHolderArgument.scoreHolder();
+			case SCOREHOLDER_MULTIPLE -> ScoreHolderArgument.scoreHolders();
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Override
@@ -471,7 +475,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, EntitySelector selector)
+	public abstract Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException;
 
 	@Override
@@ -652,7 +656,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
-	public abstract <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
+	public abstract Object getSound(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType);
 
 	// This differs from 1.18 -> 1.18.2 due to biome suggestions, but it should be covered by the default case (empty)
 	@Override

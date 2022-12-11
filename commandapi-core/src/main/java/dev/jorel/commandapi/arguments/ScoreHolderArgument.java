@@ -52,7 +52,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 	 */
 	@Deprecated(forRemoval = true, since = "8.7.0")
 	public ScoreHolderArgument(String nodeName, ScoreHolderType type) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(ArgumentSubType.SCOREHOLDER_SINGLE));
 		single = (type == ScoreHolderType.SINGLE);
 	}
 	
@@ -115,7 +115,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 		 * @param nodeName the name of the node for this argument
 		 */
 		public Multiple(String nodeName) {
-			super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(false));
+			super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(ArgumentSubType.SCOREHOLDER_MULTIPLE));
 		}
 
 		@Override

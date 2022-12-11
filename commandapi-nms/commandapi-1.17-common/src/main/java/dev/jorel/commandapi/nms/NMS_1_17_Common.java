@@ -180,12 +180,13 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(
-			dev.jorel.commandapi.arguments.EntitySelector selector) {
-		return switch (selector) {
-			case MANY_ENTITIES -> EntityArgument.entities();
-			case MANY_PLAYERS -> EntityArgument.players();
-			case ONE_ENTITY -> EntityArgument.entity();
-			case ONE_PLAYER -> EntityArgument.player();
+			ArgumentSubType subType) {
+		return switch (subType) {
+			case ENTITYSELECTOR_MANY_ENTITIES -> EntityArgument.entities();
+			case ENTITYSELECTOR_MANY_PLAYERS -> EntityArgument.players();
+			case ENTITYSELECTOR_ONE_ENTITY -> EntityArgument.entity();
+			case ENTITYSELECTOR_ONE_PLAYER -> EntityArgument.player();
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
 		};
 	}
 
@@ -293,7 +294,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelector selector) throws CommandSyntaxException {
+	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have
@@ -307,8 +308,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 			e1.printStackTrace();
 		}
 
-		return switch (selector) {
-			case MANY_ENTITIES:
+		return switch (subType) {
+			case ENTITYSELECTOR_MANY_ENTITIES:
 				try {
 					List<org.bukkit.entity.Entity> result = new ArrayList<>();
 					for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
@@ -318,7 +319,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 				} catch (CommandSyntaxException e) {
 					yield new ArrayList<org.bukkit.entity.Entity>();
 				}
-			case MANY_PLAYERS:
+			case ENTITYSELECTOR_MANY_PLAYERS:
 				try {
 					List<Player> result = new ArrayList<>();
 					for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
@@ -328,25 +329,27 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 				} catch (CommandSyntaxException e) {
 					yield new ArrayList<Player>();
 				}
-			case ONE_ENTITY:
+			case ENTITYSELECTOR_ONE_ENTITY:
 				yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
-			case ONE_PLAYER:
+			case ENTITYSELECTOR_ONE_PLAYER:
 				yield argument.findSinglePlayer(cmdCtx.getSource()).getBukkitEntity();
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + subType);
 		};
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		return EntityType.fromName(net.minecraft.world.entity.EntityType.getKey(Registry.ENTITY_TYPE.get(EntitySummonArgument.getSummonableEntity(cmdCtx, str))).getPath());
+	public EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return EntityType.fromName(net.minecraft.world.entity.EntityType.getKey(Registry.ENTITY_TYPE.get(EntitySummonArgument.getSummonableEntity(cmdCtx, key))).getPath());
 	}
 
 	@Override
-	public FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
+	public FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		List<FunctionWrapper> result = new ArrayList<>();
 		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
 
-		for (CommandFunction commandFunction : FunctionArgument.getFunctions(cmdCtx, str)) {
+		for (CommandFunction commandFunction : FunctionArgument.getFunctions(cmdCtx, key)) {
 			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(commandFunction), css,
 					entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())));
 		}
@@ -354,8 +357,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		return CraftItemStack.asBukkitCopy(ItemArgument.getItem(cmdCtx, str).createItemStack(1, false));
+	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return CraftItemStack.asBukkitCopy(ItemArgument.getItem(cmdCtx, key).createItemStack(1, false));
 	}
 
 	@Override
@@ -378,19 +381,19 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, str);
+	public Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, key);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 
 	@Override
-	public Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String str) throws CommandSyntaxException {
-		Vec3 vecPos = Vec3Argument.getCoordinates(cmdCtx, str).getPosition(cmdCtx.getSource());
+	public Location getLocationPrecise(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		Vec3 vecPos = Vec3Argument.getCoordinates(cmdCtx, key).getPosition(cmdCtx.getSource());
 		return new Location(getWorldForCSS(cmdCtx.getSource()), vecPos.x(), vecPos.y(), vecPos.z());
 	}
 
 	@Override
-	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String str) {ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, str);
+	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String key) {ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, key);
 		return new CraftLootTable(fromResourceLocation(resourceLocation), MINECRAFT_SERVER.getLootTables().get(resourceLocation));
 	}
 
@@ -400,8 +403,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String str) {
-		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, str);
+	public ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, key);
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
 		if (particleOptions instanceof SimpleParticleType) {
@@ -490,22 +493,23 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public final <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
+	public final Object getSound(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) {
 		final ResourceLocation soundResource = ResourceLocationArgument.getId(cmdCtx, key);
-		if(returnType.equals(NamespacedKey.class)) {
-			// If we want a NamespacedKey, give it one
-			return (SoundOrNamespacedKey) NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
-		} else {
-			// Otherwise, if null return null else Sound
-			final SoundEvent soundEvent = Registry.SOUND_EVENT.get(soundResource);
-			if(soundEvent == null) {
-				return null;
-			} else {
-				return (SoundOrNamespacedKey) CraftSound.getBukkit(soundEvent);
+		return switch(subType) {
+			case SOUND_SOUND -> {
+				final SoundEvent soundEvent = Registry.SOUND_EVENT.get(soundResource);
+				if(soundEvent == null) {
+					yield null;
+				} else {
+					yield CraftSound.getBukkit(soundEvent);
+				}
 			}
-		}
+			case SOUND_NAMESPACEDKEY -> {
+				yield NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
+			}
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Override

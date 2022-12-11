@@ -137,7 +137,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	ArgumentType<?> _ArgumentScoreboardTeam();
 
-	ArgumentType<?> _ArgumentScoreholder(boolean single);
+	ArgumentType<?> _ArgumentScoreholder(ArgumentSubType subType);
 
 	ArgumentType<?> _ArgumentTag();
 

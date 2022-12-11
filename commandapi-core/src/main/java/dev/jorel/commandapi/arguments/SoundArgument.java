@@ -42,7 +42,7 @@ public class SoundArgument<T> extends SafeOverrideableArgument<org.bukkit.Sound,
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
 	 * @param nodeName the name of the node for this argument
-	 * @param SoundType the return type of this argument to use, either a sound or a namespaced key
+	 * @param soundType the return type of this argument to use, either a sound or a namespaced key
 	 * @deprecated Use {@code SoundArgument.}{@link NamespacedKey} instead
 	 */
 	@Deprecated(forRemoval = true, since = "8.7.0")
