@@ -115,7 +115,7 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 		 * @param nodeName the name of the node for this argument
 		 */
 		public Multiple(String nodeName) {
-			super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(true));
+			super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(false));
 		}
 
 		@Override
