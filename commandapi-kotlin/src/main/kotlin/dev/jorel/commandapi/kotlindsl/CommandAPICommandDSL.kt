@@ -91,13 +91,8 @@ inline fun CommandAPICommand.scoreHolderArgument(nodeName: String, block: Argume
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("scoreHolderArgument(nodeName, single)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <T : ScoreHolderArgument.ScoreHolderType> CommandAPICommand.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
 
-inline fun CommandAPICommand.scoreHolderArgument(nodeName: String, single: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand {
-	return if (single) {
-		withArguments(ScoreHolderArgument.Single(nodeName).apply(block))
-	} else {
-		withArguments(ScoreHolderArgument.Multiple(nodeName).apply(block))
-	}
-}
+inline fun CommandAPICommand.scoreHolderArgument(nodeName: String, single: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
+	if (single) withArguments(ScoreHolderArgument.Single(nodeName).apply(block)) else withArguments(ScoreHolderArgument.Multiple(nodeName).apply(block))
 
 inline fun CommandAPICommand.scoreboardSlotArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(ScoreboardSlotArgument(nodeName).apply(block))
 inline fun CommandAPICommand.objectiveArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(ObjectiveArgument(nodeName).apply(block))
@@ -111,13 +106,8 @@ inline fun CommandAPICommand.advancementArgument(nodeName: String, block: Argume
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("biomeArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandAPICommand.biomeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(BiomeArgument(nodeName).apply(block))
 
-inline fun CommandAPICommand.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand {
-	return if (useNamespacedKey) {
-		withArguments(BiomeArgument.NamespacedKey(nodeName).apply(block))
-	} else {
-		withArguments(BiomeArgument.Biome(nodeName).apply(block))
-	}
-}
+inline fun CommandAPICommand.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
+	if (useNamespacedKey) withArguments(BiomeArgument.NamespacedKey(nodeName).apply(block)) else withArguments(BiomeArgument.Biome(nodeName).apply(block))
 
 inline fun CommandAPICommand.blockStateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(BlockStateArgument(nodeName).apply(block))
 inline fun CommandAPICommand.commandArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(CommandArgument(nodeName).apply(block))
@@ -140,13 +130,8 @@ inline fun <SoundOrNamespacedKey> CommandAPICommand.soundArgument(nodeName: Stri
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <SoundOrNamespacedKey> CommandAPICommand.soundArgument(nodeName: String, soundType: SoundType, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 
-inline fun CommandAPICommand.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand {
-	return if (useNamespacedKey) {
-		withArguments(SoundArgument.NamespacedKey(nodeName).apply(block))
-	} else {
-		withArguments(SoundArgument.Sound(nodeName).apply(block))
-	}
-}
+inline fun CommandAPICommand.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
+	if (useNamespacedKey) withArguments(SoundArgument.NamespacedKey(nodeName).apply(block)) else withArguments(SoundArgument.Sound(nodeName).apply(block))
 
 inline fun CommandAPICommand.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(TimeArgument(nodeName).apply(block))
 inline fun CommandAPICommand.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(UUIDArgument(nodeName).apply(block))

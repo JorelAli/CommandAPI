@@ -88,13 +88,8 @@ inline fun CommandTree.scoreHolderArgument(nodeName: String, block: ArgumentTree
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("scoreHolderArgument(nodeName, single)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <T : ScoreHolderArgument.ScoreHolderType> CommandTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
 
-inline fun CommandTree.scoreHolderArgument(nodeName: String, single: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree {
-	return if (single) {
-		then(ScoreHolderArgument.Single(nodeName).apply(block))
-	} else {
-		then(ScoreHolderArgument.Multiple(nodeName).apply(block))
-	}
-}
+inline fun CommandTree.scoreHolderArgument(nodeName: String, single: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
+	if (single) then(ScoreHolderArgument.Single(nodeName).apply(block)) else then(ScoreHolderArgument.Multiple(nodeName).apply(block))
 
 inline fun CommandTree.scoreboardSlotArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreboardSlotArgument(nodeName).apply(block))
 inline fun CommandTree.objectiveArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ObjectiveArgument(nodeName).apply(block))
@@ -108,13 +103,8 @@ inline fun CommandTree.advancementArgument(nodeName: String, block: ArgumentTree
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("biomeArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandTree.biomeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(BiomeArgument(nodeName).apply(block))
 
-inline fun CommandTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree {
-	return if (useNamespacedKey) {
-		then(BiomeArgument.NamespacedKey(nodeName).apply(block))
-	} else {
-		then(BiomeArgument.Biome(nodeName).apply(block))
-	}
-}
+inline fun CommandTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
+	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument.Biome(nodeName).apply(block))
 
 inline fun CommandTree.blockStateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(BlockStateArgument(nodeName).apply(block))
 inline fun CommandTree.commandArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(CommandArgument(nodeName).apply(block))
@@ -137,13 +127,8 @@ inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, bl
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 
-inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree {
-	return if (useNamespacedKey) {
-		then(SoundArgument.NamespacedKey(nodeName).apply(block))
-	} else {
-		then(SoundArgument.Sound(nodeName).apply(block))
-	}
-}
+inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
+	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument.Sound(nodeName).apply(block))
 
 inline fun CommandTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(TimeArgument(nodeName).apply(block))
 inline fun CommandTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(UUIDArgument(nodeName).apply(block))
@@ -231,13 +216,8 @@ inline fun ArgumentTree.scoreHolderArgument(nodeName: String, block: ArgumentTre
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("scoreHolderArgument(nodeName, single)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <T : ScoreHolderArgument.ScoreHolderType> ArgumentTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
 
-inline fun ArgumentTree.scoreHolderArgument(nodeName: String, single: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree {
-	return if (single) {
-		then(ScoreHolderArgument.Single(nodeName).apply(block))
-	} else {
-		then(ScoreHolderArgument.Multiple(nodeName).apply(block))
-	}
-}
+inline fun ArgumentTree.scoreHolderArgument(nodeName: String, single: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
+	if (single) then(ScoreHolderArgument.Single(nodeName).apply(block)) else then(ScoreHolderArgument.Multiple(nodeName).apply(block))
 
 inline fun ArgumentTree.scoreboardSlotArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreboardSlotArgument(nodeName).apply(block))
 inline fun ArgumentTree.objectiveArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ObjectiveArgument(nodeName).apply(block))
@@ -251,13 +231,8 @@ inline fun ArgumentTree.advancementArgument(nodeName: String, block: ArgumentTre
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("biomeArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun ArgumentTree.biomeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(BiomeArgument(nodeName).apply(block))
 
-inline fun ArgumentTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree {
-	return if (useNamespacedKey) {
-		then(BiomeArgument.NamespacedKey(nodeName).apply(block))
-	} else {
-		then(BiomeArgument.Biome(nodeName).apply(block))
-	}
-}
+inline fun ArgumentTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
+	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument.Biome(nodeName).apply(block))
 
 inline fun ArgumentTree.blockStateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(BlockStateArgument(nodeName).apply(block))
 inline fun ArgumentTree.commandArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(CommandArgument(nodeName).apply(block))
@@ -280,13 +255,8 @@ inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, b
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 
-inline fun ArgumentTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree {
-	return if (useNamespacedKey) {
-		then(SoundArgument.NamespacedKey(nodeName).apply(block))
-	} else {
-		then(SoundArgument.Sound(nodeName).apply(block))
-	}
-}
+inline fun ArgumentTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
+	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument.Sound(nodeName).apply(block))
 
 inline fun ArgumentTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(TimeArgument(nodeName).apply(block))
 inline fun ArgumentTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(UUIDArgument(nodeName).apply(block))
