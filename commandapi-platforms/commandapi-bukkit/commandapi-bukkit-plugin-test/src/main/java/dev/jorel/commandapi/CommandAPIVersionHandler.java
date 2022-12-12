@@ -1,6 +1,6 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
+import dev.jorel.commandapi.nms.NMS_1_19_3_R2;
 import dev.jorel.commandapi.test.MockNMS;
 
 /**
@@ -10,6 +10,6 @@ import dev.jorel.commandapi.test.MockNMS;
  */
 public interface CommandAPIVersionHandler {
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
-		return new MockNMS(new NMS_1_19_1_R1());
+		return new MockNMS(new NMS_1_19_3_R2());
 	}
 }

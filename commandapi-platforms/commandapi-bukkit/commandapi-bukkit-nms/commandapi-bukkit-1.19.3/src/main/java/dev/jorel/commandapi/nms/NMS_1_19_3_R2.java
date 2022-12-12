@@ -37,6 +37,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Keyed;
@@ -379,8 +382,8 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final CommandSourceStack getCLWFromCommandSender(CommandSender sender) {
-		return VanillaCommandWrapper.getListener(sender);
+	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender) {
+		return VanillaCommandWrapper.getListener(sender.getSource());
 	}
 
 	@Override
@@ -393,7 +396,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getInstance().getField(EntitySelector.class, "p").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "p").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -594,7 +597,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
 		CommandSender sender = css.getBukkitSender();
@@ -606,9 +609,9 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		Entity proxyEntity = css.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			return new NativeProxyCommandSender(sender, proxy, location, world);
+			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return sender;
+			return wrapCommandSender(sender);
 		}
 	}
 
@@ -674,7 +677,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "g")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "g")
 				.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

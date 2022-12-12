@@ -11,6 +11,9 @@ import org.spongepowered.plugin.builtin.jvm.Plugin;
 import com.google.inject.Inject;
 
 // TODO: Add plugin meta data, see: https://docs.spongepowered.org/stable/en/plugin/plugin-meta.html
+/**
+ * Main CommandAPI plugin entrypoint
+ */
 @Plugin("CommandAPI")
 public class CommandAPIMain implements CommandAPISpongePluginWrapper {
 

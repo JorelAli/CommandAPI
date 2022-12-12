@@ -35,6 +35,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 
+/**
+ * Main CommandAPI plugin entrypoint
+ */
 public class CommandAPIMain extends JavaPlugin {
 
 	@Override

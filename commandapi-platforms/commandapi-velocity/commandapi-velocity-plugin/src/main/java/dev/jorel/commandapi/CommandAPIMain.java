@@ -12,6 +12,9 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
+/**
+ * Main CommandAPI plugin entrypoint
+ */
 @Plugin(
 	id = "commandapi-velocity",
 	name = "CommandAPI",
