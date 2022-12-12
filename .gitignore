@@ -9,3 +9,4 @@ bin
 target
 logs/latest.log
 .vscode
+.DS_Store
