@@ -1,7 +1,7 @@
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
-import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 /**
  * This class stores metadata about a command
  */
-final class CommandMetaData {
+final class CommandMetaData<CommandSender> {
 
 	/**
 	 * The command's name
@@ -28,7 +28,7 @@ final class CommandMetaData {
 	String[] aliases = new String[0];
 	
 	/**
-	 * A predicate that a {@link CommandSender} must pass in order to execute the command
+	 * A predicate that a {@link AbstractCommandSender} must pass in order to execute the command
 	 */
 	Predicate<CommandSender> requirements = s -> true;
 	
@@ -56,7 +56,7 @@ final class CommandMetaData {
 		this.commandName = commandName;
 	}
 	
-	public CommandMetaData(CommandMetaData original) {
+	public CommandMetaData(CommandMetaData<CommandSender> original) {
 		this(original.commandName);
 		this.permission = original.permission;
 		this.aliases = Arrays.copyOf(original.aliases, original.aliases.length);

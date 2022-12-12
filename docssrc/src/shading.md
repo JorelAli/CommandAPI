@@ -44,11 +44,11 @@ The `CommandAPIConfig` class follows a typical builder pattern (without you havi
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:CommandAPIConfigSilent}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:CommandAPIConfigSilent}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:CommandAPIConfigSilent}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandAPIConfigSilent}}
 ```
 
 </div>
@@ -66,11 +66,11 @@ The `onDisable()` method disables the CommandAPI gracefully. This should be plac
 <div class="multi-pre">
 
 ```java,Java
-public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
+public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:shading}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:shading}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:shading}}
 ```
 
 </div>

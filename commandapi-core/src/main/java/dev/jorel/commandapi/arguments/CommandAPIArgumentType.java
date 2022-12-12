@@ -184,7 +184,7 @@ public enum CommandAPIArgumentType {
 	MULTI_LITERAL,
 
 	/**
-	 * The {@link NamespacedKeyArgument}
+	 * The NamespacedKeyArgument
 	 */
 	NAMESPACED_KEY("minecraft:resource_location"),
 

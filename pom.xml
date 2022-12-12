@@ -25,7 +25,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>8.7.0</version>
+	<version>9.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>commandapi</name>
@@ -58,20 +58,18 @@
 		<!-- Compile time reflection checker -->
 		<module>commandapi-preprocessor</module>
 
-		<!-- NMS versions -->
-		<module>commandapi-nms</module>
-
-		<!-- Main core code + NMS selector -->
+		<!-- Main core code -->
 		<module>commandapi-core</module>
-		<module>commandapi-vh</module>
+
+		<!-- Platform implementations -->
+		<module>commandapi-platforms</module>
 
 		<!-- Outputs -->
-		<module>commandapi-plugin</module>
-		<!-- TODO: MAKE THIS COMPILE <module>commandapi-plugin-test</module> -->
-		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
-		<module>commandapi-kotlin</module>
-	</modules>
+
+		<!-- Documentation code -->
+        <module>commandapi-documentation-code</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

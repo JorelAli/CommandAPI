@@ -20,15 +20,15 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.command.CommandSender;
-
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
  * The interface for resulting command executors
- * @param <T> the commandsender
+ * @param <CommandSender> The CommandSender for this executor
+ * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public interface IExecutorResulting<T extends CommandSender> extends IExecutorTyped {
+public interface IExecutorResulting<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends IExecutorTyped<WrapperType> {
 	
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
@@ -37,10 +37,9 @@ public interface IExecutorResulting<T extends CommandSender> extends IExecutorTy
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		return this.run((T) sender, args);
+	default int executeWith(WrapperType sender, Object[] args) throws WrapperCommandSyntaxException {
+		return this.run(sender.getSource(), args);
 	}
 
 	/**
@@ -50,6 +49,6 @@ public interface IExecutorResulting<T extends CommandSender> extends IExecutorTy
 	 * @return the value returned by this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int run(T sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
 	
 }

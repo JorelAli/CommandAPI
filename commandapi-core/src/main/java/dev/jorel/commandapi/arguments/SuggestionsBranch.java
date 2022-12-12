@@ -7,7 +7,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.SuggestionInfo;
-import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,11 +17,11 @@ import java.util.Objects;
  * This class represents a branch in the suggestions of an argument. Use {@link SuggestionsBranch#suggest(ArgumentSuggestions...)}
  * to add suggestions, then {@link SuggestionsBranch#branch(SuggestionsBranch...)} to add more branches.
  */
-public class SuggestionsBranch {
-	private final List<ArgumentSuggestions> suggestions;
-	private final List<SuggestionsBranch> branches = new ArrayList<>();
+public class SuggestionsBranch<CommandSender> {
+	private final List<ArgumentSuggestions<CommandSender>> suggestions;
+	private final List<SuggestionsBranch<CommandSender>> branches = new ArrayList<>();
 
-	private SuggestionsBranch(List<ArgumentSuggestions> suggestions) {
+	private SuggestionsBranch(List<ArgumentSuggestions<CommandSender>> suggestions) {
 		this.suggestions = suggestions;
 	}
 
@@ -34,9 +33,10 @@ public class SuggestionsBranch {
 	 *                    ArgumentSuggestions to create these.
 	 * @return a new {@link SuggestionsBranch} starting with the given suggestions
 	 */
-	public static SuggestionsBranch suggest(ArgumentSuggestions... suggestions) {
+	@SafeVarargs
+	public static <CommandSender> SuggestionsBranch<CommandSender> suggest(ArgumentSuggestions<CommandSender>... suggestions) {
 		// Arrays#asList allows null elements
-		return new SuggestionsBranch(Arrays.asList(suggestions));
+		return new SuggestionsBranch<>(Arrays.asList(suggestions));
 	}
 
 	/**
@@ -47,7 +47,8 @@ public class SuggestionsBranch {
 	 *                 {@link SuggestionsBranch#suggest(ArgumentSuggestions...)} to start creating these.
 	 * @return the current {@link SuggestionsBranch}
 	 */
-	public SuggestionsBranch branch(SuggestionsBranch... branches) {
+	@SafeVarargs
+	public final SuggestionsBranch<CommandSender> branch(SuggestionsBranch<CommandSender>... branches) {
 		// List#of does not allow null elements
 		this.branches.addAll(List.of(branches));
 		return this;
@@ -61,13 +62,13 @@ public class SuggestionsBranch {
 	 * @return The next {@link ArgumentSuggestions} given by this {@link SuggestionsBranch} or null if the suggestions should not be overridden
 	 * @throws CommandSyntaxException if the given previous arguments don't lead to a valid path for this {@link SuggestionsBranch}
 	 */
-	public ArgumentSuggestions getNextSuggestion(CommandSender sender, String... previousArguments) throws CommandSyntaxException {
+	public ArgumentSuggestions<CommandSender> getNextSuggestion(CommandSender sender, String... previousArguments) throws CommandSyntaxException {
 		return getNextSuggestion(sender, previousArguments, new StringReader(String.join(" ", previousArguments)), new ArrayList<>(), new StringBuilder());
 	}
 
-	private ArgumentSuggestions getNextSuggestion(CommandSender sender, String[] previousArguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) throws CommandSyntaxException {
+	private ArgumentSuggestions<CommandSender> getNextSuggestion(CommandSender sender, String[] previousArguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) throws CommandSyntaxException {
 		if (branches.size() == 0 && suggestions.size() == 0) return null;
-		for (ArgumentSuggestions currentSuggestion : suggestions) {
+		for (ArgumentSuggestions<CommandSender> currentSuggestion : suggestions) {
 			// If all the arguments were processed, this suggestion is next
 			if (processedArguments.size() == previousArguments.length) return currentSuggestion;
 			String currentArgument = previousArguments[processedArguments.size()];
@@ -75,7 +76,7 @@ public class SuggestionsBranch {
 
 			if (currentSuggestion != null) {
 				// Validate argument on the path
-				SuggestionInfo info = new SuggestionInfo(sender, processedArguments.toArray(), currentInput.toString(), "");
+				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, processedArguments.toArray(), currentInput.toString(), "");
 				SuggestionsBuilder builder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
 				currentSuggestion.suggest(info, builder);
 				if (builder.build().getList().stream().map(Suggestion::getText).noneMatch(currentArgument::equals)) {
@@ -89,8 +90,8 @@ public class SuggestionsBranch {
 			processedArguments.add(currentArgument);
 		}
 
-		List<ArgumentSuggestions> mergedBranches = new ArrayList<>();
-		for (SuggestionsBranch branch : branches) {
+		List<ArgumentSuggestions<CommandSender>> mergedBranches = new ArrayList<>();
+		for (SuggestionsBranch<CommandSender> branch : branches) {
 			try {
 				mergedBranches.add(branch.getNextSuggestion(
 					sender, previousArguments, errorContext, new ArrayList<>(processedArguments), new StringBuilder(currentInput)
@@ -161,7 +162,7 @@ public class SuggestionsBranch {
 		if (branches.size() == 0 && suggestions.size() == 0)
 			return new EnforceReplacementsResult(ExceptionType.NO_ERROR, null);
 
-		for (ArgumentSuggestions currentSuggestion : suggestions) {
+		for (ArgumentSuggestions<CommandSender> currentSuggestion : suggestions) {
 			String currentArgument;
 			if (processedArguments.size() >= arguments.length)
 				currentArgument = "";
@@ -171,7 +172,7 @@ public class SuggestionsBranch {
 
 			if (currentSuggestion != null) {
 				// Validate argument on the path
-				SuggestionInfo info = new SuggestionInfo(sender, processedArguments.toArray(), currentInput.toString(), "");
+				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, processedArguments.toArray(), currentInput.toString(), "");
 				SuggestionsBuilder builder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
 				try {
 					currentSuggestion.suggest(info, builder);
@@ -200,7 +201,7 @@ public class SuggestionsBranch {
 
 		// Check the branches to see if the arguments fit and try to choose an appropriate response
 		EnforceReplacementsResult finalResult = EnforceReplacementsResult.withContext(ExceptionType.UNKNOWN, errorContext);
-		for (SuggestionsBranch branch : branches) {
+		for (SuggestionsBranch<CommandSender> branch : branches) {
 			EnforceReplacementsResult result = branch.enforceReplacements(sender, arguments, errorContext, new ArrayList<>(processedArguments), new StringBuilder(currentInput));
 			if (result.isHigherPriority(finalResult)) {
 				finalResult = result;

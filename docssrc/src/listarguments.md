@@ -133,11 +133,11 @@ To do this, we create a command with an `IntegerArgument` to specify the amount 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:ListArgument_MultiGive}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:ListArgument_MultiGive}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ListArgument_MultiGive}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:ListArgument_MultiGive}}
 ```
 
 </div>
