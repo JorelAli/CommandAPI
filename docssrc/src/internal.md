@@ -23,7 +23,7 @@ The CommandAPI's arguments are representations of the different arguments that t
 | `minecraft:color` | [`ChatColorArgument`](./chatarguments.md#chat-color-argument) |
 | `minecraft:column_pos` | [`Location2DArgument`](./locationargument.md#location-2d-space) <br />(`LocationType.BLOCK_POSITION`) |
 | `minecraft:component` | [`ChatComponentArgument`](./chatarguments.md#chat-component-argument) |
-| `minecraft:dimension` | [`EnvironmentArgument`](./environmentargs.md) |
+| `minecraft:dimension` | [`WorldArgument`](./worldarguments.md) |
 | `minecraft:entity` | [`EntitySelectorArgument`](./entityarguments.md#entity-selector-argument) |
 | `minecraft:entity_anchor` | |
 | `minecraft:entity_summon` | [`EntityTypeArgument`](./entityarguments.md#entity-type-argument) |
@@ -46,7 +46,7 @@ The CommandAPI's arguments are representations of the different arguments that t
 | `minecraft:objective_criteria` | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) |
 | `minecraft:operation` | [`MathOperationArgument`](./mathoperationarguments.md) |
 | `minecraft:particle` | [`ParticleArgument`](./particlearguments.md) |
-| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./biomeargument.md)<br />[`CustomArgument<T>`](./customarguments.md)<br />[`LootTableArgument`](./loottableargument.md)<br />[`RecipeArgument`](./recipeargument.md)<br />[`SoundArgument`](./soundargument.md) |
+| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./biomeargument.md)<br />[`CustomArgument<T>`](./customarguments.md)<br />[`LootTableArgument`](./loottableargument.md)<br />[`NamespacedKeyArgument`](./namespacedkeyarg.md)<br />[`RecipeArgument`](./recipeargument.md)<br />[`SoundArgument`](./soundargument.md) |
 | `minecraft:rotation` | [`RotationArgument`](./rotationargs.md) |
 | `minecraft:score_holder` | [`ScoreHolderArgument`](./scoreboardarguments.md#score-holder-argument) |
 | `minecraft:scoreboard_slot` | [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) |

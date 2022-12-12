@@ -23,7 +23,7 @@ Say we want to make an armor stand look in a certain direction. To do this, we'l
 /rotate <rotation> <target>
 ```
 
-To do this, we'll use the rotation from the `RotationArgument` and select an entity using the `EntitySelectorArgument`, with `EntitySelector.ONE_ENTITY`. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.
+To do this, we'll use the rotation from the `RotationArgument` and select an entity using the `EntitySelectorArgument.OneEntity` class. We then check if our entity is an armor stand and if so, we set its head pose to the given rotation.
 
 <div class="multi-pre">
 

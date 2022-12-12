@@ -37,6 +37,17 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.6.0 \\(\rightarrow\\) 8.7.0
+
+> **Developer's Note:**
+>
+> `SoundArgument`s written for 8.6.0 are incompatible with this update! Other significant changes to `ScoreHolderArgument` and `EntitySelectorArgument` were made in this update. I highly recommend reading the [Upgrading guide](./upgrading.md) section which covers the changes in more detail and how to update your plugin for this version.
+
+- Updated [Biome arguments](./biomeargument.md) to allow for `NamespacedKey` objects
+- Updated [Sound arguments](./soundargument.md) with the new `NamespacedKey` constructor
+- Updated [Scoreboard arguments](./scoreboardarguments.md) with the new `Single` and `Multiple` constructors
+- Updated [Entity & player arguments](./entityarguments.md) to include the new `OneEntity`, `ManyEntities`, `OnePlayer` and `ManyPlayers` constructors
+
 ### Documentation changes 8.5.1 \\(\rightarrow\\) 8.6.0
 
 - Greatly improved the format and documentation for [Configuration for server owners](./config.md)

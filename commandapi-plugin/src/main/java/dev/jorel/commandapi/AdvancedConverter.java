@@ -40,7 +40,7 @@ import dev.jorel.commandapi.exceptions.UnknownArgumentException;
  * A command parsing system that converts string arguments into something way
  * more useful
  */
-public class AdvancedConverter {
+class AdvancedConverter {
 
 	/**
 	 * Pattern for arguments, which are of the form {@code <node_name>[type]}

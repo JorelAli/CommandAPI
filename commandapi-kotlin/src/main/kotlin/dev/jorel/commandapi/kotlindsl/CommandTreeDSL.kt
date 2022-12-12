@@ -67,15 +67,30 @@ inline fun CommandTree.adventureChatComponentArgument(nodeName: String, block: A
 inline fun CommandTree.adventureChatArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(AdventureChatArgument(nodeName).apply(block))
 
 // Entity & Player arguments
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("entitySelectorArgumentOneEntity(nodeName)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandTree.entitySelectorArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EntitySelectorArgument<Entity>(nodeName).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("entitySelectorArgumentManyEntities(nodeName)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <T : EntitySelector> CommandTree.entitySelectorArgument(nodeName: String, entitySelector: T, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EntitySelectorArgument<T>(nodeName, entitySelector).apply(block))
+
+inline fun CommandTree.entitySelectorArgumentOneEntity(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.OneEntity(nodeName).apply(block))
+inline fun CommandTree.entitySelectorArgumentManyEntities(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyEntities(nodeName).apply(block))
+inline fun CommandTree.entitySelectorArgumentOnePlayer(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.OnePlayer(nodeName).apply(block))
+inline fun CommandTree.entitySelectorArgumentManyPlayers(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyPlayers(nodeName).apply(block))
 inline fun CommandTree.playerArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(PlayerArgument(nodeName).apply(block))
 inline fun CommandTree.offlinePlayerArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(OfflinePlayerArgument(nodeName).apply(block))
 inline fun CommandTree.entityTypeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EntityTypeArgument(nodeName).apply(block))
 
 // Scoreboard arguments
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("scoreHolderArgument(nodeName, single)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandTree.scoreHolderArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<String>(nodeName).apply(block))
-inline fun <T : ScoreHolderType> CommandTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("scoreHolderArgument(nodeName, single)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
+inline fun <T : ScoreHolderArgument.ScoreHolderType> CommandTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
+
+inline fun CommandTree.scoreHolderArgument(nodeName: String, single: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
+	if (single) then(ScoreHolderArgument.Single(nodeName).apply(block)) else then(ScoreHolderArgument.Multiple(nodeName).apply(block))
+
 inline fun CommandTree.scoreboardSlotArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ScoreboardSlotArgument(nodeName).apply(block))
 inline fun CommandTree.objectiveArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ObjectiveArgument(nodeName).apply(block))
 inline fun CommandTree.objectiveCriteriaArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ObjectiveCriteriaArgument(nodeName).apply(block))
@@ -84,11 +99,20 @@ inline fun CommandTree.teamArgument(nodeName: String, block: ArgumentTree.() -> 
 // Miscellaneous arguments
 inline fun CommandTree.angleArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(AngleArgument(nodeName).apply(block))
 inline fun CommandTree.advancementArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(AdvancementArgument(nodeName).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("biomeArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandTree.biomeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(BiomeArgument(nodeName).apply(block))
+
+inline fun CommandTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
+	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument(nodeName).apply(block))
+
 inline fun CommandTree.blockStateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(BlockStateArgument(nodeName).apply(block))
 inline fun CommandTree.commandArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(CommandArgument(nodeName).apply(block))
 inline fun CommandTree.enchantmentArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EnchantmentArgument(nodeName).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("worldArgument(nodeName)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandTree.environmentArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(EnvironmentArgument(nodeName).apply(block))
+
 inline fun CommandTree.itemStackArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ItemStackArgument(nodeName).apply(block))
 inline fun CommandTree.lootTableArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(LootTableArgument(nodeName).apply(block))
 inline fun CommandTree.mathOperationArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(MathOperationArgument(nodeName).apply(block))
@@ -96,8 +120,13 @@ inline fun CommandTree.namespacedKeyArgument(nodeName: String, block: ArgumentTr
 inline fun CommandTree.particleArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(ParticleArgument(nodeName).apply(block))
 inline fun CommandTree.potionEffectArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(PotionEffectArgument(nodeName).apply(block))
 inline fun CommandTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).apply(block))
-inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName).apply(block))
-inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
+inline fun CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
+
+inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
+	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))
+
 inline fun CommandTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(TimeArgument(nodeName).apply(block))
 inline fun CommandTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(UUIDArgument(nodeName).apply(block))
 inline fun CommandTree.worldArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(WorldArgument(nodeName).apply(block))
@@ -163,15 +192,30 @@ inline fun ArgumentTree.adventureChatComponentArgument(nodeName: String, block: 
 inline fun ArgumentTree.adventureChatArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(AdventureChatArgument(nodeName).apply(block))
 
 // Entity & Player arguments
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("entitySelectorArgumentOneEntity(nodeName)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun ArgumentTree.entitySelectorArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EntitySelectorArgument<Entity>(nodeName).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("entitySelectorArgumentManyEntities(nodeName)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun <T : EntitySelector> ArgumentTree.entitySelectorArgument(nodeName: String, entitySelector: T, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EntitySelectorArgument<T>(nodeName, entitySelector).apply(block))
+
+inline fun ArgumentTree.entitySelectorArgumentOneEntity(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EntitySelectorArgument.OneEntity(nodeName).apply(block))
+inline fun ArgumentTree.entitySelectorArgumentManyEntities(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EntitySelectorArgument.ManyEntities(nodeName).apply(block))
+inline fun ArgumentTree.entitySelectorArgumentOnePlayer(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EntitySelectorArgument.OnePlayer(nodeName).apply(block))
+inline fun ArgumentTree.entitySelectorArgumentManyPlayers(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EntitySelectorArgument.ManyPlayers(nodeName).apply(block))
 inline fun ArgumentTree.playerArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(PlayerArgument(nodeName).apply(block))
 inline fun ArgumentTree.offlinePlayerArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(OfflinePlayerArgument(nodeName).apply(block))
 inline fun ArgumentTree.entityTypeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EntityTypeArgument(nodeName).apply(block))
 
 // Scoreboard arguments
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("scoreHolderArgument(nodeName, single)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun ArgumentTree.scoreHolderArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreHolderArgument<String>(nodeName).apply(block))
-inline fun <T : ScoreHolderType> ArgumentTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("scoreHolderArgument(nodeName, single)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
+inline fun <T : ScoreHolderArgument.ScoreHolderType> ArgumentTree.scoreHolderArgument(nodeName: String, scoreHolderType: T, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreHolderArgument<T>(nodeName, scoreHolderType).apply(block))
+
+inline fun ArgumentTree.scoreHolderArgument(nodeName: String, single: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
+	if (single) then(ScoreHolderArgument.Single(nodeName).apply(block)) else then(ScoreHolderArgument.Multiple(nodeName).apply(block))
+
 inline fun ArgumentTree.scoreboardSlotArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ScoreboardSlotArgument(nodeName).apply(block))
 inline fun ArgumentTree.objectiveArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ObjectiveArgument(nodeName).apply(block))
 inline fun ArgumentTree.objectiveCriteriaArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ObjectiveCriteriaArgument(nodeName).apply(block))
@@ -180,11 +224,20 @@ inline fun ArgumentTree.teamArgument(nodeName: String, block: ArgumentTree.() ->
 // Miscellaneous arguments
 inline fun ArgumentTree.angleArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(AngleArgument(nodeName).apply(block))
 inline fun ArgumentTree.advancementArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(AdvancementArgument(nodeName).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("biomeArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun ArgumentTree.biomeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(BiomeArgument(nodeName).apply(block))
+
+inline fun ArgumentTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
+	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument(nodeName).apply(block))
+
 inline fun ArgumentTree.blockStateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(BlockStateArgument(nodeName).apply(block))
 inline fun ArgumentTree.commandArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(CommandArgument(nodeName).apply(block))
 inline fun ArgumentTree.enchantmentArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EnchantmentArgument(nodeName).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("worldArgument(nodeName)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun ArgumentTree.environmentArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(EnvironmentArgument(nodeName).apply(block))
+
 inline fun ArgumentTree.itemStackArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ItemStackArgument(nodeName).apply(block))
 inline fun ArgumentTree.lootTableArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(LootTableArgument(nodeName).apply(block))
 inline fun ArgumentTree.mathOperationArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(MathOperationArgument(nodeName).apply(block))
@@ -192,8 +245,13 @@ inline fun ArgumentTree.namespacedKeyArgument(nodeName: String, block: ArgumentT
 inline fun ArgumentTree.particleArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(ParticleArgument(nodeName).apply(block))
 inline fun ArgumentTree.potionEffectArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(PotionEffectArgument(nodeName).apply(block))
 inline fun ArgumentTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(RecipeArgument(nodeName).apply(block))
-inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName).apply(block))
-inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
+
+@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
+inline fun ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument(nodeName).apply(block))
+
+inline fun ArgumentTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
+	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))
+
 inline fun ArgumentTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(TimeArgument(nodeName).apply(block))
 inline fun ArgumentTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(UUIDArgument(nodeName).apply(block))
 inline fun ArgumentTree.worldArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(WorldArgument(nodeName).apply(block))
