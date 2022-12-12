@@ -78,75 +78,185 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
 
-	/* Argument types */
+	/**
+	 * @return Angle argument (minecraft:angle)
+	 */
 	ArgumentType<?> _ArgumentAngle();
 
+	/**
+	 * @return Axis argument (minecraft:swizzle)
+	 */
 	ArgumentType<?> _ArgumentAxis();
 
+	/**
+	 * @return Block predicate argument (minecraft:block_predicate)
+	 */
 	ArgumentType<?> _ArgumentBlockPredicate();
 
+	/**
+	 * @return Block state argument (minecraft:block_state)
+	 */
 	ArgumentType<?> _ArgumentBlockState();
 
+	/**
+	 * @return Chat argument (minecraft:message)
+	 */
 	ArgumentType<?> _ArgumentChat();
 
+	/**
+	 * @return Chat component argument (minecraft:component)
+	 */
 	ArgumentType<?> _ArgumentChatComponent();
 
+	/**
+	 * @return Chat color argument (minecraft:color)
+	 */
 	ArgumentType<?> _ArgumentChatFormat();
 
+	/**
+	 * @return Dimension argument (minecraft:dimension)
+	 */
 	ArgumentType<?> _ArgumentDimension();
 
+	/**
+	 * @return Environment argument (minecraft:dimension)
+	 */
 	ArgumentType<?> _ArgumentEnvironment();
 
+	/**
+	 * @return Enchantment argument (minecraft:item_enchantment)
+	 */
 	ArgumentType<?> _ArgumentEnchantment();
 
+	/**
+	 * @param subType one of {@link ArgumentSubType#ENTITYSELECTOR_MANY_ENTITIES},
+	 *                {@link ArgumentSubType#ENTITYSELECTOR_MANY_PLAYERS},
+	 *                {@link ArgumentSubType#ENTITYSELECTOR_ONE_ENTITY} or
+	 *                {@link ArgumentSubType#ENTITYSELECTOR_ONE_PLAYER}
+	 * @return Entity selector argument (minecraft:entity)
+	 */
 	ArgumentType<?> _ArgumentEntity(ArgumentSubType subType);
 
+	/**
+	 * @return Entity type argument (minecraft:entity_summon)
+	 */
 	ArgumentType<?> _ArgumentEntitySummon();
 
+	/**
+	 * @return Float range argument (minecraft:float_range)
+	 */
 	ArgumentType<?> _ArgumentFloatRange();
 
+	/**
+	 * @return Int range argument (minecraft:int_range)
+	 */
 	ArgumentType<?> _ArgumentIntRange();
 
+	/**
+	 * @return Item predicate argument (minecraft:item_predicate)
+	 */
 	ArgumentType<?> _ArgumentItemPredicate();
 
+	/**
+	 * @return Itemstack argument (minecraft:item_stack)
+	 */
 	ArgumentType<?> _ArgumentItemStack();
 
+	/**
+	 * @return Math operation argument (minecraft:operation)
+	 */
 	ArgumentType<?> _ArgumentMathOperation();
 
+	/**
+	 * @return Minecraft key argument (minecraft:resource_location)
+	 */
 	ArgumentType<?> _ArgumentMinecraftKeyRegistered();
 
+	/**
+	 * @return Potion effect argument (minecraft:mob_effect)
+	 */
 	ArgumentType<?> _ArgumentMobEffect();
 
+	/**
+	 * @return NBT compound tag argument (minecraft:nbt_compound_tag)
+	 */
 	ArgumentType<?> _ArgumentNBTCompound();
 
+	/**
+	 * @return Particle argument (minecraft:particle)
+	 */
 	ArgumentType<?> _ArgumentParticle();
 
+	/**
+	 * @return Position argument (minecraft:block_pos)
+	 */
 	ArgumentType<?> _ArgumentPosition();
 
+	/**
+	 * @return 2D position (column) argument (minecraft:column_pos)
+	 */
 	ArgumentType<?> _ArgumentPosition2D();
 
+	/**
+	 * @return Player argument (minecraft:game_profile)
+	 */
 	ArgumentType<?> _ArgumentProfile();
 
+	/**
+	 * @return Rotation argument (minecraft:rotation)
+	 */
 	ArgumentType<?> _ArgumentRotation();
 
+	/**
+	 * @return Scoreboard objective criteria argument (minecraft:objective_criteria)
+	 */
 	ArgumentType<?> _ArgumentScoreboardCriteria();
 
+	/**
+	 * @return Scoreboard objective argument (minecraft:objective)
+	 */
 	ArgumentType<?> _ArgumentScoreboardObjective();
 
+	/**
+	 * @return Scoreboard slot argument (minecraft:scoreboard_slot)
+	 */
 	ArgumentType<?> _ArgumentScoreboardSlot();
 
+	/**
+	 * @return Scoreboard team argument (minecraft:team)
+	 */
 	ArgumentType<?> _ArgumentScoreboardTeam();
 
+	/**
+	 * @param subType one of {@link ArgumentSubType#SCOREHOLDER_MULTIPLE} or
+	 *                {@link ArgumentSubType#SCOREHOLDER_SINGLE}
+	 * @return Scoreholder argument (minecraft:score_holder)
+	 */
 	ArgumentType<?> _ArgumentScoreholder(ArgumentSubType subType);
 
+	/**
+	 * @return Function argument (minecraft:function)
+	 */
 	ArgumentType<?> _ArgumentTag();
 
+	/**
+	 * @return Time argument (minecraft:time)
+	 */
 	ArgumentType<?> _ArgumentTime();
 
+	/**
+	 * @return UUID argument (minecraft:uuid)
+	 */
 	ArgumentType<?> _ArgumentUUID();
 
+	/**
+	 * @return Location 2D argument (precise position) (minecraft:vec2)
+	 */
 	ArgumentType<?> _ArgumentVec2();
 
+	/**
+	 * @return Location argument (precise position) (minecraft:vec3)
+	 */
 	ArgumentType<?> _ArgumentVec3();
 
 	/*
@@ -196,11 +306,11 @@ public interface NMS<CommandListenerWrapper> {
 	float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-	
+
 	Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType biomeBiome) throws CommandSyntaxException;
 
 	Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
@@ -240,14 +350,14 @@ public interface NMS<CommandListenerWrapper> {
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	SimpleFunctionWrapper getFunction(NamespacedKey key);
 
@@ -258,31 +368,31 @@ public interface NMS<CommandListenerWrapper> {
 	ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException;
 
 	Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	NamespacedKey getMinecraftKey(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	<NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
-			Function<Object, NBTContainer> nbtContainerConstructor);
+		Function<Object, NBTContainer> nbtContainerConstructor);
 
 	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws IllegalArgumentException, CommandSyntaxException;
+		throws IllegalArgumentException, CommandSyntaxException;
 
 	String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
@@ -291,10 +401,10 @@ public interface NMS<CommandListenerWrapper> {
 	Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
@@ -303,10 +413,10 @@ public interface NMS<CommandListenerWrapper> {
 	ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Collection<String> getScoreHolderMultiple(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	String getScoreHolderSingle(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+		throws CommandSyntaxException;
 
 	/**
 	 * Retrieves a CommandSender, given some CommandContext. This method should
@@ -350,20 +460,24 @@ public interface NMS<CommandListenerWrapper> {
 	UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	World getWorldForCSS(CommandListenerWrapper clw);
-	
+
 	/**
 	 * Hooks into the chat previewing system for 1.19+
+	 * 
 	 * @param plugin the plugin (for async calls)
 	 * @param player the player to hook
 	 */
-	default void hookChatPreview(Plugin plugin, Player player) {};
-	
+	default void hookChatPreview(Plugin plugin, Player player) {
+	};
+
 	/**
-	 * Unhooks a player from the chat previewing system for 1.19+. This should
-	 * be called when the player quits and when the plugin is disabled
+	 * Unhooks a player from the chat previewing system for 1.19+. This should be
+	 * called when the player quits and when the plugin is disabled
+	 * 
 	 * @param player the player to unhook
 	 */
-	default void unhookChatPreview(Player player) {};
+	default void unhookChatPreview(Player player) {
+	};
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
@@ -390,7 +504,7 @@ public interface NMS<CommandListenerWrapper> {
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
 
 	Message generateMessageFromJson(String json);
-	
+
 	/**
 	 * @return Whether the server can use chat preview. This is always false for
 	 *         pre-1.19 servers, and depends on

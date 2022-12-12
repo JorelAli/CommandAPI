@@ -104,7 +104,7 @@ inline fun CommandTree.advancementArgument(nodeName: String, block: ArgumentTree
 inline fun CommandTree.biomeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(BiomeArgument(nodeName).apply(block))
 
 inline fun CommandTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
-	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument.Biome(nodeName).apply(block))
+	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument(nodeName).apply(block))
 
 inline fun CommandTree.blockStateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(BlockStateArgument(nodeName).apply(block))
 inline fun CommandTree.commandArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(CommandArgument(nodeName).apply(block))
@@ -122,10 +122,7 @@ inline fun CommandTree.potionEffectArgument(nodeName: String, block: ArgumentTre
 inline fun CommandTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).apply(block))
 
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName).apply(block))
-
-@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
+inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
 
 inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
 	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))
@@ -232,7 +229,7 @@ inline fun ArgumentTree.advancementArgument(nodeName: String, block: ArgumentTre
 inline fun ArgumentTree.biomeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(BiomeArgument(nodeName).apply(block))
 
 inline fun ArgumentTree.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
-	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument.Biome(nodeName).apply(block))
+	if (useNamespacedKey) then(BiomeArgument.NamespacedKey(nodeName).apply(block)) else then(BiomeArgument(nodeName).apply(block))
 
 inline fun ArgumentTree.blockStateArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(BlockStateArgument(nodeName).apply(block))
 inline fun ArgumentTree.commandArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(CommandArgument(nodeName).apply(block))
@@ -250,10 +247,7 @@ inline fun ArgumentTree.potionEffectArgument(nodeName: String, block: ArgumentTr
 inline fun ArgumentTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(RecipeArgument(nodeName).apply(block))
 
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName).apply(block))
-
-@Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
+inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument(nodeName).apply(block))
 
 inline fun ArgumentTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
 	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))

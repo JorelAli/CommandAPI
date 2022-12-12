@@ -22,6 +22,8 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
+import org.bukkit.block.Biome;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -33,7 +35,7 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @apiNote Returns a {@link Biome} object
  */
-public class BiomeArgument extends SafeOverrideableArgument<org.bukkit.block.Biome, org.bukkit.block.Biome> implements ICustomProvidedArgument {
+public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument {
 
 	/**
 	 * Constructs a BiomeArgument with a given node name.
@@ -42,12 +44,12 @@ public class BiomeArgument extends SafeOverrideableArgument<org.bukkit.block.Bio
 	 */
 	public BiomeArgument(String nodeName) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentSyntheticBiome(),
-			((Function<org.bukkit.block.Biome, String>) org.bukkit.block.Biome::name).andThen(String::toLowerCase));
+			((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}
 
 	@Override
-	public Class<org.bukkit.block.Biome> getPrimitiveType() {
-		return org.bukkit.block.Biome.class;
+	public Class<Biome> getPrimitiveType() {
+		return Biome.class;
 	}
 
 	@Override
@@ -61,10 +63,10 @@ public class BiomeArgument extends SafeOverrideableArgument<org.bukkit.block.Bio
 	}
 
 	@Override
-	public <CommandListenerWrapper> org.bukkit.block.Biome parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Biome parseArgument(NMS<CommandListenerWrapper> nms,
 		CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs)
 		throws CommandSyntaxException {
-		return (org.bukkit.block.Biome) nms.getBiome(cmdCtx, key, ArgumentSubType.BIOME_BIOME);
+		return (Biome) nms.getBiome(cmdCtx, key, ArgumentSubType.BIOME_BIOME);
 	}
 
 	/**
