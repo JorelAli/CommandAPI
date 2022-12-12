@@ -122,7 +122,7 @@ inline fun CommandTree.potionEffectArgument(nodeName: String, block: ArgumentTre
 inline fun CommandTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).apply(block))
 
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
+inline fun CommandTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument(nodeName).apply(block))
 
 inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
 	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))
@@ -247,7 +247,7 @@ inline fun ArgumentTree.potionEffectArgument(nodeName: String, block: ArgumentTr
 inline fun ArgumentTree.recipeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(RecipeArgument(nodeName).apply(block))
 
 @Deprecated("This method has been deprecated since version 8.7.0", ReplaceWith("soundArgument(nodeName, useNamespacedKey)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument(nodeName).apply(block))
+inline fun ArgumentTree.soundArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument(nodeName).apply(block))
 
 inline fun ArgumentTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
 	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))
