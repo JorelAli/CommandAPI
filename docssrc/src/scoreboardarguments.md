@@ -9,14 +9,14 @@ The CommandAPI uses two classes to provide information about a scoreboard:
 
 ## Score holder argument
 
-The score holder argument can accept either a single entity or a collection of multiple entities. In order to specify which one to use, you must provide a `ScoreHolderType` enum value to the `ScoreHolderArgument` constructor, which is either `ScoreHolderType.SINGLE` or `ScoreHolderType.MULTIPLE`:
+The score holder argument can accept either a single entity or a collection of multiple entities. In order to specify which one to use, you must use the `ScoreHolderArgument.Single` or `ScoreHolderArgument.Multiple` constructor respectively:
 
 ```java
-new ScoreHolderArgument(nodeName, ScoreHolderType.SINGLE);
-new ScoreHolderArgument(nodeName, ScoreHolderType.MULTIPLE);
+new ScoreHolderArgument.Single(nodeName);
+new ScoreHolderArgument.Multiple(nodeName);
 ```
 
-Depending on which constructor is used, the cast type changes. If you use a `ScoreHolderType.SINGLE`, the argument must be casted to a `String`. Otherwise, if you use `ScoreHolderType.MULTIPLE`, the argument must be casted to a `Collection<String>`.
+Depending on which constructor is used, the cast type changes. If you use `ScoreHolderArgument.Single`, the argument must be casted to a `String`. Otherwise, if you use `ScoreHolderArgument.Multiple`, the argument must be casted to a `Collection<String>`.
 
 <div class="example">
 
@@ -28,7 +28,7 @@ Say we want to reward all players that fit a certain criteria. We want a command
 /reward <players>
 ```
 
-Since we could have multiple players that fit a certain criterion, we want to use `ScoreHolderType.MULTIPLE` as the parameter for the argument's constructor.
+Since we could have multiple players that fit a certain criterion, we want to use `ScoreHolderArgument.Multiple` constructor.
 
 To give this example a bit more context, let's say we want to reward all players that have died less than 10 times in the server. To do this, we will use the following command:
 

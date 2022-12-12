@@ -20,48 +20,26 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Function;
-
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
-import org.bukkit.Sound;
 
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument<SoundOrNamespacedKey> extends SafeOverrideableArgument<SoundOrNamespacedKey, SoundOrNamespacedKey> implements ICustomProvidedArgument {
-
-	private final SoundType soundType;
+public class SoundArgument extends SafeOverrideableArgument<org.bukkit.Sound, org.bukkit.Sound> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		this(nodeName, SoundType.SOUND);
+		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), CommandAPIBukkit.get()::convert);
 	}
 
-	/**
-	 * A Sound argument. Represents Bukkit's Sound object
-	 * @param nodeName the name of the node for this argument
-	 */
-	@SuppressWarnings("unchecked")
-	public SoundArgument(String nodeName, SoundType soundType) {
-		super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), (Function<SoundOrNamespacedKey, String>) soundType.getMapper());
-		this.soundType = soundType;
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
-	public Class<SoundOrNamespacedKey> getPrimitiveType() {
-		return (Class<SoundOrNamespacedKey>) switch (soundType) {
-			case SOUND -> Sound.class;
-			case NAMESPACED_KEY -> NamespacedKey.class;
-		};
+	public Class<org.bukkit.Sound> getPrimitiveType() {
+		return org.bukkit.Sound.class;
 	}
 
 	@Override
@@ -75,7 +53,46 @@ public class SoundArgument<SoundOrNamespacedKey> extends SafeOverrideableArgumen
 	}
 	
 	@Override
-	public <CommandSourceStack> SoundOrNamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, getPrimitiveType());
+	public <CommandSourceStack> org.bukkit.Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return (org.bukkit.Sound) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_SOUND);
+	}
+
+	/**
+	 * An argument that represents the Bukkit Sound object
+	 *
+	 * @apiNote Returns a {@link NamespacedKey} object
+	 */
+	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements ICustomProvidedArgument {
+
+		/**
+		 * Constructs a SoundArgument with a given node name. This SoundArgument will
+		 * return a {@link NamespacedKey}
+		 *
+		 * @param nodeName the name of the node for argument
+		 */
+		public NamespacedKey(String nodeName) {
+			super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), org.bukkit.NamespacedKey::toString);
+		}
+
+		@Override
+		public SuggestionProviders getSuggestionProvider() {
+			return SuggestionProviders.SOUNDS;
+		}
+
+		@Override
+		public Class<org.bukkit.NamespacedKey> getPrimitiveType() {
+			return org.bukkit.NamespacedKey.class;
+		}
+
+		@Override
+		public CommandAPIArgumentType getArgumentType() {
+			return CommandAPIArgumentType.SOUND;
+		}
+
+		@Override
+		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+			return (org.bukkit.NamespacedKey) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_NAMESPACEDKEY);
+		}
+
 	}
 }

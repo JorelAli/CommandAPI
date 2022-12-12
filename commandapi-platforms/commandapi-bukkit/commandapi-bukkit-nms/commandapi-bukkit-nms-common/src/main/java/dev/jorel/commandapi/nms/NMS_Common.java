@@ -20,6 +20,47 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.NAME_CHANGED;
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CRAFTBUKKIT;
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CSS;
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import org.bukkit.Axis;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.loot.LootTable;
+import org.bukkit.potion.PotionEffectType;
+
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -28,6 +69,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -154,10 +196,11 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Unimplemented(because = NAME_CHANGED, info = "multipleEntities (1.17) -> entities (1.18) -> b (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "c (1.17)                -> player   (1.18) -> c (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "d (1.17)                -> players  (1.18) -> d (1.19)")
-	public abstract ArgumentType<?> _ArgumentEntity(EntitySelector selector);
+	public abstract ArgumentType<?> _ArgumentEntity(ArgumentSubType subType);
 
 	@Override
-	public final ArgumentType<?> _ArgumentEntitySummon() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public ArgumentType<?> _ArgumentEntitySummon() { // TODO: Abstract
 		return EntitySummonArgument.id();
 	}
 
@@ -190,7 +233,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentMobEffect() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public ArgumentType<?> _ArgumentMobEffect() { // TODO: Abstract
 		return MobEffectArgument.effect();
 	}
 
@@ -245,8 +289,12 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreholder(boolean single) {
-		return single ? ScoreHolderArgument.scoreHolder() : ScoreHolderArgument.scoreHolders();
+	public final ArgumentType<?> _ArgumentScoreholder(ArgumentSubType subType) {
+		return switch(subType) {
+			case SCOREHOLDER_SINGLE -> ScoreHolderArgument.scoreHolder();
+			case SCOREHOLDER_MULTIPLE -> ScoreHolderArgument.scoreHolders();
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Override
@@ -361,7 +409,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract Biome getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
+	public abstract Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = NAME_CHANGED, from = "getWorld()", to = "f()", in = "1.19")
@@ -420,7 +468,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, EntitySelector selector)
+	public abstract Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException;
 
 	@Override
@@ -601,7 +649,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
-	public abstract <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandSourceStack> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType);
+	public abstract Object getSound(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType);
 
 	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
 	//  this doesn't blow up, but it should be covered by the default case (empty)

@@ -41,7 +41,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	 */
 	public BiomeArgument(String nodeName) {
 		super(nodeName, CommandAPIBukkit.get()._ArgumentSyntheticBiome(),
-				((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
+			((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}
 
 	@Override
@@ -61,7 +61,47 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 
 	@Override
 	public <CommandSourceStack> Biome parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
-			throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandSourceStack>get().getBiome(cmdCtx, key);
+		throws CommandSyntaxException {
+		return (Biome) CommandAPIBukkit.<CommandSourceStack>get().getBiome(cmdCtx, key, ArgumentSubType.BIOME_BIOME);
+	}
+
+	/**
+	 * An argument that represents the Bukkit Biome object
+	 *
+	 * @apiNote Returns a {@link NamespacedKey} object
+	 */
+	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements ICustomProvidedArgument {
+
+		/**
+		 * Constructs a BiomeArgument with a given node name. This BiomeArgument will
+		 * return a {@link NamespacedKey}
+		 *
+		 * @param nodeName the name of the node for argument
+		 */
+		public NamespacedKey(String nodeName) {
+			super(nodeName, CommandAPIBukkit.get()._ArgumentSyntheticBiome(), org.bukkit.NamespacedKey::toString);
+		}
+
+		@Override
+		public SuggestionProviders getSuggestionProvider() {
+			return SuggestionProviders.BIOMES;
+		}
+
+		@Override
+		public Class<org.bukkit.NamespacedKey> getPrimitiveType() {
+			return org.bukkit.NamespacedKey.class;
+		}
+
+		@Override
+		public CommandAPIArgumentType getArgumentType() {
+			return CommandAPIArgumentType.BIOME;
+		}
+
+		@Override
+		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx,
+			String key, Object[] previousArgs) throws CommandSyntaxException {
+			return (org.bukkit.NamespacedKey) CommandAPIBukkit.<CommandSourceStack>get().getBiome(cmdCtx, key, ArgumentSubType.BIOME_NAMESPACEDKEY);
+		}
+
 	}
 }

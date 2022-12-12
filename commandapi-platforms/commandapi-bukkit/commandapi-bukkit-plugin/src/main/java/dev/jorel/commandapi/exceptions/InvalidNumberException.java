@@ -26,6 +26,12 @@ package dev.jorel.commandapi.exceptions;
 @SuppressWarnings("serial")
 public class InvalidNumberException extends Exception {
 	
+	/**
+	 * An exception caused when a number is not a number
+	 * @param input the full command input
+	 * @param command the name of the command
+	 * @param index the index where the number was invalid
+	 */
 	public InvalidNumberException(String input, String command, int index) {
 		super(format(input, command, index));
 	}

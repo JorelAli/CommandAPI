@@ -29,3 +29,17 @@ And we can set the biome of the current chunk as expected:
 </div>
 
 </div>
+
+The `BiomeArgument` also supports returning a `NamespacedKey` for custom biomes. This can be done by using the `BiomeArgument.NamespacedKey` constructor instead of the normal `BiomeArgument` constructor:
+
+```java
+// Makes a BiomeArgument that returns a Biome
+new BiomeArgument("biome");
+
+// Makes a BiomeArgument that returns a NamespacedKey
+new BiomeArgument.NamespacedKey("biome");
+```
+
+> **Developer's Note:**
+>
+> Spigot's support for custom biomes is really limited! If you have an example that lets you use custom biomes with namespaced keys, please open a GitHub issue, or reach out to us on Discord!

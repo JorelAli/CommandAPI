@@ -35,7 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * Reads YAML, generates command objects
  */
-public class ConfigPluginConverter {
+class ConfigPluginConverter {
 
 	/**
 	 * If this is a pre-8.6.0 configuration
