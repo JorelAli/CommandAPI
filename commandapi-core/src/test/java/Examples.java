@@ -114,12 +114,10 @@ import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.CommandArgument;
-import dev.jorel.commandapi.wrappers.CommandResult;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
-import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
 import dev.jorel.commandapi.arguments.EnvironmentArgument;
@@ -146,10 +144,8 @@ import dev.jorel.commandapi.arguments.RecipeArgument;
 import dev.jorel.commandapi.arguments.RotationArgument;
 import dev.jorel.commandapi.arguments.SafeSuggestions;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.SoundArgument;
-import dev.jorel.commandapi.arguments.SoundType;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.SuggestionsBranch;
 import dev.jorel.commandapi.arguments.TeamArgument;
@@ -158,6 +154,7 @@ import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.arguments.WorldArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
+import dev.jorel.commandapi.wrappers.CommandResult;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.MathOperation;
@@ -183,7 +180,8 @@ public class Examples extends JavaPlugin {
  * in curly braces {}.
  */
 
-{
+@SuppressWarnings("deprecation")
+public void commandRegistration() {
 /* ANCHOR: commandregistration */
 // Create our command
 new CommandAPICommand("broadcastmsg")
@@ -310,7 +308,7 @@ new CommandAPICommand("break")
 /* ANCHOR: rotationarguments */
 new CommandAPICommand("rotate")
     .withArguments(new RotationArgument("rotation"))
-    .withArguments(new EntitySelectorArgument<Entity>("target", EntitySelector.ONE_ENTITY))
+    .withArguments(new EntitySelectorArgument.OneEntity("target"))
     .executes((sender, args) -> {
         Rotation rotation = (Rotation) args[0];
         Entity target = (Entity) args[1];
@@ -483,7 +481,7 @@ new CommandAPICommand("pbroadcast")
 /* ANCHOR: entityselectorarguments */
 new CommandAPICommand("remove")
     // Using a collective entity selector to select multiple entities
-    .withArguments(new EntitySelectorArgument<Collection<Entity>>("entities", EntitySelector.MANY_ENTITIES))
+    .withArguments(new EntitySelectorArgument.ManyEntities("entities"))
     .executes((sender, args) -> {
         // Parse the argument as a collection of entities (as stated above in the documentation)
         @SuppressWarnings("unchecked")
@@ -516,7 +514,7 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR: scoreholderargument */
 new CommandAPICommand("reward")
     // We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
-    .withArguments(new ScoreHolderArgument<Collection<String>>("players", ScoreHolderType.MULTIPLE))
+    .withArguments(new ScoreHolderArgument.Multiple("players"))
     .executes((sender, args) -> {
         // Get player names by casting to Collection<String>
         @SuppressWarnings("unchecked")
@@ -580,7 +578,8 @@ new CommandAPICommand("sidebar")
 /* ANCHOR_END: objectiveargument */
 }
 
-{
+@SuppressWarnings("deprecation")
+public void objectiveCriteriaArguments() {
 /* ANCHOR: objectivecriteriaarguments */
 new CommandAPICommand("unregisterall")
     .withArguments(new ObjectiveCriteriaArgument("objective criteria"))
@@ -833,7 +832,7 @@ new CommandAPICommand("unlockrecipe")
 {
 /* ANCHOR: soundarguments */
 new CommandAPICommand("sound")
-    .withArguments(new SoundArgument<Sound>("sound"))
+    .withArguments(new SoundArgument("sound"))
     .executesPlayer((player, args) -> {
         player.getWorld().playSound(player.getLocation(), (Sound) args[0], 100.0f, 1.0f);
     })
@@ -842,7 +841,7 @@ new CommandAPICommand("sound")
 
 /* ANCHOR: soundarguments2 */
 new CommandAPICommand("sound")
-    .withArguments(new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY))
+    .withArguments(new SoundArgument.NamespacedKey("sound"))
     .executesPlayer((player, args) -> {
         player.getWorld().playSound(player.getLocation(), ((NamespacedKey) args[0]).asString(), 100.0f, 1.0f);
     })
@@ -1303,7 +1302,7 @@ void resultingcommandexecutor3(){
 /* ANCHOR: resultingcommandexecutor3 */
 // Register reward giving system for a target player
 new CommandAPICommand("givereward")
-    .withArguments(new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER))
+    .withArguments(new EntitySelectorArgument.OnePlayer("target"))
     .executes((sender, args) -> {
         Player player = (Player) args[0];
         player.getInventory().addItem(new ItemStack(Material.DIAMOND, 64));
@@ -1977,7 +1976,7 @@ new CommandAPICommand("spawnmob")
 {
 /* ANCHOR: SafePotionArguments */
 List<Argument<?>> arguments = new ArrayList<>();
-arguments.add(new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER));
+arguments.add(new EntitySelectorArgument.OnePlayer("target"));
 arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(
     info -> {
         Player target = (Player) info.previousArgs()[0];

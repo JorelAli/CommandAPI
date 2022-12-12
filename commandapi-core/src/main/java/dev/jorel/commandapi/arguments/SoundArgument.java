@@ -29,24 +29,13 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument<T> extends SafeOverrideableArgument<org.bukkit.Sound, org.bukkit.Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends SafeOverrideableArgument<org.bukkit.Sound, org.bukkit.Sound> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		this(nodeName, SoundType.SOUND);
-	}
-	
-	/**
-	 * A Sound argument. Represents Bukkit's Sound object
-	 * @param nodeName the name of the node for this argument
-	 * @param soundType the return type of this argument to use, either a sound or a namespaced key
-	 * @deprecated Use {@code SoundArgument.}{@link NamespacedKey} instead
-	 */
-	@Deprecated(forRemoval = true, since = "8.7.0")
-	public SoundArgument(String nodeName, SoundType soundType) {
 		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getInstance().getNMS()::convert);
 	}
 
@@ -69,25 +58,6 @@ public class SoundArgument<T> extends SafeOverrideableArgument<org.bukkit.Sound,
 	public <CommandListenerWrapper> org.bukkit.Sound parseArgument(NMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return (org.bukkit.Sound) nms.getSound(cmdCtx, key, ArgumentSubType.SOUND_SOUND);
-	}
-	
-	/**
-	 * An argument that represents the Bukkit Sound object
-	 * 
-	 * @apiNote Returns a {@link org.bukkit.Sound} object
-	 */
-	// For feature parity, SoundArgument.Sound() is equivalent to SoundArgument()
-	public static class Sound extends SoundArgument<Object> {
-
-		/**
-		 * Constructs a SoundArgument with a given node name.
-		 * 
-		 * @param nodeName the name of the node for argument
-		 */
-		public Sound(String nodeName) {
-			super(nodeName);
-		}
-
 	}
 
 	/**

@@ -70,25 +70,6 @@ public class BiomeArgument extends SafeOverrideableArgument<org.bukkit.block.Bio
 	/**
 	 * An argument that represents the Bukkit Biome object
 	 * 
-	 * @apiNote Returns a {@link org.bukkit.block.Biome} object
-	 */
-	// For feature parity, BiomeArgument.Biome() is equivalent to BiomeArgument()
-	public static class Biome extends BiomeArgument {
-
-		/**
-		 * Constructs a BiomeArgument with a given node name.
-		 * 
-		 * @param nodeName the name of the node for argument
-		 */
-		public Biome(String nodeName) {
-			super(nodeName);
-		}
-
-	}
-
-	/**
-	 * An argument that represents the Bukkit Biome object
-	 * 
 	 * @apiNote Returns a {@link NamespacedKey} object
 	 */
 	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements ICustomProvidedArgument {

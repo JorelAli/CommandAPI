@@ -131,7 +131,7 @@ inline fun <SoundOrNamespacedKey> CommandAPICommand.soundArgument(nodeName: Stri
 inline fun <SoundOrNamespacedKey> CommandAPICommand.soundArgument(nodeName: String, soundType: SoundType, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 
 inline fun CommandAPICommand.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
-	if (useNamespacedKey) withArguments(SoundArgument.NamespacedKey(nodeName).apply(block)) else withArguments(SoundArgument.Sound(nodeName).apply(block))
+	if (useNamespacedKey) withArguments(SoundArgument.NamespacedKey(nodeName).apply(block)) else withArguments(SoundArgument(nodeName).apply(block))
 
 inline fun CommandAPICommand.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(TimeArgument(nodeName).apply(block))
 inline fun CommandAPICommand.uuidArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(UUIDArgument(nodeName).apply(block))

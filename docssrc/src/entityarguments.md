@@ -4,14 +4,14 @@
 
 ![An image of an entity selector argument with a list of suggestions including entity selectors and a player name](./images/arguments/entityselector.png)
 
-Minecraft's [target selectors](https://minecraft.gamepedia.com/Commands#Target_selectors) (e.g. `@a` or `@e`) are implemented using the `EntitySelectorArgument` class. This allows you to select specific entities based on certain attributes.
+Minecraft's [target selectors](https://minecraft.gamepedia.com/Commands#Target_selectors) (e.g. `@a` or `@e`) are implemented using the subclasses of the `EntitySelectorArgument` class. This allows you to select specific entities based on certain attributes.
 
-The `EntitySelectorArgument` constructor requires an `EntitySelector` argument to determine what type of data to return. There are 4 types of entity selections which are available:
+There are four `EntitySelectorArgument` subclasses that determine what type of data to return:
 
-- `EntitySelector.ONE_ENTITY` - A single entity, which returns a `Entity` object.
-- `EntitySelector.MANY_ENTITIES`  - A collection of many entities, which returns a `Collection<Entity>` object.
-- `EntitySelector.ONE_PLAYER` - A single player, which returns a `Player` object.
-- `EntitySelector.MANY_PLAYERS` - A collection of players, which returns a `Collection<Player>` object.
+- `EntitySelectorArgument.OneEntity` - A single entity, which returns a `Entity` object.
+- `EntitySelectorArgument.ManyEntities`  - A collection of many entities, which returns a `Collection<Entity>` object.
+- `EntitySelectorArgument.OnePlayer` - A single player, which returns a `Player` object.
+- `EntitySelectorArgument.ManyPlayers` - A collection of players, which returns a `Collection<Player>` object.
 
 The return type is the type to be cast when retrieved from the `Object[] args` in the command declaration.
 
@@ -27,7 +27,7 @@ Say we want a command to remove certain types of entities. Typically, this would
 /remove <radius>
 ```
 
-Instead, we can combine all of these into one by using the `EntitySelectorArgument`. We want to be able to target multiple entities at a time, so we want to use the `EntitySelector.MANY_ENTITIES` value in our constructor. We can simply retrieve the `Collection<Entity>` from this argument and iteratively remove each entity:
+Instead, we can combine all of these into one by using the `EntitySelectorArgument`. We want to be able to target multiple entities at a time, so we want to use the `EntitySelectorArgument.ManyEntities` constructor. We can simply retrieve the `Collection<Entity>` from this argument and iteratively remove each entity:
 
 <div class="multi-pre">
 
@@ -61,11 +61,11 @@ We could then use this to target specific entities, for example:
 
 ## Player argument
 
-The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelectorArgument`, with the `EntitySelector.ONE_PLAYER`. It returns a `Player` object and requires the player to be online.
+The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelectorArgument.OnePlayer`. It returns a `Player` object and requires the player to be online.
 
 > **Developer's Note:**
 >
-> The `PlayerArgument` internally uses the `GameProfile` class from Mojang's authlib, which means that this argument has a slight performance overhead compared to using `EntitySelector.ONE_PLAYER`
+> The `PlayerArgument` internally uses the `GameProfile` class from Mojang's authlib, which means that this argument has a slight performance overhead compared to using `EntitySelectorArgument.OnePlayer`
 
 -----
 

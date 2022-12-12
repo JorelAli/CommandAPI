@@ -213,7 +213,7 @@ fun rotationarguments() {
 /* ANCHOR: rotationarguments */
 CommandAPICommand("rotate")
     .withArguments(RotationArgument("rotation"))
-    .withArguments(EntitySelectorArgument<Entity>("target", EntitySelector.ONE_ENTITY))
+    .withArguments(EntitySelectorArgument.OneEntity("target"))
     .executes(CommandExecutor { _, args ->
         val rotation = args[0] as Rotation
         val target = args[1] as Entity
@@ -388,7 +388,7 @@ fun entityselectorarguments() {
 /* ANCHOR: entityselectorarguments */
 CommandAPICommand("remove")
     // Using a collective entity selector to select multiple entities
-    .withArguments(EntitySelectorArgument<Collection<Entity>>("entities", EntitySelector.MANY_ENTITIES))
+    .withArguments(EntitySelectorArgument.ManyEntities("entities"))
     .executes(CommandExecutor { sender, args ->
         // Parse the argument as a collection of entities (as stated above in the documentation)
         val entities = args[0] as Collection<Entity>
@@ -420,7 +420,7 @@ fun scoreholderargument() {
 /* ANCHOR: scoreholderargument */
 CommandAPICommand("reward")
     // We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
-    .withArguments(ScoreHolderArgument<Collection<String>>("players", ScoreHolderType.MULTIPLE))
+    .withArguments(ScoreHolderArgument.Multiple("players"))
     .executes(CommandExecutor { _, args ->
         // Get player names by casting to Collection<String>
         val players = args[0] as Collection<String>
@@ -735,7 +735,7 @@ CommandAPICommand("unlockrecipe")
 fun soundarguments() {
 /* ANCHOR: soundarguments */
 CommandAPICommand("sound")
-    .withArguments(SoundArgument<Sound>("sound"))
+    .withArguments(SoundArgument("sound"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         player.world.playSound(player.location, args[0] as Sound, 100.0f, 1.0f)
     })
@@ -744,7 +744,7 @@ CommandAPICommand("sound")
 
 /* ANCHOR: soundarguments2 */
 CommandAPICommand("sound")
-    .withArguments(SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY))
+    .withArguments(SoundArgument.NamespacedKey("sound"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         player.world.playSound(player.location, (args[0] as NamespacedKey).asString(), 100.0f, 1.0f)
     })
@@ -1177,7 +1177,7 @@ fun resultingcommandexecutor3(){
 /* ANCHOR: resultingcommandexecutor3 */
 // Register reward giving system for a target player
 CommandAPICommand("givereward")
-    .withArguments(EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER))
+    .withArguments(EntitySelectorArgument.OnePlayer("target"))
     .executes(CommandExecutor { _, args ->
         val player = args[0] as Player
         player.inventory.addItem(ItemStack(Material.DIAMOND, 64))
@@ -1850,7 +1850,7 @@ CommandAPICommand("spawnmob")
 fun safepotionarguments() {
 /* ANCHOR: SafePotionArguments */
 val arguments = mutableListOf<Argument<*>>()
-arguments.add(EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER))
+arguments.add(EntitySelectorArgument.OnePlayer("target"))
 arguments.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest {
     info ->
         val target = info.previousArgs()[0] as Player

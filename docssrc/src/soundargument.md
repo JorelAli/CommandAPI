@@ -4,15 +4,14 @@
 
 The `SoundArgument` class allows a command sender to retrieve the Bukkit `Sound` or `NamespacedKey` object to represent in-game sound effects (such as mob sounds or ambient sound effects), as well as in-game music.
 
-The `SoundArgument` must be parameterized over `Sound` or `NamespacedKey` to indicate whether it will return a `Sound` object or a `NamespacedKey` object. A `SoundType` can be provided to specify whether the `SoundArgument` will return a `Sound` or `NamespacedKey`. If no `SoundType` is provided, the `SoundArgument` will default to returning a `Sound` object:
+The `SoundArgument` can return a `Sound` or `NamespacedKey` object. To return a `Sound` object, simply use the `SoundArgument` as normal. To return a `NamespacedKey` object, use the `SoundArgument.NamespacedKey` constructor instead:
 
 ```java
 // Makes a SoundArgument that returns a Sound
-new SoundArgument<Sound>("sound");
-new SoundArgument<Sound>("sound", SoundType.SOUND);
+new SoundArgument("sound");
 
 // Makes a SoundArgument that returns a NamespacedKey
-new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY);
+new SoundArgument.NamespacedKey("sound");
 ```
 
 <div class="example">

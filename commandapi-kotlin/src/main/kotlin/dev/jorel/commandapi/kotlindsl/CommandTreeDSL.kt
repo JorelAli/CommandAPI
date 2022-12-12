@@ -128,7 +128,7 @@ inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, bl
 inline fun <SoundOrNamespacedKey> CommandTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): CommandTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 
 inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): CommandTree =
-	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument.Sound(nodeName).apply(block))
+	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))
 
 inline fun CommandTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(TimeArgument(nodeName).apply(block))
 inline fun CommandTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): CommandTree = then(UUIDArgument(nodeName).apply(block))
@@ -256,7 +256,7 @@ inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, b
 inline fun <SoundOrNamespacedKey> ArgumentTree.soundArgument(nodeName: String, soundType: SoundType, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(SoundArgument<SoundOrNamespacedKey>(nodeName, soundType).apply(block))
 
 inline fun ArgumentTree.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: ArgumentTree.() -> Unit = {}): ArgumentTree =
-	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument.Sound(nodeName).apply(block))
+	if (useNamespacedKey) then(SoundArgument.NamespacedKey(nodeName).apply(block)) else then(SoundArgument(nodeName).apply(block))
 
 inline fun ArgumentTree.timeArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(TimeArgument(nodeName).apply(block))
 inline fun ArgumentTree.uuidArgument(nodeName: String, block: ArgumentTree.() -> Unit = {}): ArgumentTree = then(UUIDArgument(nodeName).apply(block))
