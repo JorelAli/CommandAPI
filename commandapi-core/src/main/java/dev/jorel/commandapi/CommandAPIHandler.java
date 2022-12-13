@@ -369,8 +369,9 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Populate array
 		for (Argument<?> argument : args) {
 			if (argument.isListed()) {
-				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
-				argsMap.put(argument.getNodeName(), parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray());
+				argList.add(parsedArgument);
+				argsMap.put(argument.getNodeName(), parsedArgument);
 			}
 		}
 
