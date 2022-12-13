@@ -23,6 +23,7 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -62,6 +63,11 @@ public class CommandAPIMain extends JavaPlugin {
 		for (String commandName : CommandAPI.config.getCommandsToConvert()) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
+
+		new CommandTree("test")
+			.executesPlayer(info -> {
+				Player player = info.sender();
+			})
 	}
 
 	@Override
