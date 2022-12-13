@@ -306,11 +306,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Generate our command from executor
 		return (cmdCtx) -> {
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
-			Map<Integer, Object> arguments = argsToCommandArgs(cmdCtx, args);
-			Object[] argObjs = (Object[]) arguments.get(0);
-			Map<String, Object> argsMap = (LinkedHashMap<String, Object>) arguments.get(1);
+			CommandArguments arguments = argsToCommandArgs(cmdCtx, args);
+			Object[] argObjs = arguments.args();
 
-			ExecutionInfo<CommandSender> executionInfo = new ExecutionInfo<>(sender, new CommandArguments(argObjs, argsMap));
+			ExecutionInfo<CommandSender> executionInfo = new ExecutionInfo<>(sender, arguments);
 			if (converted) {
 				int resultValue = 0;
 
