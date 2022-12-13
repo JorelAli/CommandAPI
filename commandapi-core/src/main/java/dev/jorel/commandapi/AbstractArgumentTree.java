@@ -21,6 +21,7 @@ public abstract class AbstractArgumentTree<Impl extends AbstractArgumentTree<Imp
 	 * Instantiates an {@link AbstractArgumentTree}. This can only be called if the class
 	 * that extends this is an {@link AbstractArgument}
 	 */
+	@SuppressWarnings("unchecked")
 	protected AbstractArgumentTree() {
 		if (this instanceof AbstractArgument<?, ?, Argument, CommandSender>) {
 			this.argument = (Argument) this;

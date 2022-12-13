@@ -26,6 +26,7 @@ import dev.jorel.commandapi.arguments.AbstractArgument;
  * An exception caused when a greedy argument is not declared at the end of a
  * List
  */
+@SuppressWarnings("serial")
 public class GreedyArgumentException extends RuntimeException {
 	/**
 	 * Creates a GreedyArgumentException

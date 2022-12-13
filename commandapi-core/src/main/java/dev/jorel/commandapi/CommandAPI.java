@@ -212,6 +212,7 @@ public class CommandAPI {
 	 * @param player the player whose requirements should be updated
 	 */
 	public static <CommandSender, Player extends CommandSender> void updateRequirements(Player player) {
+		@SuppressWarnings("unchecked")
 		CommandAPIPlatform<?, CommandSender, ?> platform = (CommandAPIPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		platform.updateRequirements((AbstractPlayer<?>) platform.wrapCommandSender(player));
 	}

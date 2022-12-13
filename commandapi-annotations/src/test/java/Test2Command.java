@@ -40,9 +40,7 @@ import dev.jorel.commandapi.annotations.arguments.ALocationArgument;
 import dev.jorel.commandapi.annotations.arguments.ALongArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument;
-import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /* ANCHOR: teleport_command */
 @Command("teleport")    
@@ -112,13 +110,14 @@ public static void command(CommandSender sender,
 /* ANCHOR_END: literal_arguments */
 
 
+// TODO: EntitySelectorArgument and ScoreHolder argument have changed - these need updating in the documentation
 /* ANCHOR: other_arguments */
 @Default
 public static void command(CommandSender sender, 
     @ALocationArgument(LocationType.BLOCK_POSITION) Location location,
     @ALocation2DArgument(LocationType.PRECISE_POSITION) Location location2d,
-    @AEntitySelectorArgument(EntitySelector.MANY_ENTITIES) Collection<Entity> entities,
-    @AScoreHolderArgument(ScoreHolderType.MULTIPLE) Collection<String> scoreHolders
+    @AEntitySelectorArgument.ManyEntities Collection<Entity> entities,
+    @AScoreHolderArgument.Multiple Collection<String> scoreHolders
 ) {
     // Command implementation here
 }

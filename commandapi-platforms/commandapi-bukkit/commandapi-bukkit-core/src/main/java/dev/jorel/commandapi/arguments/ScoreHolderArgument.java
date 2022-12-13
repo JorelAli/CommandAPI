@@ -29,74 +29,36 @@ import java.util.Collection;
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
  */
-public class ScoreHolderArgument<T> extends Argument<T> {
-		
-	private final boolean single;
-	
-	/**
-	 * A Score Holder argument. Represents a single score holder or a collection of score holders.
-	 * Defaults to using {@link ScoreHolderType#SINGLE}
-	 * @param nodeName the name of the node for this argument
-	 */
-	public ScoreHolderArgument(String nodeName) {
-		this(nodeName, ScoreHolderType.SINGLE);
-	}
-	
-	/**
-	 * A Score Holder argument. Represents a single score holder or a collection of score holders
-	 * @param nodeName the name of the node for this argument
-	 * @param type whether this argument represents a single score holder or a collection of score holders
-	 * @deprecated Use {@code ScoreHolderArgument.}{@link Single} or {@code ScoreHolderArgument.}{@link Multiple} instead
-	 */
-	@Deprecated(forRemoval = true, since = "8.7.0")
-	public ScoreHolderArgument(String nodeName, ScoreHolderType type) {
-		super(nodeName, CommandAPIBukkit.get()._ArgumentScoreholder(ArgumentSubType.SCOREHOLDER_SINGLE));
-		single = (type == ScoreHolderType.SINGLE);
-	}
-	
-	/**
-	 * Returns whether this argument represents a single score holder or a collection of score holders
-	 * @return true if this argument represents a single score holder
-	 */
-	public boolean isSingle() {
-		return this.single;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public Class<T> getPrimitiveType() {
-		return (Class<T>) (single ? String.class : Collection.class);
-	}
-	
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.SCORE_HOLDER;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return (T) (single ?
-			CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderSingle(cmdCtx, key) :
-			CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderMultiple(cmdCtx, key));
-	}
-
-
+public class ScoreHolderArgument {
 
 	/**
 	 * An argument that represents a scoreholder's name
 	 *
 	 * @apiNote Returns a {@link String} object
 	 */
-	// For feature parity, ScoreHolderArgument.Single() is equivalent to ScoreHolderArgument()
-	public static class Single extends ScoreHolderArgument<Object> {
+	public static class Single extends Argument<String> {
 
 		/**
 		 * A Score Holder argument. Represents a single score holder
 		 * @param nodeName the name of the node for this argument
 		 */
 		public Single(String nodeName) {
-			super(nodeName);
+			super(nodeName, CommandAPIBukkit.get()._ArgumentScoreholder(ArgumentSubType.SCOREHOLDER_SINGLE));
+		}
+
+		@Override
+		public Class<String> getPrimitiveType() {
+			return String.class;
+		}
+
+		@Override
+		public CommandAPIArgumentType getArgumentType() {
+			return CommandAPIArgumentType.SCORE_HOLDER;
+		}
+
+		@Override
+		public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+			return CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderSingle(cmdCtx, key);
 		}
 
 	}
@@ -132,22 +94,5 @@ public class ScoreHolderArgument<T> extends Argument<T> {
 			return CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderMultiple(cmdCtx, key);
 		}
 
-	}
-
-	/**
-	 * An enum specifying whether a score holder consists of a single score holder or a collection of score holders
-	 * @deprecated
-	 */
-	@Deprecated(forRemoval = true, since = "8.7.0")
-	public static enum ScoreHolderType {
-		/**
-		 * A single score holder name
-		 */
-		SINGLE, 
-		
-		/**
-		 * A collection of score holder names
-		 */
-		MULTIPLE;
 	}
 }

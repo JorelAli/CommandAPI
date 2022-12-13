@@ -1,44 +1,45 @@
 package dev.jorel.commandapi.nms;
 
-import com.mojang.brigadier.Message;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.exceptions.AngleArgumentException;
-import dev.jorel.commandapi.exceptions.BiomeArgumentException;
-import dev.jorel.commandapi.exceptions.TimeArgumentException;
-import dev.jorel.commandapi.exceptions.UUIDArgumentException;
-import dev.jorel.commandapi.preprocessor.Differs;
-import dev.jorel.commandapi.preprocessor.NMSMeta;
-import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.Rotation;
-import dev.jorel.commandapi.wrappers.*;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_13_R2.*;
-import net.minecraft.server.v1_13_R2.CriterionConditionValue.c;
-import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
-import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import java.io.File;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import org.bukkit.Axis;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
-import org.bukkit.*;
-import org.bukkit.World;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.*;
-import org.bukkit.craftbukkit.v1_13_R2.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_13_R2.CraftLootTable;
+import org.bukkit.craftbukkit.v1_13_R2.CraftParticle;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftSound;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_13_R2.command.CraftBlockCommandSender;
 import org.bukkit.craftbukkit.v1_13_R2.command.ProxiedNativeCommandSender;
@@ -59,13 +60,98 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.File;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
+import com.mojang.brigadier.Message;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
+
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.exceptions.UnimplementedArgumentException;
+import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.preprocessor.NMSMeta;
+import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.FunctionWrapper;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.Location2D;
+import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.Rotation;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.v1_13_R2.Advancement;
+import net.minecraft.server.v1_13_R2.ArgumentBlockPredicate;
+import net.minecraft.server.v1_13_R2.ArgumentChat;
+import net.minecraft.server.v1_13_R2.ArgumentChatComponent;
+import net.minecraft.server.v1_13_R2.ArgumentChatFormat;
+import net.minecraft.server.v1_13_R2.ArgumentCriterionValue;
+import net.minecraft.server.v1_13_R2.ArgumentDimension;
+import net.minecraft.server.v1_13_R2.ArgumentEnchantment;
+import net.minecraft.server.v1_13_R2.ArgumentEntity;
+import net.minecraft.server.v1_13_R2.ArgumentEntitySummon;
+import net.minecraft.server.v1_13_R2.ArgumentItemPredicate;
+import net.minecraft.server.v1_13_R2.ArgumentItemStack;
+import net.minecraft.server.v1_13_R2.ArgumentMathOperation;
+import net.minecraft.server.v1_13_R2.ArgumentMinecraftKeyRegistered;
+import net.minecraft.server.v1_13_R2.ArgumentMobEffect;
+import net.minecraft.server.v1_13_R2.ArgumentNBTTag;
+import net.minecraft.server.v1_13_R2.ArgumentParticle;
+import net.minecraft.server.v1_13_R2.ArgumentPosition;
+import net.minecraft.server.v1_13_R2.ArgumentProfile;
+import net.minecraft.server.v1_13_R2.ArgumentRotation;
+import net.minecraft.server.v1_13_R2.ArgumentRotationAxis;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardCriteria;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardObjective;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardSlot;
+import net.minecraft.server.v1_13_R2.ArgumentScoreboardTeam;
+import net.minecraft.server.v1_13_R2.ArgumentScoreholder;
+import net.minecraft.server.v1_13_R2.ArgumentTag;
+import net.minecraft.server.v1_13_R2.ArgumentTile;
+import net.minecraft.server.v1_13_R2.ArgumentVec2;
+import net.minecraft.server.v1_13_R2.ArgumentVec2I;
+import net.minecraft.server.v1_13_R2.ArgumentVec3;
+import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
+import net.minecraft.server.v1_13_R2.CompletionProviders;
+import net.minecraft.server.v1_13_R2.CriterionConditionValue;
+import net.minecraft.server.v1_13_R2.CriterionConditionValue.c;
+import net.minecraft.server.v1_13_R2.CustomFunction;
+import net.minecraft.server.v1_13_R2.CustomFunctionData;
+import net.minecraft.server.v1_13_R2.DedicatedServer;
+import net.minecraft.server.v1_13_R2.DimensionManager;
+import net.minecraft.server.v1_13_R2.Entity;
+import net.minecraft.server.v1_13_R2.EntityPlayer;
+import net.minecraft.server.v1_13_R2.EntitySelector;
+import net.minecraft.server.v1_13_R2.EnumDirection.EnumAxis;
+import net.minecraft.server.v1_13_R2.IBlockData;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_13_R2.ICompletionProvider;
+import net.minecraft.server.v1_13_R2.IRegistry;
+import net.minecraft.server.v1_13_R2.ItemStack;
+import net.minecraft.server.v1_13_R2.LootTable;
+import net.minecraft.server.v1_13_R2.LootTableRegistry;
+import net.minecraft.server.v1_13_R2.MinecraftKey;
+import net.minecraft.server.v1_13_R2.MinecraftServer;
+import net.minecraft.server.v1_13_R2.ParticleParam;
+import net.minecraft.server.v1_13_R2.ParticleParamBlock;
+import net.minecraft.server.v1_13_R2.ParticleParamItem;
+import net.minecraft.server.v1_13_R2.ParticleParamRedstone;
+import net.minecraft.server.v1_13_R2.ShapeDetectorBlock;
+import net.minecraft.server.v1_13_R2.Vec2F;
+import net.minecraft.server.v1_13_R2.Vec3D;
 
 /**
  * NMS implementation for Minecraft 1.13.1
@@ -123,7 +209,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
-		throw new AngleArgumentException();
+		throw new UnimplementedArgumentException("AngleArgument", "1.16.2");
 	}
 
 	@Override
@@ -286,7 +372,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
-		throw new BiomeArgumentException();
+		throw new UnimplementedArgumentException("BiomeArgument", "1.16");
 	}
 
 	@Override
@@ -296,12 +382,12 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public ArgumentType<?> _ArgumentTime() {
-		throw new TimeArgumentException();
+		throw new UnimplementedArgumentException("TimeArgument", "1.14");
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentUUID() {
-		throw new UUIDArgumentException();
+		throw new UnimplementedArgumentException("UUIDArgument", "1.16");
 	}
 
 	@Override
@@ -386,7 +472,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		throw new AngleArgumentException();
+		throw new UnimplementedArgumentException("AngleArgument", "1.16.2");
 	}
 
 	@Override
@@ -405,7 +491,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		throw new BiomeArgumentException();
+		throw new UnimplementedArgumentException("BiomeArgument", "1.16");
 	}
 
 	@Override
@@ -835,12 +921,12 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		throw new TimeArgumentException();
+		throw new UnimplementedArgumentException("TimeArgument", "1.14");
 	}
 
 	@Override
 	public UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		throw new UUIDArgumentException();
+		throw new UnimplementedArgumentException("UUIDArgument", "1.16");
 	}
 
 	@Override

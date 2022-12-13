@@ -83,6 +83,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 		instance = this;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <Source> CommandAPIBukkit<Source> get() {
 		return (CommandAPIBukkit<Source>) instance;
 	}

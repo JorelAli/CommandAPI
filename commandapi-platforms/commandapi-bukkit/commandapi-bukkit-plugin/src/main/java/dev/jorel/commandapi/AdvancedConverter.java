@@ -20,20 +20,69 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import dev.jorel.commandapi.arguments.*;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
-import dev.jorel.commandapi.exceptions.InvalidNumberException;
-import dev.jorel.commandapi.exceptions.UnknownArgumentException;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AdventureChatArgument;
+import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
+import dev.jorel.commandapi.arguments.AngleArgument;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.AxisArgument;
+import dev.jorel.commandapi.arguments.BiomeArgument;
+import dev.jorel.commandapi.arguments.BlockPredicateArgument;
+import dev.jorel.commandapi.arguments.BlockStateArgument;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatArgument;
+import dev.jorel.commandapi.arguments.ChatColorArgument;
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
+import dev.jorel.commandapi.arguments.CommandArgument;
+import dev.jorel.commandapi.arguments.DoubleArgument;
+import dev.jorel.commandapi.arguments.EnchantmentArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.EntityTypeArgument;
+import dev.jorel.commandapi.arguments.EnvironmentArgument;
+import dev.jorel.commandapi.arguments.FloatArgument;
+import dev.jorel.commandapi.arguments.FloatRangeArgument;
+import dev.jorel.commandapi.arguments.FunctionArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.IntegerRangeArgument;
+import dev.jorel.commandapi.arguments.ItemStackArgument;
+import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+import dev.jorel.commandapi.arguments.Location2DArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.LongArgument;
+import dev.jorel.commandapi.arguments.LootTableArgument;
+import dev.jorel.commandapi.arguments.MathOperationArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.NBTCompoundArgument;
+import dev.jorel.commandapi.arguments.NamespacedKeyArgument;
+import dev.jorel.commandapi.arguments.ObjectiveArgument;
+import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
+import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
+import dev.jorel.commandapi.arguments.ParticleArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
+import dev.jorel.commandapi.arguments.RecipeArgument;
+import dev.jorel.commandapi.arguments.RotationArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
+import dev.jorel.commandapi.arguments.SoundArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.TeamArgument;
+import dev.jorel.commandapi.arguments.TextArgument;
+import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.arguments.UUIDArgument;
+import dev.jorel.commandapi.exceptions.InvalidNumberException;
+import dev.jorel.commandapi.exceptions.UnknownArgumentException;
 
 /**
  * A command parsing system that converts string arguments into something way
@@ -198,9 +247,9 @@ class AdvancedConverter {
 			case CHAT_COMPONENT -> new ChatComponentArgument(nodeName);
 			case COMMAND -> new CommandArgument(nodeName);
 			case ENCHANTMENT -> new EnchantmentArgument(nodeName);
-			case ENTITY_SELECTOR -> new EntitySelectorArgument<Entity>(nodeName, EntitySelector.ONE_ENTITY);
+			case ENTITY_SELECTOR -> new EntitySelectorArgument.OneEntity(nodeName);
 			case ENTITY_TYPE -> new EntityTypeArgument(nodeName);
-			case ENVIRONMENT -> new EnvironmentArgument(nodeName);
+			// Byeeeeeeee~ case ENVIRONMENT -> new EnvironmentArgument(nodeName);
 			case FLOAT_RANGE -> new FloatRangeArgument(nodeName);
 			case FUNCTION -> new FunctionArgument(nodeName);
 			case INT_RANGE -> new IntegerRangeArgument(nodeName);
@@ -221,7 +270,7 @@ class AdvancedConverter {
 			case RECIPE -> new RecipeArgument(nodeName);
 			case ROTATION -> new RotationArgument(nodeName);
 			case SCOREBOARD_SLOT -> new ScoreboardSlotArgument(nodeName);
-			case SCORE_HOLDER -> new ScoreHolderArgument<String>(nodeName, ScoreHolderType.SINGLE);
+			case SCORE_HOLDER -> new ScoreHolderArgument.Single(nodeName);
 			case SOUND -> new SoundArgument(nodeName);
 			case TEAM -> new TeamArgument(nodeName);
 			case TIME -> new TimeArgument(nodeName);
@@ -257,10 +306,10 @@ class AdvancedConverter {
 			} else {
 				// We have a few edge cases to handle
 				return switch (argumentType) {
-					case "api:entity" -> new EntitySelectorArgument<Entity>(nodeName, EntitySelector.ONE_ENTITY);
-					case "api:entities" -> new EntitySelectorArgument<Collection<Entity>>(nodeName, EntitySelector.MANY_ENTITIES);
-					case "api:player" -> new EntitySelectorArgument<Player>(nodeName, EntitySelector.ONE_PLAYER);
-					case "api:players" -> new EntitySelectorArgument<Collection<Player>>(nodeName, EntitySelector.MANY_PLAYERS);
+					case "api:entity" -> new EntitySelectorArgument.OneEntity(nodeName);
+					case "api:entities" -> new EntitySelectorArgument.ManyEntities(nodeName);
+					case "api:player" -> new EntitySelectorArgument.OnePlayer(nodeName);
+					case "api:players" -> new EntitySelectorArgument.ManyPlayers(nodeName);
 					case "minecraft:vec3" -> new LocationArgument(nodeName, LocationType.PRECISE_POSITION);
 					case "minecraft:vec2" -> new Location2DArgument(nodeName, LocationType.PRECISE_POSITION);
 					default -> parseDefinedArgumentType(argumentType, nodeName);

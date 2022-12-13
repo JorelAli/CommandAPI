@@ -25,6 +25,7 @@ public class Execution<CommandSender, Argument extends AbstractArgument<?, ?, Ar
 	 * @param meta The metadata to register the command with
 	 */
 	public void register(CommandMetaData<CommandSender> meta) {
+		@SuppressWarnings("unchecked")
 		CommandAPIPlatform<Argument, CommandSender, ?> platform = (CommandAPIPlatform<Argument, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		AbstractCommandAPICommand<?, Argument, CommandSender> command = platform.newConcreteCommandAPICommand(meta);
 		command.withArguments(arguments);

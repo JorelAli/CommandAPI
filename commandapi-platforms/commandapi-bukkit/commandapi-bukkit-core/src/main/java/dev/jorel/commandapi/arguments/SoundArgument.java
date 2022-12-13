@@ -20,14 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.Sound;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.jorel.commandapi.CommandAPIBukkit;
 
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<org.bukkit.Sound, org.bukkit.Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
@@ -38,8 +41,8 @@ public class SoundArgument extends SafeOverrideableArgument<org.bukkit.Sound, or
 	}
 
 	@Override
-	public Class<org.bukkit.Sound> getPrimitiveType() {
-		return org.bukkit.Sound.class;
+	public Class<Sound> getPrimitiveType() {
+		return Sound.class;
 	}
 
 	@Override
@@ -53,8 +56,8 @@ public class SoundArgument extends SafeOverrideableArgument<org.bukkit.Sound, or
 	}
 	
 	@Override
-	public <CommandSourceStack> org.bukkit.Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return (org.bukkit.Sound) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_SOUND);
+	public <CommandSourceStack> Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return (Sound) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_SOUND);
 	}
 
 	/**

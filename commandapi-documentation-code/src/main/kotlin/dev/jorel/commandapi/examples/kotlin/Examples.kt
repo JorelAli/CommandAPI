@@ -12,7 +12,6 @@ import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
 import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.wrappers.*
@@ -384,7 +383,7 @@ CommandAPICommand("spawnmob")
 fun scoreholderargument() {
 /* ANCHOR: scoreholderargument */
 CommandAPICommand("reward")
-    // We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
+    // We want multiple players, so we use the ScoreHolderArgument.Multiple constructor
     .withArguments(ScoreHolderArgument.Multiple("players"))
     .executes(CommandExecutor { _, args ->
         // Get player names by casting to Collection<String>
