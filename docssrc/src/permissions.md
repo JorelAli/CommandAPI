@@ -117,3 +117,145 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 > As you can see, there are multiple ways of applying permissions to commands with arguments. In the `/god` command shown above, the permission was applied to the whole command. In the `/kill` command shown above, the permission was applied to the argument.
 >
 > There's not really much difference between the two methods, but I personally would use _argument permissions_ as it has greater control over arguments.
+
+## Child Base Permissions
+### Example - /economy command with argument permissions
+
+For example, say we're registering a command `/economy`:
+
+```mccmd
+/economy                         - shows your own balance
+/economy <target>                - shows you another players balance
+/economy give  <target> <amount> - gives the target a set amount of money
+/economy reset <target> <amount> - resets the targets balance
+```
+
+We first declare the command as normal. Nothing fancy is going on here:
+```java
+// /economy
+new CommandAPICommand("economy")
+  .withPermission("economy.self") // The important part of this example
+  .executesPlayer((player, objects) -> { 
+    player.sendMessage(getBalance(player))
+  })
+  .register();
+
+// /economy <target>
+new CommandAPICommand("economy")
+  .withPermission("economy.other") // The important part of this example
+  .withArguments(new PlayerArgument("target"))
+  .executesPlayer((player, objects) -> { 
+    player.sendMessage(getBalance((Player) objects[0]))
+  })
+  .register();
+
+// /economy give <target> <amount>
+new CommandAPICommand("economy")
+  .withPermission("economy.admin.give") // The important part of this example
+  .withArguments(new PlayerArgument("target"))
+  .withArguments(new DoubleArgument("amount"))
+  .executesPlayer((player, objects) -> { 
+    updatePlayerBalance((Player) objects[0], (Double) objects[1])
+  })
+  .register();
+
+// /economy reset <target>
+new CommandAPICommand("economy")
+  .withPermission("economy.admin.reset") // The important part of this example
+  .withArguments(new PlayerArgument("target"))
+  .executesPlayer((player, objects) -> { 
+    resetPlayerBalance((Player) objects[0])
+  })
+  .register();
+}
+```
+in our **plugin.yml** we can also setup our permissions for example...
+
+```yml
+permissions:
+  economy.*:
+    description: Gives the user full access to the economy commands
+    children:
+      economy.other: true
+      economy.admin.*: true
+
+  economy:
+    description: Allows the user to view their own balance
+  economy.other:
+    description: Allows the user to another players balance
+    children:
+      economy: true
+
+  economy.admin.*:
+    description: Gives the user access to all of the admin commands
+    children:
+      economy.admin.give: true
+      economy.admin.reset: true
+  economy.admin.give:
+    description: Gives the user access to /economy give <target> <amount>
+  economy.admin.reset:
+    description: Gives the user access to /economy reset <target>
+```
+
+this setup of childeren allows us to give a player less permissions, but have them access more features. 
+since `economy.*` inherits `economy.admin.*` which inherits `economy.admin.give`, a player with the permission `economny.*` will be able to execute `/economy give <target> <amount>` without them directly having the `economy.admin.give` permission node
+
+this also works with `economy.other`, if a player has `economy.other` they will **inherit** `economy`
+
+> **Developer's Note:**
+>
+> An example of what this command may look like without the usage of the plugin.yml is:
+> The compexity of the example below can massively increase with more and more permissions. 
+```java
+// /economy
+new CommandAPICommand("economy")
+  .withRequirement(sender ->
+    sender.hasPermission("economy.*") ||
+    sender.hasPermission("economy.other") ||
+    sender.hasPermission("economy")
+  )
+  .executesPlayer((player, objects) -> { 
+    player.sendMessage(getBalance(player))
+  })
+  .register();
+
+// /economy <target>
+new CommandAPICommand("economy")
+  .withRequirement(sender ->
+    sender.hasPermission("economy.*") ||
+    sender.hasPermission("economy.other") ||
+  )
+  .withArguments(new PlayerArgument("target"))
+  .executesPlayer((player, objects) -> { 
+    player.sendMessage(getBalance((Player) objects[0]))
+  })
+  .register();
+
+// /economy give <target> <amount>
+new CommandAPICommand("economy")
+  .withRequirement(sender ->
+    sender.hasPermission("economy.*") ||
+    sender.hasPermission("economy.admin.*") ||
+    sender.hasPermission("economy.admin.give")
+  )
+  .withArguments(new PlayerArgument("target"))
+  .withArguments(new DoubleArgument("amount"))
+  .executesPlayer((player, objects) -> { 
+    updatePlayerBalance((Player) objects[0], (Double) objects[1])
+  })
+  .register();
+
+// /economy reset <target>
+new CommandAPICommand("economy")
+  .withRequirement(sender ->
+    sender.hasPermission("economy.*") ||
+    sender.hasPermission("economy.admin.*") ||
+    sender.hasPermission("economy.admin.reset")
+  )
+  .withArguments(new PlayerArgument("target"))
+  .executesPlayer((player, objects) -> { 
+    resetPlayerBalance((Player) objects[0])
+  })
+  .register();
+}
+```
