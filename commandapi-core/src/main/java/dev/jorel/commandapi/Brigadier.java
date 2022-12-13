@@ -187,7 +187,7 @@ public final class Brigadier {
 	 * @throws CommandSyntaxException if there was an error during parsing
 	 */
 	public static Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
-		return (Object[]) CommandAPIHandler.getInstance().argsToObjectArr(cmdCtx, args.toArray(new Argument[0])).get(0);
+		return (Object[]) CommandAPIHandler.getInstance().argsToCommandArgs(cmdCtx, args.toArray(new Argument[0])).get(0);
 	}
 
 	/**

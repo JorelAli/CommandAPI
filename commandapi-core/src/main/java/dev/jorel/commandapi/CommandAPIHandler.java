@@ -306,7 +306,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// Generate our command from executor
 		return (cmdCtx) -> {
 			CommandSender sender = NMS.getSenderForCommand(cmdCtx, executor.isForceNative());
-			Map<Integer, Object> arguments = argsToObjectArr(cmdCtx, args);
+			Map<Integer, Object> arguments = argsToCommandArgs(cmdCtx, args);
 			Object[] argObjs = (Object[]) arguments.get(0);
 			Map<String, Object> argsMap = (LinkedHashMap<String, Object>) arguments.get(1);
 
@@ -355,10 +355,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * 
 	 * @param cmdCtx the command context that will execute this command
 	 * @param args   the map of strings to arguments
-	 * @return an Object[] which can be used in (sender, args) ->
+	 * @return an CommandArguments object which can be used in (sender, args) ->
 	 * @throws CommandSyntaxException
 	 */
-	Map<Integer, Object> argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument<?>[] args)
+	CommandArguments argsToCommandArgs(CommandContext<CommandSourceStack> cmdCtx, Argument<?>[] args)
 			throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
@@ -375,10 +375,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 		}
 
-		Map<Integer, Object> arguments = new HashMap<>();
-		arguments.put(0, argList.toArray());
-		arguments.put(1, argsMap);
-		return arguments;
+		return new CommandArguments(argList.toArray(), argsMap);
 	}
 
 	/**
