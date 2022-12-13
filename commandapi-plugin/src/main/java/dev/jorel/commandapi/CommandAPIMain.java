@@ -63,11 +63,6 @@ public class CommandAPIMain extends JavaPlugin {
 		for (String commandName : CommandAPI.config.getCommandsToConvert()) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
-
-		new CommandTree("test")
-			.executesPlayer(info -> {
-				Player player = info.sender();
-			})
 	}
 
 	@Override
