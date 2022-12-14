@@ -1127,7 +1127,7 @@ new CommandAPICommand("economy")
 new CommandAPICommand("economy")
     .withRequirement(sender ->
         sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.other") ||
+        sender.hasPermission("economy.other")
     )
     .withArguments(new PlayerArgument("target"))
     .executesPlayer((player, objects) -> {
