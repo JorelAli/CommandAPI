@@ -15,6 +15,7 @@ import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
 import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.wrappers.*
+import dev.jorel.commandapi.wrappers.Rotation
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
@@ -993,22 +994,19 @@ CommandAPICommand("kill")
 }
 
 fun permissions3_2() {
-/* ANCHOR: permissions3_2 */
+	/* ANCHOR: permissions3_2 */
 // Adds the OP permission to the "target" argument. The sender requires OP to execute /kill <target>
-CommandAPICommand("kill")
-    .withArguments(PlayerArgument("target").withPermission(CommandPermission.OP))
-    .executesPlayer(PlayerCommandExecutor { _, args ->
-        (args[0] as Player).setHealth(0.0)
-    })
-    .register()
-/* ANCHOR_END: permissions3_2 */
+	CommandAPICommand("kill")
+		.withArguments(PlayerArgument("target").withPermission(CommandPermission.OP))
+		.executesPlayer(PlayerCommandExecutor { _, args ->
+			(args[0] as Player).setHealth(0.0)
+		})
+		.register()
+	/* ANCHOR_END: permissions3_2 */
 }
 
 fun permissions4_1() {
-	/* ANCHOR: permissions4 */
-	// /economy - requires the permission "economy.self" to exectue
-
-	/* ANCHOR: permissions4 */
+/* ANCHOR: permissions4_1 */
 // /economy - requires the permission "economy.self" to exectue
 CommandAPICommand("economy")
 	.withPermission("economy.self") // The important part of this example
@@ -1016,8 +1014,6 @@ CommandAPICommand("economy")
 		// send the executor their own balance here.
 	}
 	.register()
-
-// /economy <target> - requires the permission "economy.other" to execute
 
 // /economy <target> - requires the permission "economy.other" to execute
 CommandAPICommand("economy")
@@ -1028,8 +1024,6 @@ CommandAPICommand("economy")
 		// send the executor the targets balance here.
 	}
 	.register()
-
-// /economy give <target> <amount> - requires the permission "economy.admin.give" to execute
 
 // /economy give <target> <amount> - requires the permission "economy.admin.give" to execute
 CommandAPICommand("economy")
@@ -1113,7 +1107,7 @@ CommandAPICommand("economy")
 		// reset the targets balance here
 	}
 	.register()
-/* ANCHOR_END: permissions4_1 */
+	/* ANCHOR_END: permissions4_2 */
 }
 
 fun aliases() {
@@ -1873,7 +1867,7 @@ getServer().addRecipe(emeraldSwordRecipe)
 // Safely override with the recipe we've defined
 val arguments = listOf<Argument<*>>(
     RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest {
-        arrayOf(emeraldSwordRecipe /* Other recipes here */)
+        arrayOf(emeraldSwordRecipe, /* Other recipes here */)
     })
 )
 
