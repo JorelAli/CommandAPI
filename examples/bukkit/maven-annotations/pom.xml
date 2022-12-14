@@ -66,8 +66,7 @@
 							<version>8.5.1</version>
 						</path>
 					</annotationProcessorPaths>
-					<source>8</source>
-					<target>8</target>
+					<release>16</release>
 				</configuration>
 			</plugin>
 		</plugins>
