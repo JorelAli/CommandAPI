@@ -62,11 +62,10 @@
 						<path>
 							<groupId>dev.jorel</groupId>
 							<artifactId>commandapi-annotations</artifactId>
-							<version>8.5.1</version>
+							<version>9.0.0-SNAPSHOT</version>
 						</path>
 					</annotationProcessorPaths>
-					<source>16</source>
-					<target>16</target>
+					<release>16</release>
 				</configuration>
 			</plugin>
 			<!-- Add necessary classes into our plugin jar -->

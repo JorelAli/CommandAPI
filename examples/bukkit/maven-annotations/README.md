@@ -34,7 +34,7 @@ Key points:
                     <path>
                         <groupId>dev.jorel</groupId>
                         <artifactId>commandapi-annotations</artifactId>
-                        <version>8.5.1</version>
+                        <version>9.0.0-SNAPSHOT</version>
                     </path>
                 </annotationProcessorPaths>
             </configuration>
