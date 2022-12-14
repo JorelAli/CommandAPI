@@ -1,7 +1,6 @@
 package dev.jorel.commandapi.executors;
 
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import org.bukkit.command.CommandSender;
 
 /**
  * This record represents a BukkitExecutionInfo for a command. It provides the sender of a command, as well as it's arguments
