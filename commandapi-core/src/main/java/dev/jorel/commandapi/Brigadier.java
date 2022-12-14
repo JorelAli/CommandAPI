@@ -193,7 +193,7 @@ public final class Brigadier {
 	 */
 	public static <Argument extends AbstractArgument<?, ?, Argument, ?>> Object[] parseArguments(CommandContext cmdCtx, List<Argument> args) throws CommandSyntaxException {
 		CommandAPIHandler<Argument, ?, ?> handler = (CommandAPIHandler<Argument, ?, ?>) CommandAPIHandler.getInstance();
-		return handler.argsToObjectArr(cmdCtx, (Argument[]) args.toArray(AbstractArgument[]::new)).args();
+		return handler.argsToCommandArgs(cmdCtx, (Argument[]) args.toArray(AbstractArgument[]::new)).args();
 	}
 
 	/**
