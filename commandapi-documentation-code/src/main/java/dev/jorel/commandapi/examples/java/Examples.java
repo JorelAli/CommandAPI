@@ -1064,6 +1064,51 @@ new CommandAPICommand("kill")
 /* ANCHOR_END: permissions3_2 */
 }
 
+
+{
+/* ANCHOR: permissions4 */
+// /economy - requires the permission "economy.self" to execute
+new CommandAPICommand("economy")
+    .withPermission("economy.self") // The important part of this example
+    .executesPlayer((player, args) -> {
+        // send the executor their own balance here.
+    })
+    .register();
+
+// /economy <target> - requires the permission "economy.other" to execute
+new CommandAPICommand("economy")
+    .withPermission("economy.other") // The important part of this example
+    .withArguments(new PlayerArgument("target"))
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args[0];
+        // Send executor, the targets balance here.
+    })
+    .register();
+
+// /economy give <target> <amount> - requires the permission "economy.admin.give" to execute
+new CommandAPICommand("economy")
+    .withPermission("economy.admin.give") // The important part of this example
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new DoubleArgument("amount"))
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args[0];
+        double amount = (Double) args[1];
+        // Update player balance here
+    })
+    .register();
+
+// /economy reset <target> - requires the permission "economy.admin.reset" to execute
+new CommandAPICommand("economy")
+    .withPermission("economy.admin.reset") // The important part of this example
+    .withArguments(new PlayerArgument("target"))
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args[0];
+        // Reset target balance here
+    })
+    .register();
+/* ANCHOR_END: permissions4 */
+}
+
 {
 /* ANCHOR: aliases */
 new CommandAPICommand("getpos")
