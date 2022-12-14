@@ -1166,7 +1166,7 @@ CommandAPICommand("getfruit")
             // Do something with inputFruit
         } else {
             // The sender's input is not in the list of fruit
-            throw CommandAPI.fail("That fruit doesn't exist!")
+            throw CommandAPI.failWithString("That fruit doesn't exist!")
         }
     })
     .register()
