@@ -1012,7 +1012,7 @@ CommandAPICommand("economy")
     .withPermission("economy.self")
     .executesPlayer(PlayerCommandExecutor { player, _ ->
         // send the executor their own balance here.
-	})
+    })
     .register()
 
 // /economy <target> - requires the permission "economy.other" to execute

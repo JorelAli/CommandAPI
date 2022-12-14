@@ -128,7 +128,7 @@ When the CommandAPI checks if our player has a permission, Bukkit considers if t
 This not only keeps permissions easier to manage, it also makes your code cleaner and gives you a nice place to lay out all of your permissions,
 detailing what they do and what other permissions inherit them.
 
-### Example - /economy command with argument permissions
+### Example - /economy command with argument permissions:
 
 For example, say we're registering a command `/economy`
 

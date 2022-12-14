@@ -1081,7 +1081,7 @@ new CommandAPICommand("economy")
     .withArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
         Player target = (Player) args[0];
-    // Send executor, the targets balance here.
+        // Send executor, the targets balance here.
     })
     .register();
 
