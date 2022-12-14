@@ -1058,7 +1058,7 @@ CommandAPICommand("economy")
         sender.hasPermission("economy.other") ||
         sender.hasPermission("economy")
     }
-    .executesPlayer { player, objects ->
+    .executesPlayer { player, args ->
         // send the executor their own balance here
     }
     .register()
@@ -1070,7 +1070,7 @@ CommandAPICommand("economy")
         sender.hasPermission("economy.other")
     }
     .withArguments(PlayerArgument("target"))
-    .executesPlayer { player, objects ->
+    .executesPlayer { player, args ->
         val target = args.get(0) as Player
         // send the executor the targets balance here
     }
@@ -1085,7 +1085,7 @@ CommandAPICommand("economy")
     }
     .withArguments(PlayerArgument("target"))
     .withArguments(DoubleArgument("amount"))
-    .executesPlayer { player, objects ->
+    .executesPlayer { player, args ->
         val target = args.get(0) as Player
         val amount = args.get(1) as Double
         // update the targets balance here
@@ -1100,7 +1100,7 @@ CommandAPICommand("economy")
         sender.hasPermission("economy.admin.reset")
     }
     .withArguments(PlayerArgument("target"))
-    .executesPlayer { player, objects ->
+    .executesPlayer { player, args ->
         val target = args.get(0) as Player
         // reset the targets balance here
     }

@@ -1118,7 +1118,7 @@ new CommandAPICommand("economy")
         sender.hasPermission("economy.other") ||
         sender.hasPermission("economy")
     )
-    .executesPlayer((player, objects) -> {
+    .executesPlayer((player, args) -> {
         // send player their own balance here.
     })
     .register();
@@ -1130,7 +1130,7 @@ new CommandAPICommand("economy")
         sender.hasPermission("economy.other")
     )
     .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, objects) -> {
+    .executesPlayer((player, args) -> {
         Player target = (Player) args[0];
         // send executor the targets balance here.
     })
@@ -1145,7 +1145,7 @@ new CommandAPICommand("economy")
     )
     .withArguments(new PlayerArgument("target"))
     .withArguments(new DoubleArgument("amount"))
-    .executesPlayer((player, objects) -> {
+    .executesPlayer((player, args) -> {
         Player target = (Player) args[0];
         double amount = (Double) args[1];
         // update the targets balance here.
@@ -1160,7 +1160,7 @@ new CommandAPICommand("economy")
         sender.hasPermission("economy.admin.reset")
     )
     .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, objects) -> {
+    .executesPlayer((player, args) -> {
         Player target = (Player) args[0];
         // reset the targets balance here
     })
