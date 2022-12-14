@@ -175,7 +175,7 @@ permissions:
     description: Gives the user access to /economy reset <target>
 ```
 
-This setup of childeren allows us to give a player less permissions, but have them access more features. 
+This setup of children allows us to give a player less permissions, but have them access more features. 
 Since `economy.*` inherits `economy.admin.*` which inherits `economy.admin.give`, a player with the permission `economy.*` will be able to execute `/economy give <target> <amount>` without them directly having the `economy.admin.give` permission node.
 
 This also works with `economy.other`, if a player has `economy.other` they will **inherit** `economy`.
