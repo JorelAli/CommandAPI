@@ -120,11 +120,15 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 
 -----
 
-## Child Base Permissions
+## Child-based Permissions
 ### Example - /economy command with argument permissions
-Child Based Permissions allow you to group permissions together, we achieve this by laying out our permission groups in the `plugin.yml` file which Bukkit registers as valid permissions. When the CommandAPI checks if our player has a permission Bukkit considers if they have the child of a permission as well. This not only keeps permissions easier to manage, it also makes your code cleaner and gives you a nice place to layout out all of your permissions, what they do and what other permissions inherit them.
+For example, say we're registering a command `/economy`
 
-For example, say we're registering a command `/economy`:
+Child-based permissions allow you to group permissions together. 
+We achieve this by laying out our permission groups in the `plugin.yml` file which Bukkit registers as valid permissions. 
+When the CommandAPI checks if our player has a permission, Bukkit considers if they have the child of a permission as well.
+This not only keeps permissions easier to manage, it also makes your code cleaner and gives you a nice place to layout out all of your permissions,
+detailing what they do and what other permissions inherit them.
 
 ```mccmd
 /economy                         - shows your own balance                 | economy.self
@@ -138,7 +142,7 @@ We first declare the command as normal. Nothing fancy is going on here:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_1)}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_1}}
 ```
 
 ```kotlin,Kotlin
@@ -188,7 +192,7 @@ This also works with `economy.other`, if a player has `economy.other` they will 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_2)}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_2}}
 ```
 
 ```kotlin,Kotlin
