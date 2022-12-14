@@ -120,7 +120,7 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 
 -----
 
-## Child-based Permissions
+## Child-based permissions
 Child-based permissions allow you to group permissions together.
 We achieve this by laying out our permission groups in the `plugin.yml` file which Bukkit registers as valid permissions.
 When the CommandAPI checks if our player has a permission, Bukkit considers if they have the child of a permission as well.
@@ -151,7 +151,7 @@ We first declare the command as normal. Nothing fancy is going on here:
 
 </div>
 
-In our **plugin.yml** we can also setup our permissions for example...
+In our **plugin.yml** we can also set up our permissions for example...
 
 ```yml
 permissions:
