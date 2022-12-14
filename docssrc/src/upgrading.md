@@ -1,5 +1,105 @@
 # Upgrading guide
 
+## From 8.6.0 to 8.7.0
+
+### Sound arguments
+
+This update introduces a backwards-incompatible change to the `SoundArgument` which was introduced in 8.6.0. SoundArguments no longer need a generic type parameter:
+
+<div class="multi-pre">
+
+```java,8.6.0
+new SoundArgument<Sound>("sound")
+```
+
+</div>
+
+\\[\downarrow\\]
+
+<div class="multi-pre">
+
+```java,8.7.0
+new SoundArgument("sound")
+```
+
+</div>
+
+`NamespacedKey` SoundArguments no longer need a `SoundType` parameter, instead the `NamespacedKey` constructor should be used:
+
+<div class="multi-pre">
+
+```java,8.6.0
+new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY)
+```
+
+</div>
+
+\\[\downarrow\\]
+
+<div class="multi-pre">
+
+```java,8.7.0
+new SoundArgument.NamespacedKey("sound")
+```
+
+</div>
+
+### Entity selector arguments
+
+Entity selector arguments no longer need a generic type parameter or a `EntitySelector` parameter. Instead, the corresponding constructor should be used instead:
+
+<div class="multi-pre">
+
+```java,8.6.0
+new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER)
+new EntitySelectorArgument<Collection<Player>>("target", EntitySelector.MANY_PLAYERS)
+
+new EntitySelectorArgument<Entity>("target", EntitySelector.ONE_ENTITY)
+new EntitySelectorArgument<Collection<Entity>>("target", EntitySelector.MANY_ENTITIES)
+```
+
+</div>
+
+\\[\downarrow\\]
+
+<div class="multi-pre">
+
+```java,8.7.0
+new EntitySelectorArgument.OnePlayer("target")
+new EntitySelectorArgument.ManyPlayers("target")
+
+new EntitySelectorArgument.OneEntity("target")
+new EntitySelectorArgument.ManyEntities("target")
+```
+
+</div>
+
+### Scoreholder arguments
+
+The `ScoreHolderArgument` no longer needs a generic type parameter or a `ScoreHolderType` parameter. Instead, the corresponding constructor should be used instead:
+
+<div class="multi-pre">
+
+```java,8.6.0
+new ScoreHolderArgument<String>(nodeName, ScoreHolderType.SINGLE);
+new ScoreHolderArgument<Collection<String>>(nodeName, ScoreHolderType.MULTIPLE);
+```
+
+</div>
+
+\\[\downarrow\\]
+
+<div class="multi-pre">
+
+```java,8.7.0
+new ScoreHolderArgument.Single(nodeName);
+new ScoreHolderArgument.Multiple(nodeName);
+```
+
+</div>
+
+-----
+
 ## From 8.5.1 to 8.6.0
 
 ### Sound arguments

@@ -1,6 +1,8 @@
 var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument =
 [
+    [ "Multiple", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_multiple.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_multiple" ],
     [ "ScoreHolderType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type.html", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_score_holder_type" ],
+    [ "Single", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_single.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_single" ],
     [ "ScoreHolderArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#ab6ec0d89ab31e4c0743f49f382afab21", null ],
     [ "ScoreHolderArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#ab9ad94def240cfe46caa7f18092ff4e0", null ],
     [ "getArgumentPermission", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html#a2216e5bd7c9e2c08dfddcac97e10ff9d", null ],

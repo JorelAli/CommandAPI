@@ -20,35 +20,32 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.command.CommandSender;
-
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-
-import java.util.Map;
 
 /**
  * The interface for resulting command executors
- * @param <T> the commandsender
+ * @param <CommandSender> The CommandSender for this executor
+ * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public interface IExecutorResulting<T extends CommandSender> extends IExecutorTyped {
+public interface IExecutorResulting<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends IExecutorTyped<CommandSender, WrapperType> {
 
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param info The ExecutionInfo for this command
+	 * @param info The AbstractExecutionInfo for this command
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	default int executeWith(ExecutionInfo<CommandSender> info) throws WrapperCommandSyntaxException {
-		return this.run((ExecutionInfo<T>) info);
+	default int executeWith(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException {
+		return this.run(info);
 	}
 
 	/**
 	 * Executes the command.
-	 * @param info The ExecutionInfo for this command
+	 * @param info The AbstractExecutionInfo for this command
 	 * @return the value returned by this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int run(ExecutionInfo<T> info) throws WrapperCommandSyntaxException;
+	int run(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 }

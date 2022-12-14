@@ -20,18 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.command.CommandSender;
-
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-
-import java.util.Map;
 
 /**
  * An interface that includes the type of an executor (what command senders it
  * can execute) and has a method that executes an executor with a given command
  * sender and arguments
+ * @param <WrapperType> The AbstractCommandSenderClass for this executor
  */
-public interface IExecutorTyped {
+public interface IExecutorTyped<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
 	
 	/**
 	 * Returns the type of the sender of the current executor.
@@ -43,10 +41,10 @@ public interface IExecutorTyped {
 
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param info The ExecutionInfo for this command
+	 * @param info The AbstractExecutionInfo for this command
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int executeWith(ExecutionInfo<CommandSender> info) throws WrapperCommandSyntaxException;
+	int executeWith(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 
 }

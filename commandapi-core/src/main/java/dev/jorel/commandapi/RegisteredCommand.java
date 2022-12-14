@@ -3,13 +3,11 @@ package dev.jorel.commandapi;
 import java.util.List;
 import java.util.Optional;
 
-import dev.jorel.commandapi.arguments.IntegerArgument;
-
 /**
  * Class to store a registered command which has its command name and a list of
  * arguments as a string. The arguments are expected to be of the form
  * {@code node_name:class_name}, for example
- * {@code value:}{@link IntegerArgument}. This class also contains the
+ * {@code value:IntegerArgument}. This class also contains the
  * information required to construct a meaningful help topic for a command
  */
 public record RegisteredCommand(

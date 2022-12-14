@@ -1,10 +1,10 @@
 package dev.jorel.commandapi.arguments;
 
-import org.bukkit.entity.Player;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 
 public record PreviewInfo<T> (
 	/** @param player the Player typing this command */
-	Player player,
+	AbstractPlayer<?> player,
 
 	/**
 	 * @param input the current partially typed argument. For example "/mycmd tes"

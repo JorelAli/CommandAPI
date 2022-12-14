@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>commandapi-platforms</artifactId>
+		<groupId>dev.jorel</groupId>
+		<version>9.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>commandapi-bukkit</artifactId>
+	<packaging>pom</packaging>
+
+	<modules>
+		<!-- Core bukkit implementation -->
+		<module>commandapi-bukkit-core</module>
+
+		<!-- NMS versions -->
+		<module>commandapi-bukkit-nms</module>
+
+		<!-- NMS selector -->
+		<module>commandapi-bukkit-vh</module>
+
+		<!-- Outputs -->
+		<module>commandapi-bukkit-plugin</module>
+		<!-- TODO: MAKE THIS COMPILE <module>commandapi-bukkit-plugin-test</module> -->
+		<module>commandapi-bukkit-shade</module>
+		<module>commandapi-kotlin-bukkit</module>
+	</modules>
+</project>

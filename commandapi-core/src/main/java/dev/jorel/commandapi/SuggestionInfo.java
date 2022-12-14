@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import org.bukkit.command.CommandSender;
-
 /**
  * A class that represents information which you can use to generate
  * suggestions.
@@ -33,7 +31,7 @@ import org.bukkit.command.CommandSender;
  * @param currentArg   - the current partially typed argument. For example
  *                     "/mycmd tes" will return "tes"
  */
-public record SuggestionInfo(
+public record SuggestionInfo<CommandSender>(
 		/** @param sender - the CommandSender typing this command */
 		CommandSender sender,
 

@@ -26,22 +26,26 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /**
  * Annotation equivalent of the {@link ScoreHolderArgument}
  */
-@Primitive({ "java.util.Collection<String>", // ScoreHolderType.MULTIPLE
-		"String" // ScoreHolderType.SINGLE
-})
-@Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AScoreHolderArgument {
+public interface AScoreHolderArgument {
 
 	/**
-	 * @return whether this argument represents a single score holder or a
-	 *         collection of score holders
+	 * Annotation equivalent of the {@link ScoreHolderArgument} for a single score holder
 	 */
-	ScoreHolderType value() default ScoreHolderType.SINGLE;
+	@Primitive("String")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target(ElementType.PARAMETER)
+	public @interface Single { }
+	
+	/**
+	 * Annotation equivalent of the {@link ScoreHolderArgument} for multiple score holders
+	 */
+	@Primitive("java.util.Collection<String>")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target(ElementType.PARAMETER)
+	public @interface Multiple { }
 
 }

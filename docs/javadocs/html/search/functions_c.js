@@ -11,6 +11,8 @@ var searchData=
   ['ofteamcolor_8',['ofTeamColor',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html#ad7b3c50b19c04861896dc2c7aa607ea5',1,'dev::jorel::commandapi::wrappers::ScoreboardSlot']]],
   ['oncommandcomplete_9',['onCommandComplete',['../interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html#ac029a0bbb094f02cf1cd4af0d2e7c22f',1,'com::mojang::brigadier::ResultConsumer']]],
   ['ondisable_10',['onDisable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a2b6cd61ef43ca9b69d8c17420d229fc1',1,'dev::jorel::commandapi::CommandAPI']]],
-  ['onenable_11',['onEnable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7',1,'dev::jorel::commandapi::CommandAPI']]],
-  ['onload_12',['onLoad',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af1dd48702add1d831d2d35b7e1084ac1',1,'dev::jorel::commandapi::CommandAPI']]]
+  ['oneentity_11',['OneEntity',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_one_entity.html#ab228c8608d499c8d355256fd62c12af1',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::OneEntity']]],
+  ['onenable_12',['onEnable',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#abaaeec30c996adb7a07999cbee39bfa7',1,'dev::jorel::commandapi::CommandAPI']]],
+  ['oneplayer_13',['OnePlayer',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_one_player.html#aefffe4124886d8e703b0bc85ace26db1',1,'dev::jorel::commandapi::arguments::EntitySelectorArgument::OnePlayer']]],
+  ['onload_14',['onLoad',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af1dd48702add1d831d2d35b7e1084ac1',1,'dev::jorel::commandapi::CommandAPI']]]
 ];
