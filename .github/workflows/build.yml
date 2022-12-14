@@ -4,7 +4,7 @@
 # against bad commits.
 
 name: build
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -40,3 +40,7 @@ jobs:
             !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*javadoc.jar
       - name: build CommandAPI examples in examples/
         run: cd ./examples; ./build.sh;
+      - name: docssrc markdown linter
+        uses: DavidAnson/markdownlint-cli2-action@v8
+        with:
+          globs: 'docssrc/src/*.md'
