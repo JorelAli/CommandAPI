@@ -121,6 +121,7 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 -----
 
 ## Child-based permissions
+
 Child-based permissions allow you to group permissions together.
 We achieve this by laying out our permission groups in the `plugin.yml` file which Bukkit registers as valid permissions.
 When the CommandAPI checks if our player has a permission, Bukkit considers if they have the child of a permission as well.
@@ -128,6 +129,7 @@ This not only keeps permissions easier to manage, it also makes your code cleane
 detailing what they do and what other permissions inherit them.
 
 ### Example - /economy command with argument permissions
+
 For example, say we're registering a command `/economy`
 
 ```mccmd
