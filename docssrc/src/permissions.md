@@ -128,9 +128,9 @@ When the CommandAPI checks if our player has a permission, Bukkit considers if t
 This not only keeps permissions easier to manage, it also makes your code cleaner and gives you a nice place to lay out all of your permissions,
 detailing what they do and what other permissions inherit them.
 
-### Example - /economy command with argument permissions:
+### Example - /economy command with argument permissions
 
-For example, say we're registering a command `/economy`
+For example, say we're registering a command `/economy`:
 
 ```mccmd
 /economy                         - shows your own balance                 | economy.self
@@ -144,11 +144,11 @@ We first declare the command as normal. Nothing fancy is going on here:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4_1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4}}
 ```
 
 </div>
@@ -180,25 +180,7 @@ permissions:
   economy.admin.reset:
     description: Gives the user access to /economy reset <target>
 ```
-
 This setup of children allows us to give a player less permissions, but have them access more features.
 Since `economy.*` inherits `economy.admin.*` which inherits `economy.admin.give`, a player with the permission `economy.*` will be able to execute `/economy give <target> <amount>` without them directly having the `economy.admin.give` permission node.
 
 This also works with `economy.other`, if a player has `economy.other` they will **inherit** `economy`.
-
-> **Developer's Note:**
->
-> An example of what this command may look like without the usage of the plugin.yml is:
-> The complexity of the example below can massively increase with more and more permissions.
-
-<div class="multi-pre">
-
-```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_2}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4_2}}
-```
-
-</div>

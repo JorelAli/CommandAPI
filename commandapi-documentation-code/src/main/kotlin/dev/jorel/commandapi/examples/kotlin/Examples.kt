@@ -1005,8 +1005,8 @@ CommandAPICommand("kill")
 /* ANCHOR_END: permissions3_2 */
 }
 
-fun permissions4_1() {
-/* ANCHOR: permissions4_1 */
+fun permissions4() {
+/* ANCHOR: permissions4 */
 // /economy - requires the permission "economy.self" to exectue
 CommandAPICommand("economy")
     .withPermission("economy.self")
@@ -1046,66 +1046,7 @@ CommandAPICommand("economy")
         // reset the targets balance here
     })
     .register()
-/* ANCHOR_END: permissions4_1 */
-}
-
-fun permissions4_2() {
-/* ANCHOR: permissions4_2 */
-// /economy - requires the permission "economy.self" to execute
-CommandAPICommand("economy")
-    .withRequirement { sender ->
-        sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.other") ||
-        sender.hasPermission("economy")
-    }
-    .executesPlayer(PlayerCommandExecutor { player, _ ->
-        // send the executor their own balance here
-    })
-    .register()
-
-// /economy <target> - requires the permission "economy.other" to execute
-CommandAPICommand("economy")
-    .withRequirement { sender ->
-        sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.other")
-    }
-    .withArguments(PlayerArgument("target"))
-    .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args.get(0) as Player
-        // send the executor the targets balance here
-    })
-    .register()
-
-// /economy give <target> <amount> - requires the permission "economy.admin.give" to execute
-CommandAPICommand("economy")
-    .withRequirement { sender ->
-        sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.admin.*") ||
-        sender.hasPermission("economy.admin.give")
-    }
-    .withArguments(PlayerArgument("target"))
-    .withArguments(DoubleArgument("amount"))
-    .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args.get(0) as Player
-        val amount = args.get(1) as Double
-        // update the targets balance here
-    })
-    .register()
-
-// /economy reset <target> - requires the permission "economy.admin.give" to execute
-CommandAPICommand("economy")
-    .withRequirement { sender ->
-        sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.admin.*") ||
-        sender.hasPermission("economy.admin.reset")
-    }
-    .withArguments(PlayerArgument("target"))
-    .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args.get(0) as Player
-        // reset the targets balance here
-    })
-    .register()
-/* ANCHOR_END: permissions4_2 */
+/* ANCHOR_END: permissions4 */
 }
 
 fun aliases() {
