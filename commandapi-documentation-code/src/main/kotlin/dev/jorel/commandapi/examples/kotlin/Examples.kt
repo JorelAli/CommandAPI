@@ -997,11 +997,11 @@ fun permissions3_2() {
 /* ANCHOR: permissions3_2 */
 // Adds the OP permission to the "target" argument. The sender requires OP to execute /kill <target>
 CommandAPICommand("kill")
-	.withArguments(PlayerArgument("target").withPermission(CommandPermission.OP))
-	.executesPlayer(PlayerCommandExecutor { _, args ->
-		(args[0] as Player).setHealth(0.0)
-	})
-	.register()
+    .withArguments(PlayerArgument("target").withPermission(CommandPermission.OP))
+    .executesPlayer(PlayerCommandExecutor { _, args ->
+        (args[0] as Player).setHealth(0.0)
+    })
+    .register()
 /* ANCHOR_END: permissions3_2 */
 }
 
