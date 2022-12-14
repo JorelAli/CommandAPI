@@ -17,7 +17,7 @@ class SayHelloCommand {
 
 		commandAPICommand("suicide") {
 			literalArgument("confirm")
-			playerExecutor { player, args ->
+			playerExecutor { player, _ ->
 				player.health = 0.0
 			}
 		}
