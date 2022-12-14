@@ -122,7 +122,7 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 
 ## Child Base Permissions
 ### Example - /economy command with argument permissions
-Child Based Permissions allow you to group permissions together in groups, we acheive this by laying out our permission groups in the `plugin.yml` which Bukkit registers as valid permissions. When we then check if our player has a permission bukkit all considers if they have the child of a permission aswell. This not only keeps things easier to manage, it cleans up your code in the CommandAPI and gives you a nice place to layout out all of your permissions, what they do and what other permissions inheirt them.
+Child Based Permissions allow you to group permissions together, we achieve this by laying out our permission groups in the `plugin.yml` file which Bukkit registers as valid permissions. When the CommandAPI checks if our player has a permission Bukkit considers if they have the child of a permission as well. This not only keeps permissions easier to manage, it also makes your code cleaner and gives you a nice place to layout out all of your permissions, what they do and what other permissions inherit them.
 
 For example, say we're registering a command `/economy`:
 
@@ -181,12 +181,12 @@ permissions:
       economy.other: true
       economy.admin.*: true
 
-  economy:
+  economy.self:
     description: Allows the user to view their own balance
   economy.other:
     description: Allows the user to another players balance
     children:
-      economy: true
+      economy.self: true
 
   economy.admin.*:
     description: Gives the user access to all of the admin commands
@@ -200,9 +200,9 @@ permissions:
 ```
 
 This setup of childeren allows us to give a player less permissions, but have them access more features. 
-Since `economy.*` inherits `economy.admin.*` which inherits `economy.admin.give`, a player with the permission `economy.*` will be able to execute `/economy give <target> <amount>` without them directly having the `economy.admin.give` permission node
+Since `economy.*` inherits `economy.admin.*` which inherits `economy.admin.give`, a player with the permission `economy.*` will be able to execute `/economy give <target> <amount>` without them directly having the `economy.admin.give` permission node.
 
-this also works with `economy.other`, if a player has `economy.other` they will **inherit** `economy`.
+This also works with `economy.other`, if a player has `economy.other` they will **inherit** `economy`.
 
 > **Developer's Note:**
 >
