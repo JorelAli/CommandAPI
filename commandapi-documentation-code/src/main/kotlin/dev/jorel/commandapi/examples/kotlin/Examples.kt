@@ -1009,20 +1009,20 @@ fun permissions4_1() {
 /* ANCHOR: permissions4_1 */
 // /economy - requires the permission "economy.self" to exectue
 CommandAPICommand("economy")
-    .withPermission("economy.self") // The important part of this example
-    .executesPlayer { player, args ->
+    .withPermission("economy.self")
+    .executesPlayer(PlayerCommandExecutor { player, _ ->
         // send the executor their own balance here.
-    }
+	})
     .register()
 
 // /economy <target> - requires the permission "economy.other" to execute
 CommandAPICommand("economy")
     .withPermission("economy.other") // The important part of this example
     .withArguments(PlayerArgument("target"))
-    .executesPlayer { player, args ->
+    .executesPlayer(PlayerCommandExecutor { player, args ->
         val target = args.get(0) as Player
         // send the executor the targets balance here.
-    }
+    })
     .register()
 
 // /economy give <target> <amount> - requires the permission "economy.admin.give" to execute
@@ -1030,21 +1030,21 @@ CommandAPICommand("economy")
     .withPermission("economy.admin.give") // The important part of this example
     .withArguments(PlayerArgument("target"))
     .withArguments(DoubleArgument("amount"))
-    .executesPlayer { player, args ->
+    .executesPlayer(PlayerCommandExecutor { player, args ->
         val target = args.get(0) as Player
         val amount = args.get(1) as Double
         // update the targets balance here
-    }
+    })
     .register()
 
 // /economy reset <target> - requires the permission "economy.admin.reset" to execute
 CommandAPICommand("economy")
     .withPermission("economy.admin.reset") // The important part of this example
     .withArguments(PlayerArgument("target"))
-    .executesPlayer { player, args ->
+    .executesPlayer(PlayerCommandExecutor { player, args ->
         val target = args.get(0) as Player
         // reset the targets balance here
-    }
+    })
     .register()
 /* ANCHOR_END: permissions4_1 */
 }
@@ -1058,9 +1058,9 @@ CommandAPICommand("economy")
         sender.hasPermission("economy.other") ||
         sender.hasPermission("economy")
     }
-    .executesPlayer { player, args ->
+    .executesPlayer(PlayerCommandExecutor { player, _ ->
         // send the executor their own balance here
-    }
+    })
     .register()
 
 // /economy <target> - requires the permission "economy.other" to execute
@@ -1070,10 +1070,10 @@ CommandAPICommand("economy")
         sender.hasPermission("economy.other")
     }
     .withArguments(PlayerArgument("target"))
-    .executesPlayer { player, args ->
+    .executesPlayer(PlayerCommandExecutor { player, args ->
         val target = args.get(0) as Player
         // send the executor the targets balance here
-    }
+    })
     .register()
 
 // /economy give <target> <amount> - requires the permission "economy.admin.give" to execute
@@ -1085,11 +1085,11 @@ CommandAPICommand("economy")
     }
     .withArguments(PlayerArgument("target"))
     .withArguments(DoubleArgument("amount"))
-    .executesPlayer { player, args ->
+    .executesPlayer(PlayerCommandExecutor { player, args ->
         val target = args.get(0) as Player
         val amount = args.get(1) as Double
         // update the targets balance here
-    }
+    })
     .register()
 
 // /economy reset <target> - requires the permission "economy.admin.give" to execute
@@ -1100,10 +1100,10 @@ CommandAPICommand("economy")
         sender.hasPermission("economy.admin.reset")
     }
     .withArguments(PlayerArgument("target"))
-    .executesPlayer { player, args ->
+    .executesPlayer(PlayerCommandExecutor { player, args ->
         val target = args.get(0) as Player
         // reset the targets balance here
-    }
+    })
     .register()
 /* ANCHOR_END: permissions4_2 */
 }
