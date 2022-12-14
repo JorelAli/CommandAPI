@@ -134,44 +134,20 @@ For example, say we're registering a command `/economy`:
 ```
 
 We first declare the command as normal. Nothing fancy is going on here:
-```java
-// /economy
-new CommandAPICommand("economy")
-    .withPermission("economy.self") // The important part of this example
-    .executesPlayer((player, args) -> { 
-      player.sendMessage(getBalance(player))
-    })
-    .register();
 
-// /economy <target>
-new CommandAPICommand("economy")
-    .withPermission("economy.other") // The important part of this example
-    .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, args) -> { 
-        player.sendMessage(getBalance((Player) objects[0]))
-    })
-    .register();
+<div class="multi-pre">
 
-// /economy give <target> <amount>
-new CommandAPICommand("economy")
-    .withPermission("economy.admin.give") // The important part of this example
-    .withArguments(new PlayerArgument("target"))
-    .withArguments(new DoubleArgument("amount"))
-    .executesPlayer((player, args) -> { 
-        updatePlayerBalance((Player) args[0], (Double) args[1])
-    })
-    .register();
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_1)}}
+```
 
-// /economy reset <target>
-new CommandAPICommand("economy")
-    .withPermission("economy.admin.reset") // The important part of this example
-    .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, args) -> { 
-        resetPlayerBalance((Player) args[0])
-    })
-    .register();
-}
-``In our **plugin.yml** we can also setup our permissions for example...
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4_1}}
+```
+
+</div>
+
+In our **plugin.yml** we can also setup our permissions for example...
 
 ```yml
 permissions:
@@ -207,57 +183,16 @@ This also works with `economy.other`, if a player has `economy.other` they will 
 > **Developer's Note:**
 >
 > An example of what this command may look like without the usage of the plugin.yml is:
-> The compexity of the example below can massively increase with more and more permissions. 
-```java
-// /economy
-new CommandAPICommand("economy")
-    .withRequirement(sender ->
-        sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.other") ||
-        sender.hasPermission("economy")
-    )
-    .executesPlayer((player, objects) -> { 
-        player.sendMessage(getBalance(player))
-    })
-    .register();
+> The complexity of the example below can massively increase with more and more permissions. 
 
-// /economy <target>
-new CommandAPICommand("economy")
-    .withRequirement(sender ->
-        sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.other") ||
-    )
-    .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, objects) -> { 
-        player.sendMessage(getBalance((Player) objects[0]))
-    })
-    .register();
+<div class="multi-pre">
 
-// /economy give <target> <amount>
-new CommandAPICommand("economy")
-    .withRequirement(sender ->
-        sender.hasPermission("economy.*") ||
-        sender.hasPermission("economy.admin.*") ||
-        sender.hasPermission("economy.admin.give")
-    )
-    .withArguments(new PlayerArgument("target"))
-    .withArguments(new DoubleArgument("amount"))
-    .executesPlayer((player, objects) -> { 
-        updatePlayerBalance((Player) objects[0], (Double) objects[1])
-    })
-    .register();
-
-// /economy reset <target>
-new CommandAPICommand("economy")
-    .withRequirement(sender ->
-      sender.hasPermission("economy.*") ||
-      sender.hasPermission("economy.admin.*") ||
-      sender.hasPermission("economy.admin.reset")
-    )
-    .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, objects) -> { 
-        resetPlayerBalance((Player) objects[0])
-    })
-    .register();
-}
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4_2)}}
 ```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4_2}}
+```
+
+</div>
