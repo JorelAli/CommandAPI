@@ -11,15 +11,16 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @param types A list of executor types to use this executes method for.
+	 * @param types    A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
 	default Impl executes(CommandExecutor executor, ExecutorType... types) {
-		if(types == null || types.length == 0) {
+		if (types == null || types.length == 0) {
 			getExecutor().addNormalExecutor(executor);
 		} else {
-			for(ExecutorType type : types) {
+			for (ExecutorType type : types) {
 				getExecutor().addNormalExecutor(new CommandExecutor() {
 
 					@Override
@@ -44,15 +45,16 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run
-	 * @param types A list of executor types to use this executes method for.
+	 * @param types    A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
 	default Impl executes(CommandExecutionInfo executor, ExecutorType... types) {
-		if(types == null || types.length == 0) {
+		if (types == null || types.length == 0) {
 			getExecutor().addNormalExecutor(executor);
 		} else {
-			for(ExecutorType type : types) {
+			for (ExecutorType type : types) {
 				getExecutor().addNormalExecutor(new CommandExecutionInfo() {
 
 					@Override
@@ -72,15 +74,16 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
-	 * @param types A list of executor types to use this executes method for.
+	 * @param types    A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
 	default Impl executes(ResultingCommandExecutor executor, ExecutorType... types) {
-		if(types == null || types.length == 0) {
+		if (types == null || types.length == 0) {
 			getExecutor().addResultingExecutor(executor);
 		} else {
-			for(ExecutorType type : types) {
+			for (ExecutorType type : types) {
 				getExecutor().addResultingExecutor(new ResultingCommandExecutor() {
 
 					@Override
@@ -101,15 +104,16 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
-	 * @param types A list of executor types to use this executes method for.
+	 * @param types    A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
 	default Impl executes(ResultingCommandExecutionInfo executor, ExecutorType... types) {
-		if(types == null || types.length == 0) {
+		if (types == null || types.length == 0) {
 			getExecutor().addResultingExecutor(executor);
 		} else {
-			for(ExecutorType type : types) {
+			for (ExecutorType type : types) {
 				getExecutor().addResultingExecutor(new ResultingCommandExecutionInfo() {
 
 					@Override
@@ -133,6 +137,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(Player, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -143,6 +148,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -153,6 +159,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(Player, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -163,6 +170,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -175,6 +183,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -185,6 +194,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -195,6 +205,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -205,6 +216,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -217,6 +229,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -227,6 +240,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -237,6 +251,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(Entity, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -247,6 +262,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -259,6 +275,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(BlockCommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -269,6 +286,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -279,6 +297,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(BlockCommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -289,6 +308,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -301,6 +321,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(ConsoleCommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -311,6 +332,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -321,6 +343,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(ConsoleCommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -331,6 +354,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -343,6 +367,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, CommandArguments) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -353,6 +378,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -363,6 +389,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param executor A lambda of type <code>(NativeCommandExecutor, CommandArguments) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
@@ -373,6 +400,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 	/**
 	 * Adds an executor to the current command builder
+	 *
 	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
