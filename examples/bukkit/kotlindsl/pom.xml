@@ -54,6 +54,7 @@
 	<build>
 		<sourceDirectory>src/main/kotlin</sourceDirectory>
 		<plugins>
+			<!-- Shade the CommandAPI Kotlin DSL into the jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -76,6 +77,8 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Usual Kotlin configuration -->
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>

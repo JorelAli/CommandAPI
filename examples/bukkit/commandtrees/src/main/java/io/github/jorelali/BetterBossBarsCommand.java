@@ -21,7 +21,6 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
-import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -61,7 +60,7 @@ public class BetterBossBarsCommand {
 			.then(new LiteralArgument("set")
 				.then(new NamespacedKeyArgument("id")
 					.then(new LiteralArgument("players")
-						.then(new EntitySelectorArgument<Collection<Player>>("targets", EntitySelector.MANY_PLAYERS)
+						.then(new EntitySelectorArgument.ManyPlayers("targets")
 							.executes(this::setPlayers)
 						)
 					)
@@ -139,7 +138,7 @@ public class BetterBossBarsCommand {
 				case "notched_12" -> BarStyle.SEGMENTED_12;
 				case "notched_20" -> BarStyle.SEGMENTED_20;
 				case "progress" -> BarStyle.SOLID;
-				default -> throw CommandAPI.fail(style + " is an invalid bossbar style");
+				default -> throw CommandAPI.failWithString(style + " is an invalid bossbar style");
 			});
 	}
 
@@ -206,7 +205,7 @@ public class BetterBossBarsCommand {
 	}
 
 	private void list(CommandSender sender, Object[] args) {
-		Iterable<KeyedBossBar> bossBars = () -> Bukkit.getBossBars();
+		Iterable<KeyedBossBar> bossBars = Bukkit::getBossBars;
 		sender.sendMessage("List of custom bossbars: " +
 			StreamSupport
 				.stream(bossBars.spliterator(), false)
