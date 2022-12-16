@@ -14,8 +14,8 @@
 [![Join us on Discord](https://img.shields.io/discord/745416925924032523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2&style=flat-square)](https://discord.gg/G4SzSxZ)
 <br>
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/JorelAli/CommandAPI/master?style=flat-square)](https://www.codefactor.io/repository/github/jorelali/commandapi)
-![GitHub Workflow Status (master)](https://img.shields.io/github/workflow/status/JorelAli/CommandAPI/build/master?style=flat-square)
-![GitHub Workflow Status (dev/dev)](https://img.shields.io/github/workflow/status/JorelAli/CommandAPI/build/dev/dev?label=dev%20build&style=flat-square)
+![GitHub Workflow Status (master)](https://img.shields.io/github/actions/workflow/status/JorelAli/CommandAPI/build.yml?branch=master&style=flat-square)
+![GitHub Workflow Status (dev/dev)](https://img.shields.io/github/actions/workflow/status/JorelAli/CommandAPI/build.yml?branch=dev/dev&label=dev%20build&style=flat-square)
 ![Spiget Download Size](https://img.shields.io/spiget/download-size/62353?style=flat-square)
 <br>
 ![Spiget Downloads](https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads&style=flat-square)
