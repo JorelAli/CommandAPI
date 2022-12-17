@@ -20,10 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.entity.Player;
-
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import org.bukkit.entity.Player;
 
 /**
  * A resulting command executor for a Player
@@ -34,15 +33,23 @@ public interface PlayerResultingCommandExecutor extends IExecutorResulting<Playe
 	/**
 	 * The code to run when this command is performed
 	 * 
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
 	 * @return the result of this command
 	 */
-	int run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(Player sender, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param info The AbstractExecutionInfo for this command
+	 * @return the result of this command
+	 * @throws WrapperCommandSyntaxException
+	 */
+	@Override
+	default int run(AbstractExecutionInfo<Player, BukkitPlayer> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

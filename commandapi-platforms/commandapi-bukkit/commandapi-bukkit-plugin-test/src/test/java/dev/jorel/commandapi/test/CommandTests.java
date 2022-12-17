@@ -56,8 +56,8 @@ public class CommandTests {
 				.withArguments(new StringArgument("arg1"))
 				.withArguments(new GreedyStringArgument("arg2"))
 				.executes((sender, args) -> {
-					String arg1 = (String) args[0];
-					String arg2 = (String) args[0];
+					String arg1 = (String) args.get(0);
+					String arg2 = (String) args.get(0);
 				})
 				.register();
 		});
@@ -67,8 +67,8 @@ public class CommandTests {
 				.withArguments(new GreedyStringArgument("arg1"))
 				.withArguments(new StringArgument("arg2"))
 				.executes((sender, args) -> {
-					String arg1 = (String) args[0];
-					String arg2 = (String) args[0];
+					String arg1 = (String) args.get(0);
+					String arg2 = (String) args.get(0);
 				})
 				.register();
 		});
@@ -80,7 +80,7 @@ public class CommandTests {
 			new CommandAPICommand((String) null)
 				.withArguments(new StringArgument("arg1"))
 				.executes((sender, args) -> {
-					String arg1 = (String) args[0];
+					String arg1 = (String) args.get(0);
 				})
 				.register();
 		});
@@ -89,7 +89,7 @@ public class CommandTests {
 			new CommandAPICommand("")
 				.withArguments(new StringArgument("arg1"))
 				.executes((sender, args) -> {
-					String arg1 = (String) args[0];
+					String arg1 = (String) args.get(0);
 				})
 				.register();
 		});
@@ -98,7 +98,7 @@ public class CommandTests {
 			new CommandAPICommand("my command")
 				.withArguments(new StringArgument("arg1"))
 				.executes((sender, args) -> {
-					String arg1 = (String) args[0];
+					String arg1 = (String) args.get(0);
 				})
 				.register();
 		});

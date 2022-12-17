@@ -224,57 +224,57 @@ inline fun CommandTree.requirement(base: Argument<*>, predicate: Predicate<Comma
 inline fun Argument<*>.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.withRequirement(predicate).apply(block))
 
 // CommandTree execution
-fun CommandTree.anyExecutor(any: (CommandSender, Array<Any>) -> Unit) = CommandTreeExecution().any(any).executes(this)
-fun CommandTree.playerExecutor(player: (Player, Array<Any>) -> Unit) = CommandTreeExecution().player(player).executes(this)
-fun CommandTree.consoleExecutor(console: (ConsoleCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().console(console).executes(this)
-fun CommandTree.commandBlockExecutor(block: (BlockCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().block(block).executes(this)
-fun CommandTree.proxyExecutor(proxy: (ProxiedCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
-fun CommandTree.nativeExecutor(native: (NativeProxyCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().native(native).executes(this)
+fun CommandTree.anyExecutor(any: (CommandSender, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
+fun CommandTree.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
+fun CommandTree.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
+fun CommandTree.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().block(block).executes(this)
+fun CommandTree.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
+fun CommandTree.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().native(native).executes(this)
 
 // ArgumentTree execution
-fun Argument<*>.anyExecutor(any: (CommandSender, Array<Any>) -> Unit) = CommandTreeExecution().any(any).executes(this)
-fun Argument<*>.playerExecutor(player: (Player, Array<Any>) -> Unit) = CommandTreeExecution().player(player).executes(this)
-fun Argument<*>.consoleExecutor(console: (ConsoleCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().console(console).executes(this)
-fun Argument<*>.commandBlockExecutor(block: (BlockCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().block(block).executes(this)
-fun Argument<*>.proxyExecutor(proxy: (ProxiedCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
-fun Argument<*>.nativeExecutor(native: (NativeProxyCommandSender, Array<Any>) -> Unit) = CommandTreeExecution().native(native).executes(this)
+fun Argument<*>.anyExecutor(any: (CommandSender, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
+fun Argument<*>.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
+fun Argument<*>.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
+fun Argument<*>.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().block(block).executes(this)
+fun Argument<*>.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
+fun Argument<*>.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().native(native).executes(this)
 
 
 class CommandTreeExecution {
 
-	private var any: ((CommandSender, Array<Any>) -> Unit)? = null
-	private var player: ((Player, Array<Any>) -> Unit)? = null
-	private var console: ((ConsoleCommandSender, Array<Any>) -> Unit)? = null
-	private var block: ((BlockCommandSender, Array<Any>) -> Unit)? = null
-	private var proxy: ((ProxiedCommandSender, Array<Any>) -> Unit)? = null
-	private var native: ((NativeProxyCommandSender, Array<Any>) -> Unit)? = null
+	private var any: ((CommandSender, CommandArguments) -> Unit)? = null
+	private var player: ((Player, CommandArguments) -> Unit)? = null
+	private var console: ((ConsoleCommandSender, CommandArguments) -> Unit)? = null
+	private var block: ((BlockCommandSender, CommandArguments) -> Unit)? = null
+	private var proxy: ((ProxiedCommandSender, CommandArguments) -> Unit)? = null
+	private var native: ((NativeProxyCommandSender, CommandArguments) -> Unit)? = null
 
-	fun any(any: (CommandSender, Array<Any>) -> Unit): CommandTreeExecution {
+	fun any(any: (CommandSender, CommandArguments) -> Unit): CommandTreeExecution {
 		this.any = any
 		return this
 	}
 
-	fun player(player: (Player, Array<Any>) -> Unit): CommandTreeExecution {
+	fun player(player: (Player, CommandArguments) -> Unit): CommandTreeExecution {
 		this.player = player
 		return this
 	}
 
-	fun console(console: (ConsoleCommandSender, Array<Any>) -> Unit): CommandTreeExecution {
+	fun console(console: (ConsoleCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
 		this.console = console
 		return this
 	}
 
-	fun block(block: (BlockCommandSender, Array<Any>) -> Unit): CommandTreeExecution {
+	fun block(block: (BlockCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
 		this.block = block
 		return this
 	}
 
-	fun proxy(proxy: (ProxiedCommandSender, Array<Any>) -> Unit): CommandTreeExecution {
+	fun proxy(proxy: (ProxiedCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
 		this.proxy = proxy
 		return this
 	}
 
-	fun native(native: (NativeProxyCommandSender, Array<Any>) -> Unit): CommandTreeExecution {
+	fun native(native: (NativeProxyCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
 		this.native = native
 		return this
 	}

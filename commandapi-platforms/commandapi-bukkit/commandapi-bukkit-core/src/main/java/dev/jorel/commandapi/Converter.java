@@ -23,6 +23,8 @@ package dev.jorel.commandapi;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.executors.AbstractExecutionInfo;
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.Bukkit;
@@ -134,7 +136,7 @@ public final class Converter {
 					// We know the args are a String[] because that's how converted things are
 					// handled in generateCommand()
 					CommandSender proxiedSender = mergeProxySender(sender);
-					Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", (String[]) args));
+					Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", (String[]) args.args()));
 				});
 
 		multiArgs.setConverted(true);
@@ -197,7 +199,7 @@ public final class Converter {
 					? sender.getCallee()
 					: mergeProxySender(sender);
 			
-			command.execute(proxiedSender, commandName, (String[]) args);
+			command.execute(proxiedSender, commandName, (String[]) args.args());
 		};
 
 		// No arguments
@@ -206,7 +208,22 @@ public final class Converter {
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> {
-				executor.executeWith(new BukkitNativeProxyCommandSender(sender), new String[0]);
+				executor.executeWith(new AbstractExecutionInfo<>() {
+					@Override
+					public NativeProxyCommandSender sender() {
+						return sender;
+					}
+
+					@Override
+					public BukkitNativeProxyCommandSender senderWrapper() {
+						return new BukkitNativeProxyCommandSender(sender);
+					}
+
+					@Override
+					public CommandArguments args() {
+						return args;
+					}
+				});
 			})
 			.register();
 

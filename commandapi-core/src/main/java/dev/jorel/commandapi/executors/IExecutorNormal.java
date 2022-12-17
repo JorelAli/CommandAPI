@@ -28,27 +28,24 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * @param <CommandSender> The CommandSender for this executor
  * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public interface IExecutorNormal<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends IExecutorTyped<WrapperType> {
-	
+public interface IExecutorNormal<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends IExecutorTyped<CommandSender, WrapperType> {
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param sender the command sender for this command
-	 * @param args the arguments provided to this command
+	 * @param info The AbstractExecutionInfo for this command
 	 * @return 1 if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
 	@Override
-	default int executeWith(WrapperType sender, Object[] args) throws WrapperCommandSyntaxException {
-		this.run(sender.getSource(), args);
+	default int executeWith(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException {
+		this.run(info);
 		return 1;
 	}
-	
+
 	/**
 	 * Executes the command.
-	 * @param sender the command sender for this command
-	 * @param args the arguments provided to this command
+	 * @param info The AbstractExecutionInfo for this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 
 }

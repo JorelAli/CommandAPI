@@ -34,6 +34,8 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.executors.AbstractExecutionInfo;
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
@@ -42,8 +44,8 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
@@ -161,13 +163,46 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		// Generate our command from executor
 		return (cmdCtx) -> {
 			AbstractCommandSender<? extends CommandSender> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
+			CommandArguments commandArguments = argsToCommandArgs(cmdCtx, args);
+			AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> executionInfo = new AbstractExecutionInfo<>() {
+				@Override
+				public CommandSender sender() {
+					return sender.getSource();
+				}
+
+				@Override
+				public AbstractCommandSender<? extends CommandSender> senderWrapper() {
+					return sender;
+				}
+
+				@Override
+				public CommandArguments args() {
+					return commandArguments;
+				}
+			};
 			if (converted) {
-				Object[] argObjs = argsToObjectArr(cmdCtx, args);
 				int resultValue = 0;
 
 				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
+				AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> convertedExecutionInfo = new AbstractExecutionInfo<>() {
+					@Override
+					public CommandSender sender() {
+						return sender.getSource();
+					}
+
+					@Override
+					public AbstractCommandSender<? extends CommandSender> senderWrapper() {
+						return sender;
+					}
+
+					@Override
+					public CommandArguments args() {
+						return new CommandArguments(result, new LinkedHashMap<>());
+					}
+				};
+
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
 
 				// As stupid as it sounds, it's more performant and safer to use
@@ -175,7 +210,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				@SuppressWarnings("unchecked")
 				List<String>[] entityNamesForArgs = new List[args.length];
 				for (int i = 0; i < args.length; i++) {
-					entityNamesForArgs[i] = args[i].getEntityNames(argObjs[i]);
+					entityNamesForArgs[i] = args[i].getEntityNames(commandArguments.get(i));
 				}
 				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));
 
@@ -189,12 +224,12 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 							}
 						}
 					}
-					resultValue += executor.execute(sender, result);
+					resultValue += executor.execute(convertedExecutionInfo);
 				}
 
 				return resultValue;
 			} else {
-				return executor.execute(sender, argsToObjectArr(cmdCtx, args));
+				return executor.execute(executionInfo);
 			}
 		};
 	}
@@ -204,22 +239,27 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * 
 	 * @param cmdCtx the command context that will execute this command
 	 * @param args   the map of strings to arguments
-	 * @return an Object[] which can be used in (sender, args) ->
-	 * @throws CommandSyntaxException when an argument isn't formatted correctly
+	 * @return an CommandArguments object which can be used in (sender, args) ->
+	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<Source> cmdCtx, Argument[] args)
+	CommandArguments argsToCommandArgs(CommandContext<Source> cmdCtx, Argument[] args)
 			throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
+		// LinkedHashMap for arguments for executor
+		Map<String, Object> argsMap = new LinkedHashMap<>();
+
 		// Populate array
 		for (Argument argument : args) {
 			if (argument.isListed()) {
-				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray()));
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray());
+				argList.add(parsedArgument);
+				argsMap.put(argument.getNodeName(), parsedArgument);
 			}
 		}
 
-		return argList.toArray();
+		return new CommandArguments(argList.toArray(), argsMap);
 	}
 
 	/**
@@ -633,8 +673,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @param permission  the permission required to use this literal
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<Source> getLiteralArgumentBuilderArgument(String commandName,
-			CommandPermission permission, Predicate<CommandSender> requirements) {
+	LiteralArgumentBuilder<Source> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
 		LiteralArgumentBuilder<Source> builder = LiteralArgumentBuilder.literal(commandName);
 		return builder.requires((Source css) -> permissionCheck(platform.getCommandSenderFromCommandSource(css),
 				permission, requirements));

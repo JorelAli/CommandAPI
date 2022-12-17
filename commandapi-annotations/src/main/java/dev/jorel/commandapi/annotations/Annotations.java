@@ -353,9 +353,9 @@ public class Annotations extends AbstractProcessor {
 			} else {
 				out.print(simpleFromQualified(fromArgumentMap));
 			}
-			out.print(") args[");
+			out.print(") args.get(");
 			out.print(i);
-			out.print("]");
+			out.print(")");
 		}
 		//populate stuff here
 		

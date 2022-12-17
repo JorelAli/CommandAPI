@@ -2,6 +2,7 @@ package dev.jorel.commandapi.kotlindsl
 
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
+import dev.jorel.commandapi.executors.CommandArguments
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor
 import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.executors.ConsoleCommandExecutor
@@ -127,48 +128,48 @@ inline fun CommandAPICommand.multiLiteralArgument(vararg literals: String, block
 inline fun CommandAPICommand.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(base.withRequirement(predicate).apply(block))
 
 // Command execution
-fun CommandAPICommand.anyExecutor(any: (CommandSender, Array<Any>) -> Unit) = CommandAPICommandExecution().any(any).executes(this)
-fun CommandAPICommand.playerExecutor(player: (Player, Array<Any>) -> Unit) = CommandAPICommandExecution().player(player).executes(this)
-fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSender, Array<Any>) -> Unit) = CommandAPICommandExecution().console(console).executes(this)
-fun CommandAPICommand.commandBlockExecutor(block: (BlockCommandSender, Array<Any>) -> Unit) = CommandAPICommandExecution().block(block).executes(this)
-fun CommandAPICommand.proxyExecutor(proxy: (ProxiedCommandSender, Array<Any>) -> Unit) = CommandAPICommandExecution().proxy(proxy).executes(this)
-fun CommandAPICommand.nativeExecutor(native: (NativeProxyCommandSender, Array<Any>) -> Unit) = CommandAPICommandExecution().native(native).executes(this)
+fun CommandAPICommand.anyExecutor(any: (CommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().any(any).executes(this)
+fun CommandAPICommand.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandAPICommandExecution().player(player).executes(this)
+fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().console(console).executes(this)
+fun CommandAPICommand.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().block(block).executes(this)
+fun CommandAPICommand.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().proxy(proxy).executes(this)
+fun CommandAPICommand.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().native(native).executes(this)
 
 class CommandAPICommandExecution {
 
-	private var any: ((CommandSender, Array<Any>) -> Unit)? = null
-	private var player: ((Player, Array<Any>) -> Unit)? = null
-	private var console: ((ConsoleCommandSender, Array<Any>) -> Unit)? = null
-	private var block: ((BlockCommandSender, Array<Any>) -> Unit)? = null
-	private var proxy: ((ProxiedCommandSender, Array<Any>) -> Unit)? = null
-	private var native: ((NativeProxyCommandSender, Array<Any>) -> Unit)? = null
+	private var any: ((CommandSender, CommandArguments) -> Unit)? = null
+	private var player: ((Player, CommandArguments) -> Unit)? = null
+	private var console: ((ConsoleCommandSender, CommandArguments) -> Unit)? = null
+	private var block: ((BlockCommandSender, CommandArguments) -> Unit)? = null
+	private var proxy: ((ProxiedCommandSender, CommandArguments) -> Unit)? = null
+	private var native: ((NativeProxyCommandSender, CommandArguments) -> Unit)? = null
 
-	fun any(any: (CommandSender, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun any(any: (CommandSender, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.any = any
 		return this
 	}
 
-	fun player(player: (Player, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun player(player: (Player, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.player = player
 		return this
 	}
 
-	fun console(console: (ConsoleCommandSender, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun console(console: (ConsoleCommandSender, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.console = console
 		return this
 	}
 
-	fun block(block: (BlockCommandSender, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun block(block: (BlockCommandSender, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.block = block
 		return this
 	}
 
-	fun proxy(proxy: (ProxiedCommandSender, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun proxy(proxy: (ProxiedCommandSender, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.proxy = proxy
 		return this
 	}
 
-	fun native(native: (NativeProxyCommandSender, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun native(native: (NativeProxyCommandSender, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.native = native
 		return this
 	}

@@ -33,14 +33,21 @@ public interface ProxyCommandExecutor extends IExecutorNormal<NativeProxyCommand
 	/**
 	 * The code to run when this command is performed
 	 * 
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
 	 */
-	void run(NativeProxyCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(NativeProxyCommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * Executes the command.
+	 *
+	 * @param info The AbstractExecutionInfo for this command
+	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
+	 */
+	@Override
+	default void run(AbstractExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender> info) throws WrapperCommandSyntaxException {
+		this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

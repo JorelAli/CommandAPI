@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
 import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
@@ -34,15 +35,22 @@ public interface ConsoleResultingCommandExecutor extends IExecutorResulting<Cons
 	/**
 	 * The code to run when this command is performed
 	 * 
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
 	 * @return the result of this command
 	 */
-	int run(ConsoleCommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int run(ConsoleCommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param info The AbstractExecutionInfo for this command
+	 * @return the result of this command
+	 */
+	@Override
+	default int run(AbstractExecutionInfo<ConsoleCommandSender, BukkitConsoleCommandSender> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

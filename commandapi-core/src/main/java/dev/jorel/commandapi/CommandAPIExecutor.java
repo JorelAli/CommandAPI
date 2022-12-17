@@ -25,10 +25,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.executors.ExecutorType;
-import dev.jorel.commandapi.executors.IExecutorNormal;
-import dev.jorel.commandapi.executors.IExecutorResulting;
-import dev.jorel.commandapi.executors.IExecutorTyped;
+import dev.jorel.commandapi.executors.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,13 +60,13 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		this.resultingExecutors.add((IExecutorResulting<CommandSender, WrapperType>) executor);
 	}
 
-	public int execute(WrapperType sender, Object[] arguments) throws CommandSyntaxException {
+	public int execute(AbstractExecutionInfo<CommandSender, WrapperType> info) throws CommandSyntaxException {
 
 		// Parse executor type
 		if (!resultingExecutors.isEmpty()) {
 			// Run resulting executor
 			try {
-				return execute(resultingExecutors, sender, arguments);
+				return execute(resultingExecutors, info);
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			} catch (Exception e) {
@@ -79,7 +76,7 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		} else {
 			// Run normal executor
 			try {
-				return execute(normalExecutors, sender, arguments);
+				return execute(normalExecutors, info);
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			} catch (Exception e) {
@@ -89,35 +86,35 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped<WrapperType>> executors, WrapperType sender, Object[] args)
+	private int execute(List<? extends IExecutorTyped<CommandSender, WrapperType>> executors, AbstractExecutionInfo<CommandSender, WrapperType> info)
 			throws WrapperCommandSyntaxException {
 		if (isForceNative()) {
-			return execute(executors, sender, args, ExecutorType.NATIVE);
-		} else if (sender instanceof AbstractPlayer && matches(executors, ExecutorType.PLAYER)) {
-			return execute(executors, sender, args, ExecutorType.PLAYER);
-		} else if (sender instanceof AbstractEntity && matches(executors, ExecutorType.ENTITY)) {
-			return execute(executors, sender, args, ExecutorType.ENTITY);
-		} else if (sender instanceof AbstractConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
-			return execute(executors, sender, args, ExecutorType.CONSOLE);
-		} else if (sender instanceof AbstractBlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
-			return execute(executors, sender, args, ExecutorType.BLOCK);
-		} else if (sender instanceof AbstractProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
-			return execute(executors, sender, args, ExecutorType.PROXY);
+			return execute(executors, info, ExecutorType.NATIVE);
+		} else if (info.senderWrapper() instanceof AbstractPlayer && matches(executors, ExecutorType.PLAYER)) {
+			return execute(executors, info, ExecutorType.PLAYER);
+		} else if (info.senderWrapper() instanceof AbstractEntity && matches(executors, ExecutorType.ENTITY)) {
+			return execute(executors, info, ExecutorType.ENTITY);
+		} else if (info.senderWrapper() instanceof AbstractConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
+			return execute(executors, info, ExecutorType.CONSOLE);
+		} else if (info.senderWrapper() instanceof AbstractBlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
+			return execute(executors, info, ExecutorType.BLOCK);
+		} else if (info.senderWrapper() instanceof AbstractProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
+			return execute(executors, info, ExecutorType.PROXY);
 		} else if (matches(executors, ExecutorType.ALL)) {
-			return execute(executors, sender, args, ExecutorType.ALL);
+			return execute(executors, info, ExecutorType.ALL);
 		} else {
 			throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(
 					new LiteralMessage(CommandAPI.getConfiguration().getMissingImplementationMessage()
-							.replace("%s", sender.getClass().getSimpleName().toLowerCase())
-							.replace("%S", sender.getClass().getSimpleName()))).create());
+							.replace("%s", info.sender().getClass().getSimpleName().toLowerCase())
+							.replace("%S", info.sender().getClass().getSimpleName()))).create());
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped<WrapperType>> executors, WrapperType sender, Object[] args,
-			ExecutorType type) throws WrapperCommandSyntaxException {
-		for (IExecutorTyped<WrapperType> executor : executors) {
+	private int execute(List<? extends IExecutorTyped<CommandSender, WrapperType>> executors,
+	        AbstractExecutionInfo<CommandSender, WrapperType> info, ExecutorType type) throws WrapperCommandSyntaxException {
+		for (IExecutorTyped<CommandSender, WrapperType> executor : executors) {
 			if (executor.getType() == type) {
-				return executor.executeWith(sender, args);
+				return executor.executeWith(info);
 			}
 		}
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
@@ -139,8 +136,8 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
 
-	private boolean matches(List<? extends IExecutorTyped<?>> executors, ExecutorType type) {
-		for (IExecutorTyped<?> executor : executors) {
+	private boolean matches(List<? extends IExecutorTyped<?, ?>> executors, ExecutorType type) {
+		for (IExecutorTyped<?, ?> executor : executors) {
 			if (executor.getType() == type) {
 				return true;
 			}

@@ -29,7 +29,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * sender and arguments
  * @param <WrapperType> The AbstractCommandSenderClass for this executor
  */
-public interface IExecutorTyped<WrapperType extends AbstractCommandSender<?>> {
+public interface IExecutorTyped<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
 	
 	/**
 	 * Returns the type of the sender of the current executor.
@@ -38,14 +38,13 @@ public interface IExecutorTyped<WrapperType extends AbstractCommandSender<?>> {
 	default ExecutorType getType() {
 		return ExecutorType.ALL;
 	}
-	
+
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param sender the command sender for this command
-	 * @param args the arguments provided to this command
+	 * @param info The AbstractExecutionInfo for this command
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int executeWith(WrapperType sender, Object[] args) throws WrapperCommandSyntaxException;
+	int executeWith(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 
 }
