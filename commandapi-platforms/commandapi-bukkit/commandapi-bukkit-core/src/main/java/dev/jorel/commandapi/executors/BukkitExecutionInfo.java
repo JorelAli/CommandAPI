@@ -15,6 +15,11 @@ public record BukkitExecutionInfo<Sender>(
 	Sender sender,
 
 	/**
+	 * @return The wrapper type of this command
+	 */
+	BukkitCommandSender<? extends Sender> senderWrapper,
+
+	/**
 	 * @return The arguments of this command
 	 */
 	CommandArguments args

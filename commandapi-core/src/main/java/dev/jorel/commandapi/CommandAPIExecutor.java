@@ -90,15 +90,15 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 			throws WrapperCommandSyntaxException {
 		if (isForceNative()) {
 			return execute(executors, info, ExecutorType.NATIVE);
-		} else if (info.sender() instanceof AbstractPlayer && matches(executors, ExecutorType.PLAYER)) {
+		} else if (info.senderWrapper() instanceof AbstractPlayer && matches(executors, ExecutorType.PLAYER)) {
 			return execute(executors, info, ExecutorType.PLAYER);
-		} else if (info.sender() instanceof AbstractEntity && matches(executors, ExecutorType.ENTITY)) {
+		} else if (info.senderWrapper() instanceof AbstractEntity && matches(executors, ExecutorType.ENTITY)) {
 			return execute(executors, info, ExecutorType.ENTITY);
-		} else if (info.sender() instanceof AbstractConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
+		} else if (info.senderWrapper() instanceof AbstractConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
 			return execute(executors, info, ExecutorType.CONSOLE);
-		} else if (info.sender() instanceof AbstractBlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
+		} else if (info.senderWrapper() instanceof AbstractBlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
 			return execute(executors, info, ExecutorType.BLOCK);
-		} else if (info.sender() instanceof AbstractProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
+		} else if (info.senderWrapper() instanceof AbstractProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
 			return execute(executors, info, ExecutorType.PROXY);
 		} else if (matches(executors, ExecutorType.ALL)) {
 			return execute(executors, info, ExecutorType.ALL);

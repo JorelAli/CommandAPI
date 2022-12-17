@@ -30,7 +30,22 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 					@Override
 					public void run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException {
-						executor.executeWith(new BukkitExecutionInfo<>(sender, args));
+						executor.executeWith(new BukkitExecutionInfo<>(sender, new BukkitCommandSender<CommandSender>() {
+							@Override
+							public boolean hasPermission(String permissionNode) {
+								return sender.hasPermission(permissionNode);
+							}
+
+							@Override
+							public boolean isOp() {
+								return sender.isOp();
+							}
+
+							@Override
+							public CommandSender getSource() {
+								return sender;
+							}
+						}, args));
 					}
 
 					@Override
@@ -88,7 +103,22 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 					@Override
 					public int run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException {
-						executor.executeWith(new BukkitExecutionInfo<>(sender, args));
+						executor.executeWith(new BukkitExecutionInfo<>(sender, new BukkitCommandSender<>() {
+							@Override
+							public boolean hasPermission(String permissionNode) {
+								return sender.hasPermission(permissionNode);
+							}
+
+							@Override
+							public boolean isOp() {
+								return sender.isOp();
+							}
+
+							@Override
+							public CommandSender getSource() {
+								return sender;
+							}
+						}, args));
 						return 1;
 					}
 

@@ -171,6 +171,11 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				}
 
 				@Override
+				public AbstractCommandSender<? extends CommandSender> senderWrapper() {
+					return sender;
+				}
+
+				@Override
 				public CommandArguments args() {
 					return commandArguments;
 				}
@@ -181,10 +186,15 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
-				AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> convertedExecutionInfo = new AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>>() {
+				AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> convertedExecutionInfo = new AbstractExecutionInfo<>() {
 					@Override
 					public CommandSender sender() {
 						return sender.getSource();
+					}
+
+					@Override
+					public AbstractCommandSender<? extends CommandSender> senderWrapper() {
+						return sender;
 					}
 
 					@Override

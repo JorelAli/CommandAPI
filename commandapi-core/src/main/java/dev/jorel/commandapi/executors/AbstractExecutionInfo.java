@@ -15,6 +15,11 @@ public interface AbstractExecutionInfo<Sender, WrapperType extends AbstractComma
 	Sender sender();
 
 	/**
+	 * @return The wrapper type of this command
+	 */
+	WrapperType senderWrapper();
+
+	/**
 	 * @return The arguments of this command
 	 */
 	CommandArguments args();
