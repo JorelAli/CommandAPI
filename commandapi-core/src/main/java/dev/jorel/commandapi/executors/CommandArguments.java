@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.executors;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -42,8 +43,9 @@ public class CommandArguments {
 	 * Returns an argument by its node name
 	 *
 	 * @param nodeName The node name of this argument. This was set when initializing an argument
-	 * @return an argument which has the given node name
+	 * @return An argument which has the given node name. Can be null if <code>nodeName</code> was not found.
 	 */
+	@Nullable
 	public Object get(String nodeName) {
 		return argsMap.get(nodeName);
  	}
