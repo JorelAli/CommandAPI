@@ -15,6 +15,8 @@ public interface AbstractExecutionInfo<Sender, WrapperType extends AbstractComma
 	Sender sender();
 
 	/**
+	 * This is not intended for public use and is only used internally. The {@link AbstractExecutionInfo#sender()} method should be used instead!
+	 *
 	 * @return The wrapper type of this command
 	 */
 	WrapperType senderWrapper();
