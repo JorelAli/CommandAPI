@@ -91,9 +91,18 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 */
 	public static <CommandSource> String getRawArgumentInput(CommandContext<CommandSource> cmdCtx,
 			String key) {
-		StringRange range = ((Map<String, ParsedArgument<CommandSource, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx))
-				.get(key).getRange();
-		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+		final Map<String, ParsedArgument<CommandSource, ?>> commandContextArgs = (Map<String, ParsedArgument<CommandSource, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx);
+		final ParsedArgument<CommandSource, ?> parsedArgument = commandContextArgs.get(key);
+		
+		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
+		// the arguments for this command context (most likely because it's a redirected command).
+		// We need to figure out how to handle this case.
+		if(parsedArgument != null) {
+			StringRange range = parsedArgument.getRange();
+			return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+		} else {
+			return "";
+		}
 	}
 
 	// TODO: Need to ensure this can be safely "disposed of" when we're done (e.g. on reloads).
