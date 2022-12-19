@@ -31,11 +31,11 @@ jobs:
         run: mvn clean install --batch-mode -PPlatform.Bukkit
       - name: check NMS Common works on all versions
         run: |
-            mvn clean package -pl :commandapi-bukkit-nms-common -P Spigot_1_17_R1
-            mvn clean package -pl :commandapi-bukkit-nms-common -P Spigot_1_18_R1
-            mvn clean package -pl :commandapi-bukkit-nms-common -P Spigot_1_18_2_R2
-            mvn clean package -pl :commandapi-bukkit-nms-common -P Spigot_1_19_R1
-            mvn clean package -pl :commandapi-bukkit-nms-common -P Spigot_1_19_3_R2;
+            mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_17_R1
+            mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_18_R1
+            mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_18_2_R2
+            mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_R1
+            mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_3_R2;
       - name: CommandAPI (Bukkit) plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v3

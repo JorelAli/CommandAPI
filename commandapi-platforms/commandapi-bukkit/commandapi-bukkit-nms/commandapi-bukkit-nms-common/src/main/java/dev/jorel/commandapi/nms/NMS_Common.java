@@ -85,11 +85,11 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
  * compiling this code against all of the declared Maven profiles specified in
  * this submodule's pom.xml file, by running the following commands:
  * <ul>
- * <li><code>mvn clean package -pl :commandapi-nms-common -P Spigot_1_19_3_R2</code></li>
- * <li><code>mvn clean package -pl :commandapi-nms-common -P Spigot_1_19_R1</code></li>
- * <li><code>mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_2_R2</code></li>
- * <li><code>mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_R1</code></li>
- * <li><code>mvn clean package -pl :commandapi-nms-common -P Spigot_1_17_R1</code></li>
+ * <li><code>mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_3_R2</code></li>
+ * <li><code>mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_R1</code></li>
+ * <li><code>mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_18_2_R2</code></li>
+ * <li><code>mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_18_R1</code></li>
+ * <li><code>mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_17_R1</code></li>
  * </ul>
  * Any of these that do not work should be removed or implemented otherwise
  * (introducing another NMS_Common module perhaps?
