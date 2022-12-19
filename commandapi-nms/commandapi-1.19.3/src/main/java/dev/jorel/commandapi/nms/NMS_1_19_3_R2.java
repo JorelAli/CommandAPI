@@ -251,6 +251,11 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		return ItemArgument.item(COMMAND_BUILD_CONTEXT);
 	}
 
+	@Override
+	public final ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle(COMMAND_BUILD_CONTEXT);
+	}
+
 	@Differs(from = "1.19.2", by = "Now needs command build context")
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {

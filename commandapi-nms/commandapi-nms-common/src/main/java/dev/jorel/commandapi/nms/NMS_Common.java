@@ -192,6 +192,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
 	public ArgumentType<?> _ArgumentEnchantment() {
 		return ItemEnchantmentArgument.enchantment();
 	}
@@ -239,8 +240,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
-	public ArgumentType<?> _ArgumentMobEffect() { // TODO: Abstract
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
+	public ArgumentType<?> _ArgumentMobEffect() {
 		return MobEffectArgument.effect();
 	}
 
@@ -250,7 +251,8 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentParticle() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
+	public ArgumentType<?> _ArgumentParticle() {
 		return ParticleArgument.particle();
 	}
 
