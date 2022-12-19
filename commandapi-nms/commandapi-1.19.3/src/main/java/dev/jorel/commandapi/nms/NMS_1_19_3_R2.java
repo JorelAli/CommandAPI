@@ -67,6 +67,7 @@ import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R2.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_19_R2.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
@@ -223,6 +224,12 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		return BlockStateArgument.block(COMMAND_BUILD_CONTEXT);
 	}
 
+	@Differs(from = "1.19.2", by = "Enchantment argument now uses ResourceArgument")
+	@Override
+	public final ArgumentType<?> _ArgumentEnchantment() {
+		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENCHANTMENT);
+	}
+
 	@Override
 	public final ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
 		return switch (subType) {
@@ -242,6 +249,11 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final ArgumentType<?> _ArgumentItemStack() {
 		return ItemArgument.item(COMMAND_BUILD_CONTEXT);
+	}
+
+	@Override
+	public final ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle(COMMAND_BUILD_CONTEXT);
 	}
 
 	@Differs(from = "1.19.2", by = "Now needs command build context")
@@ -381,6 +393,12 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final CommandSourceStack getCLWFromCommandSender(CommandSender sender) {
 		return VanillaCommandWrapper.getListener(sender);
+	}
+	
+	@Differs(from = "1.19.2", by = "Use of ResourceArgument")
+	@Override
+	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return Enchantment.getByKey(fromResourceLocation(BuiltInRegistries.ENCHANTMENT.getKey(ResourceArgument.getEnchantment(cmdCtx, key).value())));
 	}
 
 	@Override

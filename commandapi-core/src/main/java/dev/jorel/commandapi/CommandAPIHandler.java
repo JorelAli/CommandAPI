@@ -129,9 +129,18 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 */
 	public static <CommandSourceStack> String getRawArgumentInput(CommandContext<CommandSourceStack> cmdCtx,
 			String key) {
-		StringRange range = ((Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx))
-				.get(key).getRange();
-		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+		final Map<String, ParsedArgument<CommandSourceStack, ?>> commandContextArgs = (Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx);
+		final ParsedArgument<CommandSourceStack, ?> parsedArgument = commandContextArgs.get(key);
+
+		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
+		// the arguments for this command context (most likely because it's a redirected command).
+		// We need to figure out how to handle this case.
+		if(parsedArgument != null) {
+			StringRange range = parsedArgument.getRange();
+			return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+		} else {
+			return "";
+		}
 	}
 
 	private static CommandAPIHandler<?> instance;
@@ -457,11 +466,19 @@ public class CommandAPIHandler<CommandSourceStack> {
 			satisfiesPermissions = true;
 		} else {
 			if (permission.equals(CommandPermission.NONE)) {
+				// No permission set
 				satisfiesPermissions = true;
 			} else if (permission.equals(CommandPermission.OP)) {
+				// Op permission set
 				satisfiesPermissions = sender.isOp();
 			} else {
-				satisfiesPermissions = sender.hasPermission(permission.getPermission().get());
+				// A permission has been set
+				if(permission.getPermission().isPresent()) {
+					satisfiesPermissions = sender.hasPermission(permission.getPermission().get());
+				} else {
+					// TODO: This should assert, we should be defaulting to CommandPermission.NONE, but for some reason we're not.
+					satisfiesPermissions = true;
+				}
 			}
 		}
 		if (permission.isNegated()) {
@@ -492,7 +509,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			} else if (perm.getPermission().isPresent()) {
 				permNode = perm.getPermission().get();
 			} else {
-				// This case should never occur. Worth testing this with some assertion
+				// TODO: This case should never occur. Worth testing this with some assertion
 				permNode = null;
 			}
 
