@@ -192,7 +192,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentEnchantment() {
+	public ArgumentType<?> _ArgumentEnchantment() {
 		return ItemEnchantmentArgument.enchantment();
 	}
 
@@ -470,7 +470,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) {
+	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return Enchantment.getByKey(fromResourceLocation(Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key))));
 	}
 
