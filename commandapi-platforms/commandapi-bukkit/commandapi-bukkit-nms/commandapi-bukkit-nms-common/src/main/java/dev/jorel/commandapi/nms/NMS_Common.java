@@ -144,7 +144,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentEnchantment() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
+	public ArgumentType<?> _ArgumentEnchantment() {
 		return ItemEnchantmentArgument.enchantment();
 	}
 
@@ -191,8 +192,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
-	public ArgumentType<?> _ArgumentMobEffect() { // TODO: Abstract
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
+	public ArgumentType<?> _ArgumentMobEffect() {
 		return MobEffectArgument.effect();
 	}
 
@@ -202,7 +203,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentParticle() {
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
+	public ArgumentType<?> _ArgumentParticle() {
 		return ParticleArgument.particle();
 	}
 
@@ -421,7 +423,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) {
+	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return Enchantment.getByKey(fromResourceLocation(Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key))));
 	}
 

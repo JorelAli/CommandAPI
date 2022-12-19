@@ -330,7 +330,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
-	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException; // Throws exception in 1.19.3
 
 	Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException;
