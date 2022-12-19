@@ -129,9 +129,18 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 */
 	public static <CommandSourceStack> String getRawArgumentInput(CommandContext<CommandSourceStack> cmdCtx,
 			String key) {
-		StringRange range = ((Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx))
-				.get(key).getRange();
-		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+		final Map<String, ParsedArgument<CommandSourceStack, ?>> commandContextArgs = (Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx);
+		final ParsedArgument<CommandSourceStack, ?> parsedArgument = commandContextArgs.get(key);
+
+		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
+		// the arguments for this command context (most likely because it's a redirected command).
+		// We need to figure out how to handle this case.
+		if(parsedArgument != null) {
+			StringRange range = parsedArgument.getRange();
+			return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+		} else {
+			return "";
+		}
 	}
 
 	private static CommandAPIHandler<?> instance;
