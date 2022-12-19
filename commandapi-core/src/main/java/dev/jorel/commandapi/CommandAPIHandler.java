@@ -466,11 +466,19 @@ public class CommandAPIHandler<CommandSourceStack> {
 			satisfiesPermissions = true;
 		} else {
 			if (permission.equals(CommandPermission.NONE)) {
+				// No permission set
 				satisfiesPermissions = true;
 			} else if (permission.equals(CommandPermission.OP)) {
+				// Op permission set
 				satisfiesPermissions = sender.isOp();
 			} else {
-				satisfiesPermissions = sender.hasPermission(permission.getPermission().get());
+				// A permission has been set
+				if(permission.getPermission().isPresent()) {
+					satisfiesPermissions = sender.hasPermission(permission.getPermission().get());
+				} else {
+					// TODO: This should assert, we should be defaulting to CommandPermission.NONE, but for some reason we're not.
+					satisfiesPermissions = true;
+				}
 			}
 		}
 		if (permission.isNegated()) {
@@ -501,7 +509,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			} else if (perm.getPermission().isPresent()) {
 				permNode = perm.getPermission().get();
 			} else {
-				// This case should never occur. Worth testing this with some assertion
+				// TODO: This case should never occur. Worth testing this with some assertion
 				permNode = null;
 			}
 
