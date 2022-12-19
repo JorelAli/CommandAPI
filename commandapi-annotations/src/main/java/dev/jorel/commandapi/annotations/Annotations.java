@@ -66,7 +66,6 @@ import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEnchantmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntityTypeArgument;
-import dev.jorel.commandapi.annotations.arguments.AEnvironmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatRangeArgument;
 import dev.jorel.commandapi.annotations.arguments.AFunctionArgument;
@@ -101,10 +100,8 @@ import dev.jorel.commandapi.annotations.arguments.ATextArgument;
 import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
 import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
-import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 /**
  * The main annotation processor for annotation-based arguments
@@ -113,19 +110,21 @@ import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 public class Annotations extends AbstractProcessor {
 
 	private final Class<?>[] ARGUMENT_ANNOTATIONS = new Class<?>[] { AAdvancementArgument.class,
-			AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
-			AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
-			ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
-			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class, AEntityTypeArgument.class,
-			AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class, AFunctionArgument.class,
-			AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class, AItemStackArgument.class,
-			AItemStackPredicateArgument.class, ALiteralArgument.class, ALocation2DArgument.class,
-			ALocationArgument.class, ALongArgument.class, ALootTableArgument.class, AMathOperationArgument.class,
-			AMultiLiteralArgument.class, ANamespacedKeyArgument.class, ANBTCompoundArgument.class, AObjectiveArgument.class,
-			AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class, AParticleArgument.class, APlayerArgument.class,
-			APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class, AScoreboardSlotArgument.class,
-			AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class, ATeamArgument.class,
-			ATextArgument.class, ATimeArgument.class, AUUIDArgument.class };
+		AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
+		AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
+		ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
+		ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.ManyEntities.class,
+		AEntitySelectorArgument.ManyPlayers.class, AEntitySelectorArgument.OneEntity.class,
+		AEntitySelectorArgument.OnePlayer.class, AEntityTypeArgument.class,
+		AFloatArgument.class, AFloatRangeArgument.class, AFunctionArgument.class,
+		AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class, AItemStackArgument.class,
+		AItemStackPredicateArgument.class, ALiteralArgument.class, ALocation2DArgument.class,
+		ALocationArgument.class, ALongArgument.class, ALootTableArgument.class, AMathOperationArgument.class,
+		AMultiLiteralArgument.class, ANamespacedKeyArgument.class, ANBTCompoundArgument.class, AObjectiveArgument.class,
+		AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class, AParticleArgument.class, APlayerArgument.class,
+		APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class, AScoreboardSlotArgument.class,
+		AScoreHolderArgument.Single.class, AScoreHolderArgument.Multiple.class, ASoundArgument.class, AStringArgument.class, ATeamArgument.class,
+		ATextArgument.class, ATimeArgument.class, AUUIDArgument.class };
 
 	// List of stuff we can deal with
 	@Override
@@ -187,15 +186,20 @@ public class Annotations extends AbstractProcessor {
 			if(methodElement instanceof ExecutableElement) {
 				ExecutableElement method = (ExecutableElement) methodElement;
 				for(VariableElement parameter : method.getParameters()) {
-					if(getArgument(parameter) != null) {
-						imports.addAll(Arrays.asList(getPrimitive(getArgument(parameter)).value()));
-						imports.add("dev.jorel.commandapi.arguments." + getArgument(parameter).annotationType().getSimpleName().substring(1));
-						if(getArgument(parameter) instanceof ALocationArgument || getArgument(parameter) instanceof ALocation2DArgument) {
+					Annotation argument = getArgument(parameter);
+					if(argument != null) {
+						imports.addAll(Arrays.asList(getPrimitive(argument).value()));
+
+						if(argument.annotationType().getEnclosingClass() == null) {
+							// Normal arguments
+							imports.add("dev.jorel.commandapi.arguments." + argument.annotationType().getSimpleName().substring(1));
+						} else {
+							// Nested arguments, like EntitySelectorArgument
+							imports.add("dev.jorel.commandapi.arguments." + argument.annotationType().getEnclosingClass().getSimpleName().substring(1));
+						}
+						
+						if(argument instanceof ALocationArgument || argument instanceof ALocation2DArgument) {
 							imports.add(LocationType.class.getCanonicalName());
-						} else if(getArgument(parameter) instanceof AScoreHolderArgument) {
-							imports.add(ScoreHolderType.class.getCanonicalName());
-						} else if(getArgument(parameter) instanceof AEntitySelectorArgument) {
-							imports.add(EntitySelector.class.getCanonicalName());
 						}
 					}
 					
@@ -303,22 +307,6 @@ public class Annotations extends AbstractProcessor {
 			Primitive primitive = getPrimitive(argumentAnnotation);
 			if(primitive.value().length == 1) {
 				argumentMapping.put(i - 1, primitive.value()[0]);
-			} else {
-				if(argumentAnnotation instanceof AEntitySelectorArgument argument) {
-					switch(argument.value()) {
-					case MANY_ENTITIES -> argumentMapping.put(i - 1, primitive.value()[0]);
-					case MANY_PLAYERS  -> argumentMapping.put(i - 1, primitive.value()[1]);
-					case ONE_ENTITY    -> argumentMapping.put(i - 1, primitive.value()[2]);
-					case ONE_PLAYER    -> argumentMapping.put(i - 1, primitive.value()[3]);
-					default            -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
-					}
-				} else if (argumentAnnotation instanceof AScoreHolderArgument argument) {
-					switch(argument.value()) {
-					case MULTIPLE -> argumentMapping.put(i - 1, primitive.value()[0]);
-					case SINGLE   -> argumentMapping.put(i - 1, primitive.value()[1]);
-					default       -> throw new IllegalArgumentException("Unexpected value: " + argument.value());
-					}
-				}
 			}
 		}
 		
@@ -365,9 +353,9 @@ public class Annotations extends AbstractProcessor {
 			} else {
 				out.print(simpleFromQualified(fromArgumentMap));
 			}
-			out.print(") args[");
+			out.print(") args.get(");
 			out.print(i);
-			out.print("]");
+			out.print(")");
 		}
 		//populate stuff here
 		
@@ -492,7 +480,15 @@ public class Annotations extends AbstractProcessor {
 	private <T extends Annotation> void emitArgument(PrintWriter out, T argumentAnnotation, VariableElement parameter, int indent) {
 		out.print(indent(indent) + ".withArguments(new ");
 		// We're assuming that the name of the argument MUST be "A" + the same name
-		out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
+		if(argumentAnnotation.annotationType().getEnclosingClass() == null) {
+			// Normal arguments
+			out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
+		} else {
+			// Nested arguments, like EntitySelectorArgument
+			out.print(argumentAnnotation.annotationType().getEnclosingClass().getSimpleName().substring(1));
+			out.print(".");
+			out.print(argumentAnnotation.annotationType().getSimpleName());
+		}
 		
 		// Node name
 		if(argumentAnnotation instanceof AMultiLiteralArgument || argumentAnnotation instanceof ALiteralArgument) {
@@ -521,10 +517,6 @@ public class Annotations extends AbstractProcessor {
 			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
 		} else if(argumentAnnotation instanceof ALocationArgument argument) {
 			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
-		} else if(argumentAnnotation instanceof AEntitySelectorArgument argument) {
-			out.print(", " + EntitySelector.class.getSimpleName() + "." + argument.value().toString());
-		} else if(argumentAnnotation instanceof AScoreHolderArgument argument) {
-			out.print(", " + ScoreHolderType.class.getSimpleName() + "." + argument.value().toString());
 		} else if(argumentAnnotation instanceof AMultiLiteralArgument argument) {
 			out.print(Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
 		} else if(argumentAnnotation instanceof ALiteralArgument argument) {
@@ -557,11 +549,22 @@ public class Annotations extends AbstractProcessor {
 	private <T extends Annotation> T getArgument(VariableElement tMirror) {
 		for(AnnotationMirror mirror : tMirror.getAnnotationMirrors()) {
 			if(isArgument(mirror)) {
+				T argumentAnnotation = null;
+				String mirrorCanonicalName = mirror.getAnnotationType().toString();
 				try {
-					return tMirror.getAnnotationsByType((Class<T>) Class.forName(mirror.getAnnotationType().toString()))[0];
+					argumentAnnotation = tMirror.getAnnotationsByType((Class<T>) Class.forName(mirrorCanonicalName))[0];
 				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
+					// We might be in a nested class. Let's try accessing that
+					try {
+						// Replace final . with $
+						mirrorCanonicalName = mirrorCanonicalName.substring(0, mirrorCanonicalName.lastIndexOf(".")) + "$" + mirrorCanonicalName.substring(mirrorCanonicalName.lastIndexOf(".") + 1);
+						argumentAnnotation = tMirror.getAnnotationsByType((Class<T>) Class.forName(mirrorCanonicalName))[0];
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					}
 				}
+				
+				return argumentAnnotation;
 			}
 		}
 		return null;

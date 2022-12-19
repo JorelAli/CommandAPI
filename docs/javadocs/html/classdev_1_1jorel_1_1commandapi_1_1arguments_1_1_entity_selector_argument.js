@@ -1,11 +1,14 @@
 var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument =
 [
+    [ "ManyEntities", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_entities.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_entities" ],
+    [ "ManyPlayers", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_players.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_players" ],
+    [ "OneEntity", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_one_entity.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_one_entity" ],
+    [ "OnePlayer", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_one_player.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_one_player" ],
     [ "EntitySelectorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#a8b48b9764166ca4930d95024d3e197d1", null ],
     [ "EntitySelectorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#aa897b4b961b38522ab7b8b622e508b34", null ],
     [ "getArgumentPermission", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#a2216e5bd7c9e2c08dfddcac97e10ff9d", null ],
     [ "getArgumentType", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#a000731a1a505c90d960bf1a6f21cc788", null ],
     [ "getEntityNames", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#ab52dad31b9b98c82058fd4c20a472ff6", null ],
-    [ "getEntitySelector", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#ada827549ba7958dfa586fdcf0be98207", null ],
     [ "getIncludedSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#a171d90580224f0b493980509549ddb5e", null ],
     [ "getNodeName", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#abcf7ec6ba4643d45bd71c90cc481c731", null ],
     [ "getOverriddenSuggestions", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html#a2bfff4945cfc596936135dccdb628345", null ],

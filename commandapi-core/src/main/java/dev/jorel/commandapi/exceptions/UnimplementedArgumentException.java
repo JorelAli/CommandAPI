@@ -23,6 +23,7 @@ package dev.jorel.commandapi.exceptions;
 /**
  * An exception caused when using an argument which hasn't been implemented in this Minecraft version
  */
+@SuppressWarnings("serial")
 public class UnimplementedArgumentException extends RuntimeException {
 
 	/**

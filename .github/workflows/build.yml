@@ -4,7 +4,7 @@
 # against bad commits.
 
 name: build
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -27,40 +27,26 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java }}
           cache: maven
-      - name: build CommandAPI using maven
-        run: mvn clean install --batch-mode
+      - name: build CommandAPI (Bukkit) using maven
+        run: mvn clean install --batch-mode -PPlatform.Bukkit
       - name: check NMS Common works on all versions
         run: |
-          mvn clean package -pl :commandapi-nms-common -P Spigot_1_17_R1
-          mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_R1
-          mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_2_R2
-          mvn clean package -pl :commandapi-nms-common -P Spigot_1_19_R1;
-      - name: CommandAPI plugin artifact
+            mvn clean package -pl :commandapi-nms-common -P Spigot_1_17_R1
+            mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_R1
+            mvn clean package -pl :commandapi-nms-common -P Spigot_1_18_2_R2
+            mvn clean package -pl :commandapi-nms-common -P Spigot_1_19_R1;
+      - name: CommandAPI (Bukkit) plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: CommandAPI (plugin)
           path: |
-            commandapi-plugin/target/CommandAPI*.jar
-            !commandapi-plugin/target/*sources.jar
-            !commandapi-plugin/target/*javadoc.jar
-      - name: CommandAPI core artifact
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v2
-        with:
-          name: CommandAPI (core)
-          path: |
-            commandapi-core/target/CommandAPI*.jar
-            !commandapi-core/target/*sources.jar
-            !commandapi-core/target/*javadoc.jar
-      - name: CommandAPI shade artifact
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v2
-        with:
-          name: CommandAPI (shade)
-          path: |
-            commandapi-shade/target/CommandAPI*.jar
-            !commandapi-shade/target/*sources.jar
-            !commandapi-shade/target/*javadoc.jar
+            commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/CommandAPI*.jar
+            !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*sources.jar
+            !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*javadoc.jar
       - name: build CommandAPI examples in examples/
-        run: for folder in examples/*/; do ( cd $folder; mvn clean package ); done
+        run: cd ./examples; ./build.sh;
+      - name: docssrc markdown linter
+        uses: DavidAnson/markdownlint-cli2-action@v8
+        with:
+          globs: 'docssrc/src/*.md'

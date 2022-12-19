@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import dev.jorel.commandapi.ChainableBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Optional;
  * @param <T> The class of the object returned when the {@link ArgumentType}
  *           used by this Argument parses its raw input
  */
-public interface InitialParseExceptionArgument<T, Impl extends Argument<?>> {
+public interface InitialParseExceptionArgument<T, Impl extends AbstractArgument<?, Impl, ?, ?>> extends ChainableBuilder<Impl> {
 	/**
 	 * A map that links Arguments to their ExceptionHandlers. This is basically
 	 * equivalent to putting one instance variable in this interface, but Java
@@ -32,7 +33,7 @@ public interface InitialParseExceptionArgument<T, Impl extends Argument<?>> {
 	 */
 	default Impl withInitialParseExceptionHandler(InitialParseExceptionHandler<T> exceptionHandler) {
 		exceptionHandlers.put(this, exceptionHandler);
-		return (Impl) this;
+		return instance();
 	}
 
 	/**

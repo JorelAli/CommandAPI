@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
-import org.bukkit.Location;
-
 /**
  * A class to represent the pitch and yaw rotation in degrees
  */
@@ -65,7 +63,7 @@ public class Rotation {
 	 * @return the normalized pitch in degrees
 	 */
 	public float getNormalizedPitch() {
-		return Location.normalizePitch(this.pitch);
+		return pitch > 90.0F ? 90.0F : Math.max(pitch, -90.F);
 	}
 
 	/**
@@ -74,7 +72,14 @@ public class Rotation {
 	 * @return the normalized yaw in degrees
 	 */
 	public float getNormalizedYaw() {
-		return Location.normalizeYaw(this.yaw);
+		float normalizedYaw = yaw % 360.0F;
+		if (normalizedYaw >= 180.0F) {
+			normalizedYaw -= 360.0F;
+		} else if (normalizedYaw < -180.0F) {
+			normalizedYaw += 360.0F;
+		}
+
+		return normalizedYaw;
 	}
 	
 	/**

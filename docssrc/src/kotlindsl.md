@@ -19,11 +19,11 @@ We can then use the following command registration:
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommand}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:dslSendMessageToCommand}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommand2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:dslSendMessageToCommand2}}
 ```
 
 </div>
@@ -95,11 +95,11 @@ Below, the `sendMessageTo` command is adding a broadcast option which should onl
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommandRequirement}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:dslSendMessageToCommandRequirement}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommandRequirement2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:dslSendMessageToCommandRequirement2}}
 ```
 
 </div>
@@ -113,11 +113,11 @@ You can also restrict the use of a whole command by using requirements:
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslCommandRequirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:dslCommandRequirements}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslCommandRequirements2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:dslCommandRequirements2}}
 ```
 
 </div>
@@ -144,11 +144,11 @@ As with the Java method of registering commands, with a CommandTree you can decl
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:optionalArgument}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:optionalArgument}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:optionalArgument2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:optionalArgument2}}
 ```
 
 </div>
@@ -170,11 +170,11 @@ We make use of the `argument()` method to provide an argument implementation and
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:replaceSuggestions}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:replaceSuggestions}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:replaceSuggestions2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:replaceSuggestions2}}
 ```
 
 </div>

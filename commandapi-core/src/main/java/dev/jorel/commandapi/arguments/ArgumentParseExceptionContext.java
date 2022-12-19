@@ -1,7 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import org.bukkit.command.CommandSender;
 
 /**
  * A record containing information on why an Argument failed to parse.
@@ -11,5 +10,5 @@ import org.bukkit.command.CommandSender;
  * @param input The raw object returned by the initial Brigadier parse for the Argument
  * @param previousArguments The previously parsed arguments that came before this argument
  */
-public record ArgumentParseExceptionContext(WrapperCommandSyntaxException exception, CommandSender sender, Object input, Object[] previousArguments) {
+public record ArgumentParseExceptionContext<CommandSender>(WrapperCommandSyntaxException exception, CommandSender sender, Object input, Object[] previousArguments) {
 }

@@ -10,7 +10,7 @@ The default `config.yml` is shown below:
   <summary><b>config.yml</b></summary>
 
 ```yaml
-{{#include ../../commandapi-plugin/src/main/resources/config.yml}}
+{{#include ../../commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/src/main/resources/config.yml}}
 ```
 
 </details>

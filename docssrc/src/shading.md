@@ -44,11 +44,11 @@ The `CommandAPIConfig` class follows a typical builder pattern (without you havi
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:CommandAPIConfigSilent}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:CommandAPIConfigSilent}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:CommandAPIConfigSilent}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandAPIConfigSilent}}
 ```
 
 </div>
@@ -66,11 +66,11 @@ The `onDisable()` method disables the CommandAPI gracefully. This should be plac
 <div class="multi-pre">
 
 ```java,Java
-public {{#include ../../commandapi-core/src/test/java/Examples.java:shading}}
+public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:shading}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:shading}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:shading}}
 ```
 
 </div>
@@ -100,7 +100,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-shade</artifactId>
-        <version>8.6.0</version>
+        <version>9.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -194,13 +194,13 @@ Next, we declare our dependencies:
 
 ```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-shade:8.6.0"
+    implementation "dev.jorel:commandapi-shade:9.0.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-shade:8.6.0")
+    implementation("dev.jorel:commandapi-shade:9.0.0")
 }
 ```
 
@@ -213,7 +213,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```groovy,build.gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.6.0")
+        include dependency("dev.jorel:commandapi-shade:9.0.0")
     }
 
     // TODO: Change this to my own package name
@@ -224,7 +224,7 @@ shadowJar {
 ```kotlin,build.gradle.kts
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:8.6.0")
+        include dependency("dev.jorel:commandapi-shade:9.0.0")
     }
 
     // TODO: Change this to my own package name

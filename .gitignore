@@ -1,4 +1,4 @@
-.idea/**
+**/.idea/
 *.iml
 build-works/
 libs/
@@ -8,8 +8,5 @@ bin
 .settings
 target
 logs/latest.log
-commandapi-plugin/dependency-reduced-pom.xml
-commandapi-shade/dependency-reduced-pom.xml
 .vscode
-commandapi-plugin-test/command_registration.json
-commandapi-plugin-test/logs/*
+.DS_Store
