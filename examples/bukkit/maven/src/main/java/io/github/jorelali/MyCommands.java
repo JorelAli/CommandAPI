@@ -28,7 +28,7 @@ public class MyCommands {
 			// We want to target blocks in particular, so use BLOCK_POSITION
 			.withArguments(new LocationArgument("block", LocationType.BLOCK_POSITION))
 			.executesPlayer((player, args) -> {
-				((Location) args[0]).getBlock().breakNaturally();
+				((Location) args.get(0)).getBlock().breakNaturally();
 			})
 			.register();
 
@@ -40,8 +40,8 @@ public class MyCommands {
 			.withArguments(new PlayerArgument("target"))
 			.withArguments(new PotionEffectArgument("potion"))
 			.executes((sender, args) -> {
-				Player target = (Player) args[0];
-				PotionEffectType potionEffectType = (PotionEffectType) args[1];
+				Player target = (Player) args.get(0);
+				PotionEffectType potionEffectType = (PotionEffectType) args.get(1);
 				target.addPotionEffect(new PotionEffect(potionEffectType, 300 * 20, 1));
 			})
 			.register();
@@ -52,7 +52,7 @@ public class MyCommands {
 		new CommandAPICommand("nbt")
 			.withArguments(new NBTCompoundArgument<NBTContainer>("nbt"))
 			.executes(((sender, args) -> {
-				NBTContainer nbt = (NBTContainer) args[0];
+				NBTContainer nbt = (NBTContainer) args.get(0);
 
 				sender.sendMessage(nbt.toString());
 			}))
@@ -68,7 +68,7 @@ public class MyCommands {
 		new CommandTree("break")
 			.then(new LocationArgument("block", LocationType.BLOCK_POSITION)
 				.executesPlayer((player, args) -> {
-					((Location) args[0]).getBlock().breakNaturally();
+					((Location) args.get(0)).getBlock().breakNaturally();
 				}))
 			.register();
 
@@ -82,7 +82,7 @@ public class MyCommands {
 					// Register /myeffect <potion effect>
 					// This command just adds the potion effect to the player that
 					// executes the command
-					PotionEffectType potionEffectType = (PotionEffectType) args[0];
+					PotionEffectType potionEffectType = (PotionEffectType) args.get(0);
 					player.addPotionEffect(new PotionEffect(potionEffectType, 300 * 20, 1));
 				})
 				.then(new PlayerArgument("target")
@@ -90,8 +90,8 @@ public class MyCommands {
 						// Register /myeffect <potion effect> <player>
 						// This command works exactly the same as the example
 						// shown in registerAllCommands()
-						PotionEffectType potionEffectType = (PotionEffectType) args[0];
-						Player target = (Player) args[1];
+						PotionEffectType potionEffectType = (PotionEffectType) args.get(0);
+						Player target = (Player) args.get(1);
 						target.addPotionEffect(new PotionEffect(potionEffectType, 300 * 20, 1));
 					})))
 			.register();

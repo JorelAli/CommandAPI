@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
@@ -115,11 +116,11 @@ public class BetterBossBarsCommand {
 			.register();
 	}
 
-	private void setPlayers(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
+	private void setPlayers(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
 
 		@SuppressWarnings("unchecked")
-		Collection<Player> targets = (Collection<Player>) args[1];
+		Collection<Player> targets = (Collection<Player>) args.get(1);
 
 		Bukkit.getBossBar(id).removeAll();
 		for (Player player : targets) {
@@ -127,9 +128,9 @@ public class BetterBossBarsCommand {
 		}
 	}
 
-	private void setStyle(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		NamespacedKey id = (NamespacedKey) args[0];
-		String style = (String) args[1];
+	private void setStyle(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException {
+		NamespacedKey id = (NamespacedKey) args.get(0);
+		String style = (String) args.get(1);
 
 		Bukkit.getBossBar(id).setStyle(
 			switch (style) {
@@ -142,9 +143,9 @@ public class BetterBossBarsCommand {
 			});
 	}
 
-	private void setValue(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
-		int value = (int) args[1];
+	private void setValue(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
+		int value = (int) args.get(1);
 
 		if (this.maxValues.containsKey(id)) {
 			Bukkit.getBossBar(id).setProgress((double) value / (double) this.maxValues.get(id));
@@ -154,57 +155,57 @@ public class BetterBossBarsCommand {
 		}
 	}
 
-	private void setVisible(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
-		boolean visible = (boolean) args[1];
+	private void setVisible(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
+		boolean visible = (boolean) args.get(1);
 
 		Bukkit.getBossBar(id).setVisible(visible);
 	}
 
-	private void removeBossbar(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
+	private void removeBossbar(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
 
 		sender.sendMessage("Removed custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "]");
 		Bukkit.getBossBar(id).removeAll();
 		Bukkit.removeBossBar(id);
 	}
 
-	private void getPlayers(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
+	private void getPlayers(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
 		List<Player> bossBarPlayers = Bukkit.getBossBar(id).getPlayers();
 		String players = bossBarPlayers.stream().map(Player::getName).collect(Collectors.joining(", "));
 		sender.sendMessage("Custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "] has " + bossBarPlayers.size() + " players currently online: " + players);
 	}
 
-	private void getVisible(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
+	private void getVisible(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
 		BossBar bossBar = Bukkit.getBossBar(id);
 		sender.sendMessage("Custom bossbar [" + bossBar.getTitle() + "] is currently " + (bossBar.isVisible() ? "shown" : "hidden"));
 	}
 
-	private void getMax(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
+	private void getMax(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
 		sender.sendMessage("Custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "] has a maximum of " + this.maxValues.getOrDefault(id, 100));
 	}
 
-	private void getValue(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
+	private void getValue(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
 		BossBar bossBar = Bukkit.getBossBar(id);
 		
 		int value = (int) (bossBar.getProgress() * this.maxValues.getOrDefault(id, 100));
 		sender.sendMessage("Custom bossbar [" + Bukkit.getBossBar(id).getTitle() + "] has a value of " + value);
 	}
 
-	private void addBossbar(CommandSender sender, Object[] args) {
-		NamespacedKey id = (NamespacedKey) args[0];
-		BaseComponent[] name = (BaseComponent[]) args[1];
+	private void addBossbar(CommandSender sender, CommandArguments args) {
+		NamespacedKey id = (NamespacedKey) args.get(0);
+		BaseComponent[] name = (BaseComponent[]) args.get(1);
 
 		Bukkit.createBossBar(id, BaseComponent.toLegacyText(name), BarColor.WHITE, BarStyle.SOLID);
 		this.maxValues.put(id, 100);
 		sender.sendMessage("Created custom bossbar [" + BaseComponent.toLegacyText(name) + ChatColor.WHITE + "]");
 	}
 
-	private void list(CommandSender sender, Object[] args) {
+	private void list(CommandSender sender, CommandArguments args) {
 		Iterable<KeyedBossBar> bossBars = Bukkit::getBossBars;
 		sender.sendMessage("List of custom bossbars: " +
 			StreamSupport
