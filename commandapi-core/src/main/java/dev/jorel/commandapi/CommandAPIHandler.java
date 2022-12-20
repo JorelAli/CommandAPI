@@ -347,8 +347,10 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 			satisfiesPermissions = true;
 		} else {
 			if (permission.equals(CommandPermission.NONE)) {
+				// No permission set
 				satisfiesPermissions = true;
 			} else if (permission.equals(CommandPermission.OP)) {
+				// Op permission set
 				satisfiesPermissions = sender.isOp();
 			} else {
 				satisfiesPermissions = permission.getPermission().isEmpty() || sender.hasPermission(permission.getPermission().get());

@@ -44,7 +44,7 @@ In this example, we simply create the `GreedyStringArgument` and use `replaceSug
 
 > **Developer's Note:**
 >
-> This example has been superseded by the [Command argument](./commandarguments.md). This example is still present as it gives an example of much more complicated brigadier suggestions which may be useful for readers!
+> This example has been superseded by the [Command argument](./argument_command.md). This example is still present as it gives an example of much more complicated brigadier suggestions which may be useful for readers!
 
 Courtesy of [469512345](https://github.com/469512345), the following example shows how using Brigadier's suggestions and parser can be combined with the CommandAPI to create an argument which suggests valid Minecraft commands. This could be used for example as a `sudo` command, to run a command as another player.
 

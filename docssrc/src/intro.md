@@ -43,21 +43,21 @@ Here's the list of changes to the documentation between each update. You can vie
 >
 > `SoundArgument`s written for 8.6.0 are incompatible with this update! Other significant changes to `ScoreHolderArgument` and `EntitySelectorArgument` were made in this update. I highly recommend reading the [Upgrading guide](./upgrading.md) section which covers the changes in more detail and how to update your plugin for this version.
 
-- Updated [Biome arguments](./biomeargument.md) to allow for `NamespacedKey` objects
+- Updated [Biome arguments](./argument_biome.md) to allow for `NamespacedKey` objects
 - Updated [Sound arguments](./soundargument.md) with the new `NamespacedKey` constructor
-- Updated [Scoreboard arguments](./scoreboardarguments.md) with the new `Single` and `Multiple` constructors
-- Updated [Entity & player arguments](./entityarguments.md) to include the new `OneEntity`, `ManyEntities`, `OnePlayer` and `ManyPlayers` constructors
+- Updated [Scoreboard arguments](./argument_scoreboards.md) with the new `Single` and `Multiple` constructors
+- Updated [Entity & player arguments](./argument_entities.md) to include the new `OneEntity`, `ManyEntities`, `OnePlayer` and `ManyPlayers` constructors
 
 ### Documentation changes 8.5.1 \\(\rightarrow\\) 8.6.0
 
 - Greatly improved the format and documentation for [Configuration for server owners](./config.md)
 - Adds a Kotlin tab to all Java code blocks which displays the equivalent code, but in Kotlin
-- Adds the new [Command arguments](./commandarguments.md) section
-- Adds the new [World arguments](./worldarguments.md) section
-- Mentions the new `LiteralArgument.of()` and `LiteralArgument.literal()` methods in [Literal arguments](./literalarguments.md)
+- Adds the new [Command arguments](./argument_command.md) section
+- Adds the new [World arguments](./argument_world.md) section
+- Mentions the new `LiteralArgument.of()` and `LiteralArgument.literal()` methods in [Literal arguments](./argument_literal.md)
 - Adds a really cool new example to the [Brigadier Suggestions](./brigadiersuggestions.md) page
 - Updated various sections (a summary of this can be found in the [Upgrading guide](./upgrading.md)):
-  - Update [List arguments](./listarguments.md) to include the new `buildGreedy()` and `buildText()` methods
+  - Update [List arguments](./argument_list.md) to include the new `buildGreedy()` and `buildText()` methods
   - Update [Handling command failures](./commandfailures.md) with new methods
   - Update [Argument suggestions with tooltips](./tooltips.md) with new tooltip methods for formatting text
   - Update [Sound arguments](./soundargument.md) with support for namespaced keys
@@ -72,15 +72,15 @@ Here's the list of changes to the documentation between each update. You can vie
 
 - Adds [Chat preview](./chatpreview.md) section
 - Adds Kotlin-DSL `build.gradle.kts` instructions for using the CommandAPI
-- Adds `CommandAPI.onDisable()` method to [Shading the CommandAPI in your plugins](./shading.md#disabling)
+- Adds `CommandAPI.onDisable()` method to [Shading the CommandAPI in your plugins](./setup_shading.md#disabling)
 
 ### Documentation changes 8.3.0 \\(\rightarrow\\) 8.4.0
 
-- Updated [Shading with Maven](./shading.md#shading-with-maven) with updated `maven-shade-plugin` version
-- Adds [NamespacedKey arguments](./namespacedkeyarg.md) section
+- Updated [Shading with Maven](./setup_shading.md#shading-with-maven) with updated `maven-shade-plugin` version
+- Adds [NamespacedKey arguments](./argument_namespacedkey.md) section
 - Update [Argument Casting](./arguments.md#argument-casting) section with new arguments and types
-- Update [NBT arguments](./nbtarguments.md) page with new NBT arguments information
-- Update [Custom arguments](./customarguments.md) page with new custom arguments information
+- Update [NBT arguments](./argument_nbt.md) page with new NBT arguments information
+- Update [Custom arguments](./argument_custom.md) page with new custom arguments information
 - Adds [Getting a list of registered commands](./internal.md#getting-a-list-of-registered-commands) section to the Internal CommandAPI page
 - Update [Upgrading guide](./upgrading.md) for 8.4.0 changes
 
@@ -90,12 +90,12 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 8.0.0 \\(\rightarrow\\) 8.2.0
 
-- Adds [List arguments](./listarguments.md) section.
+- Adds [List arguments](./argument_list.md) section.
 - Fix bug with [Multiple command executors with the same implementation](./normalexecutors.md#multiple-command-executors-with-the-same-implementation) example.
 
 ### Documentation changes 7.0.0 \\(\rightarrow\\) 8.0.0
 
-- Updated particle arguments in the [Particle arguments](./particlearguments.md) section.
+- Updated particle arguments in the [Particle arguments](./argument_particle.md) section.
 - Update the [Upgrading guide](./upgrading.md) for the new changes in 8.0.0.
 
 ### Documentation changes 6.5.4 \\(\rightarrow\\) 7.0.0
@@ -104,7 +104,7 @@ Here's the list of changes to the documentation between each update. You can vie
 - Remove direct link to `CommandAPI.jar` file from [Installation for server owners](./installation.md), in favor of pointing to the latest release page (to allow version numbers to appear in the file name).
 - Rewrite the [Argument suggestions](./argumentsuggestions.md) section to cover the new argument suggestions API.
 - Update the [Upgrading guide](./upgrading.md) for the new changes in 7.0.0.
-- Update repository information in the [Shading the CommandAPI in your plugins](./shading.md) page.
+- Update repository information in the [Shading the CommandAPI in your plugins](./setup_shading.md) page.
 - Update the [Brigadier + CommandAPI](./brigadier.md) page with updated methods.
 - Adds an example of using Brgiader's `SuggestionsBuilder` in the [Brigadier Suggestions](./brigadiersuggestions.md) section.
 - Updated the colors of links, example blocks and warning blocks to meet accessibility contrast guidelines better.
@@ -130,22 +130,22 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 6.2.0 \\(\rightarrow\\) 6.3.0
 
-- Update [Custom arguments](./customarguments.md) page with new custom argument constructor information
+- Update [Custom arguments](./argument_custom.md) page with new custom argument constructor information
 - Adds upgrade info to the [Upgrading guide](./upgrading.md#from-version-620-to-630) to help upgrade any existing custom arguments which you may have.
 
 ### Documentation changes 6.0.0 \\(\rightarrow\\) 6.2.0
 
 - Update [Configuration for server owners](./config.md) page with new config options `missing-executor-implementation` and `use-latest-nms-version`
-- Update instructions for shading the CommandAPI with maven in [Shading the CommandAPI in your plugins](./shading.md#shading-with-maven) to support Java 16.
+- Update instructions for shading the CommandAPI with maven in [Shading the CommandAPI in your plugins](./setup_shading.md#shading-with-maven) to support Java 16.
 - Mention that commands registered with the CommandAPI appear in the `minecraft:` namespace (see above under "How the CommandAPI works")
 
 ### Documentation changes 5.12 \\(\rightarrow\\) 6.0.0
 
 - Adds entry for [Upgrading guide](./upgrading.md#from-version-5x-to-600) to help update from 5.12 to 6.0.0.
 - Adds new `silent-logs` config entry to [Configuration for server owners](./config.md)
-- Update syntax for `onLoad(CommandAPIConfig)` for [Shading the CommandAPI in your plugins](./shading.md)
+- Update syntax for `onLoad(CommandAPIConfig)` for [Shading the CommandAPI in your plugins](./setup_shading.md)
 - Update [Argument suggestions](./argumentsuggestions.md) including new `replaceSuggestions` method
-- Adds documentation for [OfflinePlayerArgument](./entityarguments.md#offlineplayer-argument)
+- Adds documentation for [OfflinePlayerArgument](./argument_entities.md#offlineplayer-argument)
 - Adds a new section **CommandAPI Contribution** which gives a bit of insight into the project structure of the CommandAPI (Still in progress, not complete yet)
 - Fix old documentation typos
 - Fix spacing issues in some existing code blocks
@@ -156,9 +156,9 @@ Here's the list of changes to the documentation between each update. You can vie
 
 > **Developer's Note**
 >
-> The Maven/Gradle repository URL has changed! See [5. Setting up your development environment](./quickstart.md) for more information. For older versions of the CommandAPI (versions 5.11 and below), please consult the older documentation which can be found on the homepage [here](https://commandapi.jorel.dev/).
+> The Maven/Gradle repository URL has changed! See [5. Setting up your development environment](./setup_dev.md) for more information. For older versions of the CommandAPI (versions 5.11 and below), please consult the older documentation which can be found on the homepage [here](https://commandapi.jorel.dev/).
 
-- Change the repository URL for the CommandAPI in [5. Setting up your development environment](./quickstart.md)
+- Change the repository URL for the CommandAPI in [5. Setting up your development environment](./setup_dev.md)
 - Update the [Afterword](./afterword.md)
 
 ### Documentation changes 5.10 \\(\rightarrow\\) 5.11
@@ -169,9 +169,9 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 5.6 \\(\rightarrow\\) 5.10
 
-- Splits chat argument sections into two: [11.5.1. Spigot chat arguments](./spigotchatarguments.md) and [11.5.2. Adventure chat arguments](./adventurechatarguments.md)
+- Splits chat argument sections into two: [11.5.1. Spigot chat arguments](./argument_chat_spigot.md) and [11.5.2. Adventure chat arguments](./argument_chat_adventure.md)
 - Adds a [FAQ page](./faq.md)
-- Adds a warning about shading in [6. Shading the CommandAPI in your plugins](./shading.md)
+- Adds a warning about shading in [6. Shading the CommandAPI in your plugins](./setup_shading.md)
 
 ### Documentation changes 5.3 \\(\rightarrow\\) 5.6
 
@@ -179,7 +179,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 5.2 \\(\rightarrow\\) 5.3
 
-- Adds a section [6. Using the annotation system](./annotationsetup.md) on setting up your development environment to use the annotation system
+- Adds a section [6. Using the annotation system](./setup_annotations.md) on setting up your development environment to use the annotation system
 - Adds a whole massive section on using annotations ([16. Annotation-based commands](./annotationsintro.md), [17. Annotations](./annotations.md), [18. Registering annotation-based commands](./registeringannotations.md))
 - Adds a section on argument suggestion deferral in section [9.1. Argument suggestions](./argumentsuggestions.md#argument-suggestion-deferral)
 - Improve warning for `LiteralArgument` - instead of it being "obsolete" compared to the `MultiLiteralArgument`, it is now "more complex" than `MultiLiteralArgument`s
@@ -206,10 +206,10 @@ Every page has been rewritten in this update and checked for errors. In general,
 
 - New section [3. Command conversion](./conversionforowners.md) dedicated to command conversion via the `config.yml`
 - New section [8.4. Listed arguments](./listed.md)
-- New section [9.8.1. Angle arguments](./anglearguments.md)
+- New section [9.8.1. Angle arguments](./argument_angle.md)
 - New section [14. Subcommands](./subcommands.md)
-- New section [16. Internal CommandAPI](./internal) now lists all arguments and their respective Minecraft argument IDs
-- Mentions listed arguments in section [9.11.1. Literal arguments](./literalarguments.md)
+- New section [16. Internal CommandAPI](./internal.md) now lists all arguments and their respective Minecraft argument IDs
+- Mentions listed arguments in section [9.11.1. Literal arguments](./argument_literal.md)
 - Section [15. Command conversion](./conversion.md) has been rewritten
 - Executes native is now present in the command registration page
 - Section [8.3. Argument suggestions with tooltips](./tooltips.md) now mentions the `IStringTooltip` class
@@ -230,8 +230,8 @@ Every page has been rewritten in this update and checked for errors. In general,
 ### Documentation changes 4.0 \\(\rightarrow\\) 4.1
 
 - Adds a new section [7.3. Argument suggestions with tooltips](./tooltips.md)
-- Adds documentation for the `MultiLiteralArgument` in section [8.11.2. Multi literal arguments](./multilitargs.md)
-- Adds a new section [4. Shading the CommandAPI into your plugins](./shading.md)
+- Adds documentation for the `MultiLiteralArgument` in section [8.11.2. Multi literal arguments](./argument_multiliteral.md)
+- Adds a new section [4. Shading the CommandAPI into your plugins](./setup_shading.md)
 - Update documentation for [14. Brigadier + CommandAPI](./brigadier.md) with new (overloaded) function `argBuildOf`
 - Update [Afterword](./afterword.md)
 
@@ -239,16 +239,16 @@ Every page has been rewritten in this update and checked for errors. In general,
 
 - Update the maven and gradle documentation to state that it is `provided` and `compileOnly`
 - The project has been renamed from the "1.13 Command API" to simply the "CommandAPI". This has changed a few things, such as various links. See the section [Upgrading guide](./upgrading.md) to view the relevant changes with regards to maven.
-- Updated [3. Setting up your development environment](./quickstart.md) to include new Maven repository links
+- Updated [3. Setting up your development environment](./setup_dev.md) to include new Maven repository links
 - Fixed stronkage with Java versions - there's now no random warning boxes about incompatibility with Java 12!
 - Arguments now include pictures that showcase how they work!
 - Reorganised the sections - arguments is now split up into two sections: [6. Arguments (in general)](./arguments.md) and [7. Argument types](./argumenttypes.md)
 - Adds documentation for [6.2. Safe argument suggestions](./safeargumentsuggestions.md)
-- Adds documentation for [7.8.3. BlockState arguments](./blockstatearguments.md)
+- Adds documentation for [7.8.3. BlockState arguments](./argument_blockstate.md)
 - Adds documentation for new arguments:
-  - `UUIDArgument`: [7.8.14. UUID arguments](./uuidargs.md)
-  - `BlockPredicateArgument`: [7.9.1. Block predicate arguments](./blockpredicateargs.md)
-  - `ItemStackPredicateArgument`: [7.9.2. ItemStack predicate arguments](./itemstackpredicateargs.md)
+  - `UUIDArgument`: [7.8.14. UUID arguments](./argument_uuid.md)
+  - `BlockPredicateArgument`: [7.9.1. Block predicate arguments](./argument_blockpredicate.md)
+  - `ItemStackPredicateArgument`: [7.9.2. ItemStack predicate arguments](./argument_itemstackpredicate.md)
 - Adds page [Incompatible version information](./incompatibleversions.md) outlining what parts of the CommandAPI are incompatible with what versions of Minecraft
 - Adds `getCommands()` documentation to the [8.2. The FunctionWrapper class](./functionwrapper.md#getcommands) page
 - Adds page [13. Brigadier + CommandAPI](./brigadier.md) which shows how the CommandAPI can be used with Brigadier side-by-side
@@ -273,8 +273,8 @@ Every page has been rewritten in this update and checked for errors. In general,
 - Adds new section [5.1 Argument suggestions](./argumentsuggestions.md) to cover how to override suggestions - Having it all in section _5. Arguments_ was a bit too content-heavy
 - Adds documentation for the new `.overrideSuggestions()` method in section [5.1 Argument suggestions](./argumentsuggestions.md#suggestions-depending-on-previous-arguments)
 - Simplified the description of the documentation updates
-- Changed the artifact ID for the dependency of the CommandAPI. Instead of being `commandapi`, it is now `commandapi-core`. You can view the changes in section [2 Setting up your development environment](./quickstart.md)
-- Changed the repository information for gradle in section [2 Setting up your development environment](./quickstart.md). You now have to include the NBTAPI repository because gradle can't automatically detect this for some reason. Kinda stupid tbh.
+- Changed the artifact ID for the dependency of the CommandAPI. Instead of being `commandapi`, it is now `commandapi-core`. You can view the changes in section [2 Setting up your development environment](./setup_dev.md)
+- Changed the repository information for gradle in section [2 Setting up your development environment](./setup_dev.md). You now have to include the NBTAPI repository because gradle can't automatically detect this for some reason. Kinda stupid tbh.
 - Adds a section on using multiple or optional arguments in section [5 Arguments](./arguments.md#optionaldifferent-arguments)
 
 ### Documentation changes 2.1 \\(\rightarrow\\) 3.0
@@ -285,11 +285,11 @@ Every page has been rewritten in this update and checked for errors. In general,
 
 - Sections on the left have been tidied up and should be more "approachable"
 - Installation section ([1. Installation for server owners](./installation.md)) now includes information about additional dependencies
-- Dependency section ([2. Setting up your development environment](./quickstart.md)) updated to use the new dependency Group ID
+- Dependency section ([2. Setting up your development environment](./setup_dev.md)) updated to use the new dependency Group ID
 - Command registration section ([3. Command registration](./commandregistration.md)) updated to reflect new API changes
 - Command execution section ([4. Command Executors](./commandexecutors.md)) updated to reflect new API changes
 - Arguments section ([5. Arguments](./arguments.md)) completely rewritten to reflect new API changes. Adds more detailed examples for each argument
-- Function arguments section ([6.3 Function Arguments](./functionarguments.md)) updated to reflect new API changes
+- Function arguments section ([6.3 Function Arguments](./argument_function.md)) updated to reflect new API changes
 - Permissions section ([7. Permissions](./permissions.md)) updated to reflect new API changes
 - Aliases section ([8. Aliases](./aliases.md)) updated to reflect new API changes
 - Command conversion section ([9. Command conversion](./conversion.md)) rewrite example to be more detailed

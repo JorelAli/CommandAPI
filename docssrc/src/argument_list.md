@@ -33,7 +33,7 @@ public ListArgumentBuilder<T>(String nodeName);
 public ListArgumentBuilder<T>(String nodeName, String delimiter);
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 > ### Allowing duplicates (Optional)
 >
@@ -55,7 +55,7 @@ public ListArgumentBuilder<T>(String nodeName, String delimiter);
 >
 > ![List arguments with duplicates disabled](./images/arguments/listargument_without_duplicates.gif)
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ### Providing the list
 
@@ -79,7 +79,7 @@ The `ListArgument` requires a list that the list argument can pull suggestions a
   public ListArgumentBuilder withList(Function<CommandSender, Collection<T>> list);
   ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ### Providing a list mapping function
 
@@ -103,7 +103,7 @@ In order to display suggestions, the `ListArgument` needs to know how to convert
   public ListArgumentBuilder withStringTooltipMapper(Function<T, IStringTooltip> mapper);
   ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ### Building the `ListArgumentBuilder`
 

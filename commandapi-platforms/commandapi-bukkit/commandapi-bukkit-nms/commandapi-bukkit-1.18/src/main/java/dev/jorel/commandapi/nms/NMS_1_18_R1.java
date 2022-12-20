@@ -99,6 +99,7 @@ import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R1.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_18_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
@@ -163,6 +164,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	public ArgumentType<?> _ArgumentBlockState() {
 		return BlockStateArgument.block();
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		return ItemEnchantmentArgument.enchantment();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
@@ -176,6 +182,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEntitySummon() {
+		return EntitySummonArgument.id();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentItemPredicate() {
 		return ItemPredicateArgument.itemPredicate();
 	}
@@ -183,6 +194,16 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public ArgumentType<?> _ArgumentItemStack() {
 		return ItemArgument.item();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMobEffect() {
+		return MobEffectArgument.effect();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle();
 	}
 
 	@Override
@@ -279,6 +300,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		return VanillaCommandWrapper.getListener(senderWrapper.getSource());
+	}
+
+	@Override
+	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return Enchantment.getByKey(fromResourceLocation(Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key))));
 	}
 
 	@Override

@@ -111,6 +111,7 @@ import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_18_R2.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
@@ -176,6 +177,21 @@ public class NMS_1_18_R2 extends NMS_Common {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		return ItemEnchantmentArgument.enchantment();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMobEffect() {
+		return MobEffectArgument.effect();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentEntity(
 			ArgumentSubType subType) {
 		return switch (subType) {
@@ -185,6 +201,11 @@ public class NMS_1_18_R2 extends NMS_Common {
 			case ENTITYSELECTOR_ONE_PLAYER -> EntityArgument.player();
 			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
 		};
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEntitySummon() {
+		return EntitySummonArgument.id();
 	}
 
 	@Override
@@ -332,6 +353,11 @@ public class NMS_1_18_R2 extends NMS_Common {
 	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		return VanillaCommandWrapper.getListener(senderWrapper.getSource());
+	}
+
+	@Override
+	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return Enchantment.getByKey(fromResourceLocation(Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key))));
 	}
 
 	@Override

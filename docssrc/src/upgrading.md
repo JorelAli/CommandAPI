@@ -14,7 +14,7 @@ new SoundArgument<Sound>("sound")
 
 </div>
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 <div class="multi-pre">
 
@@ -34,7 +34,7 @@ new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY)
 
 </div>
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 <div class="multi-pre">
 
@@ -60,7 +60,7 @@ new EntitySelectorArgument<Collection<Entity>>("target", EntitySelector.MANY_ENT
 
 </div>
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 <div class="multi-pre">
 
@@ -87,7 +87,7 @@ new ScoreHolderArgument<Collection<String>>(nodeName, ScoreHolderType.MULTIPLE);
 
 </div>
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 <div class="multi-pre">
 
@@ -110,7 +110,7 @@ In 8.6.0, the `SoundArgument` now supports returning a `Sound` or `NamespacedKey
 new SoundArgument("sound")
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new SoundArgument<Sound>("sound")
@@ -126,7 +126,7 @@ StringTooltip.of("wave", "Waves at a player")
 Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn")
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 StringTooltip.ofString("wave", "Waves at a player")
@@ -145,7 +145,7 @@ public String getTooltip() {
 }
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 @Override
@@ -162,7 +162,7 @@ To support Spigot's `BaseComponent[]`s and Adventure's `Component`s, the `Comman
 throw CommandAPI.fail("Error message");
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 throw CommandAPI.failWithString("Error message");
@@ -179,7 +179,7 @@ new ListArgumentBuilder<Material>("materials")
     .build();
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new ListArgumentBuilder<Material>("materials")
@@ -204,7 +204,7 @@ Brigadier.fromArgument(argumentList, "myargument");
 Brigadier.toSuggestions("myargument", argumentList);
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 Argument<?> myArgument = new StringArgument("myargument");
@@ -226,7 +226,7 @@ In 8.2.1, the CommandAPI exposed `CommandAPIHandler.getInstance().registeredComm
 CommandAPIHandler.getInstance().registeredCommands
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 CommandAPI.getRegisteredCommands()
@@ -240,7 +240,7 @@ The import for `EntitySelector` for the `EntitySelectorArgument` has moved to im
 dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 dev.jorel.commandapi.arguments.EntitySelector
@@ -248,7 +248,7 @@ dev.jorel.commandapi.arguments.EntitySelector
 
 ### Custom arguments
 
-Custom arguments are no longer restricted to a string-based argument or a keyed-based argument and can now be implemented over any existing argument "base". This argument is now parameterized over two types: the first type being the return type of this custom argument and the second type being the return type of the "base" argument. Custom arguments should now use the new constructor that accepts an argument - more information on how to do that can be found on the [Custom arguments page](./customarguments.md). It's recommended to review your implementation of custom arguments and upgrade them if you feel that you need a more powerful argument parser (for example, you might want to use a greedy string argument as the base argument instead of a string argument).
+Custom arguments are no longer restricted to a string-based argument or a keyed-based argument and can now be implemented over any existing argument "base". This argument is now parameterized over two types: the first type being the return type of this custom argument and the second type being the return type of the "base" argument. Custom arguments should now use the new constructor that accepts an argument - more information on how to do that can be found on the [Custom arguments page](./argument_custom.md). It's recommended to review your implementation of custom arguments and upgrade them if you feel that you need a more powerful argument parser (for example, you might want to use a greedy string argument as the base argument instead of a string argument).
 
 Custom arguments that are _not_ keyed can be drop-in replaced with a `StringArgument`:
 
@@ -259,7 +259,7 @@ new CustomArgument<T>("nodename", inputInfo -> {
 });
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new CustomArgument<T, String>(new StringArgument("nodename"), inputInfo -> {
@@ -277,7 +277,7 @@ new CustomArgument<T>("nodename", inputInfo -> {
 }, true);
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new CustomArgument<T, NamespacedKey>(new NamespacedKeyArgument("nodename"), inputInfo -> {
@@ -296,7 +296,7 @@ NBTCompoundArguments are now parameterized over their implemented NBTCompound im
 new NBTCompoundArgument("nbt");
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new NBTCompoundArgument<NBTContainer>("nbt");
@@ -310,7 +310,7 @@ You no longer have to include the NBT API separately, the CommandAPI comes with 
 de.tr7zw.nbtapi.NBTContainer
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 dev.jorel.commandapi.nbtapi.NBTContainer
@@ -318,7 +318,7 @@ dev.jorel.commandapi.nbtapi.NBTContainer
 
 #### If you're shading the CommandAPI
 
-You now need to shade the NBT API into your plugin (as well as the CommandAPI). So the CommandAPI knows how to use the underlying implementation of the NBT API, you have to configure it using the `CommandAPIConfig.initializeNBTAPI()` method in `CommandAPI.onLoad()`. More information on how to do that can be found on the [NBT arguments page, under Shading usage setup](./nbtarguments.md#shading-usage-setup).
+You now need to shade the NBT API into your plugin (as well as the CommandAPI). So the CommandAPI knows how to use the underlying implementation of the NBT API, you have to configure it using the `CommandAPIConfig.initializeNBTAPI()` method in `CommandAPI.onLoad()`. More information on how to do that can be found on the [NBT arguments page, under Shading usage setup](./argument_nbt.md#shading-usage-setup).
 
 -----
 
@@ -330,7 +330,7 @@ Arguments are now parameterized over a generic type. This does very little in te
 Argument myArgument = new GreedyStringArgument("arg");
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 Argument<?> myArgument = new GreedyStringArgument("arg");
@@ -348,7 +348,7 @@ For example:
 new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER);
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER);
@@ -360,7 +360,7 @@ new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER);
 
 ### Particle arguments
 
-Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./particlearguments.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
+Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./argument_particle.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
 
 ```java
 new CommandAPICommand("mycommand")
@@ -372,7 +372,7 @@ new CommandAPICommand("mycommand")
     .register();
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new CommandAPICommand("mycommand")
@@ -398,7 +398,7 @@ The Maven repository used to serve the CommandAPI has changed from JitPack.io to
 
 **The group ID has changed from `dev.jorel.CommandAPI` to `dev.jorel`**
 
-More information about setting up your development environment can be found in [Setting up your development environment](./quickstart.md).
+More information about setting up your development environment can be found in [Setting up your development environment](./setup_dev.md).
 
 ### CommandAPI command failures
 
@@ -415,7 +415,7 @@ new CommandAPICommand("mycommand")
     })
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new CommandAPICommand("mycommand")
@@ -440,7 +440,7 @@ Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions);
 Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions);
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 Argument replaceSuggestions(ArgumentSuggestions suggestions);
@@ -456,7 +456,7 @@ arguments.add(new StringArgument("world").replaceSuggestions(info ->
 ));
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 List<Argument> arguments = new ArrayList<>();
@@ -474,7 +474,7 @@ Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggesti
 Argument includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 Argument replaceSuggestions(ArgumentSuggestions suggestions);
@@ -495,7 +495,7 @@ arguments.add(new StringArgument("emote")
 );
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 List<Argument> arguments = new ArrayList<>();
@@ -518,7 +518,7 @@ Argument replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
 Argument includeWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 Argument replaceSafeSuggestions(SafeSuggestions<T> suggestions);
@@ -534,7 +534,7 @@ arguments.add(new RecipeArgument("recipe").replaceWithSafeSuggestions(info ->
 ));
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 List<Argument> arguments = new ArrayList<>();

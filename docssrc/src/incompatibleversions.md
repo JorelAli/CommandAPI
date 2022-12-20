@@ -46,11 +46,11 @@ Incompatible with Minecraft versions **less than 1.16** _(1.13.x, 1.14.x, 1.15.x
 
 In Minecraft version **1.16**, the way datapacks were loaded changed in such a way that the CommandAPI had to put in additional countermeasures to provide full support to it. To illustrate this, this was the previous loading sequence for Bukkit servers in Minecraft 1.15:
 
-\\[\texttt{Server loads}\rightarrow\texttt{Plugins load}\rightarrow\texttt{Datapacks load}\rightarrow\texttt{Server finishes loading}\\]
+\\(\texttt{Server loads}\rightarrow\texttt{Plugins load}\rightarrow\texttt{Datapacks load}\rightarrow\texttt{Server finishes loading}\\)
 
 Instead however, Minecraft 1.16 changed the loading sequence to the following:
 
-\\[\texttt{Server loads}\rightarrow\texttt{Datapacks load}\rightarrow\texttt{Plugins load}\rightarrow\texttt{Server finishes loading}\\]
+\\(\texttt{Server loads}\rightarrow\texttt{Datapacks load}\rightarrow\texttt{Plugins load}\rightarrow\texttt{Server finishes loading}\\)
 
 Because the CommandAPI used to register vanilla Minecraft commands _before_ datapacks (and thus, custom Minecraft functions), it was possible to register custom commands that can be used in functions. With this new loading sequence change in Minecraft 1.16, this meant that datapacks load first before the CommandAPI does, so custom commands are not registered and functions with custom commands would fail to load.
 

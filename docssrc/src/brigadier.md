@@ -69,17 +69,17 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 
 - We also want this predicate to come _after_ `execute if`:
 
-  \\[
+  \\(
   \texttt{execute}\\\\
   \downarrow\\\\
   \texttt{if}\\\\
   \downarrow\\\\
   \texttt{randomchance <numerator}\texttt{> <denominator}\texttt{>}
-  \\]
+  \\)
   
 - After entering our predicate, we want to route back to `execute` (because the argument after `execute` is `run`, which is used in our example command above):
 
-  \\[
+  \\(
   \texttt{execute}\\\\
   \downarrow\\\\
   \texttt{if}\\\\
@@ -87,7 +87,7 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
   \texttt{randomchance <numerator}\texttt{> <denominator}\texttt{>}\\\\
   \downarrow\\\\
   \texttt{execute}
-  \\]
+  \\)
 
 -----
 
