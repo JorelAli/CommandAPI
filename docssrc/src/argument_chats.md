@@ -6,7 +6,7 @@ The CommandAPI provides a number of ways to interact with chat formatting in Min
 - **Chat**: Text which is said in chat. This also includes entity selectors such as `@a` and `@r`
 - **ChatComponent**: Minecraft's [Raw JSON text format](https://minecraft.gamepedia.com/Raw_JSON_text_format)
 
-The CommandAPI implements **Chat** and **ChatComponent** in two separate ways: [Spigot-compatible](./spigotchatarguments.md) and [Adventure-compatible](./adventurechatarguments.md). The differences between these and how to use them are described in their own relevant pages. To use Minecraft 1.19's chat preview feature, information on that can be found in [Chat preview](./chatpreview.md).
+The CommandAPI implements **Chat** and **ChatComponent** in two separate ways: [Spigot-compatible](./argument_chat_spigot.md) and [Adventure-compatible](./argument_chat_adventure.md). The differences between these and how to use them are described in their own relevant pages. To use Minecraft 1.19's chat preview feature, information on that can be found in [Chat preview](./chatpreview.md).
 
 -----
 

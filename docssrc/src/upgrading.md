@@ -248,7 +248,7 @@ dev.jorel.commandapi.arguments.EntitySelector
 
 ### Custom arguments
 
-Custom arguments are no longer restricted to a string-based argument or a keyed-based argument and can now be implemented over any existing argument "base". This argument is now parameterized over two types: the first type being the return type of this custom argument and the second type being the return type of the "base" argument. Custom arguments should now use the new constructor that accepts an argument - more information on how to do that can be found on the [Custom arguments page](./customarguments.md). It's recommended to review your implementation of custom arguments and upgrade them if you feel that you need a more powerful argument parser (for example, you might want to use a greedy string argument as the base argument instead of a string argument).
+Custom arguments are no longer restricted to a string-based argument or a keyed-based argument and can now be implemented over any existing argument "base". This argument is now parameterized over two types: the first type being the return type of this custom argument and the second type being the return type of the "base" argument. Custom arguments should now use the new constructor that accepts an argument - more information on how to do that can be found on the [Custom arguments page](./argument_custom.md). It's recommended to review your implementation of custom arguments and upgrade them if you feel that you need a more powerful argument parser (for example, you might want to use a greedy string argument as the base argument instead of a string argument).
 
 Custom arguments that are _not_ keyed can be drop-in replaced with a `StringArgument`:
 
@@ -318,7 +318,7 @@ dev.jorel.commandapi.nbtapi.NBTContainer
 
 #### If you're shading the CommandAPI
 
-You now need to shade the NBT API into your plugin (as well as the CommandAPI). So the CommandAPI knows how to use the underlying implementation of the NBT API, you have to configure it using the `CommandAPIConfig.initializeNBTAPI()` method in `CommandAPI.onLoad()`. More information on how to do that can be found on the [NBT arguments page, under Shading usage setup](./nbtarguments.md#shading-usage-setup).
+You now need to shade the NBT API into your plugin (as well as the CommandAPI). So the CommandAPI knows how to use the underlying implementation of the NBT API, you have to configure it using the `CommandAPIConfig.initializeNBTAPI()` method in `CommandAPI.onLoad()`. More information on how to do that can be found on the [NBT arguments page, under Shading usage setup](./argument_nbt.md#shading-usage-setup).
 
 -----
 
@@ -360,7 +360,7 @@ new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER);
 
 ### Particle arguments
 
-Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./particlearguments.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
+Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./argument_particle.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
 
 ```java
 new CommandAPICommand("mycommand")
@@ -398,7 +398,7 @@ The Maven repository used to serve the CommandAPI has changed from JitPack.io to
 
 **The group ID has changed from `dev.jorel.CommandAPI` to `dev.jorel`**
 
-More information about setting up your development environment can be found in [Setting up your development environment](./quickstart.md).
+More information about setting up your development environment can be found in [Setting up your development environment](./setup_dev.md).
 
 ### CommandAPI command failures
 

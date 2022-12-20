@@ -22,7 +22,7 @@ Unlike regular commands (as those implemented by Bukkit for example), these four
 
 **Developer's Note:**
 
-There is a simpler alternative to the `LiteralArgument` class! Instead of having to deal with arguments not being present in the array of arguments, consider using the much more intuitive `MultiLiteralArgument`, which is described in more detail [here](./multilitargs.md)!
+There is a simpler alternative to the `LiteralArgument` class! Instead of having to deal with arguments not being present in the array of arguments, consider using the much more intuitive `MultiLiteralArgument`, which is described in more detail [here](./argument_multiliteral.md)!
 
 </div>
 
