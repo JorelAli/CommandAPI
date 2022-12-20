@@ -134,7 +134,7 @@ import java.util.function.ToIntFunction;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.19 and 1.19.1
+ * NMS implementation for Minecraft 1.19, 1.19.1 and 1.19.2 (and NOT 1.19.3, because screw that version)
  */
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
@@ -198,6 +198,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	public final ArgumentType<?> _ArgumentBlockState() {
 		return BlockStateArgument.block(COMMAND_BUILD_CONTEXT);
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		return ItemEnchantmentArgument.enchantment();
+	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
@@ -211,6 +216,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEntitySummon() {
+		return EntitySummonArgument.id();
+	}
+
+	@Override
 	public final ArgumentType<?> _ArgumentItemPredicate() {
 		return ItemPredicateArgument.itemPredicate(COMMAND_BUILD_CONTEXT);
 	}
@@ -218,6 +228,16 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final ArgumentType<?> _ArgumentItemStack() {
 		return ItemArgument.item(COMMAND_BUILD_CONTEXT);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMobEffect() {
+		return MobEffectArgument.effect();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle();
 	}
 
 	@Override

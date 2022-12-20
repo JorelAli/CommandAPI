@@ -144,10 +144,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
-	public ArgumentType<?> _ArgumentEnchantment() {
-		return ItemEnchantmentArgument.enchantment();
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public abstract ArgumentType<?> _ArgumentEnchantment();
 
 	@Override
 	// I mean... really? Why?
@@ -159,9 +157,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
-	public ArgumentType<?> _ArgumentEntitySummon() { // TODO: Abstract
-		return EntitySummonArgument.id();
-	}
+	public abstract ArgumentType<?> _ArgumentEntitySummon();
 
 	@Override
 	public final ArgumentType<?> _ArgumentFloatRange() {
@@ -192,10 +188,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
-	public ArgumentType<?> _ArgumentMobEffect() {
-		return MobEffectArgument.effect();
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public abstract ArgumentType<?> _ArgumentMobEffect();
 
 	@Override
 	public final ArgumentType<?> _ArgumentNBTCompound() {
@@ -203,10 +197,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3") // TODO: Abstract
-	public ArgumentType<?> _ArgumentParticle() {
-		return ParticleArgument.particle();
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
+	public abstract ArgumentType<?> _ArgumentParticle();
 
 	@Override
 	public final ArgumentType<?> _ArgumentPosition() {

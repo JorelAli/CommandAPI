@@ -161,6 +161,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	public ArgumentType<?> _ArgumentBlockState() {
 		return BlockStateArgument.block();
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		return ItemEnchantmentArgument.enchantment();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
@@ -174,6 +179,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEntitySummon() {
+		return EntitySummonArgument.id();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentItemPredicate() {
 		return ItemPredicateArgument.itemPredicate();
 	}
@@ -181,6 +191,16 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public ArgumentType<?> _ArgumentItemStack() {
 		return ItemArgument.item();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMobEffect() {
+		return MobEffectArgument.effect();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle();
 	}
 
 	@Override

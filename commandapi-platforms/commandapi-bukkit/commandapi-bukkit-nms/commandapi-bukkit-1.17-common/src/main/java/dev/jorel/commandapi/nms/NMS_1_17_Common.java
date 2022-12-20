@@ -34,6 +34,7 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.*;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
@@ -98,6 +99,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.potion.PotionEffectType;
 
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -157,6 +160,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	public ArgumentType<?> _ArgumentBlockState() {
 		return BlockStateArgument.block();
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		return ItemEnchantmentArgument.enchantment();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(
@@ -171,6 +179,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEntitySummon() {
+		return EntitySummonArgument.id();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentItemPredicate() {
 		return ItemPredicateArgument.itemPredicate();
 	}
@@ -178,6 +191,16 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	@Override
 	public ArgumentType<?> _ArgumentItemStack() {
 		return ItemArgument.item();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMobEffect() {
+		return MobEffectArgument.effect();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentParticle() {
+		return ParticleArgument.particle();
 	}
 
 	@Override
