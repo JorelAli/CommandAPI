@@ -102,7 +102,7 @@ However, if we redirect execution via the `/execute` command to have the followi
 
 This won't work, because we make use of a redirect:
 
-\\[\texttt{/execute run} \xrightarrow{redirect} \texttt{mycommand arg1 arg2 arg3}\\]
+\\(\texttt{/execute run} \xrightarrow{redirect} \texttt{mycommand arg1 arg2 arg3}\\)
 
 It is not possible to access the `Object[]` of previously declared arguments. **If a command occurs via a redirect, the `Object[]` of previously declared arguments will be null**.
 

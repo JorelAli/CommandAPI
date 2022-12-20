@@ -15,7 +15,7 @@ The CommandAPI's arguments are representations of the different arguments that t
 | `brigadier:float` | [`FloatArgument`](./primitivearguments.md#numerical-arguments) |
 | `brigadier:integer` | [`IntegerArgument`](./primitivearguments.md#numerical-arguments) |
 | `brigadier:long` | [`LongArgument`](./primitivearguments.md#numerical-arguments) |
-| `brigadier:string` | [`StringArgument`](./stringarguments.md#string-argument)<br />[`TextArgument`](./stringarguments.md#text-argument)<br />[`GreedyStringArgument`](./stringarguments.md#greedy-string-argument)<br />[`CustomArgument<T>`](./customarguments.md) |
+| `brigadier:string` | [`StringArgument`](./argument_strings.md#string-argument)<br />[`TextArgument`](./argument_strings.md#text-argument)<br />[`GreedyStringArgument`](./argument_strings.md#greedy-string-argument)<br />[`CustomArgument<T>`](./customarguments.md) |
 | `minecraft:angle` | [`AngleArgument`](./angleargument.md) |
 | `minecraft:block_pos` | [`LocationArgument`](./locationargument.md#location-3d-space)<br />(`LocationType.BLOCK_POSITION`) |
 | `minecraft:block_predicate` | [`BlockPredicateArgument`](./blockpredicateargs.md) |
@@ -42,11 +42,11 @@ The CommandAPI's arguments are representations of the different arguments that t
 | `minecraft:nbt_compound_tag` | [`NBTCompoundArgument`](./nbtarguments.md) |
 | `minecraft:nbt_path` | |
 | `minecraft:nbt_tag` | |
-| `minecraft:objective` | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) |
-| `minecraft:objective_criteria` | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) |
+| `minecraft:objective` | [`ObjectiveArgument`](./argument_objectives.md#objective-argument) |
+| `minecraft:objective_criteria` | [`ObjectiveCriteriaArgument`](./argument_objectives.md#objective-criteria-argument) |
 | `minecraft:operation` | [`MathOperationArgument`](./mathoperationarguments.md) |
 | `minecraft:particle` | [`ParticleArgument`](./particlearguments.md) |
-| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./biomeargument.md)<br />[`CustomArgument<T>`](./customarguments.md)<br />[`LootTableArgument`](./loottableargument.md)<br />[`NamespacedKeyArgument`](./namespacedkeyarg.md)<br />[`RecipeArgument`](./recipeargument.md)<br />[`SoundArgument`](./soundargument.md) |
+| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./biomeargument.md)<br />[`CustomArgument<T>`](./customarguments.md)<br />[`LootTableArgument`](./loottableargument.md)<br />[`NamespacedKeyArgument`](./argument_namespacedkey.md)<br />[`RecipeArgument`](./recipeargument.md)<br />[`SoundArgument`](./soundargument.md) |
 | `minecraft:rotation` | [`RotationArgument`](./rotationargs.md) |
 | `minecraft:score_holder` | [`ScoreHolderArgument`](./scoreboardarguments.md#score-holder-argument) |
 | `minecraft:scoreboard_slot` | [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) |

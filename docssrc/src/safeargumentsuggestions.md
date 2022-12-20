@@ -51,7 +51,7 @@ The list of supported arguments are displayed in the following table. The parame
 | [`FloatArgument`](./primitivearguments.md#numerical-arguments) | **`Float`**                                    |
 | [`FloatRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`     |
 |                   [`FunctionArgument`](./functionwrapper.md) | **`org.bukkit.NamespacedKey`**                 |
-| [`GreedyStringArgument`](./stringarguments.md#greedy-string-argument) | `String`                                       |
+| [`GreedyStringArgument`](./argument_strings.md#greedy-string-argument) | `String`                                       |
 | [`IntegerArgument`](./primitivearguments.md#numerical-arguments) | **`Integer`**                                  |
 | [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`   |
 |               [`ItemStackArgument`](./itemstackarguments.md) | `org.bukkit.inventory.ItemStack`               |
@@ -61,7 +61,7 @@ The list of supported arguments are displayed in the following table. The parame
 |                [`LootTableArgument`](./loottableargument.md) | `org.bukkit.loot.LootTable`                    |
 |       [`MathOperationArgument`](./mathoperationarguments.md) | `dev.jorel.commandapi.wrappers.MathOperation`  |
 |                   [`NBTCompoundArgument`](./nbtarguments.md) | `de.tr7zw.nbtapi.NBTContainer`                 |
-| [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
+| [`ObjectiveArgument`](./argument_objectives.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
 | [`OfflinePlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.OfflinePlayer`                     |
 |                 [`ParticleArgument`](./particlearguments.md) | `org.bukkit.Particle`                          |
 |     [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                     |

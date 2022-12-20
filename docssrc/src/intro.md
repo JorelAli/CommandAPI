@@ -52,7 +52,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 - Greatly improved the format and documentation for [Configuration for server owners](./config.md)
 - Adds a Kotlin tab to all Java code blocks which displays the equivalent code, but in Kotlin
-- Adds the new [Command arguments](./commandarguments.md) section
+- Adds the new [Command arguments](./argument_command.md) section
 - Adds the new [World arguments](./worldarguments.md) section
 - Mentions the new `LiteralArgument.of()` and `LiteralArgument.literal()` methods in [Literal arguments](./literalarguments.md)
 - Adds a really cool new example to the [Brigadier Suggestions](./brigadiersuggestions.md) page
@@ -77,7 +77,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 8.3.0 \\(\rightarrow\\) 8.4.0
 
 - Updated [Shading with Maven](./shading.md#shading-with-maven) with updated `maven-shade-plugin` version
-- Adds [NamespacedKey arguments](./namespacedkeyarg.md) section
+- Adds [NamespacedKey arguments](./argument_namespacedkey.md) section
 - Update [Argument Casting](./arguments.md#argument-casting) section with new arguments and types
 - Update [NBT arguments](./nbtarguments.md) page with new NBT arguments information
 - Update [Custom arguments](./customarguments.md) page with new custom arguments information
@@ -206,9 +206,9 @@ Every page has been rewritten in this update and checked for errors. In general,
 
 - New section [3. Command conversion](./conversionforowners.md) dedicated to command conversion via the `config.yml`
 - New section [8.4. Listed arguments](./listed.md)
-- New section [9.8.1. Angle arguments](./anglearguments.md)
+- New section [9.8.1. Angle arguments](./angleargument.md)
 - New section [14. Subcommands](./subcommands.md)
-- New section [16. Internal CommandAPI](./internal) now lists all arguments and their respective Minecraft argument IDs
+- New section [16. Internal CommandAPI](./internal.md) now lists all arguments and their respective Minecraft argument IDs
 - Mentions listed arguments in section [9.11.1. Literal arguments](./literalarguments.md)
 - Section [15. Command conversion](./conversion.md) has been rewritten
 - Executes native is now present in the command registration page

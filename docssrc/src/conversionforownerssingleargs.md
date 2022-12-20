@@ -49,7 +49,7 @@ Using this, we can display options, such as "fly" and "walk", as well as optiona
 
 Additionally, we can apply limits to the numbers that can be provided. For example, here we limit the number to a value between 0 to 10. If a value is outside of that range, and error is shown to the user:
 
-![A command "/execute run speed walk 15" with an error displaying "Long must not be more than 10, found 15 at position 24: ...peed walk <--[HERE]](./images/speedlimit.png)
+![A command "/execute run speed walk 15" with an error displaying `"Long must not be more than 10, found 15 at position 24: ...peed walk <--[HERE]`](./images/speedlimit.png)
 
 </div>
 

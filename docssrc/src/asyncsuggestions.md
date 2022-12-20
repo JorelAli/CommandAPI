@@ -26,7 +26,7 @@ The easiest way to create a `CompleteableFuture` for asynchronous suggestions is
 new String[] { "dirt", "grass", "cobblestone", };
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 CompletableFuture.supplyAsync(() -> {

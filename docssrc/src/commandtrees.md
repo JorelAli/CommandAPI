@@ -37,7 +37,7 @@ new CommandAPICommand("sayhi")
     .register();
 ```
 
-\\[\downarrow\\]
+\\(\downarrow\\)
 
 ```java
 new CommandTree("sayhi")
