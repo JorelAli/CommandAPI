@@ -10,3 +10,4 @@ target
 logs/latest.log
 .vscode
 .DS_Store
+docssrc/src/.markdownlint-cli2.yaml
