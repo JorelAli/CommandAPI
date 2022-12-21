@@ -1,15 +1,9 @@
 #!/bin/sh
-build() {
-    for folder in ./*/; do
-    	echo $folder
-		cd $folder
-		if [ -f pom.xml ]; then
-			mvn clean package
-		else
-			build
-		fi
-		cd ..
-    done
-}
 
-build
+# Exit if any command fails
+set -e
+
+# Find all pom.xml files
+for folder in $(find $PWD -name "pom.xml" | xargs dirname); do
+	cd $folder && mvn clean package
+done
