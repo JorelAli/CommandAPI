@@ -57,3 +57,10 @@ jobs:
         uses: DavidAnson/markdownlint-cli2-action@v8
         with:
           globs: 'docssrc/src/*.md'
+
+      - name: build documentation with mdBook
+        run: |
+          cd docssrc
+          curl -LJO https://github.com/JorelAli/mdBook/releases/download/v0.4.21-fa6/mdbook-fa6 && chmod +x mdbook-fa6
+          mkdir -p mdbook-linkcheck && cd "$_" && curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && unzip "$_" && chmod +x mdbook-linkcheck && export PATH=$PWD:$PATH && cd ..
+          ./mdbook-fa6 build
