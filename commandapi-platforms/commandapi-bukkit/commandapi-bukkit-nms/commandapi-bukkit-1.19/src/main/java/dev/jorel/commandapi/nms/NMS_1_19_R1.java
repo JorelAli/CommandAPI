@@ -50,7 +50,6 @@ public class NMS_1_19_R1 extends NMS_1_19_Common {
 		return new String[] { "1.19" };
 	}
 
-	@Differs(from = "1.19", by = "Use of 1.19.1 chat preview handler")
 	@Override
 	public void hookChatPreview(Plugin plugin, Player player) {
 		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;

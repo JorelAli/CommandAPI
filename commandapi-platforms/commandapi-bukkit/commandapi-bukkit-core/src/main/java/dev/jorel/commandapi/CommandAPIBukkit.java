@@ -164,30 +164,6 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 
 		}, plugin);
 
-		// On 1.19+, enable chat preview if the server allows it
-		if (canUseChatPreview()) {
-			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-
-				@EventHandler
-				public void onPlayerJoin(PlayerJoinEvent e) {
-					if (Bukkit.shouldSendChatPreviews()) {
-						hookChatPreview(plugin, e.getPlayer());
-					}
-				}
-
-				@EventHandler
-				public void onPlayerQuit(PlayerQuitEvent e) {
-					if (Bukkit.shouldSendChatPreviews()) {
-						unhookChatPreview(e.getPlayer());
-					}
-				}
-
-			}, plugin);
-			CommandAPI.logNormal("Chat preview enabled");
-		} else {
-			CommandAPI.logNormal("Chat preview is not available");
-		}
-
 		paper.registerReloadHandler(plugin);
 	}
 
@@ -334,9 +310,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 
 	@Override
 	public void onDisable() {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			unhookChatPreview(player);
-		}
+		// Nothing to do
 	}
 
 	@Override

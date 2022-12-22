@@ -39,6 +39,7 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.*;
 import io.netty.channel.Channel;
 import io.papermc.paper.text.PaperComponents;
@@ -116,9 +117,14 @@ import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
@@ -133,6 +139,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
+
 // Mojang-Mapped reflection
 /**
  * NMS implementation for Minecraft 1.19, 1.19.1 and 1.19.2 (and NOT 1.19.3, because screw that version)
@@ -140,6 +148,7 @@ import java.util.function.ToIntFunction;
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
+@Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
 	private static final MinecraftServer MINECRAFT_SERVER;
@@ -184,6 +193,63 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		EntityPositionSource_sourceEntity = eps_se;
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
+	}
+
+	@Override
+	public void onEnable(Object pluginObject) {
+		super.onEnable(pluginObject);
+
+		JavaPlugin plugin = (JavaPlugin) pluginObject;
+		// Enable chat preview if the server allows it
+		if (Bukkit.shouldSendChatPreviews()) {
+			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+
+				@EventHandler
+				public void onPlayerJoin(PlayerJoinEvent e) {
+					hookChatPreview(plugin, e.getPlayer());
+				}
+
+				@EventHandler
+				public void onPlayerQuit(PlayerQuitEvent e) {
+					unhookChatPreview(e.getPlayer());
+				}
+
+			}, plugin);
+			CommandAPI.logNormal("Chat preview enabled");
+		} else {
+			CommandAPI.logNormal("Chat preview is not available");
+		}
+	}
+
+	/**
+	 * Hooks into the chat previewing system
+	 *
+	 * @param plugin the plugin (for async calls)
+	 * @param player the player to hook
+	 */
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
+	protected abstract void hookChatPreview(Plugin plugin, Player player);
+
+	/**
+	 * Unhooks a player from the chat previewing system. This should be
+	 * called when the player quits and when the plugin is disabled
+	 *
+	 * @param player the player to unhook
+	 */
+	private void unhookChatPreview(Player player) {
+		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
+		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
+			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
+		}
+	}
+
+	@Override
+	public void onDisable() {
+		super.onDisable();
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			unhookChatPreview(player);
+		}
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -252,11 +318,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
 		helpTopics.putAll(helpTopicsToAdd);
-	}
-
-	@Override
-	public final boolean canUseChatPreview() {
-		return Bukkit.shouldSendChatPreviews();
 	}
 
 	@Override
@@ -642,10 +703,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
-	@Differs(from = "1.19", by = "Use of 1.19.1 chat preview handler")
-	@Override
-	public abstract void hookChatPreview(Plugin plugin, Player player);
-
 	@Override
 	public final boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
@@ -783,14 +840,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
-	public final void unhookChatPreview(Player player) {
-		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
-			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
-		}
 	}
 
 	@Override

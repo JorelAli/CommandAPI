@@ -174,6 +174,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
+@Differs(from = "1.19.2", by = "Chat preview removed")
 public class NMS_1_19_3_R2 extends NMS_Common {
 
 	private static final MinecraftServer MINECRAFT_SERVER;
@@ -271,12 +272,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
 		helpTopics.putAll(helpTopicsToAdd);
-	}
-
-	@Differs(from = "1.19.2", by = "Chat preview removed")
-	@Override
-	public final boolean canUseChatPreview() {
-		return false;
 	}
 
 	@Override
@@ -669,10 +664,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
-	@Differs(from = "1.19.2", by = "Chat preview was removed")
-	@Override
-	public void hookChatPreview(Plugin plugin, Player player) {}
-
 	@Override
 	public final boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
@@ -814,14 +805,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final void resendPackets(Player player) {
 		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
-	public final void unhookChatPreview(Player player) {
-		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
-			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
-		}
 	}
 
 	@Override

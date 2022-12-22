@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * Literally just a fancy comment that I can put next to stuff to know how it
  * differs from previous versions
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Differs {
 	
