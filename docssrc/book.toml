@@ -57,4 +57,4 @@ warning-policy = "error"
 #
 # Hint: you can use TOML's raw strings (single quote) to avoid needing to
 # escape things twice.
-exclude = [ 'spigotmc\.org' ]
+exclude = [ 'spigotmc\.org', 'bukkit\.org' ]
