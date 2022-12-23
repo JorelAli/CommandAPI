@@ -27,7 +27,7 @@ package dev.jorel.commandapi.exceptions;
 public class UnimplementedArgumentException extends RuntimeException {
 
 	/**
-	 * Creates an EnvironmentArgumentException
+	 * Creates an UnimplementedArgumentException
 	 */
 	public UnimplementedArgumentException(String type, String versionSupportedIn) {
 		super("The " + type + " is only compatible with Minecraft " + versionSupportedIn + " or later");

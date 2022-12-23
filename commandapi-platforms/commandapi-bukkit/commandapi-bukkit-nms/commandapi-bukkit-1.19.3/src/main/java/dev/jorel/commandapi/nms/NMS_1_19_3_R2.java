@@ -103,6 +103,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.netty.channel.Channel;
 import io.papermc.paper.text.PaperComponents;
+import net.kyori.adventure.chat.SignedMessage;
 import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
@@ -316,6 +317,12 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+	}
+
+	@Override
+	public SignedMessage getAdventureSignedMessage(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		// TODO: Oh boy, here we go...
+		return null;
 	}
 
 	@Differs(from = "1.19.2", by = "Now uses ResourceOrTagArgument instead of ResourceOrTagLocationArgument")

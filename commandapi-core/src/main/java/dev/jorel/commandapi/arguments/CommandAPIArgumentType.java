@@ -43,6 +43,11 @@ public enum CommandAPIArgumentType {
 	ADVENTURE_CHAT_COMPONENT,
 
 	/**
+	 * The (Adventure)SignedMessageArgument (with Paper Adventure backend)
+	 */
+	ADVENTURE_SIGNED_MESSAGE,
+
+	/**
 	 * The AngleArgument
 	 */
 	ANGLE("minecraft:angle"),

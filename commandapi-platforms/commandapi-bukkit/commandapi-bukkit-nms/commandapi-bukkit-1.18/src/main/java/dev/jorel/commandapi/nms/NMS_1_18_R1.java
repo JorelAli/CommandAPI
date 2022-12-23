@@ -32,12 +32,14 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.exceptions.UnimplementedArgumentException;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.*;
 import io.papermc.paper.text.PaperComponents;
+import net.kyori.adventure.chat.SignedMessage;
 import net.kyori.adventure.text.Component;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandFunction;
@@ -260,6 +262,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+	}
+
+	@Override
+	public SignedMessage getAdventureSignedMessage(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		throw new UnimplementedArgumentException("AdventureSignedMessageArgument", "1.19.3");
 	}
 
 	@Override

@@ -31,7 +31,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Axis;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -51,7 +50,6 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -72,6 +70,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.chat.SignedMessage;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -301,6 +300,8 @@ public interface NMS<CommandListenerWrapper> {
 	Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+
+	SignedMessage getAdventureSignedMessage(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

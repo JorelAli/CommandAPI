@@ -96,6 +96,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
+import net.kyori.adventure.chat.SignedMessage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -483,6 +484,11 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
 		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+
+	@Override
+	public SignedMessage getAdventureSignedMessage(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		throw new UnimplementedArgumentException("AdventureSignedMessageArgument", "1.19.3");
 	}
 
 	@Override
