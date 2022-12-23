@@ -301,7 +301,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	SignedMessage getAdventureSignedMessage(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	SignedMessage getAdventureSignedMessage(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

@@ -385,6 +385,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
 	public abstract Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override

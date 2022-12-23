@@ -27,6 +27,7 @@ import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,9 +38,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Keyed;
@@ -75,8 +73,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
@@ -93,6 +92,9 @@ import com.mojang.logging.LogUtils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -101,16 +103,18 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import io.netty.channel.Channel;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.chat.SignedMessage;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
@@ -141,6 +145,7 @@ import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
@@ -320,9 +325,60 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
-	public SignedMessage getAdventureSignedMessage(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		// TODO: Oh boy, here we go...
-		return null;
+	public SignedMessage getAdventureSignedMessage(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		// We want to unpack this argument manually, instead of using MessageArgument#resolveChatMessage
+		net.minecraft.network.chat.Component messageComponent = MessageArgument.getMessage(cmdCtx, key);
+		PlayerChatMessage chatMessage = cmdCtx.getSource().getSigningContext().getArgument(key);
+		
+		// The things we actually need
+		String rawText = cmdCtx.getArgument(key, net.minecraft.commands.arguments.MessageArgument.Message.class).getText();
+		Component unsignedComponent = GsonComponentSerializer.gson().deserialize(Serializer.toJson(messageComponent));
+		
+		final SignedMessage result;
+		if(chatMessage != null) {
+			// It's a signed message
+			result = new SignedMessage() {
+				
+				@Override
+				public @NotNull Identity identity() {
+					return Identity.identity(chatMessage.sender());
+				}
+				
+				@Override
+				public @Nullable Component unsignedContent() {
+					return unsignedComponent;
+				}
+				
+				@Override
+				public @NotNull Instant timestamp() {
+					return chatMessage.timeStamp();
+				}
+				
+				@Override
+				public @Nullable Signature signature() {
+					if(chatMessage.hasSignature()) {
+						return SignedMessage.signature(chatMessage.signature().bytes());
+					} else {
+						return null;
+					}
+				}
+				
+				@Override
+				public long salt() {
+					return chatMessage.salt();
+				}
+				
+				@Override
+				public @NotNull String message() {
+					return rawText;
+				}
+			};
+		} else {
+			// It's not a signed message.
+			result = SignedMessage.system(rawText, unsignedComponent);
+		}
+		
+		return result;
 	}
 
 	@Differs(from = "1.19.2", by = "Now uses ResourceOrTagArgument instead of ResourceOrTagLocationArgument")
