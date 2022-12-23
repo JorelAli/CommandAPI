@@ -19,7 +19,7 @@ depend: [CommandAPI]
 
   - Adding the external .jar file in Eclipse:
 
-  ![An image of some context menu entries in Eclipse after right clicking a project. Displays the highlighted options "Build Path", followed by "Add External Archives..."](images/eclipse.jpg)
+    ![An image of some context menu entries in Eclipse after right clicking a project. Displays the highlighted options "Build Path", followed by "Add External Archives..."](images/eclipse.jpg)
 
   - Adding the external .jar file in IntelliJ:
 
@@ -27,7 +27,7 @@ depend: [CommandAPI]
 
     - Next, click the little `+` at the top:
 
-    ![An image in IntelliJ showing the plus icon to add an external .jar.](images/intellij.png)
+      ![An image in IntelliJ showing the plus icon to add an external .jar.](images/intellij.png)
 
     - After you clicked that, you need to select `Java`. A little pop-up will appear where you can choose the location of your external .jar file.
 
