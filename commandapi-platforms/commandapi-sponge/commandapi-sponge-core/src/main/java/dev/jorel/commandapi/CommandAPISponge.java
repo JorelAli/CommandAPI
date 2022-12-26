@@ -22,6 +22,7 @@ import java.util.List;
 public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Object> {
 	private CommandManager commandManager;
 	private static CommandAPISponge instance;
+	private static InternalSpongeConfig config;
 
 	public CommandAPISponge() {
 		instance = this;
@@ -35,16 +36,23 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 		}
 	}
 
-	@Override
-	public void onLoad() {
-
+	public static InternalSpongeConfig getConfiguration() {
+		return config;
 	}
 
 	@Override
-	public void onEnable(Object pluginObject) {
-		CommandAPISpongePluginWrapper plugin = (CommandAPISpongePluginWrapper) pluginObject;
+	public void onLoad(CommandAPIConfig config) {
+		if(config instanceof CommandAPISpongeConfig spongeConfig) {
+			CommandAPISponge.config = new InternalSpongeConfig(spongeConfig);
+		} else {
+			CommandAPI.logError("CommandAPISponge was loaded with non-Sponge config!");
+			CommandAPI.logError("Attempts to access Sponge-specific config variables will fail!");
+		}
+	}
 
-		commandManager = plugin.getServer().commandManager();
+	@Override
+	public void onEnable() {
+		commandManager = config.getServer().commandManager();
 	}
 
 	@Override

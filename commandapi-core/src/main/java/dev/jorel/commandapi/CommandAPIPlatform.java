@@ -24,16 +24,16 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is loaded,
 	 * such as checking dependencies and initializing helper classes.
+	 *
+	 * @param config the configuration to use for the CommandAPI.
 	 */
-	public abstract void onLoad();
+	public abstract void onLoad(CommandAPIConfig config);
 
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is enabled,
 	 * such as registering event listeners.
-	 *
-	 * @param plugin The plugin providing the CommandAPI. This should have a specific class depending on the platform.
 	 */
-	public abstract void onEnable(Object plugin);
+	public abstract void onEnable();
 
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is disabled.

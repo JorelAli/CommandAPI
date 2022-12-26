@@ -45,7 +45,7 @@ public class CommandAPIMain extends JavaPlugin {
 		// Read config file
 		saveDefaultConfig();
 		FileConfiguration fileConfig = getConfig();
-		CommandAPIConfig config = new CommandAPIConfig()
+		CommandAPIConfig config = new CommandAPIBukkitConfig(this)
 			.verboseOutput(fileConfig.getBoolean("verbose-outputs"))
 			.silentLogs(fileConfig.getBoolean("silent-logs"))
 			.useLatestNMSVersion(fileConfig.getBoolean("use-latest-nms-version"))
@@ -123,6 +123,6 @@ public class CommandAPIMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		CommandAPI.onEnable(this);
+		CommandAPI.onEnable();
 	}
 }

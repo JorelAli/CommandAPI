@@ -196,10 +196,10 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	public void onEnable(Object pluginObject) {
-		super.onEnable(pluginObject);
+	public void onEnable() {
+		super.onEnable();
 
-		JavaPlugin plugin = (JavaPlugin) pluginObject;
+		JavaPlugin plugin = getConfiguration().getPlugin();
 		// Enable chat preview if the server allows it
 		if (Bukkit.shouldSendChatPreviews()) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {

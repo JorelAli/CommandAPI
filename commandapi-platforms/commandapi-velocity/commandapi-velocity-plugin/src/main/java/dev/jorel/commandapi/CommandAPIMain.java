@@ -35,7 +35,7 @@ public class CommandAPIMain implements CommandAPIVelocityPluginWrapper {
 
 		// TODO: Save default and load config file from dataDirectory
 		//  does Velocity have an API for this?
-		CommandAPIConfig config = new CommandAPIConfig()
+		CommandAPIConfig config = new CommandAPIVelocityConfig(server)
 			.verboseOutput()
 			.silentLogs()
 			.missingExecutorImplementationMessage()
@@ -53,7 +53,7 @@ public class CommandAPIMain implements CommandAPIVelocityPluginWrapper {
 
 	@Subscribe
 	public void onProxyInitialization(ProxyInitializeEvent event) {
-		CommandAPI.onEnable(this);
+		CommandAPI.onEnable();
 		
 		// Command can be registered using the following:
 		//

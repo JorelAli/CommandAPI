@@ -2401,7 +2401,7 @@ class MyPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true)); // Load with verbose output
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true)); // Load with verbose output
         
         new CommandAPICommand("ping")
             .executes((sender, args) -> {
@@ -2412,7 +2412,7 @@ class MyPlugin extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        CommandAPI.onEnable(this);
+        CommandAPI.onEnable();
         
         // Register commands, listeners etc.
     }

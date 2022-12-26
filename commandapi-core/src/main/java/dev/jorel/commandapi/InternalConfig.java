@@ -49,18 +49,9 @@ public class InternalConfig {
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
 
+	// NBT API configuration
 	private final Class<?> nbtContainerClass;
 	private final Function<Object, ?> nbtContainerConstructor;
-
-	/**
-	 * Creates an {@link InternalConfig}
-	 * 
-	 * @param verbose whether verbose logging should be enabled or not
-	 */
-	@Deprecated(forRemoval = true)
-	public InternalConfig(boolean verbose) {
-		this(new CommandAPIConfig().verboseOutput(verbose));
-	}
 
 	/**
 	 * Creates an {@link InternalConfig} from a {@link CommandAPIConfig}

@@ -2303,7 +2303,7 @@ class Main : JavaPlugin() {
 class MyPlugin : JavaPlugin() {
 
     override fun onLoad() {
-        CommandAPI.onLoad(CommandAPIConfig().verboseOutput(true)) // Load with verbose output
+        CommandAPI.onLoad(CommandAPIBukkitConfig(this).verboseOutput(true)) // Load with verbose output
 
         CommandAPICommand("ping")
             .executes(CommandExecutor { sender, _ ->
@@ -2313,7 +2313,7 @@ class MyPlugin : JavaPlugin() {
     }
 
     override fun onEnable() {
-        CommandAPI.onEnable(this)
+        CommandAPI.onEnable()
 
         // Register commands, listeners etc.
     }

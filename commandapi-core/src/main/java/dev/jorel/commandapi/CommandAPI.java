@@ -116,7 +116,7 @@ public class CommandAPI {
 			logNormal("Loaded platform " + platformClassHierarchy);
 
 			// Finish loading
-			CommandAPIHandler.getInstance().onLoad();
+			CommandAPIHandler.getInstance().onLoad(config);
 
 			loaded = true;
 		} else {
@@ -127,11 +127,9 @@ public class CommandAPI {
 	/**
 	 * Enables the CommandAPI. This should be placed at the start of your
 	 * <code>onEnable()</code> method.
-	 *
-	 * @param plugin the plugin that this onEnable method is called from
 	 */
-	public static void onEnable(Object plugin) {
-		CommandAPIHandler.getInstance().onEnable(plugin);
+	public static void onEnable() {
+		CommandAPIHandler.getInstance().onEnable();
 	}
 
 	/**

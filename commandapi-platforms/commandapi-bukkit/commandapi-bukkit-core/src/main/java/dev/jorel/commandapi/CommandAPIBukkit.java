@@ -27,7 +27,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -52,6 +51,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argument<?>, CommandSender, Source> implements NMS<Source> {
 	// References to utility classes
 	private static CommandAPIBukkit<?> instance;
+	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
 
 	// Static VarHandles
@@ -96,8 +96,19 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 		return paper;
 	}
 
+	public static InternalBukkitConfig getConfiguration() {
+		return config;
+	}
+
 	@Override
-	public void onLoad() {
+	public void onLoad(CommandAPIConfig config) {
+		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
+			CommandAPIBukkit.config = new InternalBukkitConfig(bukkitConfig);
+		} else {
+			CommandAPI.logError("CommandAPIBukkit was loaded with non-Bukkit config!");
+			CommandAPI.logError("Attempts to access Bukkit-specific config variables will fail!");
+		}
+
 		checkDependencies();
 	}
 
@@ -144,8 +155,8 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	}
 
 	@Override
-	public void onEnable(Object pluginObject) {
-		JavaPlugin plugin = (JavaPlugin) pluginObject;
+	public void onEnable() {
+		JavaPlugin plugin = config.getPlugin();
 
 		// Prevent command registration after server has loaded
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
