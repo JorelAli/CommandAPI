@@ -63,14 +63,17 @@ public class CommandAPI {
 	 *
 	 * @return the internal configuration used to manage the CommandAPI
 	 */
+	@SuppressWarnings("rawtypes")
 	public static InternalConfig getConfiguration() {
 		if (config == null) {
-			CommandAPI.config = new InternalConfig(new CommandAPIConfig() {
-				@Override
-				public Object instance() {
-					return this;
+			CommandAPI.config = new InternalConfig(
+				new CommandAPIConfig() {
+					@Override
+					public Object instance() {
+						return this;
+					}
 				}
-			});
+			);
 			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
 		}
 		return config;
@@ -96,9 +99,10 @@ public class CommandAPI {
 	 * Initializes the CommandAPI for loading. This should be placed at the start of
 	 * your <code>onLoad()</code> method.
 	 *
-	 * @param config the configuration to use for the CommandAPI
+	 * @param config the configuration to use for the CommandAPI. This should be a {@link CommandAPIConfig}
+	 *               subclass corresponding to the active platform.
 	 */
-	public static void onLoad(CommandAPIConfig config) {
+	public static void onLoad(CommandAPIConfig<?> config) {
 		if (!loaded) {
 			// Setup variables
 			CommandAPI.config = new InternalConfig(config);

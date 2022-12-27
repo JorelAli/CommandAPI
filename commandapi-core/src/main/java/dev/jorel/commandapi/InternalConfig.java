@@ -58,7 +58,7 @@ public class InternalConfig {
 	 * 
 	 * @param config The configuration to use to set up this internal configuration
 	 */
-	public InternalConfig(CommandAPIConfig config) {
+	public InternalConfig(CommandAPIConfig<?> config) {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;

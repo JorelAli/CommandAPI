@@ -27,6 +27,8 @@ import java.util.function.Function;
 
 /**
  * A class to contain information about how to configure the CommandAPI during its loading step.
+ * You shouldn't use this class directly. Instead, use an appropriate subclass that corresponds to
+ * the platform you are developing for.
  */
 public abstract class CommandAPIConfig<Impl extends CommandAPIConfig<Impl>> implements ChainableBuilder<Impl> {
 	// The default configuration. This should mirror the commandapi-plugin config.yml file.
