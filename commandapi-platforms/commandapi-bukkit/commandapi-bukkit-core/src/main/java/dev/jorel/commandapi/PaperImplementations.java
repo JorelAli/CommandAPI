@@ -43,6 +43,9 @@ public class PaperImplementations {
 				}
 
 			}, plugin);
+			CommandAPI.logNormal("Hooked into Paper ServerResourcesReloadedEvent");
+		} else {
+			CommandAPI.logNormal("Did not hook into Paper ServerResourcesReloadedEvent");
 		}
 	}
 
