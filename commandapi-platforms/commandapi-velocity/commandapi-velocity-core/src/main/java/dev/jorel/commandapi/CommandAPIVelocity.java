@@ -42,7 +42,7 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 	}
 
 	@Override
-	public void onLoad(CommandAPIConfig config) {
+	public void onLoad(CommandAPIConfig<?> config) {
 		if(config instanceof CommandAPIVelocityConfig spongeConfig) {
 			CommandAPIVelocity.config = new InternalVelocityConfig(spongeConfig);
 		} else {

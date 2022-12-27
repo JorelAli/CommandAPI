@@ -101,7 +101,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	}
 
 	@Override
-	public void onLoad(CommandAPIConfig config) {
+	public void onLoad(CommandAPIConfig<?> config) {
 		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
 			CommandAPIBukkit.config = new InternalBukkitConfig(bukkitConfig);
 		} else {

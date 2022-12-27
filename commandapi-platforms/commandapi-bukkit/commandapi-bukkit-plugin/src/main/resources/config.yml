@@ -41,6 +41,15 @@ create-dispatcher-json: false
 # implementation is actually compatible with the current Minecraft version.
 use-latest-nms-version: false
 
+# Hook into Paper's ServerResourcesReloadedEvent (default: true)
+# If "true", and the CommandAPI detects it is running on a Paper server, it will
+# hook into Paper's ServerResourcesReloadedEvent to detect when /reload is run.
+# This allows the CommandAPI to automatically call its internal datapack-reloading
+# function on a server reload, allowing CommandAPI commands to be used in datapacks.
+# If you set this to false, CommandAPI commands may not work inside datapacks after
+# reloading the server.
+hook-paper-reload: true
+
 ################################################################################
 # Command conversion                                                           #
 ################################################################################

@@ -27,7 +27,7 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	 *
 	 * @param config the configuration to use for the CommandAPI.
 	 */
-	public abstract void onLoad(CommandAPIConfig config);
+	public abstract void onLoad(CommandAPIConfig<?> config);
 
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is enabled,

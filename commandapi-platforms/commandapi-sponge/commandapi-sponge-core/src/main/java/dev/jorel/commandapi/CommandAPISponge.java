@@ -41,7 +41,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public void onLoad(CommandAPIConfig config) {
+	public void onLoad(CommandAPIConfig<?> config) {
 		if(config instanceof CommandAPISpongeConfig spongeConfig) {
 			CommandAPISponge.config = new InternalSpongeConfig(spongeConfig);
 		} else {

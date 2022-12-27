@@ -28,7 +28,7 @@ import java.util.function.Function;
 /**
  * A class to contain information about how to configure the CommandAPI during its loading step.
  */
-public class CommandAPIConfig {
+public abstract class CommandAPIConfig<Impl extends CommandAPIConfig<Impl>> implements ChainableBuilder<Impl> {
 	// The default configuration. This should mirror the commandapi-plugin config.yml file.
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
@@ -49,9 +49,9 @@ public class CommandAPIConfig {
 	 * @param value whether verbose output should be enabled
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig verboseOutput(boolean value) {
+	public Impl verboseOutput(boolean value) {
 		this.verboseOutput = value;
-		return this;
+		return instance();
 	}
 
 	/**
@@ -61,9 +61,9 @@ public class CommandAPIConfig {
 	 * @param value whether logging suppression should be enabled
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig silentLogs(boolean value) {
+	public Impl silentLogs(boolean value) {
 		this.silentLogs = value;
-		return this;
+		return instance();
 	}
 
 	/**
@@ -76,9 +76,9 @@ public class CommandAPIConfig {
 	 * @param value whether the latest version of NMS should be used
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig useLatestNMSVersion(boolean value) {
+	public Impl useLatestNMSVersion(boolean value) {
 		this.useLatestNMSVersion = value;
-		return this;
+		return instance();
 	}
 
 	/**
@@ -93,9 +93,9 @@ public class CommandAPIConfig {
 	 * @param value the message to display when a command has no executor
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig missingExecutorImplementationMessage(String value) {
+	public Impl missingExecutorImplementationMessage(String value) {
 		this.missingExecutorImplementationMessage = value;
-		return this;
+		return instance();
 	}
 
 	/**
@@ -108,19 +108,19 @@ public class CommandAPIConfig {
 	 *             If this argument is {@code null}, this file will not be created.
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig dispatcherFile(File file) {
+	public Impl dispatcherFile(File file) {
 		this.dispatcherFile = file;
-		return this;
+		return instance();
 	}
 
-	public CommandAPIConfig addSkipSenderProxy(String... names) {
+	public Impl addSkipSenderProxy(String... names) {
 		this.skipSenderProxy.addAll(List.of(names));
-		return this;
+		return instance();
 	}
 
-	public CommandAPIConfig addSkipSenderProxy(List<String> names) {
+	public Impl addSkipSenderProxy(List<String> names) {
 		this.skipSenderProxy.addAll(names);
-		return this;
+		return instance();
 	}
 
 	/**
@@ -137,10 +137,10 @@ public class CommandAPIConfig {
 	 *                                {@code NBTContainer::new}.
 	 * @return this CommandAPIConfig
 	 */
-	public <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass,
+	public <T> Impl initializeNBTAPI(Class<T> nbtContainerClass,
 												 Function<Object, T> nbtContainerConstructor) {
 		this.nbtContainerClass = nbtContainerClass;
 		this.nbtContainerConstructor = nbtContainerConstructor;
-		return this;
+		return instance();
 	}
 }
