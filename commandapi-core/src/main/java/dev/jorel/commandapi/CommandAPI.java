@@ -65,7 +65,12 @@ public class CommandAPI {
 	 */
 	public static InternalConfig getConfiguration() {
 		if (config == null) {
-			CommandAPI.config = new InternalConfig(new CommandAPIConfig());
+			CommandAPI.config = new InternalConfig(new CommandAPIConfig() {
+				@Override
+				public Object instance() {
+					return this;
+				}
+			});
 			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
 		}
 		return config;
