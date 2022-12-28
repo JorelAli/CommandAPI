@@ -85,7 +85,11 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 
 	@SuppressWarnings("unchecked")
 	public static <Source> CommandAPIBukkit<Source> get() {
-		return (CommandAPIBukkit<Source>) instance;
+		if(instance != null) {
+			return (CommandAPIBukkit<Source>) instance;
+		} else {
+			throw new IllegalStateException("Tried to access CommandAPIBukkit instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
+		}
 	}
 
 	public PaperImplementations getPaper() {

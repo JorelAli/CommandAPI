@@ -150,7 +150,11 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	}
 
 	public static CommandAPIHandler<?, ?, ?> getInstance() {
-		return instance;
+		if(instance != null) {
+			return instance;
+		} else {
+			throw new IllegalStateException("Tried to access CommandAPIHandler instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
+		}
 	}
 
 	public CommandAPIPlatform<Argument, CommandSender, Source> getPlatform() {

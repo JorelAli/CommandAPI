@@ -144,8 +144,13 @@ public class CommandAPI {
 		CommandAPI.loaded = false;
 
 		// This method is called automatically when the class loads to set up variables, in which case
-		// BaseHandler will not have been initialized
-		CommandAPIHandler<?, ?, ?> handler = CommandAPIHandler.getInstance();
+		// CommandAPIHandler will not have been initialized
+		CommandAPIHandler<?, ?, ?> handler = null;
+		try {
+			handler = CommandAPIHandler.getInstance();
+		} catch (IllegalStateException ignored) {
+			// Not an error, CommandAPIHandler is not in loaded state anyway
+		}
 		if (handler != null) handler.onDisable();
 	}
 
