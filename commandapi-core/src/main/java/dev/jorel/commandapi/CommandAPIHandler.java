@@ -34,7 +34,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.executors.AbstractExecutionInfo;
+import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
@@ -177,7 +177,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		return (cmdCtx) -> {
 			AbstractCommandSender<? extends CommandSender> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
 			CommandArguments commandArguments = argsToCommandArgs(cmdCtx, args);
-			AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> executionInfo = new AbstractExecutionInfo<>() {
+			ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> executionInfo = new ExecutionInfo<>() {
 				@Override
 				public CommandSender sender() {
 					return sender.getSource();
@@ -199,7 +199,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
-				AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> convertedExecutionInfo = new AbstractExecutionInfo<>() {
+				ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> convertedExecutionInfo = new ExecutionInfo<>() {
 					@Override
 					public CommandSender sender() {
 						return sender.getSource();

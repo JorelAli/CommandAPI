@@ -41,10 +41,10 @@ public interface IExecutorTyped<CommandSender, WrapperType extends AbstractComma
 
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int executeWith(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
+	int executeWith(ExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 
 }

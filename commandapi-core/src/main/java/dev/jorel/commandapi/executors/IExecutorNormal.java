@@ -31,21 +31,21 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 public interface IExecutorNormal<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends IExecutorTyped<CommandSender, WrapperType> {
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @return 1 if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
 	@Override
-	default int executeWith(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException {
+	default int executeWith(ExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException {
 		this.run(info);
 		return 1;
 	}
 
 	/**
 	 * Executes the command.
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	void run(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
+	void run(ExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 
 }

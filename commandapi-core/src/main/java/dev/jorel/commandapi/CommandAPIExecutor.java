@@ -60,7 +60,7 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		this.resultingExecutors.add((IExecutorResulting<CommandSender, WrapperType>) executor);
 	}
 
-	public int execute(AbstractExecutionInfo<CommandSender, WrapperType> info) throws CommandSyntaxException {
+	public int execute(ExecutionInfo<CommandSender, WrapperType> info) throws CommandSyntaxException {
 
 		// Parse executor type
 		if (!resultingExecutors.isEmpty()) {
@@ -86,7 +86,7 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped<CommandSender, WrapperType>> executors, AbstractExecutionInfo<CommandSender, WrapperType> info)
+	private int execute(List<? extends IExecutorTyped<CommandSender, WrapperType>> executors, ExecutionInfo<CommandSender, WrapperType> info)
 			throws WrapperCommandSyntaxException {
 		if (isForceNative()) {
 			return execute(executors, info, ExecutorType.NATIVE);
@@ -111,7 +111,7 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 	}
 
 	private int execute(List<? extends IExecutorTyped<CommandSender, WrapperType>> executors,
-	        AbstractExecutionInfo<CommandSender, WrapperType> info, ExecutorType type) throws WrapperCommandSyntaxException {
+	                    ExecutionInfo<CommandSender, WrapperType> info, ExecutorType type) throws WrapperCommandSyntaxException {
 		for (IExecutorTyped<CommandSender, WrapperType> executor : executors) {
 			if (executor.getType() == type) {
 				return executor.executeWith(info);
