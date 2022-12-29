@@ -5,15 +5,15 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.entity.Player;
 
 @FunctionalInterface
-public interface PlayerExecutionInfo extends IExecutorNormal<Player, BukkitPlayer> {
+public interface PlayerExecutionInfo extends NormalExecutor<Player, BukkitPlayer> {
 
 	/**
 	 * Executes the command.
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	void run(AbstractExecutionInfo<Player, BukkitPlayer> info) throws WrapperCommandSyntaxException;
+	void run(ExecutionInfo<Player, BukkitPlayer> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

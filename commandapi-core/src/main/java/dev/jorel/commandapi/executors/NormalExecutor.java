@@ -28,7 +28,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * @param <CommandSender> The CommandSender for this executor
  * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public interface IExecutorNormal<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends IExecutorTyped<CommandSender, WrapperType> {
+public interface NormalExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends TypedExecutor<CommandSender, WrapperType> {
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
 	 * @param info The ExecutionInfo for this command

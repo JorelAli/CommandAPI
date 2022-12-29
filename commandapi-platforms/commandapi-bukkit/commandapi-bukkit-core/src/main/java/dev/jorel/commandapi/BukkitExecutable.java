@@ -24,7 +24,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 				getExecutor().addNormalExecutor(new CommandExecutor() {
 
 					@Override
-					public void run(AbstractExecutionInfo<CommandSender, BukkitCommandSender<? extends CommandSender>> info) throws WrapperCommandSyntaxException {
+					public void run(ExecutionInfo<CommandSender, BukkitCommandSender<? extends CommandSender>> info) throws WrapperCommandSyntaxException {
 						run(info.sender(), info.args());
 					}
 
@@ -73,7 +73,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 				getExecutor().addNormalExecutor(new CommandExecutionInfo() {
 
 					@Override
-					public void run(AbstractExecutionInfo<CommandSender, BukkitCommandSender<? extends CommandSender>> info) throws WrapperCommandSyntaxException {
+					public void run(ExecutionInfo<CommandSender, BukkitCommandSender<? extends CommandSender>> info) throws WrapperCommandSyntaxException {
 						executor.executeWith(info);
 					}
 
@@ -147,7 +147,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 				getExecutor().addResultingExecutor(new ResultingCommandExecutionInfo() {
 
 					@Override
-					public int run(AbstractExecutionInfo<CommandSender, BukkitCommandSender<? extends CommandSender>> info) throws WrapperCommandSyntaxException {
+					public int run(ExecutionInfo<CommandSender, BukkitCommandSender<? extends CommandSender>> info) throws WrapperCommandSyntaxException {
 						executor.executeWith(info);
 						return 1;
 					}

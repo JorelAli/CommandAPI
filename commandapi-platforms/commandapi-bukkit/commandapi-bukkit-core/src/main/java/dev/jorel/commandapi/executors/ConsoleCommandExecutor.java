@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
 import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
@@ -30,7 +29,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A normal command executor for a ConsoleCommandSender
  */
 @FunctionalInterface
-public interface ConsoleCommandExecutor extends IExecutorNormal<ConsoleCommandSender, BukkitConsoleCommandSender> {
+public interface ConsoleCommandExecutor extends NormalExecutor<ConsoleCommandSender, BukkitConsoleCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -43,10 +42,10 @@ public interface ConsoleCommandExecutor extends IExecutorNormal<ConsoleCommandSe
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 */
 	@Override
-	default void run(AbstractExecutionInfo<ConsoleCommandSender, BukkitConsoleCommandSender> info) throws WrapperCommandSyntaxException {
+	default void run(ExecutionInfo<ConsoleCommandSender, BukkitConsoleCommandSender> info) throws WrapperCommandSyntaxException {
 		this.run(info.sender(), info.args());
 	}
 

@@ -23,7 +23,7 @@ package dev.jorel.commandapi;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.executors.AbstractExecutionInfo;
+import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -208,7 +208,7 @@ public final class Converter {
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
 			.executesNative((sender, args) -> {
-				executor.executeWith(new AbstractExecutionInfo<>() {
+				executor.executeWith(new ExecutionInfo<>() {
 					@Override
 					public NativeProxyCommandSender sender() {
 						return sender;

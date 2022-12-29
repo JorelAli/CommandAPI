@@ -24,20 +24,11 @@ import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
- * An interface that includes the type of an executor (what command senders it
- * can execute) and has a method that executes an executor with a given command
- * sender and arguments
- * @param <WrapperType> The AbstractCommandSenderClass for this executor
+ * The interface for resulting command executors
+ * @param <CommandSender> The CommandSender for this executor
+ * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public interface IExecutorTyped<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
-	
-	/**
-	 * Returns the type of the sender of the current executor.
-	 * @return the type of the sender of the current executor
-	 */
-	default ExecutorType getType() {
-		return ExecutorType.ALL;
-	}
+public interface ResultingExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends TypedExecutor<CommandSender, WrapperType> {
 
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
@@ -45,6 +36,16 @@ public interface IExecutorTyped<CommandSender, WrapperType extends AbstractComma
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int executeWith(ExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
+	@Override
+	default int executeWith(ExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException {
+		return this.run(info);
+	}
 
+	/**
+	 * Executes the command.
+	 * @param info The ExecutionInfo for this command
+	 * @return the value returned by this command
+	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
+	 */
+	int run(ExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 }
