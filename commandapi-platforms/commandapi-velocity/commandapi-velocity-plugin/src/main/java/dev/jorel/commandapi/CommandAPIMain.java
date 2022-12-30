@@ -23,7 +23,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 	description = "An API to use Minecraft 1.13s new command UI",
 	authors = {"Skepter"}
 )
-public class CommandAPIMain implements CommandAPIVelocityPluginWrapper {
+public class CommandAPIMain {
 
 	private final ProxyServer server;
 	private final Logger logger;
@@ -35,7 +35,7 @@ public class CommandAPIMain implements CommandAPIVelocityPluginWrapper {
 
 		// TODO: Save default and load config file from dataDirectory
 		//  does Velocity have an API for this?
-		CommandAPIConfig config = new CommandAPIConfig()
+		CommandAPIVelocityConfig config = new CommandAPIVelocityConfig(server)
 			.verboseOutput()
 			.silentLogs()
 			.missingExecutorImplementationMessage()
@@ -46,14 +46,9 @@ public class CommandAPIMain implements CommandAPIVelocityPluginWrapper {
 		CommandAPI.onLoad(config);
 	}
 
-	@Override
-	public ProxyServer getServer() {
-		return server;
-	}
-
 	@Subscribe
 	public void onProxyInitialization(ProxyInitializeEvent event) {
-		CommandAPI.onEnable(this);
+		CommandAPI.onEnable();
 		
 		// Command can be registered using the following:
 		//

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandSource, CommandSource> {
 	private CommandManager commandManager;
 	private static CommandAPIVelocity instance;
+	private static InternalVelocityConfig config;
 
 	public CommandAPIVelocity() {
 		instance = this;
@@ -36,16 +37,23 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 		}
 	}
 
-	@Override
-	public void onLoad() {
-
+	public static InternalVelocityConfig getConfiguration() {
+		return config;
 	}
 
 	@Override
-	public void onEnable(Object pluginObject) {
-		CommandAPIVelocityPluginWrapper plugin = (CommandAPIVelocityPluginWrapper) pluginObject;
+	public void onLoad(CommandAPIConfig<?> config) {
+		if(config instanceof CommandAPIVelocityConfig spongeConfig) {
+			CommandAPIVelocity.config = new InternalVelocityConfig(spongeConfig);
+		} else {
+			CommandAPI.logError("CommandAPIVelocity was loaded with non-Velocity config!");
+			CommandAPI.logError("Attempts to access Velocity-specific config variables will fail!");
+		}
+	}
 
-		commandManager = plugin.getServer().getCommandManager();
+	@Override
+	public void onEnable() {
+		commandManager = config.getServer().getCommandManager();
 	}
 
 	@Override

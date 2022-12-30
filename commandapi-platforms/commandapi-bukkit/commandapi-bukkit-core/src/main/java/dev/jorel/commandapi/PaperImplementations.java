@@ -33,7 +33,7 @@ public class PaperImplementations {
 	 * @param plugin the plugin that the CommandAPI is being used from
 	 */
 	public void registerReloadHandler(Plugin plugin) {
-		if (isPaperPresent) {
+		if (isPaperPresent && CommandAPIBukkit.getConfiguration().shouldHookPaperReload()) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
 
 				@EventHandler
@@ -43,6 +43,9 @@ public class PaperImplementations {
 				}
 
 			}, plugin);
+			CommandAPI.logNormal("Hooked into Paper ServerResourcesReloadedEvent");
+		} else {
+			CommandAPI.logNormal("Did not hook into Paper ServerResourcesReloadedEvent");
 		}
 	}
 

@@ -850,7 +850,7 @@ class NBTTest extends JavaPlugin {
 /* ANCHOR: nbtcompoundargumentonload */
 @Override
 public void onLoad() {
-    CommandAPI.onLoad(new CommandAPIConfig()
+    CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
         .initializeNBTAPI(NBTContainer.class, NBTContainer::new)
     );
 }
@@ -1987,8 +1987,10 @@ new CommandAPICommand("removeeffect")
 }
 
 {
+JavaPlugin plugin = new JavaPlugin() {};
+
 /* ANCHOR: CommandAPIConfigSilent */
-CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true));
+CommandAPI.onLoad(new CommandAPIBukkitConfig(plugin).silentLogs(true));
 /* ANCHOR_END: CommandAPIConfigSilent */
 }
 
@@ -2401,7 +2403,7 @@ class MyPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true)); // Load with verbose output
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true)); // Load with verbose output
         
         new CommandAPICommand("ping")
             .executes((sender, args) -> {
@@ -2412,7 +2414,7 @@ class MyPlugin extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        CommandAPI.onEnable(this);
+        CommandAPI.onEnable();
         
         // Register commands, listeners etc.
     }

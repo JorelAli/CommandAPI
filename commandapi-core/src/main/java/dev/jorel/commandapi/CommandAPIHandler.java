@@ -125,9 +125,9 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		instance = this;
 	}
 
-	public void onLoad() {
+	public void onLoad(CommandAPIConfig config) {
 		checkDependencies();
-		platform.onLoad();
+		platform.onLoad(config);
 	}
 
 	private void checkDependencies() {
@@ -140,8 +140,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		}
 	}
 
-	public void onEnable(Object plugin) {
-		platform.onEnable(plugin);
+	public void onEnable() {
+		platform.onEnable();
 	}
 
 	public void onDisable() {
