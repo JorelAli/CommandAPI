@@ -18,14 +18,14 @@ For the CommandAPI to function as normal, you **must** call the CommandAPI's ini
 
 ```java
 CommandAPI.onLoad(CommandAPIConfig config);
-CommandAPI.onEnable(Plugin plugin);
+CommandAPI.onEnable();
 ```
 
 If you want to handle reloading, the CommandAPI has minimal support for it with the `onDisable()` method, which can go in your plugin. This is optional and is not required if you don't plan on reloading the server.
 
 ### Loading
 
-The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading sequence. This must be called _before_ you start to access the CommandAPI and must be placed in your plugin's `onLoad()` method. The argument `CommandAPIConfig` is used to configure how the CommandAPI. The `CommandAPIConfig` class has the following parameters which let you set how the CommandAPI works similar to the `config.yml`, which is described [here](./config.md).
+The `onLoad(CommandAPIConfig)` method initializes the CommandAPI's loading sequence. This must be called _before_ you start to access the CommandAPI and must be placed in your plugin's `onLoad()` method. The argument `CommandAPIConfig` is used to configure how the CommandAPI works. The `CommandAPIConfig` class has the following parameters which let you set how the CommandAPI works similar to the `config.yml`, which is described [here](./config.md).
 
 ```java
 public class CommandAPIConfig {
@@ -39,7 +39,23 @@ public class CommandAPIConfig {
 }
 ```
 
-The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances. For example, to load the CommandAPI with all logging disabled, you can use the following:
+The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances.
+
+However, the `CommandAPIConfig` class is abstract and cannot be used to configure the CommandAPI directly. Instead, you must use a subclass of `CommandAPIConfig` that corresponds to the platform you are developing for. For example, when developing for Bukkit, you should use the `CommandAPIBukkiConfig` class. 
+
+<!-- TODO: Add tabs and explanations for other platforms --> 
+
+```java
+public class CommandAPIBukkitConfig extends CommandAPIConfig {
+	CommandAPIBukkitConfig(JavaPlugin plugin);
+
+	CommandAPIBukkitConfig shouldHookPaperReload(boolean hooked); // Whether the CommandAPI should hook into the Paper-exclusive ServerResourcesReloadedEvent
+}
+```
+
+In order to create a `CommandAPIBukkitConfig` object, you must give it a reference to your `JavaPlugin` instance. The CommandAPI always uses this to registers events, so it is required when loading the CommandAPI on Bukkit. There are also Bukkit-specific features, such as the `hook-paper-reload` configuration option, which may be configured using a `CommandAPIBukkitConfig` instance.
+
+For example, to load the CommandAPI on Bukkit with all logging disabled, you can use the following:
 
 <div class="multi-pre">
 
@@ -55,7 +71,7 @@ The `CommandAPIConfig` class follows a typical builder pattern (without you havi
 
 ### Enabling & Disabling
 
-The `onEnable(Plugin)` method initializes the CommandAPI's enabling sequence. As with the `onLoad(boolean)` method, this one must be placed in your plugin's `onEnable()` method. This isn't as strict as the `onLoad(boolean)` method, and can be placed anywhere in your `onEnable()` method. The argument `plugin` is your current plugin instance.
+The `onEnable()` method initializes the CommandAPI's enabling sequence. Similar to the `onLoad(CommandAPIConfig)` method, this must be placed in your plugin's `onEnable()` method. This isn't as strict as the `onLoad(CommandAPIConfig)` method, and can be placed anywhere in your `onEnable()` method.
 
 The `onDisable()` method disables the CommandAPI gracefully. This should be placed in your plugin's `onDisable()` method. This doesn't unregister commands, so commands may persist during reloads - this can be mitigated using the `CommandAPI.unregister()` method.
 
