@@ -5,16 +5,16 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 @FunctionalInterface
-public interface ProxyResultingExecutionInfo extends IExecutorResulting<NativeProxyCommandSender, BukkitNativeProxyCommandSender> {
+public interface ProxyResultingExecutionInfo extends ResultingExecutor<NativeProxyCommandSender, BukkitNativeProxyCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @return the command result
 	 * @throws WrapperCommandSyntaxException
 	 */
-	int run(AbstractExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender> info) throws WrapperCommandSyntaxException;
+	int run(ExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

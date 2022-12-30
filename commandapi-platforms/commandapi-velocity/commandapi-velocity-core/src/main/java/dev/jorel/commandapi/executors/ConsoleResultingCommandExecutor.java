@@ -28,7 +28,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A resulting command executor for a ConsoleCommandSender
  */
 @FunctionalInterface
-public interface ConsoleResultingCommandExecutor extends IExecutorResulting<ConsoleCommandSource, VelocityConsoleCommandSender> {
+public interface ConsoleResultingCommandExecutor extends ResultingExecutor<ConsoleCommandSource, VelocityConsoleCommandSender> {
 
 	/**
 	 * The code to run when this command is performed

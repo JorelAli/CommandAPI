@@ -28,7 +28,7 @@ import org.bukkit.entity.Entity;
  * A normal command executor for an Entity
  */
 @FunctionalInterface
-public interface EntityCommandExecutor extends IExecutorNormal<Entity, BukkitEntity> {
+public interface EntityCommandExecutor extends NormalExecutor<Entity, BukkitEntity> {
 
 	/**
 	 * The code to run when this command is performed
@@ -41,11 +41,11 @@ public interface EntityCommandExecutor extends IExecutorNormal<Entity, BukkitEnt
 	/**
 	 * Executes the command.
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
 	@Override
-	default void run(AbstractExecutionInfo<Entity, BukkitEntity> info) throws WrapperCommandSyntaxException {
+	default void run(ExecutionInfo<Entity, BukkitEntity> info) throws WrapperCommandSyntaxException {
 		this.run(info.sender(), info.args());
 	}
 

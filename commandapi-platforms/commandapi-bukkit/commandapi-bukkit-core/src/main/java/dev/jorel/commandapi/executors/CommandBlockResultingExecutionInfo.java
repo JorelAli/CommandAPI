@@ -5,15 +5,15 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.command.BlockCommandSender;
 
 @FunctionalInterface
-public interface CommandBlockResultingExecutionInfo extends IExecutorResulting<BlockCommandSender, BukkitBlockCommandSender> {
+public interface CommandBlockResultingExecutionInfo extends ResultingExecutor<BlockCommandSender, BukkitBlockCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 */
-	int run(AbstractExecutionInfo<BlockCommandSender, BukkitBlockCommandSender> info) throws WrapperCommandSyntaxException;
+	int run(ExecutionInfo<BlockCommandSender, BukkitBlockCommandSender> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

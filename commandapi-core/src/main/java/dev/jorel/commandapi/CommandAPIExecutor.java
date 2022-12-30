@@ -42,8 +42,8 @@ import java.util.NoSuchElementException;
  */
 public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
 
-	private List<IExecutorNormal<CommandSender, WrapperType>> normalExecutors;
-	private List<IExecutorResulting<CommandSender, WrapperType>> resultingExecutors;
+	private List<NormalExecutor<CommandSender, WrapperType>> normalExecutors;
+	private List<ResultingExecutor<CommandSender, WrapperType>> resultingExecutors;
 
 	public CommandAPIExecutor() {
 		normalExecutors = new ArrayList<>();
@@ -51,16 +51,16 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 	}
 
 	@SuppressWarnings("unchecked")
-	public void addNormalExecutor(IExecutorNormal<?, ?> executor) {
-		this.normalExecutors.add((IExecutorNormal<CommandSender, WrapperType>) executor);
+	public void addNormalExecutor(NormalExecutor<?, ?> executor) {
+		this.normalExecutors.add((NormalExecutor<CommandSender, WrapperType>) executor);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void addResultingExecutor(IExecutorResulting<?, ?> executor) {
-		this.resultingExecutors.add((IExecutorResulting<CommandSender, WrapperType>) executor);
+	public void addResultingExecutor(ResultingExecutor<?, ?> executor) {
+		this.resultingExecutors.add((ResultingExecutor<CommandSender, WrapperType>) executor);
 	}
 
-	public int execute(AbstractExecutionInfo<CommandSender, WrapperType> info) throws CommandSyntaxException {
+	public int execute(ExecutionInfo<CommandSender, WrapperType> info) throws CommandSyntaxException {
 
 		// Parse executor type
 		if (!resultingExecutors.isEmpty()) {
@@ -86,7 +86,7 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped<CommandSender, WrapperType>> executors, AbstractExecutionInfo<CommandSender, WrapperType> info)
+	private int execute(List<? extends TypedExecutor<CommandSender, WrapperType>> executors, ExecutionInfo<CommandSender, WrapperType> info)
 			throws WrapperCommandSyntaxException {
 		if (isForceNative()) {
 			return execute(executors, info, ExecutorType.NATIVE);
@@ -110,9 +110,9 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped<CommandSender, WrapperType>> executors,
-	        AbstractExecutionInfo<CommandSender, WrapperType> info, ExecutorType type) throws WrapperCommandSyntaxException {
-		for (IExecutorTyped<CommandSender, WrapperType> executor : executors) {
+	private int execute(List<? extends TypedExecutor<CommandSender, WrapperType>> executors,
+	                    ExecutionInfo<CommandSender, WrapperType> info, ExecutorType type) throws WrapperCommandSyntaxException {
+		for (TypedExecutor<CommandSender, WrapperType> executor : executors) {
 			if (executor.getType() == type) {
 				return executor.executeWith(info);
 			}
@@ -120,11 +120,11 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
 	}
 
-	public List<IExecutorNormal<CommandSender, WrapperType>> getNormalExecutors() {
+	public List<NormalExecutor<CommandSender, WrapperType>> getNormalExecutors() {
 		return normalExecutors;
 	}
 
-	public List<IExecutorResulting<CommandSender, WrapperType>> getResultingExecutors() {
+	public List<ResultingExecutor<CommandSender, WrapperType>> getResultingExecutors() {
 		return resultingExecutors;
 	}
 
@@ -136,8 +136,8 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
 
-	private boolean matches(List<? extends IExecutorTyped<?, ?>> executors, ExecutorType type) {
-		for (IExecutorTyped<?, ?> executor : executors) {
+	private boolean matches(List<? extends TypedExecutor<?, ?>> executors, ExecutorType type) {
+		for (TypedExecutor<?, ?> executor : executors) {
 			if (executor.getType() == type) {
 				return true;
 			}
@@ -154,11 +154,11 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 		return result;
 	}
 
-	public void setNormalExecutors(List<IExecutorNormal<CommandSender, WrapperType>> normalExecutors) {
+	public void setNormalExecutors(List<NormalExecutor<CommandSender, WrapperType>> normalExecutors) {
 		this.normalExecutors = normalExecutors;
 	}
 
-	public void setResultingExecutors(List<IExecutorResulting<CommandSender, WrapperType>> resultingExecutors) {
+	public void setResultingExecutors(List<ResultingExecutor<CommandSender, WrapperType>> resultingExecutors) {
 		this.resultingExecutors = resultingExecutors;
 	}
 }

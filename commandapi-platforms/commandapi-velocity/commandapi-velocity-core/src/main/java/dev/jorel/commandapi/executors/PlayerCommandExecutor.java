@@ -28,7 +28,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A normal command executor for a Player
  */
 @FunctionalInterface
-public interface PlayerCommandExecutor extends IExecutorNormal<Player, VelocityPlayer> {
+public interface PlayerCommandExecutor extends NormalExecutor<Player, VelocityPlayer> {
 
 	/**
 	 * The code to run when this command is performed
