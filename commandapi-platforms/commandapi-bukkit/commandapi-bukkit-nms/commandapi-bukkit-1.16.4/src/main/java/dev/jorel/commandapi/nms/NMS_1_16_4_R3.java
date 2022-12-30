@@ -696,7 +696,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
-		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
+		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.i, rot.j);
 
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();

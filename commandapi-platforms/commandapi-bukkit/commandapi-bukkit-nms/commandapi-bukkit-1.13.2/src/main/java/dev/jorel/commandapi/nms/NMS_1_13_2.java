@@ -72,7 +72,7 @@ public class NMS_1_13_2 extends NMS_1_13_1 {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
-		Location location = new Location(world, pos.x, pos.y, pos.z, rot.j, rot.i);
+		Location location = new Location(world, pos.x, pos.y, pos.z, rot.i, rot.j);
 
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
