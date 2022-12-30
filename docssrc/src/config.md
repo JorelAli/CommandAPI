@@ -126,7 +126,7 @@ Controls whether the CommandAPI hooks into the Paper-exclusive `ServerResourcesR
 
 When the CommandAPI detects it is running on a Paper-based server, its default behavior will be to hook into the `ServerResourcesReloadedEvent`, which triggers when `/minecraft:reload` is run. During this event, the CommandAPI runs a custom datapack reloading sequence that helps commands registered with the CommandAPI work within datapacks. See [Reloading datapacks](./internal.md#reloading-datapacks) for more information on this process.
 
-By default, this value is set to true and the CommandAPI will hook into the `ServerResourcesReloadedEvent`. If you want, you can set this to false, and the CommandAPI will not hook into this event.
+By default, this value is set to `true` and the CommandAPI will hook into the `ServerResourcesReloadedEvent`. If you want, you can set this to `false`, and the CommandAPI will not hook into this event.
 
 **Default value**
 
