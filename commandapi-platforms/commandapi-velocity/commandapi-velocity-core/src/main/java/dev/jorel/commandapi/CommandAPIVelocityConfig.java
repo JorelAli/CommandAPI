@@ -20,6 +20,6 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 
 	@Override
 	public CommandAPIVelocityConfig instance() {
-		return null;
+		return this;
 	}
 }
