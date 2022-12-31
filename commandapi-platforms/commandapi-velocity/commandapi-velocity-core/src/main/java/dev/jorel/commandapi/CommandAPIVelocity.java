@@ -53,16 +53,15 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 			CommandAPI.logError("CommandAPIVelocity was loaded with non-Velocity config!");
 			CommandAPI.logError("Attempts to access Velocity-specific config variables will fail!");
 		}
+		commandManager = getConfiguration().getServer().getCommandManager();
 	}
 
 	@Override
 	public void onEnable() {
-		commandManager = config.getServer().getCommandManager();
 	}
 
 	@Override
 	public void onDisable() {
-
 	}
 
 	@Override
