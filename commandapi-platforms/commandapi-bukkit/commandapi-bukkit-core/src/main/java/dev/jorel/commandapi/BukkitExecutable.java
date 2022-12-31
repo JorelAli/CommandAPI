@@ -22,30 +22,9 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 		} else {
 			for (ExecutorType type : types) {
 				getExecutor().addNormalExecutor(new CommandExecutor() {
-
-					@Override
-					public void run(ExecutionInfo<CommandSender, BukkitCommandSender<? extends CommandSender>> info) throws WrapperCommandSyntaxException {
-						run(info.sender(), info.args());
-					}
-
 					@Override
 					public void run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException {
-						executor.executeWith(new BukkitExecutionInfo<>(sender, new BukkitCommandSender<CommandSender>() {
-							@Override
-							public boolean hasPermission(String permissionNode) {
-								return sender.hasPermission(permissionNode);
-							}
-
-							@Override
-							public boolean isOp() {
-								return sender.isOp();
-							}
-
-							@Override
-							public CommandSender getSource() {
-								return sender;
-							}
-						}, args));
+						executor.executeWith(new BukkitExecutionInfo<>(sender, CommandAPIBukkit.get().wrapCommandSender(sender), args));
 					}
 
 					@Override
@@ -61,7 +40,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 	/**
 	 * Adds an executor to the current command builder
 	 *
-	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BukkitCommandExecutionInfo) -&gt; ()</code> that will be executed when the command is run
 	 * @param types    A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
@@ -103,22 +82,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 
 					@Override
 					public int run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException {
-						executor.executeWith(new BukkitExecutionInfo<>(sender, new BukkitCommandSender<>() {
-							@Override
-							public boolean hasPermission(String permissionNode) {
-								return sender.hasPermission(permissionNode);
-							}
-
-							@Override
-							public boolean isOp() {
-								return sender.isOp();
-							}
-
-							@Override
-							public CommandSender getSource() {
-								return sender;
-							}
-						}, args));
+						executor.executeWith(new BukkitExecutionInfo<>(sender, CommandAPIBukkit.get().wrapCommandSender(sender), args));
 						return 1;
 					}
 
@@ -135,7 +99,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 	/**
 	 * Adds an executor to the current command builder
 	 *
-	 * @param executor A lambda of type <code>(CommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(BukkitCommandExecutionInfo) -&gt; int</code> that will be executed when the command is run
 	 * @param types    A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
@@ -301,7 +265,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 		return instance();
 	}
 
-	// Command block command sender
+	// Command block command executor
 
 	/**
 	 * Adds an executor to the current command builder
@@ -347,7 +311,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 		return instance();
 	}
 
-	// Console command sender
+	// Console command executor
 
 	/**
 	 * Adds an executor to the current command builder
@@ -393,7 +357,7 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 		return instance();
 	}
 
-	// Native command sender
+	// Native command executor
 
 	/**
 	 * Adds an executor to the current command builder
@@ -438,6 +402,4 @@ public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends P
 		getExecutor().addResultingExecutor(info);
 		return instance();
 	}
-
-
 }

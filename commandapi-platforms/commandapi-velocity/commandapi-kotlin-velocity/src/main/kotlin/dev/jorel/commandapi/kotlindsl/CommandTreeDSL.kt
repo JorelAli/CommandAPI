@@ -86,33 +86,33 @@ inline fun CommandTree.requirement(base: Argument<*>, predicate: Predicate<Comma
 inline fun Argument<*>.requirement(base: Argument<*>, predicate: Predicate<CommandSource>, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.withRequirement(predicate).apply(block))
 
 // CommandTree execution
-fun CommandTree.anyExecutor(any: (CommandSource, Array<Any>) -> Unit) = CommandTreeExecution().any(any).executes(this)
-fun CommandTree.playerExecutor(player: (Player, Array<Any>) -> Unit) = CommandTreeExecution().player(player).executes(this)
-fun CommandTree.consoleExecutor(console: (ConsoleCommandSource, Array<Any>) -> Unit) = CommandTreeExecution().console(console).executes(this)
+fun CommandTree.anyExecutor(any: (CommandSource, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
+fun CommandTree.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
+fun CommandTree.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
 
 // ArgumentTree execution
-fun Argument<*>.anyExecutor(any: (CommandSource, Array<Any>) -> Unit) = CommandTreeExecution().any(any).executes(this)
-fun Argument<*>.playerExecutor(player: (Player, Array<Any>) -> Unit) = CommandTreeExecution().player(player).executes(this)
-fun Argument<*>.consoleExecutor(console: (ConsoleCommandSource, Array<Any>) -> Unit) = CommandTreeExecution().console(console).executes(this)
+fun Argument<*>.anyExecutor(any: (CommandSource, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
+fun Argument<*>.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
+fun Argument<*>.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
 
 
 class CommandTreeExecution {
 
-	private var any: ((CommandSource, Array<Any>) -> Unit)? = null
-	private var player: ((Player, Array<Any>) -> Unit)? = null
-	private var console: ((ConsoleCommandSource, Array<Any>) -> Unit)? = null
+	private var any: ((CommandSource, CommandArguments) -> Unit)? = null
+	private var player: ((Player, CommandArguments) -> Unit)? = null
+	private var console: ((ConsoleCommandSource, CommandArguments) -> Unit)? = null
 
-	fun any(any: (CommandSource, Array<Any>) -> Unit): CommandTreeExecution {
+	fun any(any: (CommandSource, CommandArguments) -> Unit): CommandTreeExecution {
 		this.any = any
 		return this
 	}
 
-	fun player(player: (Player, Array<Any>) -> Unit): CommandTreeExecution {
+	fun player(player: (Player, CommandArguments) -> Unit): CommandTreeExecution {
 		this.player = player
 		return this
 	}
 
-	fun console(console: (ConsoleCommandSource, Array<Any>) -> Unit): CommandTreeExecution {
+	fun console(console: (ConsoleCommandSource, CommandArguments) -> Unit): CommandTreeExecution {
 		this.console = console
 		return this
 	}

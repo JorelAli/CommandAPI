@@ -32,15 +32,21 @@ public interface PlayerCommandExecutor extends NormalExecutor<Player, VelocityPl
 
 	/**
 	 * The code to run when this command is performed
-	 * 
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 *
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
 	 */
-	void run(Player sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(Player sender, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param info The ExecutionInfo for this command
+	 */
+	@Override
+	default void run(ExecutionInfo<Player, VelocityPlayer> info) throws WrapperCommandSyntaxException {
+		this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.
