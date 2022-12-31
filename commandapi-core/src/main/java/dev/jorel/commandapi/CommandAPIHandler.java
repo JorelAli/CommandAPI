@@ -125,7 +125,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		instance = this;
 	}
 
-	public void onLoad(CommandAPIConfig config) {
+	public void onLoad(CommandAPIConfig<?> config) {
 		checkDependencies();
 		platform.onLoad(config);
 	}

@@ -37,7 +37,11 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	public static InternalSpongeConfig getConfiguration() {
-		return config;
+		if(config != null) {
+			return config;
+		} else {
+			throw new IllegalStateException("Tried to access InternalSpongeConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
+		}
 	}
 
 	@Override

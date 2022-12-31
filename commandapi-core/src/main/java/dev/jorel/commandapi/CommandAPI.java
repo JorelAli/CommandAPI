@@ -65,18 +65,11 @@ public class CommandAPI {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static InternalConfig getConfiguration() {
-		if (config == null) {
-			CommandAPI.config = new InternalConfig(
-				new CommandAPIConfig() {
-					@Override
-					public Object instance() {
-						return this;
-					}
-				}
-			);
-			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
+		if(config != null) {
+			return config;
+		} else {
+			throw new IllegalStateException("Tried to access InternalConfig, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
 		}
-		return config;
 	}
 
 	public static void setLogger(CommandAPILogger logger) {

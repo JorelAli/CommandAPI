@@ -97,7 +97,11 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	}
 
 	public static InternalBukkitConfig getConfiguration() {
-		return config;
+		if(config != null) {
+			return config;
+		} else {
+			throw new IllegalStateException("Tried to access InternalBukkitConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
+		}
 	}
 
 	@Override

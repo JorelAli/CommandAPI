@@ -38,7 +38,11 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 	}
 
 	public static InternalVelocityConfig getConfiguration() {
-		return config;
+		if(config != null) {
+			return config;
+		} else {
+			throw new IllegalStateException("Tried to access InternalVelocityConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
+		}
 	}
 
 	@Override
