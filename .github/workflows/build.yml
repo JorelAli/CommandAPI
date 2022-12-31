@@ -29,8 +29,8 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
 
-      - name: build CommandAPI (Bukkit) using maven
-        run: mvn clean install --batch-mode -PPlatform.Bukkit
+      - name: build CommandAPI (Bukkit+Velocity) using maven
+        run: mvn clean install --batch-mode -P Platform.Bukkit,Platform.Velocity
 
       - name: check NMS Common works on all versions
         run: |
