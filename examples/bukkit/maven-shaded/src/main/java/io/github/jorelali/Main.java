@@ -4,7 +4,7 @@ import java.io.File;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import dev.jorel.commandapi.CommandAPIJavaLogger;
+import dev.jorel.commandapi.CommandAPILogger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.CommandAPI;
@@ -14,7 +14,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		// Set CommandAPI to use this plugin's logger
-		CommandAPI.setLogger(new CommandAPIJavaLogger(getLogger()));
+		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
 
 		// Load the CommandAPI
 		CommandAPI.onLoad(

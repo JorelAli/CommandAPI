@@ -64,7 +64,7 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		// Main CommandAPI loading
-		CommandAPI.setLogger(new CommandAPIJavaLogger(getLogger()));
+		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
 		CommandAPI.onLoad(config);
 
 		// Configure the NBT API - we're not allowing tracking at all, according

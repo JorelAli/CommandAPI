@@ -63,7 +63,6 @@ public class CommandAPI {
 	 *
 	 * @return the internal configuration used to manage the CommandAPI
 	 */
-	@SuppressWarnings("rawtypes")
 	public static InternalConfig getConfiguration() {
 		if(config != null) {
 			return config;
@@ -104,6 +103,9 @@ public class CommandAPI {
 			CommandAPIPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
 			new CommandAPIHandler<>(platform);
 
+			// Finish loading
+			CommandAPIHandler.getInstance().onLoad(config);
+
 			// Log platform load
 			final String platformClassHierarchy;
 			{
@@ -116,9 +118,6 @@ public class CommandAPI {
 				platformClassHierarchy = String.join(" > ", platformClassHierarchyList);
 			}
 			logNormal("Loaded platform " + platformClassHierarchy);
-
-			// Finish loading
-			CommandAPIHandler.getInstance().onLoad(config);
 
 			loaded = true;
 		} else {

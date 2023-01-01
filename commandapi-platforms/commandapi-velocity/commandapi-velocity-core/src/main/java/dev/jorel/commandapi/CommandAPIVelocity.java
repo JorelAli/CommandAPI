@@ -15,10 +15,9 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.*;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandSource, CommandSource> {
 	private CommandManager commandManager;
@@ -47,8 +46,8 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
-		if(config instanceof CommandAPIVelocityConfig spongeConfig) {
-			CommandAPIVelocity.config = new InternalVelocityConfig(spongeConfig);
+		if(config instanceof CommandAPIVelocityConfig velocityConfig) {
+			CommandAPIVelocity.config = new InternalVelocityConfig(velocityConfig);
 		} else {
 			CommandAPI.logError("CommandAPIVelocity was loaded with non-Velocity config!");
 			CommandAPI.logError("Attempts to access Velocity-specific config variables will fail!");
@@ -66,7 +65,7 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 
 	@Override
 	public void registerPermission(String string) {
-		return; // Unsurprisingly, Velocity doesn't have a dumb permission system!
+		// Unsurprisingly, Velocity doesn't have a dumb permission system!
 	}
 
 	@Override
@@ -80,21 +79,9 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 		return null;
 	}
 
-	// Comment out this method if you want logging to work without fixing DefaultLogger
 	@Override
 	public CommandAPILogger getLogger() {
-		return new DefaultLogger();
-	}
-
-	private static class DefaultLogger extends Logger implements CommandAPILogger {
-		protected DefaultLogger() {
-			super("CommandAPI", null);
-			// TODO: How do we get the parent Logger for a Velocity server
-			//  Note: Using this logger might not work because the parent isn't set
-			//  If you'd like to run the plugin and have logging work, comment out the getDefaultLogger method so it isn't overridden anymore
-//			setParent(Bukkit.getServer().getLogger());
-			setLevel(Level.ALL);
-		}
+		return CommandAPILogger.fromApacheLog4jLogger(LogManager.getLogger("CommandAPI"));
 	}
 
 	@Override
@@ -146,7 +133,6 @@ public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandS
 		// Nothing to do?
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public LiteralCommandNode<CommandSource> registerCommandNode(LiteralArgumentBuilder<CommandSource> node) {
 		BrigadierCommand command = new BrigadierCommand(node);
