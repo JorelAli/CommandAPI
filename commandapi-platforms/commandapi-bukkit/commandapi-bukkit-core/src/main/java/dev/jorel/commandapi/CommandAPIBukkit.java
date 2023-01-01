@@ -378,10 +378,14 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 		// Warn if the command we're registering already exists in this plugin's
 		// plugin.yml file
 		final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
-		if (pluginCommand != null) {
+		if (pluginCommand == null) {
+			return;
+		}
+		String pluginName = pluginCommand.getPlugin().getName();
+		if (config.getPlugin().getName().equals(pluginName)) {
 			CommandAPI.logWarning(
 				"Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?"
-					.formatted(commandName, pluginCommand.getPlugin().getName()));
+					.formatted(commandName, pluginName));
 		}
 	}
 
