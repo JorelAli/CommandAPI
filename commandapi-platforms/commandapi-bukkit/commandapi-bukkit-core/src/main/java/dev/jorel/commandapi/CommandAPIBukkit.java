@@ -388,8 +388,8 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 					.formatted(commandName, pluginName));
 		} else {
 			CommandAPI.logNormal(
-				"Plugin command /%s is registered by Bukkit. You may have to use /minecraft:%s to execute your command."
-					.formatted(commandName, commandName));
+				"Plugin command /%s is registered by Bukkit (%s). You may have to use /minecraft:%s to execute your command."
+					.formatted(commandName, pluginName, commandName));
 		}
 	}
 
