@@ -47,7 +47,6 @@ The list of supported arguments are displayed in the following table. The parame
 | [`DoubleArgument`](./argument_primitives.md#numerical-arguments) | **`Double`**                                   |
 |            [`EnchantmentArgument`](./argument_enchantment.md) | `org.bukkit.enchantments.Enchantment`          |
 | [`EntityTypeArgument`](./argument_entities.md#entity-type-argument) | `org.bukkit.entity.EntityType`                 |
-|                [`EnvironmentArgument`](./argument_environment.md) | `org.bukkit.World.Environment`                 |
 | [`FloatArgument`](./argument_primitives.md#numerical-arguments) | **`Float`**                                    |
 | [`FloatRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`     |
 |                   [`FunctionArgument`](./functionwrapper.md) | **`org.bukkit.NamespacedKey`**                 |

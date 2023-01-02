@@ -591,23 +591,6 @@ new CommandAPICommand("enchantitem")
 }
 
 {
-/* ANCHOR: environmentarguments */
-new CommandAPICommand("createworld")
-    .withArguments(new StringArgument("worldname"))
-    .withArguments(new EnvironmentArgument("type"))
-    .executes((sender, args) -> {
-        String worldName = (String) args.get(0);
-        Environment environment = (Environment) args.get(1);
-
-        // Create a new world with the specific world name and environment
-        Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
-        sender.sendMessage("World created!");
-    })
-    .register();
-/* ANCHOR_END: environmentarguments */
-}
-
-{
 /* ANCHOR: worldarguments */
 new CommandAPICommand("unloadworld")
     .withArguments(new WorldArgument("world"))

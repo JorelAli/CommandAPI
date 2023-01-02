@@ -701,27 +701,6 @@ commandAPICommand("enchantitem") {
 /* ANCHOR_END: enchantmentarguments */
 }
 
-fun environmentarguments() {
-/* ANCHOR: environmentarguments */
-commandAPICommand("createworld") {
-    stringArgument("worldname")
-    // TODO: How to deal with the EnvironmentArgument
-}
-        CommandAPICommand("createworld")
-            .withArguments(StringArgument("worldname"))
-            .withArguments(EnvironmentArgument("type"))
-            .executes(CommandExecutor { sender, args ->
-                val worldName = args[0] as String
-                val environment = args[1] as Environment
-
-                // Create a new world with the specific world name and environment
-                Bukkit.getServer().createWorld(WorldCreator(worldName).environment(environment))
-                sender.sendMessage("World created!")
-            })
-            .register()
-/* ANCHOR_END: environmentarguments */
-}
-
 fun worldarguments() {
 /* ANCHOR: worldarguments */
 commandAPICommand("unloadworld") {

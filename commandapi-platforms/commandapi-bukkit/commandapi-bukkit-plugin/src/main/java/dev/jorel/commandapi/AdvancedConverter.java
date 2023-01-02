@@ -47,7 +47,6 @@ import dev.jorel.commandapi.arguments.DoubleArgument;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
-import dev.jorel.commandapi.arguments.EnvironmentArgument;
 import dev.jorel.commandapi.arguments.FloatArgument;
 import dev.jorel.commandapi.arguments.FloatRangeArgument;
 import dev.jorel.commandapi.arguments.FunctionArgument;
@@ -249,7 +248,6 @@ class AdvancedConverter {
 			case ENCHANTMENT -> new EnchantmentArgument(nodeName);
 			case ENTITY_SELECTOR -> new EntitySelectorArgument.OneEntity(nodeName);
 			case ENTITY_TYPE -> new EntityTypeArgument(nodeName);
-			// Byeeeeeeee~ case ENVIRONMENT -> new EnvironmentArgument(nodeName);
 			case FLOAT_RANGE -> new FloatRangeArgument(nodeName);
 			case FUNCTION -> new FunctionArgument(nodeName);
 			case INT_RANGE -> new IntegerRangeArgument(nodeName);

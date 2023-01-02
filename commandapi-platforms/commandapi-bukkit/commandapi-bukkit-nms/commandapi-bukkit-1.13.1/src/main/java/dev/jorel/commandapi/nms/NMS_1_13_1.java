@@ -248,12 +248,6 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		return ArgumentDimension.a();
 	}
 
-	@Differs(from = "1.13", by = "Not throwing EnvironmentArgumentException")
-	@Override
-	public ArgumentType<?> _ArgumentEnvironment() {
-		return ArgumentDimension.a();
-	}
-
 	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();

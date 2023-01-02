@@ -244,11 +244,6 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEnvironment() {
-		throw new UnimplementedArgumentException("EnvironmentArgument", "1.13.1");
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}

@@ -118,11 +118,6 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentDimension();
 
 	/**
-	 * @return Environment argument (minecraft:dimension)
-	 */
-	ArgumentType<?> _ArgumentEnvironment();
-
-	/**
 	 * @return Enchantment argument (minecraft:item_enchantment)
 	 */
 	ArgumentType<?> _ArgumentEnchantment();

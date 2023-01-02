@@ -171,11 +171,6 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEnvironment() {
-		return ArgumentDimension.a();
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
 		return ArgumentEnchantment.a();
 	}
