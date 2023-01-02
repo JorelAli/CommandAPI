@@ -1,5 +1,3 @@
-package dev.jorel.commandapi.examples.kotlin
-
 import com.mojang.brigadier.LiteralMessage
 import com.mojang.brigadier.Message
 import com.mojang.brigadier.ParseResults
@@ -13,6 +11,8 @@ import dev.jorel.commandapi.arguments.*
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
 import dev.jorel.commandapi.arguments.LiteralArgument.of
+import dev.jorel.commandapi.examples.kotlin.CustomItem
+import dev.jorel.commandapi.examples.kotlin.Friends
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
 import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.kotlindsl.*
@@ -52,6 +52,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
 import kotlin.random.Random
 
+class ExamplesKotlinDSL : JavaPlugin() {
 fun sendMessageToCommand() {
 /* ANCHOR: dslSendMessageToCommand */
 commandTree("sendmessageto") {
@@ -344,7 +345,7 @@ commandAPICommand("rotate") {
 }
 
 @Suppress("DEPRECATION")
-fun chatcolorarguments(){
+fun chatcolorarguments() {
 /* ANCHOR: chatcolorarguments */
 commandAPICommand("namecolor") {
     chatColorArgument("chatcolor")
@@ -1848,7 +1849,6 @@ commandAPICommand("warp") {
 /* ANCHOR_END: ArgumentSuggestions1 */
 }
 
-class SafeRecipeArguments : JavaPlugin() {
 @Suppress("deprecation")
 fun SafeRecipeArguments() {
 /* ANCHOR: SafeRecipeArguments */
@@ -1889,7 +1889,6 @@ commandAPICommand("giverecipe") {
     }
 }
 /* ANCHOR_END: SafeRecipeArguments_2 */
-}
 }
 
 fun safemobspawnarguments() {
@@ -1980,7 +1979,7 @@ commandAPICommand("concept") {
 }
 
 fun commandapiconfigsilent() {
-val plugin: JavaPlugin = object: JavaPlugin() {}
+val plugin: JavaPlugin = this
 
 /* ANCHOR: CommandAPIConfigSilent */
 CommandAPI.onLoad(CommandAPIBukkitConfig(plugin).silentLogs(true))
@@ -2189,7 +2188,6 @@ commandTree("sayhi") {
 /* ANCHOR_END: CommandTree_sayhi1 */
 }
 
-class SignEdit : JavaPlugin() {
 @Suppress("deprecation")
 fun signedit() {
 val plugin = this
@@ -2243,7 +2241,6 @@ commandTree("signedit") {
     }
 }
 /* ANCHOR_END: CommandTree_signedit */
-}
 }
 
 @Throws(WrapperCommandSyntaxException::class)
@@ -2323,6 +2320,7 @@ CommandArgument("command")
         )
     )
 /* ANCHOR_END: command_argument_branch */
+}
 }
 
 /* ANCHOR: functionregistration */
