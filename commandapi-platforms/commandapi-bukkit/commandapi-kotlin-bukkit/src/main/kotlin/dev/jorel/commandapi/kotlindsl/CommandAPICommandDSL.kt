@@ -4,12 +4,19 @@ import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
 import dev.jorel.commandapi.executors.CommandArguments
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor
+import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor
 import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.executors.ConsoleCommandExecutor
+import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor
 import dev.jorel.commandapi.executors.EntityCommandExecutor
+import dev.jorel.commandapi.executors.EntityResultingCommandExecutor
 import dev.jorel.commandapi.executors.NativeCommandExecutor
+import dev.jorel.commandapi.executors.NativeResultingCommandExecutor
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.executors.PlayerResultingCommandExecutor
 import dev.jorel.commandapi.executors.ProxyCommandExecutor
+import dev.jorel.commandapi.executors.ProxyResultingCommandExecutor
+import dev.jorel.commandapi.executors.ResultingCommandExecutor
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender
 import org.bukkit.command.BlockCommandSender
 import org.bukkit.command.CommandSender
@@ -144,6 +151,14 @@ fun CommandAPICommand.commandBlockExecutor(block: (BlockCommandSender, CommandAr
 fun CommandAPICommand.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().proxy(proxy).executes(this)
 fun CommandAPICommand.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().native(native).executes(this)
 
+fun CommandAPICommand.anyResultingExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().any(any).executes(this)
+fun CommandAPICommand.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandAPICommandResultingExecution().player(player).executes(this)
+fun CommandAPICommand.entityResultingExecutor(entity: (Entity, CommandArguments) -> Int) = CommandAPICommandResultingExecution().entity(entity).executes(this)
+fun CommandAPICommand.consoleResultingExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().console(console).executes(this)
+fun CommandAPICommand.commandBlockResultingExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().block(block).executes(this)
+fun CommandAPICommand.proxyResultingExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().proxy(proxy).executes(this)
+fun CommandAPICommand.nativeResultingExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().native(native).executes(this)
+
 class CommandAPICommandExecution {
 
 	private var any: ((CommandSender, CommandArguments) -> Unit)? = null
@@ -228,6 +243,95 @@ class CommandAPICommandExecution {
 		if (native != null) {
 			command.executesNative(NativeCommandExecutor { native, args ->
 				this.native?.invoke(native, args)
+			})
+			return
+		}
+	}
+}
+
+class CommandAPICommandResultingExecution {
+	private var any: ((CommandSender, CommandArguments) -> Int)? = null
+	private var player: ((Player, CommandArguments) -> Int)? = null
+	private var entity: ((Entity, CommandArguments) -> Int)? = null
+	private var console: ((ConsoleCommandSender, CommandArguments) -> Int)? = null
+	private var block: ((BlockCommandSender, CommandArguments) -> Int)? = null
+	private var proxy: ((ProxiedCommandSender, CommandArguments) -> Int)? = null
+	private var native: ((NativeProxyCommandSender, CommandArguments) -> Int)? = null
+
+	fun any(any: (CommandSender, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.any = any
+		return this
+	}
+
+	fun player(player: (Player, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.player = player
+		return this
+	}
+
+	fun entity(entity: (Entity, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.entity = entity
+		return this
+	}
+
+	fun console(console: (ConsoleCommandSender, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.console = console
+		return this
+	}
+
+	fun block(block: (BlockCommandSender, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.block = block
+		return this
+	}
+
+	fun proxy(proxy: (ProxiedCommandSender, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.proxy = proxy
+		return this
+	}
+
+	fun native(native: (NativeProxyCommandSender, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.native = native
+		return this
+	}
+
+	fun executes(command: CommandAPICommand) {
+		if (any != null) {
+			command.executes(ResultingCommandExecutor { sender, args ->
+				this.any!!.invoke(sender, args)
+			})
+			return
+		}
+		if (player != null) {
+			command.executesPlayer(PlayerResultingCommandExecutor { player, args ->
+				this.player!!.invoke(player, args)
+			})
+			return
+		}
+		if (entity != null) {
+			command.executesEntity(EntityResultingCommandExecutor { entity, args ->
+				this.entity!!.invoke(entity, args)
+			})
+		}
+		if (console != null) {
+			command.executesConsole(ConsoleResultingCommandExecutor { console, args ->
+				this.console!!.invoke(console, args)
+			})
+			return
+		}
+		if (block != null) {
+			command.executesCommandBlock(CommandBlockResultingCommandExecutor { block, args ->
+				this.block!!.invoke(block, args)
+			})
+			return
+		}
+		if (proxy != null) {
+			command.executesProxy(ProxyResultingCommandExecutor { proxy, args ->
+				this.proxy!!.invoke(proxy, args)
+			})
+			return
+		}
+		if (native != null) {
+			command.executesNative(NativeResultingCommandExecutor { native, args ->
+				this.native!!.invoke(native, args)
 			})
 			return
 		}

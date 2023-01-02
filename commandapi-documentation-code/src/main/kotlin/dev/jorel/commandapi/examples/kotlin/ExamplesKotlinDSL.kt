@@ -1295,13 +1295,10 @@ commandAPICommand("break") {
 fun resultingcommandexecutor() {
 /* ANCHOR: resultingcommandexecutor */
 commandAPICommand("randnum") {
-    // TODO: Implement resulting executors
+    anyResultingExecutor { _, _ ->
+        Random.nextInt()
+    }
 }
-        CommandAPICommand("randnum")
-            .executes(ResultingCommandExecutor { _, _ ->
-                Random.nextInt()
-            })
-            .register()
 /* ANCHOR_END: resultingcommandexecutor */
 }
 
@@ -1309,13 +1306,10 @@ fun resultingcommandexecutor2() {
 /* ANCHOR: resultingcommandexecutor2 */
 // Register random number generator command from 1 to 99 (inclusive)
 commandAPICommand("randomnumber") {
-    // TODO: Implement resulting executors
+    anyResultingExecutor { _, _ ->
+        (1..100).random()
+    }
 }
-        CommandAPICommand("randomnumber")
-            .executes(ResultingCommandExecutor { _, _ ->
-                (1..100).random() // Returns random number from 1 <= x < 100
-            })
-            .register()
 /* ANCHOR_END: resultingcommandexecutor2 */
 }
 

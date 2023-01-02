@@ -90,10 +90,18 @@ fun CommandTree.anyExecutor(any: (CommandSource, CommandArguments) -> Unit) = Co
 fun CommandTree.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
 fun CommandTree.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
 
+fun CommandTree.anyResultingExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
+fun CommandTree.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
+fun CommandTree.consoleResultingExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
+
 // ArgumentTree execution
 fun Argument<*>.anyExecutor(any: (CommandSource, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
 fun Argument<*>.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
 fun Argument<*>.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
+
+fun Argument<*>.anyResultingExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
+fun Argument<*>.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
+fun Argument<*>.consoleResultingExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
 
 
 class CommandTreeExecution {
@@ -154,6 +162,70 @@ class CommandTreeExecution {
 		if (console != null) {
 			tree.executesConsole(ConsoleCommandExecutor { console, args ->
 				this.console?.invoke(console, args)
+			})
+			return
+		}
+	}
+}
+
+class CommandTreeResultingExecution {
+
+	private var any: ((CommandSource, CommandArguments) -> Int)? = null
+	private var player: ((Player, CommandArguments) -> Int)? = null
+	private var console: ((ConsoleCommandSource, CommandArguments) -> Int)? = null
+
+	fun any(any: (CommandSource, CommandArguments) -> Int): CommandTreeResultingExecution {
+		this.any = any
+		return this
+	}
+
+	fun player(player: (Player, CommandArguments) -> Int): CommandTreeResultingExecution {
+		this.player = player
+		return this
+	}
+
+	fun console(console: (ConsoleCommandSource, CommandArguments) -> Int): CommandTreeResultingExecution {
+		this.console = console
+		return this
+	}
+
+	fun executes(tree: Argument<*>) {
+		if (any != null) {
+			tree.executes(ResultingCommandExecutor { sender, args ->
+				any!!.invoke(sender, args)
+			})
+			return
+		}
+		if (player != null) {
+			tree.executesPlayer(PlayerResultingCommandExecutor { player, args ->
+				this.player!!.invoke(player, args)
+			})
+			return
+		}
+		if (console != null) {
+			tree.executesConsole(ConsoleResultingCommandExecutor { console, args ->
+				this.console!!.invoke(console, args)
+			})
+			return
+		}
+	}
+
+	fun executes(tree: CommandTree) {
+		if (any != null) {
+			tree.executes(ResultingCommandExecutor { sender, args ->
+				any!!.invoke(sender, args)
+			})
+			return
+		}
+		if (player != null) {
+			tree.executesPlayer(PlayerResultingCommandExecutor { player, args ->
+				this.player!!.invoke(player, args)
+			})
+			return
+		}
+		if (console != null) {
+			tree.executesConsole(ConsoleResultingCommandExecutor { console, args ->
+				this.console!!.invoke(console, args)
 			})
 			return
 		}
