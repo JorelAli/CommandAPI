@@ -6,6 +6,7 @@ import dev.jorel.commandapi.executors.CommandArguments
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor
 import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.executors.ConsoleCommandExecutor
+import dev.jorel.commandapi.executors.EntityCommandExecutor
 import dev.jorel.commandapi.executors.NativeCommandExecutor
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
 import dev.jorel.commandapi.executors.ProxyCommandExecutor
@@ -23,6 +24,10 @@ inline fun commandAPICommand(name: String, command: CommandAPICommand.() -> Unit
 inline fun commandAPICommand(name: String, predicate: Predicate<CommandSender>, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).withRequirement(predicate).apply(command).register()
 
 inline fun CommandAPICommand.argument(base: Argument<*>, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(base.apply(block))
+fun CommandAPICommand.arguments(vararg arguments: Argument<*>): CommandAPICommand = withArguments(*arguments)
+
+inline fun subcommand(name: String, command: CommandAPICommand.() -> Unit = {}): CommandAPICommand = CommandAPICommand(name).apply(command)
+fun CommandAPICommand.subcommand(command: CommandAPICommand): CommandAPICommand = withSubcommand(command)
 inline fun CommandAPICommand.subcommand(name: String, command: CommandAPICommand.() -> Unit = {}): CommandAPICommand = withSubcommand(CommandAPICommand(name).apply(command))
 
 // Integer arguments
@@ -91,7 +96,7 @@ inline fun CommandAPICommand.teamArgument(nodeName: String, block: Argument<*>.(
 inline fun CommandAPICommand.angleArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(AngleArgument(nodeName).apply(block))
 inline fun CommandAPICommand.advancementArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(AdvancementArgument(nodeName).apply(block))
 
-inline fun CommandAPICommand.biomeArgument(nodeName: String, useNamespacedKey: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
+inline fun CommandAPICommand.biomeArgument(nodeName: String, useNamespacedKey: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
 	if (useNamespacedKey) withArguments(BiomeArgument.NamespacedKey(nodeName).apply(block)) else withArguments(BiomeArgument(nodeName).apply(block))
 
 inline fun CommandAPICommand.blockStateArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(BlockStateArgument(nodeName).apply(block))
@@ -106,7 +111,7 @@ inline fun CommandAPICommand.particleArgument(nodeName: String, block: Argument<
 inline fun CommandAPICommand.potionEffectArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(PotionEffectArgument(nodeName).apply(block))
 inline fun CommandAPICommand.recipeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(RecipeArgument(nodeName).apply(block))
 
-inline fun CommandAPICommand.soundArgument(nodeName: String, useNamespacedKey: Boolean, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
+inline fun CommandAPICommand.soundArgument(nodeName: String, useNamespacedKey: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
 	if (useNamespacedKey) withArguments(SoundArgument.NamespacedKey(nodeName).apply(block)) else withArguments(SoundArgument(nodeName).apply(block))
 
 inline fun CommandAPICommand.timeArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(TimeArgument(nodeName).apply(block))
@@ -124,12 +129,16 @@ inline fun <NBTContainer> CommandAPICommand.nbtCompoundArgument(nodeName: String
 inline fun CommandAPICommand.literalArgument(literal: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LiteralArgument.of(literal).apply(block))
 inline fun CommandAPICommand.multiLiteralArgument(vararg literals: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(MultiLiteralArgument(*literals).apply(block))
 
+// Function arguments
+inline fun CommandAPICommand.functionArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(FunctionArgument(nodeName).apply(block))
+
 // Requirements
 inline fun CommandAPICommand.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(base.withRequirement(predicate).apply(block))
 
 // Command execution
 fun CommandAPICommand.anyExecutor(any: (CommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().any(any).executes(this)
 fun CommandAPICommand.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandAPICommandExecution().player(player).executes(this)
+fun CommandAPICommand.entityExecutor(entity: (Entity, CommandArguments) -> Unit) = CommandAPICommandExecution().entity(entity).executes(this)
 fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().console(console).executes(this)
 fun CommandAPICommand.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().block(block).executes(this)
 fun CommandAPICommand.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().proxy(proxy).executes(this)
@@ -139,6 +148,7 @@ class CommandAPICommandExecution {
 
 	private var any: ((CommandSender, CommandArguments) -> Unit)? = null
 	private var player: ((Player, CommandArguments) -> Unit)? = null
+	private var entity: ((Entity, CommandArguments) -> Unit)? = null
 	private var console: ((ConsoleCommandSender, CommandArguments) -> Unit)? = null
 	private var block: ((BlockCommandSender, CommandArguments) -> Unit)? = null
 	private var proxy: ((ProxiedCommandSender, CommandArguments) -> Unit)? = null
@@ -151,6 +161,11 @@ class CommandAPICommandExecution {
 
 	fun player(player: (Player, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.player = player
+		return this
+	}
+
+	fun entity(entity: (Entity, CommandArguments) -> Unit): CommandAPICommandExecution {
+		this.entity = entity
 		return this
 	}
 
@@ -186,6 +201,11 @@ class CommandAPICommandExecution {
 				this.player?.invoke(player, args)
 			})
 			return
+		}
+		if (entity != null) {
+			command.executesEntity(EntityCommandExecutor { entity, args ->
+				this.entity?.invoke(entity, args)
+			})
 		}
 		if (console != null) {
 			command.executesConsole(ConsoleCommandExecutor { console, args ->
