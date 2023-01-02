@@ -26,6 +26,10 @@ Since most enchantment levels range between 1 and 5, we will also make use of th
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:enchantmentarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:enchantmentarguments}}
+```
+
 </div>
 
 </div>

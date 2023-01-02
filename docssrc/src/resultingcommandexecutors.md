@@ -34,6 +34,10 @@ Say we want a command that returns a random number as a result. This can then be
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingcommandexecutor}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:resultingcommandexecutor}}
+```
+
 </div>
 
 This returns a **success value of 1** _(Because no errors or `CommandAPI.failWithString(String)` was thrown)_ and a **result value of a random number**.
@@ -65,6 +69,10 @@ Since we're declaring commands that are to be used in `/execute`, we must ensure
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingcommandexecutor2}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:resultingcommandexecutor2}}
+```
+
 </div>
 
 Now we write our implementation for `/givereward`. In this example, we use the `EntitySelectorArgument` to select a single player. We cast it to `Player` and then add the items to their inventory.
@@ -77,6 +85,10 @@ Now we write our implementation for `/givereward`. In this example, we use the `
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingcommandexecutor3}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:resultingcommandexecutor3}}
 ```
 
 </div>

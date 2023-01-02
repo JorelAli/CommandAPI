@@ -24,6 +24,10 @@ To do this, given a team we want to use the `setAllowFriendlyFire(boolean)` func
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:teamarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:teamarguments}}
+```
+
 </div>
 
 </div>

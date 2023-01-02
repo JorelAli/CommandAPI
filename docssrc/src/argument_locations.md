@@ -50,6 +50,10 @@ Simply put, given the coordinates provided to the command, "break" the block by 
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:locationarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:locationarguments}}
+```
+
 </div>
 
 </div>

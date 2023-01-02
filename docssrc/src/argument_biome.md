@@ -26,6 +26,10 @@ And we can set the biome of the current chunk as expected:
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:biomearguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:biomearguments}}
+```
+
 </div>
 
 </div>

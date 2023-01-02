@@ -26,6 +26,10 @@ Since we require a player, we will use the `PlayerArgument` for this example. Gi
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:advancementarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:advancementarguments}}
+```
+
 </div>
 
 </div>

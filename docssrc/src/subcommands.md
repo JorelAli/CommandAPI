@@ -40,6 +40,10 @@ We can implement this by creating a `CommandAPICommand` with the command name `a
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommandspart}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:subcommandspart}}
+```
+
 </div>
 
 Similarly, we have another part `remove <permission> <groupName>`. We can declare this similar to our `add` command. Once we've done that, we can now join everything up together. Here, we create a command `group` which adds the two other subcommands:
@@ -52,6 +56,10 @@ Similarly, we have another part `remove <permission> <groupName>`. We can declar
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:subcommands}}
 ```
 
 </div>
@@ -68,6 +76,10 @@ Finally, we can link everything up together to the `perm` command and register t
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommandsend}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:subcommandsend}}
+```
+
 </div>
 
 -----
@@ -82,6 +94,10 @@ Another, more intuitive method, is to shove everything in one go without creatin
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands1}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:subcommands1}}
 ```
 
 </div>

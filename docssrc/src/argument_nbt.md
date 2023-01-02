@@ -73,6 +73,10 @@ Since the underlying implementation of the `NBTCompoundArgument` can change (e.g
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:nbtcompoundarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:nbtcompoundarguments}}
+```
+
 </div>
 
 </div>

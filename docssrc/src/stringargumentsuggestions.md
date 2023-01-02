@@ -26,6 +26,10 @@ We then implement our warp teleporting command using `replaceSuggestions()` on t
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:ArgumentSuggestions1}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:ArgumentSuggestions1}}
+```
+
 </div>
 
 </div>
@@ -72,6 +76,10 @@ We can then use this to generate our suggested list of friends:
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:ArgumentSuggestions2_2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:ArgumentSuggestions2_2}}
 ```
 
 </div>
@@ -128,6 +136,10 @@ When run, this command will send a message to a target player within the provide
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:ArgumentSuggestionsPrevious}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:ArgumentSuggestionsPrevious}}
 ```
 
 </div>

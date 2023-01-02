@@ -42,6 +42,10 @@ We first retrieve the keys from the configuration file using the typical Bukkit 
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:booleanargs}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:booleanargs}}
+```
+
 </div>
 
 </div>

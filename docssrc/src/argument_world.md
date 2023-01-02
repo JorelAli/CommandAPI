@@ -26,6 +26,10 @@ Using the world from the `WorldArgument`, we can then unload the world safely us
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:worldarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:worldarguments}}
+```
+
 </div>
 
 </div>

@@ -29,6 +29,10 @@ Therefore, to gracefully handle this with a proper error message, we use one of 
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandfailures}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:commandfailures}}
+```
+
 </div>
 
 </div>

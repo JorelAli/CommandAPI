@@ -30,6 +30,10 @@ And then we can simply set our block using `setBlockData()`:
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockstateargument}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:blockstateargument}}
+```
+
 </div>
 
 </div>

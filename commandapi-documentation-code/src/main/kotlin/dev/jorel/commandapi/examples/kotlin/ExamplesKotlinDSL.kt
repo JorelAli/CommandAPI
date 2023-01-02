@@ -209,8 +209,9 @@ fun commandregistration() {
 /* ANCHOR: commandregistration */
 // Create our command
 commandAPICommand("broadcastmsg") {
-    withAliases("broadcast", "broadcastmessage")
-    greedyStringArgument("message")
+    withAliases("broadcast", "broadcastmessage") // Command aliases
+    withPermission(CommandPermission.OP)                  // Required permissions
+    greedyStringArgument("message")            // The arguments
     anyExecutor { sender, args ->
         val message = args[0] as String
         Bukkit.getServer().broadcastMessage(message)
@@ -319,7 +320,7 @@ fun locationarguments() {
 /* ANCHOR: locationarguments */
 commandAPICommand("break") {
     // We want to target blocks in particular, so use BLOCK_POSITION
-    locationArgument("break", LocationType.BLOCK_POSITION)
+    locationArgument("block", LocationType.BLOCK_POSITION)
     playerExecutor { _, args ->
         (args[0] as Location).block.type = Material.AIR
     }
@@ -387,13 +388,13 @@ commandAPICommand("makebook") {
 fun chatarguments() {
 /* ANCHOR: chatarguments */
 commandAPICommand("pbroadcast") {
-	chatArgument("message")
-	anyExecutor { _, args ->
-		val message = args[0] as Array<BaseComponent>
+    chatArgument("message")
+    anyExecutor { _, args ->
+        val message = args[0] as Array<BaseComponent>
 
-		// Broadcast the message to everyone on the server
-		Bukkit.getServer().spigot().broadcast(*message)
-	}
+        // Broadcast the message to everyone on the server
+        Bukkit.getServer().spigot().broadcast(*message)
+    }
 }
 /* ANCHOR_END: chatarguments */
 
@@ -703,21 +704,21 @@ commandAPICommand("enchantitem") {
 fun environmentarguments() {
 /* ANCHOR: environmentarguments */
 commandAPICommand("createworld") {
-	stringArgument("worldname")
-	// TODO: How to deal with the EnvironmentArgument
+    stringArgument("worldname")
+    // TODO: How to deal with the EnvironmentArgument
 }
-		CommandAPICommand("createworld")
-			.withArguments(StringArgument("worldname"))
-			.withArguments(EnvironmentArgument("type"))
-			.executes(CommandExecutor { sender, args ->
-				val worldName = args[0] as String
-				val environment = args[1] as Environment
+        CommandAPICommand("createworld")
+            .withArguments(StringArgument("worldname"))
+            .withArguments(EnvironmentArgument("type"))
+            .executes(CommandExecutor { sender, args ->
+                val worldName = args[0] as String
+                val environment = args[1] as Environment
 
-				// Create a new world with the specific world name and environment
-				Bukkit.getServer().createWorld(WorldCreator(worldName).environment(environment))
-				sender.sendMessage("World created!")
-			})
-			.register()
+                // Create a new world with the specific world name and environment
+                Bukkit.getServer().createWorld(WorldCreator(worldName).environment(environment))
+                sender.sendMessage("World created!")
+            })
+            .register()
 /* ANCHOR_END: environmentarguments */
 }
 
@@ -760,7 +761,7 @@ commandAPICommand("giveloottable") {
         // Check if the input block is a container (e.g. chest)
         if (state is Container && state is Lootable) {
             // Apply the loot table to the chest
-	        state.lootTable = lootTable
+            state.lootTable = lootTable
             state.update()
         }
     }
@@ -954,12 +955,12 @@ commandAPICommand("rem") {
 
 class NBTTest : JavaPlugin() {
 
-	/* ANCHOR: nbtcompoundargumentonload */
-	override fun onLoad() {
-		CommandAPI.onLoad(CommandAPIBukkitConfig(this)
-			.initializeNBTAPI(NBTContainer::class.java, ::NBTContainer)
-		)
-	}
+    /* ANCHOR: nbtcompoundargumentonload */
+    override fun onLoad() {
+        CommandAPI.onLoad(CommandAPIBukkitConfig(this)
+            .initializeNBTAPI(NBTContainer::class.java, ::NBTContainer)
+        )
+    }
 /* ANCHOR_END: nbtcompoundargumentonload */
 
 }
@@ -996,10 +997,10 @@ fun literalarguments2() {
 /* ANCHOR: literalarguments2 */
 // Create a map of gamemode names to their respective objects
 val gamemodes = mapOf(
-	"adventure" to GameMode.ADVENTURE,
-	"creative" to GameMode.CREATIVE,
-	"spectator" to GameMode.SPECTATOR,
-	"survival" to GameMode.SURVIVAL
+    "adventure" to GameMode.ADVENTURE,
+    "creative" to GameMode.CREATIVE,
+    "spectator" to GameMode.SPECTATOR,
+    "survival" to GameMode.SURVIVAL
 )
 
 // Iterate over the map
@@ -1058,7 +1059,7 @@ commandAPICommand("gamemode") {
 fun customarguments() {
 /* ANCHOR: customarguments */
 commandAPICommand("tpworld") {
-    worldArgument("world")
+    worldArgument("world") // This method is actually also built into the Kotlin DSL
     playerExecutor { player, args ->
         player.teleport((args[0] as World).spawnLocation)
     }
@@ -1404,7 +1405,7 @@ val arguments = listOf(
 
 commandAPICommand("mycommand") {
     arguments(*arguments.toTypedArray())
-	// And so on
+    // And so on
 }
 /* ANCHOR_END: argumentsyntax3 */
 }
@@ -1433,9 +1434,9 @@ commandAPICommand("kill") {
 fun argumentCasting() {
 /* ANCHOR: argumentcasting */
 val arguments = listOf(
-	StringArgument("arg0"),
-	PotionEffectArgument("arg1"),
-	LocationArgument("arg2")
+    StringArgument("arg0"),
+    PotionEffectArgument("arg1"),
+    LocationArgument("arg2")
 )
 
 commandAPICommand("cmd") {
@@ -1698,13 +1699,13 @@ fun tooltips1() {
 /* ANCHOR: Tooltips1 */
 val arguments = mutableListOf<Argument<*>>()
 arguments.add(StringArgument("emote")
-	.replaceSuggestions(ArgumentSuggestions.stringsWithTooltips { info ->
-		arrayOf<IStringTooltip>(
-			StringTooltip.ofString("wave", "Waves at a player"),
-			StringTooltip.ofString("hug", "Gives a player a hug"),
-			StringTooltip.ofString("glare", "Gives a player the death glare")
-		)
-	})
+    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips { info ->
+        arrayOf<IStringTooltip>(
+            StringTooltip.ofString("wave", "Waves at a player"),
+            StringTooltip.ofString("hug", "Gives a player a hug"),
+            StringTooltip.ofString("glare", "Gives a player the death glare")
+        )
+    })
 )
 arguments.add(PlayerArgument("target"))
 /* ANCHOR_END: Tooltips1 */
@@ -1728,8 +1729,8 @@ commandAPICommand("emote") {
 fun tooltips4() {
 /* ANCHOR: Tooltips4 */
 val customItems = arrayOf<CustomItem>(
-	CustomItem(ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
-	CustomItem(ItemStack(Material.PUMPKIN_PIE), "Sweet pie", "Just like grandma used to make")
+    CustomItem(ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
+    CustomItem(ItemStack(Material.PUMPKIN_PIE), "Sweet pie", "Just like grandma used to make")
 )
 
 commandAPICommand("giveitem") {
@@ -1834,9 +1835,9 @@ fun argumentsuggestions1() {
 val warps = mutableMapOf<String, Location>()
 /* ANCHOR: ArgumentSuggestions1 */
 val arguments = listOf<Argument<*>>(
-	StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings(
-		"northland", "eastland", "southland", "westland"
-	))
+    StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings(
+        "northland", "eastland", "southland", "westland"
+    ))
 )
 
 commandAPICommand("warp") {
@@ -1862,7 +1863,9 @@ emeraldSword.setItemMeta(meta)
 // Create and register our recipe
 val emeraldSwordRecipe = ShapedRecipe(NamespacedKey(this, "emerald_sword"), emeraldSword)
 emeraldSwordRecipe.shape(
-    "AEA", "AEA", "ABA"
+    "AEA",
+    "AEA",
+    "ABA"
 )
 emeraldSwordRecipe.setIngredient('A', Material.AIR)
 emeraldSwordRecipe.setIngredient('E', Material.EMERALD)
@@ -1928,10 +1931,10 @@ fun safepotionarguments() {
 val arguments = mutableListOf<Argument<*>>()
 arguments.add(EntitySelectorArgument.OnePlayer("target"))
 arguments.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest { info ->
-	val target = info.previousArgs()[0] as Player
+    val target = info.previousArgs()[0] as Player
 
-	// Convert PotionEffect[] into PotionEffectType[]
-	target.activePotionEffects.map{ it.type }.toTypedArray()
+    // Convert PotionEffect[] into PotionEffectType[]
+    target.activePotionEffects.map{ it.type }.toTypedArray()
 }))
 /* ANCHOR_END: SafePotionArguments */
 
@@ -1951,17 +1954,17 @@ commandAPICommand("removeeffect") {
 fun fruits() {
 // A really simple example showing how you can use the new suggestion system
 val fruits = arrayOf<String>( "Apple", "Apricot", "Artichoke", "Asparagus", "Atemoya", "Avocado",
-	"Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
-	"Boysenberries", "Broccoflower", "Broccoli", "Cabbage", "Cactus Pear", "Cantaloupe", "Carambola", "Carrots",
-	"Cauliflower", "Celery", "Chayote", "Cherimoya", "Cherries", "Coconuts", "Corn", "Cranberries", "Cucumber",
-	"Dates", "Eggplant", "Endive", "Escarole", "Feijoa", "Fennel", "Figs", "Garlic", "Gooseberries",
-	"Grapefruit", "Grapes", "Greens", "Guava", "Hominy", "Jicama", "Kale", "Kiwifruit", "Kohlrabi", "Kumquat",
-	"Leeks", "Lemons", "Lettuce", "Lima Beans", "Limes", "Longan", "Loquat", "Lychee", "Madarins", "Malanga",
-	"Mangos", "Mulberries", "Mushrooms", "Napa", "Nectarines", "Okra", "Onion", "Oranges", "Papayas", "Parsnip",
-	"Peaches", "Pears", "Peas", "Peppers", "Persimmons", "Pineapple", "Plantains", "Plums", "Pomegranate",
-	"Potatoes", "Prunes", "Pummelo", "Pumpkin", "Quince", "Radicchio", "Radishes", "Raisins", "Raspberries",
-	"Rhubarb", "Rutabaga", "Shallots", "Spinach", "Sprouts", "Squash", "Strawberries", "Tangelo", "Tangerines",
-	"Tomatillo", "Tomato", "Turnip", "Watercress", "Watermelon", "Yams", "Zucchini" )
+    "Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
+    "Boysenberries", "Broccoflower", "Broccoli", "Cabbage", "Cactus Pear", "Cantaloupe", "Carambola", "Carrots",
+    "Cauliflower", "Celery", "Chayote", "Cherimoya", "Cherries", "Coconuts", "Corn", "Cranberries", "Cucumber",
+    "Dates", "Eggplant", "Endive", "Escarole", "Feijoa", "Fennel", "Figs", "Garlic", "Gooseberries",
+    "Grapefruit", "Grapes", "Greens", "Guava", "Hominy", "Jicama", "Kale", "Kiwifruit", "Kohlrabi", "Kumquat",
+    "Leeks", "Lemons", "Lettuce", "Lima Beans", "Limes", "Longan", "Loquat", "Lychee", "Madarins", "Malanga",
+    "Mangos", "Mulberries", "Mushrooms", "Napa", "Nectarines", "Okra", "Onion", "Oranges", "Papayas", "Parsnip",
+    "Peaches", "Pears", "Peas", "Peppers", "Persimmons", "Pineapple", "Plantains", "Plums", "Pomegranate",
+    "Potatoes", "Prunes", "Pummelo", "Pumpkin", "Quince", "Radicchio", "Radishes", "Raisins", "Raspberries",
+    "Rhubarb", "Rutabaga", "Shallots", "Spinach", "Sprouts", "Squash", "Strawberries", "Tangelo", "Tangerines",
+    "Tomatillo", "Tomato", "Turnip", "Watercress", "Watermelon", "Yams", "Zucchini" )
 
 commandAPICommand("concept") {
     stringArgument("text")
@@ -2108,17 +2111,17 @@ val emojis = mapOf(
 )
 
 val messageArgument = GreedyStringArgument("message")
-	.replaceSuggestions { info, builder ->
-		// Only display suggestions at the very end character
-	    val newBuilder = builder.createOffset(builder.getStart() + info.currentArg().length);
+    .replaceSuggestions { info, builder ->
+        // Only display suggestions at the very end character
+        val newBuilder = builder.createOffset(builder.getStart() + info.currentArg().length);
 
-		// Suggest all the emojis!
-		emojis.forEach { (emoji, description) ->
-			newBuilder.suggest(emoji, LiteralMessage(description));
-		}
+        // Suggest all the emojis!
+        emojis.forEach { (emoji, description) ->
+            newBuilder.suggest(emoji, LiteralMessage(description));
+        }
 
-		newBuilder.buildFuture()
-	}
+        newBuilder.buildFuture()
+    }
 
 commandAPICommand("emoji") {
     argument(messageArgument)
@@ -2245,12 +2248,12 @@ commandTree("signedit") {
 
 @Throws(WrapperCommandSyntaxException::class)
 fun getTargetSign(player: Player): Sign {
-	val block: Block? = player.getTargetBlock(null, 256)
-	if (block != null && block.state is Sign) {
-		return block.state as Sign
-	} else {
-		throw CommandAPI.failWithString("You're not looking at a sign!")
-	}
+    val block: Block? = player.getTargetBlock(null, 256)
+    if (block != null && block.state is Sign) {
+        return block.state as Sign
+    } else {
+        throw CommandAPI.failWithString("You're not looking at a sign!")
+    }
 }
 
 fun sudoCommandArgument() {

@@ -88,6 +88,10 @@ In this example, we want to be able to run any arbitrary command, so we will sim
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_sudo}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:command_argument_sudo}}
+```
+
 </div>
 
 </div>

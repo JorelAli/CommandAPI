@@ -48,6 +48,10 @@ Lastly, we register our command as normal using the `register()` method.
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockpredicatearguments2}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:blockpredicatearguments2}}
+```
+
 </div>
 
 </div>

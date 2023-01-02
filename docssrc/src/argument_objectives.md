@@ -37,6 +37,10 @@ Given that an objective has to be casted to a String, we have to find a way to c
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:objectiveargument}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:objectiveargument}}
+```
+
 </div>
 
 </div>
@@ -67,6 +71,10 @@ To do this, we're going to take advantage of Bukkit's `Scoreboard.getObjectivesB
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:objectivecriteriaarguments}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:objectivecriteriaarguments}}
 ```
 
 </div>

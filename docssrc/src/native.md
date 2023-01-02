@@ -60,6 +60,10 @@ As you can see, this command takes no arguments. This is fine, since our "argume
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:nativesender}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:nativesender}}
+```
+
 </div>
 
 This can now be used via the following command examples:

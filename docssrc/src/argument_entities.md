@@ -39,6 +39,10 @@ Instead, we can combine all of these into one by using the `EntitySelectorArgume
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:entityselectorarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:entityselectorarguments}}
+```
+
 </div>
 
 We could then use this to target specific entities, for example:
@@ -103,6 +107,10 @@ Since we're trying to specify an entity type, we will use the `EntityTypeArgumen
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:entitytypearguments}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:entitytypearguments}}
 ```
 
 </div>

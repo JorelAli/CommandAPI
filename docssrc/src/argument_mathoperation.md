@@ -70,6 +70,10 @@ As with any command, we declare our arguments, cast them properly and then we wr
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:mathoperationarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:mathoperationarguments}}
+```
+
 </div>
 
 -----
