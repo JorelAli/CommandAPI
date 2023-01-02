@@ -198,8 +198,12 @@ public final class Converter {
 			CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin.getName())
 					? sender.getCallee()
 					: mergeProxySender(sender);
-			
-			command.execute(proxiedSender, commandName, (String[]) args.args());
+
+			if (args.args() instanceof String[]) {
+				command.execute(proxiedSender, commandName, (String[]) args.args());
+			} else {
+				command.execute(proxiedSender, commandName, new String[0]);
+			}
 		};
 
 		// No arguments
@@ -207,24 +211,7 @@ public final class Converter {
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
-			.executesNative((sender, args) -> {
-				executor.executeWith(new ExecutionInfo<>() {
-					@Override
-					public NativeProxyCommandSender sender() {
-						return sender;
-					}
-
-					@Override
-					public BukkitNativeProxyCommandSender senderWrapper() {
-						return new BukkitNativeProxyCommandSender(sender);
-					}
-
-					@Override
-					public CommandArguments args() {
-						return args;
-					}
-				});
-			})
+			.executesNative(executor)
 			.register();
 
 		// Multiple arguments
