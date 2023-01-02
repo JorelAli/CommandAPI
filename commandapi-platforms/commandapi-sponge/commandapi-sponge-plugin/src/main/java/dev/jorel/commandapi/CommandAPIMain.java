@@ -24,7 +24,7 @@ public class CommandAPIMain {
 	@Listener
 	public void onServerStarting(final StartingEngineEvent<Server> event) {
 		server = event.engine();
-		CommandAPI.setLogger(new SpongeLogger(logger));
+		CommandAPI.setLogger(CommandAPILogger.fromApacheLog4jLogger(logger));
 
 		// TODO: Save default config file if it doesn't exist then load config and apply settings to CommandAPIConfig()
 		//  See: https://docs.spongepowered.org/stable/en/plugin/configuration/index.html

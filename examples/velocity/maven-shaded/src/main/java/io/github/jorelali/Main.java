@@ -7,6 +7,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPILogger;
 import dev.jorel.commandapi.CommandAPIVelocityConfig;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import net.kyori.adventure.text.Component;
@@ -14,12 +15,15 @@ import net.kyori.adventure.text.Component;
 import javax.inject.Inject;
 import java.io.File;
 import java.nio.file.Path;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
 
 @Plugin(id = "maven-example", description = "An example for shading the CommandAPI with maven")
 public class Main {
 	@Inject
 	public Main(ProxyServer server, Logger logger, @DataDirectory Path dataFolder) {
+		// Set logger
+		CommandAPI.setLogger(CommandAPILogger.fromSlf4jLogger(logger));
+
 		// Load the CommandAPI first
 		CommandAPI.onLoad(
 			// Configure the CommandAPI

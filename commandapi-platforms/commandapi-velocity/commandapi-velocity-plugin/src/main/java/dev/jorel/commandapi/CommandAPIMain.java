@@ -60,7 +60,7 @@ public class CommandAPIMain {
 			.missingExecutorImplementationMessage(configYAML.getNode("messages", "missing-executor-implementation").getString())
 			.dispatcherFile(configYAML.getNode("create-dispactcher-json").getBoolean() ? new File(dataDirectory.toFile(), "command_registration.json") : null);
 
-		CommandAPI.setLogger(new CommandAPIJavaLogger(logger));
+		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(logger));
 		CommandAPI.onLoad(config);
 	}
 
