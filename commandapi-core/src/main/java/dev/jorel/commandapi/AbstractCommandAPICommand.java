@@ -24,6 +24,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
+import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ import java.util.List;
 public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>,
 	Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
-	protected List<Argument> args = new ArrayList<>();
+	protected List<Argument> arguments = new ArrayList<>();
 	protected List<Impl> subcommands = new ArrayList<>();
 	protected boolean isConverted;
 
@@ -71,7 +72,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * @return this command builder
 	 */
 	public Impl withArguments(List<Argument> args) {
-		this.args.addAll(args);
+		this.arguments.addAll(args);
 		return instance();
 	}
 
@@ -83,7 +84,41 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 */
 	@SafeVarargs
 	public final Impl withArguments(Argument... args) {
-		this.args.addAll(Arrays.asList(args));
+		this.arguments.addAll(Arrays.asList(args));
+		return instance();
+	}
+
+	/**
+	 * Appends the optional arguments to the current command builder.
+	 *
+	 * This also calls {@link AbstractArgument#setOptional(boolean)} on each argument to make sure they are optional
+	 *
+	 * @param args A <code>List</code> that represents the arguments that this
+	 *             command can accept
+	 * @return this command builder
+	 */
+	public Impl withOptionalArguments(List<Argument> args) {
+		args.forEach(argument -> {
+			argument.setOptional(true);
+			this.arguments.add(argument);
+		});
+		return instance();
+	}
+
+	/**
+	 * Appends the optional arguments to the current command builder.
+	 *
+	 * This also calls {@link AbstractArgument#setOptional(boolean)} on each argument to make sure they are optional
+	 *
+	 * @param args Arguments that this command can accept
+	 * @return this command builder
+	 */
+	@SafeVarargs
+	public final Impl withOptionalArguments(Argument... args) {
+		Arrays.asList(args).forEach(argument -> {
+			argument.setOptional(true);
+			this.arguments.add(argument);
+		});
 		return instance();
 	}
 
@@ -115,7 +150,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * @return the list of arguments that this command has
 	 */
 	public List<Argument> getArguments() {
-		return args;
+		return arguments;
 	}
 
 	/**
@@ -124,7 +159,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * @param args the arguments that this command has
 	 */
 	public void setArguments(List<Argument> args) {
-		this.args = args;
+		this.arguments = args;
 	}
 
 	/**
@@ -194,8 +229,8 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			// - has no subcommands(?)
 			// Honestly, if you're asking how or why any of this works, I don't
 			// know because I just trialled random code until it started working
-			rootCommand.args = prevArguments;
-			rootCommand.withArguments(subcommand.args);
+			rootCommand.arguments = prevArguments;
+			rootCommand.withArguments(subcommand.arguments);
 			rootCommand.executor = subcommand.executor;
 			rootCommand.subcommands = new ArrayList<>();
 			rootCommand.register();
@@ -212,29 +247,69 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			Argument[] argumentsArr = (Argument[]) (args == null ? new AbstractArgument[0] : args.toArray(AbstractArgument[]::new));
+			Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 
 			// Check IGreedyArgument constraints
-			for (int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
-				if (argumentsArr[i] instanceof IGreedyArgument) {
-					if (++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
-						throw new GreedyArgumentException(argumentsArr);
+			for (int i = 0, numGreedyArgs = 0; i < argumentsArray.length; i++) {
+				if (argumentsArray[i] instanceof IGreedyArgument) {
+					if (++numGreedyArgs > 1 || i != argumentsArray.length - 1) {
+						throw new GreedyArgumentException(argumentsArray);
 					}
+				}
+			}
+
+			// Check optional argument constraints
+			// They can only be at the end, no required argument can follow an optional argument
+			int firstOptionalArgumentIndex = -1;
+			for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
+				if (argumentsArray[i].isOptional()) {
+					firstOptionalArgumentIndex = i;
+					optionalArgumentIndex = i;
+					continue;
+				}
+				// Argument is not optional
+				if (optionalArgumentIndex != -1) {
+					throw new OptionalArgumentException();
 				}
 			}
 
 			// Assign the command's permissions to arguments if the arguments don't already
 			// have one
-			for (Argument argument : argumentsArr) {
+			for (Argument argument : argumentsArray) {
 				if (argument.getArgumentPermission() == null) {
 					argument.withPermission(meta.permission);
 				}
 			}
 
+			// Create a List of arrays that hold arguments to register optional arguments
+			// if optional arguments have been found
+			List<Argument[]> argumentsToRegister = new ArrayList<>();
+			if (firstOptionalArgumentIndex != -1) {
+				for (int i = 0; i <= argumentsArray.length; i++) {
+					if (i == firstOptionalArgumentIndex - 1) {
+						Argument[] requiredArguments = (Argument[]) new AbstractArgument[i];
+						System.arraycopy(argumentsArray, 0, requiredArguments, 0, i);
+						argumentsToRegister.add(requiredArguments);
+						continue;
+					}
+					if (i >= firstOptionalArgumentIndex) {
+						Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
+						System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
+						argumentsToRegister.add(optionalArguments);
+					}
+				}
+			}
+
 			if (executor.hasAnyExecutors()) {
-				// Need to cast handler to the right CommandSender type so that argumentsArr and executor are accepted
+				// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
 				CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
-				handler.register(meta, argumentsArr, executor, isConverted);
+				if (argumentsToRegister.isEmpty()) {
+					handler.register(meta, argumentsArray, executor, isConverted);
+				} else {
+					for (Argument[] arguments : argumentsToRegister) {
+						handler.register(meta, arguments, executor, isConverted);
+					}
+				}
 			}
 
 			// Convert subcommands into multiliteral arguments
@@ -248,7 +323,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	public Impl copy() {
 		Impl command = newConcreteCommandAPICommand(new CommandMetaData<>(this.meta));
-		command.args = new ArrayList<>(this.args);
+		command.arguments = new ArrayList<>(this.arguments);
 		command.subcommands = new ArrayList<>(this.subcommands);
 		command.isConverted = this.isConverted;
 		return command;
