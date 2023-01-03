@@ -35,12 +35,13 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.executors.AbstractExecutionInfo;
+import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -126,9 +127,9 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		instance = this;
 	}
 
-	public void onLoad() {
+	public void onLoad(CommandAPIConfig<?> config) {
 		checkDependencies();
-		platform.onLoad();
+		platform.onLoad(config);
 	}
 
 	private void checkDependencies() {
@@ -141,8 +142,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		}
 	}
 
-	public void onEnable(Object plugin) {
-		platform.onEnable(plugin);
+	public void onEnable() {
+		platform.onEnable();
 	}
 
 	public void onDisable() {
@@ -152,7 +153,11 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 	public static <Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source>
 		CommandAPIHandler<Argument, CommandSender, Source> getInstance() {
-		return (CommandAPIHandler<Argument, CommandSender, Source>) instance;
+		if(instance != null) {
+			return (CommandAPIHandler<Argument, CommandSender, Source>) instance;
+		} else {
+			throw new IllegalStateException("Tried to access CommandAPIHandler instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
+		}
 	}
 
 	public CommandAPIPlatform<Argument, CommandSender, Source> getPlatform() {
@@ -175,7 +180,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		return (cmdCtx) -> {
 			AbstractCommandSender<? extends CommandSender> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
 			CommandArguments commandArguments = argsToCommandArgs(cmdCtx, args);
-			AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> executionInfo = new AbstractExecutionInfo<>() {
+			ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> executionInfo = new ExecutionInfo<>() {
 				@Override
 				public CommandSender sender() {
 					return sender.getSource();
@@ -197,7 +202,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
-				AbstractExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> convertedExecutionInfo = new AbstractExecutionInfo<>() {
+				ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> convertedExecutionInfo = new ExecutionInfo<>() {
 					@Override
 					public CommandSender sender() {
 						return sender.getSource();
@@ -661,6 +666,20 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 //					// Byeeeeeeeeeeeeeeeeeeeee~
 //				}
 //			});
+		// We never know if this is "the last command" and we want dynamic (even if
+		// partial)
+		// command registration. Generate the dispatcher file!
+		File file = CommandAPI.getConfiguration().getDispatcherFile();
+		if (file != null) {
+			try {
+				file.getParentFile().mkdirs();
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace(System.out);
+			}
+
+			platform.createDispatcherFile(file, platform.getBrigadierDispatcher());
+		}
 
 		platform.postCommandRegistration(resultantNode, aliasNodes);
 	}

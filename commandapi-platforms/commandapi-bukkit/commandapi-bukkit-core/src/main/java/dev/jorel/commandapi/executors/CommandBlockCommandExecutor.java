@@ -29,7 +29,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A normal command executor for a BlockCommandSender
  */
 @FunctionalInterface
-public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockCommandSender, BukkitBlockCommandSender> {
+public interface CommandBlockCommandExecutor extends NormalExecutor<BlockCommandSender, BukkitBlockCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -42,10 +42,10 @@ public interface CommandBlockCommandExecutor extends IExecutorNormal<BlockComman
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 */
 	@Override
-	default void run(AbstractExecutionInfo<BlockCommandSender, BukkitBlockCommandSender> info) throws WrapperCommandSyntaxException {
+	default void run(ExecutionInfo<BlockCommandSender, BukkitBlockCommandSender> info) throws WrapperCommandSyntaxException {
 		this.run(info.sender(), info.args());
 	}
 

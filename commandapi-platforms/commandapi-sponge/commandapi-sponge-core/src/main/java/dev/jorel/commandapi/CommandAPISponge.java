@@ -14,6 +14,8 @@ import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 import org.spongepowered.api.command.manager.CommandManager;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 // See https://docs.spongepowered.org/stable/en/plugin/migrating-from-7-to-8.html#command-creation-and-registration
@@ -22,25 +24,41 @@ import java.util.List;
 public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Object> {
 	private CommandManager commandManager;
 	private static CommandAPISponge instance;
+	private static InternalSpongeConfig config;
 
 	public CommandAPISponge() {
 		instance = this;
 	}
 
 	public static CommandAPISponge get() {
-		return instance;
+		if(instance != null) {
+			return instance;
+		} else {
+			throw new IllegalStateException("Tried to access CommandAPISponge instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
+		}
+	}
+
+	public static InternalSpongeConfig getConfiguration() {
+		if(config != null) {
+			return config;
+		} else {
+			throw new IllegalStateException("Tried to access InternalSpongeConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
+		}
 	}
 
 	@Override
-	public void onLoad() {
-
+	public void onLoad(CommandAPIConfig<?> config) {
+		if(config instanceof CommandAPISpongeConfig spongeConfig) {
+			CommandAPISponge.config = new InternalSpongeConfig(spongeConfig);
+		} else {
+			CommandAPI.logError("CommandAPISponge was loaded with non-Sponge config!");
+			CommandAPI.logError("Attempts to access Sponge-specific config variables will fail!");
+		}
 	}
 
 	@Override
-	public void onEnable(Object pluginObject) {
-		CommandAPISpongePluginWrapper plugin = (CommandAPISpongePluginWrapper) pluginObject;
-
-		commandManager = plugin.getServer().commandManager();
+	public void onEnable() {
+		commandManager = config.getServer().commandManager();
 	}
 
 	@Override
@@ -62,6 +80,11 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	public CommandDispatcher<Object> getBrigadierDispatcher() {
 		// TODO: How do we get this? Do we need access to sponge internals?
 		return null;
+	}
+
+	@Override
+	public void createDispatcherFile(File file, CommandDispatcher<Object> brigadierDispatcher) throws IOException {
+		// TODO: Implement, probably similar to Velocity unless there is a Sponge method to do this like in Bukkit.
 	}
 
 	@Override

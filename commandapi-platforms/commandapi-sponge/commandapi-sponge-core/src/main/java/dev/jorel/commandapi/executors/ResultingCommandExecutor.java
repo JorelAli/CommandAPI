@@ -5,7 +5,7 @@ import dev.jorel.commandapi.commandsenders.VelocityCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 @FunctionalInterface
-public interface ResultingCommandExecutor extends IExecutorResulting<CommandSource, VelocityCommandSender<? extends CommandSource>> {
+public interface ResultingCommandExecutor extends ResultingExecutor<CommandSource, VelocityCommandSender<? extends CommandSource>> {
 	/**
 	 * Executes the command.
 	 *

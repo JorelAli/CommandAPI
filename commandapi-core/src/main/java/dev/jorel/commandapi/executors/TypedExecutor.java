@@ -24,28 +24,27 @@ import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
- * The interface for normal command executors
- * @param <CommandSender> The CommandSender for this executor
- * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
+ * An interface that includes the type of an executor (what command senders it
+ * can execute) and has a method that executes an executor with a given command
+ * sender and arguments
+ * @param <WrapperType> The AbstractCommandSenderClass for this executor
  */
-public interface IExecutorNormal<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> extends IExecutorTyped<CommandSender, WrapperType> {
+public interface TypedExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
+	
 	/**
-	 * Executes the command executor with the provided command sender and the provided arguments.
-	 * @param info The AbstractExecutionInfo for this command
-	 * @return 1 if the command succeeds, 0 if the command fails
-	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
+	 * Returns the type of the sender of the current executor.
+	 * @return the type of the sender of the current executor
 	 */
-	@Override
-	default int executeWith(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException {
-		this.run(info);
-		return 1;
+	default ExecutorType getType() {
+		return ExecutorType.ALL;
 	}
 
 	/**
-	 * Executes the command.
-	 * @param info The AbstractExecutionInfo for this command
+	 * Executes the command executor with the provided command sender and the provided arguments.
+	 * @param info The ExecutionInfo for this command
+	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	void run(AbstractExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
+	int executeWith(ExecutionInfo<CommandSender, WrapperType> info) throws WrapperCommandSyntaxException;
 
 }

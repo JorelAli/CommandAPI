@@ -47,6 +47,7 @@ To find out, which DSL executor corresponds to "normal" executors, you can refer
 |--------------------------|--------------------------|
 | `anyExecutor()`          | `executes()`             |
 | `playerExecutor()`       | `executesPlayer()`       |
+| `entityExecutor()`       | `executesEntity()`       |
 | `consoleExecutor()`      | `executesConsole()`      |
 | `commandBlockExecutor()` | `executesCommandBlock()` |
 | `proxyExecutor()`        | `executesProxy()`        |

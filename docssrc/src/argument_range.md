@@ -63,6 +63,10 @@ Now, we simply create our arguments using `IntegerRangeArgument` for our range a
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:rangedarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:rangedarguments}}
+```
+
 </div>
 
 </div>

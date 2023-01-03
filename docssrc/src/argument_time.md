@@ -30,6 +30,10 @@ Say we have a command `bigmsg` that displays a title message to all players for 
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:timearguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:timearguments}}
+```
+
 </div>
 
 </div>

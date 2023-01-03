@@ -51,6 +51,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argument<?>, CommandSender, Source> implements NMS<Source> {
 	// References to utility classes
 	private static CommandAPIBukkit<?> instance;
+	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
 
 	// Static VarHandles
@@ -84,17 +85,35 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 
 	@SuppressWarnings("unchecked")
 	public static <Source> CommandAPIBukkit<Source> get() {
-		return (CommandAPIBukkit<Source>) instance;
+		if(instance != null) {
+			return (CommandAPIBukkit<Source>) instance;
+		} else {
+			throw new IllegalStateException("Tried to access CommandAPIBukkit instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
+		}
 	}
 
 	public PaperImplementations getPaper() {
 		return paper;
 	}
 
-	@Override
-	public void onLoad() {
-		checkDependencies();
+	public static InternalBukkitConfig getConfiguration() {
+		if(config != null) {
+			return config;
+		} else {
+			throw new IllegalStateException("Tried to access InternalBukkitConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
+		}
+	}
 
+	@Override
+	public void onLoad(CommandAPIConfig<?> config) {
+		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
+			CommandAPIBukkit.config = new InternalBukkitConfig(bukkitConfig);
+		} else {
+			CommandAPI.logError("CommandAPIBukkit was loaded with non-Bukkit config!");
+			CommandAPI.logError("Attempts to access Bukkit-specific config variables will fail!");
+		}
+
+		checkDependencies();
 		registerCustomArgumentType();
 	}
 
@@ -141,8 +160,8 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	}
 
 	@Override
-	public void onEnable(Object pluginObject) {
-		JavaPlugin plugin = (JavaPlugin) pluginObject;
+	public void onEnable() {
+		JavaPlugin plugin = config.getPlugin();
 
 		// Prevent command registration after server has loaded
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -311,6 +330,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 
 	@Override
 	public void onDisable() {
+		// Nothing to do
 	}
 
 	@Override
@@ -359,29 +379,24 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 		// Warn if the command we're registering already exists in this plugin's
 		// plugin.yml file
 		final PluginCommand pluginCommand = Bukkit.getPluginCommand(commandName);
-		if (pluginCommand != null) {
+		if (pluginCommand == null) {
+			return;
+		}
+		String pluginName = pluginCommand.getPlugin().getName();
+		if (config.getPlugin().getName().equals(pluginName)) {
 			CommandAPI.logWarning(
 				"Plugin command /%s is registered by Bukkit (%s). Did you forget to remove this from your plugin.yml file?"
-					.formatted(commandName, pluginCommand.getPlugin().getName()));
+					.formatted(commandName, pluginName));
+		} else {
+			CommandAPI.logNormal(
+				"Plugin command /%s is registered by Bukkit (%s). You may have to use /minecraft:%s to execute your command."
+					.formatted(commandName, pluginName, commandName));
 		}
 	}
 
 	@Override
 	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException {
-		// We never know if this is "the last command" and we want dynamic (even if
-		// partial)
-		// command registration. Generate the dispatcher file!
-		File file = CommandAPI.getConfiguration().getDispatcherFile();
-		if (file != null) {
-			try {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace(System.out);
-			}
-
-			createDispatcherFile(file, getBrigadierDispatcher());
-		}
+		// Nothing to do
 	}
 
 	@Override
@@ -418,6 +433,9 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
 
+	@Override
+	@Unimplemented(because = {REQUIRES_MINECRAFT_SERVER, VERSION_SPECIFIC_IMPLEMENTATION})
+	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> brigadierDispatcher) throws IOException;
 
 	@Override
 	public CommandAPILogger getLogger() {

@@ -90,6 +90,10 @@ Now we can create our book command. We use the player as the main target by usin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatcomponentarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:chatcomponentarguments}}
+```
+
 </div>
 
 </div>
@@ -130,6 +134,10 @@ _Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatarguments}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:chatarguments}}
 ```
 
 </div>

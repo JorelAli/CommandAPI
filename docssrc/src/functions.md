@@ -38,6 +38,10 @@ public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/co
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionregistration}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:functionregistration}}
+```
+
 </div>
 
 </div>

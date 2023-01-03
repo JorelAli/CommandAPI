@@ -22,6 +22,10 @@ In this example, we'll show how to use multi literals to declare Minecraft's `/g
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:multiliteralarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:multiliteralarguments}}
+```
+
 </div>
 
 An important thing to note is that we don't have to implement a `default` case for the above `switch` statements, because the CommandAPI will only permit valid options of a `MultiLiteralArgument` to reach the executor. If the user enters an invalid option, the command doesn't run.

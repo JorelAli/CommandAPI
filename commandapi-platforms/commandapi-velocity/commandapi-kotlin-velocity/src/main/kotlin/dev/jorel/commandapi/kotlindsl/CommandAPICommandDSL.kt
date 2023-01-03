@@ -5,15 +5,23 @@ import com.velocitypowered.api.proxy.ConsoleCommandSource
 import com.velocitypowered.api.proxy.Player
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
+import dev.jorel.commandapi.executors.CommandArguments
 import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.executors.ConsoleCommandExecutor
+import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.executors.PlayerResultingCommandExecutor
+import dev.jorel.commandapi.executors.ResultingCommandExecutor
 import java.util.function.Predicate
 
 inline fun commandAPICommand(name: String, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register()
 inline fun commandAPICommand(name: String, predicate: Predicate<CommandSource>, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).withRequirement(predicate).apply(command).register()
 
 inline fun CommandAPICommand.argument(base: Argument<*>, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(base.apply(block))
+fun CommandAPICommand.arguments(vararg arguments: Argument<*>): CommandAPICommand = withArguments(*arguments)
+
+inline fun subcommand(name: String, command: CommandAPICommand.() -> Unit = {}): CommandAPICommand = CommandAPICommand(name).apply(command)
+fun CommandAPICommand.subcommand(command: CommandAPICommand): CommandAPICommand = withSubcommand(command)
 inline fun CommandAPICommand.subcommand(name: String, command: CommandAPICommand.() -> Unit = {}): CommandAPICommand = withSubcommand(CommandAPICommand(name).apply(command))
 
 // Integer arguments
@@ -52,27 +60,31 @@ inline fun CommandAPICommand.multiLiteralArgument(vararg literals: String, block
 inline fun CommandAPICommand.requirement(base: Argument<*>, predicate: Predicate<CommandSource>, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(base.withRequirement(predicate).apply(block))
 
 // Command execution
-fun CommandAPICommand.anyExecutor(any: (CommandSource, Array<Any>) -> Unit) = CommandAPICommandExecution().any(any).executes(this)
-fun CommandAPICommand.playerExecutor(player: (Player, Array<Any>) -> Unit) = CommandAPICommandExecution().player(player).executes(this)
-fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSource, Array<Any>) -> Unit) = CommandAPICommandExecution().console(console).executes(this)
+fun CommandAPICommand.anyExecutor(any: (CommandSource, CommandArguments) -> Unit) = CommandAPICommandExecution().any(any).executes(this)
+fun CommandAPICommand.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandAPICommandExecution().player(player).executes(this)
+fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandAPICommandExecution().console(console).executes(this)
+
+fun CommandAPICommand.anyResultingExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandAPICommandResultingExecution().any(any).executes(this)
+fun CommandAPICommand.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandAPICommandResultingExecution().player(player).executes(this)
+fun CommandAPICommand.consoleResultingExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandAPICommandResultingExecution().console(console).executes(this)
 
 class CommandAPICommandExecution {
 
-	private var any: ((CommandSource, Array<Any>) -> Unit)? = null
-	private var player: ((Player, Array<Any>) -> Unit)? = null
-	private var console: ((ConsoleCommandSource, Array<Any>) -> Unit)? = null
+	private var any: ((CommandSource, CommandArguments) -> Unit)? = null
+	private var player: ((Player, CommandArguments) -> Unit)? = null
+	private var console: ((ConsoleCommandSource, CommandArguments) -> Unit)? = null
 
-	fun any(any: (CommandSource, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun any(any: (CommandSource, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.any = any
 		return this
 	}
 
-	fun player(player: (Player, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun player(player: (Player, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.player = player
 		return this
 	}
 
-	fun console(console: (ConsoleCommandSource, Array<Any>) -> Unit): CommandAPICommandExecution {
+	fun console(console: (ConsoleCommandSource, CommandArguments) -> Unit): CommandAPICommandExecution {
 		this.console = console
 		return this
 	}
@@ -93,6 +105,49 @@ class CommandAPICommandExecution {
 		if (console != null) {
 			command.executesConsole(ConsoleCommandExecutor { console, args ->
 				this.console?.invoke(console, args)
+			})
+			return
+		}
+	}
+}
+
+class CommandAPICommandResultingExecution {
+
+	private var any: ((CommandSource, CommandArguments) -> Int)? = null
+	private var player: ((Player, CommandArguments) -> Int)? = null
+	private var console: ((ConsoleCommandSource, CommandArguments) -> Int)? = null
+
+	fun any(any: (CommandSource, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.any = any
+		return this
+	}
+
+	fun player(player: (Player, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.player = player
+		return this
+	}
+
+	fun console(console: (ConsoleCommandSource, CommandArguments) -> Int): CommandAPICommandResultingExecution {
+		this.console = console
+		return this
+	}
+
+	fun executes(command: CommandAPICommand) {
+		if (any != null) {
+			command.executes(ResultingCommandExecutor { sender, args ->
+				any!!.invoke(sender, args)
+			})
+			return
+		}
+		if (player != null) {
+			command.executesPlayer(PlayerResultingCommandExecutor { player, args ->
+				this.player!!.invoke(player, args)
+			})
+			return
+		}
+		if (console != null) {
+			command.executesConsole(ConsoleResultingCommandExecutor { console, args ->
+				this.console!!.invoke(console, args)
 			})
 			return
 		}

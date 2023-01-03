@@ -28,7 +28,7 @@ import org.bukkit.entity.Entity;
  * A resulting command executor for an Entity
  */
 @FunctionalInterface
-public interface EntityResultingCommandExecutor extends IExecutorResulting<Entity, BukkitEntity> {
+public interface EntityResultingCommandExecutor extends ResultingExecutor<Entity, BukkitEntity> {
 
 	/**
 	 * The code to run when this command is performed
@@ -42,11 +42,11 @@ public interface EntityResultingCommandExecutor extends IExecutorResulting<Entit
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 */
 	@Override
-	default int run(AbstractExecutionInfo<Entity, BukkitEntity> info) throws WrapperCommandSyntaxException {
+	default int run(ExecutionInfo<Entity, BukkitEntity> info) throws WrapperCommandSyntaxException {
 		return this.run(info.sender(), info.args());
 	}
 

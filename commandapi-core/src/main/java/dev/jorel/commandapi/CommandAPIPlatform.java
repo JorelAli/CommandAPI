@@ -10,6 +10,7 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,16 +25,16 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is loaded,
 	 * such as checking dependencies and initializing helper classes.
+	 *
+	 * @param config the configuration to use for the CommandAPI.
 	 */
-	public abstract void onLoad();
+	public abstract void onLoad(CommandAPIConfig<?> config);
 
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is enabled,
 	 * such as registering event listeners.
-	 *
-	 * @param plugin The plugin providing the CommandAPI. This should have a specific class depending on the platform.
 	 */
-	public abstract void onEnable(Object plugin);
+	public abstract void onEnable();
 
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is disabled.
@@ -91,9 +92,7 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	public abstract void preCommandRegistration(String commandName);
 
 	/**
-	 * Stuff to run after a command has been generated. For Bukkit, this involves
-	 * finding command ambiguities for logging and generating the command JSON
-	 * dispatcher file.
+	 * Stuff to run after a command has been generated.
 	 *
 	 * @param resultantNode the node that was registered
 	 * @param aliasNodes    any alias nodes that were also registered as a part of this registration process
@@ -120,6 +119,16 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	 * @return The Brigadier CommandDispatcher tree being used by the platform's server
 	 */
 	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
+
+	/**
+	 * Creates a JSON file that describes the hierarchical structure of the commands
+	 * that have been registered by the server.
+	 *
+	 * @param file       The JSON file to write to
+	 * @param dispatcher The Brigadier CommandDispatcher
+	 * @throws IOException When the file fails to be written to
+	 */
+	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> dispatcher) throws IOException;
 
 	/**
 	 * @return A new default Logger meant for the CommandAPI to use

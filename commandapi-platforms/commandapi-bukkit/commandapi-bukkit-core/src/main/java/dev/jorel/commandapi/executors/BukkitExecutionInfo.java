@@ -26,5 +26,5 @@ public record BukkitExecutionInfo<Sender>(
 	 */
 	CommandArguments args
 
-) implements AbstractExecutionInfo<Sender, BukkitCommandSender<? extends Sender>> {
+) implements ExecutionInfo<Sender, BukkitCommandSender<? extends Sender>> {
 }

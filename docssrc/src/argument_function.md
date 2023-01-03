@@ -28,6 +28,10 @@ When provided with a function, it will execute that function. If instead a tag i
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionarguments2}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:functionarguments2}}
+```
+
 </div>
 
 </div>

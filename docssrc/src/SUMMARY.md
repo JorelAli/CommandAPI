@@ -62,7 +62,6 @@
       - [Biome arguments](./argument_biome.md)
       - [BlockState arguments](./argument_blockstate.md)
       - [Enchantment arguments](./argument_enchantment.md)
-      - [Environment arguments](./argument_environment.md)
       - [Itemstack arguments](./argument_itemstack.md)
       - [LootTable argument](./argument_loottable.md)
       - [MathOperation arguments](./argument_mathoperation.md)

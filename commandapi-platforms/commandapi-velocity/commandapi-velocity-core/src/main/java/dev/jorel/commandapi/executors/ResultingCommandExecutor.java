@@ -4,18 +4,32 @@ import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.commandsenders.VelocityCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
+/**
+ * A resulting command executor for a CommandSource
+ */
 @FunctionalInterface
-public interface ResultingCommandExecutor extends IExecutorResulting<CommandSource, VelocityCommandSender<? extends CommandSource>> {
+public interface ResultingCommandExecutor extends ResultingExecutor<CommandSource, VelocityCommandSender<? extends CommandSource>> {
+
 	/**
-	 * Executes the command.
+	 * The code to run when this command is performed
 	 *
-	 * @param commandSource the CommandSource for this command
-	 * @param args          the arguments provided to this command
-	 * @return the value returned by this command if the command succeeds, 0 if the command fails
-	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
+	 * @return the result of this command
+	 */
+	int run(CommandSource sender, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param info The ExecutionInfo for this command
+	 * @return the result of this command
+	 * @throws WrapperCommandSyntaxException
 	 */
 	@Override
-	int run(CommandSource commandSource, Object[] args) throws WrapperCommandSyntaxException;
+	default int run(ExecutionInfo<CommandSource, VelocityCommandSender<? extends CommandSource>> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

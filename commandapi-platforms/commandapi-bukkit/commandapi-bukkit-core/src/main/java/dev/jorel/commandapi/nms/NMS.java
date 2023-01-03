@@ -97,11 +97,6 @@ public interface NMS<CommandListenerWrapper> {
 	ArgumentType<?> _ArgumentDimension();
 
 	/**
-	 * @return Environment argument (minecraft:dimension)
-	 */
-	ArgumentType<?> _ArgumentEnvironment();
-
-	/**
 	 * @return Enchantment argument (minecraft:item_enchantment)
 	 */
 	ArgumentType<?> _ArgumentEnchantment();
@@ -264,16 +259,6 @@ public interface NMS<CommandListenerWrapper> {
 	String convert(PotionEffectType potion);
 
 	String convert(Sound sound);
-
-	/**
-	 * Creates a JSON file that describes the hierarchical structure of the commands
-	 * that have been registered by the server.
-	 * 
-	 * @param file       The JSON file to write to
-	 * @param dispatcher The Brigadier CommandDispatcher
-	 * @throws IOException When the file fails to be written to
-	 */
-	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
 
 	Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 

@@ -5,15 +5,15 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.entity.Entity;
 
 @FunctionalInterface
-public interface EntityResultingExecutionInfo extends IExecutorResulting<Entity, BukkitEntity> {
+public interface EntityResultingExecutionInfo extends ResultingExecutor<Entity, BukkitEntity> {
 
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 */
-	int run(AbstractExecutionInfo<Entity, BukkitEntity> info) throws WrapperCommandSyntaxException;
+	int run(ExecutionInfo<Entity, BukkitEntity> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

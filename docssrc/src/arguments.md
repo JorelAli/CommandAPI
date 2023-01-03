@@ -33,6 +33,10 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax1}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax1}}
+```
+
 </div>
 
 <div class="multi-pre">
@@ -45,6 +49,10 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax2}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentsyntax2}}
+```
+
 </div>
 
 <div class="multi-pre">
@@ -55,6 +63,10 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax3}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentsyntax3}}
 ```
 
 </div>
@@ -73,6 +85,10 @@ To access arguments, they have to be casted to the type that the argument repres
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentcasting}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentcasting}}
 ```
 
 </div>
@@ -103,7 +119,6 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |               [`EntitySelectorArgument.OneEntity`](./argument_entities.md#entity-selector-argument) | `org.bukkit.entity.Entity`                                                                                                                                                                                                                          |
 |               [`EntitySelectorArgument.OnePlayer`](./argument_entities.md#entity-selector-argument) | `org.bukkit.entity.Player`                                                                                                                                                                                                                          |
 |                                 [`EntityTypeArgument`](./argument_entities.md#entity-type-argument) | `org.bukkit.entity.EntityType`                                                                                                                                                                                                                      |
-|                                                     [`EnvironmentArgument`](./argument_environment.md) | `org.bukkit.World.Environment`                                                                                                                                                                                                                      |
 |                                    [`FloatArgument`](./argument_primitives.md#numerical-arguments) | `float`                                                                                                                                                                                                                                             |
 |                   [`FloatRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`                                                                                                                                                                                                          |
 |                                                        [`FunctionArgument`](./functionwrapper.md) | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`                                                                                                                                                                                                   |
@@ -178,6 +193,10 @@ We first register the first `/kill` command as normal:
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentkillcmd}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentkillcmd}}
+```
+
 </div>
 
 Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
@@ -190,6 +209,10 @@ Now we declare our command with arguments for our second command. Then, we can r
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentkillcmd2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentkillcmd2}}
 ```
 
 </div>

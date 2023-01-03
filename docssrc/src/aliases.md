@@ -18,6 +18,10 @@ In this example, we register the command `/getpos` that returns the command send
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:aliases}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:aliases}}
+```
+
 </div>
 
 </div>

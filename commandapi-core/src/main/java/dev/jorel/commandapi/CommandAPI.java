@@ -64,11 +64,11 @@ public final class CommandAPI {
 	 * @return the internal configuration used to manage the CommandAPI
 	 */
 	public static InternalConfig getConfiguration() {
-		if (config == null) {
-			CommandAPI.config = new InternalConfig(new CommandAPIConfig());
-			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
+		if(config != null) {
+			return config;
+		} else {
+			throw new IllegalStateException("Tried to access InternalConfig, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
 		}
-		return config;
 	}
 
 	public static void setLogger(CommandAPILogger logger) {
@@ -91,9 +91,10 @@ public final class CommandAPI {
 	 * Initializes the CommandAPI for loading. This should be placed at the start of
 	 * your <code>onLoad()</code> method.
 	 *
-	 * @param config the configuration to use for the CommandAPI
+	 * @param config the configuration to use for the CommandAPI. This should be a {@link CommandAPIConfig}
+	 *               subclass corresponding to the active platform.
 	 */
-	public static void onLoad(CommandAPIConfig config) {
+	public static void onLoad(CommandAPIConfig<?> config) {
 		if (!loaded) {
 			// Setup variables
 			CommandAPI.config = new InternalConfig(config);
@@ -101,6 +102,9 @@ public final class CommandAPI {
 			// Initialize handlers
 			CommandAPIPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
 			new CommandAPIHandler<>(platform);
+
+			// Finish loading
+			CommandAPIHandler.getInstance().onLoad(config);
 
 			// Log platform load
 			final String platformClassHierarchy;
@@ -115,9 +119,6 @@ public final class CommandAPI {
 			}
 			logNormal("Loaded platform " + platformClassHierarchy);
 
-			// Finish loading
-			CommandAPIHandler.getInstance().onLoad();
-
 			loaded = true;
 		} else {
 			getLogger().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
@@ -127,11 +128,9 @@ public final class CommandAPI {
 	/**
 	 * Enables the CommandAPI. This should be placed at the start of your
 	 * <code>onEnable()</code> method.
-	 *
-	 * @param plugin the plugin that this onEnable method is called from
 	 */
-	public static void onEnable(Object plugin) {
-		CommandAPIHandler.getInstance().onEnable(plugin);
+	public static void onEnable() {
+		CommandAPIHandler.getInstance().onEnable();
 	}
 
 	/**
@@ -144,8 +143,13 @@ public final class CommandAPI {
 		CommandAPI.loaded = false;
 
 		// This method is called automatically when the class loads to set up variables, in which case
-		// BaseHandler will not have been initialized
-		CommandAPIHandler<?, ?, ?> handler = CommandAPIHandler.getInstance();
+		// CommandAPIHandler will not have been initialized
+		CommandAPIHandler<?, ?, ?> handler = null;
+		try {
+			handler = CommandAPIHandler.getInstance();
+		} catch (IllegalStateException ignored) {
+			// Not an error, CommandAPIHandler is not in loaded state anyway
+		}
 		if (handler != null) handler.onDisable();
 	}
 

@@ -26,6 +26,10 @@ In this example, we utilize some of the other arguments that we've described ear
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:potioneffectarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:potioneffectarguments}}
+```
+
 </div>
 
 </div>

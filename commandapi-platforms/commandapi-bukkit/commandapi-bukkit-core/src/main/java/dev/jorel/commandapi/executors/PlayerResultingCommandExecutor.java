@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
  * A resulting command executor for a Player
  */
 @FunctionalInterface
-public interface PlayerResultingCommandExecutor extends IExecutorResulting<Player, BukkitPlayer> {
+public interface PlayerResultingCommandExecutor extends ResultingExecutor<Player, BukkitPlayer> {
 
 	/**
 	 * The code to run when this command is performed
@@ -42,12 +42,12 @@ public interface PlayerResultingCommandExecutor extends IExecutorResulting<Playe
 	/**
 	 * The code to run when this command is performed
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @return the result of this command
 	 * @throws WrapperCommandSyntaxException
 	 */
 	@Override
-	default int run(AbstractExecutionInfo<Player, BukkitPlayer> info) throws WrapperCommandSyntaxException {
+	default int run(ExecutionInfo<Player, BukkitPlayer> info) throws WrapperCommandSyntaxException {
 		return this.run(info.sender(), info.args());
 	}
 

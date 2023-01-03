@@ -28,7 +28,7 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
  * A normal command executor for a NativeProxyCommandSender
  */
 @FunctionalInterface
-public interface ProxyCommandExecutor extends IExecutorNormal<NativeProxyCommandSender, BukkitNativeProxyCommandSender> {
+public interface ProxyCommandExecutor extends NormalExecutor<NativeProxyCommandSender, BukkitNativeProxyCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
@@ -41,11 +41,11 @@ public interface ProxyCommandExecutor extends IExecutorNormal<NativeProxyCommand
 	/**
 	 * Executes the command.
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
 	@Override
-	default void run(AbstractExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender> info) throws WrapperCommandSyntaxException {
+	default void run(ExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender> info) throws WrapperCommandSyntaxException {
 		this.run(info.sender(), info.args());
 	}
 

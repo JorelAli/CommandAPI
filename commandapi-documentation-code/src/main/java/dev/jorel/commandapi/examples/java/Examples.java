@@ -591,23 +591,6 @@ new CommandAPICommand("enchantitem")
 }
 
 {
-/* ANCHOR: environmentarguments */
-new CommandAPICommand("createworld")
-    .withArguments(new StringArgument("worldname"))
-    .withArguments(new EnvironmentArgument("type"))
-    .executes((sender, args) -> {
-        String worldName = (String) args.get(0);
-        Environment environment = (Environment) args.get(1);
-
-        // Create a new world with the specific world name and environment
-        Bukkit.getServer().createWorld(new WorldCreator(worldName).environment(environment));
-        sender.sendMessage("World created!");
-    })
-    .register();
-/* ANCHOR_END: environmentarguments */
-}
-
-{
 /* ANCHOR: worldarguments */
 new CommandAPICommand("unloadworld")
     .withArguments(new WorldArgument("world"))
@@ -850,7 +833,7 @@ class NBTTest extends JavaPlugin {
 /* ANCHOR: nbtcompoundargumentonload */
 @Override
 public void onLoad() {
-    CommandAPI.onLoad(new CommandAPIConfig()
+    CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
         .initializeNBTAPI(NBTContainer.class, NBTContainer::new)
     );
 }
@@ -1987,8 +1970,10 @@ new CommandAPICommand("removeeffect")
 }
 
 {
+JavaPlugin plugin = new JavaPlugin() {};
+
 /* ANCHOR: CommandAPIConfigSilent */
-CommandAPI.onLoad(new CommandAPIConfig().silentLogs(true));
+CommandAPI.onLoad(new CommandAPIBukkitConfig(plugin).silentLogs(true));
 /* ANCHOR_END: CommandAPIConfigSilent */
 }
 
@@ -2401,7 +2386,7 @@ class MyPlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIConfig().verboseOutput(true)); // Load with verbose output
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true)); // Load with verbose output
         
         new CommandAPICommand("ping")
             .executes((sender, args) -> {
@@ -2412,7 +2397,7 @@ class MyPlugin extends JavaPlugin {
     
     @Override
     public void onEnable() {
-        CommandAPI.onEnable(this);
+        CommandAPI.onEnable();
         
         // Register commands, listeners etc.
     }

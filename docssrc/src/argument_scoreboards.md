@@ -48,6 +48,10 @@ Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive)
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:scoreholderargument}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:scoreholderargument}}
+```
+
 </div>
 
 </div>
@@ -112,6 +116,10 @@ We implement this simply by using the `ScoreboardSlotArgument` as our argument, 
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:scoreboardslotargument}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:scoreboardslotargument}}
 ```
 
 </div>

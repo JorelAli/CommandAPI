@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.nms;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.function.ToIntFunction;
 
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import net.minecraft.server.v1_13_R1.*;
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.server.v1_13_R1.Advancement;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -189,11 +192,6 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
 		throw new UnimplementedArgumentException("DimensionArgument", "1.13.1");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentEnvironment() {
-		throw new UnimplementedArgumentException("EnvironmentArgument", "1.13.1");
 	}
 
 	@Override
@@ -385,7 +383,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 	}
 
 	@Override
-	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher) {
+	public void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
 		MINECRAFT_SERVER.vanillaCommandDispatcher.a(file);
 	}
 
@@ -764,7 +762,7 @@ public class NMS_1_13 extends NMSWrapper_1_13 {
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
-		Location location = new Location(world, pos.x, pos.y, pos.z, rot.j, rot.i);
+		Location location = new Location(world, pos.x, pos.y, pos.z, rot.i, rot.j);
 
 		Entity proxyEntity = clw.f();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();

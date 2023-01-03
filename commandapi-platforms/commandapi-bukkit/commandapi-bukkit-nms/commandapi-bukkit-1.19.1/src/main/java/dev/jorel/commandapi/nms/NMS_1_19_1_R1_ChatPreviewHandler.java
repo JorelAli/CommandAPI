@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.nms;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.PacketSendListener;
@@ -26,8 +27,7 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPrevie
 		super(platform, plugin, player);
 
 		try {
-			Field f = ServerGamePacketListenerImpl.class.getDeclaredField("M");
-			f.setAccessible(true);
+			Field f = CommandAPIHandler.getField(ServerGamePacketListenerImpl.class, "M");
 			throttler = (ChatPreviewThrottler) f.get(((CraftPlayer) player).getHandle().connection);
 		} catch (Exception e) {
 			e.printStackTrace();

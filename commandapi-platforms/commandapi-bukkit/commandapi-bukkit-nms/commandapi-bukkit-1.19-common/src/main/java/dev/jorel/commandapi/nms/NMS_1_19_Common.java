@@ -154,6 +154,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
+@Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
 	private static final MinecraftServer MINECRAFT_SERVER;
@@ -201,29 +202,14 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	@Differs(from = {"1.13", "1.14, 1.15, 1.16", "1.17", "1.18"},
-		by = "Enables chat preview")
-	public void onEnable(Object pluginObject) {
-		super.onEnable(pluginObject);
+	public void onEnable() {
+		super.onEnable();
 
-		JavaPlugin plugin = (JavaPlugin) pluginObject;
-		enableChatPreview(plugin);
-	}
-
-	@Override
-	@Differs(from = {"1.13", "1.14, 1.15, 1.16", "1.17", "1.18"},
-		by = "Disables chat preview")
-	public void onDisable() {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			unhookChatPreview(player);
-		}
-	}
-
-	private void enableChatPreview(Plugin plugin) {
-		// These versions are the only one with chat preview
+		JavaPlugin plugin = getConfiguration().getPlugin();
 		// Enable chat preview if the server allows it
 		if (Bukkit.shouldSendChatPreviews()) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+
 				@EventHandler
 				public void onPlayerJoin(PlayerJoinEvent e) {
 					hookChatPreview(plugin, e.getPlayer());
@@ -233,6 +219,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 				public void onPlayerQuit(PlayerQuitEvent e) {
 					unhookChatPreview(e.getPlayer());
 				}
+
 			}, plugin);
 			CommandAPI.logNormal("Chat preview enabled");
 		} else {
@@ -240,13 +227,34 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		}
 	}
 
+	/**
+	 * Hooks into the chat previewing system
+	 *
+	 * @param plugin the plugin (for async calls)
+	 * @param player the player to hook
+	 */
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
 	protected abstract void hookChatPreview(Plugin plugin, Player player);
 
+	/**
+	 * Unhooks a player from the chat previewing system. This should be
+	 * called when the player quits and when the plugin is disabled
+	 *
+	 * @param player the player to unhook
+	 */
 	private void unhookChatPreview(Player player) {
 		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
 		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
 			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
+		}
+	}
+
+	@Override
+	public void onDisable() {
+		super.onDisable();
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			unhookChatPreview(player);
 		}
 	}
 
@@ -344,8 +352,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	public final void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher)
-		throws IOException {
+	public final void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
+            throws IOException {
 		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
 			.toJson(ArgumentUtils.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}
@@ -655,7 +663,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		Vec3 pos = css.getPosition();
 		Vec2 rot = css.getRotation();
 		World world = getWorldForCSS(css);
-		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.x, rot.y);
+		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.y, rot.x);
 		Entity proxyEntity = css.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 

@@ -11,14 +11,6 @@ depend: [CommandAPI]
 
 -----
 
-## Manually using the .jar
-
-- Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/CommandAPI/releases/latest)
-
-- Add the CommandAPI.jar file to your project/environment's build path:
-
-  ![An image of some context menu entries in Eclipse after right clicking a project. Displays the highlighted options "Build Path", followed by "Add External Archives..."](images/eclipse.jpg)
-
 ## Using Maven (recommended)
 
 > **Developer's Note:**
@@ -38,7 +30,7 @@ depend: [CommandAPI]
   </dependencies>
   ```
 
-## Using Gradle
+## Using Gradle (recommended)
 
 - Add the repositories to your `build.gradle` file (the second repository is required because the CommandAPI depends on the NBT-API):
 
@@ -56,3 +48,23 @@ depend: [CommandAPI]
       compileOnly "dev.jorel:commandapi-core:9.0.0"
   }
   ```
+
+## Manually using the .jar
+
+- Download the latest CommandAPI.jar from the download page [here](https://github.com/JorelAli/CommandAPI/releases/latest)
+
+- Add the CommandAPI.jar file to your project/environment's build path:
+
+  - Adding the external .jar file in Eclipse:
+
+    ![An image of some context menu entries in Eclipse after right clicking a project. Displays the highlighted options "Build Path", followed by "Add External Archives..."](images/eclipse.jpg)
+
+  - Adding the external .jar file in IntelliJ:
+
+    - In your project, first click `File` -> `Project Structure` -> `Libraries`
+
+    - Next, click the little `+` at the top:
+
+      ![An image in IntelliJ showing the plus icon to add an external .jar.](images/intellij.png)
+
+    - After you clicked that, you need to select `Java`. A little pop-up will appear where you can choose the location of your external .jar file.

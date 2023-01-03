@@ -185,11 +185,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentEnvironment() {
-		return DimensionArgument.dimension();
-	}
-
-	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
 	public abstract ArgumentType<?> _ArgumentEnchantment();
 

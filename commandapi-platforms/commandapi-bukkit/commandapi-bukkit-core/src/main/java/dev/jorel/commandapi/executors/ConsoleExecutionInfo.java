@@ -5,15 +5,15 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import org.bukkit.command.ConsoleCommandSender;
 
 @FunctionalInterface
-public interface ConsoleExecutionInfo extends IExecutorNormal<ConsoleCommandSender, BukkitConsoleCommandSender> {
+public interface ConsoleExecutionInfo extends NormalExecutor<ConsoleCommandSender, BukkitConsoleCommandSender> {
 
 	/**
 	 * Executes the command.
 	 *
-	 * @param info The AbstractExecutionInfo for this command
+	 * @param info The ExecutionInfo for this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	void run(AbstractExecutionInfo<ConsoleCommandSender, BukkitConsoleCommandSender> info) throws WrapperCommandSyntaxException;
+	void run(ExecutionInfo<ConsoleCommandSender, BukkitConsoleCommandSender> info) throws WrapperCommandSyntaxException;
 
 	/**
 	 * Returns the type of the sender of the current executor.

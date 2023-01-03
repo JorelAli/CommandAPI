@@ -23,7 +23,7 @@ package dev.jorel.commandapi;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.executors.AbstractExecutionInfo;
+import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -198,8 +198,12 @@ public final class Converter {
 			CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin.getName())
 					? sender.getCallee()
 					: mergeProxySender(sender);
-			
-			command.execute(proxiedSender, commandName, (String[]) args.args());
+
+			if (args.args() instanceof String[]) {
+				command.execute(proxiedSender, commandName, (String[]) args.args());
+			} else {
+				command.execute(proxiedSender, commandName, new String[0]);
+			}
 		};
 
 		// No arguments
@@ -207,24 +211,7 @@ public final class Converter {
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
-			.executesNative((sender, args) -> {
-				executor.executeWith(new AbstractExecutionInfo<>() {
-					@Override
-					public NativeProxyCommandSender sender() {
-						return sender;
-					}
-
-					@Override
-					public BukkitNativeProxyCommandSender senderWrapper() {
-						return new BukkitNativeProxyCommandSender(sender);
-					}
-
-					@Override
-					public CommandArguments args() {
-						return args;
-					}
-				});
-			})
+			.executesNative(executor)
 			.register();
 
 		// Multiple arguments

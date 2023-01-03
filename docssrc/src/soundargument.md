@@ -44,6 +44,14 @@ This command simply plays the provided sound to the current player:
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:soundarguments2}}
 ```
 
+```kotlin,Kotlin_DSL_(Sound)
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:soundarguments}}
+```
+
+```kotlin,Kotlin_DSL_(NamespacedKey)
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:soundarguments2}}
+```
+
 </div>
 
 </div>

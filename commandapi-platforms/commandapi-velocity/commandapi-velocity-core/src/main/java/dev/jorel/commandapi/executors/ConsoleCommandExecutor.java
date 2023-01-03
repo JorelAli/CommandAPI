@@ -28,19 +28,25 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * A normal command executor for a ConsoleCommandSender
  */
 @FunctionalInterface
-public interface ConsoleCommandExecutor extends IExecutorNormal<ConsoleCommandSource, VelocityConsoleCommandSender> {
+public interface ConsoleCommandExecutor extends NormalExecutor<ConsoleCommandSource, VelocityConsoleCommandSender> {
 
 	/**
 	 * The code to run when this command is performed
-	 * 
-	 * @param sender
-	 *            The sender of this command (a player, the console etc.)
-	 * @param args
-	 *            The arguments given to this command. The objects are
-	 *            determined by the hashmap of arguments IN THE ORDER of
-	 *            insertion into the hashmap
+	 *
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
 	 */
-	void run(ConsoleCommandSource sender, Object[] args) throws WrapperCommandSyntaxException;
+	void run(ConsoleCommandSource sender, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param info The ExecutionInfo for this command
+	 */
+	@Override
+	default void run(ExecutionInfo<ConsoleCommandSource, VelocityConsoleCommandSender> info) throws WrapperCommandSyntaxException {
+		this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

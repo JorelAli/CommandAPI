@@ -100,6 +100,10 @@ This would be ideal for a greedy string, since it can consume all text after the
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:greedystringarguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:greedystringarguments}}
+```
+
 </div>
 
 Any text entered after the `<target>` argument would be sent to the player. For example, the command could be used as follows:

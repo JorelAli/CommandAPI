@@ -24,6 +24,10 @@ We implement this with a simple for loop over the player's inventory and remove 
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:itemstackpredicatearguments}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:itemstackpredicatearguments}}
+```
+
 </div>
 
 </div>

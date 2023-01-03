@@ -47,13 +47,14 @@ public class CommandAPIMain extends JavaPlugin {
 		// Read config file
 		saveDefaultConfig();
 		FileConfiguration fileConfig = getConfig();
-		CommandAPIConfig config = new CommandAPIConfig()
+		CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this)
 			.verboseOutput(fileConfig.getBoolean("verbose-outputs"))
 			.silentLogs(fileConfig.getBoolean("silent-logs"))
 			.useLatestNMSVersion(fileConfig.getBoolean("use-latest-nms-version"))
 			.missingExecutorImplementationMessage(fileConfig.getString("messages.missing-executor-implementation"))
 			.dispatcherFile(fileConfig.getBoolean("create-dispatcher-json") ? new File(getDataFolder(), "command_registration.json") : null)
-			.initializeNBTAPI(NBTContainer.class, NBTContainer::new);
+			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
+			.shouldHookPaperReload(fileConfig.getBoolean("hook-paper-reload"));
 
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
 			if (Bukkit.getPluginManager().getPlugin(pluginName) != null) {
@@ -65,7 +66,7 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		// Main CommandAPI loading
-		CommandAPI.setLogger(new CommandAPIJavaLogger(getLogger()));
+		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
 		CommandAPI.onLoad(config);
 
 		// Configure the NBT API - we're not allowing tracking at all, according
@@ -148,6 +149,6 @@ public class CommandAPIMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		CommandAPI.onEnable(this);
+		CommandAPI.onEnable();
 	}
 }

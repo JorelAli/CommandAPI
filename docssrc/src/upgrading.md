@@ -1,5 +1,41 @@
 # Upgrading guide
 
+## From 8.7.1 to 9.0.0
+
+### Loading and Enabling the CommandAPI when shading
+
+This update introduces support for Minecraft server platforms other than Bukkit, which means it is possible for the CommandAPI to be loaded and enabled in different environments. Accordingly, the methods `CommandAPI#onEnable` and `CommandAPI#onLoad` are used differently:
+
+<div class="multi-pre">
+
+```java,8.7.1
+public void onLoad() {
+    CommandAPI.onLoad(new CommandAPIConfig());
+}
+
+public void onEnable() {
+    CommandAPI.onEnable(this);
+}
+```
+
+</div>
+
+\\(\downarrow\\)
+
+<div class="multi-pre">
+
+```java,9.0.0
+public void onLoad() {
+    CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+}
+
+public void onEnable() {
+    CommandAPI.onEnable();
+}
+```
+
+</div>
+
 ## From 8.6.0 to 8.7.0
 
 ### Sound arguments

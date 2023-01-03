@@ -15,30 +15,25 @@ import com.google.inject.Inject;
  * Main CommandAPI plugin entrypoint
  */
 @Plugin("CommandAPI")
-public class CommandAPIMain implements CommandAPISpongePluginWrapper {
+public class CommandAPIMain {
 
 	@Inject
 	private Logger logger;
 	private Server server;
 
-	@Override
-	public Server getServer() {
-		return server;
-	}
-
 	@Listener
 	public void onServerStarting(final StartingEngineEvent<Server> event) {
 		server = event.engine();
-		CommandAPI.setLogger(new SpongeLogger(logger));
+		CommandAPI.setLogger(CommandAPILogger.fromApacheLog4jLogger(logger));
 
 		// TODO: Save default config file if it doesn't exist then load config and apply settings to CommandAPIConfig()
 		//  See: https://docs.spongepowered.org/stable/en/plugin/configuration/index.html
-		CommandAPI.onLoad(new CommandAPIConfig());
+		CommandAPI.onLoad(new CommandAPISpongeConfig(server));
 	}
 
 	@Listener
 	public void onServerStart(final StartedEngineEvent<Server> event) {
-		CommandAPI.onEnable(this);
+		CommandAPI.onEnable();
 	}
 
 	@Listener

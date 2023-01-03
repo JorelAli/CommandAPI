@@ -546,23 +546,6 @@ CommandAPICommand("enchantitem")
 /* ANCHOR_END: enchantmentarguments */
 }
 
-fun environmentarguments() {
-/* ANCHOR: environmentarguments */
-CommandAPICommand("createworld")
-    .withArguments(StringArgument("worldname"))
-    .withArguments(EnvironmentArgument("type"))
-    .executes(CommandExecutor { sender, args ->
-        val worldName = args[0] as String
-        val environment = args[1] as Environment
-
-        // Create a new world with the specific world name and environment
-        Bukkit.getServer().createWorld(WorldCreator(worldName).environment(environment))
-        sender.sendMessage("World created!")
-    })
-    .register()
-/* ANCHOR_END: environmentarguments */
-}
-
 fun worldarguments() {
 /* ANCHOR: worldarguments */
 CommandAPICommand("unloadworld")
@@ -800,7 +783,7 @@ class NBTTest : JavaPlugin() {
 
 /* ANCHOR: nbtcompoundargumentonload */
 override fun onLoad() {
-    CommandAPI.onLoad(CommandAPIConfig()
+    CommandAPI.onLoad(CommandAPIBukkitConfig(this)
         .initializeNBTAPI(NBTContainer::class.java, ::NBTContainer)
     )
 }
@@ -1913,8 +1896,10 @@ fun fruits() {
 }
 
 fun commandapiconfigsilent() {
+val plugin: JavaPlugin = object: JavaPlugin() {}
+
 /* ANCHOR: CommandAPIConfigSilent */
-CommandAPI.onLoad(CommandAPIConfig().silentLogs(true))
+CommandAPI.onLoad(CommandAPIBukkitConfig(plugin).silentLogs(true))
 /* ANCHOR_END: CommandAPIConfigSilent */
 }
 
@@ -2303,7 +2288,7 @@ class Main : JavaPlugin() {
 class MyPlugin : JavaPlugin() {
 
     override fun onLoad() {
-        CommandAPI.onLoad(CommandAPIConfig().verboseOutput(true)) // Load with verbose output
+        CommandAPI.onLoad(CommandAPIBukkitConfig(this).verboseOutput(true)) // Load with verbose output
 
         CommandAPICommand("ping")
             .executes(CommandExecutor { sender, _ ->
@@ -2313,7 +2298,7 @@ class MyPlugin : JavaPlugin() {
     }
 
     override fun onEnable() {
-        CommandAPI.onEnable(this)
+        CommandAPI.onEnable()
 
         // Register commands, listeners etc.
     }
