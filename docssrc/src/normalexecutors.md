@@ -43,7 +43,7 @@ We use an argument "message" to hold the message to broadcast, we provide some a
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalcommandexecutors3_1}}
 ```
 
-```kotlin,Kotlin
+```kotlin,Kotlin_DSL
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:normalcommandexecutors3_1}}
 ```
 
