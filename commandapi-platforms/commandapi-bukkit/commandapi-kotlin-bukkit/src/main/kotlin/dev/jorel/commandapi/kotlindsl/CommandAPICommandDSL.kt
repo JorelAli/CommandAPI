@@ -151,13 +151,13 @@ fun CommandAPICommand.commandBlockExecutor(block: (BlockCommandSender, CommandAr
 fun CommandAPICommand.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().proxy(proxy).executes(this)
 fun CommandAPICommand.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandAPICommandExecution().native(native).executes(this)
 
-fun CommandAPICommand.anyExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().any(any).executes(this)
-fun CommandAPICommand.playerExecutor(player: (Player, CommandArguments) -> Int) = CommandAPICommandResultingExecution().player(player).executes(this)
-fun CommandAPICommand.entityExecutor(entity: (Entity, CommandArguments) -> Int) = CommandAPICommandResultingExecution().entity(entity).executes(this)
-fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().console(console).executes(this)
-fun CommandAPICommand.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().block(block).executes(this)
-fun CommandAPICommand.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().proxy(proxy).executes(this)
-fun CommandAPICommand.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().native(native).executes(this)
+fun CommandAPICommand.anyResultingExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().any(any).executes(this)
+fun CommandAPICommand.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandAPICommandResultingExecution().player(player).executes(this)
+fun CommandAPICommand.entityResultingExecutor(entity: (Entity, CommandArguments) -> Int) = CommandAPICommandResultingExecution().entity(entity).executes(this)
+fun CommandAPICommand.consoleResultingExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().console(console).executes(this)
+fun CommandAPICommand.commandBlockResultingExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().block(block).executes(this)
+fun CommandAPICommand.proxyResultingExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().proxy(proxy).executes(this)
+fun CommandAPICommand.nativeResultingExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandAPICommandResultingExecution().native(native).executes(this)
 
 class CommandAPICommandExecution {
 

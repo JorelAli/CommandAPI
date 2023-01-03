@@ -90,18 +90,18 @@ fun CommandTree.anyExecutor(any: (CommandSource, CommandArguments) -> Unit) = Co
 fun CommandTree.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
 fun CommandTree.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
 
-fun CommandTree.anyExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
-fun CommandTree.playerExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
-fun CommandTree.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
+fun CommandTree.anyResultingExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
+fun CommandTree.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
+fun CommandTree.consoleResultingExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
 
 // ArgumentTree execution
 fun Argument<*>.anyExecutor(any: (CommandSource, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
 fun Argument<*>.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
 fun Argument<*>.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
 
-fun Argument<*>.anyExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
-fun Argument<*>.playerExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
-fun Argument<*>.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
+fun Argument<*>.anyResultingExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
+fun Argument<*>.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
+fun Argument<*>.consoleResultingExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
 
 
 class CommandTreeExecution {

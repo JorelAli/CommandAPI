@@ -237,13 +237,13 @@ fun CommandTree.commandBlockExecutor(block: (BlockCommandSender, CommandArgument
 fun CommandTree.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
 fun CommandTree.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().native(native).executes(this)
 
-fun CommandTree.anyExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
-fun CommandTree.playerExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
-fun CommandTree.entityExecutor(entity: (Entity, CommandArguments) -> Int) = CommandTreeResultingExecution().entity(entity).executes(this)
-fun CommandTree.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
-fun CommandTree.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().block(block).executes(this)
-fun CommandTree.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().proxy(proxy).executes(this)
-fun CommandTree.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().native(native).executes(this)
+fun CommandTree.anyResultingExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
+fun CommandTree.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
+fun CommandTree.entityResultingExecutor(entity: (Entity, CommandArguments) -> Int) = CommandTreeResultingExecution().entity(entity).executes(this)
+fun CommandTree.consoleResultingExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
+fun CommandTree.commandBlockResultingExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().block(block).executes(this)
+fun CommandTree.proxyResultingExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().proxy(proxy).executes(this)
+fun CommandTree.nativeResultingExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().native(native).executes(this)
 
 // ArgumentTree execution
 fun Argument<*>.anyExecutor(any: (CommandSender, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
@@ -254,13 +254,13 @@ fun Argument<*>.commandBlockExecutor(block: (BlockCommandSender, CommandArgument
 fun Argument<*>.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
 fun Argument<*>.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().native(native).executes(this)
 
-fun Argument<*>.anyExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
-fun Argument<*>.playerExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
-fun Argument<*>.entityExecutor(entity: (Entity, CommandArguments) -> Int) = CommandTreeResultingExecution().entity(entity).executes(this)
-fun Argument<*>.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
-fun Argument<*>.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().block(block).executes(this)
-fun Argument<*>.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().proxy(proxy).executes(this)
-fun Argument<*>.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().native(native).executes(this)
+fun Argument<*>.anyResultingExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
+fun Argument<*>.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
+fun Argument<*>.entityResultingExecutor(entity: (Entity, CommandArguments) -> Int) = CommandTreeResultingExecution().entity(entity).executes(this)
+fun Argument<*>.consoleResultingExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
+fun Argument<*>.commandBlockResultingExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().block(block).executes(this)
+fun Argument<*>.proxyResultingExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().proxy(proxy).executes(this)
+fun Argument<*>.nativeResultingExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().native(native).executes(this)
 
 
 class CommandTreeExecution {
