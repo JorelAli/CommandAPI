@@ -782,11 +782,12 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 	@Override
 	@Differs(from = {"1.19", "1.19.1", "1.19.2"},
-		by = "Registry.CommandArgumentType renamed to BuiltInRegistries.COMMAND_ARGUMENT_TYPE")
+		by = "Registry.COMMAND_ARGUMENT_TYPE renamed to BuiltInRegistries.COMMAND_ARGUMENT_TYPE" +
+			" MappedRegistry#ca -> MappedRegistry#l (Registries frozen)")
 	public void registerCustomArgumentType() {
 		try {
 			// Unfreeze registry
-			Field isFrozen = CommandAPIHandler.getField(MappedRegistry.class, "ca");
+			Field isFrozen = CommandAPIHandler.getField(MappedRegistry.class, "l");
 
 			isFrozen.set(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, false);
 
@@ -796,7 +797,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 			registerArgument.setAccessible(true);
 
 			registerArgument.invoke(null, BuiltInRegistries.COMMAND_ARGUMENT_TYPE, "commandapi:exception_handler",
-				ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentInfo_1_19_Common<>());
+				ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentInfo_1_19_3<>());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
