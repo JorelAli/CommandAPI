@@ -64,9 +64,9 @@ fun CommandAPICommand.anyExecutor(any: (CommandSource, CommandArguments) -> Unit
 fun CommandAPICommand.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandAPICommandExecution().player(player).executes(this)
 fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Unit) = CommandAPICommandExecution().console(console).executes(this)
 
-fun CommandAPICommand.anyResultingExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandAPICommandResultingExecution().any(any).executes(this)
-fun CommandAPICommand.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandAPICommandResultingExecution().player(player).executes(this)
-fun CommandAPICommand.consoleResultingExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandAPICommandResultingExecution().console(console).executes(this)
+fun CommandAPICommand.anyExecutor(any: (CommandSource, CommandArguments) -> Int) = CommandAPICommandResultingExecution().any(any).executes(this)
+fun CommandAPICommand.playerExecutor(player: (Player, CommandArguments) -> Int) = CommandAPICommandResultingExecution().player(player).executes(this)
+fun CommandAPICommand.consoleExecutor(console: (ConsoleCommandSource, CommandArguments) -> Int) = CommandAPICommandResultingExecution().console(console).executes(this)
 
 class CommandAPICommandExecution {
 
