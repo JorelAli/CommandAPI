@@ -246,7 +246,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	@Differs(from = "1.17", by = "Use of Files.asCharSink() instead of Files.write()")
 	@Override
-	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
+	public void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
 		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
 				.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}

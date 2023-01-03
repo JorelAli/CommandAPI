@@ -40,6 +40,7 @@ import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -663,6 +664,20 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 //					// Byeeeeeeeeeeeeeeeeeeeee~
 //				}
 //			});
+		// We never know if this is "the last command" and we want dynamic (even if
+		// partial)
+		// command registration. Generate the dispatcher file!
+		File file = CommandAPI.getConfiguration().getDispatcherFile();
+		if (file != null) {
+			try {
+				file.getParentFile().mkdirs();
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace(System.out);
+			}
+
+			platform.createDispatcherFile(file, platform.getBrigadierDispatcher());
+		}
 
 		platform.postCommandRegistration(resultantNode, aliasNodes);
 	}

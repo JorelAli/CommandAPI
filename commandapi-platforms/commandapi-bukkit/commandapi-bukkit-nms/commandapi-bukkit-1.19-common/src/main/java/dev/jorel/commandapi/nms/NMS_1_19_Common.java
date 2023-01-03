@@ -346,8 +346,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	public final void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher)
-		throws IOException {
+	public final void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
+            throws IOException {
 		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
 			.toJson(ArgumentUtils.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}
