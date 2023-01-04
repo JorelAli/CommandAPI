@@ -32,7 +32,7 @@ import java.util.function.Function;
  * 
  * @apiNote Returns a {@link Biome} object
  */
-public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument {
+public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements CustomProvidedArgument {
 
 	/**
 	 * Constructs a BiomeArgument with a given node name.
@@ -70,7 +70,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	 *
 	 * @apiNote Returns a {@link NamespacedKey} object
 	 */
-	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements ICustomProvidedArgument {
+	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements CustomProvidedArgument {
 
 		/**
 		 * Constructs a BiomeArgument with a given node name. This BiomeArgument will

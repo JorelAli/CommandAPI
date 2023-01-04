@@ -62,7 +62,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
 	public static StringTooltip ofString(String suggestion, String tooltip) {
-		return ofMessage(suggestion, AbstractTooltip.messageFromString(tooltip));
+		return ofMessage(suggestion, Tooltip.messageFromString(tooltip));
 	}
 
 	/**

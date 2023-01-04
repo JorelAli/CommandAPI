@@ -22,7 +22,7 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.IGreedyArgument;
+import dev.jorel.commandapi.arguments.GreedyArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
@@ -249,11 +249,11 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		try {
 			Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 
-			// Check IGreedyArgument constraints
-			for (int i = 0, numGreedyArgs = 0; i < argumentsArray.length; i++) {
-				if (argumentsArray[i] instanceof IGreedyArgument) {
-					if (++numGreedyArgs > 1 || i != argumentsArray.length - 1) {
-						throw new GreedyArgumentException(argumentsArray);
+			// Check GreedyArgument constraints
+			for (int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
+				if (argumentsArr[i] instanceof GreedyArgument) {
+					if (++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
+						throw new GreedyArgumentException(argumentsArr);
 					}
 				}
 			}

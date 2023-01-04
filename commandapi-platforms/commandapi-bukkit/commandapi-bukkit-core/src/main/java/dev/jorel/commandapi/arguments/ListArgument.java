@@ -31,7 +31,7 @@ import java.util.function.Function;
  * 
  * @param <T> the type that this list argument generates a list of.
  */
-public class ListArgument<T> extends ListArgumentCommon<T> implements IGreedyArgument {
+public class ListArgument<T> extends ListArgumentCommon<T> implements GreedyArgument {
 
 	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, false);

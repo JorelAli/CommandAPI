@@ -29,7 +29,7 @@ import org.bukkit.loot.LootTable;
 /**
  * An argument that represents the Bukkit LootTable object
  */
-public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements ICustomProvidedArgument {
+public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements CustomProvidedArgument {
 	
 	/**
 	 * A LootTable argument that represents a Bukkit LootTable.

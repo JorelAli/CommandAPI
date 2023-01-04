@@ -23,7 +23,6 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
-import org.bukkit.World.Environment
 import org.bukkit.advancement.Advancement
 import org.bukkit.block.*
 import org.bukkit.block.data.BlockData
@@ -1672,10 +1671,10 @@ val arguments = listOf<Argument<*>>(
         .replaceSafeSuggestions(SafeSuggestions.tooltips { info ->
             // We know the sender is a player if we use .executesPlayer()
             val player = info.sender() as Player
-            Tooltip.arrayOf(
-                Tooltip.ofString(player.world.spawnLocation, "World spawn"),
-                Tooltip.ofString(player.bedSpawnLocation, "Your bed"),
-                Tooltip.ofString(player.getTargetBlockExact(256)?.location, "Target block")
+            BukkitTooltip.arrayOf(
+                BukkitTooltip.ofString(player.world.spawnLocation, "World spawn"),
+                BukkitTooltip.ofString(player.bedSpawnLocation, "Your bed"),
+                BukkitTooltip.ofString(player.getTargetBlockExact(256)?.location, "Target block")
             )
         } )
 )
@@ -2264,7 +2263,7 @@ class CustomItem(val item: ItemStack, val name: String, lore: String): IStringTo
 
     override fun getSuggestion(): String = this.item.itemMeta.displayName
 
-    override fun getTooltip(): Message = Tooltip.messageFromString(this.item.itemMeta.lore?.get(0) ?: "")
+    override fun getTooltip(): Message = BukkitTooltip.messageFromString(this.item.itemMeta.lore?.get(0) ?: "")
 
 }
 /* ANCHOR_END: Tooltips3 */

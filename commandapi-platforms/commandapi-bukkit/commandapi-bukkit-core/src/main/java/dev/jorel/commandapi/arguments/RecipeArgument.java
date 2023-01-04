@@ -29,7 +29,7 @@ import org.bukkit.inventory.Recipe;
 /**
  * An argument that represents the Bukkit Recipe object
  */
-public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> implements ICustomProvidedArgument {
+public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> implements CustomProvidedArgument {
 
 	/**
 	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe

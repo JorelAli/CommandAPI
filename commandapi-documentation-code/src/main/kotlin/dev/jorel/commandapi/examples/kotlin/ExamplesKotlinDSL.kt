@@ -1,10 +1,8 @@
 import com.mojang.brigadier.LiteralMessage
-import com.mojang.brigadier.Message
 import com.mojang.brigadier.ParseResults
 import com.mojang.brigadier.context.StringRange
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.suggestion.Suggestions
-import com.mojang.brigadier.tree.LiteralCommandNode
 import de.tr7zw.changeme.nbtapi.NBTContainer
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
@@ -25,12 +23,10 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
-import org.bukkit.World.Environment
 import org.bukkit.advancement.Advancement
 import org.bukkit.block.*
 import org.bukkit.block.data.BlockData
 import org.bukkit.command.CommandSender
-import org.bukkit.command.ProxiedCommandSender
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
 import org.bukkit.inventory.ComplexRecipe
@@ -1736,10 +1732,10 @@ val arguments = listOf<Argument<*>>(
         .replaceSafeSuggestions(SafeSuggestions.tooltips { info ->
             // We know the sender is a player if we use .executesPlayer()
             val player = info.sender() as Player
-            Tooltip.arrayOf(
-                Tooltip.ofString(player.world.spawnLocation, "World spawn"),
-                Tooltip.ofString(player.bedSpawnLocation, "Your bed"),
-                Tooltip.ofString(player.getTargetBlockExact(256)?.location, "Target block")
+            BukkitTooltip.arrayOf(
+                BukkitTooltip.ofString(player.world.spawnLocation, "World spawn"),
+                BukkitTooltip.ofString(player.bedSpawnLocation, "Your bed"),
+                BukkitTooltip.ofString(player.getTargetBlockExact(256)?.location, "Target block")
             )
         })
 )
