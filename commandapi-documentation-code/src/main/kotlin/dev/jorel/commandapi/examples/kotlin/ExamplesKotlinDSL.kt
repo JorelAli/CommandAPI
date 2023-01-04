@@ -1396,7 +1396,7 @@ commandAPICommand("sayhi") {
         }
     }
 }
-/* ANCHOR_END: argumentsaycmd */
+/* ANCHOR_END: argumentsayhicmd */
 }
 
 @Suppress("unused")
