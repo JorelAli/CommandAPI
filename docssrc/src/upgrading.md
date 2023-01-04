@@ -20,7 +20,7 @@ public void onEnable() {
 
 </div>
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 <div class="multi-pre">
 
@@ -50,7 +50,7 @@ new SoundArgument<Sound>("sound")
 
 </div>
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 <div class="multi-pre">
 
@@ -70,7 +70,7 @@ new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY)
 
 </div>
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 <div class="multi-pre">
 
@@ -96,7 +96,7 @@ new EntitySelectorArgument<Collection<Entity>>("target", EntitySelector.MANY_ENT
 
 </div>
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 <div class="multi-pre">
 
@@ -123,7 +123,7 @@ new ScoreHolderArgument<Collection<String>>(nodeName, ScoreHolderType.MULTIPLE);
 
 </div>
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 <div class="multi-pre">
 
@@ -146,7 +146,7 @@ In 8.6.0, the `SoundArgument` now supports returning a `Sound` or `NamespacedKey
 new SoundArgument("sound")
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new SoundArgument<Sound>("sound")
@@ -162,7 +162,7 @@ StringTooltip.of("wave", "Waves at a player")
 Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn")
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 StringTooltip.ofString("wave", "Waves at a player")
@@ -181,7 +181,7 @@ public String getTooltip() {
 }
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 @Override
@@ -198,7 +198,7 @@ To support Spigot's `BaseComponent[]`s and Adventure's `Component`s, the `Comman
 throw CommandAPI.fail("Error message");
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 throw CommandAPI.failWithString("Error message");
@@ -215,7 +215,7 @@ new ListArgumentBuilder<Material>("materials")
     .build();
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new ListArgumentBuilder<Material>("materials")
@@ -240,7 +240,7 @@ Brigadier.fromArgument(argumentList, "myargument");
 Brigadier.toSuggestions("myargument", argumentList);
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 Argument<?> myArgument = new StringArgument("myargument");
@@ -262,7 +262,7 @@ In 8.2.1, the CommandAPI exposed `CommandAPIHandler.getInstance().registeredComm
 CommandAPIHandler.getInstance().registeredCommands
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 CommandAPI.getRegisteredCommands()
@@ -276,7 +276,7 @@ The import for `EntitySelector` for the `EntitySelectorArgument` has moved to im
 dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 dev.jorel.commandapi.arguments.EntitySelector
@@ -295,7 +295,7 @@ new CustomArgument<T>("nodename", inputInfo -> {
 });
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new CustomArgument<T, String>(new StringArgument("nodename"), inputInfo -> {
@@ -313,7 +313,7 @@ new CustomArgument<T>("nodename", inputInfo -> {
 }, true);
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new CustomArgument<T, NamespacedKey>(new NamespacedKeyArgument("nodename"), inputInfo -> {
@@ -332,7 +332,7 @@ NBTCompoundArguments are now parameterized over their implemented NBTCompound im
 new NBTCompoundArgument("nbt");
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new NBTCompoundArgument<NBTContainer>("nbt");
@@ -346,7 +346,7 @@ You no longer have to include the NBT API separately, the CommandAPI comes with 
 de.tr7zw.nbtapi.NBTContainer
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 dev.jorel.commandapi.nbtapi.NBTContainer
@@ -366,7 +366,7 @@ Arguments are now parameterized over a generic type. This does very little in te
 Argument myArgument = new GreedyStringArgument("arg");
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 Argument<?> myArgument = new GreedyStringArgument("arg");
@@ -384,7 +384,7 @@ For example:
 new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER);
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER);
@@ -408,7 +408,7 @@ new CommandAPICommand("mycommand")
     .register();
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new CommandAPICommand("mycommand")
@@ -451,7 +451,7 @@ new CommandAPICommand("mycommand")
     })
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new CommandAPICommand("mycommand")
@@ -476,7 +476,7 @@ Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions);
 Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions);
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 Argument replaceSuggestions(ArgumentSuggestions suggestions);
@@ -492,7 +492,7 @@ arguments.add(new StringArgument("world").replaceSuggestions(info ->
 ));
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 List<Argument> arguments = new ArrayList<>();
@@ -510,7 +510,7 @@ Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggesti
 Argument includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 Argument replaceSuggestions(ArgumentSuggestions suggestions);
@@ -531,7 +531,7 @@ arguments.add(new StringArgument("emote")
 );
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 List<Argument> arguments = new ArrayList<>();
@@ -554,7 +554,7 @@ Argument replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
 Argument includeWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 Argument replaceSafeSuggestions(SafeSuggestions<T> suggestions);
@@ -570,7 +570,7 @@ arguments.add(new RecipeArgument("recipe").replaceWithSafeSuggestions(info ->
 ));
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 List<Argument> arguments = new ArrayList<>();
