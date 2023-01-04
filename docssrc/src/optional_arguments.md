@@ -80,13 +80,13 @@ However, calling `withOptionalArguments` is safer because it makes sure that the
 
 ## Avoiding null values and exceptions
 
-Previously, we've looked at how to handle null values and how to avoid exceptions. To make all of this easier, the CommandAPI implements multiple `getOrDefault()` methods:
+Previously, we've looked at how to handle null values and how to avoid exceptions. To make all of this easier, the CommandAPI implements multiple `getOrDefault()` methods for `CommandArguments`:
 
 ```java
-CommandArguments getOrDefault(int index, Object defaultValue)
-CommandArguments getOrDefault(String nodeName, Object defaultValue)
-CommandArguments getOrDefault(int index, Supplier<?> defaultValue)
-CommandArguments getOrDefault(String nodeName, Supplier<?> defaultValue)
+Object getOrDefault(int index, Object defaultValue)
+Object getOrDefault(String nodeName, Object defaultValue)
+Object getOrDefault(int index, Supplier<?> defaultValue)
+Object getOrDefault(String nodeName, Supplier<?> defaultValue)
 ```
 
 <div class="example">
