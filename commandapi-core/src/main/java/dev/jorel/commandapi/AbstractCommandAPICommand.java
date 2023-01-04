@@ -267,7 +267,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			}
 
 			// Create a List<Argument[]> that is used to register optional arguments
-			List<Argument[]> argumentsToRegister = getArgumentsToRegister(argumentsArray, new ArrayList<>());
+			List<Argument[]> argumentsToRegister = getArgumentsToRegister(argumentsArray);
 
 			if (executor.hasAnyExecutors()) {
 				// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
@@ -300,7 +300,9 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	protected abstract Impl newConcreteCommandAPICommand(CommandMetaData<CommandSender> metaData);
 
-	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray, List<Argument[]> argumentsToRegister) {
+	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray) {
+		List<Argument[]> argumentsToRegister = new ArrayList<>();
+
 		// Check optional argument constraints
 		// They can only be at the end, no required argument can follow an optional argument
 		int firstOptionalArgumentIndex = -1;
