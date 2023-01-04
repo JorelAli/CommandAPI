@@ -2,6 +2,7 @@ package dev.jorel.commandapi.executors;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * This class stores the arguments for this command
@@ -14,7 +15,7 @@ public class CommandArguments {
 	/**
 	 * Constructs a new CommandArguments instance
 	 *
-	 * @param args The arguments for this command
+	 * @param args    The arguments for this command
 	 * @param argsMap The arguments for this command mapped to the node names. This is an ordered map
 	 */
 	public CommandArguments(Object[] args, Map<String, Object> argsMap) {
@@ -48,5 +49,57 @@ public class CommandArguments {
 	@Nullable
 	public Object get(String nodeName) {
 		return argsMap.get(nodeName);
- 	}
+	}
+
+	/**
+	 * Returns an argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @param defaultValue The Object returned if the argument is not existent
+	 * @return An argument which is placed at the given index, or the provided default value
+	 */
+	public Object getOrDefault(int index, Object defaultValue) {
+		if (args.length <= index) {
+			return defaultValue;
+		} else {
+			return args[index];
+		}
+	}
+
+	/**
+	 * Returns an argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @param defaultValue The Object returned if the argument was not found.
+	 * @return The argument with the specified node name or the provided default value
+	 */
+	public Object getOrDefault(String nodeName, Object defaultValue) {
+		return argsMap.getOrDefault(nodeName, defaultValue);
+	}
+
+	/**
+	 * Returns an argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @param defaultValue The Object returned if the argument is not existent
+	 * @return An argument which is placed at the given index, or the provided default value
+	 */
+	public Object getOrDefault(int index, Supplier<?> defaultValue) {
+		if (args.length <= index) {
+			return defaultValue.get();
+		} else {
+			return args[index];
+		}
+	}
+
+	/**
+	 * Returns an argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @param defaultValue The Object returned if the argument was not found.
+	 * @return The argument with the specified node name or the provided default value
+	 */
+	public Object getOrDefault(String nodeName, Supplier<?> defaultValue) {
+		return argsMap.getOrDefault(nodeName, defaultValue.get());
+	}
 }
