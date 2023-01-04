@@ -85,7 +85,7 @@ CommandAPICommand("gamemode")
 fun booleanargs() {
 /* ANCHOR: booleanargs */
 // Load keys from config file
-val configKeys: Array<String> = getConfig().getKeys(true).toTypedArray()
+val configKeys: Array<String> = config.getKeys(true).toTypedArray()
 
 // Register our command
 CommandAPICommand("editconfig")
@@ -93,7 +93,7 @@ CommandAPICommand("editconfig")
     .withArguments(BooleanArgument("value"))
     .executes(CommandExecutor { _, args ->
         // Update the config with the boolean argument
-        getConfig().set(args[0] as String, args[1] as Boolean)
+        config.set(args[0] as String, args[1] as Boolean)
     })
     .register()
 /* ANCHOR_END: booleanargs */
@@ -140,9 +140,9 @@ CommandAPICommand("searchrange")
             player.sendMessage("No chests were found")
         } else {
             player.sendMessage("Found ${locations.size} chests:")
-            locations.forEach({
-                player.sendMessage("  Found at: ${it.getX()}, ${it.getY()}, ${it.getZ()}")
-            })
+            locations.forEach {
+                player.sendMessage("  Found at: ${it.x}, ${it.y}, ${it.z}")
+            }
         }
     })
     .register()
@@ -167,7 +167,7 @@ CommandAPICommand("break")
     // We want to target blocks in particular, so use BLOCK_POSITION
     .withArguments(LocationArgument("block", LocationType.BLOCK_POSITION))
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        (args[0] as Location).block.setType(Material.AIR)
+        (args[0] as Location).block.type = Material.AIR
     })
     .register()
 /* ANCHOR_END: locationarguments */
@@ -183,7 +183,7 @@ CommandAPICommand("rotate")
         val target = args[1] as Entity
 
         if (target is ArmorStand) {
-            target.setHeadPose(EulerAngle(Math.toRadians(rotation.pitch.toDouble()), Math.toRadians(rotation.yaw.toDouble() - 90), 0.0))
+            target.headPose = EulerAngle(Math.toRadians(rotation.pitch.toDouble()), Math.toRadians(rotation.yaw.toDouble() - 90), 0.0)
         }
     })
     .register()
@@ -197,7 +197,7 @@ CommandAPICommand("namecolor")
     .withArguments(ChatColorArgument("chatcolor"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val color = args[0] as ChatColor
-        player.setDisplayName("$color${player.getName()}")
+        player.setDisplayName("$color${player.name}")
     })
     .register()
 /* ANCHOR_END: chatcolorarguments */
@@ -216,11 +216,11 @@ CommandAPICommand("makebook")
 
         // Create book
         val item = ItemStack(Material.WRITTEN_BOOK)
-        val meta = item.getItemMeta() as BookMeta
-        meta.setTitle("Custom Book")
-        meta.setAuthor(player.name)
+        val meta = item.itemMeta as BookMeta
+        meta.title = "Custom Book"
+        meta.author = player.name
         meta.spigot().setPages(arr)
-        item.setItemMeta(meta)
+        item.itemMeta = meta
 
         // Give player the book
         player.inventory.addItem(item)
@@ -245,13 +245,13 @@ CommandAPICommand("pbroadcast")
 
 /* ANCHOR: chatpreviewspigot */
 CommandAPICommand("broadcast")
-    .withArguments(ChatArgument("message").withPreview( { info ->
+    .withArguments(ChatArgument("message").withPreview { info ->
         // Convert parsed BaseComponent[] to plain text
         val plainText: String = BaseComponent.toPlainText(*info.parsedInput() as Array<BaseComponent>)
 
         // Translate the & in plain text and generate a new BaseComponent[]
         TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
-    }))
+    } )
     .executesPlayer(PlayerCommandExecutor { _, args ->
         // The user still entered legacy text. We need to properly convert this
         // to a BaseComponent[] by converting to plain text then to BaseComponent[]
@@ -264,13 +264,13 @@ CommandAPICommand("broadcast")
 
 /* ANCHOR: chatpreviewadventure */
 CommandAPICommand("broadcast")
-    .withArguments(AdventureChatArgument("message").withPreview( { info ->
+    .withArguments(AdventureChatArgument("message").withPreview { info ->
         // Convert parsed Component to plain text
         val plainText: String = PlainTextComponentSerializer.plainText().serialize(info.parsedInput() as Component)
 
         // Translate the & in plain text and generate a new Component
         LegacyComponentSerializer.legacyAmpersand().deserialize(plainText)
-    }))
+    } )
     .executesPlayer(PlayerCommandExecutor { _, args ->
         // The user still entered legacy text. We need to properly convert this
         // to a Component by converting to plain text then to Component
@@ -282,13 +282,13 @@ CommandAPICommand("broadcast")
 
 /* ANCHOR: chatpreviewspigotusepreview */
 CommandAPICommand("broadcast")
-    .withArguments(ChatArgument("message").usePreview(true).withPreview( { info ->
+    .withArguments(ChatArgument("message").usePreview(true).withPreview { info ->
         // Convert parsed BaseComponent[] to plain text
         val plainText = BaseComponent.toPlainText(*info.parsedInput() as Array<BaseComponent>)
 
         // Translate the & in plain text and generate a new BaseComponent[]
         TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
-    }))
+    } )
     .executesPlayer(PlayerCommandExecutor { _, args ->
         Bukkit.spigot().broadcast(*args[0] as Array<BaseComponent>)
     })
@@ -297,13 +297,13 @@ CommandAPICommand("broadcast")
 
 /* ANCHOR: chatpreviewadventureusepreview */
 CommandAPICommand("broadcast")
-    .withArguments(AdventureChatArgument("message").usePreview(true).withPreview( { info ->
+    .withArguments(AdventureChatArgument("message").usePreview(true).withPreview { info ->
         // Convert parsed Component to plain text
         val plainText = PlainTextComponentSerializer.plainText().serialize(info.parsedInput() as Component)
 
         // Translate the & in plain text and generate a new Component
         LegacyComponentSerializer.legacyAmpersand().deserialize(plainText)
-    }))
+    } )
     .executesPlayer(PlayerCommandExecutor { _, args ->
         Bukkit.broadcast(args[0] as Component)
     })
@@ -440,7 +440,7 @@ CommandAPICommand("sidebar")
         val objective = Bukkit.getScoreboardManager().mainScoreboard.getObjective(objectiveName)
 
         // Set display slot
-        objective?.setDisplaySlot(DisplaySlot.SIDEBAR)
+        objective?.displaySlot = DisplaySlot.SIDEBAR
     })
     .register()
 /* ANCHOR_END: objectiveargument */
@@ -523,8 +523,8 @@ CommandAPICommand("set")
         val targetBlock = player.getTargetBlockExact(256)
 
         // Set the block, along with its data
-        targetBlock?.setType(blockdata.material)
-        targetBlock?.state?.setBlockData(blockdata)
+        targetBlock?.type = blockdata.material
+        targetBlock?.state?.blockData = blockdata
     })
     .register()
 /* ANCHOR_END: blockstateargument */
@@ -580,12 +580,12 @@ CommandAPICommand("giveloottable")
         val lootTable = args[0] as LootTable
         val location = args[1] as Location
 
-        val state = location.getBlock().getState()
+        val state = location.block.state
 
         // Check if the input block is a container (e.g. chest)
         if (state is Container && state is Lootable) {
             // Apply the loot table to the chest
-            state.setLootTable(lootTable)
+            state.lootTable = lootTable
             state.update()
         }
     })
@@ -604,7 +604,7 @@ CommandAPICommand("changelevel")
         val op = args[1] as MathOperation
         val value = args[2] as Int
 
-        target.setLevel(op.apply(target.level, value))
+        target.level = op.apply(target.level, value)
     })
     .register()
 /* ANCHOR_END: mathoperationarguments */
@@ -747,8 +747,8 @@ CommandAPICommand("replace")
 
                         // If that block matches a block from the predicate, set it
                         if (predicate.test(block)) {
-                            block.setType(blockData.material)
-                            block.setBlockData(blockData)
+                            block.type = blockData.material
+                            block.blockData = blockData
                         }
                     }
                 }
@@ -769,7 +769,7 @@ CommandAPICommand("rem")
         // Get our predicate
         val predicate = args[0] as Predicate<ItemStack>
 
-        for (item in player.getInventory()) {
+        for (item in player.inventory) {
             if (predicate.test(item)) {
                 player.inventory.remove(item)
             }
@@ -837,7 +837,7 @@ for ((key, _) in gamemodes) {
         .withArguments(LiteralArgument(key))
         .executesPlayer(PlayerCommandExecutor { player, _ ->
             // Retrieve the object from the map via the key and NOT the args[]
-            player.setGameMode(gamemodes[key]!!)
+            player.gameMode = gamemodes[key]!!
         })
         .register()
 }
@@ -871,10 +871,10 @@ CommandAPICommand("gamemode")
     .executesPlayer(PlayerCommandExecutor { player, args ->
         // The literal string that the player enters IS available in the args[]
         when (args[0] as String) {
-            "adventure" -> player.setGameMode(GameMode.ADVENTURE)
-            "creative" -> player.setGameMode(GameMode.CREATIVE)
-            "spectator" -> player.setGameMode(GameMode.SPECTATOR)
-            "survival" -> player.setGameMode(GameMode.SURVIVAL)
+            "adventure" -> player.gameMode = GameMode.ADVENTURE
+            "creative" -> player.gameMode = GameMode.CREATIVE
+            "spectator" -> player.gameMode = GameMode.SPECTATOR
+            "survival" -> player.gameMode = GameMode.SURVIVAL
         }
     })
     .register()
@@ -897,7 +897,7 @@ CommandAPICommand("tpworld")
 fun worldArgument(nodeName: String): Argument<World> {
 
     // Construct our CustomArgument that takes in a String input and returns a World object
-    return CustomArgument<World, String>(StringArgument(nodeName), { info ->
+    return CustomArgument<World, String>(StringArgument(nodeName)) { info ->
         // Parse the world from our input
         val world = Bukkit.getWorld(info.input())
 
@@ -906,7 +906,7 @@ fun worldArgument(nodeName: String): Argument<World> {
         } else {
             world
         }
-    }).replaceSuggestions(ArgumentSuggestions.strings { _ ->
+    }.replaceSuggestions(ArgumentSuggestions.strings { _ ->
         // List of world names on the server
         Bukkit.getWorlds().map{ it.name }.toTypedArray()
     })
@@ -949,7 +949,7 @@ fun permissions() {
 CommandAPICommand("god")
     .withPermission(CommandPermission.fromString("command.god"))
     .executesPlayer(PlayerCommandExecutor { player, _ ->
-        player.setInvulnerable(true)
+        player.isInvulnerable = true
     })
     .register()
 /* ANCHOR_END: permissions */
@@ -959,7 +959,7 @@ CommandAPICommand("god")
 CommandAPICommand("god")
     .withPermission("command.god")
     .executesPlayer(PlayerCommandExecutor { player, _ ->
-        player.setInvulnerable(true)
+        player.isInvulnerable = true
     })
     .register()
 /* ANCHOR_END: permissions2 */
@@ -970,7 +970,7 @@ fun permissions3_1() {
 // Register /kill command normally. Since no permissions are applied, anyone can run this command
 CommandAPICommand("kill")
     .executesPlayer(PlayerCommandExecutor { player, _ ->
-        player.setHealth(0.0)
+        player.health = 0.0
     })
     .register()
 /* ANCHOR_END: permissions3_1 */
@@ -982,7 +982,7 @@ fun permissions3_2() {
 CommandAPICommand("kill")
     .withArguments(PlayerArgument("target").withPermission(CommandPermission.OP))
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        (args[0] as Player).setHealth(0.0)
+        (args[0] as Player).health = 0.0
     })
     .register()
 /* ANCHOR_END: permissions3_2 */
@@ -1311,7 +1311,7 @@ CommandAPICommand("party")
         // Get the name of the party to create
         val partyName = args[0] as String
 
-        partyMembers.put(player.uniqueId, partyName)
+        partyMembers[player.uniqueId] = partyName
     })
     .register()
 /* ANCHOR_END: requirements3 */
@@ -1320,12 +1320,11 @@ CommandAPICommand("party")
 /* ANCHOR: requirements4 */
 arguments = mutableListOf<Argument<*>>()
 arguments.add(LiteralArgument("tp")
-    .withRequirement({ partyMembers.containsKey((it as Player).uniqueId) })
-)
+    .withRequirement { partyMembers.containsKey((it as Player).uniqueId) })
 /* ANCHOR_END: requirementstp */
 
 arguments.add(PlayerArgument("player")
-    .replaceSafeSuggestions(SafeSuggestions.suggest( { info ->
+    .replaceSafeSuggestions(SafeSuggestions.suggest { info ->
 
         // Store the list of party members to teleport to
         val playersToTeleportTo = mutableListOf<Player>()
@@ -1342,7 +1341,7 @@ arguments.add(PlayerArgument("player")
                 // If the party member is in the same party as you
                 if (party == partyName) {
                     val target = Bukkit.getPlayer(uuid)!!
-                    if (target.isOnline()) {
+                    if (target.isOnline) {
                         // Add them if they are online
                         playersToTeleportTo.add(target)
                     }
@@ -1351,7 +1350,7 @@ arguments.add(PlayerArgument("player")
         }
 
         playersToTeleportTo.toTypedArray()
-    })))
+    }))
 /* ANCHOR_END: requirements4 */
 
 /* ANCHOR: requirements5 */
@@ -1372,7 +1371,7 @@ CommandAPICommand("party")
         // Get the name of the party to create
         val partyName = args[0] as String
 
-        partyMembers.put(player.uniqueId, partyName)
+        partyMembers[player.uniqueId] = partyName
 
         CommandAPI.updateRequirements(player)
     })
@@ -1383,9 +1382,9 @@ CommandAPICommand("party")
 fun multiplerequirements() {
 /* ANCHOR: multiplerequirements */
 CommandAPICommand("someCommand")
-    .withRequirement({ (it as Player).level >= 30 })
-    .withRequirement({ (it as Player).inventory.contains(Material.DIAMOND_PICKAXE) })
-    .withRequirement({ (it as Player).isInvulnerable() })
+    .withRequirement { (it as Player).level >= 30 }
+    .withRequirement { (it as Player).inventory.contains(Material.DIAMOND_PICKAXE) }
+    .withRequirement { (it as Player).isInvulnerable() }
     .executesPlayer(PlayerCommandExecutor { player, args ->
         // Code goes here
     })
@@ -1578,7 +1577,7 @@ CommandAPICommand("yaw")
     .withArguments(AngleArgument("amount"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val newLocation = player.location
-        newLocation.setYaw(args[0] as Float)
+        newLocation.yaw = args[0] as Float
         player.teleport(newLocation)
     })
     .register()
@@ -1660,7 +1659,7 @@ fun safetooltips() {
 /* ANCHOR: SafeTooltips */
 val arguments = listOf<Argument<*>>(
     LocationArgument("location")
-        .replaceSafeSuggestions(SafeSuggestions.tooltips( { info ->
+        .replaceSafeSuggestions(SafeSuggestions.tooltips { info ->
             // We know the sender is a player if we use .executesPlayer()
             val player = info.sender() as Player
             Tooltip.arrayOf(
@@ -1668,7 +1667,7 @@ val arguments = listOf<Argument<*>>(
                 Tooltip.ofString(player.bedSpawnLocation, "Your bed"),
                 Tooltip.ofString(player.getTargetBlockExact(256)?.location, "Target block")
             )
-        }))
+        } )
 )
 /* ANCHOR_END: SafeTooltips */
 /* ANCHOR: SafeTooltips2 */
@@ -1722,9 +1721,9 @@ CommandAPICommand("localmsg")
 fun argumentsuggestions2_2() {
 /* ANCHOR: ArgumentSuggestions2_2 */
 val arguments = listOf<Argument<*>>(
-    PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings({ info ->
+    PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings { info ->
         Friends.getFriends(info.sender())
-    }))
+    } )
 )
 
 CommandAPICommand("friendtp")
@@ -1761,10 +1760,10 @@ fun SafeRecipeArguments() {
 /* ANCHOR: SafeRecipeArguments */
 // Create our itemstack
 val emeraldSword = ItemStack(Material.DIAMOND_SWORD)
-val meta = emeraldSword.getItemMeta()
+val meta = emeraldSword.itemMeta
 meta?.setDisplayName("Emerald Sword")
-meta?.setUnbreakable(true)
-emeraldSword.setItemMeta(meta)
+meta?.isUnbreakable = true
+emeraldSword.itemMeta = meta
 
 // Create and register our recipe
 val emeraldSwordRecipe = ShapedRecipe(NamespacedKey(this, "emerald_sword"), emeraldSword)
@@ -1776,7 +1775,7 @@ emeraldSwordRecipe.shape(
 emeraldSwordRecipe.setIngredient('A', Material.AIR)
 emeraldSwordRecipe.setIngredient('E', Material.EMERALD)
 emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD)
-getServer().addRecipe(emeraldSwordRecipe)
+server.addRecipe(emeraldSwordRecipe)
 
 // Omitted, more itemstacks and recipes
 /* ANCHOR_END: SafeRecipeArguments */
@@ -1811,7 +1810,7 @@ allowedMobs.removeAll(forbiddenMobs) // Now contains everything except enderdrag
 val arguments = listOf<Argument<*>>(
     EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest {
         info ->
-            if (info.sender().isOp()) {
+            if (info.sender().isOp) {
                 // All entity types
                 EntityType.values()
             } else {
@@ -1878,12 +1877,12 @@ fun fruits() {
 
     CommandAPICommand("concept")
         .withArguments(StringArgument("text"))
-        .withArguments(StringArgument("input").replaceSuggestions(ArgumentSuggestions.strings( { info ->
+        .withArguments(StringArgument("input").replaceSuggestions(ArgumentSuggestions.strings { info ->
             println(info.currentArg()) // partially typed argument
             println(info.currentInput()) // current input (includes the /)
 
-            fruits.filter{ it.lowercase().startsWith(info.currentArg().lowercase()) }.toTypedArray()
-        })))
+            fruits.filter { it.lowercase().startsWith(info.currentArg().lowercase()) }.toTypedArray()
+        } ))
         .withArguments(IntegerArgument("int"))
         .executes(CommandExecutor { _, _ ->
             // stuff
@@ -1904,9 +1903,9 @@ fun asyncreadfile() {
 val plugin: JavaPlugin = object: JavaPlugin() {}
 /* ANCHOR: asyncreadfile */
 CommandAPICommand("setconfig")
-    .withArguments(StringArgument("key").replaceSuggestions(ArgumentSuggestions.stringsAsync({ _ ->
+    .withArguments(StringArgument("key").replaceSuggestions(ArgumentSuggestions.stringsAsync { _ ->
         CompletableFuture.supplyAsync { plugin.config.getKeys(false).toTypedArray() }
-    })))
+    } ))
     .withArguments(TextArgument("value"))
     .executes(CommandExecutor { _, args ->
         val key = args[0] as String
@@ -2023,11 +2022,11 @@ val emojis = mapOf(
 val messageArgument = GreedyStringArgument("message")
     .replaceSuggestions { info, builder ->
         // Only display suggestions at the very end character
-        val newBuilder = builder.createOffset(builder.getStart() + info.currentArg().length);
+        val newBuilder = builder.createOffset(builder.start + info.currentArg().length)
 
         // Suggest all the emojis!
         emojis.forEach { (emoji, description) ->
-            newBuilder.suggest(emoji, LiteralMessage(description));
+            newBuilder.suggest(emoji, LiteralMessage(description))
         }
 
         newBuilder.buildFuture()
@@ -2036,7 +2035,7 @@ val messageArgument = GreedyStringArgument("message")
 CommandAPICommand("emoji")
     .withArguments(messageArgument)
     .executes(CommandExecutor { _, args ->
-        Bukkit.broadcastMessage(args[0] as String);
+        Bukkit.broadcastMessage(args[0] as String)
     })
     .register()
 /* ANCHOR_END: BrigadierSuggestions3 */
@@ -2249,8 +2248,8 @@ class CustomItem(val item: ItemStack, val name: String, lore: String): IStringTo
     init {
         val meta = item.itemMeta
         meta.setDisplayName(name)
-        meta.setLore(listOf(lore))
-        item.setItemMeta(meta)
+        meta.lore = listOf(lore)
+        item.itemMeta = meta
     }
 
     override fun getSuggestion(): String = this.item.itemMeta.displayName
@@ -2269,7 +2268,7 @@ class Main : JavaPlugin() {
         CommandAPICommand("killall")
             .executes(CommandExecutor { _, _ ->
                 // Kills all enemies in all worlds
-                Bukkit.getWorlds().forEach { it.livingEntities.forEach { it.setHealth(0.0) } }
+                Bukkit.getWorlds().forEach { world -> world.livingEntities.forEach { entity -> entity.health = 0.0 } }
             })
             .register()
     }
