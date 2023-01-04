@@ -1241,7 +1241,8 @@ CommandAPICommand("sayhi")
         } else {
             player.sendMessage("Hi!")
         }
-    }).register()
+    })
+    .register()
 /* ANCHOR_END: argumentsayhicmd */
 }
 

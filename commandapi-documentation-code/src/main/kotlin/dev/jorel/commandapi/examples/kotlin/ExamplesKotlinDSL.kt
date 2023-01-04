@@ -1390,9 +1390,9 @@ commandAPICommand("sayhi") {
     playerExecutor { player, args ->
         val target: Player? = args["target"] as Player?
         if (target != null) {
-	        target.sendMessage("Hi!")
+            target.sendMessage("Hi!")
         } else {
-	        player.sendMessage("Hi!")
+            player.sendMessage("Hi!")
         }
     }
 }
