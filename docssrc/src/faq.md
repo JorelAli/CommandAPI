@@ -64,7 +64,7 @@ new CommandAPICommand("mycommand")
     .register();
 ```
 
-\\(\downarrow\\)
+$$\downarrow$$
 
 ```java
 new CommandAPICommand("mycommand")
