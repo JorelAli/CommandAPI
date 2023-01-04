@@ -324,14 +324,10 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray, List<Argument[]> argumentsToRegister, int firstOptionalArgumentIndex) {
 		if (firstOptionalArgumentIndex != -1) {
 			for (int i = 0; i <= argumentsArray.length; i++) {
-				if (i == firstOptionalArgumentIndex - 1) {
-					Argument[] requiredArguments = (Argument[]) new AbstractArgument[i];
-					System.arraycopy(argumentsArray, 0, requiredArguments, 0, i);
-					argumentsToRegister.add(requiredArguments);
-				} else if (i >= firstOptionalArgumentIndex) {
-					Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
-					System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
-					argumentsToRegister.add(optionalArguments);
+				if (i >= firstOptionalArgumentIndex - 1) {
+					Argument[] arguments = (Argument[]) new AbstractArgument[i];
+					System.arraycopy(argumentsArray, 0, arguments, 0, i);
+					argumentsToRegister.add(arguments);
 				}
 			}
 		}
