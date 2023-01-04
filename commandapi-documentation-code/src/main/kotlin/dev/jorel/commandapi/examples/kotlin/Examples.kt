@@ -1235,7 +1235,7 @@ fun argumentkillcmd() {
 CommandAPICommand("kill")
     .withOptionalArguments(PlayerArgument("target"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target: Player? = args.get("target") as Player?
+        val target: Player? = args["target"] as Player?
         if (target != null) {
             target.health = 0.0
         } else {
