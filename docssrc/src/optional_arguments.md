@@ -52,8 +52,6 @@ You can notice two things:
 
 With optional arguments, there is a possibility of them being not present in the arguments of a command. The reason we use `args.get("target")` is that this will just return `null` and you can handle what should happen.
 
-If you use `args.get(0)` this will just throw an `ArrayIndexOutOfBoundsException` every time the command is executed without providing the optional argument.
-
 </div>
 
 ## Setting existing arguments as optional arguments
@@ -78,9 +76,9 @@ new CommandAPICommand("optional")
 
 However, calling `withOptionalArguments` is safer because it makes sure that the argument is optional because of that internal call.
 
-## Avoiding null values and exceptions
+## Avoiding null values
 
-Previously, we've looked at how to handle null values and how to avoid exceptions. To make all of this easier, the CommandAPI implements multiple `getOrDefault()` methods for `CommandArguments`:
+Previously, we've looked at how to handle null values. To make all of this easier, the CommandAPI implements multiple `getOrDefault()` methods for `CommandArguments`:
 
 ```java
 Object getOrDefault(int index, Object defaultValue)

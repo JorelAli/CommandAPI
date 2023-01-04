@@ -36,8 +36,13 @@ public class CommandArguments {
 	 * @param index The position of this argument
 	 * @return an argument which is placed at the given index
 	 */
+	@Nullable
 	public Object get(int index) {
-		return args[index];
+		if (args.length <= index) {
+			return null;
+		} else {
+			return args[index];
+		}
 	}
 
 	/**
