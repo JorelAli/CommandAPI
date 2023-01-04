@@ -34,7 +34,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentsyntax1}}
 ```
 
 </div>

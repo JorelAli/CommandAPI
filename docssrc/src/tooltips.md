@@ -54,10 +54,6 @@ First, we'll declare our arguments. Here, we'll use the `stringsWithTooltips` me
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:Tooltips1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:Tooltips1}}
-```
-
 </div>
 
 Finally, we declare our command as normal:
@@ -186,10 +182,6 @@ First, we'll declare our arguments. Here, we use a `LocationArgument` and use th
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeTooltips}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeTooltips}}
 ```
 
 </div>

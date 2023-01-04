@@ -922,7 +922,7 @@ commandAPICommand("rem") {
         // Get our predicate
         val predicate = args[0] as Predicate<ItemStack>
 
-        for (item in player.getInventory()) {
+        for (item in player.inventory) {
             if (predicate.test(item)) {
                 player.inventory.remove(item)
             }
@@ -1025,10 +1025,10 @@ commandAPICommand("gamemode") {
     playerExecutor { player, args ->
         // The literal string that the player enters IS available in the args[]
         when (args[0] as String) {
-            "adventure" -> player.setGameMode(GameMode.ADVENTURE)
-            "creative" -> player.setGameMode(GameMode.CREATIVE)
-            "spectator" -> player.setGameMode(GameMode.SPECTATOR)
-            "survival" -> player.setGameMode(GameMode.SURVIVAL)
+            "adventure" -> player.gameMode = GameMode.ADVENTURE
+            "creative" -> player.gameMode = GameMode.CREATIVE
+            "spectator" -> player.gameMode = GameMode.SPECTATOR
+            "survival" -> player.gameMode = GameMode.SURVIVAL
         }
     }
 }
@@ -1274,7 +1274,7 @@ commandAPICommand("killme") {
     proxyExecutor { proxy, _ ->
         // Check if the callee (target) is an Entity and kill it
         if (proxy.callee is LivingEntity) {
-            (proxy.callee as LivingEntity).setHealth(0.0)
+            (proxy.callee as LivingEntity).health = 0.0
         }
     }
 }
@@ -1496,7 +1496,7 @@ arguments.add(PlayerArgument("player")
                 // If the party member is in the same party as you
                 if (party == partyName) {
                     val target = Bukkit.getPlayer(uuid)!!
-                    if (target.isOnline()) {
+                    if (target.isOnline) {
                         // Add them if they are online
                         playersToTeleportTo.add(target)
                     }
@@ -1831,7 +1831,7 @@ val emeraldSword = ItemStack(Material.DIAMOND_SWORD)
 val meta = emeraldSword.itemMeta
 meta?.setDisplayName("Emerald Sword")
 meta?.isUnbreakable = true
-emeraldSword.setItemMeta(meta)
+emeraldSword.itemMeta = meta
 
 // Create and register our recipe
 val emeraldSwordRecipe = ShapedRecipe(NamespacedKey(this, "emerald_sword"), emeraldSword)
@@ -1843,7 +1843,7 @@ emeraldSwordRecipe.shape(
 emeraldSwordRecipe.setIngredient('A', Material.AIR)
 emeraldSwordRecipe.setIngredient('E', Material.EMERALD)
 emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD)
-getServer().addRecipe(emeraldSwordRecipe)
+server.addRecipe(emeraldSwordRecipe)
 
 // Omitted, more itemstacks and recipes
 /* ANCHOR_END: SafeRecipeArguments */
@@ -1877,7 +1877,7 @@ allowedMobs.removeAll(forbiddenMobs) // Now contains everything except enderdrag
 /* ANCHOR: SafeMobSpawnArguments_2 */
 val arguments = listOf<Argument<*>>(
     EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest { info ->
-        if (info.sender().isOp()) {
+        if (info.sender().isOp) {
             // All entity types
             EntityType.values()
         } else {
@@ -2086,7 +2086,7 @@ val emojis = mapOf(
 val messageArgument = GreedyStringArgument("message")
     .replaceSuggestions { info, builder ->
         // Only display suggestions at the very end character
-        val newBuilder = builder.createOffset(builder.getStart() + info.currentArg().length);
+        val newBuilder = builder.createOffset(builder.start + info.currentArg().length);
 
         // Suggest all the emojis!
         emojis.forEach { (emoji, description) ->

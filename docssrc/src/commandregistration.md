@@ -224,6 +224,10 @@ To replace a command, we can first unregister it and then register our implement
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandunregistration}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:commandunregistration}}
+```
+
 </div>
 
 </div>

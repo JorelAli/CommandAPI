@@ -18,6 +18,10 @@ Say we have a command which kills the sender of a command. This is easily implem
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:proxysender}}
 ```
 
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:proxysender}}
+```
+
 </div>
 
 But what if the sender of the command is _not_ a player? By using Minecraft's `/execute` command, we could execute the command as _any_ arbitrary entity, as shown with the command below:
@@ -36,6 +40,10 @@ To handle this case, we can use the `.executesProxy()` method to ensure that the
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:proxysender2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:proxysender2}}
 ```
 
 </div>

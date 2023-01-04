@@ -181,10 +181,6 @@ Now say that we don't want non-op players to spawn bosses. To do this, we'll cre
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeMobSpawnArguments}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeMobSpawnArguments}}
-```
-
 </div>
 
 We then use our safe arguments to return an `EntityType[]` as the list of values that are suggested to the player. In this example, we use the `sender()` method to determine if the sender has permissions to view the suggestions:
@@ -197,10 +193,6 @@ We then use our safe arguments to return an `EntityType[]` as the list of values
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeMobSpawnArguments_2}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeMobSpawnArguments_2}}
 ```
 
 </div>
@@ -245,10 +237,6 @@ Now, we don't want to remove a potion effect that already exists on a player, so
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafePotionArguments}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafePotionArguments}}
 ```
 
 </div>
