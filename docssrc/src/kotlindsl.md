@@ -140,7 +140,7 @@ We want to create a `/give` command with the following syntax:
 /optionalArgument give <item> <amount>
 ```
 
-As with the Java method of registering commands, with a CommandTree you can declare the command tree to include the additional argument `<amount>`, and with the CommandAPICommand you have to declare the two branching commands separately:
+As with the Java method of registering commands, with a CommandTree you can declare the command tree to include the additional argument `<amount>`, and with the CommandAPICommand you have to call the `optionalArgument` method to add an optional argument:
 
 <div class="multi-pre">
 
