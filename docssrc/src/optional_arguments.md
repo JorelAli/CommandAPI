@@ -1,10 +1,10 @@
 ## Optional Arguments
 
-Sometimes, you want to implement a command that has arguments that do not need to be entered. Take a `/kill` command for example. You may want to kill yourself, or another player. For that, we want this command syntax:
+Sometimes, you want to implement a command that has arguments that do not need to be entered. Take a `/sayhi` command for example. You may want to say "Hi", or to another player. For that, we want this command syntax:
 
 ```mccmd
-/kill          - Kills yourself
-/kill <target> - Kills a target player
+/sayhi          - Says "Hi!" to yourself
+/sayhi <target> - Says "Hi!" to a target player
 ```
 
 To implement these commands, the CommandAPI provides two methods to help you with that:
@@ -18,32 +18,32 @@ Argument withOptionalArguments(Argument<?>... args)
 
 ### Example - /kill command with two separate arguments
 
-For example, say we're registering a command `/kill`:
+For example, say we're registering a command `/sayhi`:
 
 ```mccmd
-/kill          - Kills yourself
-/kill <target> - Kills a target player
+/sayhi          - Says "Hi!" to yourself
+/sayhi <target> - Says "Hi!" to a target player
 ```
 
-For that, we are going to register a command `/kill`. To add optional arguments, we are going to use the `withOptionalArguments(Argument... args)` method:
+For that, we are going to register a command `/sayhi`. To add optional arguments, we are going to use the `withOptionalArguments(Argument... args)` method:
 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentkillcmd}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentsayhicmd}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentkillcmd}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsayhicmd}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentkillcmd}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentsayhicmd}}
 ```
 
 </div>
 
-This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.
+This gives us the ability to run both `/sayhi` and `/sayhi <target>` with the same command name "sayhi", but have different results based on the arguments used.
 
 You can notice two things:
 - We use the `withOptionalArguments` method to add an optional argument to a command

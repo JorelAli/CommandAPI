@@ -1304,19 +1304,19 @@ new CommandAPICommand("mycommand")
 }
 
 {
-/* ANCHOR: argumentkillcmd */
-new CommandAPICommand("kill")
+/* ANCHOR: argumentsayhicmd */
+new CommandAPICommand("sayhi")
     .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
         Player target = (Player) args.get("target");
         if (target != null) {
-            target.setHealth(0.0);
+	        target.sendMessage("Hi!");
         } else {
-            player.setHealth(0.0);
+	        player.sendMessage("Hi!");
         }
     })
     .register();
-/* ANCHOR_END: argumentkillcmd */
+/* ANCHOR_END: argumentsayhicmd */
 }
 
 @SuppressWarnings("unused")
