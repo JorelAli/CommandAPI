@@ -395,20 +395,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 
 	@Override
 	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException {
-		// We never know if this is "the last command" and we want dynamic (even if
-		// partial)
-		// command registration. Generate the dispatcher file!
-		File file = CommandAPI.getConfiguration().getDispatcherFile();
-		if (file != null) {
-			try {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace(System.out);
-			}
-
-			createDispatcherFile(file, getBrigadierDispatcher());
-		}
+		// Nothing to do
 	}
 
 	@Override
@@ -445,6 +432,9 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
 
+	@Override
+	@Unimplemented(because = {REQUIRES_MINECRAFT_SERVER, VERSION_SPECIFIC_IMPLEMENTATION})
+	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> brigadierDispatcher) throws IOException;
 
 	@Override
 	public CommandAPILogger getLogger() {

@@ -34,7 +34,6 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.*;
 import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
@@ -99,8 +98,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.potion.PotionEffectType;
-
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
 
 import java.io.File;
 import java.io.IOException;
@@ -241,7 +238,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
+	public void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
 		Files.write(
 				new GsonBuilder().setPrettyPrinting().create()
 					.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);

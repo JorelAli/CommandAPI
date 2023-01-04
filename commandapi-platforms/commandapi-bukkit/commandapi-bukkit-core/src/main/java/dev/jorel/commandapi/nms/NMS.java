@@ -281,16 +281,6 @@ public interface NMS<CommandListenerWrapper> {
 
 	String convert(Sound sound);
 
-	/**
-	 * Creates a JSON file that describes the hierarchical structure of the commands
-	 * that have been registered by the server.
-	 * 
-	 * @param file       The JSON file to write to
-	 * @param dispatcher The Brigadier CommandDispatcher
-	 * @throws IOException When the file fails to be written to
-	 */
-	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
-
 	Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
