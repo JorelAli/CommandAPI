@@ -251,7 +251,7 @@ CommandAPICommand("broadcast")
 
         // Translate the & in plain text and generate a new BaseComponent[]
         TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
-    })
+    } )
     .executesPlayer(PlayerCommandExecutor { _, args ->
         // The user still entered legacy text. We need to properly convert this
         // to a BaseComponent[] by converting to plain text then to BaseComponent[]
