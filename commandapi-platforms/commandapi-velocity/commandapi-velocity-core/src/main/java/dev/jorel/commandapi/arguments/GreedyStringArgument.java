@@ -27,7 +27,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 /**
  * An argument that represents arbitrary strings
  */
-public class GreedyStringArgument extends SafeOverrideableArgument<String, String> implements IGreedyArgument {
+public class GreedyStringArgument extends SafeOverrideableArgument<String, String> implements GreedyArgument {
 	/**
 	 * A string argument for a string of any length
 	 *

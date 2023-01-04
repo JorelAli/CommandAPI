@@ -30,7 +30,7 @@ import dev.jorel.commandapi.CommandAPIBukkit;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements CustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
@@ -65,7 +65,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	 *
 	 * @apiNote Returns a {@link NamespacedKey} object
 	 */
-	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements ICustomProvidedArgument {
+	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements CustomProvidedArgument {
 
 		/**
 		 * Constructs a SoundArgument with a given node name. This SoundArgument will

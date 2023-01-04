@@ -30,7 +30,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.ILiteralArgument;
+import dev.jorel.commandapi.arguments.Literal;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 
 import java.util.Collections;
@@ -81,7 +81,7 @@ public final class Brigadier {
 	 * @return a LiteralArgumentBuilder that represents the literal
 	 */
 	public static <CommandSender, Argument extends AbstractArgument<String, ?, ?, CommandSender>>
-	LiteralArgumentBuilder fromLiteralArgument(ILiteralArgument<Argument> literalArgument) {
+	LiteralArgumentBuilder fromLiteralArgument(Literal<Argument> literalArgument) {
 		CommandAPIHandler<?, CommandSender, ?> handler = (CommandAPIHandler<?, CommandSender, ?>) CommandAPIHandler.getInstance();
 		return handler.getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), literalArgument.instance().getArgumentPermission(), literalArgument.instance().getRequirements());
 	}

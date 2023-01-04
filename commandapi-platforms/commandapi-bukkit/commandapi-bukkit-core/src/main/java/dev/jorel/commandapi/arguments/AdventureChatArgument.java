@@ -39,7 +39,7 @@ import java.util.Optional;
  * 
  * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument, IPreviewable<AdventureChatArgument, Component> {
+public class AdventureChatArgument extends Argument<Component> implements GreedyArgument, Previewable<AdventureChatArgument, Component> {
 
 	private PreviewableFunction<Component> preview;
 	private boolean usePreview;

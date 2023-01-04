@@ -38,97 +38,97 @@ import java.util.function.Function;
  *
  * @param <S> the object that the argument suggestions use
  */
-public class Tooltip<S> extends AbstractTooltip<S> {
+public class BukkitTooltip<S> extends Tooltip<S> {
 
-	protected Tooltip(S object, Message tooltip) {
+	protected BukkitTooltip(S object, Message tooltip) {
 		super(object, tooltip);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from an array of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from an array of suggestions, and a function which generates a
 	 * tooltip formatted as an array of {@link BaseComponent}s for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an array of {@link BaseComponent}s
 	 * @param suggestions array of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated formatted
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
 	 * 	tooltips
 	 */
 	@SafeVarargs
-	public static <S> Collection<AbstractTooltip<S>> generateBaseComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::ofBaseComponents, suggestions);
+	public static <S> Collection<Tooltip<S>> generateBaseComponents(Function<S, BaseComponent[]> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, BukkitTooltip::ofBaseComponents, suggestions);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from a collection of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from a collection of suggestions, and a function which generates a
 	 * tooltip formatted as an array of {@link BaseComponent}s for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an array of {@link BaseComponent}s
 	 * @param suggestions collection of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated formatted
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
 	 * 	tooltips
 	 */
-	public static <S> Collection<AbstractTooltip<S>> generateBaseComponents(Function<S, BaseComponent[]> tooltipGenerator, Collection<S> suggestions) {
-		return generate(tooltipGenerator, Tooltip::ofBaseComponents, suggestions);
+	public static <S> Collection<Tooltip<S>> generateBaseComponents(Function<S, BaseComponent[]> tooltipGenerator, Collection<S> suggestions) {
+		return generate(tooltipGenerator, BukkitTooltip::ofBaseComponents, suggestions);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from an array of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from an array of suggestions, and a function which generates a
 	 * tooltip formatted as an adventure {@link Component} for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an adventure {@link Component}
 	 * @param suggestions array of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated formatted
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
 	 * 	tooltips
 	 */
 	@SafeVarargs
-	public static <S> Collection<AbstractTooltip<S>> generateAdvenureComponents(Function<S, Component> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, Tooltip::ofAdventureComponent, suggestions);
+	public static <S> Collection<Tooltip<S>> generateAdvenureComponents(Function<S, Component> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, BukkitTooltip::ofAdventureComponent, suggestions);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from a collection of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from a collection of suggestions, and a function which generates a
 	 * tooltip formatted as an adventure {@link Component} for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an adventure {@link Component}
 	 * @param suggestions collection of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated formatted
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
 	 * 	tooltips
 	 */
-	public static <S> Collection<AbstractTooltip<S>> generateAdvenureComponents(Function<S, Component> tooltipGenerator, Collection<S> suggestions) {
-		return generate(tooltipGenerator, Tooltip::ofAdventureComponent, suggestions);
+	public static <S> Collection<Tooltip<S>> generateAdvenureComponents(Function<S, Component> tooltipGenerator, Collection<S> suggestions) {
+		return generate(tooltipGenerator, BukkitTooltip::ofAdventureComponent, suggestions);
 	}
 
 	/**
-	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a formatted tooltip
+	 * Constructs a <code>BukkitTooltip&lt;S&gt;</code> with a suggestion and a formatted tooltip
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param object the suggestion to provide to the user
 	 * @param tooltip    the formatted tooltip to show to the user when they hover over the
 	 *                   suggestion
-	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
+	 * @return a <code>BukkitTooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> AbstractTooltip<S> ofBaseComponents(S object, BaseComponent... tooltip) {
+	public static <S> Tooltip<S> ofBaseComponents(S object, BaseComponent... tooltip) {
 		return ofMessage(object, messageFromBaseComponents(tooltip));
 	}
 
 	/**
-	 * Constructs a <code>Tooltip&lt;S&gt;</code> with a suggestion and a formatted tooltip
+	 * Constructs a <code>BukkitTooltip&lt;S&gt;</code> with a suggestion and a formatted tooltip
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param object the suggestion to provide to the user
 	 * @param tooltip    the formatted tooltip to show to the user when they hover over the
 	 *                   suggestion
-	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
+	 * @return a <code>BukkitTooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> AbstractTooltip<S> ofAdventureComponent(S object, Component tooltip) {
+	public static <S> Tooltip<S> ofAdventureComponent(S object, Component tooltip) {
 		return ofMessage(object, messageFromAdventureComponent(tooltip));
 	}
 

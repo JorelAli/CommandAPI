@@ -39,7 +39,7 @@ import java.util.Optional;
  * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument, IPreviewable<ChatArgument, BaseComponent[]> {
+public class ChatArgument extends Argument<BaseComponent[]> implements GreedyArgument, Previewable<ChatArgument, BaseComponent[]> {
 
 	private PreviewableFunction<BaseComponent[]> preview;
 	private boolean usePreview;

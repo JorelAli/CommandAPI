@@ -244,7 +244,7 @@ public class CommandAPI {
 	 * {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException failWithString(String message) {
-		return failWithMessage(AbstractTooltip.messageFromString(message));
+		return failWithMessage(Tooltip.messageFromString(message));
 	}
 
 	/**

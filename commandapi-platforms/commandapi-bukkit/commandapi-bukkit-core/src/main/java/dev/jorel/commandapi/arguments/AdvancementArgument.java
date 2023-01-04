@@ -29,7 +29,7 @@ import org.bukkit.advancement.Advancement;
  * An argument that represents the Bukkit Advancement object
  * @apiNote Returns an {@link Advancement} object
  */
-public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
+public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements CustomProvidedArgument {
 
 	/**
 	 * Constructs an AdvancementArgument with a given node name

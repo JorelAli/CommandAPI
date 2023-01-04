@@ -38,12 +38,12 @@ import java.util.stream.Stream;
  *
  * @param <S> the object that the argument suggestions use
  */
-public class AbstractTooltip<S> {
+public class Tooltip<S> {
 
 	private final S object;
 	private final Message tooltip;
 
-	protected AbstractTooltip(S object, Message tooltip) {
+	protected Tooltip(S object, Message tooltip) {
 		this.object = object;
 		this.tooltip = tooltip;
 	}
@@ -73,7 +73,7 @@ public class AbstractTooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> AbstractTooltip<S> ofString(S object, String tooltip) {
+	public static <S> Tooltip<S> ofString(S object, String tooltip) {
 		return ofMessage(object, messageFromString(tooltip));
 	}
 
@@ -86,8 +86,8 @@ public class AbstractTooltip<S> {
 	 *                   suggestion
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion and tooltip
 	 */
-	public static <S> AbstractTooltip<S> ofMessage(S object, Message tooltip) {
-		return new AbstractTooltip<>(object, tooltip);
+	public static <S> Tooltip<S> ofMessage(S object, Message tooltip) {
+		return new Tooltip<>(object, tooltip);
 	}
 
 	/**
@@ -97,94 +97,94 @@ public class AbstractTooltip<S> {
 	 * @param object the suggestion to provide to the user
 	 * @return a <code>Tooltip&lt;S&gt;</code> representing this suggestion
 	 */
-	public static <S> AbstractTooltip<S> none(S object) {
-		return new AbstractTooltip<>(object, null);
+	public static <S> Tooltip<S> none(S object) {
+		return new Tooltip<>(object, null);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from an array of suggestions, and no tooltips
+	 * Constructs a collection of {@link Tooltip <S>} objects from an array of suggestions, and no tooltips
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param suggestions array of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the suggestions, with no tooltips
+	 * @return a collection of {@link Tooltip <S>} objects from the suggestions, with no tooltips
 	 */
 	@SafeVarargs
-	public static <S> Collection<AbstractTooltip<S>> none(S... suggestions) {
-		return generate(S::toString, (s, t) -> AbstractTooltip.none(s), suggestions);
+	public static <S> Collection<Tooltip<S>> none(S... suggestions) {
+		return generate(S::toString, (s, t) -> Tooltip.none(s), suggestions);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from a collection of suggestions, and no tooltips
+	 * Constructs a collection of {@link Tooltip <S>} objects from a collection of suggestions, and no tooltips
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param suggestions collection of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the suggestions, with no tooltips
+	 * @return a collection of {@link Tooltip <S>} objects from the suggestions, with no tooltips
 	 */
-	public static <S> Collection<AbstractTooltip<S>> none(Collection<S> suggestions) {
-		return generate(S::toString, (s, t) -> AbstractTooltip.none(s), suggestions);
+	public static <S> Collection<Tooltip<S>> none(Collection<S> suggestions) {
+		return generate(S::toString, (s, t) -> Tooltip.none(s), suggestions);
 
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from an array of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from an array of suggestions, and a function which generates a
 	 * string tooltip for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a string tooltip for the suggestion
 	 * @param suggestions array of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated string tooltips
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated string tooltips
 	 */
 	@SafeVarargs
-	public static <S> Collection<AbstractTooltip<S>> generateStrings(Function<S, String> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, AbstractTooltip::ofString, suggestions);
+	public static <S> Collection<Tooltip<S>> generateStrings(Function<S, String> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, Tooltip::ofString, suggestions);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from a collection of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from a collection of suggestions, and a function which generates a
 	 * string tooltip for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a string tooltip for the suggestion
 	 * @param suggestions collection of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated string tooltips
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated string tooltips
 	 */
-	public static <S> Collection<AbstractTooltip<S>> generateStrings(Function<S, String> tooltipGenerator, Collection<S> suggestions) {
-		return generate(tooltipGenerator, AbstractTooltip::ofString, suggestions);
+	public static <S> Collection<Tooltip<S>> generateStrings(Function<S, String> tooltipGenerator, Collection<S> suggestions) {
+		return generate(tooltipGenerator, Tooltip::ofString, suggestions);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from an array of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from an array of suggestions, and a function which generates a
 	 * formatted tooltip for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion
 	 * @param suggestions array of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated formatted
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
 	 * 	tooltips
 	 */
 	@SafeVarargs
-	public static <S> Collection<AbstractTooltip<S>> generateMessages(Function<S, Message> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, AbstractTooltip::ofMessage, suggestions);
+	public static <S> Collection<Tooltip<S>> generateMessages(Function<S, Message> tooltipGenerator, S... suggestions) {
+		return generate(tooltipGenerator, Tooltip::ofMessage, suggestions);
 	}
 
 	/**
-	 * Constructs a collection of {@link AbstractTooltip<S>} objects from an collection of suggestions, and a function which generates a
+	 * Constructs a collection of {@link Tooltip <S>} objects from an collection of suggestions, and a function which generates a
 	 * formatted tooltip for each suggestion
 	 *
 	 * @param <S> the object that the argument suggestions use
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion
 	 * @param suggestions collection of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestions, with the generated formatted
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
 	 * 	tooltips
 	 */
-	public static <S> Collection<AbstractTooltip<S>> generateMessages(Function<S, Message> tooltipGenerator, Collection<S> suggestions) {
-		return generate(tooltipGenerator, AbstractTooltip::ofMessage, suggestions);
+	public static <S> Collection<Tooltip<S>> generateMessages(Function<S, Message> tooltipGenerator, Collection<S> suggestions) {
+		return generate(tooltipGenerator, Tooltip::ofMessage, suggestions);
 	}
 
 	/**
@@ -193,14 +193,14 @@ public class AbstractTooltip<S> {
 	 * @param <S> the object that the argument suggestions use
 	 * @param <T> the type of the tooltip
 	 * @param tooltipGenerator tooltip generation function
-	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link AbstractTooltip<S>} object
+	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link Tooltip <S>} object
 	 * @param suggestions array of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestion, wrapped using the above functions
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestion, wrapped using the above functions
 	 */
 	@SafeVarargs
 	protected
-	static <S, T> Collection<AbstractTooltip<S>> generate(Function<S, T> tooltipGenerator, BiFunction<S, T, AbstractTooltip<S>> tooltipWrapper, S... suggestions) {
+	static <S, T> Collection<Tooltip<S>> generate(Function<S, T> tooltipGenerator, BiFunction<S, T, Tooltip<S>> tooltipWrapper, S... suggestions) {
 		return generate(tooltipGenerator, tooltipWrapper, Arrays.stream(suggestions));
 	}
 
@@ -210,12 +210,12 @@ public class AbstractTooltip<S> {
 	 * @param <S> the object that the argument suggestions use
 	 * @param <T> the type of the tooltip
 	 * @param tooltipGenerator tooltip generation function
-	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link AbstractTooltip<S>} object
+	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link Tooltip <S>} object
 	 * @param suggestions collection of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestion, wrapped using the above functions
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestion, wrapped using the above functions
 	 */
-	protected static <S, T> Collection<AbstractTooltip<S>> generate(Function<S, T> tooltipGenerator, BiFunction<S, T, AbstractTooltip<S>> tooltipWrapper, Collection<S> suggestions) {
+	protected static <S, T> Collection<Tooltip<S>> generate(Function<S, T> tooltipGenerator, BiFunction<S, T, Tooltip<S>> tooltipWrapper, Collection<S> suggestions) {
 		return generate(tooltipGenerator, tooltipWrapper, suggestions.stream());
 	}
 
@@ -225,12 +225,12 @@ public class AbstractTooltip<S> {
 	 * @param <S> the object that the argument suggestions use
 	 * @param <T> the type of the tooltip
 	 * @param tooltipGenerator tooltip generation function
-	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link AbstractTooltip<S>} object
+	 * @param tooltipWrapper function which wraps suggestion and tooltip into a {@link Tooltip <S>} object
 	 * @param suggestions stream of suggestions to provide to the user
 	 *
-	 * @return a collection of {@link AbstractTooltip<S>} objects from the provided suggestion, wrapped using the above functions
+	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestion, wrapped using the above functions
 	 */
-	private static <S, T> Collection<AbstractTooltip<S>> generate(Function<S, T> tooltipGenerator, BiFunction<S, T, AbstractTooltip<S>> tooltipWrapper, Stream<S> suggestions) {
+	private static <S, T> Collection<Tooltip<S>> generate(Function<S, T> tooltipGenerator, BiFunction<S, T, Tooltip<S>> tooltipWrapper, Stream<S> suggestions) {
 		return suggestions.map(suggestion -> tooltipWrapper.apply(suggestion,tooltipGenerator.apply(suggestion))).toList();
 	}
 
@@ -245,7 +245,7 @@ public class AbstractTooltip<S> {
 	 * @return a <code>Tooltip&lt;S&gt;</code>[] from the provided <code>Tooltip&lt;S&gt;</code>
 	 */
 	@SafeVarargs
-	public static <S> AbstractTooltip<S>[] arrayOf(AbstractTooltip<S>... tooltips) {
+	public static <S> Tooltip<S>[] arrayOf(Tooltip<S>... tooltips) {
 		return tooltips;
 	}
 	
@@ -258,7 +258,7 @@ public class AbstractTooltip<S> {
 	 * @param mapper a mapping function that converts an S instance into a String
 	 * @return the mapping function from this tooltip into a StringTooltip
 	 */
-	public static <S> Function<AbstractTooltip<S>, StringTooltip> build(Function<S, String> mapper) {
+	public static <S> Function<Tooltip<S>, StringTooltip> build(Function<S, String> mapper) {
 		return t -> StringTooltip.ofMessage(mapper.apply(t.object), t.tooltip);
 	}
 

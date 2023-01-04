@@ -21,6 +21,13 @@
 package dev.jorel.commandapi.arguments;
 
 /**
- * An interface indicating that an argument consumes all available characters
+ * An interface allowing arguments to have built-in suggestion providers based on Minecraft namespaced keys
  */
-public interface IGreedyArgument {}
+public interface CustomProvidedArgument {
+			
+	/**
+	 * Returns the suggestion provider that this argument is populated with
+	 * @return the suggestion provider that this argument is populated with
+	 */
+	SuggestionProviders getSuggestionProvider();
+}
