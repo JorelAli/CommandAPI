@@ -1319,6 +1319,18 @@ new CommandAPICommand("sayhi")
 /* ANCHOR_END: argumentsayhicmd */
 }
 
+{
+/* ANCHOR: argumentsayhicmd2 */
+new CommandAPICommand("sayhi")
+    .withOptionalArguments(new PlayerArgument("target"))
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args.getOrDefault("target", player);
+        target.sendMessage("Hi!");
+    })
+    .register();
+/* ANCHOR_END: argumentsayhicmd2 */
+}
+
 @SuppressWarnings("unused")
 public void argumentCasting() {
 /* ANCHOR: argumentcasting */

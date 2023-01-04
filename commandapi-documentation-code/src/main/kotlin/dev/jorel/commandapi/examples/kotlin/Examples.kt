@@ -1244,6 +1244,16 @@ CommandAPICommand("sayhi")
     })
     .register()
 /* ANCHOR_END: argumentsayhicmd */
+
+/* ANCHOR: argumentsayhicmd2 */
+CommandAPICommand("sayhi")
+    .withOptionalArguments(PlayerArgument("target"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val target: Player = args.getOrDefault("target", player) as Player
+        target.sendMessage("Hi!")
+    })
+    .register()
+/* ANCHOR_END: argumentsayhicmd2 */
 }
 
 @Suppress("unused")
