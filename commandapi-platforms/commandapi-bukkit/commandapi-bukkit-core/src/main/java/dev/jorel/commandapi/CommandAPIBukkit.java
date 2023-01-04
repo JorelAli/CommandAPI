@@ -482,7 +482,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	 * {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException failWithBaseComponents(BaseComponent... message) {
-		return CommandAPI.failWithMessage(Tooltip.messageFromBaseComponents(message));
+		return CommandAPI.failWithMessage(BukkitTooltip.messageFromBaseComponents(message));
 	}
 
 	/**
@@ -493,6 +493,6 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	 * {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
-		return CommandAPI.failWithMessage(Tooltip.messageFromAdventureComponent(message));
+		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
 	}
 }

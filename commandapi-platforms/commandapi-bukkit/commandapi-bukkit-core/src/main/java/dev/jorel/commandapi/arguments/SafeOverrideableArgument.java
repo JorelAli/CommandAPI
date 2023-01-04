@@ -14,7 +14,7 @@ import java.util.function.Function;
  *            a {@link StringArgument} will have a custom type
  *            <code>String</code>
  */
-public abstract class SafeOverrideableArgument<T, S> extends Argument<T> implements ISafeOverrideableArgument<T, S, Argument<T>, Argument<?>, CommandSender> {
+public abstract class SafeOverrideableArgument<T, S> extends Argument<T> implements SafeOverrideable<T, S, Argument<T>, Argument<?>, CommandSender> {
 	private final Function<S, String> mapper;
 
 	/**

@@ -29,7 +29,7 @@ import org.bukkit.NamespacedKey;
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<FunctionWrapper[]>> {
+public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements CustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<FunctionWrapper[]>> {
 
 	/**
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft

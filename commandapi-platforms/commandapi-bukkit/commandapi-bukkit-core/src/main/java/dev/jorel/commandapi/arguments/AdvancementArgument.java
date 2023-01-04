@@ -29,7 +29,7 @@ import org.bukkit.advancement.Advancement;
  * An argument that represents the Bukkit Advancement object
  * @apiNote Returns an {@link Advancement} object
  */
-public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<Advancement>> {
+public class AdvancementArgument extends SafeOverrideableArgument<Advancement, Advancement> implements CustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<Advancement>> {
 	/**
 	 * Constructs an AdvancementArgument with a given node name
 	 * @param nodeName the name of the node for argument
@@ -42,7 +42,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 	public Class<Advancement> getPrimitiveType() {
 		return Advancement.class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ADVANCEMENT;
@@ -54,7 +54,7 @@ public class AdvancementArgument extends SafeOverrideableArgument<Advancement, A
 	}
 
 	@Override
-	public <CommandListenerWrapper> Advancement parseArgument(CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandListenerWrapper>get().getAdvancement(cmdCtx, key);
+	public <CommandSourceStack> Advancement parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getAdvancement(cmdCtx, key);
 	}
 }

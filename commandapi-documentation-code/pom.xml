@@ -65,7 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-kotlin-bukkit</artifactId>
+			<artifactId>commandapi-bukkit-kotlin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

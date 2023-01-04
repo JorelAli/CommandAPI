@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandArgument extends Argument<CommandResult> implements IGreedyArgument {
+public class CommandArgument extends Argument<CommandResult> implements GreedyArgument {
 	public CommandArgument(String nodeName) {
 		super(nodeName, StringArgumentType.greedyString());
 

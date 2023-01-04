@@ -115,7 +115,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	final TreeMap<String, CommandPermission> REGISTERED_PERMISSIONS = new TreeMap<>();
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
-	final Map<List<String>, IPreviewable<?, ?>> previewableArguments; // Arguments with previewable chat
+	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
 
 	private static CommandAPIHandler<?, ?, ?> instance;
 
@@ -384,8 +384,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		// "Expands" our MultiLiterals into Literals
 		for (int index = 0; index < args.length; index++) {
 			// Find the first multiLiteral in the for loop
-			if (args[index] instanceof IMultiLiteralArgument) {
-				IMultiLiteralArgument<? extends Argument> superArg = (IMultiLiteralArgument<? extends Argument>) args[index];
+			if (args[index] instanceof MultiLiteral) {
+				MultiLiteral<? extends Argument> superArg = (MultiLiteral<? extends Argument>) args[index];
 
 				// Add all of its entries
 				for (String literal: superArg.getLiterals()) {
@@ -464,14 +464,14 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		Argument innerArg = args[args.length - 1];
 
 		// Handle Literal arguments
-		if (innerArg instanceof ILiteralArgument) {
-			ILiteralArgument<? extends Argument> literalArgument = (ILiteralArgument<? extends Argument>) innerArg;
+		if (innerArg instanceof Literal) {
+			Literal<? extends Argument> literalArgument = (Literal<? extends Argument>) innerArg;
 			return getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), innerArg.getArgumentPermission(),
 					innerArg.getRequirements()).executes(command);
 		}
 
 		// Handle arguments with built-in suggestion providers
-		else if (innerArg instanceof ICustomProvidedArgument customProvidedArg && innerArg.getOverriddenSuggestions().isEmpty()) {
+		else if (innerArg instanceof CustomProvidedArgument customProvidedArg && innerArg.getOverriddenSuggestions().isEmpty()) {
 			return getRequiredArgumentBuilderWithProvider(innerArg, args,
 					platform.getSuggestionProvider(customProvidedArg.getSuggestionProvider())).executes(command);
 		}
@@ -489,14 +489,14 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 			Argument outerArg = args[i];
 
 			// Handle Literal arguments
-			if (outerArg instanceof ILiteralArgument) {
-				ILiteralArgument<? extends Argument> literalArgument = (ILiteralArgument<? extends Argument>) outerArg;
+			if (outerArg instanceof Literal) {
+				Literal<? extends Argument> literalArgument = (Literal<? extends Argument>) outerArg;
 				outer = getLiteralArgumentBuilderArgument(literalArgument.getLiteral(),
 					outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
 			}
 
 			// Handle arguments with built-in suggestion providers
-			else if (outerArg instanceof ICustomProvidedArgument customProvidedArg
+			else if (outerArg instanceof CustomProvidedArgument customProvidedArg
 					&& outerArg.getOverriddenSuggestions().isEmpty()) {
 				outer = getRequiredArgumentBuilderWithProvider(outerArg, args,
 						platform.getSuggestionProvider(customProvidedArg.getSuggestionProvider())).then(outer);
@@ -519,7 +519,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @param aliases     the command's aliases
 	 */
 	private void handlePreviewableArguments(String commandName, Argument[] args, String[] aliases) {
-		if (args.length > 0 && args[args.length - 1] instanceof IPreviewable<?, ?> previewable) {
+		if (args.length > 0 && args[args.length - 1] instanceof Previewable<?, ?> previewable) {
 			List<String> path = new ArrayList<>();
 
 			path.add(commandName);
@@ -562,7 +562,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 			Set<String> argumentNames = new HashSet<>();
 			for (Argument arg : args) {
 				// We shouldn't find MultiLiteralArguments at this point, only LiteralArguments
-				if (!(arg instanceof ILiteralArgument)) {
+				if (!(arg instanceof Literal)) {
 					if (argumentNames.contains(arg.getNodeName())) {
 						CommandAPI.logError("""
 								Failed to register command:
@@ -781,7 +781,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		List<Object> previousArguments = new ArrayList<>();
 
 		for (Argument arg : args) {
-			if (arg.getNodeName().equals(nodeName) && !(arg instanceof ILiteralArgument)) {
+			if (arg.getNodeName().equals(nodeName) && !(arg instanceof Literal)) {
 				break;
 			}
 
@@ -834,7 +834,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 *         return a function that always returns null.
 	 */
 	public Optional<PreviewableFunction<?>> lookupPreviewable(List<String> path) {
-		final IPreviewable<?, ?> previewable = previewableArguments.get(path);
+		final Previewable<?, ?> previewable = previewableArguments.get(path);
 		if (previewable != null && previewable.getPreview().isPresent()) {
 			// Yeah, don't even question this logic of getting the value of an
 			// optional and then wrapping it in an optional again. Java likes it
@@ -852,7 +852,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @return Whether a previewable is legacy (non-Adventure) or not
 	 */
 	public boolean lookupPreviewableLegacyStatus(List<String> path) {
-		final IPreviewable<?, ?> previewable = previewableArguments.get(path);
+		final Previewable<?, ?> previewable = previewableArguments.get(path);
 		if (previewable != null && previewable.getPreview().isPresent()) {
 			return previewable.isLegacy();
 		} else {

@@ -45,7 +45,6 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
-import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.block.*;
@@ -1304,23 +1303,31 @@ new CommandAPICommand("mycommand")
 }
 
 {
-/* ANCHOR: argumentkillcmd */
-new CommandAPICommand("kill")
+/* ANCHOR: argumentsayhicmd */
+new CommandAPICommand("sayhi")
+    .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
-        player.setHealth(0);
+        Player target = (Player) args.get("target");
+        if (target != null) {
+            target.sendMessage("Hi!");
+        } else {
+            player.sendMessage("Hi!");
+        }
     })
     .register();
-/* ANCHOR_END: argumentkillcmd */
+/* ANCHOR_END: argumentsayhicmd */
+}
 
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command
-new CommandAPICommand("kill")
-    .withArguments(new PlayerArgument("target"))
+{
+/* ANCHOR: argumentsayhicmd2 */
+new CommandAPICommand("sayhi")
+    .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
-        ((Player) args.get(0)).setHealth(0);
+        Player target = (Player) args.getOrDefault("target", player);
+        target.sendMessage("Hi!");
     })
     .register();
-/* ANCHOR_END: argumentkillcmd2 */
+/* ANCHOR_END: argumentsayhicmd2 */
 }
 
 @SuppressWarnings("unused")
@@ -1746,10 +1753,10 @@ arguments.add(new LocationArgument("location")
     .replaceSafeSuggestions(SafeSuggestions.tooltips(info -> {
         // We know the sender is a player if we use .executesPlayer()
         Player player = (Player) info.sender();
-        return Tooltip.arrayOf(
-            Tooltip.ofString(player.getWorld().getSpawnLocation(), "World spawn"),
-            Tooltip.ofString(player.getBedSpawnLocation(), "Your bed"),
-            Tooltip.ofString(player.getTargetBlockExact(256).getLocation(), "Target block")
+        return BukkitTooltip.arrayOf(
+            BukkitTooltip.ofString(player.getWorld().getSpawnLocation(), "World spawn"),
+            BukkitTooltip.ofString(player.getBedSpawnLocation(), "Your bed"),
+            BukkitTooltip.ofString(player.getTargetBlockExact(256).getLocation(), "Target block")
         );
     })));
 /* ANCHOR_END: SafeTooltips */
@@ -2353,7 +2360,7 @@ class CustomItem implements IStringTooltip {
 
     @Override
     public Message getTooltip() {
-        return Tooltip.messageFromString(this.itemstack.getItemMeta().getLore().get(0));
+        return BukkitTooltip.messageFromString(this.itemstack.getItemMeta().getLore().get(0));
     }
     
 }

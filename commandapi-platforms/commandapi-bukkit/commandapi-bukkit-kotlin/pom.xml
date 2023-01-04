@@ -10,7 +10,7 @@
 		<version>9.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>commandapi-kotlin-bukkit</artifactId>
+	<artifactId>commandapi-bukkit-kotlin</artifactId>
 
 	<properties>
 		<kotlin.version>1.7.20</kotlin.version>

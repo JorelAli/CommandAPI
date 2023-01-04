@@ -21,7 +21,7 @@ public class BukkitStringTooltip extends StringTooltip {
 	 * @return a StringTooltip representing this suggestion and tooltip
 	 */
 	public static StringTooltip ofBaseComponents(String suggestion, BaseComponent... tooltip) {
-		return ofMessage(suggestion, Tooltip.messageFromBaseComponents(tooltip));
+		return ofMessage(suggestion, BukkitTooltip.messageFromBaseComponents(tooltip));
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class BukkitStringTooltip extends StringTooltip {
 	 */
 
 	public static StringTooltip ofAdventureComponent(String suggestion, Component tooltip) {
-		return ofMessage(suggestion, Tooltip.messageFromAdventureComponent(tooltip));
+		return ofMessage(suggestion, BukkitTooltip.messageFromAdventureComponent(tooltip));
 	}
 	/**
 	 * Constructs a collection of {@link StringTooltip} objects from an array of suggestions, and a function which generates

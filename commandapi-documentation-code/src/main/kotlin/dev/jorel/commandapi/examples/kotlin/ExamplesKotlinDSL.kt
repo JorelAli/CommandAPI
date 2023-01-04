@@ -1,10 +1,8 @@
 import com.mojang.brigadier.LiteralMessage
-import com.mojang.brigadier.Message
 import com.mojang.brigadier.ParseResults
 import com.mojang.brigadier.context.StringRange
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.suggestion.Suggestions
-import com.mojang.brigadier.tree.LiteralCommandNode
 import de.tr7zw.changeme.nbtapi.NBTContainer
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
@@ -25,12 +23,10 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
-import org.bukkit.World.Environment
 import org.bukkit.advancement.Advancement
 import org.bukkit.block.*
 import org.bukkit.block.data.BlockData
 import org.bukkit.command.CommandSender
-import org.bukkit.command.ProxiedCommandSender
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
 import org.bukkit.inventory.ComplexRecipe
@@ -166,19 +162,13 @@ commandTree("optionalArgument") {
 commandAPICommand("optionalArgument") {
     literalArgument("give")
     itemStackArgument("item")
-    playerExecutor { player, args -> // This will let you execute "/optionalArgument give minecraft:stick"
+    optionalArgument(IntegerArgument("amount"))
+    playerExecutor { player, args ->
+        // This command will let you execute:
+        // "/optionalArgument give minecraft:stick"
+        // "/optionalArgument give minecraft:stick 5"
         val itemStack: ItemStack = args[0] as ItemStack
-        player.inventory.addItem(itemStack)
-    }
-}
-
-commandAPICommand("optionalArgument") {
-    literalArgument("give")
-    itemStackArgument("item")
-    integerArgument("amount")
-    playerExecutor { player, args -> // This will let you execute "/optionalArgument give minecraft:stick 5"
-        val itemStack: ItemStack = args[0] as ItemStack
-        val amount: Int = args[1] as Int
+        val amount: Int = args.getOrDefault("amount", 1) as Int
         itemStack.amount = amount
         player.inventory.addItem(itemStack)
     }
@@ -922,7 +912,7 @@ commandAPICommand("rem") {
         // Get our predicate
         val predicate = args[0] as Predicate<ItemStack>
 
-        for (item in player.getInventory()) {
+        for (item in player.inventory) {
             if (predicate.test(item)) {
                 player.inventory.remove(item)
             }
@@ -1025,10 +1015,10 @@ commandAPICommand("gamemode") {
     playerExecutor { player, args ->
         // The literal string that the player enters IS available in the args[]
         when (args[0] as String) {
-            "adventure" -> player.setGameMode(GameMode.ADVENTURE)
-            "creative" -> player.setGameMode(GameMode.CREATIVE)
-            "spectator" -> player.setGameMode(GameMode.SPECTATOR)
-            "survival" -> player.setGameMode(GameMode.SURVIVAL)
+            "adventure" -> player.gameMode = GameMode.ADVENTURE
+            "creative" -> player.gameMode = GameMode.CREATIVE
+            "spectator" -> player.gameMode = GameMode.SPECTATOR
+            "survival" -> player.gameMode = GameMode.SURVIVAL
         }
     }
 }
@@ -1274,7 +1264,7 @@ commandAPICommand("killme") {
     proxyExecutor { proxy, _ ->
         // Check if the callee (target) is an Entity and kill it
         if (proxy.callee is LivingEntity) {
-            (proxy.callee as LivingEntity).setHealth(0.0)
+            (proxy.callee as LivingEntity).health = 0.0
         }
     }
 }
@@ -1383,24 +1373,30 @@ commandAPICommand("mycommand") {
 /* ANCHOR_END: argumentsyntax3 */
 }
 
-fun argumentkillcmd() {
-/* ANCHOR: argumentkillcmd */
-commandAPICommand("kill") {
-    playerExecutor { player, _ ->
-        player.health = 0.0
+fun argumentsayhicmd() {
+/* ANCHOR: argumentsayhicmd */
+commandAPICommand("sayhi") {
+    optionalArgument(PlayerArgument("target"))
+    playerExecutor { player, args ->
+        val target: Player? = args["target"] as Player?
+        if (target != null) {
+            target.sendMessage("Hi!")
+        } else {
+            player.sendMessage("Hi!")
+        }
     }
 }
-/* ANCHOR_END: argumentkillcmd */
+/* ANCHOR_END: argumentsayhicmd */
 
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command#
-commandAPICommand("kill") {
-    playerArgument("target")
-    playerExecutor { _, args ->
-        (args[0] as Player).health = 0.0
+/* ANCHOR: argumentsayhicmd2 */
+commandAPICommand("sayhi") {
+    optionalArgument(PlayerArgument("target"))
+    playerExecutor { player, args ->
+        val target: Player = args.getOrDefault("target", player) as Player
+        target.sendMessage("Hi!")
     }
 }
-/* ANCHOR_END: argumentkillcmd2 */
+/* ANCHOR_END: argumentsayhicmd2 */
 }
 
 @Suppress("unused")
@@ -1496,7 +1492,7 @@ arguments.add(PlayerArgument("player")
                 // If the party member is in the same party as you
                 if (party == partyName) {
                     val target = Bukkit.getPlayer(uuid)!!
-                    if (target.isOnline()) {
+                    if (target.isOnline) {
                         // Add them if they are online
                         playersToTeleportTo.add(target)
                     }
@@ -1730,10 +1726,10 @@ val arguments = listOf<Argument<*>>(
         .replaceSafeSuggestions(SafeSuggestions.tooltips { info ->
             // We know the sender is a player if we use .executesPlayer()
             val player = info.sender() as Player
-            Tooltip.arrayOf(
-                Tooltip.ofString(player.world.spawnLocation, "World spawn"),
-                Tooltip.ofString(player.bedSpawnLocation, "Your bed"),
-                Tooltip.ofString(player.getTargetBlockExact(256)?.location, "Target block")
+            BukkitTooltip.arrayOf(
+                BukkitTooltip.ofString(player.world.spawnLocation, "World spawn"),
+                BukkitTooltip.ofString(player.bedSpawnLocation, "Your bed"),
+                BukkitTooltip.ofString(player.getTargetBlockExact(256)?.location, "Target block")
             )
         })
 )
@@ -1831,7 +1827,7 @@ val emeraldSword = ItemStack(Material.DIAMOND_SWORD)
 val meta = emeraldSword.itemMeta
 meta?.setDisplayName("Emerald Sword")
 meta?.isUnbreakable = true
-emeraldSword.setItemMeta(meta)
+emeraldSword.itemMeta = meta
 
 // Create and register our recipe
 val emeraldSwordRecipe = ShapedRecipe(NamespacedKey(this, "emerald_sword"), emeraldSword)
@@ -1843,7 +1839,7 @@ emeraldSwordRecipe.shape(
 emeraldSwordRecipe.setIngredient('A', Material.AIR)
 emeraldSwordRecipe.setIngredient('E', Material.EMERALD)
 emeraldSwordRecipe.setIngredient('B', Material.BLAZE_ROD)
-getServer().addRecipe(emeraldSwordRecipe)
+server.addRecipe(emeraldSwordRecipe)
 
 // Omitted, more itemstacks and recipes
 /* ANCHOR_END: SafeRecipeArguments */
@@ -1877,7 +1873,7 @@ allowedMobs.removeAll(forbiddenMobs) // Now contains everything except enderdrag
 /* ANCHOR: SafeMobSpawnArguments_2 */
 val arguments = listOf<Argument<*>>(
     EntityTypeArgument("mob").replaceSafeSuggestions(SafeSuggestions.suggest { info ->
-        if (info.sender().isOp()) {
+        if (info.sender().isOp) {
             // All entity types
             EntityType.values()
         } else {
@@ -2086,7 +2082,7 @@ val emojis = mapOf(
 val messageArgument = GreedyStringArgument("message")
     .replaceSuggestions { info, builder ->
         // Only display suggestions at the very end character
-        val newBuilder = builder.createOffset(builder.getStart() + info.currentArg().length);
+        val newBuilder = builder.createOffset(builder.start + info.currentArg().length);
 
         // Suggest all the emojis!
         emojis.forEach { (emoji, description) ->

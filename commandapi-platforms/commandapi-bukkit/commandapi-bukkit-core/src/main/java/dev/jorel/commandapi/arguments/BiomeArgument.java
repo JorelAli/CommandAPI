@@ -32,7 +32,7 @@ import java.util.function.Function;
  * 
  * @apiNote Returns a {@link Biome} object
  */
-public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<Biome>> {
+public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements CustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<Biome>> {
 
 	/**
 	 * Constructs a BiomeArgument with a given node name.
@@ -70,7 +70,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	 *
 	 * @apiNote Returns a {@link NamespacedKey} object
 	 */
-	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements ICustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<org.bukkit.NamespacedKey>> {
+	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements CustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<org.bukkit.NamespacedKey>> {
 
 		/**
 		 * Constructs a BiomeArgument with a given node name. This BiomeArgument will
