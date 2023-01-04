@@ -260,18 +260,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 			// Check optional argument constraints
 			// They can only be at the end, no required argument can follow an optional argument
-			int firstOptionalArgumentIndex = -1;
-			for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
-				if (argumentsArray[i].isOptional()) {
-					if (firstOptionalArgumentIndex == -1) {
-						firstOptionalArgumentIndex = i;
-					}
-					optionalArgumentIndex = i;
-				} else if (optionalArgumentIndex != -1) {
-					// Argument is not optional
-					throw new OptionalArgumentException();
-				}
-			}
+			int firstOptionalArgumentIndex = getFirstOptionalArgumentIndex(argumentsArray);
 
 			// Assign the command's permissions to arguments if the arguments don't already
 			// have one
@@ -283,20 +272,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 			// Create a List of arrays that hold arguments to register optional arguments
 			// if optional arguments have been found
-			List<Argument[]> argumentsToRegister = new ArrayList<>();
-			if (firstOptionalArgumentIndex != -1) {
-				for (int i = 0; i <= argumentsArray.length; i++) {
-					if (i == firstOptionalArgumentIndex - 1) {
-						Argument[] requiredArguments = (Argument[]) new AbstractArgument[i];
-						System.arraycopy(argumentsArray, 0, requiredArguments, 0, i);
-						argumentsToRegister.add(requiredArguments);
-					} else if (i >= firstOptionalArgumentIndex) {
-						Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
-						System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
-						argumentsToRegister.add(optionalArguments);
-					}
-				}
-			}
+			List<Argument[]> argumentsToRegister = getArgumentsToRegister(argumentsArray, new ArrayList<>(), firstOptionalArgumentIndex);
 
 			if (executor.hasAnyExecutors()) {
 				// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
@@ -328,4 +304,37 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	}
 
 	protected abstract Impl newConcreteCommandAPICommand(CommandMetaData<CommandSender> metaData);
+
+	private int getFirstOptionalArgumentIndex(Argument[] argumentsArray) {
+		int firstOptionalArgumentIndex = -1;
+		for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
+			if (argumentsArray[i].isOptional()) {
+				if (firstOptionalArgumentIndex == -1) {
+					firstOptionalArgumentIndex = i;
+				}
+				optionalArgumentIndex = i;
+			} else if (optionalArgumentIndex != -1) {
+				// Argument is not optional
+				throw new OptionalArgumentException();
+			}
+		}
+		return firstOptionalArgumentIndex;
+	}
+
+	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray, List<Argument[]> argumentsToRegister, int firstOptionalArgumentIndex) {
+		if (firstOptionalArgumentIndex != -1) {
+			for (int i = 0; i <= argumentsArray.length; i++) {
+				if (i == firstOptionalArgumentIndex - 1) {
+					Argument[] requiredArguments = (Argument[]) new AbstractArgument[i];
+					System.arraycopy(argumentsArray, 0, requiredArguments, 0, i);
+					argumentsToRegister.add(requiredArguments);
+				} else if (i >= firstOptionalArgumentIndex) {
+					Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
+					System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
+					argumentsToRegister.add(optionalArguments);
+				}
+			}
+		}
+		return argumentsToRegister;
+	}
 }
