@@ -27,6 +27,6 @@
 		<module>commandapi-bukkit-plugin</module>
 		<!-- TODO: MAKE THIS COMPILE <module>commandapi-bukkit-plugin-test</module> -->
 		<module>commandapi-bukkit-shade</module>
-		<module>commandapi-kotlin-bukkit</module>
+		<module>commandapi-bukkit-kotlin</module>
 	</modules>
 </project>

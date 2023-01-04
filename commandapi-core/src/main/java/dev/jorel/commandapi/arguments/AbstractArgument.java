@@ -250,6 +250,32 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 		return instance();
 	}
 
+	/////////////////
+	// Optionality //
+	/////////////////
+
+	private boolean isOptional = false;
+
+	/**
+	 * Returns true if this argument will be optional when executing the command this argument is included in
+	 *
+	 * @return true if this argument will be optional when executing the command this argument is included in
+	 */
+	public boolean isOptional() {
+		return isOptional;
+	}
+
+	/**
+	 * Sets whether this argument will be optional when executing the command this argument is included in
+	 *
+	 * @param optional if true, this argument will be optional when executing the command this argument is included in
+	 * @return this current argument
+	 */
+	public Impl setOptional(boolean optional) {
+		this.isOptional = optional;
+		return instance();
+	}
+
 	///////////
 	// Other //
 	///////////

@@ -1303,23 +1303,31 @@ new CommandAPICommand("mycommand")
 }
 
 {
-/* ANCHOR: argumentkillcmd */
-new CommandAPICommand("kill")
+/* ANCHOR: argumentsayhicmd */
+new CommandAPICommand("sayhi")
+    .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
-        player.setHealth(0);
+        Player target = (Player) args.get("target");
+        if (target != null) {
+            target.sendMessage("Hi!");
+        } else {
+            player.sendMessage("Hi!");
+        }
     })
     .register();
-/* ANCHOR_END: argumentkillcmd */
+/* ANCHOR_END: argumentsayhicmd */
+}
 
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command
-new CommandAPICommand("kill")
-    .withArguments(new PlayerArgument("target"))
+{
+/* ANCHOR: argumentsayhicmd2 */
+new CommandAPICommand("sayhi")
+    .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
-        ((Player) args.get(0)).setHealth(0);
+        Player target = (Player) args.getOrDefault("target", player);
+        target.sendMessage("Hi!");
     })
     .register();
-/* ANCHOR_END: argumentkillcmd2 */
+/* ANCHOR_END: argumentsayhicmd2 */
 }
 
 @SuppressWarnings("unused")

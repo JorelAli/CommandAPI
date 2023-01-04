@@ -1379,24 +1379,30 @@ commandAPICommand("mycommand") {
 /* ANCHOR_END: argumentsyntax3 */
 }
 
-fun argumentkillcmd() {
-/* ANCHOR: argumentkillcmd */
-commandAPICommand("kill") {
-    playerExecutor { player, _ ->
-        player.health = 0.0
+fun argumentsayhicmd() {
+/* ANCHOR: argumentsayhicmd */
+commandAPICommand("sayhi") {
+    optionalArgument(PlayerArgument("target"))
+    playerExecutor { player, args ->
+        val target: Player? = args["target"] as Player?
+        if (target != null) {
+            target.sendMessage("Hi!")
+        } else {
+            player.sendMessage("Hi!")
+        }
     }
 }
-/* ANCHOR_END: argumentkillcmd */
+/* ANCHOR_END: argumentsayhicmd */
 
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command#
-commandAPICommand("kill") {
-    playerArgument("target")
-    playerExecutor { _, args ->
-        (args[0] as Player).health = 0.0
+/* ANCHOR: argumentsayhicmd2 */
+commandAPICommand("sayhi") {
+    optionalArgument(PlayerArgument("target"))
+    playerExecutor { player, args ->
+        val target: Player = args.getOrDefault("target", player) as Player
+        target.sendMessage("Hi!")
     }
 }
-/* ANCHOR_END: argumentkillcmd2 */
+/* ANCHOR_END: argumentsayhicmd2 */
 }
 
 @Suppress("unused")

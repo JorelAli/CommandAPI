@@ -1229,24 +1229,30 @@ CommandAPICommand("mycommand")
 /* ANCHOR_END: argumentsyntax3 */
 }
 
-fun argumentkillcmd() {
-/* ANCHOR: argumentkillcmd */
-CommandAPICommand("kill")
-    .executesPlayer(PlayerCommandExecutor { player, _ ->
-        player.health = 0.0
+fun argumentsayhicmd() {
+/* ANCHOR: argumentsayhicmd */
+CommandAPICommand("sayhi")
+    .withOptionalArguments(PlayerArgument("target"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val target: Player? = args["target"] as Player?
+        if (target != null) {
+            target.sendMessage("Hi!")
+        } else {
+            player.sendMessage("Hi!")
+        }
     })
     .register()
-/* ANCHOR_END: argumentkillcmd */
+/* ANCHOR_END: argumentsayhicmd */
 
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command
-CommandAPICommand("kill")
-    .withArguments(PlayerArgument("target"))
-    .executesPlayer(PlayerCommandExecutor { _, args ->
-        (args[0] as Player).health = 0.0
+/* ANCHOR: argumentsayhicmd2 */
+CommandAPICommand("sayhi")
+    .withOptionalArguments(PlayerArgument("target"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val target: Player = args.getOrDefault("target", player) as Player
+        target.sendMessage("Hi!")
     })
     .register()
-/* ANCHOR_END: argumentkillcmd2 */
+/* ANCHOR_END: argumentsayhicmd2 */
 }
 
 @Suppress("unused")
@@ -1726,7 +1732,7 @@ fun argumentsuggestions2_2() {
 val arguments = listOf<Argument<*>>(
     PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings { info ->
         Friends.getFriends(info.sender())
-    })
+    } )
 )
 
 CommandAPICommand("friendtp")
