@@ -98,10 +98,10 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * @return this command builder
 	 */
 	public Impl withOptionalArguments(List<Argument> args) {
-		args.forEach(argument -> {
+		for (Argument argument : args) {
 			argument.setOptional(true);
 			this.arguments.add(argument);
-		});
+		}
 		return instance();
 	}
 
@@ -115,10 +115,10 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 */
 	@SafeVarargs
 	public final Impl withOptionalArguments(Argument... args) {
-		Arrays.asList(args).forEach(argument -> {
+		for (Argument argument : args) {
 			argument.setOptional(true);
 			this.arguments.add(argument);
-		});
+		}
 		return instance();
 	}
 
@@ -263,12 +263,12 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			int firstOptionalArgumentIndex = -1;
 			for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
 				if (argumentsArray[i].isOptional()) {
-					firstOptionalArgumentIndex = i;
+					if (firstOptionalArgumentIndex == -1) {
+						firstOptionalArgumentIndex = i;
+					}
 					optionalArgumentIndex = i;
-					continue;
-				}
-				// Argument is not optional
-				if (optionalArgumentIndex != -1) {
+				} else if (optionalArgumentIndex != -1) {
+					// Argument is not optional
 					throw new OptionalArgumentException();
 				}
 			}
@@ -290,9 +290,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 						Argument[] requiredArguments = (Argument[]) new AbstractArgument[i];
 						System.arraycopy(argumentsArray, 0, requiredArguments, 0, i);
 						argumentsToRegister.add(requiredArguments);
-						continue;
-					}
-					if (i >= firstOptionalArgumentIndex) {
+					} else if (i >= firstOptionalArgumentIndex) {
 						Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
 						System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
 						argumentsToRegister.add(optionalArguments);
