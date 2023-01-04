@@ -258,10 +258,6 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 				}
 			}
 
-			// Check optional argument constraints
-			// They can only be at the end, no required argument can follow an optional argument
-			int firstOptionalArgumentIndex = getFirstOptionalArgumentIndex(argumentsArray);
-
 			// Assign the command's permissions to arguments if the arguments don't already
 			// have one
 			for (Argument argument : argumentsArray) {
@@ -270,9 +266,8 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 				}
 			}
 
-			// Create a List of arrays that hold arguments to register optional arguments
-			// if optional arguments have been found
-			List<Argument[]> argumentsToRegister = getArgumentsToRegister(argumentsArray, new ArrayList<>(), firstOptionalArgumentIndex);
+			// Create a List<Argument[]> that is used to register optional arguments
+			List<Argument[]> argumentsToRegister = getArgumentsToRegister(argumentsArray, new ArrayList<>());
 
 			if (executor.hasAnyExecutors()) {
 				// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
@@ -305,7 +300,9 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	protected abstract Impl newConcreteCommandAPICommand(CommandMetaData<CommandSender> metaData);
 
-	private int getFirstOptionalArgumentIndex(Argument[] argumentsArray) {
+	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray, List<Argument[]> argumentsToRegister) {
+		// Check optional argument constraints
+		// They can only be at the end, no required argument can follow an optional argument
 		int firstOptionalArgumentIndex = -1;
 		for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
 			if (argumentsArray[i].isOptional()) {
@@ -318,10 +315,9 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 				throw new OptionalArgumentException();
 			}
 		}
-		return firstOptionalArgumentIndex;
-	}
 
-	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray, List<Argument[]> argumentsToRegister, int firstOptionalArgumentIndex) {
+		// Create a List of arrays that hold arguments to register optional arguments
+		// if optional arguments have been found
 		if (firstOptionalArgumentIndex != -1) {
 			for (int i = 0; i <= argumentsArray.length; i++) {
 				if (i >= firstOptionalArgumentIndex - 1) {
