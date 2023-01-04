@@ -322,7 +322,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		// if optional arguments have been found
 		if (firstOptionalArgumentIndex != -1) {
 			for (int i = 0; i <= argumentsArray.length; i++) {
-				if (i >= firstOptionalArgumentIndex - 1) {
+				if (i >= firstOptionalArgumentIndex) {
 					Argument[] arguments = (Argument[]) new AbstractArgument[i];
 					System.arraycopy(argumentsArray, 0, arguments, 0, i);
 					argumentsToRegister.add(arguments);
