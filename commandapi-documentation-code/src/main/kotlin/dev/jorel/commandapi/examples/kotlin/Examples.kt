@@ -1989,7 +1989,8 @@ CommandAPICommand("commandargument")
     .executes(CommandExecutor { sender, args ->
         // Run the command using Bukkit.dispatchCommand()
         Bukkit.dispatchCommand(sender, args[0] as String)
-    }).register()
+    })
+    .register()
 /* ANCHOR_END: BrigadierSuggestions2 */
 }
 
