@@ -250,10 +250,10 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 
 			// Check GreedyArgument constraints
-			for (int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
-				if (argumentsArr[i] instanceof GreedyArgument) {
-					if (++numGreedyArgs > 1 || i != argumentsArr.length - 1) {
-						throw new GreedyArgumentException(argumentsArr);
+			for (int i = 0, numGreedyArgs = 0; i < argumentsArray.length; i++) {
+				if (argumentsArray[i] instanceof GreedyArgument) {
+					if (++numGreedyArgs > 1 || i != argumentsArray.length - 1) {
+						throw new GreedyArgumentException(argumentsArray);
 					}
 				}
 			}
