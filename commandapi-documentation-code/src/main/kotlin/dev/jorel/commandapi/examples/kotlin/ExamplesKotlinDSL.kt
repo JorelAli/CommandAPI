@@ -162,19 +162,10 @@ commandTree("optionalArgument") {
 commandAPICommand("optionalArgument") {
     literalArgument("give")
     itemStackArgument("item")
+    optionalArgument(IntegerArgument("amount"))
     playerExecutor { player, args -> // This will let you execute "/optionalArgument give minecraft:stick"
         val itemStack: ItemStack = args[0] as ItemStack
-        player.inventory.addItem(itemStack)
-    }
-}
-
-commandAPICommand("optionalArgument") {
-    literalArgument("give")
-    itemStackArgument("item")
-    integerArgument("amount")
-    playerExecutor { player, args -> // This will let you execute "/optionalArgument give minecraft:stick 5"
-        val itemStack: ItemStack = args[0] as ItemStack
-        val amount: Int = args[1] as Int
+        val amount: Int = args.getOrDefault("amount", 1) as Int
         itemStack.amount = amount
         player.inventory.addItem(itemStack)
     }
