@@ -1310,9 +1310,9 @@ new CommandAPICommand("sayhi")
     .executesPlayer((player, args) -> {
         Player target = (Player) args.get("target");
         if (target != null) {
-	        target.sendMessage("Hi!");
+            target.sendMessage("Hi!");
         } else {
-	        player.sendMessage("Hi!");
+            player.sendMessage("Hi!");
         }
     })
     .register();
