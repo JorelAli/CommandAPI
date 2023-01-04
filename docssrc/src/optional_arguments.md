@@ -1,4 +1,4 @@
-## Optional Arguments
+# Optional Arguments
 
 Sometimes, you want to implement a command that has arguments that do not need to be entered. Take a `/sayhi` command for example. You may want to say "Hi", or to another player. For that, we want this command syntax:
 
@@ -10,8 +10,8 @@ Sometimes, you want to implement a command that has arguments that do not need t
 To implement these commands, the CommandAPI provides two methods to help you with that:
 
 ```java
-Argument withOptionalArguments(List<Argument<?>> args)
-Argument withOptionalArguments(Argument<?>... args)
+Argument withOptionalArguments(List<Argument<?>> args);
+Argument withOptionalArguments(Argument<?>... args);
 ```
 
 <div class="example">
@@ -46,6 +46,7 @@ For that, we are going to register a command `/sayhi`. To add optional arguments
 This gives us the ability to run both `/sayhi` and `/sayhi <target>` with the same command name "sayhi", but have different results based on the arguments used.
 
 You can notice two things:
+
 - We use the `withOptionalArguments` method to add an optional argument to a command
 - We use `args.get("target")` to get our player out of the arguments
 
