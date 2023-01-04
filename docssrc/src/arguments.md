@@ -161,14 +161,12 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 
 ## Optional/Different Arguments
 
-Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the `/kill` command. If you run `/kill` on its own, it will kill the command sender. If however you run `/kill <target>`, it will kill the target. In other words, we have the following command command syntax:
+Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the `/kill` command. If you run `/kill` on its own, it will kill the command sender. If however you run `/kill <target>`, it will kill the target. In other words, we have the following command syntax:
 
 ```mccmd
 /kill          - Kills yourself
 /kill <target> - Kills a target player
 ```
-
-As shown by the command syntax, we need to register _two commands_.
 
 <div class="example">
 
@@ -181,7 +179,7 @@ For example, say we're registering a command `/kill`:
 /kill <target> - Kills a target player
 ```
 
-We first register the first `/kill` command as normal:
+For that, we are going to register a command `/kill`. To add optional arguments, we are going to use the `withOptionalArguments(Argument... args)` method:
 
 <div class="multi-pre">
 
@@ -199,26 +197,23 @@ We first register the first `/kill` command as normal:
 
 </div>
 
-Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
-
-<div class="multi-pre">
-
-```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentkillcmd2}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentkillcmd2}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentkillcmd2}}
-```
-
-</div>
-
 This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.
 
-In this example, we use the simpler, inline `.withArguments(Argument... arguments)` method to register our argument. There is no difference to using this method as opposed to explicitly declaring a list and using `.withArguments(List<Argument> arguments)`, so feel free to use whichever method you want!
+In this example, we use the simpler, inline `.withOptionalArguments(Argument... arguments)` method to register our argument. There is no difference to using this method as opposed to explicitly declaring a list and using `.withOptionalArguments(List<Argument> arguments)`, so feel free to use whichever method you want!
+
+You will also notice that we use `args.get("target")` to get the Player out of the arguments. This is safer than using `args.get(0)` because that will result in an `ArrayIndexOutOfBoundsException` whereas calling `args.get("target")` will return `null` if the argument was not provided.
 
 </div>
+
+One thing to note when using the `withOptionalArguments` method is that this calls the `setOptional()` method internally. This means that the following two examples are identical:
+```java
+new CommandAPICommand("optional")
+    .withOptionalArguments(new PlayerArgument("target"))
+```
+
+```java
+new CommandAPICommand("optional")
+    .withArguments(new PlayerArgument("target").setOptional(true))
+```
+
+However, calling `withOptionalArguments` is safer because it makes sure that the argument is optional.

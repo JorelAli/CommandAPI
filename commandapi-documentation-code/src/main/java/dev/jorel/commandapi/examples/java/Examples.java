@@ -1306,21 +1306,17 @@ new CommandAPICommand("mycommand")
 {
 /* ANCHOR: argumentkillcmd */
 new CommandAPICommand("kill")
+    .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
-        player.setHealth(0);
+        Player target = (Player) args.get("target");
+        if (target != null) {
+            target.setHealth(0.0);
+        } else {
+            player.setHealth(0.0);
+        }
     })
     .register();
 /* ANCHOR_END: argumentkillcmd */
-
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command
-new CommandAPICommand("kill")
-    .withArguments(new PlayerArgument("target"))
-    .executesPlayer((player, args) -> {
-        ((Player) args.get(0)).setHealth(0);
-    })
-    .register();
-/* ANCHOR_END: argumentkillcmd2 */
 }
 
 @SuppressWarnings("unused")

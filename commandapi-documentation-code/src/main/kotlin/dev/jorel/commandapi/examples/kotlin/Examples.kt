@@ -1233,21 +1233,16 @@ CommandAPICommand("mycommand")
 fun argumentkillcmd() {
 /* ANCHOR: argumentkillcmd */
 CommandAPICommand("kill")
-    .executesPlayer(PlayerCommandExecutor { player, _ ->
-        player.setHealth(0.0)
-    })
-    .register()
+    .withOptionalArguments(PlayerArgument("target"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val target: Player? = args.get("target") as Player?
+        if (target != null) {
+            target.health = 0.0
+        } else {
+            player.health = 0.0
+        }
+    }).register()
 /* ANCHOR_END: argumentkillcmd */
-
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command
-CommandAPICommand("kill")
-    .withArguments(PlayerArgument("target"))
-    .executesPlayer(PlayerCommandExecutor { _, args ->
-        (args[0] as Player).setHealth(0.0)
-    })
-    .register()
-/* ANCHOR_END: argumentkillcmd2 */
 }
 
 @Suppress("unused")
@@ -1727,7 +1722,7 @@ fun argumentsuggestions2_2() {
 /* ANCHOR: ArgumentSuggestions2_2 */
 val arguments = listOf<Argument<*>>(
     PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings({ info ->
-		Friends.getFriends(info.sender())
+        Friends.getFriends(info.sender())
     }))
 )
 

@@ -1386,21 +1386,17 @@ commandAPICommand("mycommand") {
 fun argumentkillcmd() {
 /* ANCHOR: argumentkillcmd */
 commandAPICommand("kill") {
-    playerExecutor { player, _ ->
-        player.health = 0.0
+    optionalArgument(PlayerArgument("target"))
+    playerExecutor { player, args ->
+        val target: Player? = args["target"] as Player?
+        if (target != null) {
+            target.health = 0.0
+        } else {
+            player.health = 0.0
+        }
     }
 }
 /* ANCHOR_END: argumentkillcmd */
-
-/* ANCHOR: argumentkillcmd2 */
-// Register our second /kill <target> command#
-commandAPICommand("kill") {
-    playerArgument("target")
-    playerExecutor { _, args ->
-        (args[0] as Player).health = 0.0
-    }
-}
-/* ANCHOR_END: argumentkillcmd2 */
 }
 
 @Suppress("unused")
