@@ -56,7 +56,15 @@ If you use `args.get(0)` this will just throw an `ArrayIndexOutOfBoundsException
 
 </div>
 
-One thing to note when using the `withOptionalArguments` method is that this calls the `setOptional()` method internally. This means that the following two examples are identical:
+## Setting existing arguments as optional arguments
+
+In order to set arguments as optional the CommandAPI has the method `setOptional(boolean)`:
+
+```java
+Argument setOptional(boolean optional);
+```
+
+When using the `withOptionalArguments` method it might be interesting to know that it calls the `setOptional()` method internally. This means that the following two examples are identical:
 
 ```java
 new CommandAPICommand("optional")
