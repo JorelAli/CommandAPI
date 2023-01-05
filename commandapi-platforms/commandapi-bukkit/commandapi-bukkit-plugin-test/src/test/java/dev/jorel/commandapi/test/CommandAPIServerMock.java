@@ -22,15 +22,15 @@ import be.seeseemelk.mockbukkit.AsyncCatcher;
 import be.seeseemelk.mockbukkit.ServerMock;
 import dev.jorel.commandapi.Brigadier;
 
-public class CustomServerMock extends ServerMock {
+public class CommandAPIServerMock extends ServerMock {
 
 	@SuppressWarnings("unchecked")
-	public boolean dispatchThrowableCommand(CommandSender sender, String commandLine) throws CommandSyntaxException{
+	public boolean dispatchThrowableCommand(CommandSender sender, String commandLine) throws CommandSyntaxException {
 		String[] commands = commandLine.split(" ");
 		String commandLabel = commands[0];
 		Command command = getCommandMap().getCommand(commandLabel);
-		
-		if(command != null) {
+
+		if (command != null) {
 			return super.dispatchCommand(sender, commandLine);
 		} else {
 			AsyncCatcher.catchOp("command dispatch");
@@ -40,7 +40,7 @@ public class CustomServerMock extends ServerMock {
 			return dispatcher.execute(commandLine, css) != 0;
 		}
 	}
-	
+
 	@Override
 	public boolean dispatchCommand(CommandSender sender, String commandLine) {
 		try {
@@ -49,7 +49,7 @@ public class CustomServerMock extends ServerMock {
 			return false;
 		}
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<String> getSuggestions(CommandSender sender, String commandLine) {
 		AsyncCatcher.catchOp("command tabcomplete");
@@ -63,20 +63,20 @@ public class CustomServerMock extends ServerMock {
 			e.printStackTrace();
 			suggestions = new Suggestions(StringRange.at(0), new ArrayList<>()); // Empty suggestions
 		}
-		
+
 		List<String> suggestionsAsStrings = new ArrayList<>();
-		for(Suggestion suggestion : suggestions.getList()) {
+		for (Suggestion suggestion : suggestions.getList()) {
 			suggestionsAsStrings.add(suggestion.getText());
 		}
-		
+
 		return suggestionsAsStrings;
 	}
-	
+
 	@Override
 	public boolean shouldSendChatPreviews() {
 		return true;
 	}
-	
+
 	@Override
 	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
 		return null;

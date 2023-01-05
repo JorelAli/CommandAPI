@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +15,6 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
 import org.bukkit.inventory.ItemStack;
@@ -24,43 +22,31 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ParticleArgument;
-import dev.jorel.commandapi.test.CustomServerMock;
-import dev.jorel.commandapi.test.Main;
 import dev.jorel.commandapi.test.Mut;
+import dev.jorel.commandapi.test.TestBase;
 import dev.jorel.commandapi.wrappers.ParticleData;
 
 /**
  * Tests for the {@link ParticleArgument}
  */
 @SuppressWarnings("rawtypes")
-public class ArgumentParticleTests {
+public class ArgumentParticleTests extends TestBase {
 
 	/*********
 	 * Setup *
 	 *********/
 
-	private CustomServerMock server;
-	private Main plugin;
-
 	@BeforeEach
 	public void setUp() {
-		server = MockBukkit.mock(new CustomServerMock());
-		plugin = MockBukkit.load(Main.class);
+		super.setUp();
 	}
 
 	@AfterEach
 	public void tearDown() {
-		Bukkit.getScheduler().cancelTasks(plugin);
-		if (plugin != null) {
-			plugin.onDisable();
-		}
-		MockBukkit.unmock();
+		super.tearDown();
 	}
 
 	// From CraftParticle + https://minecraft.fandom.com/wiki/Particles#Particle_IDs
