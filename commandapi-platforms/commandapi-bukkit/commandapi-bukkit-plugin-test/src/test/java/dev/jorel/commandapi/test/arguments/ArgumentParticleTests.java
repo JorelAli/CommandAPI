@@ -9,14 +9,22 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
+import org.bukkit.Vibration;
+import org.bukkit.Vibration.Destination.BlockDestination;
+import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
+import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
@@ -54,15 +62,15 @@ public class ArgumentParticleTests {
 		}
 		MockBukkit.unmock();
 	}
-	
+
 	// From CraftParticle + https://minecraft.fandom.com/wiki/Particles#Particle_IDs
 	private Map<String, Particle> getParticles() {
-		
+
 		// DO NOT dynamically populate this list using CraftParticle or otherwise
-		// because the map is not bijective (when it should be). "underwater" 
+		// because the map is not bijective (when it should be). "underwater"
 		// maps to SUSPENDED, but Bukkit has SUSPENDED and SUSPENDED_DEPTH which
 		// both map to "underwater"
-		
+
 		Map<String, Particle> particleNames = new HashMap<>();
 		particleNames.put("ambient_entity_effect", Particle.SPELL_MOB_AMBIENT); // Non-standard Bukkit name
 		particleNames.put("angry_villager", Particle.VILLAGER_ANGRY); // Non-standard Bukkit name
@@ -146,7 +154,7 @@ public class ArgumentParticleTests {
 		particleNames.put("wax_on", Particle.WAX_ON);
 		particleNames.put("white_ash", Particle.WHITE_ASH);
 		particleNames.put("witch", Particle.SPELL_WITCH); // Non-standard Bukkit name
-		
+
 		return particleNames;
 	}
 
@@ -168,14 +176,14 @@ public class ArgumentParticleTests {
 		PlayerMock player = server.addPlayer();
 
 		// Particles that don't have any data
-		for(Entry<String, Particle> particles : getParticles().entrySet()) {
-			if(particles.getValue().getDataType().equals(Void.class)) {
+		for (Entry<String, Particle> particles : getParticles().entrySet()) {
+			if (particles.getValue().getDataType().equals(Void.class)) {
 				server.dispatchCommand(player, "test " + particles.getKey());
 				assertEquals(particles.getValue(), type.get().particle());
 			}
 		}
 	}
-	
+
 	@Test
 	public void executionTestWithParticleArgumentBlocks() {
 		Mut<ParticleData> type = Mut.of();
@@ -194,14 +202,10 @@ public class ArgumentParticleTests {
 		assertEquals(Particle.BLOCK_CRACK, result.particle());
 		assertInstanceOf(BlockData.class, result.data());
 
-		// Test framework can't call BlockData.getMaterial() because it can't 
-		// call CraftMagicNumbers which requires org.Bukkit.getRegistry(), so
-		// access it via NMS instead
 		CraftBlockData blockData = (CraftBlockData) result.data();
-		// BlockData.getState().getBlock().getDescriptionId();
-		assertEquals("block.minecraft.grass_block", blockData.getState().b().g());
+		assertEquals(Material.GRASS_BLOCK, blockData.getMaterial());
 	}
-	
+
 	@Test
 	public void executionTestWithParticleArgumentDust() {
 		Mut<ParticleData> type = Mut.of();
@@ -219,12 +223,12 @@ public class ArgumentParticleTests {
 		ParticleData result = type.get();
 		assertEquals(Particle.REDSTONE, result.particle());
 		assertInstanceOf(DustOptions.class, result.data());
-		
+
 		DustOptions dustOptions = (DustOptions) result.data();
 		assertEquals(Color.fromRGB(255, 255 / 2, 255 / 2), dustOptions.getColor());
 		assertEquals(1.0f, dustOptions.getSize());
 	}
-	
+
 	@Test
 	public void executionTestWithParticleArgumentDustTransition() {
 		Mut<ParticleData> type = Mut.of();
@@ -242,11 +246,108 @@ public class ArgumentParticleTests {
 		ParticleData result = type.get();
 		assertEquals(Particle.DUST_COLOR_TRANSITION, result.particle());
 		assertInstanceOf(DustTransition.class, result.data());
-		
+
 		DustTransition dustTransition = (DustTransition) result.data();
 		assertEquals(Color.fromRGB(255, 0, 0), dustTransition.getColor());
 		assertEquals(Color.fromRGB(0, 0, 255), dustTransition.getToColor());
 		assertEquals(1.0f, dustTransition.getSize());
+	}
+
+	@Test
+	public void executionTestWithParticleArgumentItem() {
+		Mut<ParticleData> type = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				type.set((ParticleData) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		server.dispatchCommand(player, "test item minecraft:apple");
+		ParticleData result = type.get();
+		assertEquals(Particle.ITEM_CRACK, result.particle());
+		assertInstanceOf(ItemStack.class, result.data());
+
+		ItemStack itemStack = (ItemStack) result.data();
+		assertEquals(Material.APPLE, itemStack.getType());
+		assertEquals(1, itemStack.getAmount());
+	}
+
+	@Test
+	public void executionTestWithParticleArgumentSculkCharge() {
+		Mut<ParticleData> type = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				type.set((ParticleData) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		server.dispatchCommand(player, "test sculk_charge 0.2");
+		ParticleData result = type.get();
+		assertEquals(Particle.SCULK_CHARGE, result.particle());
+		assertInstanceOf(Float.class, result.data());
+
+		float angle = (float) result.data();
+		assertEquals(0.2, angle, 0.0001);
+	}
+
+	@Test
+	public void executionTestWithParticleArgumentShriek() {
+		Mut<ParticleData> type = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				type.set((ParticleData) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		server.dispatchCommand(player, "test shriek 100");
+		ParticleData result = type.get();
+		assertEquals(Particle.SHRIEK, result.particle());
+		assertInstanceOf(Integer.class, result.data());
+
+		int delay = (int) result.data();
+		assertEquals(100, delay);
+	}
+
+	@Test
+	public void executionTestWithParticleArgumentVibration() {
+		Mut<ParticleData> type = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				type.set((ParticleData) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		server.dispatchCommand(player, "test vibration 5.0 64.0 0.0 200"); // x y z ticks
+		ParticleData result = type.get();
+		assertEquals(Particle.VIBRATION, result.particle());
+		assertInstanceOf(Vibration.class, result.data());
+
+		Vibration vibration = (Vibration) result.data();
+		assertInstanceOf(BlockDestination.class, vibration.getDestination());
+		BlockDestination destination = (BlockDestination) vibration.getDestination();
+		{
+			Location location = destination.getLocation();
+			assertEquals(5, location.getBlockX());
+			assertEquals(64, location.getBlockY());
+			assertEquals(0, location.getBlockZ());
+		}
+		assertEquals(200, vibration.getArrivalTime());
 	}
 
 }

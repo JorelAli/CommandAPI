@@ -1,14 +1,15 @@
 package dev.jorel.commandapi.test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.bukkit.Keyed;
 import org.bukkit.Registry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
@@ -74,5 +75,10 @@ public class CustomServerMock extends ServerMock {
 	@Override
 	public boolean shouldSendChatPreviews() {
 		return true;
+	}
+	
+	@Override
+	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
+		return null;
 	}
 }
