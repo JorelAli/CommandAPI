@@ -8,9 +8,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -51,6 +57,10 @@ public abstract class TestBase {
 		CommandSyntaxException exception = assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(sender, command));
 		assertEquals(message, exception.getMessage());
 	}
+	
+	public void assertNoMoreResults(Mut<?> mut) {
+		assertThrows(NoSuchElementException.class, () -> mut.get(), "Expected there to be no results left, but at least one was found");
+	}
 
 	public String getDispatcherString() {
 		try {
@@ -59,6 +69,17 @@ public abstract class TestBase {
 			e.printStackTrace(System.out);
 			return "";
 		}
+	}
+	
+	public void registerDummyCommands(CommandMap commandMap, String... commandName) {
+		commandMap.registerAll("minecraft", Arrays.stream(commandName).map(name -> 
+			new Command(name) {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
+			}
+		).collect(Collectors.toList()));
 	}
 
 }

@@ -45,8 +45,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		new CommandAPICommand("test")
 			.withArguments(new BooleanArgument("value"))
 			.executesPlayer((player, args) -> {
-				boolean value = (boolean) args.get(0);
-				type.set(value);
+				type.set((boolean) args.get(0));
 			})
 			.register();
 
@@ -61,7 +60,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertEquals(false, type.get());
 
 		// /test aaaaa
-		assertCommandFailsWith(player, "test 123hello", "Invalid boolean, expected 'true' or 'false' but found '123hello' at position 5: test <--[HERE]");
+		assertCommandFailsWith(player, "test aaaaa", "Invalid boolean, expected 'true' or 'false' but found 'aaaaa' at position 5: test <--[HERE]");
 	}
 
 	@Test
@@ -71,8 +70,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("value"))
 			.executesPlayer((player, args) -> {
-				int value = (int) args.get(0);
-				type.set(value);
+				type.set((int) args.get(0));
 			})
 			.register();
 
@@ -115,8 +113,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("value", 10))
 			.executesPlayer((player, args) -> {
-				int value = (int) args.get(0);
-				type.set(value);
+				type.set((int) args.get(0));
 			})
 			.register();
 
@@ -141,8 +138,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("value", 10, 20))
 			.executesPlayer((player, args) -> {
-				int value = (int) args.get(0);
-				type.set(value);
+				type.set((int) args.get(0));
 			})
 			.register();
 
@@ -167,4 +163,6 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertCommandFailsWith(player, "test 30", "Integer must not be more than 20, found 30 at position 5: test <--[HERE]");
 	}
 
+	// TODO: Double, Float, Long
+	
 }
