@@ -392,7 +392,7 @@ public class ArgumentTests {
 	@Test
 	public void executionTestWithEntitySelectorArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new EntitySelectorArgument<Player>("value", EntitySelector.ONE_PLAYER))
+			.withArguments(new EntitySelectorArgument.OnePlayer("value"))
 			.executesPlayer((player, args) -> {
 				Player value = (Player) args.get(0);
 				player.sendMessage(value.getName());
@@ -400,7 +400,7 @@ public class ArgumentTests {
 			.register();
 
 		new CommandAPICommand("testall")
-			.withArguments(new EntitySelectorArgument<Collection<Player>>("value", EntitySelector.MANY_PLAYERS))
+			.withArguments(new EntitySelectorArgument.ManyPlayers("value"))
 			.executesPlayer((player, args) -> {
 				@SuppressWarnings("unchecked")
 				Collection<Player> value = (Collection<Player>) args.get(0);

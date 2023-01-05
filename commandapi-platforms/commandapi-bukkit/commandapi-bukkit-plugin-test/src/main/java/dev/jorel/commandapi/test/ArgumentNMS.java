@@ -4,7 +4,6 @@ import java.util.function.Predicate;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -21,7 +20,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import dev.jorel.commandapi.arguments.EntitySelector;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -61,8 +60,8 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEntity(EntitySelector selector) {
-		return BASE_NMS._ArgumentEntity(selector);
+	public ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
+		return BASE_NMS._ArgumentEntity(subType);
 	}
 
 	@Override
@@ -132,8 +131,8 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
-	public Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getBiome((CommandContext) cmdCtx, key);
+	public Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return BASE_NMS.getBiome((CommandContext) cmdCtx, key, subType);
 	}
 
 	@Override
@@ -153,14 +152,13 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
-	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getEnchantment((CommandContext) cmdCtx, key);
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, EntitySelector selector)
-			throws CommandSyntaxException {
-		return BASE_NMS.getEntitySelector((CommandContext) cmdCtx, key, selector);
+	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return BASE_NMS.getEntitySelector((CommandContext) cmdCtx, key, subType);
 	}
 
 	@Override
@@ -257,8 +255,8 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
-	public <SoundOrNamespacedKey> SoundOrNamespacedKey getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, Class<SoundOrNamespacedKey> returnType) {
-		return (SoundOrNamespacedKey) BASE_NMS.getSound((CommandContext) cmdCtx, key, returnType);
+	public Object getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) {
+		return BASE_NMS.getSound((CommandContext) cmdCtx, key, subType);
 	}
 
 	@Override

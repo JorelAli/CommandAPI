@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
+
 import org.bukkit.Axis;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -137,12 +139,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEnvironment() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
@@ -215,7 +211,7 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentScoreholder(boolean single) {
+	public ArgumentType<?> _ArgumentScoreholder(ArgumentSubType subType) {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}

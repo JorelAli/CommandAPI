@@ -50,7 +50,7 @@ public class ChatPreviewTests {
 				}
 			}))
 			.executesPlayer((sender, args) -> {
-				Component component = (Component) args[0];
+				Component component = (Component) args.get("str");
 				sender.sendMessage(component.decorate(TextDecoration.BOLD));
 			})
 			.register();
