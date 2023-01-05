@@ -25,6 +25,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -255,6 +256,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	/////////////////
 
 	private boolean isOptional = false;
+	private final List<AbstractArgument<T, Impl, Argument, CommandSender>> linkedArguments = new ArrayList<>();
 
 	/**
 	 * Returns true if this argument will be optional when executing the command this argument is included in
@@ -273,6 +275,37 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 */
 	public Impl setOptional(boolean optional) {
 		this.isOptional = optional;
+		return instance();
+	}
+
+	/**
+	 * Returns a list of arguments linked to this argument.
+	 *
+	 * @return A list of arguments linked to this argument
+	 */
+	public List<AbstractArgument<T, Impl, Argument, CommandSender>> getLinkedArguments() {
+		return linkedArguments;
+	}
+
+	/**
+	 * Returns true if this argument has linked arguments.
+	 *
+	 * @return true if this argument has linked arguments
+	 */
+	public boolean hasLinkedArguments() {
+		return !linkedArguments.isEmpty();
+	}
+
+	/**
+	 * Adds linked arguments to this argument. Linked arguments are used to have required arguments after optional arguments
+	 * by ignoring they exist until they are added to the arguments array for registration
+	 *
+	 * @param linkedArguments The arguments to link
+	 * @return this current argument
+	 */
+	@SafeVarargs
+	public final Impl linkArguments(AbstractArgument<T, Impl, Argument, CommandSender>... linkedArguments) {
+		this.linkedArguments.addAll(Arrays.asList(linkedArguments));
 		return instance();
 	}
 

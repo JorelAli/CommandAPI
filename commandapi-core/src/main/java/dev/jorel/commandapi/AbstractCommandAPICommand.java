@@ -29,6 +29,7 @@ import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -306,6 +307,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 		// Check optional argument constraints
 		// They can only be at the end, no required argument can follow an optional argument
+		// This method also ignores linked arguments
 		int firstOptionalArgumentIndex = -1;
 		for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
 			if (argumentsArray[i].isOptional()) {
@@ -322,11 +324,23 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		// Create a List of arrays that hold arguments to register optional arguments
 		// if optional arguments have been found
 		if (firstOptionalArgumentIndex != -1) {
-			for (int i = 0; i <= argumentsArray.length; i++) {
-				if (i >= firstOptionalArgumentIndex) {
-					Argument[] arguments = (Argument[]) new AbstractArgument[i];
-					System.arraycopy(argumentsArray, 0, arguments, 0, i);
-					argumentsToRegister.add(arguments);
+			for (int i = 0; i < argumentsArray.length; i++) {
+				if (i >= firstOptionalArgumentIndex - 1) {
+					if (!argumentsArray[i].hasLinkedArguments()) {
+						List<Argument> arguments = new ArrayList<>();
+						for (int j = 0; j <= i; j++) {
+							arguments.add(argumentsArray[j]);
+							if (argumentsArray[j].hasLinkedArguments()) {
+								arguments.addAll((List<Argument>) argumentsArray[j].getLinkedArguments());
+							}
+						}
+						argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));
+					} else {
+						List<Argument> linkedArguments = (List<Argument>) argumentsArray[i].getLinkedArguments();
+						List<Argument> arguments = new ArrayList<>(Arrays.asList(argumentsArray).subList(0, i + 1));
+						arguments.addAll(linkedArguments);
+						argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));
+					}
 				}
 			}
 		}
