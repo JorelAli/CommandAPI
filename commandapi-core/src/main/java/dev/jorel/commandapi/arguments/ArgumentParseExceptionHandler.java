@@ -7,9 +7,10 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * See {@link ArgumentParseExceptionHandler#handleException(ArgumentParseExceptionContext)}
  *
  * @param <T> The class of the object returned by the Argument this object is handling
+ * @param <CommandSender> The CommandSender class being used
  */
 @FunctionalInterface
-public interface ArgumentParseExceptionHandler<T> {
+public interface ArgumentParseExceptionHandler<T, CommandSender> {
 	/**
 	 * A method that handles when an Argument fails to parse.
 	 * It can either return an object or throw a different exception.
@@ -19,5 +20,5 @@ public interface ArgumentParseExceptionHandler<T> {
 	 * @return A new object in place of the failed parse
 	 * @throws WrapperCommandSyntaxException A new exception to pass on
 	 */
-	T handleException(ArgumentParseExceptionContext context) throws WrapperCommandSyntaxException;
+	T handleException(ArgumentParseExceptionContext<CommandSender> context) throws WrapperCommandSyntaxException;
 }

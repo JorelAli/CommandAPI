@@ -116,7 +116,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 			return parseArgument(cmdCtx, key, previousArgs);
 		} catch (CommandSyntaxException original) {
 			try {
-				return exceptionHandler.handleException(new ArgumentParseExceptionContext<CommandSender>(
+				return exceptionHandler.handleException(new ArgumentParseExceptionContext<>(
 					new WrapperCommandSyntaxException(original),
 					CommandAPIHandler.<Argument, CommandSender, CommandSourceStack>getInstance().getPlatform()
 						.getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
@@ -318,7 +318,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	// Exception Handling //
 	///////////////////////
 
-	private ArgumentParseExceptionHandler<T> exceptionHandler = context -> { throw context.exception(); };
+	private ArgumentParseExceptionHandler<T, CommandSender> exceptionHandler = context -> { throw context.exception(); };
 
 	/**
 	 * Sets the {@link ArgumentParseExceptionHandler} this Argument should use when it fails to parse its input.
@@ -326,7 +326,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * @param exceptionHandler The new {@link ArgumentParseExceptionHandler} this argument should use
 	 * @return this current argument
 	 */
-	public final Impl withArgumentParseExceptionHandler(ArgumentParseExceptionHandler<T> exceptionHandler) {
+	public final Impl withArgumentParseExceptionHandler(ArgumentParseExceptionHandler<T, CommandSender> exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 		return instance();
 	}
@@ -335,7 +335,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * Returns the {@link ArgumentParseExceptionHandler} this argument is using
 	 * @return The {@link ArgumentParseExceptionHandler} this argument is using
 	 */
-	public final ArgumentParseExceptionHandler<T> getArgumentParseExceptionHandler() {
+	public final ArgumentParseExceptionHandler<T, CommandSender> getArgumentParseExceptionHandler() {
 		return this.exceptionHandler;
 	}
 
