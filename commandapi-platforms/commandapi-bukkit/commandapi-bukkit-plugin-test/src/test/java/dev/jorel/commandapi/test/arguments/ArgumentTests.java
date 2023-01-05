@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
@@ -294,24 +291,6 @@ public class ArgumentTests extends TestBase {
 
 	private CommandExecutor givePosition(String pos, Mut<String> result) {
 		return (sender, args) -> result.set(pos);
-	}
-
-	@Test
-	public void executionTestWithBooleanArgument() {
-		new CommandAPICommand("test")
-			.withArguments(new BooleanArgument("value"))
-			.executesPlayer((player, args) -> {
-				boolean value = (boolean) args.get(0);
-				player.sendMessage("success " + value);
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer();
-		server.dispatchCommand(player, "test true");
-		server.dispatchCommand(player, "test false");
-		assertEquals("success true", player.nextMessage());
-		assertEquals("success false", player.nextMessage());
-		assertInvalidSyntax(player, "test aaaaa");
 	}
 	
 	@Test
