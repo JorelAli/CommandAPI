@@ -1,7 +1,6 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;

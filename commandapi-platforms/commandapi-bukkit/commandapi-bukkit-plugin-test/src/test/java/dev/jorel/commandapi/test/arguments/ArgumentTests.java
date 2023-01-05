@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
@@ -12,14 +11,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -27,15 +21,11 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
-import dev.jorel.commandapi.arguments.CommandArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -46,11 +36,9 @@ import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.arguments.SuggestionsBranch;
 import dev.jorel.commandapi.executors.CommandExecutor;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-import dev.jorel.commandapi.wrappers.CommandResult;
 import dev.jorel.commandapi.wrappers.Location2D;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -649,28 +637,31 @@ public class ArgumentTests extends TestBase {
 			})
 			.register();
 		
-		//	["", {
-		//	    "text": "Once upon a time, there was a guy call "
-		//	}, {
-		//	    "text": "Skepter",
-		//	    "color": "light_purple",
-		//	    "hoverEvent": {
-		//	        "action": "show_entity",
-		//	        "value": "Skepter"
-		//	    }
-		//	}, {
-		//	    "text": " and he created the "
-		//	}, {
-		//	    "text": "CommandAPI",
-		//	    "underlined": true,
-		//	    "clickEvent": {
-		//	        "action": "open_url",
-		//	        "value": "https://github.com/JorelAli/CommandAPI"
-		//	    }
-		//	}]
-
-		final String json = "[\"[\\\"\\\",{\\\"text\\\":\\\"Once upon a time, there was a guy call \\\"},{\\\"text\\\":\\\"Skepter\\\",\\\"color\\\":\\\"light_purple\\\",\\\"hoverEvent\\\":{\\\"action\\\":\\\"show_entity\\\",\\\"value\\\":\\\"Skepter\\\"}},{\\\"text\\\":\\\" and he created the \\\"},{\\\"text\\\":\\\"CommandAPI\\\",\\\"underlined\\\":true,\\\"clickEvent\\\":{\\\"action\\\":\\\"open_url\\\",\\\"value\\\":\\\"https://github.com/JorelAli/CommandAPI\\\"}}]\"]";
+		final String json = "[\"%s\"]".formatted("""
+			["", {
+			    "text": "Once upon a time, there was a guy "
+			}, {
+			    "text": "Skepter",
+			    "color": "light_purple",
+			    "hoverEvent": {
+			        "action": "show_entity",
+			        "value": "Skepter"
+			    }
+			}, {
+			    "text": " and he created the "
+			}, {
+			    "text": "CommandAPI",
+			    "underlined": true,
+			    "clickEvent": {
+			        "action": "open_url",
+			        "value": "https://github.com/JorelAli/CommandAPI"
+			    }
+			}]
+			""".stripIndent().replace("\n", "").replace("\r", "").replace("\"", "\\\""));
 		
+		// The above, in normal human-readable JSON gets turned into this for command purposes:
+		// [\"[\\\"\\\",{\\\"text\\\":\\\"Once upon a time, there was a guy call \\\"},{\\\"text\\\":\\\"Skepter\\\",\\\"color\\\":\\\"light_purple\\\",\\\"hoverEvent\\\":{\\\"action\\\":\\\"show_entity\\\",\\\"value\\\":\\\"Skepter\\\"}},{\\\"text\\\":\\\" and he created the \\\"},{\\\"text\\\":\\\"CommandAPI\\\",\\\"underlined\\\":true,\\\"clickEvent\\\":{\\\"action\\\":\\\"open_url\\\",\\\"value\\\":\\\"https://github.com/JorelAli/CommandAPI\\\"}}]\"]
+
 		PlayerMock player = server.addPlayer("Skepter");
 		server.dispatchCommand(player, "spigot " + json);
 		server.dispatchCommand(player, "adventure " + json);

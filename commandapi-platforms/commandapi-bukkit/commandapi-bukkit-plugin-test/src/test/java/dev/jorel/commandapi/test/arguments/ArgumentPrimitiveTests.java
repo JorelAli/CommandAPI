@@ -40,12 +40,12 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 	@Test
 	public void executionTestWithBooleanArgument() {
-		Mut<Boolean> type = Mut.of();
+		Mut<Boolean> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new BooleanArgument("value"))
 			.executesPlayer((player, args) -> {
-				type.set((boolean) args.get(0));
+				results.set((boolean) args.get(0));
 			})
 			.register();
 
@@ -53,11 +53,11 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test true
 		server.dispatchCommand(player, "test true");
-		assertEquals(true, type.get());
+		assertEquals(true, results.get());
 
 		// /test false
 		server.dispatchCommand(player, "test false");
-		assertEquals(false, type.get());
+		assertEquals(false, results.get());
 
 		// /test aaaaa
 		assertCommandFailsWith(player, "test aaaaa", "Invalid boolean, expected 'true' or 'false' but found 'aaaaa' at position 5: test <--[HERE]");
@@ -65,12 +65,12 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 	@Test
 	public void executionTestWithIntegerArgument() {
-		Mut<Integer> type = Mut.of();
+		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("value"))
 			.executesPlayer((player, args) -> {
-				type.set((int) args.get(0));
+				results.set((int) args.get(0));
 			})
 			.register();
 
@@ -78,23 +78,23 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 10
 		server.dispatchCommand(player, "test 10");
-		assertEquals(10, type.get());
+		assertEquals(10, results.get());
 
 		// /test -10
 		server.dispatchCommand(player, "test -10");
-		assertEquals(-10, type.get());
+		assertEquals(-10, results.get());
 
 		// /test 0
 		server.dispatchCommand(player, "test 0");
-		assertEquals(0, type.get());
+		assertEquals(0, results.get());
 
 		// /test 2147483647
 		server.dispatchCommand(player, "test 2147483647");
-		assertEquals(Integer.MAX_VALUE, type.get());
+		assertEquals(Integer.MAX_VALUE, results.get());
 
 		// /test -2147483648
 		server.dispatchCommand(player, "test -2147483648");
-		assertEquals(Integer.MIN_VALUE, type.get());
+		assertEquals(Integer.MIN_VALUE, results.get());
 
 		// /test 123hello
 		assertCommandFailsWith(player, "test 123hello", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
@@ -108,12 +108,12 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 	@Test
 	public void executionTestWithBoundedIntegerArgument() {
-		Mut<Integer> type = Mut.of();
+		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("value", 10))
 			.executesPlayer((player, args) -> {
-				type.set((int) args.get(0));
+				results.set((int) args.get(0));
 			})
 			.register();
 
@@ -121,11 +121,11 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 10
 		server.dispatchCommand(player, "test 10");
-		assertEquals(10, type.get());
+		assertEquals(10, results.get());
 
 		// /test 20
 		server.dispatchCommand(player, "test 20");
-		assertEquals(20, type.get());
+		assertEquals(20, results.get());
 
 		// /test 0
 		assertCommandFailsWith(player, "test 0", "Integer must not be less than 10, found 0 at position 5: test <--[HERE]");
@@ -133,12 +133,12 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 	@Test
 	public void executionTestWithDoubleBoundedIntegerArgument() {
-		Mut<Integer> type = Mut.of();
+		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("value", 10, 20))
 			.executesPlayer((player, args) -> {
-				type.set((int) args.get(0));
+				results.set((int) args.get(0));
 			})
 			.register();
 
@@ -146,15 +146,15 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 10
 		server.dispatchCommand(player, "test 10");
-		assertEquals(10, type.get());
+		assertEquals(10, results.get());
 		
 		// /test 15
 		server.dispatchCommand(player, "test 15");
-		assertEquals(15, type.get());
+		assertEquals(15, results.get());
 
 		// /test 20
 		server.dispatchCommand(player, "test 20");
-		assertEquals(20, type.get());
+		assertEquals(20, results.get());
 
 		// /test 0
 		assertCommandFailsWith(player, "test 0", "Integer must not be less than 10, found 0 at position 5: test <--[HERE]");
