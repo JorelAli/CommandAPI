@@ -661,7 +661,7 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 	// This differs from 1.18 -> 1.18.2 due to biome suggestions, but it should be covered by the default case (empty)
 	@Override
 	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
-	public final SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
+	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
 				ServerFunctionManager functionData = getMinecraftServer().getFunctions();

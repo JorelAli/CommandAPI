@@ -85,6 +85,8 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 
@@ -143,6 +145,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
 import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -664,6 +667,30 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 				yield NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
 			}
 			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
+	}
+
+	@Override
+	@Differs(from = {"NMS_Common"}, by = "Many MinecraftServer#get methods mapped to different names")
+	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
+		return switch (provider) {
+			case FUNCTION -> (context, builder) -> {
+				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
+				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
+				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
+			};
+			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
+			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
+			case ADVANCEMENTS -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
+					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
+			};
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
+			};
+			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
+			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
 
