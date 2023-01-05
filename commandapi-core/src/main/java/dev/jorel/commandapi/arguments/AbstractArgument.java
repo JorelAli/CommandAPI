@@ -256,7 +256,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	/////////////////
 
 	private boolean isOptional = false;
-	private final List<AbstractArgument<T, Impl, Argument, CommandSender>> linkedArguments = new ArrayList<>();
+	private final List<Argument> linkedArguments = new ArrayList<>();
 
 	/**
 	 * Returns true if this argument will be optional when executing the command this argument is included in
@@ -283,7 +283,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 *
 	 * @return A list of arguments linked to this argument
 	 */
-	public List<AbstractArgument<T, Impl, Argument, CommandSender>> getLinkedArguments() {
+	public List<Argument> getLinkedArguments() {
 		return linkedArguments;
 	}
 
@@ -304,7 +304,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * @return this current argument
 	 */
 	@SafeVarargs
-	public final Impl linkArguments(AbstractArgument<T, Impl, Argument, CommandSender>... linkedArguments) {
+	public final Impl linkArguments(Argument... linkedArguments) {
 		this.linkedArguments.addAll(Arrays.asList(linkedArguments));
 		return instance();
 	}

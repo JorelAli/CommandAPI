@@ -26,7 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
