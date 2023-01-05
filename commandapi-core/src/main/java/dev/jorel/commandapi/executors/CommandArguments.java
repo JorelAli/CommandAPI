@@ -1,6 +1,8 @@
 package dev.jorel.commandapi.executors;
 
 import javax.annotation.Nullable;
+
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -29,12 +31,19 @@ public class CommandArguments {
 	public Object[] args() {
 		return args;
 	}
+	
+	/**
+	 * @return An unmodifiable clone of the mapping of node names to argument values
+	 */
+	public Map<String, Object> argsMap() {
+		return Collections.unmodifiableMap(argsMap);
+	}
 
 	/**
 	 * Returns an argument by its position
 	 *
 	 * @param index The position of this argument
-	 * @return an argument which is placed at the given index
+	 * @return An argument which is placed at the given index, or {@code null} if the provided index does not point to an argument.
 	 */
 	@Nullable
 	public Object get(int index) {
