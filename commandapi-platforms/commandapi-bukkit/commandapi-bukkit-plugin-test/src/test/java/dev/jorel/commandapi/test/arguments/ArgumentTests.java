@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.test;
+package dev.jorel.commandapi.test.arguments;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.WorldMock;
@@ -10,6 +10,9 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.executors.CommandExecutor;
+import dev.jorel.commandapi.test.CustomServerMock;
+import dev.jorel.commandapi.test.Main;
+import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.wrappers.CommandResult;
 import dev.jorel.commandapi.wrappers.Location2D;
 import net.kyori.adventure.text.Component;
@@ -42,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
  */
+@SuppressWarnings("null")
 public class ArgumentTests {
 	
 	private CustomServerMock server;
@@ -477,7 +481,7 @@ public class ArgumentTests {
 			.withArguments(new ListArgumentBuilder<>("values", ", ")
 				.withList(() -> List.of("cat", "wolf", "axolotl"))
 				.withStringMapper()
-				.build())
+				.buildGreedy())
 			.executesPlayer((player, args) -> {
 				type.set((List<String>) args.get(0));
 			})
@@ -496,7 +500,7 @@ public class ArgumentTests {
 				.allowDuplicates(true)
 				.withList(() -> List.of("cat", "wolf", "axolotl"))
 				.withStringMapper()
-				.build())
+				.buildGreedy())
 			.executesPlayer((player, args) -> {
 				type.set((List<String>) args.get(0));
 			})
@@ -513,7 +517,7 @@ public class ArgumentTests {
 			.withArguments(new ListArgumentBuilder<>("values", ", ")
 				.withList(List.of("cat", "wolf", "axolotl"))
 				.withStringMapper()
-				.build())
+				.buildGreedy())
 			.executesPlayer((player, args) -> {
 				type.set((List<String>) args.get(0));
 			})
@@ -531,7 +535,7 @@ public class ArgumentTests {
 			.withArguments(new ListArgumentBuilder<>("values", ", ")
 				.withList(player -> List.of("cat", "wolf", "axolotl", player.getName()))
 				.withStringMapper()
-				.build())
+				.buildGreedy())
 			.executesPlayer((player, args) -> {
 				type.set((List<String>) args.get(0));
 			})
@@ -925,8 +929,6 @@ public class ArgumentTests {
 		assertEquals(5, int1.get());
 		assertEquals(60, int1.get());
 		assertEquals(null, int2.get());
-		
-		
 	}
-
+	
 }

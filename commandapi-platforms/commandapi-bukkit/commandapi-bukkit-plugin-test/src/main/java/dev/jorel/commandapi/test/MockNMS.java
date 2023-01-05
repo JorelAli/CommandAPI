@@ -296,6 +296,17 @@ public class MockNMS extends ArgumentNMS {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T getFieldAs(Class<?> className, String fieldName, Object instance, Class<T> asType) {
+		try {
+			Field field = className.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			return (T) field.get(instance);
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
+	}
+
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {

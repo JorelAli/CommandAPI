@@ -83,6 +83,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public ArgumentType<?> _ArgumentMobEffect() {
 		return BASE_NMS._ArgumentMobEffect();
 	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentParticle() {
+		return BASE_NMS._ArgumentParticle();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentPosition() {
@@ -214,7 +219,7 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 			Function<Object, NBTContainer> nbtContainerConstructor) {
-		return BASE_NMS.getParticle((CommandContext) cmdCtx, key);
+		return BASE_NMS.getNBTCompound((CommandContext) cmdCtx, key, nbtContainerConstructor);
 	}
 
 	@Override

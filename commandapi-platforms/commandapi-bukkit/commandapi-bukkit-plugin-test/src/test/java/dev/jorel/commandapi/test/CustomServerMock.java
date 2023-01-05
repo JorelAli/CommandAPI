@@ -1,14 +1,18 @@
 package dev.jorel.commandapi.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.bukkit.Registry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -56,6 +60,7 @@ public class CustomServerMock extends ServerMock {
 			suggestions = (Suggestions) dispatcher.getCompletionSuggestions(parseResults).get();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
+			suggestions = new Suggestions(StringRange.at(0), new ArrayList<>()); // Empty suggestions
 		}
 		
 		List<String> suggestionsAsStrings = new ArrayList<>();

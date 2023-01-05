@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.test;
+package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -14,6 +14,9 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
+import dev.jorel.commandapi.test.CustomServerMock;
+import dev.jorel.commandapi.test.Main;
+import dev.jorel.commandapi.test.Mut;
 
 /**
  * Tests for optional arguments

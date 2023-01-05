@@ -175,12 +175,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentParticle() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentRotation() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");

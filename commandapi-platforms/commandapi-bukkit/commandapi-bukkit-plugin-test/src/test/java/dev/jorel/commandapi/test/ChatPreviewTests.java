@@ -13,13 +13,13 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.AdventureChatArgument;
-import dev.jorel.commandapi.test.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 
 /**
- * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
+ * Tests for chat preview (1.19 - 1.19.2)
  */
+@SuppressWarnings("null")
 public class ChatPreviewTests {
 	
 	private CustomServerMock server;
