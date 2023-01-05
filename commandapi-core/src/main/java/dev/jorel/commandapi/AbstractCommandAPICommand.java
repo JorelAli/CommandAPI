@@ -304,32 +304,14 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray) {
 		List<Argument[]> argumentsToRegister = new ArrayList<>();
 
-		// Check optional argument constraints
-		// They can only be at the end, no required argument can follow an optional argument
-		int firstOptionalArgumentIndex = -1;
-		for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
-			if (argumentsArray[i].isOptional()) {
-				if (firstOptionalArgumentIndex == -1) {
-					firstOptionalArgumentIndex = i;
-				}
-				optionalArgumentIndex = i;
-			} else if (optionalArgumentIndex != -1) {
-				// Argument is not optional
-				throw new OptionalArgumentException(meta.commandName);
-			}
+		// Create a List of arrays that hold arguments to register split based on where optional arguments are
+		List<Argument> currentCommand = new ArrayList<>(argumentsArray.length);
+		for(Argument argument : argumentsArray) {
+			if(argument.isOptional()) argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
+			currentCommand.add(argument);
 		}
-
-		// Create a List of arrays that hold arguments to register optional arguments
-		// if optional arguments have been found
-		if (firstOptionalArgumentIndex != -1) {
-			for (int i = 0; i <= argumentsArray.length; i++) {
-				if (i >= firstOptionalArgumentIndex) {
-					Argument[] arguments = (Argument[]) new AbstractArgument[i];
-					System.arraycopy(argumentsArray, 0, arguments, 0, i);
-					argumentsToRegister.add(arguments);
-				}
-			}
-		}
+		// All arguments are also valid and not added by above loop
+		argumentsToRegister.add(argumentsArray);
 		return argumentsToRegister;
 	}
 }

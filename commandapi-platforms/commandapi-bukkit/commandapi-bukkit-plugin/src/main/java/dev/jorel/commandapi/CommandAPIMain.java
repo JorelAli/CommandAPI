@@ -26,7 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
@@ -125,5 +129,32 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable();
+
+		// TODO: Example command, remove before merging
+		new CommandAPICommand("rate")
+			.withArguments(
+				new StringArgument("topic").setOptional(true),
+				new IntegerArgument("rating", 0, 10),
+				new PlayerArgument("target").setOptional(true)
+			)
+			.executes(info -> {
+				String topic = (String) info.args().get("topic");
+				if(topic == null) {
+					// Honestly not sure how to justify topic being optional here,
+					// causing there to be a required argument after an optional one,
+					// but I'm sure an example exists, right?
+					info.sender().sendMessage("You didn't give a rating");
+					return;
+				}
+
+				// We know this is not null because rating is required if topic is given
+				int rating = (int) info.args().get("rating");
+
+				// The target player is optional, so give it a default here
+				CommandSender target = (CommandSender) info.args().getOrDefault("target", info.sender());
+
+				target.sendMessage("Your " + topic + " was rated: " + rating + "/10");
+			})
+			.register();
 	}
 }
