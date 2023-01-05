@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -216,7 +217,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		Argument literal = (Argument) CommandAPIHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
 
 		literal.withPermission(subcommand.meta.permission)
-			.withRequirement(subcommand.meta.requirements)
+			.withRequirement((Predicate) subcommand.meta.requirements)
 			.setListed(false);
 
 		prevArguments.add(literal);
@@ -314,7 +315,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 				optionalArgumentIndex = i;
 			} else if (optionalArgumentIndex != -1) {
 				// Argument is not optional
-				throw new OptionalArgumentException();
+				throw new OptionalArgumentException(meta.commandName);
 			}
 		}
 

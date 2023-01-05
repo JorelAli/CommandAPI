@@ -270,7 +270,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType biomeBiome) throws CommandSyntaxException;
+	Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException;
 
 	Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 		throws CommandSyntaxException;

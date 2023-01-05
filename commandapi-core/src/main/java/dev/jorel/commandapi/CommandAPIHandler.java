@@ -393,7 +393,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 					litArg.setListed(superArg.instance().isListed())
 						.withPermission(superArg.instance().getArgumentPermission())
-						.withRequirement(superArg.instance().getRequirements());
+						.withRequirement((Predicate) superArg.instance().getRequirements());
 
 					// Reconstruct the list of arguments and place in the new literals
 					Argument[] newArgs = Arrays.copyOf(args, args.length);
