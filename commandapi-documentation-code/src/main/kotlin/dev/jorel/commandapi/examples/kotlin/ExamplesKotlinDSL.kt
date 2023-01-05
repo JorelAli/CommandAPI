@@ -162,7 +162,7 @@ commandTree("optionalArgument") {
 commandAPICommand("optionalArgument") {
     literalArgument("give")
     itemStackArgument("item")
-    optionalArgument(IntegerArgument("amount"))
+    integerArgument("amount", optional = true) // This sets the argument as optional, technically, the "optional =" is not necessary
     playerExecutor { player, args ->
         // This command will let you execute:
         // "/optionalArgument give minecraft:stick"
@@ -1376,7 +1376,7 @@ commandAPICommand("mycommand") {
 fun argumentsayhicmd() {
 /* ANCHOR: argumentsayhicmd */
 commandAPICommand("sayhi") {
-    optionalArgument(PlayerArgument("target"))
+    playerArgument("target", optional = true)
     playerExecutor { player, args ->
         val target: Player? = args["target"] as Player?
         if (target != null) {
@@ -1390,7 +1390,7 @@ commandAPICommand("sayhi") {
 
 /* ANCHOR: argumentsayhicmd2 */
 commandAPICommand("sayhi") {
-    optionalArgument(PlayerArgument("target"))
+    playerArgument("target", optional = true)
     playerExecutor { player, args ->
         val target: Player = args.getOrDefault("target", player) as Player
         target.sendMessage("Hi!")
