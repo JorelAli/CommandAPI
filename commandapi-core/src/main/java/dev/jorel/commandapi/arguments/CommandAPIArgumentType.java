@@ -192,6 +192,11 @@ public enum CommandAPIArgumentType {
 	 * The NBTCompoundArgument
 	 */
 	NBT_COMPOUND("minecraft:nbt_compound_tag"),
+	
+	/**
+	 * The NBTPathArgument
+	 */
+	NBT_PATH("minecraft:nbt_path"),
 
 	/**
 	 * The ObjectiveArgument

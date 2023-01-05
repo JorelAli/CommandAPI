@@ -83,6 +83,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.NBTPath;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
@@ -102,6 +103,8 @@ import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.commands.arguments.MessageArgument;
+import net.minecraft.commands.arguments.NbtPathArgument;
+import net.minecraft.commands.arguments.NbtPathArgument.NbtPath;
 import net.minecraft.commands.arguments.ObjectiveArgument;
 import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
 import net.minecraft.commands.arguments.OperationArgument;
@@ -235,6 +238,11 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final ArgumentType<?> _ArgumentNBTCompound() {
 		return CompoundTagArgument.compoundTag();
+	}
+
+	@Override
+	public final ArgumentType<?> _ArgumentNBTPath() {
+		return NbtPathArgument.nbtPath();
 	}
 
 	@Override
@@ -555,6 +563,12 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public final <NBTContainer> Object getNBTCompound(CommandContext<CommandSourceStack> cmdCtx, String key,
 		Function<Object, NBTContainer> nbtContainerConstructor) {
 		return nbtContainerConstructor.apply(CompoundTagArgument.getCompoundTag(cmdCtx, key));
+	}
+	
+	@Override
+	public NBTPath getNBTPath(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		NbtPath path = NbtPathArgument.getPath(cmdCtx, key);
+		return new NBTPath(path.toString());
 	}
 
 	@Override

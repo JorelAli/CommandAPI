@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
@@ -31,7 +29,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.bukkit.Axis;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -51,7 +48,6 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -68,6 +64,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.NBTPath;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
@@ -175,6 +172,11 @@ public interface NMS<CommandListenerWrapper> {
 	 * @return NBT compound tag argument (minecraft:nbt_compound_tag)
 	 */
 	ArgumentType<?> _ArgumentNBTCompound();
+	
+	/**
+	 * @return NBT path argument (minecraft:nbt_path)
+	 */
+	default ArgumentType<?> _ArgumentNBTPath() { return null; };
 
 	/**
 	 * @return Particle argument (minecraft:particle)
@@ -358,6 +360,8 @@ public interface NMS<CommandListenerWrapper> {
 
 	<NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 		Function<Object, NBTContainer> nbtContainerConstructor);
+
+	default NBTPath getNBTPath(CommandContext<CommandListenerWrapper> cmdCtx, String key) { return null; };
 
 	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 		throws IllegalArgumentException, CommandSyntaxException;
