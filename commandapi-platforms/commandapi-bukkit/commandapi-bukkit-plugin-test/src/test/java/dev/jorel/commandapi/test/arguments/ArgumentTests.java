@@ -1,24 +1,17 @@
 package dev.jorel.commandapi.test.arguments;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.WorldMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.arguments.*;
-import dev.jorel.commandapi.executors.CommandExecutor;
-import dev.jorel.commandapi.test.CustomServerMock;
-import dev.jorel.commandapi.test.Main;
-import dev.jorel.commandapi.test.Mut;
-import dev.jorel.commandapi.wrappers.CommandResult;
-import dev.jorel.commandapi.wrappers.Location2D;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
@@ -26,65 +19,67 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.CommandArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.ListArgumentBuilder;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.Location2DArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.SuggestionsBranch;
+import dev.jorel.commandapi.executors.CommandExecutor;
+import dev.jorel.commandapi.test.Mut;
+import dev.jorel.commandapi.test.TestBase;
+import dev.jorel.commandapi.wrappers.CommandResult;
+import dev.jorel.commandapi.wrappers.Location2D;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
  */
 @SuppressWarnings("null")
-public class ArgumentTests {
+public class ArgumentTests extends TestBase {
 	
-	private CustomServerMock server;
-	private Main plugin;
-
-	private String getDispatcherString() {
-		try {
-			return Files.readString(CommandAPI.getConfiguration().getDispatcherFile().toPath());
-		} catch (IOException e) {
-			return "";
-		}
-	}
-
-	public <T> void assertStoresResult(CommandSender sender, String command, Mut<T> queue, T expected) {
-		assertDoesNotThrow(() -> assertTrue(
-			server.dispatchThrowableCommand(sender, command),
-			"Expected command dispatch to return true, but it gave false")
-		);
-		assertEquals(expected, queue.get());
-	}
-
-	public void assertInvalidSyntax(CommandSender sender, String command) {
-		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(sender,command)));
-	}
+	/*********
+	 * Setup *
+	 *********/
 
 	@BeforeEach
 	public void setUp() {
-		server = MockBukkit.mock(new CustomServerMock());
-		plugin = MockBukkit.load(Main.class);
+		super.setUp();
 	}
 
 	@AfterEach
 	public void tearDown() {
-		Bukkit.getScheduler().cancelTasks(plugin);
-		if(plugin != null) {
-			plugin.onDisable();
-		}
-		MockBukkit.unmock();
+		super.tearDown();
 	}
+	
+	/*********
+	 * Tests *
+	 *********/
 
 	@Test
 	public void executionTest() {
@@ -114,7 +109,7 @@ public class ArgumentTests {
 		boolean commandResult = server.dispatchCommand(player, "test myvalue");
 		assertTrue(commandResult);
 		assertEquals("success myvalue", player.nextMessage());
-		assertEquals(getDispatcherString(), """
+		assertEquals("""
 				{
 				  "type": "root",
 				  "children": {
@@ -132,7 +127,7 @@ public class ArgumentTests {
 				      }
 				    }
 				  }
-				}""");
+				}""", getDispatcherString());
 		
 		// Negative test
 		server.dispatchCommand(player, "test myvalue");
@@ -178,7 +173,7 @@ public class ArgumentTests {
 				)
 			).register();
 
-		assertEquals(getDispatcherString(), """
+		assertEquals("""
 			{
 			  "type": "root",
 			  "children": {
@@ -257,7 +252,7 @@ public class ArgumentTests {
 			      "executable": true
 			    }
 			  }
-			}""");
+			}""", getDispatcherString());
 
 		PlayerMock sender = server.addPlayer("APlayer");
 
@@ -296,24 +291,6 @@ public class ArgumentTests {
 
 	private CommandExecutor givePosition(String pos, Mut<String> result) {
 		return (sender, args) -> result.set(pos);
-	}
-
-	@Test
-	public void executionTestWithBooleanArgument() {
-		new CommandAPICommand("test")
-			.withArguments(new BooleanArgument("value"))
-			.executesPlayer((player, args) -> {
-				boolean value = (boolean) args.get(0);
-				player.sendMessage("success " + value);
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer();
-		server.dispatchCommand(player, "test true");
-		server.dispatchCommand(player, "test false");
-		assertEquals("success true", player.nextMessage());
-		assertEquals("success false", player.nextMessage());
-		assertInvalidSyntax(player, "test aaaaa");
 	}
 	
 	@Test
@@ -445,27 +422,6 @@ public class ArgumentTests {
 		PlayerMock player = server.addPlayer("APlayer");
 		server.dispatchCommand(player, "test " + stringArgValue);
 		assertEquals(stringArgValue, player.nextMessage());
-	}
-	
-	@Test
-	public void executionTestWithPotionEffectArgument() {
-		Mut<PotionEffectType> type = Mut.of();
-
-		new CommandAPICommand("test")
-			.withArguments(new PotionEffectArgument("potion"))
-			.executesPlayer((player, args) -> {
-				type.set((PotionEffectType) args.get(0));
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer();
-		server.dispatchCommand(player, "test speed");
-		server.dispatchCommand(player, "test minecraft:speed");
-		server.dispatchCommand(player, "test bukkit:speed");
-
-		assertEquals(PotionEffectType.SPEED, type.get());
-		assertEquals(PotionEffectType.SPEED, type.get());
-		assertEquals(null, type.get());
 	}
 
 	@SuppressWarnings("unchecked")

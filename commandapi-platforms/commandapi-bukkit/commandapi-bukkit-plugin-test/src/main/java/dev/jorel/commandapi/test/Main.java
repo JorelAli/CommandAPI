@@ -14,6 +14,7 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onLoad() {
+		getDataFolder().mkdirs();
 		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
 		CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
 			.useLatestNMSVersion(true) // Doesn't matter because we implement CommandAPIVersionHandler here

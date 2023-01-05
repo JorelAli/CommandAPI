@@ -3,12 +3,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
@@ -16,23 +14,25 @@ import dev.jorel.commandapi.arguments.PotionEffectArgument;
 /**
  * Tests for suggestions
  */
-public class SuggestionsTests {
-
-	private CustomServerMock server;
-	private Main plugin;
-
+public class SuggestionsTests extends TestBase {
+	
+	/*********
+	 * Setup *
+	 *********/
+	
 	@BeforeEach
 	public void setUp() {
-		server = MockBukkit.mock(new CustomServerMock());
-		plugin = MockBukkit.load(Main.class);
+		super.setUp();
 	}
 
 	@AfterEach
 	public void tearDown() {
-		Bukkit.getScheduler().cancelTasks(plugin);
-		plugin.onDisable();
-		MockBukkit.unmock();
+		super.tearDown();
 	}
+	
+	/*********
+	 * Tests *
+	 *********/
 
 	@Test
 	public void testPotionEffectArgumentSuggestions() {

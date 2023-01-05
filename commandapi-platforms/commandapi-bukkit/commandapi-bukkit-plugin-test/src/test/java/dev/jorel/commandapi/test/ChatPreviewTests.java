@@ -1,14 +1,13 @@
 package dev.jorel.commandapi.test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -20,31 +19,34 @@ import net.kyori.adventure.text.format.TextDecoration;
  * Tests for chat preview (1.19 - 1.19.2)
  */
 @SuppressWarnings("null")
-public class ChatPreviewTests {
-	
-	private CustomServerMock server;
-	private Main plugin;
+public class ChatPreviewTests extends TestBase {
+
+	/*********
+	 * Setup *
+	 *********/
 
 	@BeforeEach
 	public void setUp() {
-		server = MockBukkit.mock(new CustomServerMock());
-		plugin = MockBukkit.load(Main.class);
+		super.setUp();
 	}
 
 	@AfterEach
 	public void tearDown() {
-		Bukkit.getScheduler().cancelTasks(plugin);
-		plugin.onDisable();
-		MockBukkit.unmock();
+		super.tearDown();
 	}
+
+	/*********
+	 * Tests *
+	 *********/
 
 	@Test
 	public void chatPreviewTest() {
 		new CommandAPICommand("chatarg")
 			.withArguments(new AdventureChatArgument("str").withPreview(info -> {
-				if(info.input().contains("hello")) {
+				if (info.input().contains("hello")) {
 					throw CommandAPI.failWithString(ChatColor.RED + "Input cannot contain the word 'hello'");
-					// return Component.text("Input cannot contain the word 'hello'").color(NamedTextColor.RED);
+					// return Component.text("Input cannot contain the word
+					// 'hello'").color(NamedTextColor.RED);
 				} else {
 					return Component.text(info.input()).decorate(TextDecoration.BOLD);
 				}
