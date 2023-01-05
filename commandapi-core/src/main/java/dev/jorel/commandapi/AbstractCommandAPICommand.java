@@ -315,7 +315,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 				optionalArgumentIndex = i;
 			} else if (optionalArgumentIndex != -1) {
 				// Argument is not optional
-				throw new OptionalArgumentException();
+				throw new OptionalArgumentException(meta.commandName);
 			}
 		}
 
