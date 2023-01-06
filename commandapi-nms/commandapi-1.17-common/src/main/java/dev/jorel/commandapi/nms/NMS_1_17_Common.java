@@ -44,6 +44,7 @@ import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -89,6 +90,7 @@ import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.EntitySummonArgument;
 import net.minecraft.commands.arguments.MobEffectArgument;
@@ -291,6 +293,16 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	@Override
 	public CommandSourceStack getCLWFromCommandSender(CommandSender sender) {
 		return VanillaCommandWrapper.getListener(sender);
+	}
+
+	@Override
+	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
+	}
+
+	@Override
+	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override
