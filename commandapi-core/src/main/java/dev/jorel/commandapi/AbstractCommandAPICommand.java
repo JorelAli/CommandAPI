@@ -324,7 +324,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		// Create a List of arrays that hold arguments to register optional arguments
 		// if optional arguments have been found
 		if (firstOptionalArgumentIndex != -1) {
-			for (int i = 0; i < argumentsArray.length; i++) {
+			for (int i = 0; i <= argumentsArray.length; i++) {
 				if (i >= firstOptionalArgumentIndex) {
 					List<Argument> arguments = new ArrayList<>();
 					Argument[] argumentsWithoutCombined = (Argument[]) new AbstractArgument[i];
