@@ -37,7 +37,7 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.19.1
+ * NMS implementation for Minecraft 1.19.1 and 1.19.2
  */
 @NMSMeta(compatibleWith = { "1.19.1", "1.19.2" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)

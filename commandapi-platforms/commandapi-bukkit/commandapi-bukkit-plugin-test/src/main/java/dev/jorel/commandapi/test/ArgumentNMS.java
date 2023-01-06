@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -71,6 +72,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public ArgumentType<?> _ArgumentChatComponent() {
 		return BASE_NMS._ArgumentChatComponent();
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentDimension() {
+		return BASE_NMS._ArgumentDimension();
 	}
 
 	@Override
@@ -191,6 +197,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return BASE_NMS.getDimension((CommandContext) cmdCtx, key);
+	}
+
+	@Override
 	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getEnchantment((CommandContext) cmdCtx, key);
 	}
@@ -237,7 +248,6 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		return BASE_NMS.getLocationBlock((CommandContext) cmdCtx, str);
-
 	}
 
 	@Override

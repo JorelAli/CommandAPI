@@ -2,12 +2,15 @@ package dev.jorel.commandapi.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Keyed;
 import org.bukkit.Registry;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +23,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import be.seeseemelk.mockbukkit.AsyncCatcher;
 import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.WorldMock;
 import dev.jorel.commandapi.Brigadier;
 
 public class CommandAPIServerMock extends ServerMock {
@@ -80,5 +84,29 @@ public class CommandAPIServerMock extends ServerMock {
 	@Override
 	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
 		return null;
+	}
+	
+	static class CustomWorldMock extends WorldMock {
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj == null) {
+				return false;
+			} else if(obj instanceof World target) {
+				return this.getUID().equals(target.getUID());
+			} else {
+				return false; // I have no idea what this is
+			}
+		}
+
+	}
+	
+	@Override
+	public WorldMock addSimpleWorld(String name) {
+		AsyncCatcher.catchOp("world creation");
+		WorldMock world = new CustomWorldMock();
+		world.setName(name);
+		super.addWorld(world);
+		return world;
 	}
 }

@@ -1,15 +1,54 @@
 package dev.jorel.commandapi.test;
 
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
-import be.seeseemelk.mockbukkit.enchantments.EnchantmentsMock;
-import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+import org.mockito.Mockito;
+
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.*;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+
+import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.enchantments.EnchantmentsMock;
+import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.nms.NMS;
@@ -18,19 +57,58 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancements;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandListenerWrapper;
-import net.minecraft.commands.arguments.*;
+import net.minecraft.commands.arguments.ArgumentAnchor;
+import net.minecraft.commands.arguments.ArgumentAngle;
+import net.minecraft.commands.arguments.ArgumentChat;
+import net.minecraft.commands.arguments.ArgumentChatComponent;
+import net.minecraft.commands.arguments.ArgumentChatFormat;
+import net.minecraft.commands.arguments.ArgumentCriterionValue;
+import net.minecraft.commands.arguments.ArgumentDimension;
+import net.minecraft.commands.arguments.ArgumentEnchantment;
+import net.minecraft.commands.arguments.ArgumentEntity;
+import net.minecraft.commands.arguments.ArgumentEntitySummon;
+import net.minecraft.commands.arguments.ArgumentInventorySlot;
+import net.minecraft.commands.arguments.ArgumentMathOperation;
+import net.minecraft.commands.arguments.ArgumentMinecraftKeyRegistered;
+import net.minecraft.commands.arguments.ArgumentMobEffect;
+import net.minecraft.commands.arguments.ArgumentNBTBase;
+import net.minecraft.commands.arguments.ArgumentNBTKey;
+import net.minecraft.commands.arguments.ArgumentNBTTag;
+import net.minecraft.commands.arguments.ArgumentParticle;
+import net.minecraft.commands.arguments.ArgumentProfile;
+import net.minecraft.commands.arguments.ArgumentScoreboardCriteria;
+import net.minecraft.commands.arguments.ArgumentScoreboardObjective;
+import net.minecraft.commands.arguments.ArgumentScoreboardSlot;
+import net.minecraft.commands.arguments.ArgumentScoreboardTeam;
+import net.minecraft.commands.arguments.ArgumentScoreholder;
+import net.minecraft.commands.arguments.ArgumentTime;
+import net.minecraft.commands.arguments.ArgumentUUID;
+import net.minecraft.commands.arguments.ResourceKeyArgument;
+import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.TemplateMirrorArgument;
+import net.minecraft.commands.arguments.TemplateRotationArgument;
 import net.minecraft.commands.arguments.blocks.ArgumentBlockPredicate;
 import net.minecraft.commands.arguments.blocks.ArgumentTile;
-import net.minecraft.commands.arguments.coordinates.*;
+import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
+import net.minecraft.commands.arguments.coordinates.ArgumentRotation;
+import net.minecraft.commands.arguments.coordinates.ArgumentRotationAxis;
+import net.minecraft.commands.arguments.coordinates.ArgumentVec2;
+import net.minecraft.commands.arguments.coordinates.ArgumentVec2I;
+import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
 import net.minecraft.commands.arguments.item.ArgumentItemPredicate;
 import net.minecraft.commands.arguments.item.ArgumentItemStack;
 import net.minecraft.commands.arguments.item.ArgumentTag;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.commands.synchronization.brigadier.*;
+import net.minecraft.commands.synchronization.brigadier.ArgumentSerializerString;
+import net.minecraft.commands.synchronization.brigadier.DoubleArgumentInfo;
+import net.minecraft.commands.synchronization.brigadier.FloatArgumentInfo;
+import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
+import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.AdvancementDataWorld;
 import net.minecraft.server.DispenserRegistry;
 import net.minecraft.server.MinecraftServer;
@@ -39,26 +117,6 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.players.UserCache;
 import net.minecraft.world.phys.Vec3D;
-import org.bukkit.*;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-import org.mockito.Mockito;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 
 public class MockNMS extends ArgumentNMS {
 
@@ -103,7 +161,7 @@ public class MockNMS extends ArgumentNMS {
 	}
 	
 	/**
-	 * This registers Minecrafts default {@link PotionEffectType PotionEffectTypes}. It also prevents any new effects to
+	 * This registers Minecraft's default {@link PotionEffectType PotionEffectTypes}. It also prevents any new effects to
 	 * be created afterwards.
 	 */
 	public static void createPotionEffectTypes() {
@@ -194,7 +252,7 @@ public class MockNMS extends ArgumentNMS {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19" };
+		return new String[] { "1.19.2" };
 	}
 
 	CommandDispatcher<CommandListenerWrapper> dispatcher;
@@ -215,7 +273,7 @@ public class MockNMS extends ArgumentNMS {
 	List<EntityPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
 	
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		CommandSender sender = senderWrapper.getSource();
@@ -275,6 +333,29 @@ public class MockNMS extends ArgumentNMS {
 				return Optional.empty();
 			});
 			Mockito.when(minecraftServerMock.ap()).thenReturn(userCacheMock);
+			
+			// World (Dimension) argument
+			Mockito.when(minecraftServerMock.a(any(ResourceKey.class))).thenAnswer(invocation -> {
+				// Get the ResourceKey<World> and extract the world name from it
+				ResourceKey<net.minecraft.world.level.World> resourceKey = invocation.getArgument(0);
+				String worldName = resourceKey.a().a();
+				
+				// Get the world via Bukkit (returns a WorldMock) and create a
+				// CraftWorld clone of it for WorldServer.getWorld()
+				World world = Bukkit.getServer().getWorld(worldName);
+				if(world == null) {
+					return null;
+				} else {
+					CraftWorld craftWorldMock = Mockito.mock(CraftWorld.class);
+					Mockito.when(craftWorldMock.getName()).thenReturn(world.getName());
+					Mockito.when(craftWorldMock.getUID()).thenReturn(world.getUID());
+					
+					// Create our return WorldServer object
+					WorldServer bukkitWorldServerMock = Mockito.mock(WorldServer.class);
+					Mockito.when(bukkitWorldServerMock.getWorld()).thenReturn(craftWorldMock);
+					return bukkitWorldServerMock;
+				}
+			});
 		}
 		return clw;
 	}
