@@ -1,7 +1,9 @@
 package dev.jorel.commandapi.test;
+import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -38,6 +40,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 
 	public ArgumentNMS(NMS<?> baseNMS) {
 		super(baseNMS);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentAxis() {
+		return BASE_NMS._ArgumentAxis();
 	}
 
 	@Override
@@ -144,6 +151,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return BASE_NMS.getAdventureChatComponent((CommandContext) cmdCtx, key);
+	}
+
+	@Override
+	public EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return BASE_NMS.getAxis((CommandContext) cmdCtx, key);
 	}
 
 	@Override
