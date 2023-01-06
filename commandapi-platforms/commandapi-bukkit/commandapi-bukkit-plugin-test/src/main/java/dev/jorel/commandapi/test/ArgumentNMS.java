@@ -1,9 +1,12 @@
 package dev.jorel.commandapi.test;
+import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -25,8 +28,10 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
+import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandListenerWrapper;
 
 /**
@@ -37,6 +42,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 
 	public ArgumentNMS(NMS<?> baseNMS) {
 		super(baseNMS);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentAxis() {
+		return BASE_NMS._ArgumentAxis();
 	}
 
 	@Override
@@ -53,10 +63,25 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public ArgumentType<?> _ArgumentChat() {
 		return BASE_NMS._ArgumentChat();
 	}
+
+	@Override
+	public ArgumentType<?> _ArgumentChatFormat() {
+		return BASE_NMS._ArgumentChatFormat();
+	}
 	
 	@Override
 	public ArgumentType<?> _ArgumentChatComponent() {
 		return BASE_NMS._ArgumentChatComponent();
+	}
+	
+	@Override
+	public ArgumentType<?> _ArgumentDimension() {
+		return BASE_NMS._ArgumentDimension();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		return BASE_NMS._ArgumentEnchantment();
 	}
 
 	@Override
@@ -72,6 +97,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public final ArgumentType<?> _ArgumentItemStack() {
 		return BASE_NMS._ArgumentItemStack();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMathOperation() {
+		return BASE_NMS._ArgumentMathOperation();
 	}
 	
 	@Override
@@ -136,6 +166,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
+	public EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return BASE_NMS.getAxis((CommandContext) cmdCtx, key);
+	}
+
+	@Override
 	public Object getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
 		return BASE_NMS.getBiome((CommandContext) cmdCtx, key, subType);
 	}
@@ -154,6 +189,16 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return BASE_NMS.getChatColor((CommandContext) cmdCtx, key);
+	}
+	
+	@Override
+	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return BASE_NMS.getChatComponent((CommandContext) cmdCtx, key);
+	}
+
+	@Override
+	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return BASE_NMS.getDimension((CommandContext) cmdCtx, key);
 	}
 
 	@Override
@@ -203,7 +248,6 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException {
 		return BASE_NMS.getLocationBlock((CommandContext) cmdCtx, str);
-
 	}
 
 	@Override
@@ -220,6 +264,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 			Function<Object, NBTContainer> nbtContainerConstructor) {
 		return BASE_NMS.getNBTCompound((CommandContext) cmdCtx, key, nbtContainerConstructor);
+	}
+
+	@Override
+	public MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return BASE_NMS.getMathOperation((CommandContext) cmdCtx, key);
 	}
 
 	@Override

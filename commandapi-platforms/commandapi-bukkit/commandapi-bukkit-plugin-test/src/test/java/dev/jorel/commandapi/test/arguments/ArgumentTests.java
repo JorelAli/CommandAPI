@@ -1,15 +1,11 @@
 package dev.jorel.commandapi.test.arguments;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
@@ -24,12 +20,8 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
-import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
-import dev.jorel.commandapi.arguments.ChatComponentArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationArgument;
@@ -40,10 +32,6 @@ import dev.jorel.commandapi.executors.CommandExecutor;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 import dev.jorel.commandapi.wrappers.Location2D;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
@@ -358,39 +346,6 @@ public class ArgumentTests extends TestBase {
 		assertEquals("2.0, 7.0", player.nextMessage());
 	}
 	
-	@Test
-	public void executionTestWithEntitySelectorArgument() {
-		new CommandAPICommand("test")
-			.withArguments(new EntitySelectorArgument.OnePlayer("value"))
-			.executesPlayer((player, args) -> {
-				Player value = (Player) args.get(0);
-				player.sendMessage(value.getName());
-			})
-			.register();
-
-		new CommandAPICommand("testall")
-			.withArguments(new EntitySelectorArgument.ManyPlayers("value"))
-			.executesPlayer((player, args) -> {
-				@SuppressWarnings("unchecked")
-				Collection<Player> value = (Collection<Player>) args.get(0);
-				player.sendMessage(value.stream().map(Player::getName).collect(Collectors.joining(", ")));
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer("APlayer");
-		server.dispatchCommand(player, "test APlayer");
-		
-		server.addPlayer("APlayer1");
-		server.addPlayer("APlayer2");
-		server.addPlayer("APlayer3");
-		server.addPlayer("APlayer4");
-		server.dispatchCommand(player, "testall @a");
-
-		assertEquals("APlayer", player.nextMessage());
-		// TODO: Why do we have APlayer here twice?
-		assertEquals("APlayer, APlayer, APlayer1, APlayer2, APlayer3, APlayer4", player.nextMessage());
-	}
-	
 	@RepeatedTest(10)
 	public void executionTestWithGreedyStringArgument() {
 		new CommandAPICommand("test")
@@ -430,58 +385,6 @@ public class ArgumentTests extends TestBase {
 		assertInvalidSyntax(player, "test BPlayer");
 		
 		assertNoMoreResults(results);
-	}
-	
-	@Test
-	public void executionTestWithChatComponentArgument() {
-		Mut<BaseComponent[]> spigot = Mut.of();
-		Mut<Component> adventure = Mut.of();
-
-		new CommandAPICommand("spigot")
-			.withArguments(new ChatComponentArgument("text"))
-			.executesPlayer((player, args) -> {
-				spigot.set((BaseComponent[]) args.get(0));
-			})
-			.register();
-		
-		new CommandAPICommand("adventure")
-			.withArguments(new AdventureChatComponentArgument("text"))
-			.executesPlayer((player, args) -> {
-				adventure.set((Component) args.get(0));
-			})
-			.register();
-		
-		final String json = "[\"%s\"]".formatted("""
-			["", {
-			    "text": "Once upon a time, there was a guy "
-			}, {
-			    "text": "Skepter",
-			    "color": "light_purple",
-			    "hoverEvent": {
-			        "action": "show_entity",
-			        "value": "Skepter"
-			    }
-			}, {
-			    "text": " and he created the "
-			}, {
-			    "text": "CommandAPI",
-			    "underlined": true,
-			    "clickEvent": {
-			        "action": "open_url",
-			        "value": "https://github.com/JorelAli/CommandAPI"
-			    }
-			}]
-			""".stripIndent().replace("\n", "").replace("\r", "").replace("\"", "\\\""));
-		
-		// The above, in normal human-readable JSON gets turned into this for command purposes:
-		// [\"[\\\"\\\",{\\\"text\\\":\\\"Once upon a time, there was a guy call \\\"},{\\\"text\\\":\\\"Skepter\\\",\\\"color\\\":\\\"light_purple\\\",\\\"hoverEvent\\\":{\\\"action\\\":\\\"show_entity\\\",\\\"value\\\":\\\"Skepter\\\"}},{\\\"text\\\":\\\" and he created the \\\"},{\\\"text\\\":\\\"CommandAPI\\\",\\\"underlined\\\":true,\\\"clickEvent\\\":{\\\"action\\\":\\\"open_url\\\",\\\"value\\\":\\\"https://github.com/JorelAli/CommandAPI\\\"}}]\"]
-
-		PlayerMock player = server.addPlayer("Skepter");
-		server.dispatchCommand(player, "spigot " + json);
-		server.dispatchCommand(player, "adventure " + json);
-		
-		assertArrayEquals(ComponentSerializer.parse(json), spigot.get());
-		assertEquals(GsonComponentSerializer.gson().deserialize(json), adventure.get());
 	}
 
 	@Test // Pre-#321 
