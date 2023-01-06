@@ -326,17 +326,17 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		if (firstOptionalArgumentIndex != -1) {
 			for (int i = 0; i < argumentsArray.length; i++) {
 				if (i >= firstOptionalArgumentIndex - 1) {
-					if (!argumentsArray[i].hasLinkedArguments()) {
+					if (!argumentsArray[i].hasCombinedArguments()) {
 						List<Argument> arguments = new ArrayList<>();
 						for (int j = 0; j <= i; j++) {
 							arguments.add(argumentsArray[j]);
-							if (argumentsArray[j].hasLinkedArguments()) {
-								arguments.addAll((List<Argument>) argumentsArray[j].getLinkedArguments());
+							if (argumentsArray[j].hasCombinedArguments()) {
+								arguments.addAll(argumentsArray[j].getCombinedArguments());
 							}
 						}
 						argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));
 					} else {
-						List<Argument> linkedArguments = (List<Argument>) argumentsArray[i].getLinkedArguments();
+						List<Argument> linkedArguments = argumentsArray[i].getCombinedArguments();
 						List<Argument> arguments = new ArrayList<>(Arrays.asList(argumentsArray).subList(0, i + 1));
 						arguments.addAll(linkedArguments);
 						argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));

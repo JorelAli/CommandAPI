@@ -256,7 +256,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	/////////////////
 
 	private boolean isOptional = false;
-	private final List<Argument> linkedArguments = new ArrayList<>();
+	private final List<Argument> combinedArguments = new ArrayList<>();
 
 	/**
 	 * Returns true if this argument will be optional when executing the command this argument is included in
@@ -283,8 +283,8 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 *
 	 * @return A list of arguments linked to this argument
 	 */
-	public List<Argument> getLinkedArguments() {
-		return linkedArguments;
+	public List<Argument> getCombinedArguments() {
+		return combinedArguments;
 	}
 
 	/**
@@ -292,20 +292,20 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 *
 	 * @return true if this argument has linked arguments
 	 */
-	public boolean hasLinkedArguments() {
-		return !linkedArguments.isEmpty();
+	public boolean hasCombinedArguments() {
+		return !combinedArguments.isEmpty();
 	}
 
 	/**
 	 * Adds linked arguments to this argument. Linked arguments are used to have required arguments after optional arguments
 	 * by ignoring they exist until they are added to the arguments array for registration
 	 *
-	 * @param linkedArguments The arguments to link
+	 * @param combinedArguments The arguments to link
 	 * @return this current argument
 	 */
 	@SafeVarargs
-	public final Impl linkArguments(Argument... linkedArguments) {
-		this.linkedArguments.addAll(Arrays.asList(linkedArguments));
+	public final Impl combineWith(Argument... combinedArguments) {
+		this.combinedArguments.addAll(Arrays.asList(combinedArguments));
 		return instance();
 	}
 
