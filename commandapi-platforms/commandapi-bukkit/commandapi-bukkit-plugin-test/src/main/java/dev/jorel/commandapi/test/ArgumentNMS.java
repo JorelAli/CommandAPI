@@ -30,6 +30,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandListenerWrapper;
 
 /**
@@ -60,6 +61,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public ArgumentType<?> _ArgumentChat() {
 		return BASE_NMS._ArgumentChat();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentChatFormat() {
+		return BASE_NMS._ArgumentChatFormat();
 	}
 	
 	@Override
@@ -177,6 +183,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return BASE_NMS.getChatColor((CommandContext) cmdCtx, key);
+	}
+	
+	@Override
+	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return BASE_NMS.getChatComponent((CommandContext) cmdCtx, key);
 	}
 
 	@Override

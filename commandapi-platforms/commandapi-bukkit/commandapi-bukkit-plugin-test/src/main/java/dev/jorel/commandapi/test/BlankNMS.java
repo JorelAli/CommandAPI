@@ -29,10 +29,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandListenerWrapper;
-import net.minecraft.commands.arguments.ArgumentChatComponent;
-import net.minecraft.network.chat.IChatBaseComponent;
 
 public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> {
 
@@ -112,12 +109,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentChatFormat() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}
@@ -228,11 +219,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return ComponentSerializer.parse(IChatBaseComponent.ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 
 	@Override
