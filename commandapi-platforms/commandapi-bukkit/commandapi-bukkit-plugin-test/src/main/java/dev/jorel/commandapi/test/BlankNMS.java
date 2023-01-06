@@ -139,12 +139,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEnchantment() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");

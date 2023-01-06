@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.enchantments.EnchantmentsMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -88,6 +89,7 @@ public class MockNMS extends ArgumentNMS {
 			if(byKey.isEmpty()) {
 				createPotionEffectTypes();
 			}
+			EnchantmentsMock.registerDefaultEnchantments();
 //			System.out.println(byKey);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

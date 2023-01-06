@@ -61,6 +61,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEnchantment() {
+		return BASE_NMS._ArgumentEnchantment();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
 		return BASE_NMS._ArgumentEntity(subType);
 	}
