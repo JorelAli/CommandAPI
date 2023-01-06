@@ -150,12 +150,12 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentBasicParticles() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get("particle"));
+				results.set((ParticleData) args.get("particle"));
 			})
 			.register();
 
@@ -165,26 +165,26 @@ public class ArgumentParticleTests extends TestBase {
 		for (Entry<String, Particle> particles : getParticles().entrySet()) {
 			if (particles.getValue().getDataType().equals(Void.class)) {
 				server.dispatchCommand(player, "test " + particles.getKey());
-				assertEquals(particles.getValue(), type.get().particle());
+				assertEquals(particles.getValue(), results.get().particle());
 			}
 		}
 	}
 
 	@Test
 	public void executionTestWithParticleArgumentBlocks() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get(0));
+				results.set((ParticleData) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		server.dispatchCommand(player, "test block minecraft:grass_block[snowy=true]");
-		ParticleData result = type.get();
+		ParticleData result = results.get();
 		assertEquals(Particle.BLOCK_CRACK, result.particle());
 		assertInstanceOf(BlockData.class, result.data());
 
@@ -194,19 +194,19 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentDust() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get(0));
+				results.set((ParticleData) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		server.dispatchCommand(player, "test dust 1.0 0.5 0.5 1.0"); // R G B size
-		ParticleData result = type.get();
+		ParticleData result = results.get();
 		assertEquals(Particle.REDSTONE, result.particle());
 		assertInstanceOf(DustOptions.class, result.data());
 
@@ -217,19 +217,19 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentDustTransition() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get(0));
+				results.set((ParticleData) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		server.dispatchCommand(player, "test dust_color_transition 1.0 0.0 0.0 1.0 0.0 0.0 1.0"); // R G B size R G B
-		ParticleData result = type.get();
+		ParticleData result = results.get();
 		assertEquals(Particle.DUST_COLOR_TRANSITION, result.particle());
 		assertInstanceOf(DustTransition.class, result.data());
 
@@ -241,19 +241,19 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentItem() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get(0));
+				results.set((ParticleData) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		server.dispatchCommand(player, "test item minecraft:apple");
-		ParticleData result = type.get();
+		ParticleData result = results.get();
 		assertEquals(Particle.ITEM_CRACK, result.particle());
 		assertInstanceOf(ItemStack.class, result.data());
 
@@ -264,19 +264,19 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentSculkCharge() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get(0));
+				results.set((ParticleData) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		server.dispatchCommand(player, "test sculk_charge 0.2");
-		ParticleData result = type.get();
+		ParticleData result = results.get();
 		assertEquals(Particle.SCULK_CHARGE, result.particle());
 		assertInstanceOf(Float.class, result.data());
 
@@ -286,19 +286,19 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentShriek() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get(0));
+				results.set((ParticleData) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		server.dispatchCommand(player, "test shriek 100");
-		ParticleData result = type.get();
+		ParticleData result = results.get();
 		assertEquals(Particle.SHRIEK, result.particle());
 		assertInstanceOf(Integer.class, result.data());
 
@@ -308,19 +308,19 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentVibration() {
-		Mut<ParticleData> type = Mut.of();
+		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new ParticleArgument("particle"))
 			.executesPlayer((player, args) -> {
-				type.set((ParticleData) args.get(0));
+				results.set((ParticleData) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		server.dispatchCommand(player, "test vibration 5.0 64.0 0.0 200"); // x y z ticks
-		ParticleData result = type.get();
+		ParticleData result = results.get();
 		assertEquals(Particle.VIBRATION, result.particle());
 		assertInstanceOf(Vibration.class, result.data());
 

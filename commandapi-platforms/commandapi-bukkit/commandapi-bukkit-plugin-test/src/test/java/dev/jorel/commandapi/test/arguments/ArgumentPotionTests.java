@@ -35,45 +35,54 @@ public class ArgumentPotionTests extends TestBase {
 	/*********
 	 * Tests *
 	 *********/
-	
+
 	@Test
 	public void executionTestWithPotionEffectArgumentWithNamespaces() {
-		Mut<PotionEffectType> type = Mut.of();
+		Mut<PotionEffectType> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new PotionEffectArgument("potion"))
 			.executesPlayer((player, args) -> {
-				type.set((PotionEffectType) args.get(0));
+				results.set((PotionEffectType) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		server.dispatchCommand(player, "test speed");
-		server.dispatchCommand(player, "test minecraft:speed");
-		server.dispatchCommand(player, "test bukkit:speed");
 
-		assertEquals(PotionEffectType.SPEED, type.get());
-		assertEquals(PotionEffectType.SPEED, type.get());
-		assertEquals(null, type.get());
+		// /test speed
+		server.dispatchCommand(player, "test speed");
+		assertEquals(PotionEffectType.SPEED, results.get());
+
+		// /test minecraft:speed
+		server.dispatchCommand(player, "test minecraft:speed");
+		assertEquals(PotionEffectType.SPEED, results.get());
+
+		// /test bukkit:speed
+		// Unknown effect, bukkit:speed is not a valid potion effect
+		assertCommandFailsWith(player, "test bukkit:speed", "Unknown effect: bukkit:speed");
+
+		assertNoMoreResults(results);
 	}
 
 	@Test
 	public void executionTestWithPotionEffectArgumentAllPotionEffects() {
-		Mut<PotionEffectType> type = Mut.of();
+		Mut<PotionEffectType> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new PotionEffectArgument("potion"))
 			.executesPlayer((player, args) -> {
-				type.set((PotionEffectType) args.get("potion"));
+				results.set((PotionEffectType) args.get("potion"));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		for(PotionEffectType potionEffect : PotionEffectType.values()) {
+		for (PotionEffectType potionEffect : PotionEffectType.values()) {
 			server.dispatchCommand(player, "test " + potionEffect.getKey().getKey());
-			assertEquals(potionEffect, type.get());
+			assertEquals(potionEffect, results.get());
 		}
+
+		assertNoMoreResults(results);
 	}
 
 }

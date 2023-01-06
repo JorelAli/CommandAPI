@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -35,9 +36,9 @@ public class Mut<T> {
 	
 	public T get() {
 		if(this.value.size() == 0) {
-			return null;
+			throw new NoSuchElementException();
 		} else {
-			return this.value.remove().orElseGet(() -> null);
+			return this.value.remove().orElse(null);
 		}
 	}
 	
