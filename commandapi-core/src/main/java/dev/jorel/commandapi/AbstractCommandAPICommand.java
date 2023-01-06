@@ -325,22 +325,17 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		// if optional arguments have been found
 		if (firstOptionalArgumentIndex != -1) {
 			for (int i = 0; i < argumentsArray.length; i++) {
-				if (i >= firstOptionalArgumentIndex - 1) {
-					if (!argumentsArray[i].hasCombinedArguments()) {
-						List<Argument> arguments = new ArrayList<>();
-						for (int j = 0; j <= i; j++) {
-							arguments.add(argumentsArray[j]);
-							if (argumentsArray[j].hasCombinedArguments()) {
-								arguments.addAll(argumentsArray[j].getCombinedArguments());
-							}
+				if (i >= firstOptionalArgumentIndex) {
+					List<Argument> arguments = new ArrayList<>();
+					Argument[] argumentsWithoutCombined = (Argument[]) new AbstractArgument[i];
+					System.arraycopy(argumentsArray, 0, argumentsWithoutCombined, 0, i);
+					for (Argument argument : argumentsWithoutCombined) {
+						arguments.add(argument);
+						if (argument.hasCombinedArguments()) {
+							arguments.addAll(argument.getCombinedArguments());
 						}
-						argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));
-					} else {
-						List<Argument> linkedArguments = argumentsArray[i].getCombinedArguments();
-						List<Argument> arguments = new ArrayList<>(Arrays.asList(argumentsArray).subList(0, i + 1));
-						arguments.addAll(linkedArguments);
-						argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));
 					}
+					argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));
 				}
 			}
 		}
