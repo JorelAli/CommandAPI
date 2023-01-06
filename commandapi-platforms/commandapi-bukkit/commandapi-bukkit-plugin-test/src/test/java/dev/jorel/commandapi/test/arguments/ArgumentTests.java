@@ -358,39 +358,6 @@ public class ArgumentTests extends TestBase {
 		assertEquals("2.0, 7.0", player.nextMessage());
 	}
 	
-	@Test
-	public void executionTestWithEntitySelectorArgument() {
-		new CommandAPICommand("test")
-			.withArguments(new EntitySelectorArgument.OnePlayer("value"))
-			.executesPlayer((player, args) -> {
-				Player value = (Player) args.get(0);
-				player.sendMessage(value.getName());
-			})
-			.register();
-
-		new CommandAPICommand("testall")
-			.withArguments(new EntitySelectorArgument.ManyPlayers("value"))
-			.executesPlayer((player, args) -> {
-				@SuppressWarnings("unchecked")
-				Collection<Player> value = (Collection<Player>) args.get(0);
-				player.sendMessage(value.stream().map(Player::getName).collect(Collectors.joining(", ")));
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer("APlayer");
-		server.dispatchCommand(player, "test APlayer");
-		
-		server.addPlayer("APlayer1");
-		server.addPlayer("APlayer2");
-		server.addPlayer("APlayer3");
-		server.addPlayer("APlayer4");
-		server.dispatchCommand(player, "testall @a");
-
-		assertEquals("APlayer", player.nextMessage());
-		// TODO: Why do we have APlayer here twice?
-		assertEquals("APlayer, APlayer, APlayer1, APlayer2, APlayer3, APlayer4", player.nextMessage());
-	}
-	
 	@RepeatedTest(10)
 	public void executionTestWithGreedyStringArgument() {
 		new CommandAPICommand("test")

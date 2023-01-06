@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -56,6 +57,11 @@ public abstract class TestBase {
 	public void assertCommandFailsWith(CommandSender sender, String command, String message) {
 		CommandSyntaxException exception = assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(sender, command));
 		assertEquals(message, exception.getMessage());
+	}
+	
+	public void assertNotCommandFailsWith(CommandSender sender, String command, String message) {
+		CommandSyntaxException exception = assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(sender, command));
+		assertNotEquals(message, exception.getMessage());
 	}
 	
 	public void assertNoMoreResults(Mut<?> mut) {
