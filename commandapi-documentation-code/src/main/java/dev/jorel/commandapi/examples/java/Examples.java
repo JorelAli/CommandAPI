@@ -1330,6 +1330,30 @@ new CommandAPICommand("sayhi")
 /* ANCHOR_END: argumentsayhicmd2 */
 }
 
+{
+/* ANCHOR: argumentrate */
+new CommandAPICommand("rate")
+    .withOptionalArguments(new StringArgument("topic").combineWith(new IntegerArgument("rating", 0, 10)))
+    .withOptionalArguments(new PlayerArgument("target"))
+    .executes((sender, args) -> {
+        String topic = (String) args.get("topic");
+        if(topic == null) {
+            sender.sendMessage("You didn't give a rating");
+            return;
+        }
+
+        // We know this is not null because rating is required if topic is given
+        int rating = (int) args.get("rating");
+
+        // The target player is optional, so give it a default here
+        CommandSender target = (CommandSender) args.getOrDefault("target", sender);
+
+        target.sendMessage("Your " + topic + " was rated: " + rating + "/10");
+    })
+    .register();
+/* ANCHOR_END: argumentrate */
+}
+
 @SuppressWarnings("unused")
 public void argumentCasting() {
 /* ANCHOR: argumentcasting */

@@ -1255,6 +1255,30 @@ CommandAPICommand("sayhi")
 /* ANCHOR_END: argumentsayhicmd2 */
 }
 
+fun ratecommand() {
+/* ANCHOR: argumentrate */
+CommandAPICommand("rate")
+    .withOptionalArguments(StringArgument("topic").combineWith(IntegerArgument("rating", 0, 10)))
+    .withOptionalArguments(PlayerArgument("target"))
+    .executes(CommandExecutor { sender, args ->
+        val topic: String? = args["topic"] as String?
+        if (topic == null) {
+            sender.sendMessage("You didn't give a rating!")
+            return@CommandExecutor
+        }
+
+        // We know this is not null because rating is required if topic is given
+        val rating = args["rating"] as Int
+
+        // The target player is optional, so give it a default here
+        val target: CommandSender = args.getOrDefault("target", sender) as CommandSender
+
+        target.sendMessage("Your $topic was rated: $rating/10")
+    })
+    .register()
+/* ANCHOR_END: argumentrate */
+}
+
 @Suppress("unused")
 public fun argumentCasting() {
 /* ANCHOR: argumentcasting */
