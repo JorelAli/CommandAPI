@@ -225,6 +225,13 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 		return instance();
 	}
 
+	/**
+	 * Resets the requirements for this command
+	 */
+	public final void resetRequirements() {
+		this.requirements = s -> true;
+	}
+
 	/////////////////
 	// Listability //
 	/////////////////
@@ -305,7 +312,12 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 */
 	@SafeVarargs
 	public final Impl combineWith(Argument... combinedArguments) {
-		this.combinedArguments.addAll(Arrays.asList(combinedArguments));
+		for (Argument argument : combinedArguments) {
+			argument.resetRequirements();
+			argument.withRequirement(this.requirements);
+			argument.withPermission(this.permission);
+			this.combinedArguments.add(argument);
+		}
 		return instance();
 	}
 
