@@ -4,13 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.WorldArgument;
@@ -39,7 +37,7 @@ public class ArgumentWorldTests extends TestBase {
 	/*********
 	 * Tests *
 	 *********/
-	
+
 	@Test
 	public void executionTestWithWorldArgument() {
 		Mut<World> results = Mut.of();
@@ -52,11 +50,11 @@ public class ArgumentWorldTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		
+
 		World world = server.addSimpleWorld("my_world");
 		World world_nether = server.addSimpleWorld("my_world_nether");
 		World world_the_end = server.addSimpleWorld("my_world_the_end");
-		
+
 		// Dev note: Comparing worlds in the testing environment
 		// Because WorldServer.getWorld() HAS to return a CraftWorld object (instead
 		// of a World object), we can't pass the WorldMock instance through it. However
@@ -71,15 +69,15 @@ public class ArgumentWorldTests extends TestBase {
 		// /test my_world
 		server.dispatchCommand(player, "test my_world");
 		assertEquals(world, results.get());
-		
+
 		// /test my_world_nether
 		server.dispatchCommand(player, "test my_world_nether");
 		assertEquals(world_nether, results.get());
-		
+
 		// /test my_world_the_end
 		server.dispatchCommand(player, "test my_world_the_end");
 		assertEquals(world_the_end, results.get());
-		
+
 		// /test world_doesnt_exist
 		assertCommandFailsWith(player, "test world_doesnt_exist", "Unknown dimension 'minecraft:world_doesnt_exist'");
 
@@ -97,19 +95,18 @@ public class ArgumentWorldTests extends TestBase {
 			.executesPlayer((player, args) -> {
 			})
 			.register();
-	
+
 		PlayerMock player = server.addPlayer();
-		
+
 		server.addSimpleWorld("my_world");
 		server.addSimpleWorld("my_world_nether");
 		server.addSimpleWorld("my_world_the_end");
-		
-		// TODO: Need to mock CLW#levels();
+
 		// /test
-//		assertEquals(List.of("world", "my_world", "my_world_nether", "my_world_the_end"), server.getSuggestions(player, "test "));
-//
-//		// /test my_
-//		assertEquals(List.of("my_world", "my_world_nether", "my_world_the_end"), server.getSuggestions(player, "test my_"));
+		assertEquals(List.of("minecraft:my_world", "minecraft:my_world_nether", "minecraft:my_world_the_end", "minecraft:world"), server.getSuggestions(player, "test "));
+
+		// /test my_
+		assertEquals(List.of("minecraft:my_world", "minecraft:my_world_nether", "minecraft:my_world_the_end"), server.getSuggestions(player, "test my_"));
 	}
 
 }

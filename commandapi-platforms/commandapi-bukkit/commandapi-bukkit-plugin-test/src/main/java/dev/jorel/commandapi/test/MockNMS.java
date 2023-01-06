@@ -9,11 +9,12 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -355,6 +356,19 @@ public class MockNMS extends ArgumentNMS {
 					Mockito.when(bukkitWorldServerMock.getWorld()).thenReturn(craftWorldMock);
 					return bukkitWorldServerMock;
 				}
+			});
+			
+			Mockito.when(clw.u()).thenAnswer(invocation -> {
+				Set<ResourceKey<net.minecraft.world.level.World>> set = new HashSet<>();
+				// We only need to implement resourceKey.a()
+				
+				for(World world : Bukkit.getWorlds()) {
+					ResourceKey<net.minecraft.world.level.World> key = Mockito.mock(ResourceKey.class);
+					Mockito.when(key.a()).thenReturn(new MinecraftKey(world.getName()));
+					set.add(key);
+				}
+				
+				return set;
 			});
 		}
 		return clw;
