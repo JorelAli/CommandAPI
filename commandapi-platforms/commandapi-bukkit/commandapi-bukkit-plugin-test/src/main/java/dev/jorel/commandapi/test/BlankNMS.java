@@ -163,12 +163,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentMathOperation() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentNBTCompound() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
@@ -283,12 +277,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 
 	@Override
 	public IntegerRange getIntRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}

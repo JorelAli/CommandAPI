@@ -25,6 +25,7 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
+import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandListenerWrapper;
@@ -72,6 +73,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public final ArgumentType<?> _ArgumentItemStack() {
 		return BASE_NMS._ArgumentItemStack();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentMathOperation() {
+		return BASE_NMS._ArgumentMathOperation();
 	}
 	
 	@Override
@@ -220,6 +226,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 			Function<Object, NBTContainer> nbtContainerConstructor) {
 		return BASE_NMS.getNBTCompound((CommandContext) cmdCtx, key, nbtContainerConstructor);
+	}
+
+	@Override
+	public MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return BASE_NMS.getMathOperation((CommandContext) cmdCtx, key);
 	}
 
 	@Override
