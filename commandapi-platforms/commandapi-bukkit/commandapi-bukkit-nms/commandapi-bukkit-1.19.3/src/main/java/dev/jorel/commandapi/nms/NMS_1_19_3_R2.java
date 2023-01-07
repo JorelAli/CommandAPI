@@ -50,6 +50,7 @@ import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -105,7 +106,9 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
@@ -139,6 +142,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
 import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -347,6 +351,16 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender) {
 		return VanillaCommandWrapper.getListener(sender.getSource());
+	}
+
+	@Override
+	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
+	}
+
+	@Override
+	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 	
 	@Differs(from = "1.19.2", by = "Use of ResourceArgument")
@@ -606,6 +620,30 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 				yield NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
 			}
 			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
+	}
+
+	@Override
+	@Differs(from = {"NMS_Common"}, by = "Many MinecraftServer#get methods mapped to different names")
+	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
+		return switch (provider) {
+			case FUNCTION -> (context, builder) -> {
+				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
+				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
+				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
+			};
+			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
+			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
+			case ADVANCEMENTS -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
+					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
+			};
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
+			};
+			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
+			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
 
