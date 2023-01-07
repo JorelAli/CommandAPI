@@ -305,7 +305,10 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 
 	/**
 	 * Adds combined arguments to this argument. Combined arguments are used to have required arguments after optional arguments
-	 * by ignoring they exist until they are added to the arguments array for registration
+	 * by ignoring they exist until they are added to the arguments array for registration.
+	 *
+	 * This method also causes permissions and requirements from this argument to be copied over to the arguments you want to combine
+	 * this argument with. Their permissions and requirements will be ignored.
 	 *
 	 * @param combinedArguments The arguments to combine to this argument
 	 * @return this current argument
