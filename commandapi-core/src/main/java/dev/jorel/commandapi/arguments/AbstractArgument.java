@@ -228,7 +228,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	/**
 	 * Resets the requirements for this command
 	 */
-	public final void resetRequirements() {
+	void resetRequirements() {
 		this.requirements = s -> true;
 	}
 
