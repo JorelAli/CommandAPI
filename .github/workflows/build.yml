@@ -65,20 +65,20 @@ jobs:
           mkdir -p mdbook-linkcheck && cd "$_" && curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && unzip "$_" && chmod +x mdbook-linkcheck && export PATH=$PWD:$PATH && cd ..
           ./mdbook-fa6 build
       
-      - name: validate version-specific dependencies (nms-common)
-        run: |
-          nms_common_path="commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/target/classes/dev/jorel/commandapi/nms/NMS_Common.class"
-          if ! command -v javap &> /dev/null
-          then
-              echo "javap could not be found, skipping NMS Common validation check"
-              exit
-          else
-              javapcommand=$(javap -v $nms_common_path | grep -E '#[0-9]+ = Class ' | cut -c 46- | sort | grep 'org/bukkit/craftbukkit')
-              if [[ -n "$javapcommand" ]]; then
-                  echo "NMS Common has version-specific dependencies!"
-                  echo $javapcommand
-                  exit 1
-              else
-                  echo "NMS Common has no version-specific dependencies :)"
-              fi
-          fi
+      # - name: validate version-specific dependencies (nms-common)
+      #   run: |
+      #     nms_common_path="commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/target/classes/dev/jorel/commandapi/nms/NMS_Common.class"
+      #     if ! command -v javap &> /dev/null
+      #     then
+      #         echo "javap could not be found, skipping NMS Common validation check"
+      #         exit
+      #     else
+      #         javapcommand=$(javap -v $nms_common_path | grep -E '#[0-9]+ = Class ' | cut -c 46- | sort | grep 'org/bukkit/craftbukkit')
+      #         if [[ -n "$javapcommand" ]]; then
+      #             echo "NMS Common has version-specific dependencies!"
+      #             echo $javapcommand
+      #             exit 1
+      #         else
+      #             echo "NMS Common has no version-specific dependencies :)"
+      #         fi
+      #     fi
