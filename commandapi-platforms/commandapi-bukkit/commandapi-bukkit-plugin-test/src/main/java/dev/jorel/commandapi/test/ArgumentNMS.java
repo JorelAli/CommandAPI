@@ -1,4 +1,6 @@
 package dev.jorel.commandapi.test;
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -16,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.mockito.Mockito;
 
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -33,7 +36,12 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.commands.arguments.item.ArgumentItemStack;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.IRegistry;
+import net.minecraft.resources.ResourceKey;
 
 /**
  * Argument related method implementations
@@ -97,7 +105,14 @@ public abstract class ArgumentNMS extends BlankNMS {
 
 	@Override
 	public final ArgumentType<?> _ArgumentItemStack() {
-		return BASE_NMS._ArgumentItemStack();
+		// We can't use BASE_NMS for this, because that requires a COMMAND_BUILD_CONTEXT.
+		// The COMMAND_BUILD_CONTEXT is only defined for CraftServer instances, otherwise
+		// it'll return null.
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.a(any(ResourceKey.class)))
+			.thenReturn(HolderLookup.a(IRegistry.Y)); // Registry.ITEM
+		return ArgumentItemStack.a(buildContextMock);
 	}
 
 	@Override
