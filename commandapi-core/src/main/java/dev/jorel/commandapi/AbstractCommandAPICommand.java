@@ -275,12 +275,8 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			if (executor.hasAnyExecutors()) {
 				// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
 				CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
-				if (argumentsToRegister.isEmpty()) {
-					handler.register(meta, argumentsArray, executor, isConverted);
-				} else {
-					for (Argument[] arguments : argumentsToRegister) {
-						handler.register(meta, arguments, executor, isConverted);
-					}
+				for (Argument[] arguments : argumentsToRegister) {
+					handler.register(meta, arguments, executor, isConverted);
 				}
 			}
 
