@@ -313,9 +313,6 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	@SafeVarargs
 	public final Impl combineWith(Argument... combinedArguments) {
 		for (Argument argument : combinedArguments) {
-			argument.resetRequirements();
-			argument.withRequirement(this.requirements);
-			argument.withPermission(this.permission);
 			this.combinedArguments.add(argument);
 		}
 		return instance();
@@ -337,6 +334,18 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 */
 	public List<String> getEntityNames(Object argument) {
 		return Arrays.asList(new String[]{null});
+	}
+
+	/**
+	 * Copies permissions and requirements from the provided argument to this argument
+	 * This also resets additional permissions and requirements.
+	 *
+	 * @param argument The argument to copy permissions and requirements from
+	 */
+	public void copyPermissionsAndRequirements(Argument argument) {
+		this.resetRequirements();
+		this.withRequirement(argument.getRequirements());
+		this.withPermission(argument.getArgumentPermission());
 	}
 
 	@Override

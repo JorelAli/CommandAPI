@@ -346,6 +346,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		List<Argument> combinedArguments = new ArrayList<>();
 		combinedArguments.add(argument);
 		for (Argument subArgument : argument.getCombinedArguments()) {
+			subArgument.copyPermissionsAndRequirements(argument);
 			combinedArguments.addAll(unpackCombinedArguments(subArgument));
 		}
 		return combinedArguments;
