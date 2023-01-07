@@ -304,10 +304,10 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	}
 
 	/**
-	 * Adds linked arguments to this argument. Linked arguments are used to have required arguments after optional arguments
+	 * Adds combined arguments to this argument. Combined arguments are used to have required arguments after optional arguments
 	 * by ignoring they exist until they are added to the arguments array for registration
 	 *
-	 * @param combinedArguments The arguments to link
+	 * @param combinedArguments The arguments to combine to this argument
 	 * @return this current argument
 	 */
 	@SafeVarargs
