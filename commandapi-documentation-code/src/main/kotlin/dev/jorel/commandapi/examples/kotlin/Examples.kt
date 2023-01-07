@@ -1263,7 +1263,11 @@ CommandAPICommand("rate")
     .executes(CommandExecutor { sender, args ->
         val topic: String? = args["topic"] as String?
         if (topic == null) {
-            sender.sendMessage("You didn't give a rating!")
+            sender.sendMessage(
+                "Usage: /rate <topic> <rating> <player>(optional)",
+                "Select a topic to rate, then give a rating between 0 and 10",
+                "You can optionally add a player at the end to give the rating to"
+            )
             return@CommandExecutor
         }
 
