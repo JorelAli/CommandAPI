@@ -330,15 +330,24 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 					Argument[] argumentsWithoutCombined = (Argument[]) new AbstractArgument[i];
 					System.arraycopy(argumentsArray, 0, argumentsWithoutCombined, 0, i);
 					for (Argument argument : argumentsWithoutCombined) {
-						arguments.add(argument);
-						if (argument.hasCombinedArguments()) {
-							arguments.addAll(argument.getCombinedArguments());
-						}
+						arguments.addAll(unpackCombinedArguments(argument));
 					}
 					argumentsToRegister.add(arguments.toArray((Argument[]) new AbstractArgument[0]));
 				}
 			}
 		}
 		return argumentsToRegister;
+	}
+
+	private List<Argument> unpackCombinedArguments(Argument argument) {
+		if (!argument.hasCombinedArguments()) {
+			return List.of(argument);
+		}
+		List<Argument> combinedArguments = new ArrayList<>();
+		combinedArguments.add(argument);
+		for (Argument subArgument : argument.getCombinedArguments()) {
+			combinedArguments.addAll(unpackCombinedArguments(subArgument));
+		}
+		return combinedArguments;
 	}
 }
