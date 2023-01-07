@@ -117,6 +117,7 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.players.UserCache;
+import net.minecraft.world.phys.Vec2F;
 import net.minecraft.world.phys.Vec3D;
 
 public class MockNMS extends ArgumentNMS {
@@ -370,6 +371,9 @@ public class MockNMS extends ArgumentNMS {
 				
 				return set;
 			});
+			
+			// Rotation argument
+			Mockito.when(clw.l()).thenReturn(new Vec2F(loc.getYaw(), loc.getPitch()));
 		}
 		return clw;
 	}

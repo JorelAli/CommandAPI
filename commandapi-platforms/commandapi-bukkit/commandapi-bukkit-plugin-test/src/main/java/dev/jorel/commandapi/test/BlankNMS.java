@@ -137,12 +137,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentRotation() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
 	public ArgumentType<?> _ArgumentScoreboardCriteria() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
@@ -240,12 +234,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}

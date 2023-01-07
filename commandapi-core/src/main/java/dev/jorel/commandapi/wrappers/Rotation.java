@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
+import java.util.Objects;
+
 /**
  * A class to represent the pitch and yaw rotation in degrees
  */
@@ -89,6 +91,24 @@ public class Rotation {
 	@Override
 	public String toString() {
 		return yaw + " " + pitch;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(pitch, yaw);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Rotation other = (Rotation) obj;
+		return Float.floatToIntBits(pitch) == Float.floatToIntBits(other.pitch)
+				&& Float.floatToIntBits(yaw) == Float.floatToIntBits(other.yaw);
 	}
 
 }

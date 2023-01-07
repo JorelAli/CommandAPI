@@ -30,6 +30,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.Rotation;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandListenerWrapper;
@@ -132,6 +133,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public ArgumentType<?> _ArgumentProfile() {
 		return BASE_NMS._ArgumentProfile();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRotation() {
+		return BASE_NMS._ArgumentRotation();
 	}
 	
 	@Override
@@ -296,6 +302,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
 		return BASE_NMS.getPotionEffect((CommandContext) cmdCtx, key);
+	}
+
+	@Override
+	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return BASE_NMS.getRotation((CommandContext) cmdCtx, key);
 	}
 
 	@Override
