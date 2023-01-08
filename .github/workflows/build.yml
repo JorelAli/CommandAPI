@@ -20,8 +20,8 @@ jobs:
         with:
           distribution: temurin
           server-id: ossrh # Needs to match the id in the main pom.xml file
-          server-username: ${{ secrets.MAVEN_USERNAME }}
-          server-password: ${{ secrets.MAVEN_PASSWORD }}
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
           java-version: 17
           cache: maven
           
@@ -33,3 +33,6 @@ jobs:
           else
             echo "Version is not a SNAPSHOT version, not deploying to Sonatype Snapshot repo"
           fi
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
