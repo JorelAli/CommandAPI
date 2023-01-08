@@ -28,11 +28,11 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
           
-    - name: deploy-maven
-      run: |
-        if mvn help:evaluate -Dexpression=project.version -q -DforceStdout | grep -E -q '\-SNAPSHOT$';  then
-          echo "SNAPSHOT version detected: $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
-          mvn deploy --batch-mode -P Platform.Bukkit,Platform.Velocity -DskipTests=true
-        else
-          echo "Version is not a SNAPSHOT version, not deploying to Sonatype Snapshot repo"
-        fi
+      - name: deploy-maven
+        run: |
+          if mvn help:evaluate -Dexpression=project.version -q -DforceStdout | grep -E -q '\-SNAPSHOT$';  then
+            echo "SNAPSHOT version detected: $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+            mvn deploy --batch-mode -P Platform.Bukkit,Platform.Velocity -DskipTests=true
+          else
+            echo "Version is not a SNAPSHOT version, not deploying to Sonatype Snapshot repo"
+          fi
