@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Function;
-
 import org.bukkit.World;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -41,7 +39,7 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public WorldArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), ((Function<World, String>) World::getName).andThen(String::toLowerCase));
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), world -> world.getName().toLowerCase());
 	}
 
 	@Override
