@@ -109,3 +109,6 @@ jobs:
           else
             echo "Version is not a SNAPSHOT version, not deploying to Sonatype Snapshot repo"
           fi
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
