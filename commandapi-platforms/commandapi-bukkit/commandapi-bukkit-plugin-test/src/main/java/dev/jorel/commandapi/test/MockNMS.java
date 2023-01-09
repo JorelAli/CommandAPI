@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.enchantments.EnchantmentsMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -32,6 +33,7 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.*;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.resources.MinecraftKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.AdvancementDataWorld;
 import net.minecraft.server.DispenserRegistry;
 import net.minecraft.server.MinecraftServer;
@@ -39,10 +41,12 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.players.UserCache;
+import net.minecraft.world.phys.Vec2F;
 import net.minecraft.world.phys.Vec3D;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -90,6 +94,7 @@ public class MockNMS extends ArgumentNMS {
 			if(byKey.isEmpty()) {
 				createPotionEffectTypes();
 			}
+			EnchantmentsMock.registerDefaultEnchantments();
 //			System.out.println(byKey);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
@@ -103,7 +108,7 @@ public class MockNMS extends ArgumentNMS {
 	}
 	
 	/**
-	 * This registers Minecrafts default {@link PotionEffectType PotionEffectTypes}. It also prevents any new effects to
+	 * This registers Minecraft's default {@link PotionEffectType PotionEffectTypes}. It also prevents any new effects to
 	 * be created afterwards.
 	 */
 	public static void createPotionEffectTypes() {
@@ -194,7 +199,7 @@ public class MockNMS extends ArgumentNMS {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19" };
+		return new String[] { "1.19.2" };
 	}
 
 	CommandDispatcher<CommandListenerWrapper> dispatcher;
@@ -215,7 +220,7 @@ public class MockNMS extends ArgumentNMS {
 	List<EntityPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
 	
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		CommandSender sender = senderWrapper.getSource();
@@ -275,6 +280,45 @@ public class MockNMS extends ArgumentNMS {
 				return Optional.empty();
 			});
 			Mockito.when(minecraftServerMock.ap()).thenReturn(userCacheMock);
+
+			// World (Dimension) argument
+			Mockito.when(minecraftServerMock.a(any(ResourceKey.class))).thenAnswer(invocation -> {
+				// Get the ResourceKey<World> and extract the world name from it
+				ResourceKey<net.minecraft.world.level.World> resourceKey = invocation.getArgument(0);
+				String worldName = resourceKey.a().a();
+
+				// Get the world via Bukkit (returns a WorldMock) and create a
+				// CraftWorld clone of it for WorldServer.getWorld()
+				World world = Bukkit.getServer().getWorld(worldName);
+				if(world == null) {
+					return null;
+				} else {
+					CraftWorld craftWorldMock = Mockito.mock(CraftWorld.class);
+					Mockito.when(craftWorldMock.getName()).thenReturn(world.getName());
+					Mockito.when(craftWorldMock.getUID()).thenReturn(world.getUID());
+
+					// Create our return WorldServer object
+					WorldServer bukkitWorldServerMock = Mockito.mock(WorldServer.class);
+					Mockito.when(bukkitWorldServerMock.getWorld()).thenReturn(craftWorldMock);
+					return bukkitWorldServerMock;
+				}
+			});
+
+			Mockito.when(clw.u()).thenAnswer(invocation -> {
+				Set<ResourceKey<net.minecraft.world.level.World>> set = new HashSet<>();
+				// We only need to implement resourceKey.a()
+
+				for(World world : Bukkit.getWorlds()) {
+					ResourceKey<net.minecraft.world.level.World> key = Mockito.mock(ResourceKey.class);
+					Mockito.when(key.a()).thenReturn(new MinecraftKey(world.getName()));
+					set.add(key);
+				}
+
+				return set;
+			});
+
+			// Rotation argument
+			Mockito.when(clw.l()).thenReturn(new Vec2F(loc.getYaw(), loc.getPitch()));
 		}
 		return clw;
 	}

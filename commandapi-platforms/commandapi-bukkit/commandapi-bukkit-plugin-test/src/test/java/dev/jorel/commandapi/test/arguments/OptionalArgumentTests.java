@@ -4,45 +4,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.bukkit.Bukkit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
-import dev.jorel.commandapi.test.CustomServerMock;
-import dev.jorel.commandapi.test.Main;
 import dev.jorel.commandapi.test.Mut;
+import dev.jorel.commandapi.test.TestBase;
 
 /**
  * Tests for optional arguments
  */
-public class OptionalArgumentTests {
+public class OptionalArgumentTests extends TestBase {
 
 	/*********
 	 * Setup *
 	 *********/
 
-	private CustomServerMock server;
-	private Main plugin;
-
 	@BeforeEach
 	public void setUp() {
-		server = MockBukkit.mock(new CustomServerMock());
-		plugin = MockBukkit.load(Main.class);
+		super.setUp();
 	}
 
 	@AfterEach
 	public void tearDown() {
-		Bukkit.getScheduler().cancelTasks(plugin);
-		if (plugin != null) {
-			plugin.onDisable();
-		}
-		MockBukkit.unmock();
+		super.tearDown();
 	}
 
 	/*********

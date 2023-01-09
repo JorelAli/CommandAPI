@@ -28,7 +28,6 @@ import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.datafixers.util.Either;
@@ -53,7 +52,6 @@ import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.*;
-import net.minecraft.commands.arguments.ResourceOrTagArgument.Result;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -107,6 +105,7 @@ import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -160,9 +159,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 
-	// From net.minecraft.server.commands.LocateCommand
-	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
-
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
 
@@ -189,8 +185,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		}
 		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
-		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
-			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -242,7 +236,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Differs(from = "1.19.2", by = "Now needs command build context")
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
-		return ResourceOrTagArgument.resourceOrTag(COMMAND_BUILD_CONTEXT, Registries.BIOME);
+		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.BIOME);
 	}
 
 	@Override
@@ -297,57 +291,23 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
-	@Differs(from = "1.19.2", by = "Now uses ResourceOrTagArgument instead of ResourceOrTagLocationArgument")
+	@Differs(from = "1.19.2", by = "Now uses ResourceArgument instead of ResourceOrTagLocationArgument")
 	@Override
 	public final Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagArgument.getResourceOrTag(cmdCtx, key, Registries.BIOME);
-		if (biomeResult.unwrap().left().isPresent()) {
-			// It's a resource key. Unwrap the result, get the resource key (left)
-			// and get its location and return its path. Important information if
-			// anyone ever has to maintain this very complicated code, because this
-			// took about an hour to figure out:
-
-			// For reference, unwrapping the object like this returns a ResourceKey:
-			// biomeResult.unwrap().left().get()
-
-			// This has two important functions:
-			// location() and registry().
-
-			// The location() returns a ResourceLocation with a namespace and
-			// path of the biome, for example:
-			// minecraft:badlands.
-
-			// The registry() returns a ResourceLocation with a namespace and
-			// path of the registry where the biome is declared in, for example:
-			// minecraft:worldgen/biome.
-			// This is the same registry that you'll find in registries.json and
-			// in the command_registration.json
-
-			final ResourceLocation resourceLocation = biomeResult.unwrap().left().get().key().location();
-			return switch(subType) {
-				case BIOME_BIOME -> {
-					Biome biome = null;
-					try {
-						biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
-					} catch(IllegalArgumentException biomeNotFound) {
-						biome = null;
-					}
-					yield biome;
+		final ResourceLocation resourceLocation = ResourceArgument.getResource(cmdCtx, key, Registries.BIOME).key().location();
+		return switch(subType) {
+			case BIOME_BIOME -> {
+				Biome biome = null;
+				try {
+					biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
+				} catch(IllegalArgumentException biomeNotFound) {
+					biome = null;
 				}
-				case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
-				default -> null;
-			};
-		} else {
-			// This isn't a biome, tell the user this.
-
-			// For reference, unwrapping this gives you the tag's namespace in location()
-			// and a (recursive structure of the) path of the registry, for example
-			// [minecraft:root / minecraft:worldgen/biome]
-
-			// ResourceOrTagLocationArgument.ERROR_INVALID_BIOME
-
-			throw ERROR_BIOME_INVALID.create(biomeResult.asPrintable());
-		}
+				yield biome;
+			}
+			case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
+			default -> null;
+		};
 	}
 
 	@Override
@@ -370,6 +330,16 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender) {
 		return VanillaCommandWrapper.getListener(sender.getSource());
+	}
+
+	@Override
+	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
+	}
+
+	@Override
+	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Differs(from = "1.19.2", by = "Use of ResourceArgument")

@@ -133,7 +133,8 @@
 
 -----
 
-[Upgrading guide](./upgrading.md)
+- [Upgrading guide](./upgrading.md)
+  - [Upgrading guide (pre-9.0.0)](./upgrading_old.md)
 
 [FAQ](./faq.md)
 
