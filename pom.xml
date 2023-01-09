@@ -80,6 +80,7 @@
 		<maven.compiler.source>16</maven.compiler.source>
 		<maven.compiler.target>16</maven.compiler.target>
 		<java.version>16</java.version>
+		<kotlin.version>1.8.0</kotlin.version>
 
 		<!-- Shared libraries. These are declared here so they can be updated easily. 
 			These are present in each module to prevent accidentally "leaking" these 
