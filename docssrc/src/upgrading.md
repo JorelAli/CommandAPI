@@ -1,14 +1,124 @@
 # Upgrading guide
 
-## From 8.7.1 to 9.0.0
+## From 8.7.x to 9.0.0
 
-### Loading and Enabling the CommandAPI when shading
+CommandAPI 9.0.0 is arguably the biggest change in the CommandAPI's project structure and usage. This update was designed to allow the CommandAPI to be generalized for other platforms (e.g. Velocity, Fabric, Sponge), and as a result **this update is incompatible with previous versions of the CommandAPI**.
 
-This update introduces support for Minecraft server platforms other than Bukkit, which means it is possible for the CommandAPI to be loaded and enabled in different environments. Accordingly, the methods `CommandAPI#onEnable` and `CommandAPI#onLoad` are used differently:
+All deprecated methods from 8.7.x have been removed in this update. Please ensure that you use the relevant replacement methods (these are described in the JavaDocs for the various deprecated methods) before upgrading to 9.0.0.
+
+-----
+
+### Project dependencies
+
+For Bukkit/Spigot/Paper plugins, the `commandapi-core` and `commandapi-shade` modules should no longer be used. Instead, use the new `commandapi-bukkit-core` and `commandapi-bukkit-shade` modules:
+
+<div class="linked-multi-pre">
+
+```xml,Maven
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-core</artifactId>
+        <version>9.0.0</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
+
+```xml,Maven_(shaded)
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-shade</artifactId>
+        <version>9.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+```gradle,Gradle
+dependencies {
+    compileOnly "dev.jorel:commandapi-core:9.0.0"
+}
+```
+
+```kotlin,Kotlin_Gradle
+dependencies {
+    compileOnly("dev.jorel:commandapi-core:9.0.0")
+}
+```
+
+```gradle,Gradle_(shaded)
+dependencies {
+    implementation "dev.jorel:commandapi-shade:9.0.0"
+}
+```
+
+```kotlin,Kotlin_Gradle_(shaded)
+dependencies {
+    implementation("dev.jorel:commandapi-shade:9.0.0")
+}
+```
+
+$$\downarrow$$
+
+```xml,Maven
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-bukkit-core</artifactId>
+        <version>9.0.0</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
+
+```xml,Maven_(shaded)
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-bukkit-shade</artifactId>
+        <version>9.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+```gradle,Gradle
+dependencies {
+    compileOnly "dev.jorel:commandapi-bukkit-core:9.0.0"
+}
+```
+
+```kotlin,Kotlin_Gradle
+dependencies {
+    compileOnly("dev.jorel:commandapi-bukkit-core:9.0.0")
+}
+```
+
+```gradle,Gradle_(shaded)
+dependencies {
+    implementation "dev.jorel:commandapi-bukkit-shade:9.0.0"
+}
+```
+
+```kotlin,Kotlin_Gradle_(shaded)
+dependencies {
+    implementation("dev.jorel:commandapi-bukkit-shade:9.0.0")
+}
+```
+
+</div>
+
+-----
+
+### Loading and enabling the CommandAPI when shading
+
+The `CommandAPI.onLoad()` method has changed in this update. Instead of using the `CommandAPIConfig` object, use the `CommandAPIBukkitConfig` and pass in the current plugin reference (`this`).
+
+and `CommandAPI.onEnable()` method has also changed, and now no longer requires the plugin reference (`this`), as it is now included in `CommandAPI.onLoad()` instead.:
 
 <div class="multi-pre">
 
-```java,8.7.1
+```java,8.7.x
 public void onLoad() {
     CommandAPI.onLoad(new CommandAPIConfig());
 }
@@ -36,551 +146,120 @@ public void onEnable() {
 
 </div>
 
-## From 8.6.0 to 8.7.0
-
-### Sound arguments
-
-This update introduces a backwards-incompatible change to the `SoundArgument` which was introduced in 8.6.0. SoundArguments no longer need a generic type parameter:
-
-<div class="multi-pre">
-
-```java,8.6.0
-new SoundArgument<Sound>("sound")
-```
-
-</div>
-
-$$\downarrow$$
-
-<div class="multi-pre">
-
-```java,8.7.0
-new SoundArgument("sound")
-```
-
-</div>
-
-`NamespacedKey` SoundArguments no longer need a `SoundType` parameter, instead the `NamespacedKey` constructor should be used:
-
-<div class="multi-pre">
-
-```java,8.6.0
-new SoundArgument<NamespacedKey>("sound", SoundType.NAMESPACED_KEY)
-```
-
-</div>
-
-$$\downarrow$$
-
-<div class="multi-pre">
-
-```java,8.7.0
-new SoundArgument.NamespacedKey("sound")
-```
-
-</div>
-
-### Entity selector arguments
-
-Entity selector arguments no longer need a generic type parameter or a `EntitySelector` parameter. Instead, the corresponding constructor should be used instead:
-
-<div class="multi-pre">
-
-```java,8.6.0
-new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER)
-new EntitySelectorArgument<Collection<Player>>("target", EntitySelector.MANY_PLAYERS)
-
-new EntitySelectorArgument<Entity>("target", EntitySelector.ONE_ENTITY)
-new EntitySelectorArgument<Collection<Entity>>("target", EntitySelector.MANY_ENTITIES)
-```
-
-</div>
-
-$$\downarrow$$
-
-<div class="multi-pre">
-
-```java,8.7.0
-new EntitySelectorArgument.OnePlayer("target")
-new EntitySelectorArgument.ManyPlayers("target")
-
-new EntitySelectorArgument.OneEntity("target")
-new EntitySelectorArgument.ManyEntities("target")
-```
-
-</div>
-
-### Scoreholder arguments
-
-The `ScoreHolderArgument` no longer needs a generic type parameter or a `ScoreHolderType` parameter. Instead, the corresponding constructor should be used instead:
-
-<div class="multi-pre">
-
-```java,8.6.0
-new ScoreHolderArgument<String>(nodeName, ScoreHolderType.SINGLE);
-new ScoreHolderArgument<Collection<String>>(nodeName, ScoreHolderType.MULTIPLE);
-```
-
-</div>
-
-$$\downarrow$$
-
-<div class="multi-pre">
-
-```java,8.7.0
-new ScoreHolderArgument.Single(nodeName);
-new ScoreHolderArgument.Multiple(nodeName);
-```
-
-</div>
-
 -----
 
-## From 8.5.1 to 8.6.0
+### Accessing arguments
 
-### Sound arguments
+Arguments for commands are no longer an `Object[]` and have now been replaced with a more powerful `CommandArguments` object. This object now lets you access arguments in a number of ways:
 
-In 8.6.0, the `SoundArgument` now supports returning a `Sound` or `NamespacedKey` object. More information on how to use this can be found in the [Sound arguments](./soundargument.md) page. `SoundArgument` objects now require a generic type parameter to specify what the return type will be (either `Sound` or `NamespacedKey`). For the default behaviour, use `Sound` as the generic type parameter:
+#### Using the `args.get(int)` method
 
-```java
-new SoundArgument("sound")
-```
+If you're in a rush and just want to upgrade quickly, call the `.get(int)` method instead of accessing the arguments using the array access notation:
 
-$$\downarrow$$
+<div class="multi-pre">
 
-```java
-new SoundArgument<Sound>("sound")
-```
-
-### Tooltips
-
-In 8.6.0, tooltips have been reworked to provide support for Spigot's `BaseComponent[]`s, and Adventure's `Component`s. As a result, the default method `StringTooltip.of()` and `Tooltip.of()` have been deprecated in favour of the better named `StringTooltip.ofString()` and `Tooltip.ofString()` methods:
-
-```java
-StringTooltip.of("wave", "Waves at a player")
-
-Tooltip.of(player.getWorld().getSpawnLocation(), "World spawn")
-```
-
-$$\downarrow$$
-
-```java
-StringTooltip.ofString("wave", "Waves at a player")
-
-Tooltip.ofString(player.getWorld().getSpawnLocation(), "World spawn")
-```
-
-Additionally, the `IStringTooltip` interface's `getTooltip` method was changed to return a Brigadier `Message` object instead of a `String`. To use the `IStringTooltip` directly, you now have to add Brigadier to your project's dependencies (info on how to do that can be found [here](https://github.com/Mojang/brigadier#installation)).
-
-You can use the `Tooltip.messageFromString(String)` to easily upgrade to the new `Message` return type:
-
-```java
-@Override
-public String getTooltip() {
-    return this.itemstack.getItemMeta().getLore().get(0);
-}
-```
-
-$$\downarrow$$
-
-```java
-@Override
-public Message getTooltip() {
-    return Tooltip.messageFromString(this.itemstack.getItemMeta().getLore().get(0));
-}
-```
-
-### Command failures
-
-To support Spigot's `BaseComponent[]`s and Adventure's `Component`s, the `CommandAPI.fail()` method has now been deprecated in favour of the better named `CommandAPI.failWithString()` method:
-
-```java
-throw CommandAPI.fail("Error message");
-```
-
-$$\downarrow$$
-
-```java
-throw CommandAPI.failWithString("Error message");
-```
-
-### List arguments
-
-List arguments can now be implemented using an underlying text argument, instead of requiring it to be a greedy string. This allows you to use multiple lists in a command, in any position. As such, the `ListArgumentBuilder.build()` method has been deprecated and replaced with `ListArgumentBuilder.buildGreedy()` instead:
-
-```java
-new ListArgumentBuilder<Material>("materials")
-    .withList(List.of(Material.values()))
-    .withMapper(material -> material.name().toLowerCase())
-    .build();
-```
-
-$$\downarrow$$
-
-```java
-new ListArgumentBuilder<Material>("materials")
-    .withList(List.of(Material.values()))
-    .withMapper(material -> material.name().toLowerCase())
-    .buildGreedy();
-```
-
------
-
-## From 8.5.0 to 8.5.1
-
-### Brigadier arguments
-
-In 8.5.1, the methods `Brigadier.fromArgument` and `Brigadier.toSuggestions` were changed to use `Argument` based parameters instead of `String` based parameters. Instead of providing the node name, you now have to provide the whole argument:
-
-```java
-Argument<?> myArgument = new StringArgument("myargument");
-List<Argument<?>> argumentList = List.of(myArgument);
-
-Brigadier.fromArgument(argumentList, "myargument");
-Brigadier.toSuggestions("myargument", argumentList);
-```
-
-$$\downarrow$$
-
-```java
-Argument<?> myArgument = new StringArgument("myargument");
-List<Argument<?>> argumentList = List.of(myArgument);
-
-Brigadier.fromArgument(argumentList, myArgument);
-Brigadier.toSuggestions(myArgument, argumentList);
-```
-
------
-
-## From 8.3.1 to 8.4.0
-
-### Getting a list of registered commands
-
-In 8.2.1, the CommandAPI exposed `CommandAPIHandler.getInstance().registeredCommands` to get a list of registered commands. This has now been changed and properly implemented as a getter method which can be accessed from `CommandAPI`:
-
-```java
-CommandAPIHandler.getInstance().registeredCommands
-```
-
-$$\downarrow$$
-
-```java
-CommandAPI.getRegisteredCommands()
-```
-
-### Entity selector arguments
-
-The import for `EntitySelector` for the `EntitySelectorArgument` has moved to improve CommandAPI shading support with jar minimization:
-
-```java
-dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector
-```
-
-$$\downarrow$$
-
-```java
-dev.jorel.commandapi.arguments.EntitySelector
-```
-
-### Custom arguments
-
-Custom arguments are no longer restricted to a string-based argument or a keyed-based argument and can now be implemented over any existing argument "base". This argument is now parameterized over two types: the first type being the return type of this custom argument and the second type being the return type of the "base" argument. Custom arguments should now use the new constructor that accepts an argument - more information on how to do that can be found on the [Custom arguments page](./argument_custom.md). It's recommended to review your implementation of custom arguments and upgrade them if you feel that you need a more powerful argument parser (for example, you might want to use a greedy string argument as the base argument instead of a string argument).
-
-Custom arguments that are _not_ keyed can be drop-in replaced with a `StringArgument`:
-
-```java
-new CustomArgument<T>("nodename", inputInfo -> {
-    // Code here
-    return T;
-});
-```
-
-$$\downarrow$$
-
-```java
-new CustomArgument<T, String>(new StringArgument("nodename"), inputInfo -> {
-    // Code here
-    return T;
-});
-```
-
-Keyed custom arguments can be drop-in replaced with a `NamespacedKeyArgument`:
-
-```java
-new CustomArgument<T>("nodename", inputInfo -> {
-    // Code here
-    return T;
-}, true);
-```
-
-$$\downarrow$$
-
-```java
-new CustomArgument<T, NamespacedKey>(new NamespacedKeyArgument("nodename"), inputInfo -> {
-    // Code here
-    return T;
-});
-```
-
-### NBT arguments
-
-NBT arguments now have a different implementation if you're using the plugin version of the CommandAPI or shading the CommandAPI.
-
-NBTCompoundArguments are now parameterized over their implemented NBTCompound implementation. For the NBT API, this means:
-
-```java
-new NBTCompoundArgument("nbt");
-```
-
-$$\downarrow$$
-
-```java
-new NBTCompoundArgument<NBTContainer>("nbt");
-```
-
-#### If you're using the plugin version of the CommandAPI
-
-You no longer have to include the NBT API separately, the CommandAPI comes with the NBT API built-in:
-
-```java
-de.tr7zw.nbtapi.NBTContainer
-```
-
-$$\downarrow$$
-
-```java
-dev.jorel.commandapi.nbtapi.NBTContainer
-```
-
-#### If you're shading the CommandAPI
-
-You now need to shade the NBT API into your plugin (as well as the CommandAPI). So the CommandAPI knows how to use the underlying implementation of the NBT API, you have to configure it using the `CommandAPIConfig.initializeNBTAPI()` method in `CommandAPI.onLoad()`. More information on how to do that can be found on the [NBT arguments page, under Shading usage setup](./argument_nbt.md#shading-usage-setup).
-
------
-
-## From 8.0.0 or earlier to 8.1.0
-
-Arguments are now parameterized over a generic type. This does very little in terms of the running of the CommandAPI, but does ensure type safety with its internals. Instances of the `Argument` type now have to be parameterized. In general, this basically means:
-
-```java
-Argument myArgument = new GreedyStringArgument("arg");
-```
-
-$$\downarrow$$
-
-```java
-Argument<?> myArgument = new GreedyStringArgument("arg");
-```
-
-Arguments that have multiple return types also need to be parameterized over their return type. This includes:
-
-- `CustomArgument`
-- `EntitySelectorArgument`
-- `ScoreholderArgument`
-
-For example:
-
-```java
-new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER);
-```
-
-$$\downarrow$$
-
-```java
-new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER);
-```
-
------
-
-## From version 7.0.0 to 8.0.0
-
-### Particle arguments
-
-Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./argument_particle.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
-
-```java
-new CommandAPICommand("mycommand")
-    .withArgument(new ParticleArgument("particle"))
+```java,8.7.x
+new CommandAPICommand("cmd")
+    .withArguments(new StringArgument("mystring"))
+    .withArguments(new PotionEffectArgument("mypotion"))
+    .withArguments(new LocationArgument("mylocation"))
     .executes((sender, args) -> {
-        Particle particle = (Particle) args[0];
-        // Do stuff with particle
+        String stringArg = (String) args[0];
+        PotionEffectType potionArg = (PotionEffectType) args[1];
+        Location locationArg = (Location) args[2];
     })
     .register();
 ```
 
+</div>
+
 $$\downarrow$$
 
-```java
-new CommandAPICommand("mycommand")
-    .withArgument(new ParticleArgument("particle"))
+<div class="multi-pre">
+
+```java,9.0.0
+new CommandAPICommand("cmd")
+    .withArguments(new StringArgument("mystring"))
+    .withArguments(new PotionEffectArgument("mypotion"))
+    .withArguments(new LocationArgument("mylocation"))
     .executes((sender, args) -> {
-        ParticleData particleData = (ParticleData) args[0];
-
-        Particle particle = particleData.particle();
-        Object data = particleData.data();
-
-        // Do stuff with particle and data
+        String stringArg = (String) args.get(0);
+        PotionEffectType potionArg = (PotionEffectType) args.get(1);
+        Location locationArg = (Location) args.get(2);
     })
     .register();
 ```
 
------
+</div>
 
-## From version 6.5.2 to 7.0.0
+#### Using the `args.get(String)` method _(recommended)_
 
-### Maven repository
+The CommandAPI introduces a new `args.get(String)` method to access arguments using the argument node name. This method is significantly safer than using `args.get(int)` and makes your code much more compatible with optional arguments:
 
-The Maven repository used to serve the CommandAPI has changed from JitPack.io to Maven Central. For Maven projects, you no longer require wan explicit `<repository>` entry for the CommandAPI. for Gradle projects, you need to ensure `mavenCentral()` in present in your `repositories` section.
+<div class="multi-pre">
 
-**The group ID has changed from `dev.jorel.CommandAPI` to `dev.jorel`**
-
-More information about setting up your development environment can be found in [Setting up your development environment](./setup_dev.md).
-
-### CommandAPI command failures
-
-The `CommandAPI.fail()` no longer automatically throws the exception that it creates, and instead now requires you to manually throw the exception yourself. This improves upon invalid states in command executors and allows invalid states to be identified more easily at compile time. To update, simply add the `throw` keyword before you call `CommandAPI.fail()`:
-
-```java
-new CommandAPICommand("mycommand")
+```java,8.7.x
+new CommandAPICommand("cmd")
+    .withArguments(new StringArgument("mystring"))
+    .withArguments(new PotionEffectArgument("mypotion"))
+    .withArguments(new LocationArgument("mylocation"))
     .executes((sender, args) -> {
-        if(!sender.hasPermission("some.permission")) {
-            CommandAPI.fail("You don't have permission to run /mycommand!");
-            return;
-        }
-        sender.sendMessage("Hello!");
+        String stringArg = (String) args[0];
+        PotionEffectType potionArg = (PotionEffectType) args[1];
+        Location locationArg = (Location) args[2];
     })
+    .register();
 ```
+
+</div>
 
 $$\downarrow$$
 
-```java
-new CommandAPICommand("mycommand")
+<div class="multi-pre">
+
+```java,9.0.0
+new CommandAPICommand("cmd")
+    .withArguments(new StringArgument("mystring"))
+    .withArguments(new PotionEffectArgument("mypotion"))
+    .withArguments(new LocationArgument("mylocation"))
     .executes((sender, args) -> {
-        if(!sender.hasPermission("some.permission")) {
-            throw CommandAPI.fail("You don't have permission to run /mycommand!");
-        }
-        sender.sendMessage("Hello!");
+        String stringArg = (String) args.get("mystring");
+        PotionEffectType potionArg = (PotionEffectType) args.get("mypotion");
+        Location locationArg = (Location) args.get("mylocation");
     })
+    .register();
 ```
 
-### Suggestions
-
-Suggestions have been overhauled and no longer take in a `Function<SuggestionsInfo, String[]>` anymore. Instead, they now take in a `ArgumentSuggestions` object which represents argument suggestions (and whether they are executed asynchronously or have tooltips).
-
-#### Normal (string) suggestions
-
-These normal suggestions methods have been replaced with an `ArgumentSuggestions` parameter instead of a function:
-
-```java
-Argument replaceSuggestions(Function<SuggestionInfo, String[]> suggestions);
-Argument includeSuggestions(Function<SuggestionInfo, String[]> suggestions);
-```
-
-$$\downarrow$$
-
-```java
-Argument replaceSuggestions(ArgumentSuggestions suggestions);
-Argument includeSuggestions(ArgumentSuggestions suggestions);
-```
-
-The same functionality can be reproduced by wrapping your existing functions in `ArgumentSuggestions.strings`:
-
-```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("world").replaceSuggestions(info -> 
-    new String[] {"northland", "eastland", "southland", "westland" }
-));
-```
-
-$$\downarrow$$
-
-```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("world").replaceSuggestions(ArgumentSuggestions.strings(info -> 
-    new String[] {"northland", "eastland", "southland", "westland" }
-)));
-```
-
-#### Normal (strings with tooltips) suggestions
-
-The `...T()` methods have been replaced with the normal methods above, and can use the `ArgumentSuggestions.stringsWithTooltips` method:
-
-```java
-Argument replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
-Argument includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions);
-```
-
-$$\downarrow$$
-
-```java
-Argument replaceSuggestions(ArgumentSuggestions suggestions);
-Argument includeSuggestions(ArgumentSuggestions suggestions);
-```
-
-For example:
-
-```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("emote")
-    .replaceSuggestionsT( info -> new IStringTooltip[] {
-            StringTooltip.of("wave", "Waves at a player"),
-            StringTooltip.of("hug", "Gives a player a hug"),
-            StringTooltip.of("glare", "Gives a player the death glare")
-        }
-    )
-);
-```
-
-$$\downarrow$$
-
-```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new StringArgument("emote")
-    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> new IStringTooltip[] {
-            StringTooltip.of("wave", "Waves at a player"),
-            StringTooltip.of("hug", "Gives a player a hug"),
-            StringTooltip.of("glare", "Gives a player the death glare")
-        }
-    ))
-);
-```
-
-#### Safe suggestions
-
-Similar to above with normal suggestions, safe suggestions have been replaced with `replaceSafeSuggestions` and `includeSafeSuggestions` respectively:
-
-```java
-Argument replaceWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
-Argument includeWithSafeSuggestions(Function<SuggestionInfo, S[]> suggestions);
-```
-
-$$\downarrow$$
-
-```java
-Argument replaceSafeSuggestions(SafeSuggestions<T> suggestions);
-Argument includeSafeSuggestions(SafeSuggestions<T> suggestions);
-```
-
-These can be used with the `SafeSuggestions.suggest` and `SafeSuggestions.tooltips` methods to wrap existing functions. For example:
-
-```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new RecipeArgument("recipe").replaceWithSafeSuggestions(info -> 
-    new Recipe[] { emeraldSwordRecipe, /* Other recipes here */ }
-));
-```
-
-$$\downarrow$$
-
-```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new RecipeArgument("recipe").replaceSafeSuggestions(SafeSuggestions.suggest(info -> 
-    new Recipe[] { emeraldSwordRecipe, /* Other recipes here */ }
-)));
-```
+</div>
 
 -----
 
-## From version 6.2.0 or earlier to 6.3.0
+### `CommandAPI` helper methods
 
-Please refer to an older version of the documentation. This has been omitted to save space and reduce confusion in this upgrading section.
+The `CommandAPI.failWithBaseComponents(message)` and `CommandAPI.failWithAdventureComponent(message)` methods have now been moved from `CommandAPI` to `CommandAPIBukkit`, because these methods are Bukkit/Spigot/Paper specific and don't exist for other platforms (e.g. Velocity, Fabric, Sponge):
+
+<div class="multi-pre">
+
+```java,8.7.x
+CommandAPI.failWithBaseComponents(...);
+CommandAPI.failWithAdventureComponent(...);
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.0
+CommandAPIBukkit.failWithBaseComponents(...);
+CommandAPIBukkit.failWithAdventureComponent(...);
+```
+
+</div>
+
+-----
+
+### Removal of the `EnvironmentArgument`
+
+The `EnvironmentArgument` has been removed in this update, as it was implemented incorrectly and is not fit for purpose. Instead, the CommandAPI has the more accurate `WorldArgument`.

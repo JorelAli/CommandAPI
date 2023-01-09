@@ -57,3 +57,50 @@ for (const multiPreNode of document.getElementsByClassName("multi-pre")) {
     }
     buttons[0].onclick();
 }
+
+// For the upgrading guide, we want multi-pre blocks which link between the
+// top code block and the bottom code block (separated by a MathJax down arrow)
+// We'll call these 'linked-multi-pre' blocks
+
+for (const multiPreNode of document.getElementsByClassName("linked-multi-pre")) {
+    let buttons = [];
+
+    // Number of buttons to make = number of <pre> divide by 2, minus the inner
+    // <p> tag with the MathJax
+    const numberOfButtons = (multiPreNode.children.length - 1) / 2;
+    for (let i = 0; i < multiPreNode.children.length; i++) {
+        const child = multiPreNode.children[i];
+        // If it's a MathJax down arrow element, we assume it's a downarrow, so let's
+        // just check if it's a down arrow
+        const isMathJax = child.innerText === "$$\\downarrow$$";
+
+        if (isMathJax) {
+            break;
+        } else {
+            const buttonText = child.querySelector("code.hljs").classList[1].replace(/_/g, " ");
+            const button = document.createElement("button");
+            button.className = "language-selector";
+            button.innerText = buttonText;
+            button.onclick = function() {
+                // Hide and unselect everything
+                for (const childElement of multiPreNode.children) {
+                    switch(childElement.tagName) {
+                        case "PRE": childElement.classList.add("hidden"); break;
+                        case "BUTTON": childElement.classList.remove("selected"); break;
+                    }
+                }
+                button.classList.add("selected");
+                child.classList.remove("hidden");
+
+                // Unselect the other corresponding child
+                multiPreNode.children[numberOfButtons + i + numberOfButtons + 1].classList.remove("hidden");
+            };
+            buttons.push(button);
+        }
+    }
+    // We do a second pass so we're not mutating the list we're iterating over
+    for (let i = buttons.length - 1; i >= 0; i--) {
+        multiPreNode.insertBefore(buttons[i], multiPreNode.firstChild);
+    }
+    buttons[0].onclick();
+}
