@@ -1,9 +1,10 @@
 package dev.jorel.commandapi;
 
-import java.util.function.Supplier;
-
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.NMS_1_17_R1;
+import dev.jorel.commandapi.nms.NMS_1_18_R1;
+import dev.jorel.commandapi.nms.NMS_1_18_R2;
 import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
+import dev.jorel.commandapi.nms.NMS_1_19_3_R2;
 import dev.jorel.commandapi.test.MockNMS;
 
 /**
@@ -13,22 +14,15 @@ import dev.jorel.commandapi.test.MockNMS;
  */
 public interface CommandAPIVersionHandler {
 	
-	static final Supplier<NMS<?>> DEFAULT_NMS_IMPLEMENTATION = () -> new NMS_1_19_1_R1();
-	
-	static Supplier[] nmsImplementation = { DEFAULT_NMS_IMPLEMENTATION };
-	
-	static void setPlatform(Supplier<NMS<?>> nmsImplementation) {
-		if(nmsImplementation == null) {
-			nmsImplementation = DEFAULT_NMS_IMPLEMENTATION;
-		}
-		CommandAPIVersionHandler.nmsImplementation[0] = nmsImplementation;
-	}
-	
-	static void resetPlatform() {
-		CommandAPIVersionHandler.nmsImplementation[0] = DEFAULT_NMS_IMPLEMENTATION;
-	}
-	
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
-		return new MockNMS((NMS<?>) nmsImplementation[0].get());
+		System.out.println("Running using " + System.getProperty("profileId"));
+		return new MockNMS(switch(System.getProperty("profileId")) {
+			case "Spigot_1_19_3_R2" -> new NMS_1_19_3_R2();
+			case "Spigot_1_19_R1" -> new NMS_1_19_1_R1();
+			case "Spigot_1_18_2_R2" -> new NMS_1_18_R2();
+			case "Spigot_1_18_R1" -> new NMS_1_18_R1();
+			case "Spigot_1_17_R1" -> new NMS_1_17_R1();
+			default -> throw new IllegalArgumentException("Unexpected value: " + System.getProperty("profileId"));
+		});
 	}
 }

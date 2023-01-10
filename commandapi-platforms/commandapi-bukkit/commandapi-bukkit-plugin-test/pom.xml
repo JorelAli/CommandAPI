@@ -90,25 +90,6 @@
 			<version>${paper.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.18-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- <dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<classifier>remapped-mojang</classifier>
-			<scope>provided</scope>
-		</dependency> -->
-		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>4.6.1</version>
@@ -118,12 +99,6 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-shade</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>${paper.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- This is literally just for testing, we're not actually packaging this -->
@@ -143,8 +118,72 @@
 				<version>2.22.0</version>
 				<configuration>
 					<trimStackTrace>false</trimStackTrace>
+					<systemPropertyVariables>
+						<profileId>${project.activeProfiles[0].id}</profileId>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>Spigot_1_19_3_R2</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.19.3-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>Spigot_1_19_R1</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.19.2-R0.1-SNAPSHOT</version> <!-- VERY IMPORTANT: CHECK 1.19-R0.1-SNAPSHOT WHICH HAS WEIRD FAILING TESTS!!!!! -->
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>Spigot_1_18_2_R2</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.18.2-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>Spigot_1_18_R1</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.18-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>Spigot_1_17_R1</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.17-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 </project>
