@@ -1,10 +1,19 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
+import org.bukkit.ChatColor;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +72,8 @@ public class ArgumentItemStackTests extends TestBase {
 		// Dev note: To make these tests work, we have to overwrite MockBukkit's
 		// ItemFactory with our own, see CommandAPIServerMock#getItemFactory()
 		
+		// NBT examples from https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags#Items
+		
 		// /test minecraft:stone{Count:3b}
 		{
 			server.dispatchCommand(player, "test minecraft:stone{Count:3b}");
@@ -79,6 +90,49 @@ public class ArgumentItemStackTests extends TestBase {
 			assertEquals(1, actual.getAmount());
 			assertEquals(1, actual.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
 		}
+		
+		// The example on the MinecraftWiki is wrong!
+		// The MinecraftWiki has this:  {display:{Name:'{"text":"Tunic of Destiny","color":"blue",...}',Lore:['{"text":"A magical blue tunic"}','{"text":"worn by the gods..."}',color:3949738]}}
+		// The actual (correct) NBT is: {display:{Name:'{"text":"Tunic of Destiny","color":"blue"}',Lore:['{"text":"A magical blue tunic"}','{"text":"worn by the gods..."}'],color:3949738}}
+		// /test minecraft:leather_chestplate{display:{Name:'{"text":"Tunic of Destiny","color":"blue"}',Lore:['{"text":"A magical blue tunic"}','{"text":"worn by the gods..."}'],color:3949738}}
+		{
+			server.dispatchCommand(player, "test minecraft:leather_chestplate{display:{Name:'{\"text\":\"Tunic of Destiny\",\"color\":\"blue\"}',Lore:['{\"text\":\"A magical blue tunic\"}','{\"text\":\"worn by the gods...\"}'],color:3949738}}");
+			ItemStack actual = results.get();
+			ItemMeta actualMeta = actual.getItemMeta();
+			assertEquals(Material.LEATHER_CHESTPLATE, actual.getType());
+			assertEquals(1, actual.getAmount());
+			assertEquals(ChatColor.BLUE + "Tunic of Destiny", actualMeta.getDisplayName());
+			assertEquals(List.of("A magical blue tunic", "worn by the gods..."), actualMeta.getLore());
+		}
+		
+		// /test minecraft:diamond_pickaxe{HideFlags:15}
+		{
+			server.dispatchCommand(player, "test minecraft:diamond_pickaxe{HideFlags:15}");
+			ItemStack actual = results.get();
+			assertEquals(Material.DIAMOND_PICKAXE, actual.getType());
+			assertEquals(1, actual.getAmount());
+			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_ENCHANTS));
+			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES));
+			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE));
+			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_DESTROYS));
+		}
+
+		// /test firework_rocket{Fireworks:{Explosions:[{Type:3b,Flicker:1b,Colors:[I;4312372],FadeColors:[I;11743532]}],Flight:1b}}
+		{
+			server.dispatchCommand(player, "test firework_rocket{Fireworks:{Explosions:[{Type:3b,Flicker:1b,Colors:[I;4312372],FadeColors:[I;11743532]}],Flight:1b}}");
+			ItemStack actual = results.get();
+			ItemMeta actualMeta = actual.getItemMeta();
+			assertEquals(Material.FIREWORK_ROCKET, actual.getType());
+			assertEquals(1, actual.getAmount());
+			assertInstanceOf(FireworkMeta.class, actualMeta);
+
+			FireworkMeta fireworkMeta = (FireworkMeta) actualMeta;
+			assertEquals(1, fireworkMeta.getEffectsSize());
+			assertEquals(1, fireworkMeta.getPower());
+			assertTrue(fireworkMeta.getEffects().get(0).hasFlicker());
+			assertEquals(FireworkEffect.Type.CREEPER, fireworkMeta.getEffects().get(0).getType());
+		}
+
 		
 		//{Enchantments:[{id:"minecraft:sharpness",lvl:1s}]}
 		

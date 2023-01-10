@@ -12,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemFactory;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -253,7 +252,7 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		// TODO: Implements getting an itemstack with its amount
+		// TODO: Implement using BASE_NMS
 		
 		// ItemInput input = ItemArgument#getItem(cmdCtx, key);
 		ArgumentPredicateItemStack input = ArgumentItemStack.a(cmdCtx, key);
