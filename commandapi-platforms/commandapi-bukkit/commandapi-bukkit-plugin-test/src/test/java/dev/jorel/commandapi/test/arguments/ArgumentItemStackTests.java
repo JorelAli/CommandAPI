@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -24,6 +25,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
+import net.minecraft.core.IRegistry;
 
 /**
  * Tests for the {@link ItemStackArgument}
@@ -42,6 +44,19 @@ public class ArgumentItemStackTests extends TestBase {
 	@AfterEach
 	public void tearDown() {
 		super.tearDown();
+	}
+	
+	/**
+	 * @return A list of all item names, sorted in alphabetical order. Each item
+	 * is prefixed with {@code minecraft:}
+	 */
+	private List<String> getAllItemNames() {
+		// Registry.ITEM
+		return StreamSupport.stream(IRegistry.Y.spliterator(), false)
+			.map(Object::toString)
+			.map(s -> "minecraft:" + s)
+			.sorted()
+			.toList();
 	}
 
 	/*********
@@ -137,50 +152,51 @@ public class ArgumentItemStackTests extends TestBase {
 			assertEquals(Color.fromRGB(11743532), fireworkMeta.getEffects().get(0).getFadeColors().get(0)); // RED
 		}
 
+		// /test item_that_doesnt_exist
+		// Fails because "item_that_doesnt_exist" isn't a valid item
+		assertCommandFailsWith(player, "test item_that_doesnt_exist", "Unknown item 'minecraft:item_that_doesnt_exist' at position 5: test <--[HERE]");
 		
-		//{Enchantments:[{id:"minecraft:sharpness",lvl:1s}]}
-		
-		// TODO: Implement the rest of this
+		// /test dirt{invalid_nbt}
+		// Fails because "{invalid_nbt}" isn't valid NBT
+		assertCommandFailsWith(player, "test dirt{invalid_nbt}", "Expected ':' at position 21: ...nvalid_nbt<--[HERE]");
 
-//		// /test xy
-//		server.dispatchCommand(player, "test xy");
-//		assertEquals(EnumSet.of(Axis.X, Axis.Y), results.get());
-//
-//		// /test xyz
-//		server.dispatchCommand(player, "test xyz");
-//		assertEquals(EnumSet.of(Axis.X, Axis.Y, Axis.Z), results.get());
-//
-//		// /test xyz
-//		server.dispatchCommand(player, "test zyx");
-//		assertEquals(EnumSet.of(Axis.X, Axis.Y, Axis.Z), results.get());
-//
-//		// /test w
-//		assertCommandFailsWith(player, "test w", "Invalid swizzle, expected combination of 'x', 'y' and 'z'");
-//
-//		assertNoMoreResults(results);
+		assertNoMoreResults(results);
 	}
 
 	/********************
 	 * Suggestion tests *
 	 ********************/
 
-//	@Test
-//	public void suggestionTestWithItemStackArgument() {
-//		new CommandAPICommand("test")
-//			.withArguments(new AxisArgument("axis"))
-//			.executesPlayer((player, args) -> {
-//			})
-//			.register();
-//
-//		PlayerMock player = server.addPlayer();
-//
-//		// /test
-//		// The axis argument doesn't have any suggestions
-//		assertEquals(List.of(), server.getSuggestions(player, "test "));
-//
-//		// /test x
-//		// The axis argument doesn't have any suggestions
-//		assertEquals(List.of(), server.getSuggestions(player, "test x"));
-//	}
+	@Test
+	public void suggestionTestWithItemStackArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new ItemStackArgument("item"))
+			.executesPlayer((player, args) -> {
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		// All items should be suggested
+		assertEquals(getAllItemNames(), server.getSuggestions(player, "test "));
+
+		// /test x
+		// All items starting with 'a' should be suggested, as well as items which
+		// are underscore-separated and start with 'a', such as 'wooden_axe'
+		assertEquals(getAllItemNames().stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
+		
+		// test dirt
+		// Completed item names should suggest open brackets
+		assertEquals(List.of("{"), server.getSuggestions(player, "test dirt"));
+		
+		// test dirt{
+		// NBT has no suggestions
+		assertEquals(List.of(), server.getSuggestions(player, "test dirt{"));
+		
+		// test dirt{}
+		// NBT has no suggestions
+		assertEquals(List.of(), server.getSuggestions(player, "test dirt{}"));
+	}
 
 }
