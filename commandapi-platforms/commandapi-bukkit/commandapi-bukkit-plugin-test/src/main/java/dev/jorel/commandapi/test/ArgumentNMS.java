@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test;
 import static org.mockito.ArgumentMatchers.any;
 
+import java.lang.invoke.MethodHandles;
 import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -11,11 +12,13 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.mockito.Mockito;
@@ -39,8 +42,10 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.item.ArgumentItemStack;
+import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.IRegistry;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.resources.ResourceKey;
 
 /**
@@ -247,7 +252,43 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException {
-		return BASE_NMS.getItemStack((CommandContext) cmdCtx, key);
+		// TODO: Implements getting an itemstack with its amount
+		
+		// ItemInput input = ItemArgument#getItem(cmdCtx, key);
+		ArgumentPredicateItemStack input = ArgumentItemStack.a(cmdCtx, key);
+		
+		NBTTagCompound tag = null;
+		try {
+			tag = (NBTTagCompound) MethodHandles.privateLookupIn(ArgumentPredicateItemStack.class, MethodHandles.lookup())
+				.findVarHandle(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class).get(input);
+		} catch(ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+		
+		// Create the ItemStack. This retrieves the tag
+		// input#createItemStack()
+		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.a(1, false);
+		
+		int count = 1;
+		if(tag != null) {
+			// The tag has some extra metadata we need! Get the Count
+			// CompoundTag#getByte(String)
+			count = (int) tag.f("Count");
+			if(count == 0) {
+				count = 1;
+			}
+			// input#createItemStack()
+			itemWithMaybeTag = input.a(count, false);
+		}
+		
+		ItemMeta meta = CraftItemStack.getItemMeta(itemWithMaybeTag);
+		ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
+//		CraftItemStack.setItemMeta(result, meta);
+		result.setItemMeta(meta);
+		
+//		return CraftItemStack.copyNMSStack(itemWithMaybeTag, count);
+		
+		return result;
 	}
 
 	@Override

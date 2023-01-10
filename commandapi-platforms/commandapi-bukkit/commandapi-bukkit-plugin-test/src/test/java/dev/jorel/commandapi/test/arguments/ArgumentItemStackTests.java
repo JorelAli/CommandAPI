@@ -3,6 +3,7 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +54,19 @@ public class ArgumentItemStackTests extends TestBase {
 		// /test dirt
 		server.dispatchCommand(player, "test dirt");
 		assertEquals(new ItemStack(Material.DIRT), results.get());
+		
+		// /test minecraft:stone{Count:3b}
+		server.dispatchCommand(player, "test minecraft:stone{Count:3b}");
+		assertEquals(new ItemStack(Material.STONE, 3), results.get());
+		
+		// /test minecraft:diamond_sword{Enchantments:[{id:"minecraft:sharpness",lvl:1s}]}
+//		server.dispatchCommand(player, "test minecraft:diamond_sword{Enchantments:[{id:\"minecraft:sharpness\",lvl:1s}]}");
+//		ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD, 1);
+//		diamondSword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+//		;
+//		assertEquals(1, results.get().getEnchantments());
+		
+		//{Enchantments:[{id:"minecraft:sharpness",lvl:1s}]}
 		
 		// TODO: Implement the rest of this
 
