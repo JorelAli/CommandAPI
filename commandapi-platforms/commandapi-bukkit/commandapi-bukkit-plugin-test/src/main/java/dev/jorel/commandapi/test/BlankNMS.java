@@ -173,12 +173,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentUUID() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
 	public String convert(PotionEffectType potion) {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
@@ -252,12 +246,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}

@@ -36,7 +36,6 @@ import dev.jorel.commandapi.wrappers.Location2D;
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
  */
-@SuppressWarnings("null")
 public class ArgumentTests extends TestBase {
 	
 	/*********

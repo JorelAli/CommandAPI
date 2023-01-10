@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.EnumSet;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -163,6 +164,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
 		return BASE_NMS._ArgumentSyntheticBiome();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentUUID() {
+		return BASE_NMS._ArgumentUUID();
 	}
 
 	@Override
@@ -352,6 +358,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public Message generateMessageFromJson(final String json) {
 		return BASE_NMS.generateMessageFromJson(json);
+	}
+
+	@Override
+	public UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return BASE_NMS.getUUID((CommandContext) cmdCtx, key);
 	}
 
 }
