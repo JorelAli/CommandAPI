@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -47,6 +48,7 @@ public class ArgumentItemStackTests extends TestBase {
 	 * Tests *
 	 *********/
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void executionTestWithItemStackArgument() {
 		Mut<ItemStack> results = Mut.of();
@@ -131,6 +133,8 @@ public class ArgumentItemStackTests extends TestBase {
 			assertEquals(1, fireworkMeta.getPower());
 			assertTrue(fireworkMeta.getEffects().get(0).hasFlicker());
 			assertEquals(FireworkEffect.Type.CREEPER, fireworkMeta.getEffects().get(0).getType());
+			assertEquals(Color.fromRGB(4312372), fireworkMeta.getEffects().get(0).getColors().get(0));      // LIME
+			assertEquals(Color.fromRGB(11743532), fireworkMeta.getEffects().get(0).getFadeColors().get(0)); // RED
 		}
 
 		

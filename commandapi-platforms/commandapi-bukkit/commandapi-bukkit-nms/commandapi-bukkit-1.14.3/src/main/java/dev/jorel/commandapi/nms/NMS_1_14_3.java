@@ -19,6 +19,7 @@ import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.minecraft.server.v1_14_R1.Advancement;
+import net.minecraft.server.v1_14_R1.ArgumentPredicateItemStack;
 import net.minecraft.server.v1_14_R1.CommandListenerWrapper;
 import net.minecraft.server.v1_14_R1.CompletionProviders;
 import net.minecraft.server.v1_14_R1.CustomFunction;
@@ -28,6 +29,7 @@ import net.minecraft.server.v1_14_R1.IBlockData;
 import net.minecraft.server.v1_14_R1.ICompletionProvider;
 import net.minecraft.server.v1_14_R1.ItemStack;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.ParticleParamBlock;
 import net.minecraft.server.v1_14_R1.ParticleParamItem;
 import net.minecraft.server.v1_14_R1.ParticleParamRedstone;
@@ -42,6 +44,7 @@ import net.minecraft.server.v1_14_R1.ParticleParamRedstone;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
+@RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_14_3 extends NMS_1_14 {
 
 	@Override
