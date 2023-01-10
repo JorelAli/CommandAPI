@@ -63,6 +63,8 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test aaaaa
 		assertCommandFailsWith(player, "test aaaaa", "Invalid boolean, expected 'true' or 'false' but found 'aaaaa' at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
 	}
 
 	@Test
@@ -100,12 +102,14 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 123hello
 		assertCommandFailsWith(player, "test 123hello", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
-		
+
 		// /test hello123
 		assertCommandFailsWith(player, "test hello123", "Expected integer at position 5: test <--[HERE]");
 
 		// /test 2147483648
 		assertCommandFailsWith(player, "test 2147483648", "Invalid integer '2147483648' at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
 	}
 
 	@Test
@@ -131,6 +135,8 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 0
 		assertCommandFailsWith(player, "test 0", "Integer must not be less than 10, found 0 at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
 	}
 
 	@Test
@@ -149,7 +155,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		// /test 10
 		server.dispatchCommand(player, "test 10");
 		assertEquals(10, results.get());
-		
+
 		// /test 15
 		server.dispatchCommand(player, "test 15");
 		assertEquals(15, results.get());
@@ -160,9 +166,11 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 0
 		assertCommandFailsWith(player, "test 0", "Integer must not be less than 10, found 0 at position 5: test <--[HERE]");
-		
+
 		// /test 30
 		assertCommandFailsWith(player, "test 30", "Integer must not be more than 20, found 30 at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
 	}
 
 	// TODO: Long
@@ -192,20 +200,20 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertEquals(0.0F, results.get());
 
 		// /test Float.MAX_VALUE
-		// String floatMaxValue = String.valueOf(Float.MAX_VALUE - 1.0F);
-		// server.dispatchCommand(player, "test " + floatMaxValue);
-		// assertEquals(Float.MAX_VALUE - 1.0F, results.get());
+		server.dispatchCommand(player, "test %f".formatted(Float.MAX_VALUE));
+		assertEquals(Float.MAX_VALUE, results.get());
 
 		// /test -Float.MAX_VALUE
-		// String floatMinValue = String.valueOf(-Float.MAX_VALUE);
-		// server.dispatchCommand(player, "test " + floatMinValue);
-		// assertEquals(-Float.MAX_VALUE, results.get());
+		server.dispatchCommand(player, "test %f".formatted(-Float.MAX_VALUE));
+		assertEquals(-Float.MAX_VALUE, results.get());
 
 		// /test 123hello
 		assertCommandFailsWith(player, "test 123hello", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
 
 		// /test hello123
 		assertCommandFailsWith(player, "test hello123", "Expected float at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
 	}
 
 	@Test
@@ -239,6 +247,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		// /test 30
 		assertCommandFailsWith(player, "test 30", "Float must not be more than 20.0, found 30.0 at position 5: test <--[HERE]");
 
+		assertNoMoreResults(results);
 	}
 
 	@Test
@@ -267,20 +276,20 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertEquals(0.0, results.get());
 
 		// /test Double.MAX_VALUE
-		// String doubleMaxValue = String.valueOf(Double.MAX_VALUE - 1.0);
-		// server.dispatchCommand(player, "test " + doubleMaxValue);
-		// assertEquals(Double.MAX_VALUE - 1.0, results.get());
+		server.dispatchCommand(player, "test %f".formatted(Double.MAX_VALUE));
+		assertEquals(Double.MAX_VALUE, results.get());
 
 		// /test -Double.MAX_VALUE
-		// String doubleMinValue = String.valueOf(-Double.MAX_VALUE);
-		// server.dispatchCommand(player, "test " + doubleMinValue);
-		// assertEquals(-Double.MAX_VALUE, results.get());
+		server.dispatchCommand(player, "test %f".formatted(-Double.MAX_VALUE));
+		assertEquals(-Double.MAX_VALUE, results.get());
 
 		// /test 123hello
 		assertCommandFailsWith(player, "test 123hello", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
 
 		// /test hello123
 		assertCommandFailsWith(player, "test hello123", "Expected double at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
 	}
 
 	@Test
@@ -314,6 +323,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		// /test 30
 		assertCommandFailsWith(player, "test 30", "Double must not be more than 20.0, found 30.0 at position 5: test <--[HERE]");
 
+		assertNoMoreResults(results);
 	}
-	
+
 }
