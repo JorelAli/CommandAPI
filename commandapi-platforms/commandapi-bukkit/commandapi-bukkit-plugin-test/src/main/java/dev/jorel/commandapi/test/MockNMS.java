@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.StreamSupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -29,9 +31,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemFactory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -40,6 +44,9 @@ import org.mockito.Mockito;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -50,6 +57,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
@@ -107,6 +118,7 @@ import net.minecraft.commands.arguments.item.ArgumentItemStack;
 import net.minecraft.commands.arguments.item.ArgumentTag;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.ArgumentSerializerString;
 import net.minecraft.commands.synchronization.brigadier.DoubleArgumentInfo;
@@ -114,6 +126,7 @@ import net.minecraft.commands.synchronization.brigadier.FloatArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistry;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.AdvancementDataWorld;
@@ -168,6 +181,24 @@ public class MockNMS extends ArgumentNMS {
 		NamespacedKey key = NamespacedKey.minecraft(name.toLowerCase(Locale.ROOT));
 		PotionEffectType type = new MockPotionEffectType(key, id, name, instant, Color.fromRGB(rgb));
 		PotionEffectType.registerPotionEffectType(type);
+	}
+	
+	// ItemStackArgument requirements
+	public static ItemFactory getItemFactory() {
+		return CraftItemFactory.instance();
+	}
+
+	/**
+	 * @return A list of all item names, sorted in alphabetical order. Each item
+	 * is prefixed with {@code minecraft:}
+	 */
+	public static List<String> getAllItemNames() {
+		// Registry.ITEM
+		return StreamSupport.stream(IRegistry.Y.spliterator(), false)
+			.map(Object::toString)
+			.map(s -> "minecraft:" + s)
+			.sorted()
+			.toList();
 	}
 	
 	/**
@@ -572,5 +603,125 @@ public class MockNMS extends ArgumentNMS {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}
+	
+	/**
+	 * An implementation of {@link ArgumentUtils} which produces JSON from a command
+	 * dispatcher and its root node. We have to avoid accessing IRegistry because it
+	 * isn't mock-able and cannot be instantiated through normal means
+	 */
+	private static class DispatcherUtil {
+
+		static Map<Class<?>, String> argumentParsers = new HashMap<>();
+
+		static {
+			argumentParsers.put(BoolArgumentType.class, "brigadier:bool");
+			argumentParsers.put(FloatArgumentType.class, "brigadier:float");
+			argumentParsers.put(DoubleArgumentType.class, "brigadier:double");
+			argumentParsers.put(IntegerArgumentType.class, "brigadier:integer");
+			argumentParsers.put(LongArgumentType.class, "brigadier:long");
+			argumentParsers.put(StringArgumentType.class, "brigadier:string");
+			argumentParsers.put(ArgumentEntity.class, "entity");
+			argumentParsers.put(ArgumentProfile.class, "game_profile");
+			argumentParsers.put(ArgumentPosition.class, "block_pos");
+			argumentParsers.put(ArgumentVec2I.class, "column_pos");
+			argumentParsers.put(ArgumentVec3.class, "vec3");
+			argumentParsers.put(ArgumentVec2.class, "vec2");
+			argumentParsers.put(ArgumentTile.class, "block_state");
+			argumentParsers.put(ArgumentBlockPredicate.class, "block_predicate");
+			argumentParsers.put(ArgumentItemStack.class, "item_stack");
+			argumentParsers.put(ArgumentItemPredicate.class, "item_predicate");
+			argumentParsers.put(ArgumentChatFormat.class, "color");
+			argumentParsers.put(ArgumentChatComponent.class, "component");
+			argumentParsers.put(ArgumentChat.class, "message");
+			argumentParsers.put(ArgumentNBTTag.class, "nbt_compound_tag");
+			argumentParsers.put(ArgumentNBTBase.class, "nbt_tag");
+			argumentParsers.put(ArgumentNBTKey.class, "nbt_path");
+			argumentParsers.put(ArgumentScoreboardObjective.class, "objective");
+			argumentParsers.put(ArgumentScoreboardCriteria.class, "objective_criteria");
+			argumentParsers.put(ArgumentMathOperation.class, "operation");
+			argumentParsers.put(ArgumentParticle.class, "particle");
+			argumentParsers.put(ArgumentAngle.class, "angle");
+			argumentParsers.put(ArgumentRotation.class, "rotation");
+			argumentParsers.put(ArgumentScoreboardSlot.class, "scoreboard_slot");
+			argumentParsers.put(ArgumentScoreholder.class, "score_holder");
+			argumentParsers.put(ArgumentRotationAxis.class, "swizzle");
+			argumentParsers.put(ArgumentScoreboardTeam.class, "team");
+			argumentParsers.put(ArgumentInventorySlot.class, "item_slot");
+			argumentParsers.put(ArgumentMinecraftKeyRegistered.class, "resource_location");
+			argumentParsers.put(ArgumentMobEffect.class, "mob_effect");
+			argumentParsers.put(ArgumentTag.class, "function");
+			argumentParsers.put(ArgumentAnchor.class, "entity_anchor");
+			argumentParsers.put(ArgumentCriterionValue.b.class, "int_range");
+			argumentParsers.put(ArgumentCriterionValue.a.class, "float_range");
+			argumentParsers.put(ArgumentEnchantment.class, "item_enchantment");
+			argumentParsers.put(ArgumentEntitySummon.class, "entity_summon");
+			argumentParsers.put(ArgumentDimension.class, "dimension");
+			argumentParsers.put(ArgumentTime.class, "time");
+			argumentParsers.put(ResourceOrTagLocationArgument.class, "resource_or_tag");
+			argumentParsers.put(ResourceKeyArgument.class, "resource");
+			argumentParsers.put(TemplateMirrorArgument.class, "template_mirror");
+			argumentParsers.put(TemplateRotationArgument.class, "template_rotation");
+			argumentParsers.put(ArgumentUUID.class, "uuid");
+		}
+
+		public static <S> JsonObject toJSON(CommandDispatcher<S> dispatcher, CommandNode<S> node) {
+			JsonObject jsonObject = new JsonObject();
+
+			// Unpack nodes
+			if (node instanceof RootCommandNode) {
+				jsonObject.addProperty("type", "root");
+			} else if (node instanceof LiteralCommandNode) {
+				jsonObject.addProperty("type", "literal");
+			} else if (node instanceof ArgumentCommandNode) {
+				ArgumentCommandNode<?, ?> argumentCommandNode = (ArgumentCommandNode<?, ?>) node;
+				argToJSON(jsonObject, argumentCommandNode.getType());
+			} else {
+				jsonObject.addProperty("type", "unknown");
+			}
+
+			// Write children
+			JsonObject children = new JsonObject();
+			for (CommandNode<S> child : node.getChildren()) {
+				children.add(child.getName(), (JsonElement) toJSON(dispatcher, child));
+			}
+			if (children.size() > 0) {
+				jsonObject.add("children", (JsonElement) children);
+			}
+
+			// Write whether the command is executable
+			if (node.getCommand() != null) {
+				jsonObject.addProperty("executable", Boolean.valueOf(true));
+			}
+			if (node.getRedirect() != null) {
+				Collection<String> redirectPaths = dispatcher.getPath(node.getRedirect());
+				if (!redirectPaths.isEmpty()) {
+					JsonArray redirects = new JsonArray();
+					for (String redirectPath : redirectPaths) {
+						redirects.add(redirectPath);
+					}
+					jsonObject.add("redirect", (JsonElement) redirects);
+				}
+			}
+			return jsonObject;
+		}
+
+		@SuppressWarnings("unchecked")
+		private static <T extends ArgumentType<?>> void argToJSON(JsonObject jsonObject, T argument) {
+			ArgumentTypeInfo.a<T> argumentInfo = ArgumentTypeInfos.b(argument);
+			jsonObject.addProperty("type", "argument");
+			jsonObject.addProperty("parser", argumentParsers.get(argument.getClass()));
+			
+			// Properties
+			JsonObject properties = new JsonObject();
+			@SuppressWarnings("rawtypes")
+			ArgumentTypeInfo argumentTypeInfo = argumentInfo.a();
+			argumentTypeInfo.a(argumentInfo, properties);
+			if (properties.size() > 0) {
+				jsonObject.add("properties", (JsonElement) properties);
+			}
+		}
+
+	}
+
 
 }
