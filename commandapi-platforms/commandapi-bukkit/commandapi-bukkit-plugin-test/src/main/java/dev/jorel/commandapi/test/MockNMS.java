@@ -22,13 +22,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +58,7 @@ import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.ParticleData;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancements;
@@ -518,6 +523,54 @@ public class MockNMS extends ArgumentNMS {
 	public void resendPackets(Player player) {
 		// There's nothing to do here, we can't "send packets to players"
 		return;
+	}
+
+	@Override
+	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String convert(ItemStack is) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String convert(ParticleData<?> particle) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String convert(PotionEffectType potion) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String convert(Sound sound) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public boolean isVanillaCommandWrapper(Command command) {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public void reloadDataPacks() {
+		new RuntimeException("unimplemented").printStackTrace();
+		throw new RuntimeException("unimplemented");
 	}
 
 }

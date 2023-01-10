@@ -172,6 +172,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentTime() {
+		return BASE_NMS._ArgumentTime();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentUUID() {
 		return BASE_NMS._ArgumentUUID();
 	}
@@ -358,6 +363,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	@Override
 	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getTeam((CommandContext) cmdCtx, key);
+	}
+
+	@Override
+	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return BASE_NMS.getTime((CommandContext) cmdCtx, key);
 	}
 
 	@Override
