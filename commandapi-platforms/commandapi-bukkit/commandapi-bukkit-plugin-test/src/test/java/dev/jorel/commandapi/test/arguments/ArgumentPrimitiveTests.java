@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import dev.jorel.commandapi.arguments.DoubleArgument;
 import dev.jorel.commandapi.arguments.FloatArgument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -164,7 +165,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertCommandFailsWith(player, "test 30", "Integer must not be more than 20, found 30 at position 5: test <--[HERE]");
 	}
 
-	// TODO: Double, Long
+	// TODO: Long
 	@Test
 	public void executionTestWithFloatArgument() {
 		Mut<Float> results = Mut.of();
@@ -237,6 +238,81 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 30
 		assertCommandFailsWith(player, "test 30", "Float must not be more than 20.0, found 30.0 at position 5: test <--[HERE]");
+
+	}
+
+	@Test
+	public void executionTestWithDoubleArgument() {
+		Mut<Double> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new DoubleArgument("value"))
+			.executesPlayer((player, args) -> {
+				results.set((double) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test 10
+		server.dispatchCommand(player, "test 10.0");
+		assertEquals(10.0, results.get());
+
+		// /test -10
+		server.dispatchCommand(player, "test -10.0");
+		assertEquals(-10.0, results.get());
+
+		// /test 0
+		server.dispatchCommand(player, "test 0.0");
+		assertEquals(0.0, results.get());
+
+		// /test Double.MAX_VALUE
+		// String doubleMaxValue = String.valueOf(Double.MAX_VALUE - 1.0);
+		// server.dispatchCommand(player, "test " + doubleMaxValue);
+		// assertEquals(Double.MAX_VALUE - 1.0, results.get());
+
+		// /test -Double.MAX_VALUE
+		// String doubleMinValue = String.valueOf(-Double.MAX_VALUE);
+		// server.dispatchCommand(player, "test " + doubleMinValue);
+		// assertEquals(-Double.MAX_VALUE, results.get());
+
+		// /test 123hello
+		assertCommandFailsWith(player, "test 123hello", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
+
+		// /test hello123
+		assertCommandFailsWith(player, "test hello123", "Expected double at position 5: test <--[HERE]");
+	}
+
+	@Test
+	public void executionTestWithDoubleBoundedArgument() {
+		Mut<Double> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new DoubleArgument("value", 10.0, 20.0))
+			.executesPlayer((player, args) -> {
+				results.set((double) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test 10
+		server.dispatchCommand(player, "test 10.0");
+		assertEquals(10.0, results.get());
+
+		// /test 15
+		server.dispatchCommand(player, "test 15.0");
+		assertEquals(15.0, results.get());
+
+		// /test 20
+		server.dispatchCommand(player, "test 20.0");
+		assertEquals(20.0, results.get());
+
+		// /test 0
+		assertCommandFailsWith(player, "test 0", "Double must not be less than 10.0, found 0.0 at position 5: test <--[HERE]");
+
+		// /test 30
+		assertCommandFailsWith(player, "test 30", "Double must not be more than 20.0, found 30.0 at position 5: test <--[HERE]");
 
 	}
 	
