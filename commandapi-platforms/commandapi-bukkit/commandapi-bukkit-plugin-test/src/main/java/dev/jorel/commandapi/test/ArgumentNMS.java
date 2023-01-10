@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemFactory;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -283,11 +284,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 		
 		ItemMeta meta = CraftItemStack.getItemMeta(itemWithMaybeTag);
 		ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
-//		CraftItemStack.setItemMeta(result, meta);
 		result.setItemMeta(meta);
 		
-//		return CraftItemStack.copyNMSStack(itemWithMaybeTag, count);
-		
+		// In theory, this should all be correct! The only thing tripping us up
+		// will be the ItemFactoryMock implementation from 
+		// ItemStack#setItemMeta -> setItemMeta0 -> Bukkit.getItemFactory()
 		return result;
 	}
 

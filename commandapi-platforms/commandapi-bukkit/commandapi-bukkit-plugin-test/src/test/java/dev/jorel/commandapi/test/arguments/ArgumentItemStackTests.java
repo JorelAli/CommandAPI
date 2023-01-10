@@ -55,16 +55,30 @@ public class ArgumentItemStackTests extends TestBase {
 		server.dispatchCommand(player, "test dirt");
 		assertEquals(new ItemStack(Material.DIRT), results.get());
 		
+		// Dev note: We're no longer using assertEquals on the ItemStack
+		// object here because these itemstacks will now have ItemMeta
+		// which has a reference to the NBT Compound Tag which we can't
+		// perform equals against.
+		
+		// Dev note: To make these tests work, we have to overwrite MockBukkit's
+		// ItemFactory with our own, see CommandAPIServerMock#getItemFactory()
+		
 		// /test minecraft:stone{Count:3b}
-		server.dispatchCommand(player, "test minecraft:stone{Count:3b}");
-		assertEquals(new ItemStack(Material.STONE, 3), results.get());
+		{
+			server.dispatchCommand(player, "test minecraft:stone{Count:3b}");
+			ItemStack actual = results.get();
+			assertEquals(Material.STONE, actual.getType());
+			assertEquals(3, actual.getAmount());
+		}
 		
 		// /test minecraft:diamond_sword{Enchantments:[{id:"minecraft:sharpness",lvl:1s}]}
-//		server.dispatchCommand(player, "test minecraft:diamond_sword{Enchantments:[{id:\"minecraft:sharpness\",lvl:1s}]}");
-//		ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD, 1);
-//		diamondSword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
-//		;
-//		assertEquals(1, results.get().getEnchantments());
+		{
+			server.dispatchCommand(player, "test minecraft:diamond_sword{Enchantments:[{id:\"minecraft:sharpness\",lvl:1s}]}");
+			ItemStack actual = results.get();
+			assertEquals(Material.DIAMOND_SWORD, actual.getType());
+			assertEquals(1, actual.getAmount());
+			assertEquals(1, actual.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
+		}
 		
 		//{Enchantments:[{id:"minecraft:sharpness",lvl:1s}]}
 		
