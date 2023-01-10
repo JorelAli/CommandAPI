@@ -15,6 +15,8 @@ import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
+import java.util.List;
+
 /**
  * Tests for the primitive arguments {@link BooleanArgument},
  * {@link IntegerArgument} etc.
@@ -324,6 +326,36 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertCommandFailsWith(player, "test 30", "Double must not be more than 20.0, found 30.0 at position 5: test <--[HERE]");
 
 		assertNoMoreResults(results);
+	}
+
+	/********************
+	 * Suggestion tests *
+	 ********************/
+	@Test
+	public void suggestionTestWithBooleanArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new BooleanArgument("value"))
+			.executesPlayer((player, args) -> {
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		// Both values should be suggested
+		assertEquals(List.of("false", "true"), server.getSuggestions(player, "test "));
+
+		// /test f
+		// Only "false" should be suggested
+		assertEquals(List.of("false"), server.getSuggestions(player, "test f"));
+
+		// /test t
+		// Only "true" should be suggested
+		assertEquals(List.of("true"), server.getSuggestions(player, "test t"));
+
+		// /test x
+		// Nothing should be suggested
+		assertEquals(List.of(), server.getSuggestions(player, "test x"));
 	}
 
 }
