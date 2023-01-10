@@ -692,7 +692,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, key);
+		BlockPosition blockPos = ArgumentPosition.b(cmdCtx, key);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 

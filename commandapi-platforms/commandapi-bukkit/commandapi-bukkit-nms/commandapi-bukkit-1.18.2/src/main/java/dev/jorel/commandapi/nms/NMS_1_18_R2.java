@@ -515,7 +515,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 
 	@Override
 	public Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, key);
+		BlockPos blockPos = BlockPosArgument.getSpawnablePos(cmdCtx, key);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 
