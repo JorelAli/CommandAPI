@@ -99,6 +99,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentEntitySummon() {
+		return BASE_NMS._ArgumentEntitySummon();
+	}
+
+	@Override
 	public final ArgumentType<?> _ArgumentItemPredicate() {
 		return BASE_NMS._ArgumentItemPredicate();
 	}
