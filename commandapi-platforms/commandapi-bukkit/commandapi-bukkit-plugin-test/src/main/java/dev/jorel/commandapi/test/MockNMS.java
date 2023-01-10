@@ -30,6 +30,7 @@ import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
 
@@ -113,12 +114,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.AdvancementDataWorld;
 import net.minecraft.server.DispenserRegistry;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.ScoreboardServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.players.UserCache;
 import net.minecraft.world.phys.Vec2F;
 import net.minecraft.world.phys.Vec3D;
+import net.minecraft.world.scores.ScoreboardTeam;
 
 public class MockNMS extends ArgumentNMS {
 
@@ -295,7 +298,7 @@ public class MockNMS extends ArgumentNMS {
 			// Advancement argument
 			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
 			Mockito.when(minecraftServerMock.az()).thenReturn(mockAdvancementDataWorld());
-			Mockito.when(clw.m()).thenReturn(minecraftServerMock);
+			Mockito.when(clw.m()).thenReturn(minecraftServerMock); // CommandSourceStack#getServer
 
 			// Entity selector argument
 			for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
@@ -374,6 +377,23 @@ public class MockNMS extends ArgumentNMS {
 			
 			// Rotation argument
 			Mockito.when(clw.l()).thenReturn(new Vec2F(loc.getYaw(), loc.getPitch()));
+			
+			// Team argument
+			ScoreboardServer scoreboardServerMock = Mockito.mock(ScoreboardServer.class);
+			Mockito.when(scoreboardServerMock.f(anyString())).thenAnswer(invocation -> { // Scoreboard#getPlayerTeam
+				String teamName = invocation.getArgument(0);
+				Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+				if (team == null) {
+					return null;
+				} else {
+					return new ScoreboardTeam(scoreboardServerMock, teamName);
+				}
+			});
+			Mockito.when(minecraftServerMock.aF()).thenReturn(scoreboardServerMock); // MinecraftServer#getScoreboard
+			
+			Mockito.when(clw.r()).thenAnswer(invocation -> { // CommandSourceStack#getAllTeams
+				return Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList();
+			});
 		}
 		return clw;
 	}

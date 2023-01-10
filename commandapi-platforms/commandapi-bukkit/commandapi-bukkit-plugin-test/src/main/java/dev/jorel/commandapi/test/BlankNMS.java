@@ -2,7 +2,6 @@ package dev.jorel.commandapi.test;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -24,7 +23,6 @@ import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -144,12 +142,6 @@ public abstract class BlankNMS extends CommandAPIBukkit<CommandListenerWrapper> 
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreboardSlot() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentScoreboardTeam() {
 		new RuntimeException("unimplemented").printStackTrace();
 		throw new RuntimeException("unimplemented");
 	}

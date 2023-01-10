@@ -160,6 +160,11 @@ public abstract class ArgumentNMS extends BlankNMS {
 	public ArgumentType<?> _ArgumentRotation() {
 		return BASE_NMS._ArgumentRotation();
 	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardTeam() {
+		return BASE_NMS._ArgumentScoreboardTeam();
+	}
 	
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
