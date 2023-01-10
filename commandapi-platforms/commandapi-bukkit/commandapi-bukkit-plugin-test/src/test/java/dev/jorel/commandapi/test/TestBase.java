@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -22,13 +23,22 @@ import org.jetbrains.annotations.NotNull;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
+import dev.jorel.commandapi.nms.NMS;
 
 public abstract class TestBase {
 
 	public CommandAPIServerMock server;
 	public Main plugin;
+	
+	public void setUp(Supplier<NMS<?>> nmsImplementation) {
+		CommandAPIVersionHandler.setPlatform(nmsImplementation);
+		server = MockBukkit.mock(new CommandAPIServerMock());
+		plugin = MockBukkit.load(Main.class);
+	}
 
 	public void setUp() {
+		CommandAPIVersionHandler.setPlatform(CommandAPIVersionHandler.DEFAULT_NMS_IMPLEMENTATION);
 		server = MockBukkit.mock(new CommandAPIServerMock());
 		plugin = MockBukkit.load(Main.class);
 	}
@@ -39,6 +49,7 @@ public abstract class TestBase {
 			plugin.onDisable();
 		}
 		MockBukkit.unmock();
+		CommandAPIVersionHandler.resetPlatform();
 	}
 
 	public <T> void assertStoresResult(CommandSender sender, String command, Mut<T> queue, T expected) {
