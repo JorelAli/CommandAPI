@@ -188,7 +188,7 @@ public class ArgumentParticleTests extends TestBase {
 		assertEquals(Particle.BLOCK_CRACK, result.particle());
 		assertInstanceOf(BlockData.class, result.data());
 
-		CraftBlockData blockData = (CraftBlockData) result.data();
+		BlockData blockData = (BlockData) result.data();
 		assertEquals(Material.GRASS_BLOCK, blockData.getMaterial());
 	}
 

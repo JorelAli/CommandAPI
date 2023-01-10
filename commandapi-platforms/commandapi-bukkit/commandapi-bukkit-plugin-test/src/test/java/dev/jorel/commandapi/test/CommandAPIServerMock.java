@@ -9,7 +9,6 @@ import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemFactory;
 import org.bukkit.inventory.ItemFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -114,6 +113,6 @@ public class CommandAPIServerMock extends ServerMock {
 	public ItemFactory getItemFactory() {
 		// Thanks MockBukkit, but we REALLY need to access
 		// the raw CraftItemMeta objects for the ItemStackArgument <3
-		return CraftItemFactory.instance();
+		return MockNMS.getItemFactory();
 	}
 }

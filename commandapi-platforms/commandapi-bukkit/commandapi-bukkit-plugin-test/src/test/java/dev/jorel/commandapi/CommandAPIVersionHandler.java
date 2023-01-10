@@ -15,7 +15,6 @@ import dev.jorel.commandapi.test.MockNMS;
 public interface CommandAPIVersionHandler {
 	
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
-		System.out.println("Running using " + System.getProperty("profileId"));
 		return new MockNMS(switch(System.getProperty("profileId")) {
 			case "Spigot_1_19_3_R2" -> new NMS_1_19_3_R2();
 			case "Spigot_1_19_R1" -> new NMS_1_19_1_R1();
