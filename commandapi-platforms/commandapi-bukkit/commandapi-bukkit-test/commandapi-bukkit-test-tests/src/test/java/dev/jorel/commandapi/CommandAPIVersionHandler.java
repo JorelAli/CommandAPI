@@ -1,10 +1,7 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.nms.NMS_1_17_R1;
 import dev.jorel.commandapi.nms.NMS_1_18_R1;
-import dev.jorel.commandapi.nms.NMS_1_18_R2;
 import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
-import dev.jorel.commandapi.nms.NMS_1_19_3_R2;
 import dev.jorel.commandapi.test.MockNMS;
 
 /**
@@ -16,11 +13,8 @@ public interface CommandAPIVersionHandler {
 	
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
 		return new MockNMS(switch(System.getProperty("profileId")) {
-			case "Spigot_1_19_3_R2" -> new NMS_1_19_3_R2();
-			case "Spigot_1_19_R1" -> new NMS_1_19_1_R1();
-			case "Spigot_1_18_2_R2" -> new NMS_1_18_R2();
-			case "Spigot_1_18_R1" -> new NMS_1_18_R1();
-			case "Spigot_1_17_R1" -> new NMS_1_17_R1();
+			case "Minecraft_1_19_2" -> new NMS_1_19_1_R1();
+			case "Minecraft_1_18" -> new NMS_1_18_R1();
 			default -> throw new IllegalArgumentException("Unexpected value: " + System.getProperty("profileId"));
 		});
 	}
