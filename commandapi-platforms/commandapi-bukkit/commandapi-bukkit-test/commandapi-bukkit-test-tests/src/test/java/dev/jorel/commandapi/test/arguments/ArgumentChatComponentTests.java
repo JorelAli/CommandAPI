@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler.MCVersion;
 import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.test.Mut;
@@ -88,8 +89,11 @@ public class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
-		// TODO: This test fails in 1.18 due to the additional " at position 8: test []<--[HERE]"
-		assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");
+		if(version.equals(MCVersion.V1_18)) {
+			assertCommandFailsWith(player, "test []", "Invalid chat component: empty at position 8: test []<--[HERE]");
+		} else if(version.greaterThanOrEqualTo(MCVersion.V1_19)) {
+			assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");	
+		}
 		
 		// /test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]
 		// Fails due to inner quotes not being escaped with a \ character
@@ -118,8 +122,11 @@ public class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
-		// TODO: This test fails in 1.18 due to the additional " at position 8: test []<--[HERE]"
-		assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");
+		if(version.equals(MCVersion.V1_18)) {
+			assertCommandFailsWith(player, "test []", "Invalid chat component: empty at position 8: test []<--[HERE]");
+		} else if(version.greaterThanOrEqualTo(MCVersion.V1_19)) {
+			assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");	
+		}
 		
 		// /test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]
 		// Fails due to inner quotes not being escaped with a \ character

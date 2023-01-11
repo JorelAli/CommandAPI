@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,27 +42,13 @@ import org.mockito.Mockito;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.BoolArgumentType;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.LongArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
-import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.mojang.brigadier.tree.RootCommandNode;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
-import be.seeseemelk.mockbukkit.enchantments.EnchantmentsMock;
+import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -73,47 +58,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementList;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.AngleArgument;
-import net.minecraft.commands.arguments.ColorArgument;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.CompoundTagArgument;
-import net.minecraft.commands.arguments.DimensionArgument;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.GameProfileArgument;
-import net.minecraft.commands.arguments.ItemEnchantmentArgument;
-import net.minecraft.commands.arguments.MessageArgument;
-import net.minecraft.commands.arguments.MobEffectArgument;
-import net.minecraft.commands.arguments.NbtPathArgument;
-import net.minecraft.commands.arguments.NbtTagArgument;
-import net.minecraft.commands.arguments.ObjectiveArgument;
-import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
-import net.minecraft.commands.arguments.OperationArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.RangeArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.ScoreHolderArgument;
-import net.minecraft.commands.arguments.ScoreboardSlotArgument;
-import net.minecraft.commands.arguments.SlotArgument;
-import net.minecraft.commands.arguments.TeamArgument;
-import net.minecraft.commands.arguments.TimeArgument;
-import net.minecraft.commands.arguments.UuidArgument;
-import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
-import net.minecraft.commands.arguments.blocks.BlockStateArgument;
-import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
-import net.minecraft.commands.arguments.coordinates.RotationArgument;
-import net.minecraft.commands.arguments.coordinates.SwizzleArgument;
-import net.minecraft.commands.arguments.coordinates.Vec2Argument;
-import net.minecraft.commands.arguments.coordinates.Vec3Argument;
-import net.minecraft.commands.arguments.item.FunctionArgument;
-import net.minecraft.commands.arguments.item.ItemArgument;
-import net.minecraft.commands.arguments.item.ItemPredicateArgument;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -135,36 +81,40 @@ public class MockNMS extends ArgumentNMS {
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
-		try {
-			initializeArgumentsInArgumentTypeInfos();
 
-			// Initialize WorldVersion (game version)
-			SharedConstants.tryDetectVersion();
+		// Initialize all argument types
+		Map<Class<?>, Object> argumentTypes_BY_CLASS = (Map<Class<?>, Object>) getField(ArgumentTypes.class, "b", null); // BY_CLASS
+		Map<Class<?>, Object> argumentTypes_BY_NAME = (Map<Class<?>, Object>) getField(ArgumentTypes.class, "c", null); // BY_NAME
+		argumentTypes_BY_CLASS.clear();
+		argumentTypes_BY_NAME.clear();
+		ArgumentTypes.bootStrap();
 
-			// MockBukkit is very helpful and registers all of the potion
-			// effects and enchantments for us. We need to not do this (because
-			// we call DispenserRegistry.a() below which does the same thing)
-			unregisterAllEnchantments();
-			unregisterAllPotionEffects();
+		// Initialize WorldVersion (game version)
+		SharedConstants.tryDetectVersion();
 
-			// Invoke Minecraft's registry (I think that's what this does anyway)
-			Bootstrap.bootStrap();
-			
-			// Sometimes, and I have no idea why, DispenserRegistry.a() only works
-			// on the very first test in the test suite. After that, everything else
-			// doesn't work. At this point, we'll use the ServerMock#createPotionEffectTypes
-			// method (which unfortunately is private and pure, so instead of using reflection
-			// we'll just implement it right here instead)
-			@SuppressWarnings("unchecked")
-			Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
-			if(byKey.isEmpty()) {
-				createPotionEffectTypes();
-			}
-			EnchantmentsMock.registerDefaultEnchantments();
-//			System.out.println(byKey);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
+		// MockBukkit is very helpful and registers all of the potion
+		// effects and enchantments for us. We need to not do this (because
+		// we call Bootstrap.bootStrap() below which does the same thing)
+		unregisterAllEnchantments();
+		unregisterAllPotionEffects();
+
+		// Invoke Minecraft's registry (I think that's what this does anyway)
+		Bootstrap.bootStrap();
+		
+		// Sometimes, and I have no idea why, Bootstrap.bootStrap() only works
+		// on the very first test in the test suite. After that, everything else
+		// doesn't work. At this point, we'll use the ServerMock#createPotionEffectTypes
+		// method (which unfortunately is private and pure, so instead of using reflection
+		// we'll just implement it right here instead)
+		@SuppressWarnings("unchecked")
+		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
+		if(byKey.isEmpty()) {
+			createPotionEffectTypes();
 		}
+		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
+		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
+		// 1.19 ones!)
+		registerDefaultEnchantments();
 	}
 	
 	private static void registerPotionEffectType(int id, @NotNull String name, boolean instant, int rgb) {
@@ -189,6 +139,14 @@ public class MockNMS extends ArgumentNMS {
 			.map(s -> "minecraft:" + s)
 			.sorted()
 			.toList();
+	}
+
+	public static void registerDefaultEnchantments() {
+		for(Enchantment enchantment : getEnchantments()) {
+			if (Enchantment.getByKey(enchantment.getKey()) == null) {
+				Enchantment.registerEnchantment(new EnchantmentMock(enchantment.getKey(), enchantment.getKey().getKey()));
+			}
+		}
 	}
 	
 	/**
@@ -237,7 +195,6 @@ public class MockNMS extends ArgumentNMS {
 		registerPotionEffectType(30, "DOLPHINS_GRACE", false, 8954814);
 		registerPotionEffectType(31, "BAD_OMEN", false, 745784);
 		registerPotionEffectType(32, "HERO_OF_THE_VILLAGE", false, 4521796);
-		registerPotionEffectType(33, "DARKNESS", false, 2696993);
 		PotionEffectType.stopAcceptingRegistrations();
 	}
 
@@ -445,6 +402,16 @@ public class MockNMS extends ArgumentNMS {
 		}
 	}
 
+	public static void setField(Class<?> className, String fieldName, Object instance, Object value) {
+		try {
+			Field field = className.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(instance, value);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T getFieldAs(Class<?> className, String fieldName, Object instance, Class<T> asType) {
 		try {
@@ -478,52 +445,7 @@ public class MockNMS extends ArgumentNMS {
 			.write(new GsonBuilder()
 				.setPrettyPrinting()
 				.create()
-				.toJson(DispatcherUtil.toJSON(dispatcher, dispatcher.getRoot())));
-	}
-
-	private void initializeArgumentsInArgumentTypeInfos() throws ReflectiveOperationException {
-		@SuppressWarnings("unchecked")
-		Map<Class<?>, ArgumentSerializer<?>> map =
-			(Map<Class<?>, ArgumentSerializer<?>>) getField(ArgumentTypes.class, "b", null); // BY_CLASS
-
-		map.put(EntityArgument.class, new EntityArgument.Serializer());
-		map.put(GameProfileArgument.class, new EmptyArgumentSerializer<>(GameProfileArgument::gameProfile));
-		map.put(BlockPosArgument.class, new EmptyArgumentSerializer<>(BlockPosArgument::blockPos));
-		map.put(ColumnPosArgument.class, new EmptyArgumentSerializer<>(ColumnPosArgument::columnPos));
-		map.put(Vec3Argument.class, new EmptyArgumentSerializer<>(Vec3Argument::vec3));
-		map.put(Vec2Argument.class, new EmptyArgumentSerializer<>(Vec2Argument::vec2));
-		map.put(BlockStateArgument.class, new EmptyArgumentSerializer<>(BlockStateArgument::block));
-		map.put(BlockPredicateArgument.class, new EmptyArgumentSerializer<>(BlockPredicateArgument::blockPredicate));
-		map.put(ItemArgument.class, new EmptyArgumentSerializer<>(ItemArgument::item));
-		map.put(ItemPredicateArgument.class, new EmptyArgumentSerializer<>(ItemPredicateArgument::itemPredicate));
-		map.put(ColorArgument.class, new EmptyArgumentSerializer<>(ColorArgument::color));
-		map.put(ComponentArgument.class, new EmptyArgumentSerializer<>(ComponentArgument::textComponent));
-		map.put(MessageArgument.class, new EmptyArgumentSerializer<>(MessageArgument::message));
-		map.put(CompoundTagArgument.class, new EmptyArgumentSerializer<>(CompoundTagArgument::compoundTag));
-		map.put(NbtTagArgument.class, new EmptyArgumentSerializer<>(NbtTagArgument::nbtTag));
-		map.put(NbtPathArgument.class, new EmptyArgumentSerializer<>(NbtPathArgument::nbtPath));
-		map.put(ObjectiveArgument.class, new EmptyArgumentSerializer<>(ObjectiveArgument::objective));
-		map.put(ObjectiveCriteriaArgument.class, new EmptyArgumentSerializer<>(ObjectiveCriteriaArgument::criteria));
-		map.put(OperationArgument.class, new EmptyArgumentSerializer<>(OperationArgument::operation));
-		map.put(ParticleArgument.class, new EmptyArgumentSerializer<>(ParticleArgument::particle));
-		map.put(AngleArgument.class, new EmptyArgumentSerializer<>(AngleArgument::angle));
-		map.put(RotationArgument.class, new EmptyArgumentSerializer<>(RotationArgument::rotation));
-		map.put(ScoreboardSlotArgument.class, new EmptyArgumentSerializer<>(ScoreboardSlotArgument::displaySlot));
-		map.put(ScoreHolderArgument.class, new ScoreHolderArgument.Serializer());
-		map.put(SwizzleArgument.class, new EmptyArgumentSerializer<>(SwizzleArgument::swizzle));
-		map.put(TeamArgument.class, new EmptyArgumentSerializer<>(TeamArgument::team));
-		map.put(SlotArgument.class, new EmptyArgumentSerializer<>(SlotArgument::slot));
-		map.put(ResourceLocationArgument.class, new EmptyArgumentSerializer<>(ResourceLocationArgument::id));
-		map.put(MobEffectArgument.class, new EmptyArgumentSerializer<>(MobEffectArgument::effect));
-		map.put(FunctionArgument.class, new EmptyArgumentSerializer<>(FunctionArgument::functions));
-		map.put(EntityAnchorArgument.class, new EmptyArgumentSerializer<>(EntityAnchorArgument::anchor));
-		map.put(RangeArgument.Ints.class, new EmptyArgumentSerializer<>(RangeArgument::intRange));
-		map.put(RangeArgument.Floats.class, new EmptyArgumentSerializer<>(RangeArgument::floatRange));
-		map.put(ItemEnchantmentArgument.class, new EmptyArgumentSerializer<>(ItemEnchantmentArgument::enchantment));
-		map.put(EntitySummonArgument.class, new EmptyArgumentSerializer<>(EntitySummonArgument::id));
-		map.put(DimensionArgument.class, new EmptyArgumentSerializer<>(DimensionArgument::dimension));
-		map.put(TimeArgument.class, new EmptyArgumentSerializer<>(TimeArgument::time));
-		map.put(UuidArgument.class, new EmptyArgumentSerializer<>(UuidArgument::uuid));
+				.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}
 
 	@Override
@@ -575,127 +497,6 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public void reloadDataPacks() {
 		throw new Error("unimplemented");
-	}
-	
-	/**
-	 * An implementation of {@link ArgumentUtils} which produces JSON from a command
-	 * dispatcher and its root node. We have to avoid accessing IRegistry because it
-	 * isn't mock-able and cannot be instantiated through normal means
-	 */
-	private static class DispatcherUtil {
-
-		static Map<Class<?>, String> argumentParsers = new HashMap<>();
-
-		static {
-			argumentParsers.put(BoolArgumentType.class, "brigadier:bool");
-			argumentParsers.put(FloatArgumentType.class, "brigadier:float");
-			argumentParsers.put(DoubleArgumentType.class, "brigadier:double");
-			argumentParsers.put(IntegerArgumentType.class, "brigadier:integer");
-			argumentParsers.put(LongArgumentType.class, "brigadier:long");
-			argumentParsers.put(StringArgumentType.class, "brigadier:string");
-			argumentParsers.put(EntityArgument.class, "entity");
-			argumentParsers.put(GameProfileArgument.class, "game_profile");
-			argumentParsers.put(BlockPosArgument.class, "block_pos");
-			argumentParsers.put(ColumnPosArgument.class, "column_pos");
-			argumentParsers.put(Vec3Argument.class, "vec3");
-			argumentParsers.put(Vec2Argument.class, "vec2");
-			argumentParsers.put(BlockStateArgument.class, "block_state");
-			argumentParsers.put(BlockPredicateArgument.class, "block_predicate");
-			argumentParsers.put(ItemArgument.class, "item_stack");
-			argumentParsers.put(ItemPredicateArgument.class, "item_predicate");
-			argumentParsers.put(ColorArgument.class, "color");
-			argumentParsers.put(ComponentArgument.class, "component");
-			argumentParsers.put(MessageArgument.class, "message");
-			argumentParsers.put(CompoundTagArgument.class, "nbt_compound_tag");
-			argumentParsers.put(NbtTagArgument.class, "nbt_tag");
-			argumentParsers.put(NbtPathArgument.class, "nbt_path");
-			argumentParsers.put(ObjectiveArgument.class, "objective");
-			argumentParsers.put(ObjectiveCriteriaArgument.class, "objective_criteria");
-			argumentParsers.put(OperationArgument.class, "operation");
-			argumentParsers.put(ParticleArgument.class, "particle");
-			argumentParsers.put(AngleArgument.class, "angle");
-			argumentParsers.put(RotationArgument.class, "rotation");
-			argumentParsers.put(ScoreboardSlotArgument.class, "scoreboard_slot");
-			argumentParsers.put(ScoreHolderArgument.class, "score_holder");
-			argumentParsers.put(SwizzleArgument.class, "swizzle");
-			argumentParsers.put(TeamArgument.class, "team");
-			argumentParsers.put(SlotArgument.class, "item_slot");
-			argumentParsers.put(ResourceLocationArgument.class, "resource_location");
-			argumentParsers.put(MobEffectArgument.class, "mob_effect");
-			argumentParsers.put(FunctionArgument.class, "function");
-			argumentParsers.put(EntityAnchorArgument.class, "entity_anchor");
-			argumentParsers.put(RangeArgument.Ints.class, "int_range");
-			argumentParsers.put(RangeArgument.Floats.class, "float_range");
-			argumentParsers.put(ItemEnchantmentArgument.class, "item_enchantment");
-			argumentParsers.put(EntitySummonArgument.class, "entity_summon");
-			argumentParsers.put(DimensionArgument.class, "dimension");
-			argumentParsers.put(TimeArgument.class, "time");
-//			argumentParsers.put(ResourceOrTagLocationArgument.class, "resource_or_tag");
-//			argumentParsers.put(ResourceKeyArgument.class, "resource");
-//			argumentParsers.put(TemplateMirrorArgument.class, "template_mirror");
-//			argumentParsers.put(TemplateRotationArgument.class, "template_rotation");
-			argumentParsers.put(UuidArgument.class, "uuid");
-		}
-
-		public static <S> JsonObject toJSON(CommandDispatcher<S> dispatcher, CommandNode<S> node) {
-			JsonObject jsonObject = new JsonObject();
-
-			// Unpack nodes
-			if (node instanceof RootCommandNode) {
-				jsonObject.addProperty("type", "root");
-			} else if (node instanceof LiteralCommandNode) {
-				jsonObject.addProperty("type", "literal");
-			} else if (node instanceof ArgumentCommandNode) {
-				ArgumentCommandNode<?, ?> argumentCommandNode = (ArgumentCommandNode<?, ?>) node;
-				argToJSON(jsonObject, argumentCommandNode.getType());
-			} else {
-				jsonObject.addProperty("type", "unknown");
-			}
-
-			// Write children
-			JsonObject children = new JsonObject();
-			for (CommandNode<S> child : node.getChildren()) {
-				children.add(child.getName(), (JsonElement) toJSON(dispatcher, child));
-			}
-			if (children.size() > 0) {
-				jsonObject.add("children", (JsonElement) children);
-			}
-
-			// Write whether the command is executable
-			if (node.getCommand() != null) {
-				jsonObject.addProperty("executable", Boolean.valueOf(true));
-			}
-			if (node.getRedirect() != null) {
-				Collection<String> redirectPaths = dispatcher.getPath(node.getRedirect());
-				if (!redirectPaths.isEmpty()) {
-					JsonArray redirects = new JsonArray();
-					for (String redirectPath : redirectPaths) {
-						redirects.add(redirectPath);
-					}
-					jsonObject.add("redirect", (JsonElement) redirects);
-				}
-			}
-			return jsonObject;
-		}
-
-		@SuppressWarnings("unchecked")
-		private static <T extends ArgumentType<?>> void argToJSON(JsonObject jsonObject, T argument) {
-//			Map<Class<?>, ArgumentSerializer<?>> map = (Map<Class<?>, ArgumentSerializer<?>>) getField(ArgumentTypes.class, "a", null); // BY_CLASS
-//			map.get(argument.getClass())
-//			ArgumentTypeInfo.Template<T> argumentInfo = ArgumentTypes.get(argument);
-//			jsonObject.addProperty("type", "argument");
-//			jsonObject.addProperty("parser", argumentParsers.get(argument.getClass()));
-//			
-//			// Properties
-//			JsonObject properties = new JsonObject();
-//			@SuppressWarnings("rawtypes")
-//			ArgumentTypeInfo argumentTypeInfo = argumentInfo.type();
-//			argumentTypeInfo.serializeToJson(argumentInfo, properties);
-//			if (properties.size() > 0) {
-//				jsonObject.add("properties", (JsonElement) properties);
-//			}
-		}
-
 	}
 
 	public static PotionEffectType[] getPotionEffects() {

@@ -311,6 +311,7 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentVibration() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19), "Vibration particle only exists in 1.19+");
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
