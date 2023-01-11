@@ -16,7 +16,6 @@ import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

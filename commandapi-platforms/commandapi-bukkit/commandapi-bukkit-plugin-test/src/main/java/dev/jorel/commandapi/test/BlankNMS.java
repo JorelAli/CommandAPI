@@ -1,17 +1,10 @@
 package dev.jorel.commandapi.test;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
 import org.bukkit.World.Environment;
-import org.bukkit.command.Command;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -22,7 +15,6 @@ import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.IntegerRange;
-import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.md_5.bungee.api.chat.BaseComponent;
