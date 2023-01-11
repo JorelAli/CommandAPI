@@ -62,11 +62,6 @@
 
 		<!-- Test dependencies -->
 		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.19</artifactId>
-			<version>2.29.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.8.2</version>
@@ -84,11 +79,10 @@
 			<version>1.0.17</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>io.papermc.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>${paper.version}</version>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.19</artifactId>
+			<version>2.29.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -96,6 +90,11 @@
 			<version>4.6.1</version>
 		</dependency>
 
+				<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.19.2-R0.1-SNAPSHOT</version>
+				</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-shade</artifactId>
@@ -108,6 +107,13 @@
 			<artifactId>item-nbt-api</artifactId>
 			<version>2.11.1</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- Semantic Versioning to allow only running certain tests on certain versions -->
+		<dependency>
+			<groupId>com.github.zafarkhaja</groupId>
+			<artifactId>java-semver</artifactId>
+			<version>0.9.0</version>
 		</dependency>
 	</dependencies>
 
@@ -140,6 +146,11 @@
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.19.2-R0.1-SNAPSHOT</version>
+				</dependency>
+				<dependency>
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.19.2-R0.1-SNAPSHOT</version> <!-- VERY IMPORTANT: CHECK 1.19-R0.1-SNAPSHOT WHICH HAS WEIRD FAILING TESTS!!!!! -->
@@ -155,6 +166,16 @@
 					<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<!-- <dependency>
+					<groupId>com.github.seeseemelk</groupId>
+					<artifactId>MockBukkit-v1.18</artifactId>
+					<version>2.27.0</version>
+				</dependency> -->
+				<!--<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.18-R0.1-SNAPSHOT</version>
+				</dependency>-->
 				<dependency>
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>

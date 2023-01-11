@@ -88,6 +88,7 @@ public class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
+		// TODO: This test fails in 1.18 due to the additional " at position 8: test []<--[HERE]"
 		assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");
 		
 		// /test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]
@@ -117,6 +118,7 @@ public class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
+		// TODO: This test fails in 1.18 due to the additional " at position 8: test []<--[HERE]"
 		assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");
 		
 		// /test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]

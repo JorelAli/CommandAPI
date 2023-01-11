@@ -22,11 +22,18 @@ import org.jetbrains.annotations.NotNull;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
+import dev.jorel.commandapi.CommandAPIVersionHandler.MCVersion;
 
 public abstract class TestBase {
 
 	public CommandAPIServerMock server;
 	public Main plugin;
+	public MCVersion version;
+	
+	public TestBase() {
+		this.version = CommandAPIVersionHandler.getVersion();
+	}
 
 	public void setUp() {
 		server = MockBukkit.mock(new CommandAPIServerMock());

@@ -2,6 +2,8 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler.MCVersion;
 import dev.jorel.commandapi.arguments.ParticleArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -263,6 +266,7 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentSculkCharge() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19), "Sculk charge particle only exists in 1.19+");
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -276,7 +280,7 @@ public class ArgumentParticleTests extends TestBase {
 
 		server.dispatchCommand(player, "test sculk_charge 0.2");
 		ParticleData result = results.get();
-		assertEquals(Particle.SCULK_CHARGE, result.particle());
+		assertEquals(Particle.valueOf("SCULK_CHARGE"), result.particle());
 		assertInstanceOf(Float.class, result.data());
 
 		float angle = (float) result.data();
@@ -285,6 +289,7 @@ public class ArgumentParticleTests extends TestBase {
 
 	@Test
 	public void executionTestWithParticleArgumentShriek() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19), "Shriek particle only exists in 1.19+");
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -298,7 +303,7 @@ public class ArgumentParticleTests extends TestBase {
 
 		server.dispatchCommand(player, "test shriek 100");
 		ParticleData result = results.get();
-		assertEquals(Particle.SHRIEK, result.particle());
+		assertEquals(Particle.valueOf("SHRIEK"), result.particle());
 		assertInstanceOf(Integer.class, result.data());
 
 		int delay = (int) result.data();
