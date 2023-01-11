@@ -425,7 +425,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final ChatColor getChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return ChatColor.getByChar(ColorArgument.getColor(cmdCtx, key).code);
+		return ChatColor.getByChar(ColorArgument.getColor(cmdCtx, key).getChar());
 	}
 
 	@Override
