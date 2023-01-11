@@ -559,50 +559,42 @@ public class MockNMS extends ArgumentNMS {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 
 	@Override
 	public String convert(ItemStack is) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 
 	@Override
 	public String convert(ParticleData<?> particle) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 
 	@Override
 	public String convert(PotionEffectType potion) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 
 	@Override
 	public String convert(Sound sound) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 
 	@Override
 	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 
 	@Override
 	public void reloadDataPacks() {
-		new RuntimeException("unimplemented").printStackTrace();
-		throw new RuntimeException("unimplemented");
+		throw new Error("unimplemented");
 	}
 	
 	/**
