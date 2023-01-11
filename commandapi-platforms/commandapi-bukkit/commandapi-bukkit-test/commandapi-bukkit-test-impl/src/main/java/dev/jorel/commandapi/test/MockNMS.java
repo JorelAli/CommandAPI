@@ -31,6 +31,7 @@ import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemFactory;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
@@ -597,6 +598,8 @@ public class MockNMS extends ArgumentNMS {
 		throw new Error("unimplemented");
 	}
 	
+
+	
 	/**
 	 * An implementation of {@link ArgumentUtils} which produces JSON from a command
 	 * dispatcher and its root node. We have to avoid accessing IRegistry because it
@@ -714,6 +717,18 @@ public class MockNMS extends ArgumentNMS {
 			}
 		}
 
+	}
+
+	public static PotionEffectType[] getPotionEffects() {
+		return PotionEffectType.values();
+	}
+
+	public static EntityType[] getEntityTypes() {
+		return EntityType.values();
+	}
+
+	public static Enchantment[] getEnchantments() {
+		return Enchantment.values();
 	}
 
 

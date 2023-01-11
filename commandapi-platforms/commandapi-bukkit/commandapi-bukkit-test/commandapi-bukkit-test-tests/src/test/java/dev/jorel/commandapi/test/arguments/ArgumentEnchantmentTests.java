@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
+import dev.jorel.commandapi.test.MockNMS;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -77,7 +78,7 @@ public class ArgumentEnchantmentTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		for (Enchantment enchantment : Enchantment.values()) {
+		for (Enchantment enchantment : MockNMS.getEnchantments()) {
 			server.dispatchCommand(player, "test " + enchantment.getKey().getKey());
 			assertEquals(enchantment, results.get());
 		}

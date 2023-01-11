@@ -1,10 +1,8 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
+import dev.jorel.commandapi.test.MockNMS;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -81,7 +80,7 @@ public class ArgumentPotionTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		for (PotionEffectType potionEffect : PotionEffectType.values()) {
+		for (PotionEffectType potionEffect : MockNMS.getPotionEffects()) {
 			server.dispatchCommand(player, "test " + potionEffect.getKey().getKey());
 			assertEquals(potionEffect, results.get());
 		}
@@ -105,7 +104,7 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test minecraft:
 		assertEquals(
-			Arrays.stream(PotionEffectType.values())
+			Arrays.stream(MockNMS.getPotionEffects())
 				.map(p -> p.getKey().asString())
 				.sorted()
 				.toList(),
@@ -114,7 +113,7 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test minecraft:s
 		assertEquals(
-			Arrays.stream(PotionEffectType.values())
+			Arrays.stream(MockNMS.getPotionEffects())
 				.map(p -> p.getKey().asString())
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()
@@ -123,7 +122,7 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test s
 		assertEquals(
-			Arrays.stream(PotionEffectType.values())
+			Arrays.stream(MockNMS.getPotionEffects())
 				.map(p -> p.getKey().asString())
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()

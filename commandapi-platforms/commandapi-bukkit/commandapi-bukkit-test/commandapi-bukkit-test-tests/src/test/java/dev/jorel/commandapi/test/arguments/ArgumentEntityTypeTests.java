@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
+import dev.jorel.commandapi.test.MockNMS;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -41,7 +42,7 @@ public class ArgumentEntityTypeTests extends TestBase {
 	 * entities are NOT in this list
 	 */
 	private List<String> getAllEntityTypes() {
-		return Arrays.stream(EntityType.values())
+		return Arrays.stream(MockNMS.getEntityTypes())
 			.filter(e -> e != EntityType.UNKNOWN)
 			.filter(e -> e != EntityType.PLAYER)
 			.filter(e -> e != EntityType.FISHING_HOOK)
