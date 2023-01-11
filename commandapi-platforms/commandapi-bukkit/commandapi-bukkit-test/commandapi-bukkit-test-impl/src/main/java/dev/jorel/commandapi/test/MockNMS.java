@@ -16,8 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.StreamSupport;
 
 import org.bukkit.Bukkit;
@@ -72,75 +70,75 @@ import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.Advancements;
-import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.CommandListenerWrapper;
-import net.minecraft.commands.arguments.ArgumentAnchor;
-import net.minecraft.commands.arguments.ArgumentAnchor.Anchor;
-import net.minecraft.commands.arguments.ArgumentAngle;
-import net.minecraft.commands.arguments.ArgumentChat;
-import net.minecraft.commands.arguments.ArgumentChatComponent;
-import net.minecraft.commands.arguments.ArgumentChatFormat;
-import net.minecraft.commands.arguments.ArgumentCriterionValue;
-import net.minecraft.commands.arguments.ArgumentDimension;
-import net.minecraft.commands.arguments.ArgumentEnchantment;
-import net.minecraft.commands.arguments.ArgumentEntity;
-import net.minecraft.commands.arguments.ArgumentEntitySummon;
-import net.minecraft.commands.arguments.ArgumentInventorySlot;
-import net.minecraft.commands.arguments.ArgumentMathOperation;
-import net.minecraft.commands.arguments.ArgumentMinecraftKeyRegistered;
-import net.minecraft.commands.arguments.ArgumentMobEffect;
-import net.minecraft.commands.arguments.ArgumentNBTBase;
-import net.minecraft.commands.arguments.ArgumentNBTKey;
-import net.minecraft.commands.arguments.ArgumentNBTTag;
-import net.minecraft.commands.arguments.ArgumentParticle;
-import net.minecraft.commands.arguments.ArgumentProfile;
-import net.minecraft.commands.arguments.ArgumentScoreboardCriteria;
-import net.minecraft.commands.arguments.ArgumentScoreboardObjective;
-import net.minecraft.commands.arguments.ArgumentScoreboardSlot;
-import net.minecraft.commands.arguments.ArgumentScoreboardTeam;
-import net.minecraft.commands.arguments.ArgumentScoreholder;
-import net.minecraft.commands.arguments.ArgumentTime;
-import net.minecraft.commands.arguments.ArgumentUUID;
+import net.minecraft.advancements.AdvancementList;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.AngleArgument;
+import net.minecraft.commands.arguments.ColorArgument;
+import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.CompoundTagArgument;
+import net.minecraft.commands.arguments.DimensionArgument;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.EntitySummonArgument;
+import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.commands.arguments.ItemEnchantmentArgument;
+import net.minecraft.commands.arguments.MessageArgument;
+import net.minecraft.commands.arguments.MobEffectArgument;
+import net.minecraft.commands.arguments.NbtPathArgument;
+import net.minecraft.commands.arguments.NbtTagArgument;
+import net.minecraft.commands.arguments.ObjectiveArgument;
+import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
+import net.minecraft.commands.arguments.OperationArgument;
+import net.minecraft.commands.arguments.ParticleArgument;
+import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
+import net.minecraft.commands.arguments.ScoreHolderArgument;
+import net.minecraft.commands.arguments.ScoreboardSlotArgument;
+import net.minecraft.commands.arguments.SlotArgument;
+import net.minecraft.commands.arguments.TeamArgument;
 import net.minecraft.commands.arguments.TemplateMirrorArgument;
 import net.minecraft.commands.arguments.TemplateRotationArgument;
-import net.minecraft.commands.arguments.blocks.ArgumentBlockPredicate;
-import net.minecraft.commands.arguments.blocks.ArgumentTile;
-import net.minecraft.commands.arguments.coordinates.ArgumentPosition;
-import net.minecraft.commands.arguments.coordinates.ArgumentRotation;
-import net.minecraft.commands.arguments.coordinates.ArgumentRotationAxis;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec2;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec2I;
-import net.minecraft.commands.arguments.coordinates.ArgumentVec3;
-import net.minecraft.commands.arguments.item.ArgumentItemPredicate;
-import net.minecraft.commands.arguments.item.ArgumentItemStack;
-import net.minecraft.commands.arguments.item.ArgumentTag;
+import net.minecraft.commands.arguments.TimeArgument;
+import net.minecraft.commands.arguments.UuidArgument;
+import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
+import net.minecraft.commands.arguments.coordinates.RotationArgument;
+import net.minecraft.commands.arguments.coordinates.SwizzleArgument;
+import net.minecraft.commands.arguments.coordinates.Vec2Argument;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.arguments.item.FunctionArgument;
+import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.commands.synchronization.brigadier.ArgumentSerializerString;
 import net.minecraft.commands.synchronization.brigadier.DoubleArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.FloatArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.IntegerArgumentInfo;
 import net.minecraft.commands.synchronization.brigadier.LongArgumentInfo;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.core.IRegistry;
-import net.minecraft.resources.MinecraftKey;
+import net.minecraft.commands.synchronization.brigadier.StringArgumentSerializer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.AdvancementDataWorld;
-import net.minecraft.server.DispenserRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ScoreboardServer;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.ServerAdvancementManager;
+import net.minecraft.server.ServerScoreboard;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
-import net.minecraft.server.players.UserCache;
-import net.minecraft.world.phys.Vec2F;
-import net.minecraft.world.phys.Vec3D;
-import net.minecraft.world.scores.ScoreboardTeam;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.PlayerTeam;
 
 public class MockNMS extends ArgumentNMS {
 
@@ -150,7 +148,7 @@ public class MockNMS extends ArgumentNMS {
 			initializeArgumentsInArgumentTypeInfos();
 
 			// Initialize WorldVersion (game version)
-			SharedConstants.a();
+			SharedConstants.tryDetectVersion();
 
 			// MockBukkit is very helpful and registers all of the potion
 			// effects and enchantments for us. We need to not do this (because
@@ -159,7 +157,7 @@ public class MockNMS extends ArgumentNMS {
 			unregisterAllPotionEffects();
 
 			// Invoke Minecraft's registry (I think that's what this does anyway)
-			DispenserRegistry.a();
+			Bootstrap.bootStrap();
 			
 			// Sometimes, and I have no idea why, DispenserRegistry.a() only works
 			// on the very first test in the test suite. After that, everything else
@@ -195,7 +193,7 @@ public class MockNMS extends ArgumentNMS {
 	 */
 	public static List<String> getAllItemNames() {
 		// Registry.ITEM
-		return StreamSupport.stream(IRegistry.Y.spliterator(), false)
+		return StreamSupport.stream(Registry.ITEM.spliterator(), false)
 			.map(Object::toString)
 			.map(s -> "minecraft:" + s)
 			.sorted()
@@ -297,10 +295,10 @@ public class MockNMS extends ArgumentNMS {
 		return new String[] { "1.19.2" };
 	}
 
-	CommandDispatcher<CommandListenerWrapper> dispatcher;
+	CommandDispatcher<CommandSourceStack> dispatcher;
 
 	@Override
-	public CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
+	public CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
 		if (this.dispatcher == null) {
 			this.dispatcher = new CommandDispatcher<>();
 		}
@@ -312,37 +310,35 @@ public class MockNMS extends ArgumentNMS {
 		return ((ServerMock) Bukkit.getServer()).getCommandMap();
 	}
 
-	List<EntityPlayer> players = new ArrayList<>();
+	List<ServerPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
 	
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
-	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
+	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		CommandSender sender = senderWrapper.getSource();
-		CommandListenerWrapper clw = Mockito.mock(CommandListenerWrapper.class);
-		Mockito.when(clw.getBukkitSender()).thenReturn(sender);
+		CommandSourceStack css = Mockito.mock(CommandSourceStack.class);
+		Mockito.when(css.getBukkitSender()).thenReturn(sender);
 
 		if (sender instanceof Player player) {
 			// Location argument
 			Location loc = player.getLocation();
-			Mockito.when(clw.e()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
+			Mockito.when(css.getPosition()).thenReturn(new Vec3(loc.getX(), loc.getY(), loc.getZ()));
 			
-			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
-			Mockito.when(clw.f()).thenReturn(worldServerMock);
-			Mockito.when(clw.f().E(any(BlockPosition.class))).thenReturn(true);
-			Mockito.when(clw.f().j(any(BlockPosition.class))).thenReturn(true);
-			Mockito.when(clw.n()).thenAnswer(invocation -> { // CommandSourceStack#getAnchor
-				return Anchor.a; // Anchor#EYES
-			});
+			ServerLevel worldServerMock = Mockito.mock(ServerLevel.class);
+			Mockito.when(css.getLevel()).thenReturn(worldServerMock);
+			Mockito.when(css.getLevel().hasChunkAt(any(BlockPos.class))).thenReturn(true);
+			Mockito.when(css.getLevel().isInWorldBounds(any(BlockPos.class))).thenReturn(true);
+			Mockito.when(css.getAnchor()).thenReturn(Anchor.EYES);
 
 			// Advancement argument
 			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
-			Mockito.when(minecraftServerMock.az()).thenReturn(mockAdvancementDataWorld());
-			Mockito.when(clw.m()).thenReturn(minecraftServerMock); // CommandSourceStack#getServer
+			Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(mockAdvancementDataWorld());
+			Mockito.when(css.getServer()).thenReturn(minecraftServerMock);
 
 			// Entity selector argument
 			for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-				EntityPlayer entityPlayerMock = Mockito.mock(EntityPlayer.class);
+				ServerPlayer entityPlayerMock = Mockito.mock(ServerPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
 				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
 				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
@@ -352,9 +348,9 @@ public class MockNMS extends ArgumentNMS {
 			
 			if(playerListMock == null) {
 				playerListMock = Mockito.mock(PlayerList.class);
-				Mockito.when(playerListMock.a(anyString())).thenAnswer(invocation -> {
+				Mockito.when(playerListMock.getPlayerByName(anyString())).thenAnswer(invocation -> {
 					String playerName = invocation.getArgument(0);
-					for(EntityPlayer onlinePlayer : players) {
+					for(ServerPlayer onlinePlayer : players) {
 						if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
 							return onlinePlayer;
 						}
@@ -363,27 +359,27 @@ public class MockNMS extends ArgumentNMS {
 				});
 			}
 			
-			Mockito.when(minecraftServerMock.ac()).thenReturn(playerListMock);
-			Mockito.when(minecraftServerMock.ac().t()).thenReturn(players);
+			Mockito.when(minecraftServerMock.getPlayerList()).thenReturn(playerListMock);
+			Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenReturn(players);
 			
 			// Player argument
-			UserCache userCacheMock = Mockito.mock(UserCache.class);
-			Mockito.when(userCacheMock.a(anyString())).thenAnswer(invocation -> {
+			GameProfileCache userCacheMock = Mockito.mock(GameProfileCache.class);
+			Mockito.when(userCacheMock.get(anyString())).thenAnswer(invocation -> {
 				String playerName = invocation.getArgument(0);
-				for(EntityPlayer onlinePlayer : players) {
+				for(ServerPlayer onlinePlayer : players) {
 					if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
 						return Optional.of(new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName));
 					}
 				}
 				return Optional.empty();
 			});
-			Mockito.when(minecraftServerMock.ap()).thenReturn(userCacheMock);
+			Mockito.when(minecraftServerMock.getProfileCache()).thenReturn(userCacheMock);
 			
 			// World (Dimension) argument
-			Mockito.when(minecraftServerMock.a(any(ResourceKey.class))).thenAnswer(invocation -> {
+			Mockito.when(minecraftServerMock.getLevel(any(ResourceKey.class))).thenAnswer(invocation -> {
 				// Get the ResourceKey<World> and extract the world name from it
-				ResourceKey<net.minecraft.world.level.World> resourceKey = invocation.getArgument(0);
-				String worldName = resourceKey.a().a();
+				ResourceKey<Level> resourceKey = invocation.getArgument(0);
+				String worldName = resourceKey.location().getPath();
 				
 				// Get the world via Bukkit (returns a WorldMock) and create a
 				// CraftWorld clone of it for WorldServer.getWorld()
@@ -396,19 +392,19 @@ public class MockNMS extends ArgumentNMS {
 					Mockito.when(craftWorldMock.getUID()).thenReturn(world.getUID());
 					
 					// Create our return WorldServer object
-					WorldServer bukkitWorldServerMock = Mockito.mock(WorldServer.class);
+					ServerLevel bukkitWorldServerMock = Mockito.mock(ServerLevel.class);
 					Mockito.when(bukkitWorldServerMock.getWorld()).thenReturn(craftWorldMock);
 					return bukkitWorldServerMock;
 				}
 			});
 			
-			Mockito.when(clw.u()).thenAnswer(invocation -> {
-				Set<ResourceKey<net.minecraft.world.level.World>> set = new HashSet<>();
+			Mockito.when(css.levels()).thenAnswer(invocation -> {
+				Set<ResourceKey<Level>> set = new HashSet<>();
 				// We only need to implement resourceKey.a()
 				
 				for(World world : Bukkit.getWorlds()) {
-					ResourceKey<net.minecraft.world.level.World> key = Mockito.mock(ResourceKey.class);
-					Mockito.when(key.a()).thenReturn(new MinecraftKey(world.getName()));
+					ResourceKey<Level> key = Mockito.mock(ResourceKey.class);
+					Mockito.when(key.location()).thenReturn(new ResourceLocation(world.getName()));
 					set.add(key);
 				}
 				
@@ -416,34 +412,35 @@ public class MockNMS extends ArgumentNMS {
 			});
 			
 			// Rotation argument
-			Mockito.when(clw.l()).thenReturn(new Vec2F(loc.getYaw(), loc.getPitch()));
+			Mockito.when(css.getRotation()).thenReturn(new Vec2(loc.getYaw(), loc.getPitch()));
 			
 			// Team argument
-			ScoreboardServer scoreboardServerMock = Mockito.mock(ScoreboardServer.class);
-			Mockito.when(scoreboardServerMock.f(anyString())).thenAnswer(invocation -> { // Scoreboard#getPlayerTeam
+			ServerScoreboard scoreboardServerMock = Mockito.mock(ServerScoreboard.class);
+			Mockito.when(scoreboardServerMock.getPlayerTeam(anyString())).thenAnswer(invocation -> { // Scoreboard#getPlayerTeam
 				String teamName = invocation.getArgument(0);
 				Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 				if (team == null) {
 					return null;
 				} else {
-					return new ScoreboardTeam(scoreboardServerMock, teamName);
+					return new PlayerTeam(scoreboardServerMock, teamName);
 				}
 			});
-			Mockito.when(minecraftServerMock.aF()).thenReturn(scoreboardServerMock); // MinecraftServer#getScoreboard
+			Mockito.when(minecraftServerMock.getScoreboard()).thenReturn(scoreboardServerMock); // MinecraftServer#getScoreboard
 			
-			Mockito.when(clw.r()).thenAnswer(invocation -> { // CommandSourceStack#getAllTeams
+			Mockito.when(css.getAllTeams()).thenAnswer(invocation -> { // CommandSourceStack#getAllTeams
 				return Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList();
 			});
 		}
-		return clw;
+		return css;
 	}
 
-	public AdvancementDataWorld mockAdvancementDataWorld() {
-		AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
-		Advancements advancements = (Advancements) getField(AdvancementDataWorld.class, "c", advancementDataWorld);
+	public ServerAdvancementManager mockAdvancementDataWorld() {
+		ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
+		AdvancementList advancements = advancementDataWorld.advancements;
+		// Advancement advancements = (Advancement) getField(ServerAdvancementManager.class, "c", advancementDataWorld);
 
-		advancements.b.put(new MinecraftKey("my:advancement"), new Advancement(new MinecraftKey("my:advancement"), null, null, null, new HashMap<>(), null));
-		advancements.b.put(new MinecraftKey("my:advancement2"), new Advancement(new MinecraftKey("my:advancement2"), null, null, null, new HashMap<>(), null));
+		advancements.advancements.put(new ResourceLocation("my:advancement"), new Advancement(new ResourceLocation("my:advancement"), null, null, null, new HashMap<>(), null));
+		advancements.advancements.put(new ResourceLocation("my:advancement2"), new Advancement(new ResourceLocation("my:advancement2"), null, null, null, new HashMap<>(), null));
 		return advancementDataWorld;
 	}
 
@@ -469,7 +466,7 @@ public class MockNMS extends ArgumentNMS {
 	}
 
 	@Override
-	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
+	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack clw) {
 		try {
 			return wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
@@ -478,12 +475,12 @@ public class MockNMS extends ArgumentNMS {
 	}
 
 	@Override
-	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative) {
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean forceNative) {
 		return getCommandSenderFromCommandSource(cmdCtx.getSource());
 	}
 
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher)
+	public void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
 			throws IOException {
 		Files
 			.asCharSink(file, StandardCharsets.UTF_8)
@@ -499,58 +496,58 @@ public class MockNMS extends ArgumentNMS {
 		f.setAccessible(true);
 		@SuppressWarnings("unchecked")
 		Map<Class<?>, ArgumentTypeInfo<?, ?>> map = (Map<Class<?>, ArgumentTypeInfo<?, ?>>) f.get(null);
-		map.put(BoolArgumentType.class, SingletonArgumentInfo.a(BoolArgumentType::bool));
+		map.put(BoolArgumentType.class, SingletonArgumentInfo.contextFree(BoolArgumentType::bool));
 		map.put(FloatArgumentType.class, new FloatArgumentInfo());
 		map.put(DoubleArgumentType.class, new DoubleArgumentInfo());
 		map.put(IntegerArgumentType.class, new IntegerArgumentInfo());
 		map.put(LongArgumentType.class, new LongArgumentInfo());
-		map.put(StringArgumentType.class, new ArgumentSerializerString());
-		map.put(ArgumentEntity.class, new ArgumentEntity.Info());
-		map.put(ArgumentProfile.class, SingletonArgumentInfo.a(ArgumentProfile::a));
-		map.put(ArgumentPosition.class, SingletonArgumentInfo.a(ArgumentPosition::a));
-		map.put(ArgumentVec2I.class, SingletonArgumentInfo.a(ArgumentVec2I::a));
-		map.put(ArgumentVec3.class, SingletonArgumentInfo.a((Supplier<ArgumentType<?>>) ArgumentVec3::a));
-		map.put(ArgumentVec2.class, SingletonArgumentInfo.a((Supplier<ArgumentType<?>>) ArgumentVec2::a));
-		map.put(ArgumentTile.class, SingletonArgumentInfo.a((Function<CommandBuildContext, ArgumentType<?>>) ArgumentTile::a));
-		map.put(ArgumentBlockPredicate.class, SingletonArgumentInfo.a((Function<CommandBuildContext, ArgumentType<?>>) ArgumentBlockPredicate::a));
-		map.put(ArgumentItemStack.class, SingletonArgumentInfo.a((Function<CommandBuildContext, ArgumentType<?>>) ArgumentItemStack::a));
-		map.put(ArgumentItemPredicate.class, SingletonArgumentInfo.a((Function<CommandBuildContext, ArgumentType<?>>) ArgumentItemPredicate::a));
-		map.put(ArgumentChatFormat.class, SingletonArgumentInfo.a(ArgumentChatFormat::a));
-		map.put(ArgumentChatComponent.class, SingletonArgumentInfo.a(ArgumentChatComponent::a));
-		map.put(ArgumentChat.class, SingletonArgumentInfo.a(ArgumentChat::a));
-		map.put(ArgumentNBTTag.class, SingletonArgumentInfo.a(ArgumentNBTTag::a));
-		map.put(ArgumentNBTBase.class, SingletonArgumentInfo.a(ArgumentNBTBase::a));
-		map.put(ArgumentNBTKey.class, SingletonArgumentInfo.a((Supplier<ArgumentType<?>>) ArgumentNBTKey::a));
-		map.put(ArgumentScoreboardObjective.class, SingletonArgumentInfo.a(ArgumentScoreboardObjective::a));
-		map.put(ArgumentScoreboardCriteria.class, SingletonArgumentInfo.a(ArgumentScoreboardCriteria::a));
-		map.put(ArgumentMathOperation.class, SingletonArgumentInfo.a((Supplier<ArgumentType<?>>) ArgumentMathOperation::a));
-		map.put(ArgumentParticle.class, SingletonArgumentInfo.a(ArgumentParticle::a));
-		map.put(ArgumentAngle.class, SingletonArgumentInfo.a(ArgumentAngle::a));
-		map.put(ArgumentRotation.class, SingletonArgumentInfo.a(ArgumentRotation::a));
-		map.put(ArgumentScoreboardSlot.class, SingletonArgumentInfo.a(ArgumentScoreboardSlot::a));
-		map.put(ArgumentScoreholder.class, new ArgumentScoreholder.a());
-		map.put(ArgumentRotationAxis.class, SingletonArgumentInfo.a(ArgumentRotationAxis::a));
-		map.put(ArgumentScoreboardTeam.class, SingletonArgumentInfo.a(ArgumentScoreboardTeam::a));
-		map.put(ArgumentInventorySlot.class, SingletonArgumentInfo.a(ArgumentInventorySlot::a));
-		map.put(ArgumentMinecraftKeyRegistered.class, SingletonArgumentInfo.a(ArgumentMinecraftKeyRegistered::a));
-		map.put(ArgumentMobEffect.class, SingletonArgumentInfo.a(ArgumentMobEffect::a));
-		map.put(ArgumentTag.class, SingletonArgumentInfo.a(ArgumentTag::a));
-		map.put(ArgumentAnchor.class, SingletonArgumentInfo.a(ArgumentAnchor::a));
-		map.put(ArgumentCriterionValue.b.class, SingletonArgumentInfo.a(ArgumentCriterionValue::a));
-		map.put(ArgumentCriterionValue.a.class, SingletonArgumentInfo.a(ArgumentCriterionValue::b));
-		map.put(ArgumentEnchantment.class, SingletonArgumentInfo.a(ArgumentEnchantment::a));
-		map.put(ArgumentEntitySummon.class, SingletonArgumentInfo.a((Supplier<ArgumentType<?>>) ArgumentEntitySummon::a));
-		map.put(ArgumentDimension.class, SingletonArgumentInfo.a(ArgumentDimension::a));
-		map.put(ArgumentTime.class, SingletonArgumentInfo.a(ArgumentTime::a));
-		map.put(ResourceOrTagLocationArgument.class, new ResourceOrTagLocationArgument.a());
-		map.put(ResourceKeyArgument.class, new ResourceKeyArgument.a());
-		map.put(TemplateMirrorArgument.class, SingletonArgumentInfo.a(TemplateMirrorArgument::a));
-		map.put(TemplateRotationArgument.class, SingletonArgumentInfo.a(TemplateRotationArgument::a));
-		map.put(ArgumentUUID.class, SingletonArgumentInfo.a(ArgumentUUID::a));
+		map.put(StringArgumentType.class, new StringArgumentSerializer());
+		map.put(EntityArgument.class, new EntityArgument.Info());
+		map.put(GameProfileArgument.class, SingletonArgumentInfo.contextFree(GameProfileArgument::gameProfile));
+		map.put(BlockPosArgument.class, SingletonArgumentInfo.contextFree(BlockPosArgument::blockPos));
+		map.put(ColumnPosArgument.class, SingletonArgumentInfo.contextFree(ColumnPosArgument::columnPos));
+		map.put(Vec3Argument.class, SingletonArgumentInfo.contextFree(Vec3Argument::vec3));
+		map.put(Vec2Argument.class, SingletonArgumentInfo.contextFree(Vec2Argument::vec2));
+		map.put(BlockStateArgument.class, SingletonArgumentInfo.contextAware(BlockStateArgument::block));
+		map.put(BlockPredicateArgument.class, SingletonArgumentInfo.contextAware(BlockPredicateArgument::blockPredicate));
+		map.put(ItemArgument.class, SingletonArgumentInfo.contextAware(ItemArgument::item));
+		map.put(ItemPredicateArgument.class, SingletonArgumentInfo.contextAware(ItemPredicateArgument::itemPredicate));
+		map.put(ColorArgument.class, SingletonArgumentInfo.contextFree(ColorArgument::color));
+		map.put(ComponentArgument.class, SingletonArgumentInfo.contextFree(ComponentArgument::textComponent));
+		map.put(MessageArgument.class, SingletonArgumentInfo.contextFree(MessageArgument::message));
+		map.put(CompoundTagArgument.class, SingletonArgumentInfo.contextFree(CompoundTagArgument::compoundTag));
+		map.put(NbtTagArgument.class, SingletonArgumentInfo.contextFree(NbtTagArgument::nbtTag));
+		map.put(NbtPathArgument.class, SingletonArgumentInfo.contextFree(NbtPathArgument::nbtPath));
+		map.put(ObjectiveArgument.class, SingletonArgumentInfo.contextFree(ObjectiveArgument::objective));
+		map.put(ObjectiveCriteriaArgument.class, SingletonArgumentInfo.contextFree(ObjectiveCriteriaArgument::criteria));
+		map.put(OperationArgument.class, SingletonArgumentInfo.contextFree(OperationArgument::operation));
+		map.put(ParticleArgument.class, SingletonArgumentInfo.contextFree(ParticleArgument::particle));
+		map.put(AngleArgument.class, SingletonArgumentInfo.contextFree(AngleArgument::angle));
+		map.put(RotationArgument.class, SingletonArgumentInfo.contextFree(RotationArgument::rotation));
+		map.put(ScoreboardSlotArgument.class, SingletonArgumentInfo.contextFree(ScoreboardSlotArgument::displaySlot));
+		map.put(ScoreHolderArgument.class, new ScoreHolderArgument.Info());
+		map.put(SwizzleArgument.class, SingletonArgumentInfo.contextFree(SwizzleArgument::swizzle));
+		map.put(TeamArgument.class, SingletonArgumentInfo.contextFree(TeamArgument::team));
+		map.put(SlotArgument.class, SingletonArgumentInfo.contextFree(SlotArgument::slot));
+		map.put(ResourceLocationArgument.class, SingletonArgumentInfo.contextFree(ResourceLocationArgument::id));
+		map.put(MobEffectArgument.class, SingletonArgumentInfo.contextFree(MobEffectArgument::effect));
+		map.put(FunctionArgument.class, SingletonArgumentInfo.contextFree(FunctionArgument::functions));
+		map.put(EntityAnchorArgument.class, SingletonArgumentInfo.contextFree(EntityAnchorArgument::anchor));
+		map.put(RangeArgument.Ints.class, SingletonArgumentInfo.contextFree(RangeArgument::intRange));
+		map.put(RangeArgument.Floats.class, SingletonArgumentInfo.contextFree(RangeArgument::floatRange));
+		map.put(ItemEnchantmentArgument.class, SingletonArgumentInfo.contextFree(ItemEnchantmentArgument::enchantment));
+		map.put(EntitySummonArgument.class, SingletonArgumentInfo.contextFree(EntitySummonArgument::id));
+		map.put(DimensionArgument.class, SingletonArgumentInfo.contextFree(DimensionArgument::dimension));
+		map.put(TimeArgument.class, SingletonArgumentInfo.contextFree(TimeArgument::time));
+		map.put(ResourceOrTagLocationArgument.class, new ResourceOrTagLocationArgument.Info());
+		map.put(ResourceKeyArgument.class, new ResourceKeyArgument.Info());
+		map.put(TemplateMirrorArgument.class, SingletonArgumentInfo.contextFree(TemplateMirrorArgument::templateMirror));
+		map.put(TemplateRotationArgument.class, SingletonArgumentInfo.contextFree(TemplateRotationArgument::templateRotation));
+		map.put(UuidArgument.class, SingletonArgumentInfo.contextFree(UuidArgument::uuid));
 	}
 
 	@Override
-	public World getWorldForCSS(CommandListenerWrapper clw) {
+	public World getWorldForCSS(CommandSourceStack clw) {
 		return new WorldMock();
 	}
 	
@@ -624,48 +621,48 @@ public class MockNMS extends ArgumentNMS {
 			argumentParsers.put(IntegerArgumentType.class, "brigadier:integer");
 			argumentParsers.put(LongArgumentType.class, "brigadier:long");
 			argumentParsers.put(StringArgumentType.class, "brigadier:string");
-			argumentParsers.put(ArgumentEntity.class, "entity");
-			argumentParsers.put(ArgumentProfile.class, "game_profile");
-			argumentParsers.put(ArgumentPosition.class, "block_pos");
-			argumentParsers.put(ArgumentVec2I.class, "column_pos");
-			argumentParsers.put(ArgumentVec3.class, "vec3");
-			argumentParsers.put(ArgumentVec2.class, "vec2");
-			argumentParsers.put(ArgumentTile.class, "block_state");
-			argumentParsers.put(ArgumentBlockPredicate.class, "block_predicate");
-			argumentParsers.put(ArgumentItemStack.class, "item_stack");
-			argumentParsers.put(ArgumentItemPredicate.class, "item_predicate");
-			argumentParsers.put(ArgumentChatFormat.class, "color");
-			argumentParsers.put(ArgumentChatComponent.class, "component");
-			argumentParsers.put(ArgumentChat.class, "message");
-			argumentParsers.put(ArgumentNBTTag.class, "nbt_compound_tag");
-			argumentParsers.put(ArgumentNBTBase.class, "nbt_tag");
-			argumentParsers.put(ArgumentNBTKey.class, "nbt_path");
-			argumentParsers.put(ArgumentScoreboardObjective.class, "objective");
-			argumentParsers.put(ArgumentScoreboardCriteria.class, "objective_criteria");
-			argumentParsers.put(ArgumentMathOperation.class, "operation");
-			argumentParsers.put(ArgumentParticle.class, "particle");
-			argumentParsers.put(ArgumentAngle.class, "angle");
-			argumentParsers.put(ArgumentRotation.class, "rotation");
-			argumentParsers.put(ArgumentScoreboardSlot.class, "scoreboard_slot");
-			argumentParsers.put(ArgumentScoreholder.class, "score_holder");
-			argumentParsers.put(ArgumentRotationAxis.class, "swizzle");
-			argumentParsers.put(ArgumentScoreboardTeam.class, "team");
-			argumentParsers.put(ArgumentInventorySlot.class, "item_slot");
-			argumentParsers.put(ArgumentMinecraftKeyRegistered.class, "resource_location");
-			argumentParsers.put(ArgumentMobEffect.class, "mob_effect");
-			argumentParsers.put(ArgumentTag.class, "function");
-			argumentParsers.put(ArgumentAnchor.class, "entity_anchor");
-			argumentParsers.put(ArgumentCriterionValue.b.class, "int_range");
-			argumentParsers.put(ArgumentCriterionValue.a.class, "float_range");
-			argumentParsers.put(ArgumentEnchantment.class, "item_enchantment");
-			argumentParsers.put(ArgumentEntitySummon.class, "entity_summon");
-			argumentParsers.put(ArgumentDimension.class, "dimension");
-			argumentParsers.put(ArgumentTime.class, "time");
+			argumentParsers.put(EntityArgument.class, "entity");
+			argumentParsers.put(GameProfileArgument.class, "game_profile");
+			argumentParsers.put(BlockPosArgument.class, "block_pos");
+			argumentParsers.put(ColumnPosArgument.class, "column_pos");
+			argumentParsers.put(Vec3Argument.class, "vec3");
+			argumentParsers.put(Vec2Argument.class, "vec2");
+			argumentParsers.put(BlockStateArgument.class, "block_state");
+			argumentParsers.put(BlockPredicateArgument.class, "block_predicate");
+			argumentParsers.put(ItemArgument.class, "item_stack");
+			argumentParsers.put(ItemPredicateArgument.class, "item_predicate");
+			argumentParsers.put(ColorArgument.class, "color");
+			argumentParsers.put(ComponentArgument.class, "component");
+			argumentParsers.put(MessageArgument.class, "message");
+			argumentParsers.put(CompoundTagArgument.class, "nbt_compound_tag");
+			argumentParsers.put(NbtTagArgument.class, "nbt_tag");
+			argumentParsers.put(NbtPathArgument.class, "nbt_path");
+			argumentParsers.put(ObjectiveArgument.class, "objective");
+			argumentParsers.put(ObjectiveCriteriaArgument.class, "objective_criteria");
+			argumentParsers.put(OperationArgument.class, "operation");
+			argumentParsers.put(ParticleArgument.class, "particle");
+			argumentParsers.put(AngleArgument.class, "angle");
+			argumentParsers.put(RotationArgument.class, "rotation");
+			argumentParsers.put(ScoreboardSlotArgument.class, "scoreboard_slot");
+			argumentParsers.put(ScoreHolderArgument.class, "score_holder");
+			argumentParsers.put(SwizzleArgument.class, "swizzle");
+			argumentParsers.put(TeamArgument.class, "team");
+			argumentParsers.put(SlotArgument.class, "item_slot");
+			argumentParsers.put(ResourceLocationArgument.class, "resource_location");
+			argumentParsers.put(MobEffectArgument.class, "mob_effect");
+			argumentParsers.put(FunctionArgument.class, "function");
+			argumentParsers.put(EntityAnchorArgument.class, "entity_anchor");
+			argumentParsers.put(RangeArgument.Ints.class, "int_range");
+			argumentParsers.put(RangeArgument.Floats.class, "float_range");
+			argumentParsers.put(ItemEnchantmentArgument.class, "item_enchantment");
+			argumentParsers.put(EntitySummonArgument.class, "entity_summon");
+			argumentParsers.put(DimensionArgument.class, "dimension");
+			argumentParsers.put(TimeArgument.class, "time");
 			argumentParsers.put(ResourceOrTagLocationArgument.class, "resource_or_tag");
 			argumentParsers.put(ResourceKeyArgument.class, "resource");
 			argumentParsers.put(TemplateMirrorArgument.class, "template_mirror");
 			argumentParsers.put(TemplateRotationArgument.class, "template_rotation");
-			argumentParsers.put(ArgumentUUID.class, "uuid");
+			argumentParsers.put(UuidArgument.class, "uuid");
 		}
 
 		public static <S> JsonObject toJSON(CommandDispatcher<S> dispatcher, CommandNode<S> node) {
@@ -711,15 +708,15 @@ public class MockNMS extends ArgumentNMS {
 
 		@SuppressWarnings("unchecked")
 		private static <T extends ArgumentType<?>> void argToJSON(JsonObject jsonObject, T argument) {
-			ArgumentTypeInfo.a<T> argumentInfo = ArgumentTypeInfos.b(argument);
+			ArgumentTypeInfo.Template<T> argumentInfo = ArgumentTypeInfos.unpack(argument);
 			jsonObject.addProperty("type", "argument");
 			jsonObject.addProperty("parser", argumentParsers.get(argument.getClass()));
 			
 			// Properties
 			JsonObject properties = new JsonObject();
 			@SuppressWarnings("rawtypes")
-			ArgumentTypeInfo argumentTypeInfo = argumentInfo.a();
-			argumentTypeInfo.a(argumentInfo, properties);
+			ArgumentTypeInfo argumentTypeInfo = argumentInfo.type();
+			argumentTypeInfo.serializeToJson(argumentInfo, properties);
 			if (properties.size() > 0) {
 				jsonObject.add("properties", (JsonElement) properties);
 			}
