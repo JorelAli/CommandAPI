@@ -19,20 +19,20 @@ jobs:
         os: [ubuntu-20.04]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: checkout repository
+      - name: Checkout the CommandAPI repository
         uses: actions/checkout@v3
 
-      - name: setup jdk ${{ matrix.java }}
+      - name: Setup JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: ${{ matrix.java }}
           cache: maven
 
-      - name: build CommandAPI (Bukkit+Velocity) using maven
+      - name: Build the CommandAPI (Bukkit+Velocity) using maven
         run: mvn clean install --batch-mode -P Platform.Bukkit,Platform.Velocity
 
-      - name: check NMS Common works on all versions
+      - name: Check NMS_Common compiles against all compatible Minecraft versions
         run: |
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_17_R1
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_18_R1
@@ -40,12 +40,12 @@ jobs:
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_R1
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_3_R2;
 
-      - name: Run unit tests across all versions
+      - name: Run Bukkit unit tests across all versions
         run: |
             mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
             mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_18
 
-      - name: CommandAPI (Bukkit) plugin artifact
+      - name: Upload CommandAPI (Bukkit) plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v3
         with:
@@ -55,15 +55,15 @@ jobs:
             !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*sources.jar
             !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*javadoc.jar
 
-      - name: build CommandAPI examples in examples/
+      - name: Build CommandAPI example Bukkit plugins in examples/ folder
         run: cd ./examples; ./build.sh;
 
-      - name: docssrc markdown linter
+      - name: Run markdownlint on all documentation Markdown documents
         uses: DavidAnson/markdownlint-cli2-action@v8
         with:
           globs: 'docssrc/src/*.md'
 
-      - name: build documentation with mdBook
+      - name: Build the documentation with mdBook
         run: |
           cd docssrc
           curl -LJO https://github.com/JorelAli/mdBook/releases/download/v0.4.21-fa6/mdbook-fa6 && chmod +x mdbook-fa6
@@ -93,10 +93,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repository
+      - name: Checkout the CommandAPI repository
         uses: actions/checkout@v3
         
-      - name: setup jdk 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: temurin
@@ -106,7 +106,7 @@ jobs:
           java-version: 17
           cache: maven
           
-      - name: deploy-maven
+      - name: Deploy snapshot version of the CommandAPI (Bukkit+Velocity) to the Sonatype snapshot repository
         run: |
           if mvn help:evaluate -Dexpression=project.version -q -DforceStdout | grep -E -q '\-SNAPSHOT$';  then
             echo "SNAPSHOT version detected: $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
