@@ -7,7 +7,7 @@ bin
 .project
 .settings
 target
-logs/latest.log
+**/logs/*.log
 .vscode
 .DS_Store
 docssrc/src/.markdownlint-cli2.yaml
