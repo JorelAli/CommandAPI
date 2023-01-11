@@ -82,13 +82,6 @@ public class MockNMS extends ArgumentNMS {
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
 
-		// Initialize all argument types
-		Map<Class<?>, Object> argumentTypes_BY_CLASS = (Map<Class<?>, Object>) getField(ArgumentTypes.class, "b", null); // BY_CLASS
-		Map<Class<?>, Object> argumentTypes_BY_NAME = (Map<Class<?>, Object>) getField(ArgumentTypes.class, "c", null); // BY_NAME
-		argumentTypes_BY_CLASS.clear();
-		argumentTypes_BY_NAME.clear();
-		ArgumentTypes.bootStrap();
-
 		// Initialize WorldVersion (game version)
 		SharedConstants.tryDetectVersion();
 
@@ -98,7 +91,8 @@ public class MockNMS extends ArgumentNMS {
 		unregisterAllEnchantments();
 		unregisterAllPotionEffects();
 
-		// Invoke Minecraft's registry (I think that's what this does anyway)
+		// Invoke Minecraft's registry. This also initializes all argument types.
+		// How convenient!
 		Bootstrap.bootStrap();
 		
 		// Sometimes, and I have no idea why, Bootstrap.bootStrap() only works
