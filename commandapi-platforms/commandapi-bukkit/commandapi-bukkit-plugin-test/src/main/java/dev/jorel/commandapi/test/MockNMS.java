@@ -76,6 +76,7 @@ import net.minecraft.advancements.Advancements;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentAnchor;
+import net.minecraft.commands.arguments.ArgumentAnchor.Anchor;
 import net.minecraft.commands.arguments.ArgumentAngle;
 import net.minecraft.commands.arguments.ArgumentChat;
 import net.minecraft.commands.arguments.ArgumentChatComponent;
@@ -330,6 +331,9 @@ public class MockNMS extends ArgumentNMS {
 			Mockito.when(clw.f()).thenReturn(worldServerMock);
 			Mockito.when(clw.f().E(any(BlockPosition.class))).thenReturn(true);
 			Mockito.when(clw.f().j(any(BlockPosition.class))).thenReturn(true);
+			Mockito.when(clw.n()).thenAnswer(invocation -> { // CommandSourceStack#getAnchor
+				return Anchor.a; // Anchor#EYES
+			});
 
 			// Advancement argument
 			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
