@@ -30,7 +30,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-bukkit-test-impl</artifactId>
+	<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
 
 	<properties>
 		<minecraft.mappings>1.19.2-R0.1-SNAPSHOT</minecraft.mappings>

@@ -153,7 +153,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public abstract class NMS_1_17_Common extends NMS_Common {
 
-	protected static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	protected static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 	private static final VarHandle ItemInput_tag;
@@ -161,6 +161,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		if(Bukkit.getServer() instanceof CraftServer server) {
+			MINECRAFT_SERVER = server.getServer();
+		} else {
+			MINECRAFT_SERVER = null;
+		}
 		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		VarHandle ii_t = null;

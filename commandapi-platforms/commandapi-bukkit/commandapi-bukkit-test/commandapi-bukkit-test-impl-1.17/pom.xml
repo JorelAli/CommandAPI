@@ -30,12 +30,11 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-bukkit-test-tests</artifactId>
+	<artifactId>commandapi-bukkit-test-impl-1.17</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19.2-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19.2-R0.1-SNAPSHOT</spigot.version>
-		<powermock.version>2.0.2</powermock.version>
+		<minecraft.mappings>1.17-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
@@ -59,8 +58,12 @@
 	</repositories>
 
 	<dependencies>
-
 		<!-- Test dependencies -->
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.19</artifactId>
+			<version>2.29.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -79,10 +82,18 @@
 			<version>1.0.17</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.19</artifactId>
-			<version>2.29.0</version>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>${paper.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version> <!-- VERY IMPORTANT: CHECK 1.19-R0.1-SNAPSHOT WHICH HAS WEIRD FAILING TESTS!!!!! -->
+			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -90,11 +101,6 @@
 			<version>4.6.1</version>
 		</dependency>
 
-				<dependency>
-					<groupId>io.papermc.paper</groupId>
-					<artifactId>paper-api</artifactId>
-					<version>1.19.2-R0.1-SNAPSHOT</version>
-				</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-shade</artifactId>
@@ -108,97 +114,43 @@
 			<version>2.11.1</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- Semantic Versioning to allow only running certain tests on certain versions -->
-		<dependency>
-			<groupId>com.github.zafarkhaja</groupId>
-			<artifactId>java-semver</artifactId>
-			<version>0.9.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.0</version>
-				<configuration>
-					<trimStackTrace>false</trimStackTrace>
-					<systemPropertyVariables>
-						<profileId>${project.activeProfiles[0].id}</profileId>
-					</systemPropertyVariables>
-				</configuration>
+				<groupId>net.md-5</groupId>
+				<artifactId>specialsource-maven-plugin</artifactId>
+				<version>1.2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>remap</goal>
+						</goals>
+						<id>remap-obf</id>
+						<configuration>
+							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:txt:maps-mojang</srgIn>
+							<reverse>true</reverse>
+							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-mojang</remappedDependencies>
+							<remappedArtifactAttached>true</remappedArtifactAttached>
+							<remappedClassifierName>remapped-obf</remappedClassifierName>
+						</configuration>
+					</execution>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>remap</goal>
+						</goals>
+						<id>remap-spigot</id>
+						<configuration>
+							<inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:csrg:maps-spigot</srgIn>
+							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-obf</remappedDependencies>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>Minecraft_1_19_2</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>dev.jorel</groupId>
-					<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
-					<version>${project.version}</version>
-				</dependency>
-				<dependency>
-					<groupId>io.papermc.paper</groupId>
-					<artifactId>paper-api</artifactId>
-					<version>1.19.2-R0.1-SNAPSHOT</version>
-				</dependency>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.19.2-R0.1-SNAPSHOT</version> <!-- VERY IMPORTANT: CHECK 1.19-R0.1-SNAPSHOT WHICH HAS WEIRD FAILING TESTS!!!!! -->
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Minecraft_1_18</id>
-			<dependencies>
-				<dependency>
-					<groupId>dev.jorel</groupId>
-					<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
-					<version>${project.version}</version>
-				</dependency>
-				<!-- <dependency>
-					<groupId>com.github.seeseemelk</groupId>
-					<artifactId>MockBukkit-v1.18</artifactId>
-					<version>2.27.0</version>
-				</dependency> -->
-				<!--<dependency>
-					<groupId>io.papermc.paper</groupId>
-					<artifactId>paper-api</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
-				</dependency>-->
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Minecraft_1_17</id>
-			<dependencies>
-				<dependency>
-					<groupId>dev.jorel</groupId>
-					<artifactId>commandapi-bukkit-test-impl-1.17</artifactId>
-					<version>${project.version}</version>
-				</dependency>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.17-R0.1-SNAPSHOT</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 </project>

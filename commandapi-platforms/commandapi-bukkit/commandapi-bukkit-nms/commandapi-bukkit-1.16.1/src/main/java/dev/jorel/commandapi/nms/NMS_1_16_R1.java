@@ -183,7 +183,7 @@ import net.minecraft.server.v1_16_R1.Vec3D;
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 
-	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle DataPackResources_b;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
@@ -194,6 +194,12 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		if(Bukkit.getServer() instanceof CraftServer server) {
+			MINECRAFT_SERVER = server.getServer();
+		} else {
+			MINECRAFT_SERVER = null;
+		}
+		
 		VarHandle dpr_b = null;
 		VarHandle shm_ht = null;
 		VarHandle ppb_c = null;

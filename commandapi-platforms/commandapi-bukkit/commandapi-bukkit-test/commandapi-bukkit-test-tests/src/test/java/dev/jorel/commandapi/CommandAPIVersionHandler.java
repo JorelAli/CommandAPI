@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import com.github.zafarkhaja.semver.Version;
 
+import dev.jorel.commandapi.nms.NMS_1_17;
 import dev.jorel.commandapi.nms.NMS_1_18_R1;
 import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
 import dev.jorel.commandapi.test.MockNMS;
@@ -17,6 +18,7 @@ public interface CommandAPIVersionHandler {
 		return new MockNMS(switch(System.getProperty("profileId")) {
 			case "Minecraft_1_19_2" -> new NMS_1_19_1_R1();
 			case "Minecraft_1_18" -> new NMS_1_18_R1();
+			case "Minecraft_1_17" -> new NMS_1_17();
 			default -> throw new IllegalArgumentException("Unexpected value: " + System.getProperty("profileId"));
 		});
 	}
@@ -25,15 +27,21 @@ public interface CommandAPIVersionHandler {
 		return switch(System.getProperty("profileId")) {
 			case "Minecraft_1_19_2" -> MCVersion.V1_19_2;
 			case "Minecraft_1_18" -> MCVersion.V1_18;
+			case "Minecraft_1_17" -> MCVersion.V1_17;
 			default -> throw new IllegalArgumentException("Unexpected value: " + System.getProperty("profileId"));
 		};
 	}
 	
 	public static enum MCVersion {
+		V1_19_3(Version.valueOf("1.19.3")),
 		V1_19_2(Version.valueOf("1.19.2")),
 		V1_19_1(Version.valueOf("1.19.1")),
 		V1_19(Version.valueOf("1.19.0")),
-		V1_18(Version.valueOf("1.18.0"));
+		V1_18_2(Version.valueOf("1.18.2")),
+		V1_18_1(Version.valueOf("1.18.1")),
+		V1_18(Version.valueOf("1.18.0")),
+		V1_17_1(Version.valueOf("1.17.1")),
+		V1_17(Version.valueOf("1.17.0"));
 		
 		private Version version;
 		
