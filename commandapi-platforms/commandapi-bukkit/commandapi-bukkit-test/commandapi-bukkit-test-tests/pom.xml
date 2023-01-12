@@ -35,7 +35,6 @@
 	<properties>
 		<minecraft.mappings>1.19.2-R0.1-SNAPSHOT</minecraft.mappings>
 		<spigot.version>1.19.2-R0.1-SNAPSHOT</spigot.version>
-		<powermock.version>2.0.2</powermock.version>
 	</properties>
 
 	<repositories>
@@ -109,6 +108,19 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>templating-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<id>filter-src</id>
+						<goals>
+							<goal>filter-test-sources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.0</version>
@@ -125,6 +137,9 @@
 	<profiles>
 		<profile>
 			<id>Minecraft_1_19_2</id>
+			<properties>
+				<ifdef.1.17>*/</ifdef.1.17>
+			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -146,6 +161,9 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_18</id>
+			<properties>
+				<ifdef.1.17>*/</ifdef.1.17>
+			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -172,6 +190,9 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_17</id>
+			<properties>
+				<ifdef.1.17>*/</ifdef.1.17>
+			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>

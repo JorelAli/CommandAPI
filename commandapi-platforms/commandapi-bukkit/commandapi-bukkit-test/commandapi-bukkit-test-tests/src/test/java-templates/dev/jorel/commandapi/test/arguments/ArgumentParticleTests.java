@@ -13,7 +13,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
+/* ${ifdef.1.17}
 import org.bukkit.Particle.DustTransition;
+/* */
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.block.data.BlockData;
@@ -63,7 +65,9 @@ public class ArgumentParticleTests extends TestBase {
 		particleNames.put("angry_villager", Particle.VILLAGER_ANGRY); // Non-standard Bukkit name
 		particleNames.put("ash", Particle.ASH);
 		particleNames.put("block", Particle.BLOCK_CRACK); // Non-standard Bukkit name
+		/* ${ifdef.1.17}
 		particleNames.put("block_marker", Particle.BLOCK_MARKER);
+		/* */
 		particleNames.put("bubble", Particle.WATER_BUBBLE); // Non-standard Bukkit name
 		particleNames.put("bubble_pop", Particle.BUBBLE_POP);
 		particleNames.put("bubble_column_up", Particle.BUBBLE_COLUMN_UP);
@@ -77,35 +81,47 @@ public class ArgumentParticleTests extends TestBase {
 		particleNames.put("damage_indicator", Particle.DAMAGE_INDICATOR);
 		particleNames.put("dolphin", Particle.DOLPHIN);
 		particleNames.put("dragon_breath", Particle.DRAGON_BREATH);
+		/* ${ifdef.1.17}
 		particleNames.put("dripping_dripstone_lava", Particle.DRIPPING_DRIPSTONE_LAVA);
 		particleNames.put("dripping_dripstone_water", Particle.DRIPPING_DRIPSTONE_WATER);
+		/* */
 		particleNames.put("dripping_lava", Particle.DRIP_LAVA); // Non-standard Bukkit name
 		particleNames.put("dripping_obsidian_tear", Particle.DRIPPING_OBSIDIAN_TEAR);
 		particleNames.put("dripping_water", Particle.DRIP_WATER); // Non-standard Bukkit name
 		particleNames.put("dust", Particle.REDSTONE); // Non-standard Bukkit name
+		/* ${ifdef.1.17}
 		particleNames.put("dust_color_transition", Particle.DUST_COLOR_TRANSITION);
+		/* */
 		particleNames.put("effect", Particle.SPELL); // Non-standard Bukkit name
 		particleNames.put("elder_guardian", Particle.MOB_APPEARANCE); // Non-standard Bukkit name
+		/* ${ifdef.1.17}
 		particleNames.put("electric_spark", Particle.ELECTRIC_SPARK);
+		/* */
 		particleNames.put("enchant", Particle.ENCHANTMENT_TABLE); // Non-standard Bukkit name
 		particleNames.put("enchanted_hit", Particle.CRIT_MAGIC); // Non-standard Bukkit name
 		particleNames.put("end_rod", Particle.END_ROD);
 		particleNames.put("entity_effect", Particle.SPELL_MOB); // Non-standard Bukkit name
 		particleNames.put("explosion_emitter", Particle.EXPLOSION_HUGE); // Non-standard Bukkit name
 		particleNames.put("explosion", Particle.EXPLOSION_LARGE); // Non-standard Bukkit name
+		/* ${ifdef.1.17}
 		particleNames.put("falling_dripstone_lava", Particle.FALLING_DRIPSTONE_LAVA);
 		particleNames.put("falling_dripstone_water", Particle.FALLING_DRIPSTONE_WATER);
+		/* */
 		particleNames.put("falling_dust", Particle.FALLING_DUST);
 		particleNames.put("falling_lava", Particle.FALLING_LAVA);
 		particleNames.put("falling_obsidian_tear", Particle.FALLING_OBSIDIAN_TEAR);
+		/* ${ifdef.1.17}
 		particleNames.put("falling_spore_blossom", Particle.FALLING_SPORE_BLOSSOM);
+		/* */
 		particleNames.put("falling_water", Particle.FALLING_WATER);
 		particleNames.put("firework", Particle.FIREWORKS_SPARK); // Non-standard Bukkit name
 		particleNames.put("fishing", Particle.WATER_WAKE); // Non-standard Bukkit name
 		particleNames.put("flame", Particle.FLAME);
 		particleNames.put("flash", Particle.FLASH);
+		/* ${ifdef.1.17}
 		particleNames.put("glow", Particle.GLOW);
 		particleNames.put("glow_squid_ink", Particle.GLOW_SQUID_INK);
+		/* */
 		particleNames.put("happy_villager", Particle.VILLAGER_HAPPY); // Non-standard Bukkit name
 		particleNames.put("heart", Particle.HEART);
 		particleNames.put("instant_effect", Particle.SPELL_INSTANT); // Non-standard Bukkit name
@@ -122,23 +138,33 @@ public class ArgumentParticleTests extends TestBase {
 		particleNames.put("poof", Particle.EXPLOSION_NORMAL); // Non-standard Bukkit name
 		particleNames.put("portal", Particle.PORTAL);
 		particleNames.put("rain", Particle.WATER_DROP); // Non-standard Bukkit name
+		/* ${ifdef.1.17}
 		particleNames.put("scrape", Particle.SCRAPE);
+		/* */
 		particleNames.put("smoke", Particle.SMOKE_NORMAL); // Non-standard Bukkit name
 		particleNames.put("sneeze", Particle.SNEEZE);
+		/* ${ifdef.1.17}
 		particleNames.put("snowflake", Particle.SNOWFLAKE);
+		/* */
 		particleNames.put("soul", Particle.SOUL);
 		particleNames.put("soul_fire_flame", Particle.SOUL_FIRE_FLAME);
 		particleNames.put("spit", Particle.SPIT);
 		particleNames.put("splash", Particle.WATER_SPLASH); // Non-standard Bukkit name
+		/* ${ifdef.1.17}
 		particleNames.put("spore_blossom_air", Particle.SPORE_BLOSSOM_AIR);
+		/* */
 		particleNames.put("squid_ink", Particle.SQUID_INK);
 		particleNames.put("sweep_attack", Particle.SWEEP_ATTACK);
 		particleNames.put("totem_of_undying", Particle.TOTEM); // Non-standard Bukkit name
 		particleNames.put("underwater", Particle.SUSPENDED); // Non-standard Bukkit name
+		/* ${ifdef.1.17}
 		particleNames.put("vibration", Particle.VIBRATION);
+		/* */
 		particleNames.put("warped_spore", Particle.WARPED_SPORE);
+		/* ${ifdef.1.17}
 		particleNames.put("wax_off", Particle.WAX_OFF);
 		particleNames.put("wax_on", Particle.WAX_ON);
+		/* */
 		particleNames.put("white_ash", Particle.WHITE_ASH);
 		particleNames.put("witch", Particle.SPELL_WITCH); // Non-standard Bukkit name
 
@@ -216,6 +242,7 @@ public class ArgumentParticleTests extends TestBase {
 		assertEquals(1.0f, dustOptions.getSize());
 	}
 
+	/* ${ifdef.1.17}
 	@Test
 	public void executionTestWithParticleArgumentDustTransition() {
 		Mut<ParticleData> results = Mut.of();
@@ -339,5 +366,6 @@ public class ArgumentParticleTests extends TestBase {
 		}
 		assertEquals(200, vibration.getArrivalTime());
 	}
+	/* */
 
 }

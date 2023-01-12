@@ -109,6 +109,7 @@ public class ArgumentItemStackTests extends TestBase {
 		}
 		
 		// /test minecraft:diamond_pickaxe{HideFlags:15}
+		/* ${ifdef.1.17}
 		{
 			server.dispatchCommand(player, "test minecraft:diamond_pickaxe{HideFlags:15}");
 			ItemStack actual = results.get();
@@ -118,7 +119,7 @@ public class ArgumentItemStackTests extends TestBase {
 			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES));
 			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE));
 			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_DESTROYS));
-		}
+		} /* */
 
 		// /test firework_rocket{Fireworks:{Explosions:[{Type:3b,Flicker:1b,Colors:[I;4312372],FadeColors:[I;11743532]}],Flight:1b}}
 		{

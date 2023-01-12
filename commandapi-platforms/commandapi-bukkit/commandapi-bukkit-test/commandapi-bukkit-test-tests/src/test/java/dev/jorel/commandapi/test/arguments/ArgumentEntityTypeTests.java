@@ -48,7 +48,7 @@ public class ArgumentEntityTypeTests extends TestBase {
 			.filter(e -> e != EntityType.UNKNOWN)
 			.filter(e -> e != EntityType.PLAYER)
 			.filter(e -> e != EntityType.FISHING_HOOK)
-			.map(e -> e.getKey().asString())
+			.map(e -> e.getKey().toString())
 			.sorted()
 			.toList();
 	}
@@ -100,7 +100,7 @@ public class ArgumentEntityTypeTests extends TestBase {
 
 		for (String entityType : getAllEntityTypes()) {
 			server.dispatchCommand(player, "test " + entityType);
-			assertEquals(Arrays.stream(EntityType.values()).filter(e -> e.getKey().asString().equals(entityType)).findFirst().get(), results.get());
+			assertEquals(Arrays.stream(EntityType.values()).filter(e -> e.getKey().toString().equals(entityType)).findFirst().get(), results.get());
 		}
 
 		assertNoMoreResults(results);
