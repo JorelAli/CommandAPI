@@ -57,8 +57,15 @@ public abstract class TestBase {
 			arr[i] = null;
 		}
 		@SuppressWarnings("unchecked")
-		Map<String, PotionEffectType> map = (Map<String, PotionEffectType>) MockNMS.getField(PotionEffectType.class, "byName", null);
-		map.clear();
+		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) MockNMS.getField(PotionEffectType.class, "byName", null);
+		byName.clear();
+		
+		@SuppressWarnings("unchecked")
+		Map<String, PotionEffectType> byKey = (Map<String, PotionEffectType>) MockNMS.getField(PotionEffectType.class, "byKey", null);
+		if(byKey != null) {
+			byKey.clear();
+		}
+		
 		MockNMS.setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
