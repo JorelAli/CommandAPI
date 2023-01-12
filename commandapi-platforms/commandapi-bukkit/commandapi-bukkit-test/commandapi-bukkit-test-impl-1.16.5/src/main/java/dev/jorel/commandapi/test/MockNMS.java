@@ -345,7 +345,7 @@ public class MockNMS extends ArgumentNMS {
 			
 			// Team argument
 			ScoreboardServer scoreboardServerMock = Mockito.mock(ScoreboardServer.class);
-			Mockito.when(scoreboardServerMock.getPlayerTeam(anyString())).thenAnswer(invocation -> { // Scoreboard#getPlayerTeam
+			Mockito.when(scoreboardServerMock.getTeam(anyString())).thenAnswer(invocation -> { // Scoreboard#getTeam is used for 1.16.5 instead of Scoreboard#getPlayerTeam
 				String teamName = invocation.getArgument(0);
 				Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 				if (team == null) {
