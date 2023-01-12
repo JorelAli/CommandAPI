@@ -23,7 +23,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
-import dev.jorel.commandapi.CommandAPIVersionHandler.MCVersion;
+import dev.jorel.commandapi.MCVersion;
 
 public abstract class TestBase {
 

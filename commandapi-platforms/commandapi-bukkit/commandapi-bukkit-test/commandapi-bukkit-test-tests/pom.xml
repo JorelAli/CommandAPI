@@ -108,14 +108,12 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>templating-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>filter-src</id>
 						<goals>
-							<goal>filter-test-sources</goal>
+							<goal>test-jar</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -137,9 +135,6 @@
 	<profiles>
 		<profile>
 			<id>Minecraft_1_19_2</id>
-			<properties>
-				<ifdef.1.17>*/</ifdef.1.17>
-			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -161,9 +156,9 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_18</id>
-			<properties>
-				<ifdef.1.17>*/</ifdef.1.17>
-			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -190,9 +185,6 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_17</id>
-			<properties>
-				<ifdef.1.17>*/</ifdef.1.17>
-			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -209,10 +201,7 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			
+
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
