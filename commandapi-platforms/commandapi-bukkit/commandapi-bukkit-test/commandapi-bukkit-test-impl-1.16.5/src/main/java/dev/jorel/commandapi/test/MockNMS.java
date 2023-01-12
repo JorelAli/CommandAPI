@@ -6,14 +6,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -61,6 +59,7 @@ import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
 import net.minecraft.server.v1_16_R3.Advancements;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
 import net.minecraft.server.v1_16_R3.ArgumentRegistry;
+import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
@@ -82,57 +81,13 @@ public class MockNMS extends ArgumentNMS {
 	static {
 		CodeSource src = PotionEffectType.class.getProtectionDomain().getCodeSource();
 		if (src != null) {
-		    URL jar = src.getLocation();
-		    System.err.println(jar);
-		} else {
-			System.err.println("Derp");
+		    System.err.println("Loading PotionEffectType sources from " + src.getLocation());
 		}
 	}
-	
-//	static {
-//		System.err.println("Initializing MockNMS for 1.16.5");
-//		try {
-//			class Y extends PotionEffectType {
-//
-//				protected Y(int id, @NotNull NamespacedKey key) {
-//					super(id, key);
-//					// TODO Auto-generated constructor stub
-//				}
-//				
-//			}
-//		} catch(Throwable e) {
-//			System.err.println("oops");
-//			e.printStackTrace(System.err);
-//			System.err.println("End");
-//			System.exit(1);
-//		}
-//		try {
-//			new CraftPotionEffectType(null);
-//		} catch(Throwable e) {
-//			System.err.println("oops");
-//			e.printStackTrace(System.err);
-//			System.err.println("End");
-//			System.exit(1);
-//		}
-//		System.err.println(Arrays.toString(PotionEffectType.class.getDeclaredConstructors()));
-//		try {
-//			System.err.println("Calling IRegistry");
-//			Object o = IRegistry.f;
-//		}catch(Throwable e) {
-//			System.err.println("Found errors");
-//			e.printStackTrace(System.err);
-//			e.printStackTrace(System.out);
-//			System.err.println("End of found errors");
-//			System.exit(1);
-//		}
-//	}
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
 		
-//		ArgumentRegistry.a();
-		
-
 		// Initialize WorldVersion (game version)
 		SharedConstants.b();
 
@@ -146,16 +101,7 @@ public class MockNMS extends ArgumentNMS {
 		// How convenient!
 		DispenserRegistry.init();
 		
-		// Sometimes, and I have no idea why, Bootstrap.bootStrap() only works
-		// on the very first test in the test suite. After that, everything else
-		// doesn't work. At this point, we'll use the ServerMock#createPotionEffectTypes
-		// method (which unfortunately is private and pure, so instead of using reflection
-		// we'll just implement it right here instead)
-		@SuppressWarnings("unchecked")
-		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
-		if(byKey.isEmpty()) {
-			createPotionEffectTypes();
-		}
+		createPotionEffectTypes();
 		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
 		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
 		// 1.19 ones!)
@@ -245,23 +191,14 @@ public class MockNMS extends ArgumentNMS {
 	@SuppressWarnings("unchecked")
 	public static void unregisterAllPotionEffects() {
 		PotionEffectType[] byId = (PotionEffectType[]) getField(PotionEffectType.class, "byId", null);
-		for (int i = 0; i < 34; i++) {
+		for (int i = 0; i < byId.length; i++) {
 			byId[i] = null;
 		}
 
 		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) getField(PotionEffectType.class, "byName", null);
 		byName.clear();
-
-		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
-		byKey.clear();
-
-		try {
-			Field field = PotionEffectType.class.getDeclaredField("acceptingNew");
-			field.setAccessible(true);
-			field.set(null, true);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		
+		setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -317,8 +254,8 @@ public class MockNMS extends ArgumentNMS {
 			Location loc = player.getLocation();
 			Mockito.when(clw.getPosition()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
 			
-//			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
-//			Mockito.when(clw.getWorld()).thenReturn(worldServerMock);
+			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
+			Mockito.when(clw.getWorld()).thenReturn(worldServerMock);
 //			Mockito.when(clw.getWorld().hasChunkAt(any(BlockPosition.class))).thenReturn(true);
 //			Mockito.when(clw.getWorld().isInWorldBounds(any(BlockPosition.class))).thenReturn(true);
 			Mockito.when(clw.k()).thenReturn(Anchor.EYES);

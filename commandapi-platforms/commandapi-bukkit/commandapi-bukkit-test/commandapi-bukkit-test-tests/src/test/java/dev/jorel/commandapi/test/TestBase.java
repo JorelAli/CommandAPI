@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -36,6 +38,7 @@ public abstract class TestBase {
 	}
 
 	public void setUp() {
+		resetAllPotions();
 		server = MockBukkit.mock(new CommandAPIServerMock());
 		plugin = MockBukkit.load(Main.class);
 	}
@@ -46,6 +49,17 @@ public abstract class TestBase {
 			plugin.onDisable();
 		}
 		MockBukkit.unmock();
+	}
+	
+	private void resetAllPotions() {
+		PotionEffectType[] arr = (PotionEffectType[]) MockNMS.getField(PotionEffectType.class, "byId", null);
+		for(int i = 0; i < arr.length; i++) {
+			arr[i] = null;
+		}
+		@SuppressWarnings("unchecked")
+		Map<String, PotionEffectType> map = (Map<String, PotionEffectType>) MockNMS.getField(PotionEffectType.class, "byName", null);
+		map.clear();
+		MockNMS.setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
 	public <T> void assertStoresResult(CommandSender sender, String command, Mut<T> queue, T expected) {

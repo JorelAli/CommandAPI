@@ -113,5 +113,18 @@
 			<version>2.11.1</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!--
+		  Spigot 1.16.5 is really fussy and wants log4j. If you do give it
+		  log4j, every test fails for some reason, so we don't give it what it
+		  wants. We can already assert that tests ARE running properly due to
+		  test failures being reported, and by writing files during tests.
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.19.0</version>
+		</dependency>
+		-->
+		
 	</dependencies>
 </project>
