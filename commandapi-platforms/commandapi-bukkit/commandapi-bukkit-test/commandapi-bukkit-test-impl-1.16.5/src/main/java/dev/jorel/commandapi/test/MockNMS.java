@@ -7,13 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
@@ -37,7 +36,6 @@ import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
 
 import com.google.common.io.Files;
@@ -76,10 +74,17 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
 public class MockNMS extends ArgumentNMS {
+	
+	static {
+		CodeSource src = PotionEffectType.class.getProtectionDomain().getCodeSource();
+		if (src != null) {
+		    System.err.println("Loading PotionEffectType sources from " + src.getLocation());
+		}
+	}
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
-
+		
 		// Initialize WorldVersion (game version)
 		SharedConstants.b();
 
@@ -93,25 +98,15 @@ public class MockNMS extends ArgumentNMS {
 		// How convenient!
 		DispenserRegistry.init();
 		
-		// Sometimes, and I have no idea why, Bootstrap.bootStrap() only works
-		// on the very first test in the test suite. After that, everything else
-		// doesn't work. At this point, we'll use the ServerMock#createPotionEffectTypes
-		// method (which unfortunately is private and pure, so instead of using reflection
-		// we'll just implement it right here instead)
-		@SuppressWarnings("unchecked")
-		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
-		if(byKey.isEmpty()) {
-			createPotionEffectTypes();
-		}
+		createPotionEffectTypes();
 		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
 		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
 		// 1.19 ones!)
 		registerDefaultEnchantments();
 	}
 	
-	private static void registerPotionEffectType(int id, @NotNull String name, boolean instant, int rgb) {
-		NamespacedKey key = NamespacedKey.minecraft(name.toLowerCase(Locale.ROOT));
-		PotionEffectType type = new MockPotionEffectType(key, id, name, instant, Color.fromRGB(rgb));
+	private static void registerPotionEffectType(int id, String name, boolean instant, int rgb) {
+		PotionEffectType type = new MockPotionEffectType(id, name, instant, Color.fromRGB(rgb));
 		PotionEffectType.registerPotionEffectType(type);
 	}
 	
@@ -193,23 +188,14 @@ public class MockNMS extends ArgumentNMS {
 	@SuppressWarnings("unchecked")
 	public static void unregisterAllPotionEffects() {
 		PotionEffectType[] byId = (PotionEffectType[]) getField(PotionEffectType.class, "byId", null);
-		for (int i = 0; i < 34; i++) {
+		for (int i = 0; i < byId.length; i++) {
 			byId[i] = null;
 		}
 
 		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) getField(PotionEffectType.class, "byName", null);
 		byName.clear();
-
-		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
-		byKey.clear();
-
-		try {
-			Field field = PotionEffectType.class.getDeclaredField("acceptingNew");
-			field.setAccessible(true);
-			field.set(null, true);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		
+		setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -265,8 +251,8 @@ public class MockNMS extends ArgumentNMS {
 			Location loc = player.getLocation();
 			Mockito.when(clw.getPosition()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
 			
-//			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
-//			Mockito.when(clw.getWorld()).thenReturn(worldServerMock);
+			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
+			Mockito.when(clw.getWorld()).thenReturn(worldServerMock);
 //			Mockito.when(clw.getWorld().hasChunkAt(any(BlockPosition.class))).thenReturn(true);
 //			Mockito.when(clw.getWorld().isInWorldBounds(any(BlockPosition.class))).thenReturn(true);
 			Mockito.when(clw.k()).thenReturn(Anchor.EYES);
@@ -308,10 +294,10 @@ public class MockNMS extends ArgumentNMS {
 				String playerName = invocation.getArgument(0);
 				for(EntityPlayer onlinePlayer : players) {
 					if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-						return Optional.of(new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName));
+						return new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName);
 					}
 				}
-				return Optional.empty();
+				return null;
 			});
 			Mockito.when(minecraftServerMock.getUserCache()).thenReturn(userCacheMock);
 			
@@ -356,7 +342,7 @@ public class MockNMS extends ArgumentNMS {
 			
 			// Team argument
 			ScoreboardServer scoreboardServerMock = Mockito.mock(ScoreboardServer.class);
-			Mockito.when(scoreboardServerMock.getPlayerTeam(anyString())).thenAnswer(invocation -> { // Scoreboard#getPlayerTeam
+			Mockito.when(scoreboardServerMock.getTeam(anyString())).thenAnswer(invocation -> { // Scoreboard#getTeam is used for 1.16.5 instead of Scoreboard#getPlayerTeam
 				String teamName = invocation.getArgument(0);
 				Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 				if (team == null) {
@@ -635,11 +621,6 @@ public class MockNMS extends ArgumentNMS {
 			EntityType.STRIDER,
 			EntityType.ZOGLIN,
 			EntityType.PIGLIN_BRUTE,
-			EntityType.AXOLOTL,
-			EntityType.GLOW_ITEM_FRAME,
-			EntityType.GLOW_SQUID,
-			EntityType.GOAT,
-			EntityType.MARKER,
 			EntityType.FISHING_HOOK,
 			EntityType.LIGHTNING,
 			EntityType.PLAYER,

@@ -274,7 +274,7 @@ public class ArgumentTests extends TestBase {
 			.withArguments(new AdvancementArgument("value"))
 			.executesPlayer((player, args) -> {
 				Advancement advancement = (Advancement) args.get(0);
-				player.sendMessage(advancement.getKey().asString());
+				player.sendMessage(advancement.getKey().toString());
 			})
 			.register();
 		

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandAPIVersionHandler.MCVersion;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.test.Mut;

@@ -17,6 +17,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link TimeArgument}
  */
+@SuppressWarnings("null")
 public class ArgumentTimeTests extends TestBase {
 
 	/*********

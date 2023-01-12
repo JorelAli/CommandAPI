@@ -466,6 +466,16 @@ public class MockNMS extends ArgumentNMS {
 		}
 	}
 
+	public static void setField(Class<?> className, String fieldName, Object instance, Object value) {
+		try {
+			Field field = className.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(instance, value);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack clw) {
 		try {

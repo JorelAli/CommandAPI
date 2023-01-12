@@ -40,5 +40,6 @@
 
 		<!-- Tests -->
 		<module>commandapi-bukkit-test-tests</module>
+        <module>commandapi-bukkit-test-tests-1.18</module>
 	</modules>
 </project>

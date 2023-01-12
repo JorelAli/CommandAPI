@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spigotmc.AsyncCatcher;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
@@ -21,6 +20,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 
+import be.seeseemelk.mockbukkit.AsyncCatcher;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import dev.jorel.commandapi.Brigadier;
@@ -36,6 +36,7 @@ public class CommandAPIServerMock extends ServerMock {
 		if (command != null) {
 			return super.dispatchCommand(sender, commandLine);
 		} else {
+			AsyncCatcher.catchOp("command dispatch");
 			@SuppressWarnings("rawtypes")
 			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
 			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
@@ -54,6 +55,7 @@ public class CommandAPIServerMock extends ServerMock {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<String> getSuggestions(CommandSender sender, String commandLine) {
+		AsyncCatcher.catchOp("command tabcomplete");
 		CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
 		Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
 		ParseResults parseResults = dispatcher.parse(commandLine, css);
@@ -73,12 +75,12 @@ public class CommandAPIServerMock extends ServerMock {
 		return suggestionsAsStrings;
 	}
 
-//	@Override
+	@Override
 	public boolean shouldSendChatPreviews() {
 		return true;
 	}
 
-//	@Override
+	@Override
 	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
 		return null;
 	}
@@ -100,6 +102,7 @@ public class CommandAPIServerMock extends ServerMock {
 	
 	@Override
 	public WorldMock addSimpleWorld(String name) {
+		AsyncCatcher.catchOp("world creation");
 		WorldMock world = new CustomWorldMock();
 		world.setName(name);
 		super.addWorld(world);
