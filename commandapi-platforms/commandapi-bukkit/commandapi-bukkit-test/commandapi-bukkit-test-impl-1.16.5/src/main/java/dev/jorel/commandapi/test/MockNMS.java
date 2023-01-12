@@ -297,10 +297,10 @@ public class MockNMS extends ArgumentNMS {
 				String playerName = invocation.getArgument(0);
 				for(EntityPlayer onlinePlayer : players) {
 					if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-						return Optional.of(new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName));
+						return new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName);
 					}
 				}
-				return Optional.empty();
+				return null;
 			});
 			Mockito.when(minecraftServerMock.getUserCache()).thenReturn(userCacheMock);
 			
