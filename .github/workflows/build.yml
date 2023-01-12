@@ -44,6 +44,7 @@ jobs:
         run: |
             mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
             mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_18
+            mvn clean package -pl :commandapi-bukkit-test-tests-1.18 -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
 
       - name: Upload CommandAPI (Bukkit) plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS

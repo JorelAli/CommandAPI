@@ -58,20 +58,7 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-test-tests</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
+
 		<!-- Basic tests + test framework setup -->
 		<!-- <dependency>
 			<groupId>com.github.seeseemelk</groupId>
@@ -83,13 +70,7 @@
 			<artifactId>paper-api</artifactId>
 			<version>1.18-R0.1-SNAPSHOT</version>
 		</dependency>-->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.18-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		
+
 
 		<!-- This is literally just for testing, we're not actually packaging this -->
 		<dependency>
@@ -122,6 +103,52 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
+					<version>${project.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-tests</artifactId>
+					<version>${project.version}</version>
+					<type>test-jar</type>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.18-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>Minecraft_1_19_2</id>
+			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
+					<version>${project.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-tests</artifactId>
+					<version>${project.version}</version>
+					<type>test-jar</type>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.19.2-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 </project>
