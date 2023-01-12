@@ -61,8 +61,8 @@
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.19</artifactId>
-			<version>2.29.0</version>
+			<artifactId>MockBukkit-v1.16</artifactId>
+			<version>1.5.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

@@ -80,21 +80,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.19</artifactId>
-			<version>2.29.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>4.6.1</version>
 		</dependency>
-
-				<dependency>
-					<groupId>io.papermc.paper</groupId>
-					<artifactId>paper-api</artifactId>
-					<version>1.19.2-R0.1-SNAPSHOT</version>
-				</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-shade</artifactId>
@@ -136,9 +125,6 @@
 	<profiles>
 		<profile>
 			<id>Minecraft_1_19_2</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -202,12 +188,22 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.16.5</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+
+				<!--<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.16.5-R0.1-SNAPSHOT</version> THERE IS NO paper-api 1.16.5!! 
+				</dependency> -->
 				<!-- <dependency>
 					<groupId>com.github.seeseemelk</groupId>
 					<artifactId>MockBukkit-v1.18</artifactId>

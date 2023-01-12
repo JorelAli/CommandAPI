@@ -6,7 +6,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,9 +78,60 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
 public class MockNMS extends ArgumentNMS {
+	
+	static {
+		CodeSource src = PotionEffectType.class.getProtectionDomain().getCodeSource();
+		if (src != null) {
+		    URL jar = src.getLocation();
+		    System.err.println(jar);
+		} else {
+			System.err.println("Derp");
+		}
+	}
+	
+//	static {
+//		System.err.println("Initializing MockNMS for 1.16.5");
+//		try {
+//			class Y extends PotionEffectType {
+//
+//				protected Y(int id, @NotNull NamespacedKey key) {
+//					super(id, key);
+//					// TODO Auto-generated constructor stub
+//				}
+//				
+//			}
+//		} catch(Throwable e) {
+//			System.err.println("oops");
+//			e.printStackTrace(System.err);
+//			System.err.println("End");
+//			System.exit(1);
+//		}
+//		try {
+//			new CraftPotionEffectType(null);
+//		} catch(Throwable e) {
+//			System.err.println("oops");
+//			e.printStackTrace(System.err);
+//			System.err.println("End");
+//			System.exit(1);
+//		}
+//		System.err.println(Arrays.toString(PotionEffectType.class.getDeclaredConstructors()));
+//		try {
+//			System.err.println("Calling IRegistry");
+//			Object o = IRegistry.f;
+//		}catch(Throwable e) {
+//			System.err.println("Found errors");
+//			e.printStackTrace(System.err);
+//			e.printStackTrace(System.out);
+//			System.err.println("End of found errors");
+//			System.exit(1);
+//		}
+//	}
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
+		
+//		ArgumentRegistry.a();
+		
 
 		// Initialize WorldVersion (game version)
 		SharedConstants.b();
@@ -110,8 +163,7 @@ public class MockNMS extends ArgumentNMS {
 	}
 	
 	private static void registerPotionEffectType(int id, @NotNull String name, boolean instant, int rgb) {
-		NamespacedKey key = NamespacedKey.minecraft(name.toLowerCase(Locale.ROOT));
-		PotionEffectType type = new MockPotionEffectType(key, id, name, instant, Color.fromRGB(rgb));
+		PotionEffectType type = new MockPotionEffectType(id, name, instant, Color.fromRGB(rgb));
 		PotionEffectType.registerPotionEffectType(type);
 	}
 	
@@ -635,11 +687,6 @@ public class MockNMS extends ArgumentNMS {
 			EntityType.STRIDER,
 			EntityType.ZOGLIN,
 			EntityType.PIGLIN_BRUTE,
-			EntityType.AXOLOTL,
-			EntityType.GLOW_ITEM_FRAME,
-			EntityType.GLOW_SQUID,
-			EntityType.GOAT,
-			EntityType.MARKER,
 			EntityType.FISHING_HOOK,
 			EntityType.LIGHTNING,
 			EntityType.PLAYER,
