@@ -110,8 +110,8 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import io.netty.channel.Channel;
-import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
@@ -400,10 +400,9 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
-	@SuppressWarnings("removal")
 	@Override
 	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
 	@Differs(from = "1.18.2", by = "Biomes now go via the registry. Also have to manually implement ERROR_BIOME_INVALID")

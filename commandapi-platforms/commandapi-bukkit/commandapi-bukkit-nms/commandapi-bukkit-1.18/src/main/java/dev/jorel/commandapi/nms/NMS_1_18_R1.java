@@ -37,7 +37,6 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
@@ -97,13 +96,12 @@ import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -303,10 +301,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
-	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
 	@Override
