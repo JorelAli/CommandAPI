@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
@@ -37,7 +36,6 @@ import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
 
 import com.google.common.io.Files;
@@ -59,7 +57,6 @@ import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
 import net.minecraft.server.v1_16_R3.Advancements;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
 import net.minecraft.server.v1_16_R3.ArgumentRegistry;
-import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
@@ -108,7 +105,7 @@ public class MockNMS extends ArgumentNMS {
 		registerDefaultEnchantments();
 	}
 	
-	private static void registerPotionEffectType(int id, @NotNull String name, boolean instant, int rgb) {
+	private static void registerPotionEffectType(int id, String name, boolean instant, int rgb) {
 		PotionEffectType type = new MockPotionEffectType(id, name, instant, Color.fromRGB(rgb));
 		PotionEffectType.registerPotionEffectType(type);
 	}

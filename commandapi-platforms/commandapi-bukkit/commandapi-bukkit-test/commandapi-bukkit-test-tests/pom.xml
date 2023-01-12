@@ -135,6 +135,9 @@
 	<profiles>
 		<profile>
 			<id>Minecraft_1_19_2</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -198,32 +201,27 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
+			<!-- 
 			<activation>
 				<activeByDefault>true</activeByDefault>
-			</activation>
-
+			</activation> -->
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.16.5</artifactId>
 					<version>${project.version}</version>
 				</dependency>
-
-				<!--<dependency>
-					<groupId>io.papermc.paper</groupId>
-					<artifactId>paper-api</artifactId>
-					<version>1.16.5-R0.1-SNAPSHOT</version> THERE IS NO paper-api 1.16.5!! 
-				</dependency> -->
 				<!-- <dependency>
 					<groupId>com.github.seeseemelk</groupId>
 					<artifactId>MockBukkit-v1.18</artifactId>
 					<version>2.27.0</version>
 				</dependency> -->
-				<!--<dependency>
-					<groupId>io.papermc.paper</groupId>
+				<dependency>
+					<groupId>com.destroystokyo.paper</groupId>
 					<artifactId>paper-api</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
-				</dependency>-->
+					<version>1.16.5-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
 				<dependency>
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>

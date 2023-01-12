@@ -33,7 +33,6 @@
 	<artifactId>commandapi-bukkit-test-impl-1.16.5</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.16.5-R0.1-SNAPSHOT</minecraft.mappings>
 		<spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
@@ -58,12 +57,7 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.16</artifactId>
-			<version>1.5.2</version>
-		</dependency>
+		<!-- Main dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -71,10 +65,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>5.8.2</version>
-			<scope>test</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.6.1</version>
+		</dependency>
+		<dependency>
+			<!-- This is literally just for testing, we're not actually packaging this -->
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.11.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.mojang</groupId>
@@ -82,35 +82,28 @@
 			<version>1.0.17</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>io.papermc.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>${paper.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>4.6.1</version>
-		</dependency>
-
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-shade</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		<!-- This is literally just for testing, we're not actually packaging this -->
+		
+		<!-- Version-specific dependencies -->
 		<dependency>
-			<groupId>de.tr7zw</groupId>
-			<artifactId>item-nbt-api</artifactId>
-			<version>2.11.1</version>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.16</artifactId>
+			<version>1.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.destroystokyo.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>${spigot.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		
