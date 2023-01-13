@@ -18,7 +18,21 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * An argument that represents a command. This allows users
+ * to enter the name and arguments of any other command as
+ * an argument to this command.
+ *
+ * @since 8.6.0
+ *
+ * @apiNote Returns a {@link CommandResult} object
+ */
 public class CommandArgument extends Argument<CommandResult> implements GreedyArgument {
+	/**
+	 * Constructs a {@link CommandArgument} with the given node name.
+	 *
+	 * @param nodeName the name of the node for this argument
+	 */
 	public CommandArgument(String nodeName) {
 		super(nodeName, StringArgumentType.greedyString());
 
@@ -128,7 +142,6 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * Replaces the default command suggestions provided by the server with custom
 	 * suggestions for each argument in the command, starting with the command's
@@ -140,6 +153,7 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 	 *                    to create these.
 	 * @return the current argument
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public CommandArgument replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
 		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
