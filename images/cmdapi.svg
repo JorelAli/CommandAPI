@@ -2,24 +2,24 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="17.990507mm"
    height="2.3812037mm"
    viewBox="0 0 17.990507 2.3812037"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04, custom)"
    sodipodi:docname="cmdapi.svg"
    inkscape:export-filename="/home/jorel/github/CommandAPI/images/cmdapi-600w.png"
    inkscape:export-xdpi="842.68311"
-   inkscape:export-ydpi="842.68311">
+   inkscape:export-ydpi="842.68311"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <inkscape:path-effect
@@ -50,16 +50,6 @@
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0" />
-    <linearGradient
-       gradientTransform="matrix(0.90000192,0,0,0.89998251,76.19981,289.3855)"
-       inkscape:collect="always"
-       xlink:href="#linearGradient4556"
-       id="linearGradient4558"
-       x1="97.895836"
-       y1="-175.28125"
-       x2="100.54166"
-       y2="-172.63542"
-       gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient4556">
@@ -100,6 +90,16 @@
        prop_units="false"
        vertical_pattern="false"
        fuse_tolerance="0" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4556"
+       id="linearGradient859"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.90000192,0,0,0.89998251,76.199806,289.3855)"
+       x1="97.895836"
+       y1="-175.28125"
+       x2="100.54166"
+       y2="-172.63542" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -108,21 +108,22 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="22.627417"
-     inkscape:cx="35.352067"
-     inkscape:cy="-2.8726294"
+     inkscape:zoom="11.313709"
+     inkscape:cx="18.473165"
+     inkscape:cy="40.481863"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1080"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="5749"
+     inkscape:window-y="1050"
+     inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0">
+     fit-margin-bottom="0"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        type="xygrid"
        id="grid4528"
@@ -137,7 +138,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -147,69 +147,71 @@
      id="layer1"
      style="opacity:1"
      transform="translate(-164.30624,-131.63547)">
-    <rect
-       style="opacity:1;fill:url(#linearGradient4558);fill-opacity:1;stroke:none;stroke-width:0.08999922;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect4550"
-       width="2.3812549"
-       height="2.3812037"
-       x="164.30624"
-       y="131.63547"
-       ry="0.47622699"
-       inkscape:export-xdpi="842.6781"
-       inkscape:export-ydpi="842.6781" />
     <g
        aria-label="CommandAPI"
        transform="scale(0.96338901,1.0380023)"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;line-height:1.25;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.44176701"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;line-height:1.25;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.441767"
        id="text4645">
       <path
          d="m 175.00781,128.37471 h -0.1932 c -0.18378,0.23089 -0.35106,0.32749 -0.60552,0.32749 -0.40289,0 -0.7351,-0.33456 -0.7351,-0.74217 0,-0.41938 0.31808,-0.73981 0.73275,-0.73981 0.24503,0 0.45001,0.0895 0.59844,0.32279 h 0.19556 c -0.1343,-0.29923 -0.44059,-0.483 -0.80107,-0.483 -0.51834,0 -0.90238,0.3864 -0.90238,0.90709 0,0.50892 0.39346,0.89532 0.91416,0.89532 0.35341,0 0.62201,-0.16493 0.79636,-0.48771 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path848" />
       <path
          d="m 176.5534,128.19093 c 0,-0.39347 -0.28273,-0.67855 -0.66913,-0.67855 -0.38168,0 -0.67619,0.2898 -0.67619,0.66677 0,0.39582 0.28979,0.68327 0.69033,0.68327 0.37697,0 0.65499,-0.28509 0.65499,-0.67149 z m -0.1767,0.002 c 0,0.29451 -0.20263,0.50891 -0.483,0.50891 -0.29687,0 -0.50892,-0.21676 -0.50892,-0.51834 0,-0.29215 0.21441,-0.51127 0.49949,-0.51127 0.28273,0 0.49243,0.22147 0.49243,0.5207 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path850" />
       <path
          d="m 178.71394,128.83179 v -0.76573 c 0,-0.37462 -0.21205,-0.55604 -0.50656,-0.55604 -0.20027,0 -0.33928,0.0778 -0.44766,0.24975 -0.10131,-0.172 -0.22854,-0.24739 -0.42174,-0.24739 -0.16257,0 -0.26388,0.0495 -0.36284,0.17906 v -0.14843 h -0.17435 v 1.28878 h 0.17435 v -0.7516 c 0,-0.25681 0.12959,-0.4076 0.34635,-0.4076 0.19791,0 0.3487,0.12016 0.3487,0.4076 v 0.7516 h 0.17435 v -0.74688 c 0,-0.29216 0.14843,-0.41468 0.35341,-0.41468 0.21205,0 0.34164,0.12488 0.34164,0.41468 v 0.74688 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path852" />
       <path
          d="m 180.92395,128.83179 v -0.76573 c 0,-0.37462 -0.21205,-0.55604 -0.50656,-0.55604 -0.20027,0 -0.33928,0.0778 -0.44766,0.24975 -0.10131,-0.172 -0.22854,-0.24739 -0.42174,-0.24739 -0.16257,0 -0.26388,0.0495 -0.36284,0.17906 v -0.14843 h -0.17435 v 1.28878 h 0.17435 v -0.7516 c 0,-0.25681 0.12959,-0.4076 0.34635,-0.4076 0.19791,0 0.3487,0.12016 0.3487,0.4076 v 0.7516 h 0.17435 v -0.74688 c 0,-0.29216 0.14843,-0.41468 0.35341,-0.41468 0.21205,0 0.34164,0.12488 0.34164,0.41468 v 0.74688 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path854" />
       <path
          d="m 182.53316,128.83179 v -1.28878 h -0.17435 v 0.22854 c -0.12723,-0.17907 -0.28509,-0.25917 -0.50892,-0.25917 -0.3864,0 -0.67855,0.29215 -0.67855,0.67855 0,0.38404 0.29451,0.67149 0.69033,0.67149 0.21912,0 0.36048,-0.073 0.49714,-0.25682 v 0.22619 z m -0.17435,-0.65028 c 0,0.29215 -0.21676,0.52069 -0.49478,0.52069 -0.29216,0 -0.51599,-0.22854 -0.51599,-0.52305 0,-0.28037 0.22619,-0.50656 0.50656,-0.50656 0.28273,0 0.50421,0.22147 0.50421,0.50892 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path856" />
       <path
          d="m 183.97037,128.83179 v -0.6762 c 0,-0.45237 -0.22854,-0.64321 -0.55133,-0.64321 -0.16963,0 -0.30629,0.066 -0.41467,0.19791 v -0.16728 h -0.17435 v 1.28878 h 0.17435 v -0.70919 c 0,-0.31571 0.16022,-0.45001 0.39347,-0.45001 0.23796,0 0.39818,0.13194 0.39818,0.483 v 0.6762 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path858" />
       <path
          d="m 185.58429,128.83179 v -1.74115 h -0.17435 v 0.65735 c -0.12723,-0.15315 -0.30394,-0.23561 -0.50656,-0.23561 -0.38876,0 -0.68562,0.29215 -0.68562,0.67619 0,0.38169 0.30393,0.67385 0.70211,0.67385 0.21441,0 0.36048,-0.0777 0.49007,-0.26389 v 0.23326 z m -0.16728,-0.64793 c 0,0.28273 -0.22619,0.51834 -0.50185,0.51834 -0.29451,0 -0.5207,-0.22618 -0.5207,-0.52069 0,-0.28273 0.22383,-0.50892 0.50421,-0.50892 0.28508,0 0.51834,0.22854 0.51834,0.51127 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path860" />
       <path
          d="m 187.45031,128.83179 -0.74924,-1.74115 h -0.19555 l -0.74688,1.74115 h 0.18377 l 0.25446,-0.58667 h 0.8105 l 0.2521,0.58667 z m -0.51127,-0.74453 h -0.6762 l 0.34163,-0.79871 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path862" />
       <path
          d="m 188.80742,127.6184 c 0,-0.36519 -0.1932,-0.52776 -0.67149,-0.52776 h -0.48064 v 1.74115 h 0.17435 v -0.70447 h 0.33457 c 0.47357,0 0.64321,-0.17907 0.64321,-0.50892 z m -0.17671,0 c 0,0.2521 -0.13194,0.35106 -0.47828,0.35106 h -0.32279 v -0.72097 h 0.24739 c 0.33221,0 0.55368,0.0165 0.55368,0.36991 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path864" />
       <path
          d="m 189.22445,128.83179 v -1.74115 h -0.17436 v 1.74115 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609078px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.44176701"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.35609px;font-family:'TeX Gyre Adventor';-inkscape-font-specification:'TeX Gyre Adventor';stroke-width:0.441767"
          id="path866" />
     </g>
-    <path
-       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 165.36459,132.69375 h 0.26458 v -0.52916 h 0.26459 V 131.9 h 0.26458 v 0.26459 h -0.26458 v 0.52916 h -0.26459 v 0.26459 h -0.26458 v 0.52916 h -0.26458 v 0.26459 h -0.26459 v -0.26459 h 0.26459 v -0.52916 h 0.26458 z"
-       id="path4659"
-       inkscape:connector-curvature="0"
+    <rect
+       inkscape:export-ydpi="842.6781"
        inkscape:export-xdpi="842.6781"
-       inkscape:export-ydpi="842.6781" />
+       ry="0.47622699"
+       y="131.63547"
+       x="164.30624"
+       height="2.3812037"
+       width="2.3812549"
+       id="rect4550-9"
+       style="fill:url(#linearGradient859);fill-opacity:1;stroke:none;stroke-width:0.0899992;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Users\Jorel\Documents\GitHub\CommandAPI\images\logo-small-512.png" />
+    <path
+       inkscape:export-ydpi="842.6781"
+       inkscape:export-xdpi="842.6781"
+       inkscape:connector-curvature="0"
+       id="path4659-8"
+       d="m 165.41749,132.73158 h 0.15875 v -0.37797 h 0.15875 v -0.18899 h 0.15875 v 0.18899 h -0.15875 v 0.37797 h -0.15875 v 0.189 h -0.15875 v 0.37797 h -0.15875 v 0.18899 h -0.15875 v -0.18899 h 0.15875 v -0.37797 h 0.15875 z"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0654652;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Users\Jorel\Documents\GitHub\CommandAPI\images\logo-small-512.png" />
   </g>
   <g
      inkscape:groupmode="layer"

@@ -1023,3 +1023,10 @@ h6 {
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.19);
     transform: scale(1.03)
 }
+
+@media (max-width: 991px) {
+    nav a.btn {
+        width: 100%;
+        margin: 0 0 2px 0;
+    }
+}
