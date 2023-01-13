@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
+import java.util.Objects;
+
 /**
  * A class representing a range of floats
  */
@@ -94,6 +96,24 @@ public class FloatRange {
 		} else {
 			return this.low + ".." + this.high;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(high, low);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof FloatRange)) {
+			return false;
+		}
+		FloatRange other = (FloatRange) obj;
+		return Float.floatToIntBits(high) == Float.floatToIntBits(other.high) &&
+			Float.floatToIntBits(low) == Float.floatToIntBits(other.low);
 	}
 	
 }

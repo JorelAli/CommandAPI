@@ -97,8 +97,8 @@ This project provides an API to help Bukkit/Spigot developers use the Minecraft 
 Still not convinced? In addition to all of the above, the CommandAPI also provides:
 
 - **Built-in command converter** - Convert other plugin commands into `/execute`-compatible ones - no code required!
-- **Compile-time annotation framework** - Don't like writing lots of code with builders? You don't have to!
 - **Tree-structure command registration** - Like Brigadier's code format? We've got you covered with `CommandTree`
+- **Kotlin DSL** - Prefer writing plugins in Kotlin? The CommandAPI has an optional Kotlin DSL just for you
 - **Powerful suggestion generation** - Generate new suggestions for each argument, or add to existing suggestions
 - **Safe suggestion generation** - The CommandAPI offers compile-time type safety for specific arguments
 - **Precise permission support** - Apply permissions to specific arguments - you need perms to even _see_ the argument
@@ -369,6 +369,49 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>9.0.0</b></td>
+            <td valign="top">??? 2023</td>
+            <td valign="top">
+                <b>⚠️ This version is incompatible with with any plugin that used the CommandAPI version 8.7.x or below! (See documentation for more information)</b><br>
+                <b>New features:</b>
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/360 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/162, https://github.com/JorelAli/CommandAPI/issues/387, https://github.com/JorelAli/CommandAPI/pull/393 Added optional arguments</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
+                    <li>Reworked the implementation of <code>ItemArgument</code>, so the <code>ItemStack</code> count is correctly reflected and <code>ItemMeta</code> is properly assigned</li>
+                </ul>
+                <b>Bug fixes:</b>
+                <ul>
+                    <li>Fixed <code>commandapi-preprocessor</code> appearing in the plugin and shaded jar file</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/390 Fixed <code>.executesNative()</code>'s CommandSender's <code>getLocation()</code> method returning the wrong pitch and yaw</li>
+                    <li>Fixed tags showing up in the <code>BiomeArgument</code> when they shouldn't have been doing so</li>
+                    <li>Fixed <code>LocationArgument</code> with <code>BLOCK_POSITION</code> not returning locations in unloaded chunks</li>
+                </ul>
+                <b>Documentation changes:</b>
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/384 Fixed various particle data not being documented for the <code>ParticleArgument</code> documentation page</li>
+                    <li>Fixed broken links in the documentation (using <a href="https://github.com/Michael-F-Bryan/mdbook-linkcheck">Michael-F-Bryan/mdbook-linkcheck</a>)</li>
+                    <li>Refactored documentation argument page names for consistency</li>
+                </ul>
+                <b>Other changes:</b>
+                <ul>
+                    <li>Removed all previously deprecated constructors, classes and methods</li>
+                    <li>Completely refactored the entire CommandAPI project to help support other platforms</li>
+                    <li>Added a live dev build of the documentation at <a href="https://commandapi-live-docs.jorel.dev/">commandapi-live-docs.jorel.dev</a></li>
+                    <li>Improved mobile support for the CommandAPI home page</li>
+                    <li>Added the CommandAPI's Modrinth link to the CommandAPI home page</li>
+                </ul>
+                <b>GitHub Actions changes:</b>
+                <ul>
+                    <li>Fixed NodeJS 12 deprecation warnings</li>
+                    <li>Added markdownlint to verify that the documentation adheres to suitable Markdown standards</li>
+                    <li>Fixed building the CommandAPI example projects not failing if they failed to compile</li>
+                    <li>Added the CommandAPI documentation to GitHub Actions</li>
+                    <li>Added deployment of snapshot builds to GitHub Actions</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>8.7.3</b></td>
             <td valign="top">January 2023</td>

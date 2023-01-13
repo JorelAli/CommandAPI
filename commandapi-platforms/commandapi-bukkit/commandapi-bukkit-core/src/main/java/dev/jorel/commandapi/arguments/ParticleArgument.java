@@ -27,6 +27,8 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 
 /**
  * An argument that represents the Bukkit Particle object
+ * 
+ * @since 1.1
  */
 @SuppressWarnings("rawtypes")
 public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>> implements InitialParseExceptionArgument<Object, Argument<ParticleData>> {

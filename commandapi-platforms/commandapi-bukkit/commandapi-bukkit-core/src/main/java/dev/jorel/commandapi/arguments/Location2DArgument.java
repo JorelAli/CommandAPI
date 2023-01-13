@@ -28,6 +28,8 @@ import org.bukkit.Location;
 
 /**
  * An argument that represents the Bukkit {@link Location} object in x and z directions
+ * 
+ * @since 3.0
  * @apiNote Returns a {@link Location2D} object
  */
 public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D> implements InitialParseExceptionArgument<Object, Argument<Location2D>> {

@@ -27,6 +27,8 @@ import dev.jorel.commandapi.wrappers.Rotation;
 
 /**
  * An argument that represents rotation as pitch and yaw
+ * 
+ * @since 3.0
  */
 public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotation> implements InitialParseExceptionArgument<Object, Argument<Rotation>> {
 

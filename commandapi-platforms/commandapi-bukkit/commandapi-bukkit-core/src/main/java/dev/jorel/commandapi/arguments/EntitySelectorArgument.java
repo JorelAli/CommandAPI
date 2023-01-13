@@ -32,6 +32,8 @@ import java.util.List;
 
 /**
  * An argument that represents a selection of entities
+ * 
+ * @since 1.3
  */
 public class EntitySelectorArgument {
 

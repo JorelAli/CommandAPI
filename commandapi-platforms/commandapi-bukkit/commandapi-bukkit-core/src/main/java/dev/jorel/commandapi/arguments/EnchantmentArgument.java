@@ -28,6 +28,8 @@ import org.bukkit.enchantments.Enchantment;
 /**
  * An argument that represents the Bukkit Enchantment object
  * 
+ * @since 1.1
+ * 
  * @apiNote Returns an {@link Enchantment} object
  */
 public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, Enchantment> implements InitialParseExceptionArgument<Object, Argument<Enchantment>>{

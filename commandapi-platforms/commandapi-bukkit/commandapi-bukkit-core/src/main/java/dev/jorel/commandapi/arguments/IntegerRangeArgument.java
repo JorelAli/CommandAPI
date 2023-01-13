@@ -27,6 +27,8 @@ import dev.jorel.commandapi.wrappers.IntegerRange;
 
 /**
  * An argument that represents a range of integer values
+ * 
+ * @since 3.0
  */
 public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange> implements InitialParseExceptionArgument<Object, Argument<IntegerRange>> {
 

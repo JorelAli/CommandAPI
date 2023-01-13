@@ -27,6 +27,8 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
 /**
  * An argument that represents the Bukkit ScoreboardSlot object
+ * 
+ * @since 3.0
  */
 public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot> implements InitialParseExceptionArgument<Object, Argument<ScoreboardSlot>>{
 

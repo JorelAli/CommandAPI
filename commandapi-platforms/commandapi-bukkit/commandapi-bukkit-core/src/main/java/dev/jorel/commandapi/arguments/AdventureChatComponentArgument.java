@@ -28,6 +28,8 @@ import net.kyori.adventure.text.Component;
 
 /**
  * An argument that represents raw JSON text
+ * 
+ * @since 5.10
  * @apiNote Returns a {@link Component} object
  */
 public class AdventureChatComponentArgument extends Argument<Component> implements InitialParseExceptionArgument<Object, Argument<Component>> {

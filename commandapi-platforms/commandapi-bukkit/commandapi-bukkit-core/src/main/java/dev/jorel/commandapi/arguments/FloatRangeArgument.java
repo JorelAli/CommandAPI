@@ -27,6 +27,8 @@ import dev.jorel.commandapi.wrappers.FloatRange;
 
 /**
  * An argument that represents a range of float values
+ * 
+ * @since 3.0
  */
 public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange> implements InitialParseExceptionArgument<Object, Argument<FloatRange>> {
 

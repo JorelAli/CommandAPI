@@ -28,6 +28,8 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 /**
  * An argument that represents primitive Java doubles
  * 
+ * @since 1.1
+ * 
  * @apiNote Returns a {@link double}
  */
 public class DoubleArgument extends SafeOverrideableArgument<Double, Double> implements InitialParseExceptionArgument<Double, Argument<Double>> {

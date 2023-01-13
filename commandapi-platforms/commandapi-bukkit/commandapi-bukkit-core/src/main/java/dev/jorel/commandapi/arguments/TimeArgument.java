@@ -27,6 +27,8 @@ import dev.jorel.commandapi.wrappers.Time;
 
 /**
  * An argument that represents a duration of time in ticks
+ * 
+ * @since 3.0
  */
 public class TimeArgument extends SafeOverrideableArgument<Integer, Time> implements InitialParseExceptionArgument<Integer, Argument<Integer>> {
 	

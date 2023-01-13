@@ -1,0 +1,977 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>CommandAPI v1.7 - CommandAPI Documentation v9.0.0</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts (including FontAwesome 6.2.0 free content) -->
+        <link rel="stylesheet" href="fontawesome/css/fontawesome.css">
+        <link rel="stylesheet" href="fontawesome/css/brands.css">
+        <link rel="stylesheet" href="fontawesome/css/solid.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="v1.0.html">CommandAPI v1.0</a></li><li class="chapter-item expanded "><a href="v1.1.html">CommandAPI v1.1</a></li><li class="chapter-item expanded "><a href="v1.2.html">CommandAPI v1.2</a></li><li class="chapter-item expanded "><a href="v1.3.html">CommandAPI v1.3</a></li><li class="chapter-item expanded "><a href="v1.4.html">CommandAPI v1.4</a></li><li class="chapter-item expanded "><a href="v1.5.html">CommandAPI v1.5</a></li><li class="chapter-item expanded "><a href="v1.6.html">CommandAPI v1.6</a></li><li class="chapter-item expanded "><a href="v1.7.html" class="active">CommandAPI v1.7</a></li><li class="chapter-item expanded "><a href="v1.8.html">CommandAPI v1.8</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa-solid fa-paintbrush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CommandAPI Documentation v9.0.0</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa-solid fa-print"></i>
+                        </a>
+                        <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa-brands fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="documentation-for-v17"><a class="header" href="#documentation-for-v17">Documentation for v1.7</a></h1>
+<p>An API to use the new command UI introduced in Minecraft 1.13</p>
+<h2 id="contents"><a class="header" href="#contents">Contents</a></h2>
+<ul>
+<li><a href="#installation-for-server-owners">Installation for server owners</a></li>
+<li><a href="#using-the-commandapi-in-your-projects-for-developers">Using the CommandAPI in your projects</a></li>
+<li><a href="#configyml">Config.yml</a></li>
+<li><a href="#basic-usage-for-developers">Basic usage (for developers)</a></li>
+<li><a href="#command-registration">Command registration</a>
+<ul>
+<li><a href="#command-loading-order">Command loading order</a></li>
+<li><a href="#command-unregistration">Command unregistration</a></li>
+</ul>
+</li>
+<li><a href="#arguments">Arguments</a>
+<ul>
+<li><a href="#argument-casting">Argument Casting</a></li>
+<li><a href="#ranged-arguments">Ranged Arguments</a></li>
+<li><a href="#entity-selector-arguments">Entity Selector Arguments</a></li>
+<li><a href="#chat-component-arguments">Chat Component Arguments</a></li>
+<li><a href="#literal-arguments-suggested-string-arguments--dynamic-suggested-string-arguments">Literal Arguments, Suggested String Arguments &amp; Dynamic Suggested String Arguments</a> 
+<ul>
+<li><a href="#literal-arguments">Literal Arguments</a></li>
+<li><a href="#suggestedstringarguments">SuggestedStringArguments</a></li>
+<li><a href="#dynamic-suggested-string-arguments">Dynamic Suggested String Arguments</a></li>
+</ul>
+</li>
+<li><a href="#strings-greedy-strings-and-text-arguments">Strings, Greedy Strings and Text arguments</a></li>
+<li><a href="#multiple-command-arguments">Multiple command arguments</a></li>
+</ul>
+</li>
+<li><a href="#functions--function-arguments">Functions &amp; Function Arguments</a>
+<ul>
+<li><a href="#the-functionwrapper-class">The FunctionWrapper class</a></li>
+<li><a href="#function-command-registration">Function command registration</a></li>
+</ul>
+</li>
+<li><a href="#permissions">Permissions</a></li>
+<li><a href="#commandexecutor">CommandExecutor</a>
+<ul>
+<li><a href="#resultingcommandexecutors">ResultingCommandExecutors</a></li>
+<li><a href="#proxiedcommandsenders">ProxiedCommandSenders</a></li>
+</ul>
+</li>
+<li><a href="#command-converter">Command Converter</a></li>
+<li><a href="#examples-examples-examples">Examples</a>
+<ul>
+<li><a href="#give-command">Give Command</a></li>
+<li><a href="#enchant-command">Enchant Command</a></li>
+<li><a href="#setblock-command">SetBlock Command</a></li>
+<li><a href="#message-command">Message Command</a></li>
+<li><a href="#using-the-chatcomponentargument">Using the ChatComponentArgument</a></li>
+<li><a href="#dynamicsuggestedstring-example">DynamicSuggestedString Example</a></li>
+<li><a href="#functions">Functions</a>
+<ul>
+<li><a href="#registering-commands-for-minecraft-function-support">Registering commands for Minecraft function support</a></li>
+<li><a href="#using-a-pre-existing-function-in-your-code">Using a pre-existing function in your code</a></li>
+</ul>
+</li>
+<li><a href="#converter">Converter</a></li>
+</ul>
+</li>
+<li><a href="#faq">FAQ</a></li>
+</ul>
+<h2 id="installation-for-server-owners"><a class="header" href="#installation-for-server-owners">Installation (For server owners)</a></h2>
+<ul>
+<li>Download the v1.7.2 CommandAPI.jar from the download page <a href="https://github.com/JorelAli/1.13-Command-API/releases/tag/v1.7.2">here</a></li>
+<li>Place the CommandAPI.jar file in your server's <code>/plugins/</code> folder</li>
+<li>That's it!</li>
+</ul>
+<h2 id="configyml"><a class="header" href="#configyml">Config.yml</a></h2>
+<p>Default config.yml:</p>
+<pre><code class="language-yaml">verbose-outputs: true
+create-dispatcher-json: true
+</code></pre>
+<ul>
+<li><code>verbose-outputs</code> - Outputs command registration and unregistration in the console</li>
+<li><code>create-dispatcher-json</code> - Creates a <code>command_registration.json</code> file showing the mapping of registered commands</li>
+</ul>
+<h2 id="using-the-commandapi-in-your-projects-for-developers"><a class="header" href="#using-the-commandapi-in-your-projects-for-developers">Using the CommandAPI in your projects (For developers)</a></h2>
+<h3 id="manual-installation-with-jar"><a class="header" href="#manual-installation-with-jar">Manual Installation with .jar</a></h3>
+<ul>
+<li>Download the v1.7.2 CommandAPI.jar from the download page <a href="https://github.com/JorelAli/1.13-Command-API/releases/tag/v1.7.2">here</a></li>
+<li>Add the CommandAPI.jar file to your project/environment's build path</li>
+<li>Add the plugin as a dependent in the plugin.yml (<code>depend: [CommandAPI]</code>)</li>
+</ul>
+<h3 id="maven"><a class="header" href="#maven">Maven</a></h3>
+<ul>
+<li>
+<p>Add the maven repository:</p>
+<pre><code>&lt;repository&gt;
+    &lt;id&gt;mccommandapi&lt;/id&gt;
+    &lt;url&gt;https://raw.githubusercontent.com/JorelAli/1.13-Command-API/mvn-repo/1.13CommandAPI/&lt;/url&gt;
+&lt;/repository&gt;
+</code></pre>
+</li>
+<li>
+<p>Add the dependency:</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;io.github.jorelali&lt;/groupId&gt;
+    &lt;artifactId&gt;commandapi&lt;/artifactId&gt;
+    &lt;version&gt;1.7.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+</li>
+</ul>
+<h2 id="basic-usage-for-developers"><a class="header" href="#basic-usage-for-developers">Basic usage (For developers)</a></h2>
+<ul>
+<li>
+<p>Generate a <code>LinkedHashMap&lt;String, Argument&gt;</code> to store your arguments for your command. The insertion order IS IMPORTANT.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; args = new LinkedHashMap&lt;&gt;();
+args.put(&quot;time&quot;, new IntegerArgument());
+</code></pre>
+</li>
+<li>
+<p>Register your command using the CommandAPI instance</p>
+<pre><code class="language-java">CommandAPI.getInstance().register(&quot;mycommand&quot;, arguments, (sender, args) -&gt; {
+    if(sender instanceof Player) {
+     	Player player = (Player) sender;
+        player.getWorld().setTime((int) args[0]);
+    }
+});
+</code></pre>
+</li>
+</ul>
+<h2 id="command-registration"><a class="header" href="#command-registration">Command registration</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>CommandRegistration method</th><th>Outcome</th></tr></thead><tbody>
+<tr><td><code>CommandAPI.getInstance().register(String, LinkedHashMap, CommandExecutor)</code></td><td>Basic command registration</td></tr>
+<tr><td><code>CommandAPI.getInstance().register(String, String[], LinkedHashMap, CommandExecutor)</code></td><td>Register command with an array of aliases</td></tr>
+<tr><td><code>CommandAPI.getInstance().register(String, CommandPermission, LinkedHashMap, CommandExecutor)</code></td><td>Register command which need certain permissions</td></tr>
+<tr><td><code>CommandAPI.getInstance().register(String, CommandPermission, String[], LinkedHashMap, CommandExecutor)</code></td><td>Register command with aliases and permission requirements</td></tr>
+</tbody></table>
+</div>
+<p>To see more about <code>CommandPermission</code>, check out the link <a href="#commandexecutor">here</a></p>
+<p>To see more about <code>CommandExecutor</code>, check out the link <a href="#commandexecutor">here</a></p>
+<h3 id="command-loading-order"><a class="header" href="#command-loading-order">Command loading order</a></h3>
+<p><strong>Commands must be registered before the server finishes loading</strong>. The CommandAPI will prevent command registration after the server has loaded.</p>
+<div class="table-wrapper"><table><thead><tr><th>When to load</th><th>What to do</th></tr></thead><tbody>
+<tr><td>Plugin <code>onLoad()</code> method</td><td>Register commands to be used in Minecraft functions (see Function section for more info)</td></tr>
+<tr><td>Plugin <code>onEnable()</code> method</td><td>Register regular commands</td></tr>
+</tbody></table>
+</div>
+<h3 id="command-unregistration"><a class="header" href="#command-unregistration">Command unregistration</a></h3>
+<p>The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!</p>
+<div class="table-wrapper"><table><thead><tr><th>Method</th><th>Result</th></tr></thead><tbody>
+<tr><td><code>CommandAPI.getInstance().unregister(String cmd)</code></td><td>Unregisters a command from the game</td></tr>
+<tr><td><code>CommandAPI.getInstance().unregister(String cmd, boolean force)</code></td><td>Unregisters a command from the game by force. This includes <code>/minecraft:cmd</code>, <code>/bukkit:cmd</code> and <code>/spigot:cmd</code> commands as well.</td></tr>
+</tbody></table>
+</div>
+<p><strong>Example:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Method</th><th>Outcome</th></tr></thead><tbody>
+<tr><td><code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;)</code></td><td>Unregisters the <code>/gamemode</code> command from the game</td></tr>
+<tr><td><code>CommandAPI.getInstance().unregister(&quot;gamemode&quot;, true)</code></td><td>Force unregisters all <code>/gamemode</code> commands from all plugins, Minecraft, Bukkit and Spigot. This includes <code>/minecraft:gamemode</code>, in addition to any other plugins which register <code>/gamemode</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="arguments"><a class="header" href="#arguments">Arguments</a></h2>
+<p>Arguments are found in the <code>io.github.jorelali.commandapi.api.arguments</code> package.</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Argument class</th><th style="text-align: center">Bukkit data type</th><th style="text-align: center">Data type</th><th style="text-align: center">Notes</th></tr></thead><tbody>
+<tr><td style="text-align: center"><code>new BooleanArgument()</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>boolean</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new ChatColorArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>ChatColor</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new ChatComponentArgument()</code></td><td style="text-align: center">✔️*</td><td style="text-align: center"><code>BaseComponent[]</code></td><td style="text-align: center">*Requires Spigot, see below for usage notes</td></tr>
+<tr><td style="text-align: center"><code>new DoubleArgument()</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>double</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new DynamicSuggestedStringArgument(DynamicSuggestions)</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>String</code></td><td style="text-align: center">See below for usage</td></tr>
+<tr><td style="text-align: center"><code>new EnchantmentArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>Enchantment</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new EntitySelectorArgument(EntitySelector)</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>Entity</code>, <code>Player</code>, <code>Collection&lt;Entity&gt;</code>, <code>Collection&lt;Player&gt;</code></td><td style="text-align: center">See below for usage</td></tr>
+<tr><td style="text-align: center"><code>new EntityTypeArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>EntityType</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new FloatArgument()</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>float</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new FunctionArgument()</code></td><td style="text-align: center">❌*</td><td style="text-align: center"><code>FunctionWrapper[]</code></td><td style="text-align: center">*Quite complex, see below for usage notes</td></tr>
+<tr><td style="text-align: center"><code>new GreedyStringArgument()</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>String</code></td><td style="text-align: center">Can have any length</td></tr>
+<tr><td style="text-align: center"><code>new IntegerArgument()</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>int</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new ItemStackArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>ItemStack</code></td><td style="text-align: center">Returns an <code>ItemStack</code> with amount 1</td></tr>
+<tr><td style="text-align: center"><code>new LiteralArgument(String)</code></td><td style="text-align: center">❌</td><td style="text-align: center">N/A</td><td style="text-align: center">See below for usage</td></tr>
+<tr><td style="text-align: center"><code>new LocationArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>Location</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new ParticleArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>Particle</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new PlayerArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>Player</code></td><td style="text-align: center">Always returns 1 player</td></tr>
+<tr><td style="text-align: center"><code>new PotionEffectArgument()</code></td><td style="text-align: center">✔️</td><td style="text-align: center"><code>PotionEffectType</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>new StringArgument()</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>String</code></td><td style="text-align: center">Always consists of 1 word</td></tr>
+<tr><td style="text-align: center"><code>new SuggestedStringArgument(String[])</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>String</code></td><td style="text-align: center">See below for usage</td></tr>
+<tr><td style="text-align: center"><code>new TextArgument()</code></td><td style="text-align: center">❌</td><td style="text-align: center"><code>String</code></td><td style="text-align: center">Can have spaces (used for text)</td></tr>
+</tbody></table>
+</div>
+<h3 id="argument-casting"><a class="header" href="#argument-casting">Argument Casting</a></h3>
+<p>To access arguments, they are casted in the order of declaration.</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;arg0&quot;, new StringArgument());
+arguments.put(&quot;arg1&quot;, new PotionEffectArgument());
+arguments.put(&quot;arg2&quot;, new LocationArgument());
+
+commandRegister.register(&quot;cmd&quot;, arguments, (sender, args) -&gt; {
+	String stringArg = (String) args[0];
+	PotionEffectType potionArg = (PotionEffectType) args[1];
+	Location locationArg = (Location) args[2];
+});
+</code></pre>
+<h3 id="ranged-arguments"><a class="header" href="#ranged-arguments">Ranged Arguments</a></h3>
+<p>Numerical arguments (<code>int</code>, <code>float</code> and <code>double</code>) can have ranged values.</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Constructor</th><th style="text-align: center">Expression</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>new IntegerArgument()</code></td><td style="text-align: center"><code>int</code></td></tr>
+<tr><td style="text-align: left"><code>new IntegerArgument(2)</code></td><td style="text-align: center">2 ≤ <code>int</code></td></tr>
+<tr><td style="text-align: left"><code>new IntegerArgument(2, 10)</code></td><td style="text-align: center">2 ≤ <code>int</code> ≤ 10</td></tr>
+</tbody></table>
+</div>
+<h3 id="entity-selector-arguments"><a class="header" href="#entity-selector-arguments">Entity Selector Arguments</a></h3>
+<p><a href="https://minecraft.gamepedia.com/Commands#Target_selectors">Target selectors</a> are implemented using the <code>EntitySelectorArgument</code> class. This allows you to select specific entities based on certain attributes.</p>
+<p>The <code>EntitySelectorArgument</code> class requires an <code>EntitySelector</code> argument to determine what type of data to return. There are 4 types of entity selections which are available:</p>
+<ul>
+<li><code>EntitySelector.ONE_ENTITY</code> - A single entity, which returns a <code>Entity</code> object.</li>
+<li><code>EntitySelector.MANY_ENTITIES</code>  - A collection of many entities, which returns a <code>Collection&lt;Entity&gt;</code> object.</li>
+<li><code>EntitySelector.ONE_PLAYER</code> - A single player, which returns a <code>Player</code> object.</li>
+<li><code>EntitySelector.MANY_PLAYERS</code> - A collection of players, which returns a <code>Collection&lt;Player&gt;</code> object.</li>
+</ul>
+<p>The return type is the type to be cast when retrieved from the <code>Object[] args</code> in the command declaration.</p>
+<pre><code class="language-java">//LinkedHashMap to store arguments for the command
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//Using a collective entity selector to select multiple entities
+arguments.put(&quot;entities&quot;, new EntitySelectorArgument(EntitySelector.MANY_ENTITIES));
+
+CommandAPI.getInstance().register(&quot;kill&quot;, arguments, (sender, args) -&gt; {
+    
+	//Parse the argument as a collection of entities (as stated above in the documentation)
+	Collection&lt;Entity&gt; entities = (Collection&lt;Entity&gt;) args[0];
+	sender.sendMessage(&quot;killed &quot; + entities.size() + &quot;entities&quot;);
+	for(Entity e : entity)
+		e.remove();
+});
+</code></pre>
+<p>You can view an example of using the EntitySelectorArgument <a href="https://github.com/JorelAli/1.13-Command-API/blob/master/1.13CommandAPI/src/io/github/jorelali/commandapi/ExampleEntitySelector.java">here</a></p>
+<h3 id="chat-component-arguments"><a class="header" href="#chat-component-arguments">Chat Component Arguments</a></h3>
+<p>The <code>ChatComponentArgument</code> uses Spigot's <code>BaseComponent</code> class to accept raw JSON text as a valid input. When raw JSON is inputted, the <code>ChatComponentArgument</code> will return a <code>BaseComponent[]</code> which can be used for books and raw messages. You can read more about raw JSON <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">here</a>, and Spigot's Chat Component API <a href="https://www.spigotmc.org/wiki/the-chat-component-api/">here</a>. You can view some examples with the <code>ChatComponentArgument</code> in the Examples section.</p>
+<p>If used on a non-spigot server (e.g. a server running CraftBukkit), the CommandAPI will throw a <code>SpigotNotFoundException</code>.</p>
+<h3 id="literal-arguments-suggested-string-arguments--dynamic-suggested-string-arguments"><a class="header" href="#literal-arguments-suggested-string-arguments--dynamic-suggested-string-arguments">Literal Arguments, Suggested String Arguments &amp; Dynamic Suggested String Arguments</a></h3>
+<h4 id="literal-arguments"><a class="header" href="#literal-arguments">Literal Arguments</a></h4>
+<p>Introduced in v1.3 is the <code>LiteralArgument</code> class. This allows you to basically create &quot;lists&quot; in your commands, or specific commands where a desired text option is required.</p>
+<p><code>LiteralArgument(String literal)</code> takes a <code>String</code> input which is the text which the argument represents.</p>
+<p>For example, take the <code>/gamemode</code> command. It takes an argument which is the game mode, which is picked from a list: adventure, creative, spectator or survival.</p>
+<p><img src="https://i.imgur.com/dvSYCc1.png" alt="example" /></p>
+<p>Literal arguments are &quot;technically&quot; not arguments, however they are declared as you would a regular argument.</p>
+<pre><code class="language-java">//Used as a regular argument, in your LinkedHashMap
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;gamemodearg&quot;, new LiteralArgument(&quot;adventure&quot;));
+
+CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args) -&gt; {
+    if(sender instanceof Player) {
+        Player player = (Player) sender;
+        player.setGameMode(GameMode.ADVENTURE);
+    }
+});
+</code></pre>
+<p>Since Literal arguments are not &quot;technically&quot; arguments, <strong>LITERAL ARGUMENTS ARE NOT DEFINED IN <code>args</code></strong>. So, with the example above, <code>args</code> is an empty array.</p>
+<p>To use lists, you can iterate over a list/map to generate multiple commands at once:</p>
+<pre><code class="language-java">//Create a map of gamemode names to their respective objects
+HashMap&lt;String, GameMode&gt; gamemodes = new HashMap&lt;&gt;();
+gamemodes.put(&quot;adventure&quot;, GameMode.ADVENTURE);
+gamemodes.put(&quot;creative&quot;, GameMode.CREATIVE);
+gamemodes.put(&quot;spectator&quot;, GameMode.SPECTATOR);
+gamemodes.put(&quot;survival&quot;, GameMode.SURVIVAL);
+
+//Iterate over the map
+for(String key : gamemodes.keySet()) {
+    
+    //Create our arguments as usual, using the LiteralArgument for the name of the gamemode
+	LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+	arguments.put(key, new LiteralArgument(key));
+    
+    //Register the command as usual
+	CommandAPI.getInstance().register(&quot;gamemode&quot;, arguments, (sender, args) -&gt; {
+	    if(sender instanceof Player) {
+	        Player player = (Player) sender;
+            
+            //Retrieve the object from the map via the key and NOT the args[]
+	        player.setGameMode(gamemodes.get(key));
+	    }
+	});
+}
+</code></pre>
+<p>Be aware that <em>large nested lists</em> are HIGHLY discouraged, as described in <a href="https://github.com/JorelAli/1.13-Command-API/issues/9#issuecomment-428818416">this comment</a></p>
+<p>Failing to define a value for a literal (either by using null or an empty String) will result in a <code>BadLiteralException</code></p>
+<h4 id="suggestedstringarguments"><a class="header" href="#suggestedstringarguments">SuggestedStringArguments</a></h4>
+<p>As of v1.5, the CommandAPI now includes the <code>SuggestedStringArgument</code> class. This is similar to the <code>LiteralArgument</code> class, however its usage is very different. The <code>SuggestedStringArgument</code> uses an array of Strings which are displayed to the user when inputting values.</p>
+<pre><code class="language-java">//Arguments
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+
+//Populate a list of suggestions with the name of each Material in the Material enum
+/* This doesn't have the same effect that LiteralArgument has where each value is
+ * stored in the command dispatcher's JSON file. The suggestion list is generated
+ * at runtime and therefore doesn't impact on server memory or cause potential client issues. */
+List&lt;String&gt; suggestions = Arrays.stream(Material.values()).map(element -&gt; element.name()).collect(Collectors.toList());
+
+//Create a SuggestedStringArgument
+arguments.put(&quot;material&quot;, new SuggestedStringArgument(suggestions));
+
+//Output the value submitted by the player
+CommandAPI.getInstance().register(&quot;suggest&quot;, arguments, (sender, args) -&gt; {
+	if (sender instanceof Player) {
+		Player player = (Player) sender;
+		player.sendMessage((String) args[0]);
+	}
+});
+</code></pre>
+<p><strong>The <code>SuggestedStringArgument</code> is a suggestion.</strong> This means that the command sender <strong>MAY NOT</strong> enter a desired value stated in the list. For example:</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;examples&quot;, new SuggestedStringArgument(&quot;hello&quot;, &quot;world&quot;, &quot;blah&quot;));
+CommandAPI.getInstance().register(&quot;mycommand&quot;, arguments, (sender, args) -&gt; {
+	String result = (String) args[0]; //String argument from /mycommand [examples]
+});
+</code></pre>
+<p><strong>This code will not guarantee that the user has entered <code>hello</code>, <code>world</code> or <code>blah</code></strong>. The user can type whatever they want, these are just suggestions.</p>
+<div class="table-wrapper"><table><thead><tr><th><code>LiteralArgument</code></th><th><code>SuggestedStringArgument</code></th></tr></thead><tbody>
+<tr><td>Forces the user to select a word from the list</td><td>The user doesn't <strong>have</strong> to select a word from the list</td></tr>
+<tr><td>Bloated and uses up more memory to store arguments</td><td>Argument list is determined at runtime and doesn't use up as much memory</td></tr>
+<tr><td>Input sanitization is performed before the command is run</td><td>Requires extra handling to deal with unintended inputs. This is implemented by you.</td></tr>
+</tbody></table>
+</div>
+<h4 id="dynamic-suggested-string-arguments"><a class="header" href="#dynamic-suggested-string-arguments">Dynamic Suggested String Arguments</a></h4>
+<p>As of version 1.7, the CommandAPI now includes the <code>DynamicSuggestedStringArgument</code> class. This basically lets you take the <code>SuggestedStringArgument</code> class to a new level by allowing the server to automatically update the list whenever you want. This is done via a functional interface:</p>
+<p>For example, say we register the command <code>dynsuggest</code> which dynamically updates from a list <code>dynamicList</code>:</p>
+<pre><code class="language-java">//Create a list to hold the information of out dynamic list
+List&lt;String&gt; dynamicList = new ArrayList&lt;&gt;();
+
+//Create a Dynamic SuggestedStringArgument
+DynamicSuggestedStringArgument dynSSArg = new DynamicSuggestedStringArgument(() -&gt; {
+    //Returns a String[]
+	return dynamicList.toArray(new String[dynamicList.size()]);
+});
+
+//Register the command as normal
+LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;suggested&quot;, dynSSArg);
+CommandAPI.getInstance().register(&quot;dynsuggest&quot;, arguments, (sender, args) -&gt; {
+	System.out.println((String) args[0]);
+});
+</code></pre>
+<p>Later on in our program, we decide to add things to the list:</p>
+<pre><code class="language-java">dynamicList.add(&quot;John&quot;);
+dynamicList.add(&quot;Smith&quot;);
+dynamicList.add(&quot;Will&quot;);
+</code></pre>
+<p>When the command is being typed by the player, the options <em>John</em>, <em>Smith</em> and <em>Will</em> will be suggested to them. Say we then add a new thing to the list:</p>
+<pre><code class="language-java">dynamicList.add(&quot;Bob&quot;);
+</code></pre>
+<p>Now when the player types the command, the options  <em>John</em>, <em>Smith</em>, <em>Will</em> and <em>Bob</em> will be suggested to them.</p>
+<h3 id="strings-greedy-strings-and-text-arguments"><a class="header" href="#strings-greedy-strings-and-text-arguments">Strings, Greedy Strings and Text arguments</a></h3>
+<h4 id="stringargument"><a class="header" href="#stringargument"><code>StringArgument</code></a></h4>
+<p>The <code>StringArgument</code> is used to represent a single word. These words <strong>can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore character</strong>.</p>
+<p>Accepted <code>StringArgument</code> values:</p>
+<pre><code>/mycommand hello
+/mycommand 123
+/mycommand hello123
+</code></pre>
+<p>Rejected <code>StringArgument</code> values:</p>
+<pre><code>/mycommand hello@gmail.com
+/mycommand yesn't
+</code></pre>
+<p><strong>Potential Uses</strong></p>
+<ul>
+<li>Entering Strings to identify offline players</li>
+</ul>
+<h4 id="textargument"><a class="header" href="#textargument"><code>TextArgument</code></a></h4>
+<p>The <code>TextArgument</code> acts similar to any String in Java. These can be single words, like to the <code>StringArgument</code>, or have additional values such as <strong>special characters if quoted</strong>. To type quotation marks, you can use <code>\&quot;</code> (as similar to Java) to escape these special characters.</p>
+<p>Accepted <code>TextArgument</code> values:</p>
+<pre><code>/mycommand hello
+/mycommand &quot;hello world!&quot;
+/mycommand &quot;hello@gmail.com&quot;
+/mycommand &quot;this has \&quot; &lt;&lt;-- speech marks! &quot;
+</code></pre>
+<p>Rejected <code>TextArgument</code> values:</p>
+<pre><code>/mycommand hello world
+/mycommand 私
+/mycommand &quot;speech marks: &quot;&quot;
+</code></pre>
+<p><strong>Potential Uses</strong></p>
+<ul>
+<li>A command to edit the contents on a sign</li>
+<li>Any command that may require multiple text arguments</li>
+</ul>
+<h4 id="greedystringargument"><a class="header" href="#greedystringargument"><code>GreedyStringArgument</code></a></h4>
+<p>The <code>GreedyStringArgument</code> takes the <code>TextArgument</code> a step further. <strong>Any characters and symbols are allowed</strong> and quotation marks are not required. <strong>However, the <code>GreedyStringArgument</code> uses the entirety of the argument array from its position</strong>.</p>
+<p>For example, say we have a command <code>/msg &lt;target&gt; &lt;message&gt;</code></p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;target&quot;, new PlayerArgument());
+arguments.put(&quot;message&quot;, new GreedyStringArgument());
+CommandAPI.getInstance().register(&quot;msg&quot;, arguments, (sender, args) -&gt; {
+	((Player) args[0]).sendMessage((String) args[1]);
+});
+</code></pre>
+<p>Any text entered after the <code>&lt;target&gt;</code> argument would be sent to the player. For example, the command:</p>
+<pre><code>/msg Skepter hello how are you? I'm doing great! Last week I sent an email to blah@mail.com
+</code></pre>
+<p>would send <code>Skepter</code> a message saying <code>hello how are you? I'm doing great! Last week I sent an email to blah@mail.com</code>.</p>
+<p>Due to the fact that <strong>the <code>GreedyStringArgument</code> has no terminator</strong> (it has infinite length), <strong>a <code>GreedyStringArgument</code> must be defined at the end of the <code>LinkedHashMap</code></strong> (otherwise the CommandAPI will throw a <code>GreedyStringException</code>)</p>
+<p>For example, if the syntax was<code>/msg &lt;message&gt; &lt;target&gt;</code>, it would not be able to determine where the message ends and the <code>&lt;target&gt;</code> argument begins.</p>
+<p><strong>Potential Uses</strong></p>
+<ul>
+<li>A messaging/whisper command</li>
+<li>A mailing command</li>
+<li>Any command involving lots of text, such as a book writing command</li>
+<li>Any command which involves an unreasonable/unknown amount of arguments</li>
+<li>Any command where you want to parse arguments similar to how regular Bukkit would</li>
+</ul>
+<h3 id="multiple-command-arguments"><a class="header" href="#multiple-command-arguments">Multiple command arguments</a></h3>
+<p>Sometimes, you'll want one command to have different arguments. For example:</p>
+<ul>
+<li><code>/walkspeed &lt;speed&gt;</code> to change your walk speed</li>
+<li><code>/walkspeed &lt;speed&gt; &lt;target&gt;</code> to change the walk speed of another player</li>
+</ul>
+<p>To accommodate for this, just register the command twice, each with different arguments:</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, ArgumentType&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;speed&quot;, new FloatArgument(0.0, 1.0)); //args[0]
+
+//Register the command
+CommandAPI.getInstance().register(&quot;walkspeed&quot;, arguments, (sender, args) -&gt; {
+	float speed = (float) args[0]; //speed argument
+	//Code here to change the player's speed
+});
+
+//We can still use the arguments variable to add new arguments as the first command has already been registered
+arguments.put(&quot;target&quot;, new PlayerArgument()); //args[1]
+
+//Register the command
+CommandAPI.getInstance().register(&quot;walkspeed&quot;, arguments, (sender, args) -&gt; {
+	float speed = (float) args[0]; //speed argument
+	Player target = (Player) args[1]; //target player
+	//Code here to change the target's speed
+});
+</code></pre>
+<h2 id="functions--function-arguments"><a class="header" href="#functions--function-arguments">Functions &amp; Function Arguments</a></h2>
+<p>As of v1.6, the CommandAPI now supports Minecraft's new <a href="https://minecraft.gamepedia.com/Function">functions</a>. The <code>FunctionArgument</code> class is used to parse functions into your own plugin. This then looks up the function and returns a <code>FunctionWrapper[]</code>, which is also included with the CommandAPI. This is a list of all functions which were retrieved by the user - either an array containing a single function or an array containing a list of functions (for example, from a <a href="https://minecraft.gamepedia.com/Function#Tags">tag</a>)</p>
+<h3 id="the-functionwrapper-class"><a class="header" href="#the-functionwrapper-class">The <code>FunctionWrapper</code> class</a></h3>
+<p>The <code>FunctionWrapper</code> class has two main methods:</p>
+<div class="table-wrapper"><table><thead><tr><th>Method</th><th>Result on execution</th></tr></thead><tbody>
+<tr><td><code>run()</code></td><td>Executes the Minecraft function(s)</td></tr>
+<tr><td><code>runAs(Entity e)</code></td><td>Executes the Minecraft function as a specific Entity</td></tr>
+</tbody></table>
+</div>
+<p>Running the function from a <code>FunctionWrapper</code> will execute the function as declared in the respective <code>.mcfunction</code> file.</p>
+<h3 id="function-command-registration"><a class="header" href="#function-command-registration">Function command registration</a></h3>
+<p>In order to allow a command from your plugin to be used in a <code>.mcfunction</code> file, you <strong>must register your command in your plugin's <code>onLoad()</code> method</strong>, instead of the <code>onEnable()</code> method. This is due to the loading order for Minecraft functions, which takes place after the <code>onLoad()</code> method, but before the <code>onEnable()</code> method.</p>
+<h2 id="permissions"><a class="header" href="#permissions">Permissions</a></h2>
+<p>Permissions are created using the <code>CommandPermission</code> class.</p>
+<div class="table-wrapper"><table><thead><tr><th>Method</th><th>Outcome</th></tr></thead><tbody>
+<tr><td><code>CommandPermission.OP</code></td><td>Requires sender to be an OP to run the command</td></tr>
+<tr><td><code>CommandPermission.NONE</code></td><td>Anyone can run the command</td></tr>
+<tr><td><code>CommandPermission.fromString(&quot;my.perm&quot;)</code></td><td>Requires the permission  <code>my.perm</code> to run the command</td></tr>
+</tbody></table>
+</div>
+<p>Note: The permission syntax changed as of v1.7. Please use this syntax from now on!</p>
+<p>Permissions in the CommandAPI are rather simple, but have a few constraints:</p>
+<ul>
+<li>Each command can only have one permission</li>
+<li>Sub commands MUST share the same permission of its parent command</li>
+</ul>
+<p>For example, a simple invincibility command with these parameters:</p>
+<pre><code>/god
+/god &lt;target&gt;
+</code></pre>
+<p>This is implemented like this:</p>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+CommandAPI.getInstance().register(&quot;god&quot;, CommandPermission.fromString(&quot;command.god&quot;), arguments, (sender, args) -&gt; {
+    if(sender instanceof Player) {
+		((Player) sender).setInvulnerable(true);
+	}
+});
+
+arguments.put(&quot;target&quot;, new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
+CommandAPI.getInstance().register(&quot;god&quot;, CommandPermission.fromString(&quot;command.god&quot;), arguments, (sender, args) -&gt; {
+	((Player) args[0]).setInvulnerable(true);
+});
+</code></pre>
+<p>Both the <code>/god</code> command AND the <code>/god target</code> command require the permission <code>command.god</code>. Failing to comply with the sub-command permission constraint causes the CommandAPI to throw a <code>ConflictingPermissionsException</code>.</p>
+<h2 id="commandexecutor"><a class="header" href="#commandexecutor">CommandExecutor</a></h2>
+<p>The <code>CommandExecutor</code> class (not to be confused with Bukkit's <a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/command/CommandExecutor.html">CommandExecutor</a> class) is a <a href="https://docs.oracle.com/javase/8/docs/api/index.html?java/lang/FunctionalInterface.html">functional interface</a> which executes when the command is performed. It consists of two parameters, <code>CommandSender sender</code>  and <code>Object[] args</code>.</p>
+<h3 id="commandexecutor-format-java-8-lambda"><a class="header" href="#commandexecutor-format-java-8-lambda">CommandExecutor format (Java 8 lambda)</a></h3>
+<pre><code class="language-java">CommandExecutor executor = (sender, args) -&gt; {
+	//Code here
+};
+</code></pre>
+<h3 id="commandexecutor-format-java-7"><a class="header" href="#commandexecutor-format-java-7">CommandExecutor format (Java 7)</a></h3>
+<pre><code class="language-java">CommandExecutor executor = new CommandExecutor() {
+	@Override
+	public void run(CommandSender sender, Object[] args) {
+		//Code here
+	}
+};
+</code></pre>
+<p>Command name checking and permission checks aren't required as these are checked when the player types the command.</p>
+<h3 id="resultingcommandexecutors"><a class="header" href="#resultingcommandexecutors">ResultingCommandExecutors</a></h3>
+<p>As of v1.7, the CommandAPI now has support for the <code>/execute</code> command's <code>store</code> tag. This allows your command to return a <code>success</code> value (either <code>1</code> if successful or <code>0</code> if failure) and a <code>result</code> value (any integer).</p>
+<p>The syntax for using a <code>ResultingCommandExecutor</code> is exactly the same as using a regular <code>CommandExecutor</code> when using the Java 8 lambda format:</p>
+<pre><code class="language-java">ResultingCommandExecutor executor = (sender, args) -&gt; {
+    //code here
+    return 5; //result value is returned here
+};
+</code></pre>
+<p>Your <code>ResultingCommandExecutor</code>  must return an integer - this is the <code>result</code> value. Default commands (ones that don't return a result value) will automatically return a result value of 0.</p>
+<p><strong>By default, all commands return a <code>success</code> value of <code>1</code></strong>. This is changed by using the <strong><code>CommandAPI.fail(String errorMessage)</code> method, which instantly returns a <code>success</code> value of <code>0</code>.</strong></p>
+<p>For example:</p>
+<pre><code class="language-java">ResultingCommandExecutor executor = (sender, args) -&gt; {
+    int randInt = new Random().nextInt();
+    if(randInt &lt; 0) {
+        CommandAPI.fail(&quot;The random number was negative :(&quot;);
+    }
+    return randInt; //result value is a random integer
+};
+</code></pre>
+<p>The <code>result</code> value is a random integer. The <code>success</code> value depends on whether that number is positive or negative. <strong>If the <code>success</code> value is <code>0</code>, the result value is assigned <code>0</code> as well.</strong></p>
+<p>In short:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center"></th><th style="text-align: center">Command works normally</th><th style="text-align: center">Command uses <code>CommandAPI.fail(String)</code></th></tr></thead><tbody>
+<tr><td style="text-align: center"><code>result</code></td><td style="text-align: center">Whatever <code>int</code> you return</td><td style="text-align: center">0</td></tr>
+<tr><td style="text-align: center"><code>success</code></td><td style="text-align: center">1</td><td style="text-align: center">0</td></tr>
+</tbody></table>
+</div>
+<h3 id="proxiedcommandsenders"><a class="header" href="#proxiedcommandsenders">ProxiedCommandSenders</a></h3>
+<p>As of v1.3, the CommandAPI now has <em>some</em> support for the <code>/execute</code> command, which is implemented using the <a href="https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/ProxiedCommandSender.html">ProxiedCommandSender</a></p>
+<p>When using a command generated by the CommandAPI, it will modify the <code>CommandSender</code> when run depending of the <code>CommandSender</code> was changed in execution.</p>
+<p>For example:</p>
+<ul>
+<li>Running <code>/mycommand</code> as a player in game will return a regular <code>CommandSender</code>, which can be cast to a <code>Player</code> object. (<code>Player player = (Player) sender</code>)</li>
+<li>Running <code>/execute as @e[type=cow] run mycommand</code> as a player in game will return a <code>ProxiedCommandSender</code>, with callee as a cow and caller as a player.</li>
+</ul>
+<h2 id="command-converter"><a class="header" href="#command-converter">Command Converter</a></h2>
+<p>As of v1.6, the CommandAPI now includes the <code>Converter</code> class! This class can be used to convert commands from other plugins into commands which are compatible with Minecraft 1.13's <code>/execute</code> commands</p>
+<div class="table-wrapper"><table><thead><tr><th>Method</th><th>Outcome</th></tr></thead><tbody>
+<tr><td><code>Converter.convert(Plugin p)</code></td><td>Converts all commands stated in <code>Plugin</code>'s plugin.yml file</td></tr>
+<tr><td><code>Converter.convert(Plugin p, String cmdName)</code></td><td>Converts the specific command (<code>cmdName</code>) from <code>Plugin</code>'s plugin.yml file</td></tr>
+</tbody></table>
+</div>
+<p>This converter is to be used cautiously and only for commands from other plugins that you <em>need</em> to use.</p>
+<h2 id="examples-examples-examples"><a class="header" href="#examples-examples-examples">Examples examples examples!</a></h2>
+<h3 id="give-command"><a class="header" href="#give-command">Give Command</a></h3>
+<pre><code>/give &lt;item&gt; &lt;amount&gt;
+/give &lt;target&gt; &lt;item&gt; &lt;amount&gt;
+</code></pre>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;item&quot;, new ItemStackArgument()); //args[0]
+arguments.put(&quot;amount&quot;, new IntegerArgument(1, 64)); //args[1]
+
+CommandAPI.getInstance().register(&quot;give&quot;, CommandPermission.OP, new String[] {&quot;i&quot;, &quot;item&quot;}, arguments, (sender, args) -&gt; {
+	if(sender instanceof Player) {
+		Player player = (Player) sender;
+		ItemStack is = (ItemStack) args[0];
+		is.setAmount((int) args[1]);
+		player.getInventory().addItem(is);
+	}
+});
+
+arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;target&quot;, new PlayerArgument()); //args0[0]
+arguments.put(&quot;item&quot;, new ItemStackArgument()); //args[1]
+arguments.put(&quot;amount&quot;, new IntegerArgument(1, 64)); //args[2]
+
+CommandAPI.getInstance().register(&quot;give&quot;, CommandPermission.OP, new String[] {&quot;i&quot;, &quot;item&quot;}, arguments, (sender, args) -&gt; {
+	Player target = (Player) args[0];
+	ItemStack is = (ItemStack) args[1];
+	is.setAmount((int) args[2]);
+	target.getInventory().addItem(is);
+});
+</code></pre>
+<h3 id="enchant-command"><a class="header" href="#enchant-command">Enchant Command</a></h3>
+<pre><code>/enchant &lt;level&gt; &lt;force enchant&gt;
+</code></pre>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;level&quot;, new IntegerArgument()); //args[0]
+arguments.put(&quot;force enchant&quot;, new BooleanArgument()); //args[1]
+
+CommandAPI.getInstance().register(&quot;enchant&quot;, CommandPermission.fromString(&quot;plugin.enchant&quot;), arguments, (sender, args) -&gt; {
+	if(sender instanceof Player) {
+		Player player = (Player) sender;
+		if((boolean) args[1]) {
+			player.getInventory().getItemInMainHand().addUnsafeEnchantment((Enchantment) args[1], (int) args[0]);
+		} else {
+			player.getInventory().getItemInMainHand().addEnchantment((Enchantment) args[1], (int) args[0]);
+		}
+	}
+});
+</code></pre>
+<h3 id="setblock-command"><a class="header" href="#setblock-command">SetBlock Command</a></h3>
+<pre><code>/setblock &lt;location&gt; &lt;type&gt;
+</code></pre>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;location&quot;, new LocationArgument()); //args[0]
+arguments.put(&quot;type&quot;, new ItemStackArgument()); //args[1]
+
+CommandAPI.getInstance().register(&quot;setblock&quot;, arguments, (sender, args) -&gt; {
+	if(sender instanceof Player) {
+		Player player = (Player) sender;
+		Material type = ((ItemStack) args[1]).getType();
+		player.getWorld().getBlockAt((Location) args[0]).setType(type);
+	}
+});
+</code></pre>
+<h3 id="message-command"><a class="header" href="#message-command">Message Command</a></h3>
+<pre><code>/message &lt;target&gt; &lt;message&gt;
+</code></pre>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;target&quot;, new PlayerArgument()); //args[0]
+arguments.put(&quot;message&quot;, new GreedyStringArgument()); //args[1]
+
+CommandAPI.getInstance().register(&quot;message&quot;, arguments, (sender, args) -&gt; {
+	Player target = (Player) args[0];
+	target.sendMessage((String) args[1]);
+});
+</code></pre>
+<h3 id="using-the-chatcomponentargument"><a class="header" href="#using-the-chatcomponentargument">Using the ChatComponentArgument:</a></h3>
+<p>Send a message with raw JSON:</p>
+<pre><code>/raw &lt;target&gt; &lt;raw message&gt;
+</code></pre>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;target&quot;, new PlayerArgument()); //args[0]
+arguments.put(&quot;rawText&quot;, new ChatComponentArgument()); //args[1]
+
+CommandAPI.getInstance().register(&quot;raw&quot;, arguments, (sender, args) -&gt; {
+    Player target = (Player) args[0];
+    //Retrieve BaseComponent[] and send to player via spigot() method
+    BaseComponent[] arr = (BaseComponent[]) args[1];
+    target.spigot().sendMessage(arr);
+});
+</code></pre>
+<p>Create a book with raw JSON:</p>
+<pre><code>/makebook &lt;contents&gt;
+</code></pre>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;contents&quot;, new ChatComponentArgument());
+CommandAPI.getInstance().register(&quot;makebook&quot;, arguments, (sender, args) -&gt; {
+	if (sender instanceof Player) {
+		Player player = (Player) sender;
+		BaseComponent[] arr = (BaseComponent[]) args[0];
+		
+        //Create book
+		ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
+		BookMeta meta = (BookMeta) is.getItemMeta(); 
+		meta.spigot().addPage(arr);
+		is.setItemMeta(meta);
+		
+        //Give player the book
+		player.getInventory().addItem(is);
+	}
+});
+</code></pre>
+<h3 id="dynamicsuggestedstring-example"><a class="header" href="#dynamicsuggestedstring-example">DynamicSuggestedString Example</a></h3>
+<p>For example, say we have a plugin that keeps track of griefers. If a moderator of the server notices a griefer, they add the griefer to their &quot;watch list&quot;. If they notice that player griefing again, they can ban that player easily as their name is suggested in the <code>/bangriefer</code> command:</p>
+<pre><code class="language-java">/addgriefer &lt;player&gt; - add griefer to watch list
+/bangriefer &lt;player&gt; - ban griefer from watch list
+</code></pre>
+<pre><code class="language-java">public class DynSugExample extends JavaPlugin {
+
+	//List of griefers
+	private List&lt;Player&gt; griefers;
+
+	@Override
+	public void onEnable() {
+
+		//Initialise list
+		griefers = new ArrayList&lt;&gt;();
+
+		//Create arguments
+		LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+		
+		//Argument to store a player
+		arguments.put(&quot;griefer&quot;, new EntitySelectorArgument(EntitySelector.ONE_PLAYER));
+		
+		// /addgriefer command adds the player to the list
+		CommandAPI.getInstance().register(&quot;addgriefer&quot;, arguments, (sender, args) -&gt; {
+			griefers.add((Player) args[0]);
+		});
+		
+		//Reset arguments and create a DynamicSuggestedStringArgument
+		arguments = new LinkedHashMap&lt;&gt;();
+		arguments.put(&quot;griefer&quot;, new DynamicSuggestedStringArgument(() -&gt; {
+			//Convert the griefers list into a String array with the player's names
+			String[] array = new String[griefers.size()];
+			for (int i = 0; i &lt; griefers.size(); i++) {
+				Player player = griefers.get(i);
+				array[i] = player.getName();
+			}
+			
+			//Return the String[]
+			return array;
+		}));
+			
+		// /bangriefer command bans the player.
+		CommandAPI.getInstance().register(&quot;bangriefer&quot;, arguments, (sender, args) -&gt; {
+			Bukkit.getBanList(BanList.Type.NAME).addBan((String) args[0], &quot;Being a griefer&quot;, new Date(), sender.getName());
+		});
+		
+	}
+}
+</code></pre>
+<h3 id="functions"><a class="header" href="#functions">Functions</a></h3>
+<h4 id="registering-commands-for-minecraft-function-support"><a class="header" href="#registering-commands-for-minecraft-function-support">Registering commands for Minecraft function support</a></h4>
+<pre><code>/killall - kills all players on the server
+/fly - enables flight
+</code></pre>
+<p><code>JavaPlugin</code> file:</p>
+<pre><code class="language-java">public class Main extends JavaPlugin {
+
+    //Commands which will be used in Minecraft functions
+	@Override
+	public void onLoad() {
+		LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+		CommandAPI.getInstance().register(&quot;killall&quot;, arguments, (sender, args) -&gt; {
+            //Lambda to kill all enemies in all worlds
+        	Bukkit.getWorlds().forEach(w -&gt; w.getLivingEntities().forEach(e -&gt; e.setHealth(0)));
+        });
+	}
+    
+    //All other commands
+    @Override
+    public void onEnable() {
+        //Other commands
+        LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+		CommandAPI.getInstance().register(&quot;fly&quot;, arguments, (sender, args) -&gt; {
+			if(sender instanceof Player) {
+				((Player) sender).setFlying(true);
+			}
+		});
+    }
+    
+}
+</code></pre>
+<p><strong>Example function hierarchy:</strong></p>
+<pre><code>server/
+├── world/
+│   ├── advancements/
+│   ├── data/
+│   ├── datapacks/
+│   │   └── bukkit/
+│   │       ├── pack.mcmeta
+│   │       └── data/
+│   │           └── mycustomnamespace/
+│   │               ├── functions/
+│   │               │   ├── test.mcfunction
+│   │               │   └── test2.mcfunction
+│   │               └── tags/
+│   │                   └── functions/
+│   │                       └── mytag.json
+│   └── ...
+├── world_nether/
+├── world_the_end/
+├── ...
+└── spigot.jar
+</code></pre>
+<p><strong>test.mcfunction</strong></p>
+<p>Note how the <em>/killall</em> command works here. Trying to register <em>/fly</em> will cause an error as it was loaded in the <code>onEnable()</code> method instead of the <code>onLoad()</code> method.</p>
+<pre><code>killall
+say Killed all living entities on the server
+</code></pre>
+<p><strong>mytag.json</strong></p>
+<pre><code class="language-json">{
+    &quot;values&quot;: [
+    &quot;mycustomnamespace:test&quot;,
+    &quot;mycustomnamespace:test2&quot;
+    ]
+}
+</code></pre>
+<p><strong>In-game command usage</strong></p>
+<pre><code>/function mycustomnamespace:test
+/function #mycustomnamespace:mytag
+</code></pre>
+<h4 id="using-a-pre-existing-function-in-your-code"><a class="header" href="#using-a-pre-existing-function-in-your-code">Using a pre-existing function in your code</a></h4>
+<pre><code>/runfunction &lt;function/tag&gt;
+</code></pre>
+<pre><code class="language-java">LinkedHashMap&lt;String, Argument&gt; arguments = new LinkedHashMap&lt;&gt;();
+arguments.put(&quot;functionarg&quot;, new FunctionArgument());
+CommandAPI.getInstance().register(&quot;runfunction&quot;, arguments, (sender, args) -&gt; {
+    FunctionWrapper[] func = (FunctionWrapper[]) args[0];
+    //Run all functions in the FunctionWrapper[]
+    for(FunctionWrapper function : func) {
+        function.run();
+    }
+});
+</code></pre>
+<h3 id="converter"><a class="header" href="#converter">Converter</a></h3>
+<p>Given a plugin's <code>plugin.yml</code> file:</p>
+<pre><code class="language-yaml">name: myPlugin
+main: some.random.package.Main
+loadbefore: [CommandAPI]
+version: 1.0
+commands:
+  gmc:
+    aliases: gm1
+  gms:
+  i:
+    permission: item.permission
+</code></pre>
+<p>Running the converter on the plugin name produces:</p>
+<pre><code class="language-java">//Convert all commands declared in myPlugin:
+//Creates a command /gmc, /gm1, /gms and /i
+Converter.convert(Bukkit.getPluginManager().getPlugin(&quot;myPlugin&quot;));
+</code></pre>
+<h2 id="faq"><a class="header" href="#faq">FAQ</a></h2>
+<h3 id="why-does-the-playerargument-only-produce-one-player-when-a-is-an-option"><a class="header" href="#why-does-the-playerargument-only-produce-one-player-when-a-is-an-option">Why does the PlayerArgument only produce one player when @a is an option?</a></h3>
+<p><strong>A:</strong> Simplicity. The old command system which involved using <code>Bukkit.getPlayer()</code> and parsing a username only produces one player. To make it as simple to use, this was the best option. Alternatively, you can use the new <code>EntitySelectorArgument</code> to select multiple players.</p>
+<h3 id="what-about-the-other-argument-types"><a class="header" href="#what-about-the-other-argument-types">What about the other argument types?</a></h3>
+<p><strong>Q:</strong> There's loads more argument types, including NBT tags, rotational position (i.e. pitch/yaw), inventory slots, scoreboards.... why aren't they implemented?</p>
+<p><strong>A:</strong> Again, for simplicity. NBT tags would require lots of NMS code to convert (and isn't majorly supported by Bukkit on its own). Rotational position isn't a majorly important argument - floating point arguments work fine. I don't really know much about how scoreboards work (if someone wants to help, I'm open to collaboration)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="v1.6.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa-solid fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="v1.8.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="v1.6.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="v1.8.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa-solid fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" charset="utf-8"></script>
+        <script src="mark.min.js" charset="utf-8"></script>
+        <script src="searcher.js" charset="utf-8"></script>
+        <script src="clipboard.min.js" charset="utf-8"></script>
+        <script src="highlight.js" charset="utf-8"></script>
+        <script src="book.js" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

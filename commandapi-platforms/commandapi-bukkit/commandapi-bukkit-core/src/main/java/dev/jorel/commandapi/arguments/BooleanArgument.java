@@ -26,6 +26,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 /**
  * An argument that represents primitive Java booleans
+ * 
+ * @since 1.1
  *
  * @apiNote Returns a {@link boolean}
  */

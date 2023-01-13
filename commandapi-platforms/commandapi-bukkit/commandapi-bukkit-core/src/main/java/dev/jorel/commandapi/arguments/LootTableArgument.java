@@ -28,6 +28,8 @@ import org.bukkit.loot.LootTable;
 
 /**
  * An argument that represents the Bukkit LootTable object
+ * 
+ * @since 2.1
  */
 public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements CustomProvidedArgument, InitialParseExceptionArgument<Object, Argument<LootTable>> {
 	

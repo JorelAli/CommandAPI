@@ -30,6 +30,8 @@ import java.util.function.Function;
 /**
  * An argument that accepts a list of objects
  * 
+ * @since 8.6.0
+ * 
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")

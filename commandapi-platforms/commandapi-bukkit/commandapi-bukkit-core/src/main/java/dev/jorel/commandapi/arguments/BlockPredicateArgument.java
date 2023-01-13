@@ -30,6 +30,8 @@ import java.util.function.Predicate;
 /**
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
  * 
+ * @since 4.0
+ * 
  * @apiNote Returns a {@link Predicate}{@code <}{@link Block}{@code >} object
  */
 @SuppressWarnings("rawtypes")

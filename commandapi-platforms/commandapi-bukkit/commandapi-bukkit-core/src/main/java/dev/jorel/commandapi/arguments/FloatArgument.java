@@ -27,6 +27,8 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
  * An argument that represents primitive Java floats
+ * 
+ * @since 1.1
  */
 public class FloatArgument extends SafeOverrideableArgument<Float, Float> implements InitialParseExceptionArgument<Float, Argument<Float>> {
 	/**

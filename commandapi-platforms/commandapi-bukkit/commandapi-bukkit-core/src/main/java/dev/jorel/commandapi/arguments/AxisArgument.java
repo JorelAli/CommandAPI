@@ -30,6 +30,8 @@ import java.util.EnumSet;
 /**
  * An argument that represents x, y and z axes as an EnumSet of Axis
  * 
+ * @since 3.0
+ * 
  * @apiNote Returns a {@link EnumSet}{@code <}{@link Axis}{@code >} object
  */
 @SuppressWarnings("rawtypes")

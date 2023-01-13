@@ -29,6 +29,8 @@ import java.util.function.Predicate;
 
 /**
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
+ * 
+ * @since 4.0
  */
 @SuppressWarnings("rawtypes")
 public class ItemStackPredicateArgument extends Argument<Predicate> implements InitialParseExceptionArgument<Predicate, Argument<Predicate>>{

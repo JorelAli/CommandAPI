@@ -26,6 +26,8 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 
 /**
  * An argument that represents multiple LiteralArguments
+ * 
+ * @since 4.1
  */
 public class MultiLiteralArgument extends Argument<String> implements MultiLiteral<Argument<String>> {
 	private final String[] literals;

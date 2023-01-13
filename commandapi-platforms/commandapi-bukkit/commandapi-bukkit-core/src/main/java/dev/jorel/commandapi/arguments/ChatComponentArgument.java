@@ -29,6 +29,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 /**
  * An argument that represents raw JSON text
  * 
+ * @since 1.5
+ * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
 public class ChatComponentArgument extends Argument<BaseComponent[]> implements InitialParseExceptionArgument<Object, Argument<BaseComponent[]>> {

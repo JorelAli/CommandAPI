@@ -27,6 +27,8 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
  * An argument that represents primitive Java ints
+ * 
+ * @since 1.1
  */
 public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> implements InitialParseExceptionArgument<Integer, Argument<Integer>> {
 	private IntegerArgument(String nodeName, IntegerArgumentType type) {

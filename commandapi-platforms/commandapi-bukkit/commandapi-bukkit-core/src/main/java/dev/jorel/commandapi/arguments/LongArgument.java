@@ -27,6 +27,8 @@ import dev.jorel.commandapi.exceptions.InvalidRangeException;
 
 /**
  * An argument that represents primitive Java longs
+ * 
+ * @since 3.0
  */
 public class LongArgument extends SafeOverrideableArgument<Long, Long> implements InitialParseExceptionArgument<Long, Argument<Long>> {
 

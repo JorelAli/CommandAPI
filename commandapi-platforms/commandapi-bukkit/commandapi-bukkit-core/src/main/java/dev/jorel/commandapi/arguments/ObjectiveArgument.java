@@ -27,6 +27,8 @@ import org.bukkit.scoreboard.Objective;
 
 /**
  * An argument that represents the name of a scoreboard objective
+ * 
+ * @since 3.0
  */
 public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective> {
 

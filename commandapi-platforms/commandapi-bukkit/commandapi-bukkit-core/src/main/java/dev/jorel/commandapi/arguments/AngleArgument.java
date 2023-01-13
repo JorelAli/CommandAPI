@@ -31,6 +31,8 @@ import dev.jorel.commandapi.CommandAPIBukkit;
  * -180.0. Tilde notation can be used to specify a rotation relative to the
  * executor's yaw angle.
  * 
+ * @since 5.0
+ * 
  * @apiNote Returns a {@link float}
  */
 public class AngleArgument extends SafeOverrideableArgument<Float, Float> implements InitialParseExceptionArgument<Object, Argument<Float>> {

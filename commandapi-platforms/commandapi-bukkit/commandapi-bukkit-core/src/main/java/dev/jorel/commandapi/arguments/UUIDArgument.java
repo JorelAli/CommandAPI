@@ -28,6 +28,8 @@ import java.util.UUID;
 
 /**
  * An argument that represents a UUID
+ * 
+ * @since 4.0
  */
 public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> implements InitialParseExceptionArgument<UUID, Argument<UUID>> {
 	

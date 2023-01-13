@@ -27,6 +27,8 @@ import org.bukkit.OfflinePlayer;
 
 /**
  * An argument that represents the Bukkit Player object
+ * 
+ * @since 6.0.0
  */
 public class OfflinePlayerArgument extends SafeOverrideableArgument<OfflinePlayer, OfflinePlayer> implements InitialParseExceptionArgument<Object, Argument<OfflinePlayer>> {
 
