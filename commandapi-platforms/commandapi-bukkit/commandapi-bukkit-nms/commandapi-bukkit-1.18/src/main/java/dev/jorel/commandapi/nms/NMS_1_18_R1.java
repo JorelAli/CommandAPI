@@ -38,8 +38,8 @@ import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.*;
-import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
@@ -53,12 +53,14 @@ import net.minecraft.commands.arguments.coordinates.Vec2Argument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.FunctionArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -128,27 +130,39 @@ import java.util.function.ToIntFunction;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "sourceEntity", ofType = Optional.class)
+@RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public class NMS_1_18_R1 extends NMS_Common {
 
-	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
+	private static final VarHandle ItemInput_tag;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		if (Bukkit.getServer() instanceof CraftServer server) {
+			MINECRAFT_SERVER = server.getServer();
+		} else {
+			MINECRAFT_SERVER = null;
+		}
+
 		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
+		VarHandle ii_t = null;
 		try {
 			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
 					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
 					.findVarHandle(EntityPositionSource.class, "d", Optional.class);
+			ii_t = MethodHandles.privateLookupIn(ItemInput.class, MethodHandles.lookup())
+				.findVarHandle(ItemInput.class, "c", CompoundTag.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 		SimpleHelpMap_helpTopics = shm_ht;
 		EntityPositionSource_sourceEntity = eps_se;
+		ItemInput_tag = ii_t;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -258,10 +272,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
-	@SuppressWarnings("removal")
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
 	@Override
@@ -382,7 +395,23 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	@Override
 	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return CraftItemStack.asBukkitCopy(ItemArgument.getItem(cmdCtx, key).createItemStack(1, false));
+		ItemInput input = ItemArgument.getItem(cmdCtx, key);
+
+		// Create the basic ItemStack with an amount of 1
+		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
+
+		// Try and find the amount from the CompoundTag (if present)
+		final CompoundTag tag = (CompoundTag) ItemInput_tag.get(input);
+		if(tag != null) {
+			// The tag has some extra metadata we need! Get the Count (amount)
+			// and create the ItemStack with the correct metadata
+			int count = (int) tag.getByte("Count");
+			itemWithMaybeTag = input.createItemStack(count == 0 ? 1 : count, false);
+		}
+
+		org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
+		result.setItemMeta(CraftItemStack.getItemMeta(itemWithMaybeTag));
+		return result;
 	}
 
 	@Override
@@ -406,7 +435,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	@Override
 	public Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, key);
+		BlockPos blockPos = BlockPosArgument.getSpawnablePos(cmdCtx, key);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 

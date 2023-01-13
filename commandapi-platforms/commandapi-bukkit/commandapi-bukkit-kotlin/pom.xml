@@ -12,10 +12,6 @@
 
 	<artifactId>commandapi-bukkit-kotlin</artifactId>
 
-	<properties>
-		<kotlin.version>1.7.20</kotlin.version>
-	</properties>
-
 	<build>
 		<sourceDirectory>src/main/kotlin</sourceDirectory>
 		<plugins>

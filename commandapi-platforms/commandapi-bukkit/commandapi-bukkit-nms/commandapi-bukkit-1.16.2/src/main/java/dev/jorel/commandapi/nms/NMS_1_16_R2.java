@@ -12,6 +12,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -61,105 +62,6 @@ import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
 
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.Message;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
-
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.preprocessor.Differs;
-import dev.jorel.commandapi.preprocessor.NMSMeta;
-import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
-import dev.jorel.commandapi.wrappers.FloatRange;
-import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.IntegerRange;
-import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.MathOperation;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.Rotation;
-import dev.jorel.commandapi.wrappers.ScoreboardSlot;
-import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.server.v1_16_R2.Advancement;
-import net.minecraft.server.v1_16_R2.ArgumentAngle;
-import net.minecraft.server.v1_16_R2.ArgumentBlockPredicate;
-import net.minecraft.server.v1_16_R2.ArgumentChat;
-import net.minecraft.server.v1_16_R2.ArgumentChatComponent;
-import net.minecraft.server.v1_16_R2.ArgumentChatFormat;
-import net.minecraft.server.v1_16_R2.ArgumentCriterionValue;
-import net.minecraft.server.v1_16_R2.ArgumentDimension;
-import net.minecraft.server.v1_16_R2.ArgumentEnchantment;
-import net.minecraft.server.v1_16_R2.ArgumentEntity;
-import net.minecraft.server.v1_16_R2.ArgumentEntitySummon;
-import net.minecraft.server.v1_16_R2.ArgumentItemPredicate;
-import net.minecraft.server.v1_16_R2.ArgumentItemStack;
-import net.minecraft.server.v1_16_R2.ArgumentMathOperation;
-import net.minecraft.server.v1_16_R2.ArgumentMinecraftKeyRegistered;
-import net.minecraft.server.v1_16_R2.ArgumentMobEffect;
-import net.minecraft.server.v1_16_R2.ArgumentNBTTag;
-import net.minecraft.server.v1_16_R2.ArgumentParticle;
-import net.minecraft.server.v1_16_R2.ArgumentPosition;
-import net.minecraft.server.v1_16_R2.ArgumentProfile;
-import net.minecraft.server.v1_16_R2.ArgumentRegistry;
-import net.minecraft.server.v1_16_R2.ArgumentRotation;
-import net.minecraft.server.v1_16_R2.ArgumentRotationAxis;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardCriteria;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardObjective;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardSlot;
-import net.minecraft.server.v1_16_R2.ArgumentScoreboardTeam;
-import net.minecraft.server.v1_16_R2.ArgumentScoreholder;
-import net.minecraft.server.v1_16_R2.ArgumentTag;
-import net.minecraft.server.v1_16_R2.ArgumentTile;
-import net.minecraft.server.v1_16_R2.ArgumentTime;
-import net.minecraft.server.v1_16_R2.ArgumentUUID;
-import net.minecraft.server.v1_16_R2.ArgumentVec2;
-import net.minecraft.server.v1_16_R2.ArgumentVec2I;
-import net.minecraft.server.v1_16_R2.ArgumentVec3;
-import net.minecraft.server.v1_16_R2.BlockPosition;
-import net.minecraft.server.v1_16_R2.BlockPosition2D;
-import net.minecraft.server.v1_16_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_16_R2.CompletionProviders;
-import net.minecraft.server.v1_16_R2.CriterionConditionValue;
-import net.minecraft.server.v1_16_R2.CustomFunction;
-import net.minecraft.server.v1_16_R2.CustomFunctionData;
-import net.minecraft.server.v1_16_R2.CustomFunctionManager;
-import net.minecraft.server.v1_16_R2.DataPackResources;
-import net.minecraft.server.v1_16_R2.Entity;
-import net.minecraft.server.v1_16_R2.EntityPlayer;
-import net.minecraft.server.v1_16_R2.EntitySelector;
-import net.minecraft.server.v1_16_R2.EntityTypes;
-import net.minecraft.server.v1_16_R2.EnumDirection.EnumAxis;
-import net.minecraft.server.v1_16_R2.IBlockData;
-import net.minecraft.server.v1_16_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R2.ICompletionProvider;
-import net.minecraft.server.v1_16_R2.IRecipe;
-import net.minecraft.server.v1_16_R2.IRegistry;
-import net.minecraft.server.v1_16_R2.IReloadableResourceManager;
-import net.minecraft.server.v1_16_R2.ItemStack;
-import net.minecraft.server.v1_16_R2.MinecraftKey;
-import net.minecraft.server.v1_16_R2.MinecraftServer;
-import net.minecraft.server.v1_16_R2.ParticleParam;
-import net.minecraft.server.v1_16_R2.ParticleParamBlock;
-import net.minecraft.server.v1_16_R2.ParticleParamItem;
-import net.minecraft.server.v1_16_R2.ParticleParamRedstone;
-import net.minecraft.server.v1_16_R2.ShapeDetectorBlock;
-import net.minecraft.server.v1_16_R2.SystemUtils;
-import net.minecraft.server.v1_16_R2.Unit;
-import net.minecraft.server.v1_16_R2.Vec2F;
-import net.minecraft.server.v1_16_R2.Vec3D;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -172,7 +74,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
-// TODO: Cleanup merged imports
 
 /**
  * NMS implementation for Minecraft 1.16.2 and 1.16.3
@@ -186,23 +87,32 @@ import java.util.function.ToIntFunction;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
+@RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
-	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle DataPackResources_b;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
 	private static final VarHandle ParticleParamItem_c;
 	private static final VarHandle ParticleParamRedstone_f;
+	private static final VarHandle ArgumentPredicateItemStack_c;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		if(Bukkit.getServer() instanceof CraftServer server) {
+			MINECRAFT_SERVER = server.getServer();
+		} else {
+			MINECRAFT_SERVER = null;
+		}
+
 		VarHandle dpr_b = null;
 		VarHandle shm_ht = null;
 		VarHandle ppb_c = null;
 		VarHandle ppi_c = null;
 		VarHandle ppr_g = null;
+		VarHandle apis_c = null;
 		try {
 			dpr_b = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup())
 					.findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);
@@ -214,6 +124,8 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 					.findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
 			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup())
 					.findVarHandle(ParticleParamRedstone.class, "f", float.class);
+			apis_c = MethodHandles.privateLookupIn(ArgumentPredicateItemStack.class, MethodHandles.lookup())
+				.findVarHandle(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -222,6 +134,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		ParticleParamBlock_c = ppb_c;
 		ParticleParamItem_c = ppi_c;
 		ParticleParamRedstone_f = ppr_g;
+		ArgumentPredicateItemStack_c = apis_c;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -672,7 +585,23 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, key).a(1, false));
+		ArgumentPredicateItemStack input = ArgumentItemStack.a(cmdCtx, key);
+
+		// Create the basic ItemStack with an amount of 1
+		ItemStack itemWithMaybeTag = input.a(1, false);
+
+		// Try and find the amount from the CompoundTag (if present)
+		final NBTTagCompound tag = (NBTTagCompound) ArgumentPredicateItemStack_c.get(input);
+		if(tag != null) {
+			// The tag has some extra metadata we need! Get the Count (amount)
+			// and create the ItemStack with the correct metadata
+			int count = (int) tag.getByte("Count");
+			itemWithMaybeTag = input.a(count == 0 ? 1 : count, false);
+		}
+
+		org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
+		result.setItemMeta(CraftItemStack.getItemMeta(itemWithMaybeTag));
+		return result;
 	}
 
 	@Override
@@ -695,7 +624,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, key);
+		BlockPosition blockPos = ArgumentPosition.b(cmdCtx, key);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 

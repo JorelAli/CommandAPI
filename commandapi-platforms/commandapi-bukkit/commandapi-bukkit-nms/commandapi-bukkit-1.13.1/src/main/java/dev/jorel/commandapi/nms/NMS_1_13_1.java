@@ -78,23 +78,32 @@ import java.util.function.ToIntFunction;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
+@RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
-	protected static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
+	protected static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle LootTableRegistry_e;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
 	private static final VarHandle ParticleParamItem_c;
 	private static final VarHandle ParticleParamRedstone_f;
+	private static final VarHandle ArgumentPredicateItemStack_c;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
+		if(Bukkit.getServer() instanceof CraftServer server) {
+			MINECRAFT_SERVER = server.getServer();
+		} else {
+			MINECRAFT_SERVER = null;
+		}
+
 		VarHandle ltr_e = null;
 		VarHandle shm_ht = null;
 		VarHandle ppb_c = null;
 		VarHandle ppi_c = null;
 		VarHandle ppr_g = null;
+		VarHandle apis_c = null;
 		try {
 			ltr_e = MethodHandles.privateLookupIn(LootTableRegistry.class, MethodHandles.lookup())
 					.findVarHandle(LootTableRegistry.class, "e", Map.class);
@@ -106,6 +115,8 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 					.findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
 			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup())
 					.findVarHandle(ParticleParamRedstone.class, "f", float.class);
+			apis_c = MethodHandles.privateLookupIn(ArgumentPredicateItemStack.class, MethodHandles.lookup())
+				.findVarHandle(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -114,6 +125,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		ParticleParamBlock_c = ppb_c;
 		ParticleParamItem_c = ppi_c;
 		ParticleParamRedstone_f = ppr_g;
+		ArgumentPredicateItemStack_c = apis_c;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -582,7 +594,23 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return CraftItemStack.asBukkitCopy(ArgumentItemStack.a(cmdCtx, key).a(1, false));
+		ArgumentPredicateItemStack input = ArgumentItemStack.a(cmdCtx, key);
+
+		// Create the basic ItemStack with an amount of 1
+		ItemStack itemWithMaybeTag = input.a(1, false);
+
+		// Try and find the amount from the CompoundTag (if present)
+		final NBTTagCompound tag = (NBTTagCompound) ArgumentPredicateItemStack_c.get(input);
+		if(tag != null) {
+			// The tag has some extra metadata we need! Get the Count (amount)
+			// and create the ItemStack with the correct metadata
+			int count = (int) tag.getByte("Count");
+			itemWithMaybeTag = input.a(count == 0 ? 1 : count, false);
+		}
+
+		org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
+		result.setItemMeta(CraftItemStack.getItemMeta(itemWithMaybeTag));
+		return result;
 	}
 
 	@Override
@@ -606,7 +634,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		BlockPosition blockPos = ArgumentPosition.a(cmdCtx, key);
+		BlockPosition blockPos = ArgumentPosition.b(cmdCtx, key);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 

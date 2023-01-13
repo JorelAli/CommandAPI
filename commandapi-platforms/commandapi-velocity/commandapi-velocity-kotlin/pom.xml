@@ -13,10 +13,6 @@
 	<artifactId>commandapi-kotlin-velocity</artifactId>
 	<packaging>jar</packaging>
 
-	<properties>
-		<kotlin.version>1.7.20</kotlin.version>
-	</properties>
-
 	<build>
 		<sourceDirectory>src/main/kotlin</sourceDirectory>
 		<plugins>
