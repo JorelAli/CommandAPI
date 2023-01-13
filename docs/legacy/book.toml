@@ -1,0 +1,10 @@
+[book]
+authors = ["JorelAli"]
+multilingual = false
+src = "src"
+title = "CommandAPI Documentation v9.0.0"
+
+[output.html]
+git-repository-url = "https://github.com/JorelAli/CommandAPI"
+default-theme = "rust"
+no-section-label = true
