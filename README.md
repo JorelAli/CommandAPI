@@ -370,6 +370,46 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.0.0</b></td>
+            <td valign="top">??? 2023</td>
+            <td valign="top">
+                <b>New features:</b>
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/360 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/162, https://github.com/JorelAli/CommandAPI/issues/387, https://github.com/JorelAli/CommandAPI/pull/393 Added optional arguments</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
+                    <li>Reworked the implementation of <code>ItemArgument</code>, so the <code>ItemStack</code> count is correctly reflected and <code>ItemMeta</code> is properly assigned</li>
+                </ul>
+                <b>Bug fixes:</b>
+                <ul>
+                    <li>Fixed <code>commandapi-preprocessor</code> appearing in the plugin and shaded jar file</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/390 Fixed <code>.executesNative()</code>'s CommandSender's <code>getLocation()</code> method returning the wrong pitch and yaw</li>
+                    <li>Fixed tags showing up in the <code>BiomeArgument</code> when they shouldn't have been doing so</li>
+                    <li>Fixed <code>LocationArgument</code> with <code>BLOCK_POSITION</code> not returning locations in unloaded chunks</li>
+                </ul>
+                <b>Documentation changes:</b>
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/384 Fixed various particle data not being documented for the <code>ParticleArgument</code> documentation page</li>
+                    <li>Fixed broken links in the documentation (using <a href="https://github.com/Michael-F-Bryan/mdbook-linkcheck">Michael-F-Bryan/mdbook-linkcheck</a>)</li>
+                    <li>Refactored documentation argument page names for consistency</li>
+                </ul>
+                <b>Other changes:</b>
+                <ul>
+                    <li>Removed all previously deprecated constructors, classes and methods</li>
+                    <li>Completely refactored the entire CommandAPI project to help support other platforms</li>
+                    <li>Added a live dev build of the documentation at <a href="https://commandapi-live-docs.jorel.dev/">commandapi-live-docs.jorel.dev</a></li>
+                </ul>
+                <b>GitHub Actions changes:</b>
+                <ul>
+                    <li>Fixed NodeJS 12 deprecation warnings</li>
+                    <li>Added markdownlint to verify that the documentation adheres to suitable Markdown standards</li>
+                    <li>Fixed building the CommandAPI example projects not failing if they failed to compile</li>
+                    <li>Added the CommandAPI documentation to GitHub Actions</li>
+                    <li>Added deployment of snapshot builds to GitHub Actions</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>8.7.3</b></td>
             <td valign="top">January 2023</td>
             <td valign="top">
