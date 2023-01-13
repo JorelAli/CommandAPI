@@ -97,8 +97,8 @@ This project provides an API to help Bukkit/Spigot developers use the Minecraft 
 Still not convinced? In addition to all of the above, the CommandAPI also provides:
 
 - **Built-in command converter** - Convert other plugin commands into `/execute`-compatible ones - no code required!
-- **Compile-time annotation framework** - Don't like writing lots of code with builders? You don't have to!
 - **Tree-structure command registration** - Like Brigadier's code format? We've got you covered with `CommandTree`
+- **Kotlin DSL** - Prefer writing plugins in Kotlin? The CommandAPI has an optional Kotlin DSL just for you
 - **Powerful suggestion generation** - Generate new suggestions for each argument, or add to existing suggestions
 - **Safe suggestion generation** - The CommandAPI offers compile-time type safety for specific arguments
 - **Precise permission support** - Apply permissions to specific arguments - you need perms to even _see_ the argument
