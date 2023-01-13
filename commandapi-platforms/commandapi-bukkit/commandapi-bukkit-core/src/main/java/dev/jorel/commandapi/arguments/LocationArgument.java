@@ -27,6 +27,8 @@ import org.bukkit.Location;
 
 /**
  * An argument that represents the Bukkit {@link Location} object
+ * 
+ * @since 1.1
  * @apiNote Returns a {@link Location} object
  */
 public class LocationArgument extends SafeOverrideableArgument<Location, Location> {

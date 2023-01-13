@@ -26,6 +26,8 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 
 /**
  * A pseudo-argument representing a single literal string
+ * 
+ * @since 1.3
  */
 public class LiteralArgument extends Argument<String> implements Literal<Argument<String>> {
 	private final String literal;

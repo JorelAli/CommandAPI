@@ -30,6 +30,8 @@ import java.util.function.Function;
 /**
  * An argument that represents the Bukkit Biome object
  * 
+ * @since 3.0
+ * 
  * @apiNote Returns a {@link Biome} object
  */
 public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implements CustomProvidedArgument {

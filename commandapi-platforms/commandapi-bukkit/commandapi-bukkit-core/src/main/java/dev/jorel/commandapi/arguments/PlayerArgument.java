@@ -27,6 +27,8 @@ import org.bukkit.entity.Player;
 
 /**
  * An argument that represents the Bukkit Player object
+ * 
+ * @since 1.1
  */
 public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 

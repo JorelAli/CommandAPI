@@ -26,6 +26,8 @@ import dev.jorel.commandapi.CommandAPIBukkit;
 
 /**
  * An argument that represents the name of an objective criteria
+ * 
+ * @since 3.0
  */
 public class ObjectiveCriteriaArgument extends Argument<String> {
 

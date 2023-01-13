@@ -27,6 +27,8 @@ import org.bukkit.scoreboard.Team;
 
 /**
  * An argument that represents the name of a scoreboard Team
+ * 
+ * @since 3.0
  */
 public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 

@@ -29,6 +29,8 @@ import dev.jorel.commandapi.CommandAPIBukkit;
 
 /**
  * An argument that represents the Bukkit World object
+ * 
+ * @since 8.6.0
  */
 public class WorldArgument extends SafeOverrideableArgument<World, World> {
 

@@ -27,6 +27,8 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * An argument that represents the Bukkit ItemStack object
+ * 
+ * @since 1.1
  */
 public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack> {
 

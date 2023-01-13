@@ -26,6 +26,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 /**
  * An argument that represents text, encased in quotes
+ * 
+ * @since 1.2
  */
 public class TextArgument extends Argument<String> {
 	/**

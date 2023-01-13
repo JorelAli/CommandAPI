@@ -28,6 +28,8 @@ import java.util.Collection;
 
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
+ * 
+ * @since 3.0
  */
 public class ScoreHolderArgument {
 

@@ -27,6 +27,8 @@ import org.bukkit.potion.PotionEffectType;
 
 /**
  * An argument that represents the Bukkit PotionEffectType object
+ * 
+ * @since 1.1
  */
 public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectType, PotionEffectType> {
 

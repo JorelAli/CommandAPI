@@ -27,6 +27,8 @@ import dev.jorel.commandapi.CommandAPI;
 
 /**
  * An argument that represents an NBTContainer from the NBT API
+ * 
+ * @since 3.0
  */
 public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
 

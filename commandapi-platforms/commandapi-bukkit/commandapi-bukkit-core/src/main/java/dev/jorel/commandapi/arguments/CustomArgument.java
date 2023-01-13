@@ -37,6 +37,8 @@ import org.bukkit.command.CommandSender;
  * @param <B> the return type of the underlying base argument {@code base}. For
  *            example, this would be {@code Integer} for an
  *            {@link IntegerArgument}
+ * 
+ * @since 2.0
  * @apiNote Returns a {@link T} object
  */
 public class CustomArgument<T, B> extends Argument<T> {

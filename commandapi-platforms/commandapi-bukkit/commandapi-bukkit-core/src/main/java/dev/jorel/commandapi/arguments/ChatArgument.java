@@ -37,6 +37,8 @@ import java.util.Optional;
 /**
  * An argument that represents chat with entity selectors
  * 
+ * @since 3.0
+ * 
  * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
 public class ChatArgument extends Argument<BaseComponent[]> implements GreedyArgument, Previewable<ChatArgument, BaseComponent[]> {

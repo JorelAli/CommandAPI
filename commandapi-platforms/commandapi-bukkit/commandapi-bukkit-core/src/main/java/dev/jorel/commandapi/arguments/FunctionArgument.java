@@ -28,6 +28,8 @@ import org.bukkit.NamespacedKey;
 
 /**
  * An argument that represents Minecraft functions and tags
+ * 
+ * @since 1.6
  */
 public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements CustomProvidedArgument {
 

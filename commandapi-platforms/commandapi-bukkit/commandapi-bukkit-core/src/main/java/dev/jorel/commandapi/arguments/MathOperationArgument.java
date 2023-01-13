@@ -27,6 +27,8 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 
 /**
  * An argument that represents Minecraft scoreboard math operations
+ * 
+ * @since 3.0
  */
 public class MathOperationArgument extends SafeOverrideableArgument<MathOperation, MathOperation> {
 

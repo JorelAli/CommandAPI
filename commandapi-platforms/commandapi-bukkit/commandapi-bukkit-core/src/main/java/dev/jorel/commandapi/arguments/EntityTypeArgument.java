@@ -27,6 +27,8 @@ import org.bukkit.entity.EntityType;
 
 /**
  * An argument that represents the Bukkit EntityType object
+ * 
+ * @since 1.1
  */
 public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType> implements CustomProvidedArgument {
 

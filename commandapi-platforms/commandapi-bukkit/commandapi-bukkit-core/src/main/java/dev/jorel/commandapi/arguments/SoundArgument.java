@@ -29,6 +29,8 @@ import dev.jorel.commandapi.CommandAPIBukkit;
 
 /**
  * An argument that represents the Bukkit Sound object
+ * 
+ * @since 2.1
  */
 public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements CustomProvidedArgument {
 	

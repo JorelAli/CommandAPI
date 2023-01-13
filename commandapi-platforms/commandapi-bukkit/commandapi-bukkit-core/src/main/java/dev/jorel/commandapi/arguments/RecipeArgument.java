@@ -28,6 +28,8 @@ import org.bukkit.inventory.Recipe;
 
 /**
  * An argument that represents the Bukkit Recipe object
+ * 
+ * @since 2.1
  */
 public class RecipeArgument extends SafeOverrideableArgument<Recipe, Recipe> implements CustomProvidedArgument {
 

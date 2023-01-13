@@ -29,6 +29,8 @@ import java.util.function.Function;
 /**
  * An argument that accepts a list of objects
  * 
+ * @since 8.6.0
+ * 
  * @param <T> the type that this list argument generates a list of.
  */
 public class ListTextArgument<T> extends ListArgumentCommon<T> {

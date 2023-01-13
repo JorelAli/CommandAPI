@@ -128,6 +128,7 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 		return this;
 	}
 
+	@SuppressWarnings("unchecked")
 	/**
 	 * Replaces the default command suggestions provided by the server with custom
 	 * suggestions for each argument in the command, starting with the command's

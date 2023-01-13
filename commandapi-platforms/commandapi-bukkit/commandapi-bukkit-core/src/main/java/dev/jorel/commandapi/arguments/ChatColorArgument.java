@@ -30,6 +30,8 @@ import java.util.function.Function;
 /**
  * An argument that represents the Bukkit ChatColor object
  * 
+ * @since 1.1
+ * 
  * @apiNote Returns a {@link ChatColor} object
  */
 public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor> {

@@ -26,6 +26,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 /**
  * An argument that represents a simple String
+ * 
+ * @since 1.1
  */
 public class StringArgument extends Argument<String> {
 	/**
