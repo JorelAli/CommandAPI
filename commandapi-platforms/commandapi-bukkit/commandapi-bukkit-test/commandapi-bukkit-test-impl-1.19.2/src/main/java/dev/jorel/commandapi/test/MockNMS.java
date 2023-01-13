@@ -740,6 +740,10 @@ public class MockNMS extends ArgumentNMS {
 	public static Enchantment[] getEnchantments() {
 		return Enchantment.values();
 	}
+	
+	public static String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
+		throw new Error("Can't get legacy NMS PotionEffectName in this version: 1.19.2");
+	}
 
 
 }

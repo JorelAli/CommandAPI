@@ -691,6 +691,10 @@ public class MockNMS extends ArgumentNMS {
 			Enchantment.SOUL_SPEED
 		};
 	}
+	
+	public static String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
+		throw new Error("Can't get legacy NMS PotionEffectName in this version: 1.17");
+	}
 
 
 }
