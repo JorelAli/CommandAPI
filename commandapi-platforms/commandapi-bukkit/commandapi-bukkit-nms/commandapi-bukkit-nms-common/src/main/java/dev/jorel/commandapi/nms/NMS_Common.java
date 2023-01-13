@@ -605,7 +605,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final Rotation getRotation(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		Vec2 rotation = RotationArgument.getRotation(cmdCtx, key).getRotation(cmdCtx.getSource());
-		return new Rotation(rotation.x, rotation.y);
+		return new Rotation(rotation.y, rotation.x);
 	}
 
 	@Override

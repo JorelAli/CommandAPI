@@ -785,7 +785,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(cmdCtx.getSource());
-		return new Rotation(vec.i, vec.j);
+		return new Rotation(vec.j, vec.i);
 	}
 
 	@Override
