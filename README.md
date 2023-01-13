@@ -373,6 +373,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
             <td valign="top"><b>9.0.0</b></td>
             <td valign="top">??? 2023</td>
             <td valign="top">
+                <b>⚠️ This version is incompatible with with any plugin that used the CommandAPI version 8.7.x or below! (See documentation for more information)</b><br>
                 <b>New features:</b>
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/360 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
@@ -398,6 +399,8 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Removed all previously deprecated constructors, classes and methods</li>
                     <li>Completely refactored the entire CommandAPI project to help support other platforms</li>
                     <li>Added a live dev build of the documentation at <a href="https://commandapi-live-docs.jorel.dev/">commandapi-live-docs.jorel.dev</a></li>
+                    <li>Improved mobile support for the CommandAPI home page</li>
+                    <li>Added the CommandAPI's Modrinth link to the CommandAPI home page</li>
                 </ul>
                 <b>GitHub Actions changes:</b>
                 <ul>
