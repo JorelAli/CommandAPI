@@ -140,7 +140,7 @@ $$\downarrow$$
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
-        <artifactId>commandapi--bukkit-kotlin</artifactId>
+        <artifactId>commandapi-bukkit-kotlin</artifactId>
         <version>9.0.0</version>
     </dependency>
 </dependencies>
