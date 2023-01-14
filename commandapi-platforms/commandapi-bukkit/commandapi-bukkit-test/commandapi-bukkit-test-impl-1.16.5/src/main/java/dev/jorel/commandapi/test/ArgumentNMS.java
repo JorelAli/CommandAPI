@@ -53,7 +53,7 @@ import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends CommandAPIBukkit<CommandListenerWrapper> {
 
-	public final NMS<?> BASE_NMS;
+	public NMS<?> BASE_NMS;
 
 	public ArgumentNMS(NMS<?> baseNMS) {
 		this.BASE_NMS = baseNMS;
@@ -378,6 +378,11 @@ public abstract class ArgumentNMS extends CommandAPIBukkit<CommandListenerWrappe
 	@Override
 	public final Location getLocationPrecise(CommandContext cmdCtx, String str) throws CommandSyntaxException {
 		return BASE_NMS.getLocationPrecise(cmdCtx, str);
+	}
+
+	@Override
+	public LootTable getLootTable(CommandContext cmdCtx, String key) {
+		return BASE_NMS.getLootTable(cmdCtx, key);
 	}
 
 	@Override

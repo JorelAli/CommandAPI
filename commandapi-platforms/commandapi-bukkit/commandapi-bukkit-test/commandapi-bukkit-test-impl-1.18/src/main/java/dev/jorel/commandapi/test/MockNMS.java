@@ -35,7 +35,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -85,6 +84,11 @@ public class MockNMS extends ArgumentNMS {
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
+		
+		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
+		// Stub in our getMinecraftServer implementation
+		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
+		BASE_NMS = nms;
 
 		// Initialize WorldVersion (game version)
 		SharedConstants.tryDetectVersion();
@@ -718,14 +722,6 @@ public class MockNMS extends ArgumentNMS {
 			return lootTables;
 		});
 		return (T) minecraftServerMock;
-	}
-
-	@Override
-	public LootTable getLootTable(CommandContext cmdCtx, String key) {
-		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
-		// Stub in our getMinecraftServer implementation
-		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
-		return nms.getLootTable(cmdCtx, key);
 	}
 
 

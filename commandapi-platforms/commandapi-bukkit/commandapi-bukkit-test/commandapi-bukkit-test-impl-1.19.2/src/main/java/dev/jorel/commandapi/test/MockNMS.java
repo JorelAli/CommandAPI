@@ -149,6 +149,12 @@ public class MockNMS extends ArgumentNMS {
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
+		
+		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
+		// Stub in our getMinecraftServer implementation
+		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
+		BASE_NMS = nms;
+		
 		try {
 			initializeArgumentsInArgumentTypeInfos();
 
@@ -767,14 +773,6 @@ public class MockNMS extends ArgumentNMS {
 			return lootTables;
 		});
 		return (T) minecraftServerMock;
-	}
-
-	@Override
-	public LootTable getLootTable(CommandContext cmdCtx, String key) {
-		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
-		// Stub in our getMinecraftServer implementation
-		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
-		return nms.getLootTable(cmdCtx, key);
 	}
 
 
