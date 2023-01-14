@@ -1142,7 +1142,6 @@ CommandAPICommand("break")
 
 fun resultingcommandexecutor() {
 /* ANCHOR: resultingcommandexecutor */
-
 CommandAPICommand("randnum")
     .executes(ResultingCommandExecutor { _, _ ->
         Random.nextInt()
