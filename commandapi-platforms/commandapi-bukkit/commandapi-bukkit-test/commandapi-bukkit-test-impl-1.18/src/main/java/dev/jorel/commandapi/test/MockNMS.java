@@ -35,6 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,7 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.nms.NMS;
@@ -73,6 +75,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
@@ -694,6 +698,34 @@ public class MockNMS extends ArgumentNMS {
 	
 	public static String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
 		throw new Error("Can't get legacy NMS PotionEffectName in this version: 1.18");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getMinecraftServer() {
+		MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
+		// LootTableArgument
+		Mockito.when(minecraftServerMock.getLootTables()).thenAnswer(invocation -> {
+			LootTables lootTables = Mockito.mock(LootTables.class);
+			Mockito.when(lootTables.get(any(ResourceLocation.class))).thenAnswer(i -> {
+				if(BuiltInLootTables.all().contains(i.getArgument(0))) {
+					return net.minecraft.world.level.storage.loot.LootTable.EMPTY;
+				} else {
+					return null;
+				}
+			});
+			Mockito.when(lootTables.getIds()).thenAnswer(i -> BuiltInLootTables.all());
+			return lootTables;
+		});
+		return (T) minecraftServerMock;
+	}
+
+	@Override
+	public LootTable getLootTable(CommandContext cmdCtx, String key) {
+		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
+		// Stub in our getMinecraftServer implementation
+		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
+		return nms.getLootTable(cmdCtx, key);
 	}
 
 

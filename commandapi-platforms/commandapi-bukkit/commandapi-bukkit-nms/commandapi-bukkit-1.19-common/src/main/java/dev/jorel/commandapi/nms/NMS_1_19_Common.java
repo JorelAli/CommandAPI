@@ -189,7 +189,6 @@ import net.minecraft.world.phys.Vec3;
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
-	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 	private static final VarHandle ItemInput_tag;
@@ -204,7 +203,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	// runtime
 	static {
 		if (Bukkit.getServer() instanceof CraftServer server) {
-			MINECRAFT_SERVER = server.getServer();
 			// Construct the command build context to use for all commands - I presume this
 			// lets you decide what happens when a tag isn't present by specifying the
 			// MissingTagAccessPolicy. This policy has three options: RETURN_EMPTY,
@@ -214,7 +212,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			COMMAND_BUILD_CONTEXT = new CommandBuildContext(RegistryAccess.BUILTIN.get());
 			COMMAND_BUILD_CONTEXT.missingTagAccessPolicy(CommandBuildContext.MissingTagAccessPolicy.RETURN_EMPTY);
 		} else {
-			MINECRAFT_SERVER = null;
+			// We're not running this on Minecraft, we're probably using the testing matrix
 			COMMAND_BUILD_CONTEXT = null;
 		}
 
@@ -378,7 +376,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private final SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions().execute(commandFunction, css);
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions().execute(commandFunction, css);
 
 		Entry[] cArr = commandFunction.getEntries();
 		String[] result = new String[cArr.length];
@@ -473,7 +471,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Override
 	public final com.mojang.brigadier.CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return MINECRAFT_SERVER.vanillaCommandDispatcher.getDispatcher();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
 	}
 
 	@Override
@@ -614,7 +612,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, key);
-		return new CraftLootTable(fromResourceLocation(resourceLocation), MINECRAFT_SERVER.getLootTables().get(resourceLocation));
+		return new CraftLootTable(fromResourceLocation(resourceLocation), this.<MinecraftServer>getMinecraftServer().getLootTables().get(resourceLocation));
 	}
 
 	@Override
@@ -702,7 +700,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		// manually
 		Entity foundEntity = null;
 
-		for (ServerLevel world : MINECRAFT_SERVER.getAllLevels()) {
+		for (ServerLevel world : this.<MinecraftServer>getMinecraftServer().getAllLevels()) {
 			Entity entityById = world.getEntity(id.right().get());
 			if (entityById != null) {
 				foundEntity = entityById;
@@ -762,7 +760,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		Collection<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
+		Collection<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
 		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
 	}
 	
@@ -784,8 +782,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
-		ReloadableResources serverResources = MINECRAFT_SERVER.resources;
-		serverResources.managers().commands = MINECRAFT_SERVER.getCommands();
+		ReloadableResources serverResources = this.<MinecraftServer>getMinecraftServer().resources;
+		serverResources.managers().commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
@@ -795,14 +793,14 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			e.printStackTrace();
 		}
 
-		// From MINECRAFT_SERVER.reloadResources //
+		// From this.<MinecraftServer>getMinecraftServer().reloadResources //
 		// Discover new packs
 		Collection<String> collection;
 		{
-			List<String> packIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getSelectedIds());
-			List<String> disabledPacks = MINECRAFT_SERVER.getWorldData().getDataPackConfig().getDisabled();
+			List<String> packIDs = new ArrayList<>(this.<MinecraftServer>getMinecraftServer().getPackRepository().getSelectedIds());
+			List<String> disabledPacks = this.<MinecraftServer>getMinecraftServer().getWorldData().getDataPackConfig().getDisabled();
 
-			for (String availablePack : MINECRAFT_SERVER.getPackRepository().getAvailableIds()) {
+			for (String availablePack : this.<MinecraftServer>getMinecraftServer().getPackRepository().getAvailableIds()) {
 				// Add every other available pack that is not disabled
 				// and is not already in the list of existing packs
 				if (!disabledPacks.contains(availablePack) && !packIDs.contains(availablePack)) {
@@ -812,12 +810,12 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			collection = packIDs;
 		}
 
-		Frozen registryAccess = MINECRAFT_SERVER.registryAccess();
+		Frozen registryAccess = this.<MinecraftServer>getMinecraftServer().registryAccess();
 
 		// Step 1: Construct an async supplier of a list of all resource packs to
 		// be loaded in the reload phase
 		CompletableFuture<List<PackResources>> first = CompletableFuture.supplyAsync(() -> {
-			PackRepository serverPackRepository = MINECRAFT_SERVER.getPackRepository();
+			PackRepository serverPackRepository = this.<MinecraftServer>getMinecraftServer().getPackRepository();
 
 			List<PackResources> packResources = new ArrayList<>();
 			for (String packID : collection) {
@@ -837,8 +835,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 			// Not using packResources, because we really really want this to work
 			CompletableFuture<?> simpleReloadInstance = SimpleReloadInstance.create(
-				resourceManager, serverResources.managers().listeners(), MINECRAFT_SERVER.executor,
-				MINECRAFT_SERVER, CompletableFuture
+				resourceManager, serverResources.managers().listeners(), this.<MinecraftServer>getMinecraftServer().executor,
+				this.<MinecraftServer>getMinecraftServer(), CompletableFuture
 					.completedFuture(Unit.INSTANCE) /* ReloadableServerResources.DATA_RELOAD_INITIAL_TASK */,
 				LogUtils.getLogger().isDebugEnabled()).done();
 
@@ -847,33 +845,33 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 		// Step 3: Actually load all of the resources
 		CompletableFuture<Void> third = second.thenAcceptAsync(resources -> {
-			MINECRAFT_SERVER.resources.close();
-			MINECRAFT_SERVER.resources = serverResources;
-			MINECRAFT_SERVER.server.syncCommands();
-			MINECRAFT_SERVER.getPackRepository().setSelected(collection);
+			this.<MinecraftServer>getMinecraftServer().resources.close();
+			this.<MinecraftServer>getMinecraftServer().resources = serverResources;
+			this.<MinecraftServer>getMinecraftServer().server.syncCommands();
+			this.<MinecraftServer>getMinecraftServer().getPackRepository().setSelected(collection);
 
-			// MINECRAFT_SERVER.getSelectedPacks
-			Collection<String> selectedIDs = MINECRAFT_SERVER.getPackRepository().getSelectedIds();
+			// this.<MinecraftServer>getMinecraftServer().getSelectedPacks
+			Collection<String> selectedIDs = this.<MinecraftServer>getMinecraftServer().getPackRepository().getSelectedIds();
 			List<String> enabledIDs = ImmutableList.copyOf(selectedIDs);
-			List<String> disabledIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getAvailableIds());
+			List<String> disabledIDs = new ArrayList<>(this.<MinecraftServer>getMinecraftServer().getPackRepository().getAvailableIds());
 
 			disabledIDs.removeIf(enabledIDs::contains);
 
-			MINECRAFT_SERVER.getWorldData().setDataPackConfig(new DataPackConfig(enabledIDs, disabledIDs));
-			MINECRAFT_SERVER.resources.managers().updateRegistryTags(registryAccess);
+			this.<MinecraftServer>getMinecraftServer().getWorldData().setDataPackConfig(new DataPackConfig(enabledIDs, disabledIDs));
+			this.<MinecraftServer>getMinecraftServer().resources.managers().updateRegistryTags(registryAccess);
 			// May need to be commented out, may not. Comment it out just in case.
 			// For some reason, calling getPlayerList().saveAll() may just hang
 			// the server indefinitely. Not sure why!
-			// MINECRAFT_SERVER.getPlayerList().saveAll();
-			// MINECRAFT_SERVER.getPlayerList().reloadResources();
-			// MINECRAFT_SERVER.getFunctions().replaceLibrary(MINECRAFT_SERVER.resources.managers().getFunctionLibrary());
-			MINECRAFT_SERVER.getStructureManager()
-				.onResourceManagerReload(MINECRAFT_SERVER.resources.resourceManager());
+			// this.<MinecraftServer>getMinecraftServer().getPlayerList().saveAll();
+			// this.<MinecraftServer>getMinecraftServer().getPlayerList().reloadResources();
+			// this.<MinecraftServer>getMinecraftServer().getFunctions().replaceLibrary(this.<MinecraftServer>getMinecraftServer().resources.managers().getFunctionLibrary());
+			this.<MinecraftServer>getMinecraftServer().getStructureManager()
+				.onResourceManagerReload(this.<MinecraftServer>getMinecraftServer().resources.resourceManager());
 		});
 
 		// Step 4: Block the thread until everything's done
-		if (MINECRAFT_SERVER.isSameThread()) {
-			MINECRAFT_SERVER.managedBlock(third::isDone);
+		if (this.<MinecraftServer>getMinecraftServer().isSameThread()) {
+			this.<MinecraftServer>getMinecraftServer().managedBlock(third::isDone);
 		}
 
 		// Run the completableFuture (and bind tags?)
@@ -907,7 +905,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Override
 	public final void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
 	}
 
 	@Override
@@ -915,8 +913,13 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		return Serializer.fromJson(json);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public final MinecraftServer getMinecraftServer() {
-		return MINECRAFT_SERVER;
+	public <T> T getMinecraftServer() {
+		if (Bukkit.getServer() instanceof CraftServer server) {
+			return (T) server.getServer();
+		} else {
+			return null;
+		}
 	}
 }

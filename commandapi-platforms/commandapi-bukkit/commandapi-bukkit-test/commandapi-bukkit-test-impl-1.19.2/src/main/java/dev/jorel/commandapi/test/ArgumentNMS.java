@@ -398,11 +398,6 @@ public abstract class ArgumentNMS extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public LootTable getLootTable(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getLootTable(cmdCtx, key);
-	}
-
-	@Override
 	public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getMathOperation(cmdCtx, key);
 	}

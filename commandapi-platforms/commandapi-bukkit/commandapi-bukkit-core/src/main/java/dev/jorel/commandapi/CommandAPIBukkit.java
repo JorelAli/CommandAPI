@@ -435,6 +435,9 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	@Override
 	@Unimplemented(because = {REQUIRES_MINECRAFT_SERVER, VERSION_SPECIFIC_IMPLEMENTATION})
 	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> brigadierDispatcher) throws IOException;
+	
+	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER) // What are the odds?
+	public abstract <T> T getMinecraftServer();
 
 	@Override
 	public CommandAPILogger getLogger() {

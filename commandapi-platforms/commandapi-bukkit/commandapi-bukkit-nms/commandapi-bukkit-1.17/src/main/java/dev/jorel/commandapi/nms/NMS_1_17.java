@@ -29,10 +29,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.inventory.Recipe;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import net.minecraft.Util;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.server.ServerResources;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
@@ -56,8 +57,8 @@ public class NMS_1_17 extends NMS_1_17_Common {
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
-		ServerResources serverResources = MINECRAFT_SERVER.resources;
-		serverResources.commands = MINECRAFT_SERVER.getCommands();
+		ServerResources serverResources = this.<MinecraftServer>getMinecraftServer().resources;
+		serverResources.commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
@@ -70,7 +71,7 @@ public class NMS_1_17 extends NMS_1_17_Common {
 		// Construct the new CompletableFuture that now uses our updated serverResources
 		CompletableFuture<?> unitCompletableFuture = ((ReloadableResourceManager) serverResources.getResourceManager())
 			.reload(Util.backgroundExecutor(), Runnable::run,
-				MINECRAFT_SERVER.getPackRepository().openAllSelected(),
+				this.<MinecraftServer>getMinecraftServer().getPackRepository().openAllSelected(),
 				CompletableFuture.completedFuture(null));
 		CompletableFuture<ServerResources> completablefuture = unitCompletableFuture
 			.whenComplete((Object u, Throwable t) -> {

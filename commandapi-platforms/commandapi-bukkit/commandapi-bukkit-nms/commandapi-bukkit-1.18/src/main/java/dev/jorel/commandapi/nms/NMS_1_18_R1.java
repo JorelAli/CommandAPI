@@ -162,7 +162,6 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public class NMS_1_18_R1 extends NMS_Common {
 
-	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle EntityPositionSource_sourceEntity;
 	private static final VarHandle ItemInput_tag;
@@ -170,12 +169,6 @@ public class NMS_1_18_R1 extends NMS_Common {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		if (Bukkit.getServer() instanceof CraftServer server) {
-			MINECRAFT_SERVER = server.getServer();
-		} else {
-			MINECRAFT_SERVER = null;
-		}
-		
 		VarHandle shm_ht = null;
 		VarHandle eps_se = null;
 		VarHandle ii_t = null;
@@ -279,7 +272,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions().execute(commandFunction, css);
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions().execute(commandFunction, css);
 
 		Entry[] cArr = commandFunction.getEntries();
 		String[] result = new String[cArr.length];
@@ -336,7 +329,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return MINECRAFT_SERVER.vanillaCommandDispatcher.getDispatcher();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
 	}
 
 	@Override
@@ -477,7 +470,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, key);
-		return new CraftLootTable(fromResourceLocation(resourceLocation), MINECRAFT_SERVER.getLootTables().get(resourceLocation));
+		return new CraftLootTable(fromResourceLocation(resourceLocation), this.<MinecraftServer>getMinecraftServer().getLootTables().get(resourceLocation));
 	}
 
 	@Override
@@ -591,7 +584,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey())).getValues();
+		List<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey())).getValues();
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
@@ -617,8 +610,8 @@ public class NMS_1_18_R1 extends NMS_Common {
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
-		ServerResources serverResources = MINECRAFT_SERVER.resources;
-		serverResources.commands = MINECRAFT_SERVER.getCommands();
+		ServerResources serverResources = this.<MinecraftServer>getMinecraftServer().resources;
+		serverResources.commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
@@ -630,7 +623,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 		// Construct the new CompletableFuture that now uses our updated serverResources
 		CompletableFuture<?> unitCompletableFuture = ((ReloadableResourceManager) serverResources.getResourceManager())
 				.reload(Util.backgroundExecutor(), Runnable::run,
-						MINECRAFT_SERVER.getPackRepository().openAllSelected(),
+						this.<MinecraftServer>getMinecraftServer().getPackRepository().openAllSelected(),
 						CompletableFuture.completedFuture(null));
 		CompletableFuture<ServerResources> completablefuture = unitCompletableFuture
 				.whenComplete((Object u, Throwable t) -> {
@@ -672,7 +665,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
+		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
 	}
 
 	@Override
@@ -680,9 +673,14 @@ public class NMS_1_18_R1 extends NMS_Common {
 		return Serializer.fromJson(json);
 	}
 
-  @Override
-	public MinecraftServer getMinecraftServer() {
-		return MINECRAFT_SERVER;
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getMinecraftServer() {
+		if (Bukkit.getServer() instanceof CraftServer server) {
+			return (T) server.getServer();
+		} else {
+			return null;
+		}
 	}
 
 }

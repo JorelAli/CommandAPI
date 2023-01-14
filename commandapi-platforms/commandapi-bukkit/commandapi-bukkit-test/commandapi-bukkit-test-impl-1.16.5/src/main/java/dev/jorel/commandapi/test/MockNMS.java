@@ -28,13 +28,13 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemFactory;
-import org.bukkit.craftbukkit.v1_16_R3.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.mockito.Mockito;
@@ -49,6 +49,7 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.nms.NMS;
@@ -62,6 +63,8 @@ import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.IRegistry;
+import net.minecraft.server.v1_16_R3.LootTableRegistry;
+import net.minecraft.server.v1_16_R3.LootTables;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.MobEffectList;
@@ -675,6 +678,36 @@ public class MockNMS extends ArgumentNMS {
 	
 	public static String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getMinecraftServer() {
+		MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
+		// LootTableArgument
+		Mockito.when(minecraftServerMock.getLootTableRegistry()).thenAnswer(invocation -> {
+			LootTableRegistry lootTables = Mockito.mock(LootTableRegistry.class);
+			Mockito.when(lootTables.getLootTable(any(MinecraftKey.class))).thenAnswer(i -> {
+				if(LootTables.a().contains(i.getArgument(0))) {
+					return net.minecraft.server.v1_16_R3.LootTable.EMPTY;
+				} else {
+					return null;
+				}
+			});
+			Mockito.when(lootTables.a()).thenAnswer(i -> {
+				return LootTables.a();
+			});
+			return lootTables;
+		});
+		return (T) minecraftServerMock;
+	}
+
+	@Override
+	public LootTable getLootTable(CommandContext cmdCtx, String key) {
+		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
+		// Stub in our getMinecraftServer implementation
+		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
+		return nms.getLootTable(cmdCtx, key);
 	}
 
 

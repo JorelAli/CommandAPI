@@ -347,7 +347,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> getMinecraftServer().getFunctions()
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions()
 			.execute(commandFunction, css);
 
 		CommandFunction.Entry[] cArr = commandFunction.getEntries();
@@ -415,7 +415,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
 	}
 
 	@Override
@@ -480,13 +480,13 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final SimpleFunctionWrapper getFunction(NamespacedKey key) {
 		return convertFunction(
-			getMinecraftServer().getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
+			this.<MinecraftServer>getMinecraftServer().getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
 	}
 
 	@Override
 	public final Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : getMinecraftServer().getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
@@ -543,11 +543,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
 	}
-
-	/*
-	 * This should return MINECRAFT_SERVER
-	 */
-	public abstract MinecraftServer getMinecraftServer();
 
 	@Override
 	public final <NBTContainer> Object getNBTCompound(CommandContext<CommandSourceStack> cmdCtx, String key,
@@ -648,18 +643,18 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
-				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
+				ServerFunctionManager functionData = this.<MinecraftServer>getMinecraftServer().getFunctions();
 				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
 				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
 			};
 			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
 			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
+				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getAdvancements().getAllAdvancements()
 					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
 			};
 			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
+				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getLootTables().getIds(), builder);
 			};
 			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
@@ -675,7 +670,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : getMinecraftServer().getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;

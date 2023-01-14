@@ -183,7 +183,6 @@ import net.minecraft.server.v1_16_R2.Vec3D;
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
-	private static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle DataPackResources_b;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
@@ -194,12 +193,6 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		if(Bukkit.getServer() instanceof CraftServer server) {
-			MINECRAFT_SERVER = server.getServer();
-		} else {
-			MINECRAFT_SERVER = null;
-		}
-		
 		VarHandle dpr_b = null;
 		VarHandle shm_ht = null;
 		VarHandle ppb_c = null;
@@ -455,7 +448,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction, clw);
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> this.<MinecraftServer>getMinecraftServer().getFunctionData().a(customFunction, clw);
 
 		Object[] cArr = customFunction.b();
 		String[] result = new String[cArr.length];
@@ -536,7 +529,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return MINECRAFT_SERVER.vanillaCommandDispatcher.a();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a();
 	}
 
 	@Override
@@ -656,13 +649,13 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return convertFunction(MINECRAFT_SERVER.getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())).get());
+		return convertFunction(this.<MinecraftServer>getMinecraftServer().getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())).get());
 	}
 
 	@Override
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().f()) {
+		for (MinecraftKey key : this.<MinecraftServer>getMinecraftServer().getFunctionData().f()) {
 			functions.add(fromMinecraftKey(key));
 		}
 		return functions;
@@ -730,7 +723,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.e(cmdCtx, key);
-		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
+		return new CraftLootTable(fromMinecraftKey(minecraftKey), this.<MinecraftServer>getMinecraftServer().getLootTableRegistry().getLootTable(minecraftKey));
 	}
 
 	@Override
@@ -900,14 +893,14 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
-				CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
+				CustomFunctionData functionData = this.<MinecraftServer>getMinecraftServer().getFunctionData();
 				ICompletionProvider.a(functionData.g(), builder, "#");
 				return ICompletionProvider.a(functionData.f(), builder);
 			};
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> ICompletionProvider.a(MINECRAFT_SERVER.getAdvancementData().getAdvancements().stream().map(Advancement::getName), builder);
-			case LOOT_TABLES -> (cmdCtx, builder) -> ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
+			case ADVANCEMENTS -> (cmdCtx, builder) -> ICompletionProvider.a(this.<MinecraftServer>getMinecraftServer().getAdvancementData().getAdvancements().stream().map(Advancement::getName), builder);
+			case LOOT_TABLES -> (cmdCtx, builder) -> ICompletionProvider.a(this.<MinecraftServer>getMinecraftServer().getLootTableRegistry().a(), builder);
 			case BIOMES -> CompletionProviders.d;
 			case ENTITIES -> CompletionProviders.e;
 			default -> (context, builder) -> Suggestions.empty();
@@ -916,7 +909,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CustomFunction> customFunctions = new ArrayList<>(MINECRAFT_SERVER.getFunctionData().b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged());
+		List<CustomFunction> customFunctions = new ArrayList<>(this.<MinecraftServer>getMinecraftServer().getFunctionData().b(new MinecraftKey(key.getNamespace(), key.getKey())).getTagged());
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
@@ -927,7 +920,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	@Override
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g()) {
+		for (MinecraftKey key : this.<MinecraftServer>getMinecraftServer().getFunctionData().g()) {
 			functions.add(fromMinecraftKey(key));
 		}
 		return functions;
@@ -966,8 +959,8 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
-		DataPackResources datapackResources = MINECRAFT_SERVER.dataPackResources;
-		datapackResources.commandDispatcher = MINECRAFT_SERVER.getCommandDispatcher();
+		DataPackResources datapackResources = this.<MinecraftServer>getMinecraftServer().dataPackResources;
+		datapackResources.commandDispatcher = this.<MinecraftServer>getMinecraftServer().getCommandDispatcher();
 
 		// Update the CustomFunctionManager for the datapackResources which now has the
 		// new commandDispatcher
@@ -980,7 +973,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		// Construct the new CompletableFuture that now uses our updated
 		// datapackResources
 		CompletableFuture<Unit> unitCompletableFuture = ((IReloadableResourceManager) DataPackResources_b.get(datapackResources))
-			.a(SystemUtils.f(), Runnable::run, MINECRAFT_SERVER.getResourcePackRepository().f(), CompletableFuture.completedFuture(null));
+			.a(SystemUtils.f(), Runnable::run, this.<MinecraftServer>getMinecraftServer().getResourcePackRepository().f(), CompletableFuture.completedFuture(null));
 
 		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture
 				.whenComplete((Unit u, Throwable t) -> {
@@ -1022,12 +1015,22 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
+		this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 
 	@Override
 	public Message generateMessageFromJson(String json) {
 		return ChatSerializer.a(json);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getMinecraftServer() {
+		if (Bukkit.getServer() instanceof CraftServer server) {
+			return (T) server.getServer();
+		} else {
+			return null;
+		}
 	}
 
 }
