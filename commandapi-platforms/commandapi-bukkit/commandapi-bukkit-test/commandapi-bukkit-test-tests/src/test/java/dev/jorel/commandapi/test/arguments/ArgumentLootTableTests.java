@@ -2,7 +2,7 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
+import java.util.Arrays;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.loot.LootTable;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.LootTableArgument;
+import dev.jorel.commandapi.test.MockNMS;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -72,10 +73,9 @@ public class ArgumentLootTableTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		
-		// TODO: Implement list of expected loot tables. This should
-		// NOT return an empty list!!
-		assertEquals(List.of(), server.getSuggestions(player, "test "));
+
+		assertEquals(Arrays.stream(MockNMS.getLootTables()).map(lt -> lt.getKey().toString())
+			.sorted().toList(), server.getSuggestions(player, "test "));
 	}
 
 }
