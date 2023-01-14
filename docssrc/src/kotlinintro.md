@@ -28,7 +28,7 @@ To install the DSL, you need to add the `commandapi-kotlin` dependency into your
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-bukkit-kotlin</artifactId>
+        <artifactId>commandapi-velocity-kotlin</artifactId>
         <version>9.0.0</version>
     </dependency>
 </dependencies>
