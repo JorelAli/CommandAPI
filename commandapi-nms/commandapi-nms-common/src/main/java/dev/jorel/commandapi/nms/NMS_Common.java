@@ -667,7 +667,6 @@ public abstract class NMS_Common implements NMS<CommandSourceStack> {
 		implications across all sorts of versions, so it's much more reliable to just implement
 		them in every version.
 		""")
-	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
 	public abstract SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider);
 
 	@Override

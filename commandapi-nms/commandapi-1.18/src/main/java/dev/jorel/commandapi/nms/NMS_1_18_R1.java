@@ -552,7 +552,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 			case LOOT_TABLES -> (cmdCtx, builder) -> {
 				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
 			};
-			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
+			case BIOMES -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_BIOMES;
 			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
 			default -> (context, builder) -> Suggestions.empty();
 		};

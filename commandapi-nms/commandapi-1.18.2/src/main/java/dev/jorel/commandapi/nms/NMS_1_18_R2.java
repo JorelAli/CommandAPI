@@ -230,7 +230,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 		return ItemArgument.item();
 	}
 
-	@Differs(from = "1.18", by = "Implementation of synthetic biome argument")
+	@Differs(from = "1.18.1", by = "Implementation of synthetic biome argument")
 	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
 		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
@@ -594,6 +594,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 	}
 	
 	@Override
+	@Differs(from = "1.18.1", by = "Use of argument synthetic biome's listSuggestions method")
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
