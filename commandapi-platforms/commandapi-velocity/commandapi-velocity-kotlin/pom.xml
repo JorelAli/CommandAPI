@@ -10,7 +10,7 @@
 		<version>9.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>commandapi-kotlin-velocity</artifactId>
+	<artifactId>commandapi-velocity-kotlin</artifactId>
 	<packaging>jar</packaging>
 
 	<build>

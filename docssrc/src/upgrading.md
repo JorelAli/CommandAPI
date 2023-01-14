@@ -108,6 +108,58 @@ dependencies {
 
 </div>
 
+Additionally, when using the Kotlin DSL for Bukkit, instead of using `commandapi-kotlin`, use `commandapi-bukkit-kotlin`:
+
+<div class="linked-multi-pre">
+
+```xml,Maven
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-kotlin</artifactId>
+        <version>9.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+```gradle,Gradle
+dependencies {
+    compileOnly "dev.jorel:commandapi-kotlin:9.0.0"
+}
+```
+
+```kotlin,Kotlin_Gradle
+dependencies {
+    compileOnly("dev.jorel:commandapi-kotlin:9.0.0")
+}
+```
+
+$$\downarrow$$
+
+```xml,Maven
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-bukkit-kotlin</artifactId>
+        <version>9.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+```gradle,Gradle
+dependencies {
+    implementation "dev.jorel:commandapi-bukkit-kotlin:9.0.0"
+}
+```
+
+```kotlin,Kotlin_Gradle
+dependencies {
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
+}
+```
+
+</div>
+
 -----
 
 ### Loading and enabling the CommandAPI when shading
