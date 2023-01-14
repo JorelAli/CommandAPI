@@ -30,10 +30,10 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-bukkit-test-impl-1.16.5</artifactId>
+	<artifactId>commandapi-bukkit-test-impl</artifactId>
 
 	<properties>
-		<spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
+		<spigot.version>1.19.2-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
@@ -57,25 +57,6 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Main dependencies -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>4.6.1</version>
-		</dependency>
-		<dependency>
-			<!-- This is literally just for testing, we're not actually packaging this -->
-			<groupId>de.tr7zw</groupId>
-			<artifactId>item-nbt-api</artifactId>
-			<version>2.11.1</version>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>com.mojang</groupId>
 			<artifactId>brigadier</artifactId>
@@ -84,23 +65,11 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-test-impl</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-shade</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<!-- Version-specific dependencies -->
 		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.16</artifactId>
-			<version>1.5.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.destroystokyo.paper</groupId>
+			<groupId>io.papermc.paper</groupId>
 			<artifactId>paper-api</artifactId>
 			<version>${spigot.version}</version>
 			<scope>provided</scope>
@@ -111,18 +80,5 @@
 			<version>${spigot.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<!--
-		  Spigot 1.16.5 is really fussy and wants log4j. If you do give it
-		  log4j, every test fails for some reason, so we don't give it what it
-		  wants. We can already assert that tests ARE running properly due to
-		  test failures being reported, and by writing files during tests.
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.19.0</version>
-		</dependency>
-		-->
-		
 	</dependencies>
 </project>

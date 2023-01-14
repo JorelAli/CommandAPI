@@ -15,6 +15,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.test.MockNMS;
+import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -83,7 +84,7 @@ public class ArgumentPotionTests extends TestBase {
 		PlayerMock player = server.addPlayer();
 
 		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_16_5));
-		for (PotionEffectType potionEffect : MockNMS.getPotionEffects()) {
+		for (PotionEffectType potionEffect : MockPlatform.getInstance().getPotionEffects()) {
 			server.dispatchCommand(player, "test " + MockNMS.getNMSPotionEffectName_1_16_5(potionEffect));
 			assertEquals(potionEffect, results.get());
 		}
@@ -109,7 +110,7 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test minecraft:
 		assertEquals(
-			Arrays.stream(MockNMS.getPotionEffects())
+			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
 				.map(MockNMS::getNMSPotionEffectName_1_16_5)
 				.sorted()
 				.toList(),
@@ -118,7 +119,7 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test minecraft:s
 		assertEquals(
-			Arrays.stream(MockNMS.getPotionEffects())
+			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
 				.map(MockNMS::getNMSPotionEffectName_1_16_5)
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()
@@ -127,7 +128,7 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test s
 		assertEquals(
-			Arrays.stream(MockNMS.getPotionEffects())
+			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
 				.map(MockNMS::getNMSPotionEffectName_1_16_5)
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()

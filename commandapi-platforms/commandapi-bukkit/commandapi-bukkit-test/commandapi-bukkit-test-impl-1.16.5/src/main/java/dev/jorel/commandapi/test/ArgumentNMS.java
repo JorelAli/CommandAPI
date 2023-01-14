@@ -30,7 +30,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.nms.NMS;
@@ -51,7 +50,7 @@ import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
  * Argument related method implementations
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public abstract class ArgumentNMS extends CommandAPIBukkit<CommandListenerWrapper> {
+public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 
 	public NMS<?> BASE_NMS;
 

@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.CodeSource;
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import net.minecraft.server.v1_16_R3.Advancement;
 import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
-import net.minecraft.server.v1_16_R3.Advancements;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
 import net.minecraft.server.v1_16_R3.ArgumentRegistry;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
@@ -82,22 +80,22 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
 public class MockNMS extends ArgumentNMS {
-	
+
 	static {
 		CodeSource src = PotionEffectType.class.getProtectionDomain().getCodeSource();
 		if (src != null) {
-		    System.err.println("Loading PotionEffectType sources from " + src.getLocation());
+			System.err.println("Loading PotionEffectType sources from " + src.getLocation());
 		}
 	}
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
-		
-		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
+
 		// Stub in our getMinecraftServer implementation
+		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		BASE_NMS = nms;
-		
+
 		// Initialize WorldVersion (game version)
 		SharedConstants.b();
 
@@ -110,55 +108,31 @@ public class MockNMS extends ArgumentNMS {
 		// Invoke Minecraft's registry. This also initializes all argument types.
 		// How convenient!
 		DispenserRegistry.init();
-		
-		createPotionEffectTypes();
+
 		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
 		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
 		// 1.19 ones!)
+		registerDefaultPotionEffects();
 		registerDefaultEnchantments();
 	}
-	
-	private static void registerPotionEffectType(int id, String name, boolean instant, int rgb) {
-		PotionEffectType type = new MockPotionEffectType(id, name, instant, Color.fromRGB(rgb));
-		PotionEffectType.registerPotionEffectType(type);
-	}
-	
-	// ItemStackArgument requirements
-	public static ItemFactory getItemFactory() {
-		return CraftItemFactory.instance();
-	}
 
-	/**
-	 * @return A list of all item names, sorted in alphabetical order. Each item
-	 * is prefixed with {@code minecraft:}
-	 */
-	public static List<String> getAllItemNames() {
-		// Registry.ITEM
-		return StreamSupport.stream(IRegistry.ITEM.spliterator(), false)
-			.map(Object::toString)
-			.map(s -> "minecraft:" + s)
-			.sorted()
-			.toList();
-	}
+	/*************************
+	 * Registry manipulation *
+	 *************************/
 
-	public static void registerDefaultEnchantments() {
-		for(Enchantment enchantment : getEnchantments()) {
-			if (Enchantment.getByKey(enchantment.getKey()) == null) {
-				Enchantment.registerEnchantment(new EnchantmentMock(enchantment.getKey(), enchantment.getKey().getKey()));
-			}
+	private void unregisterAllPotionEffects() {
+		PotionEffectType[] byId = getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);
+		for (int i = 0; i < byId.length; i++) {
+			byId[i] = null;
 		}
+
+		getFieldAs(PotionEffectType.class, "byName", null, Map.class).clear();
+		setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
-	
-	/**
-	 * This registers Minecraft's default {@link PotionEffectType PotionEffectTypes}. It also prevents any new effects to
-	 * be created afterwards.
-	 */
-	public static void createPotionEffectTypes() {
+
+	private void registerDefaultPotionEffects() {
 		for (PotionEffectType type : PotionEffectType.values()) {
-			// We probably already registered all Potion Effects
-			// otherwise this would be null
 			if (type != null) {
-				// This is not perfect, but it works.
 				return;
 			}
 		}
@@ -198,34 +172,51 @@ public class MockNMS extends ArgumentNMS {
 		PotionEffectType.stopAcceptingRegistrations();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static void unregisterAllPotionEffects() {
-		PotionEffectType[] byId = (PotionEffectType[]) getField(PotionEffectType.class, "byId", null);
-		for (int i = 0; i < byId.length; i++) {
-			byId[i] = null;
-		}
-
-		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) getField(PotionEffectType.class, "byName", null);
-		byName.clear();
-		
-		setField(PotionEffectType.class, "acceptingNew", null, true);
+	private void registerPotionEffectType(int id, String name, boolean instant, int rgb) {
+		PotionEffectType.registerPotionEffectType(new MockPotionEffectType(id, name, instant, Color.fromRGB(rgb)));
 	}
 
-	@SuppressWarnings("unchecked")
 	private void unregisterAllEnchantments() {
-
-		Map<String, Enchantment> byName = (Map<String, Enchantment>) getField(Enchantment.class, "byName", null);
-		byName.clear();
-
-		Map<NamespacedKey, Enchantment> byKey = (Map<NamespacedKey, Enchantment>) getField(Enchantment.class, "byKey", null);
-		byKey.clear();
-
+		getFieldAs(Enchantment.class, "byName", null, Map.class).clear();
+		getFieldAs(Enchantment.class, "byKey", null, Map.class).clear();
 		setField(Enchantment.class, "acceptingNew", null, true);
+	}
+
+	private void registerDefaultEnchantments() {
+		for (Enchantment enchantment : getInstance().getEnchantments()) {
+			if (Enchantment.getByKey(enchantment.getKey()) == null) {
+				Enchantment.registerEnchantment(new EnchantmentMock(enchantment.getKey(), enchantment.getKey().getKey()));
+			}
+		}
+	}
+	
+	/**************************
+	 * MockPlatform overrides *
+	 **************************/
+
+	// ItemStackArgument requirements
+	@Override
+	public ItemFactory getItemFactory() {
+		return CraftItemFactory.instance();
+	}
+
+	/**
+	 * @return A list of all item names, sorted in alphabetical order. Each item is
+	 *         prefixed with {@code minecraft:}
+	 */
+	@Override
+	public List<String> getAllItemNames() {
+		// Registry.ITEM
+		return StreamSupport.stream(IRegistry.ITEM.spliterator(), false)
+			.map(Object::toString)
+			.map(s -> "minecraft:" + s)
+			.sorted()
+			.toList();
 	}
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19.2" };
+		return BASE_NMS.compatibleVersions();
 	}
 
 	CommandDispatcher<CommandListenerWrapper> dispatcher;
@@ -245,7 +236,7 @@ public class MockNMS extends ArgumentNMS {
 
 	List<EntityPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
@@ -257,20 +248,17 @@ public class MockNMS extends ArgumentNMS {
 			// Location argument
 			Location loc = player.getLocation();
 			Mockito.when(clw.getPosition()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
-			
+
 			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
 			Mockito.when(clw.getWorld()).thenReturn(worldServerMock);
 //			Mockito.when(clw.getWorld().hasChunkAt(any(BlockPosition.class))).thenReturn(true);
 //			Mockito.when(clw.getWorld().isInWorldBounds(any(BlockPosition.class))).thenReturn(true);
 			Mockito.when(clw.k()).thenReturn(Anchor.EYES);
 
-			// Advancement argument
-			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
-			Mockito.when(minecraftServerMock.getAdvancementData()).thenReturn(advancementDataWorld);
-			Mockito.when(clw.getServer()).thenReturn(minecraftServerMock);
+			Mockito.when(clw.getServer()).thenAnswer(s -> getMinecraftServer());
 
 			// Entity selector argument
-			for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				EntityPlayer entityPlayerMock = Mockito.mock(EntityPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
 				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
@@ -278,124 +266,41 @@ public class MockNMS extends ArgumentNMS {
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
 				players.add(entityPlayerMock);
 			}
-			
-			if(playerListMock == null) {
+
+			if (playerListMock == null) {
 				playerListMock = Mockito.mock(PlayerList.class);
 				Mockito.when(playerListMock.getPlayer(anyString())).thenAnswer(invocation -> {
 					String playerName = invocation.getArgument(0);
-					for(EntityPlayer onlinePlayer : players) {
-						if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+					for (EntityPlayer onlinePlayer : players) {
+						if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
 							return onlinePlayer;
 						}
 					}
 					return null;
 				});
 			}
-			
-			Mockito.when(minecraftServerMock.getPlayerList()).thenReturn(playerListMock);
-			Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenReturn(players);
-			
-			// Player argument
-			UserCache userCacheMock = Mockito.mock(UserCache.class);
-			Mockito.when(userCacheMock.getProfile(anyString())).thenAnswer(invocation -> {
-				String playerName = invocation.getArgument(0);
-				for(EntityPlayer onlinePlayer : players) {
-					if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-						return new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName);
-					}
-				}
-				return null;
-			});
-			Mockito.when(minecraftServerMock.getUserCache()).thenReturn(userCacheMock);
-			
-			// World (Dimension) argument
-			Mockito.when(minecraftServerMock.getWorldServer(any(ResourceKey.class))).thenAnswer(invocation -> {
-				// Get the ResourceKey<World> and extract the world name from it
-				ResourceKey<net.minecraft.server.v1_16_R3.World> resourceKey = invocation.getArgument(0);
-				String worldName = resourceKey.a().getKey();
-				
-				// Get the world via Bukkit (returns a WorldMock) and create a
-				// CraftWorld clone of it for WorldServer.getWorld()
-				World world = Bukkit.getServer().getWorld(worldName);
-				if(world == null) {
-					return null;
-				} else {
-					CraftWorld craftWorldMock = Mockito.mock(CraftWorld.class);
-					Mockito.when(craftWorldMock.getName()).thenReturn(world.getName());
-					Mockito.when(craftWorldMock.getUID()).thenReturn(world.getUID());
-					
-					// Create our return WorldServer object
-					WorldServer bukkitWorldServerMock = Mockito.mock(WorldServer.class);
-					Mockito.when(bukkitWorldServerMock.getWorld()).thenReturn(craftWorldMock);
-					return bukkitWorldServerMock;
-				}
-			});
 
 			Mockito.when(clw.p()).thenAnswer(invocation -> {
 				Set<ResourceKey<net.minecraft.server.v1_16_R3.World>> set = new HashSet<>();
 				// We only need to implement resourceKey.a()
-				
-				for(World world : Bukkit.getWorlds()) {
+
+				for (World world : Bukkit.getWorlds()) {
 					ResourceKey<net.minecraft.server.v1_16_R3.World> key = Mockito.mock(ResourceKey.class);
 					Mockito.when(key.a()).thenReturn(new MinecraftKey(world.getName()));
 					set.add(key);
 				}
-				
+
 				return set;
 			});
-			
+
 			// Rotation argument
 			Mockito.when(clw.i()).thenReturn(new Vec2F(loc.getYaw(), loc.getPitch()));
-			
-			// Team argument
-			ScoreboardServer scoreboardServerMock = Mockito.mock(ScoreboardServer.class);
-			Mockito.when(scoreboardServerMock.getTeam(anyString())).thenAnswer(invocation -> { // Scoreboard#getTeam is used for 1.16.5 instead of Scoreboard#getPlayerTeam
-				String teamName = invocation.getArgument(0);
-				Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
-				if (team == null) {
-					return null;
-				} else {
-					return new ScoreboardTeam(scoreboardServerMock, teamName);
-				}
-			});
-			Mockito.when(minecraftServerMock.getScoreboard()).thenReturn(scoreboardServerMock); // MinecraftServer#getScoreboard
-			
+
 			Mockito.when(clw.m()).thenAnswer(invocation -> { // CommandListenerWrapper#getAllTeams
 				return Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList();
 			});
 		}
 		return clw;
-	}
-
-	public static Object getField(Class<?> className, String fieldName, Object instance) {
-		try {
-			Field field = className.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			return field.get(instance);
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
-	}
-
-	public static void setField(Class<?> className, String fieldName, Object instance, Object value) {
-		try {
-			Field field = className.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			field.set(instance, value);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T getFieldAs(Class<?> className, String fieldName, Object instance, Class<T> asType) {
-		try {
-			Field field = className.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			return (T) field.get(instance);
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
 	}
 
 	@Override
@@ -414,7 +319,7 @@ public class MockNMS extends ArgumentNMS {
 
 	@Override
 	public void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher)
-			throws IOException {
+		throws IOException {
 		Files
 			.asCharSink(file, StandardCharsets.UTF_8)
 			.write(new GsonBuilder()
@@ -427,7 +332,7 @@ public class MockNMS extends ArgumentNMS {
 	public World getWorldForCSS(CommandListenerWrapper clw) {
 		return new WorldMock();
 	}
-	
+
 	@Override
 	public void resendPackets(Player player) {
 		// There's nothing to do here, we can't "send packets to players"
@@ -474,7 +379,8 @@ public class MockNMS extends ArgumentNMS {
 		throw new Error("unimplemented");
 	}
 
-	public static PotionEffectType[] getPotionEffects() {
+	@Override
+	public PotionEffectType[] getPotionEffects() {
 		return new PotionEffectType[] {
 			PotionEffectType.SPEED,
 			PotionEffectType.SLOW,
@@ -511,7 +417,8 @@ public class MockNMS extends ArgumentNMS {
 		};
 	}
 
-	public static EntityType[] getEntityTypes() {
+	@Override
+	public EntityType[] getEntityTypes() {
 		return new EntityType[] {
 			EntityType.DROPPED_ITEM,
 			EntityType.EXPERIENCE_ORB,
@@ -625,7 +532,8 @@ public class MockNMS extends ArgumentNMS {
 		};
 	}
 
-	public static Enchantment[] getEnchantments() {
+	@Override
+	public Enchantment[] getEnchantments() {
 		return new Enchantment[] {
 			Enchantment.PROTECTION_ENVIRONMENTAL,
 			Enchantment.PROTECTION_FIRE,
@@ -667,8 +575,9 @@ public class MockNMS extends ArgumentNMS {
 			Enchantment.SOUL_SPEED
 		};
 	}
-	
-	public static org.bukkit.loot.LootTables[] getLootTables() {
+
+	@Override
+	public org.bukkit.loot.LootTables[] getLootTables() {
 		return new org.bukkit.loot.LootTables[] {
 			// org.bukkit.loot.LootTables.EMPTY,
 			org.bukkit.loot.LootTables.ABANDONED_MINESHAFT,
@@ -821,26 +730,26 @@ public class MockNMS extends ArgumentNMS {
 			org.bukkit.loot.LootTables.SHEEP_YELLOW
 		};
 	}
-	
-	public static org.bukkit.advancement.Advancement[] getAdvancements() {
-		return null;
-		
-	}
-	
+
 	public static String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
 	}
 
+	MinecraftServer minecraftServerMock = null;
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getMinecraftServer() {
-		MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
-		
+		if (minecraftServerMock != null) {
+			return (T) minecraftServerMock;
+		}
+		minecraftServerMock = Mockito.mock(MinecraftServer.class);
+
 		// LootTableArgument
 		Mockito.when(minecraftServerMock.getLootTableRegistry()).thenAnswer(invocation -> {
 			LootTableRegistry lootTables = Mockito.mock(LootTableRegistry.class);
 			Mockito.when(lootTables.getLootTable(any(MinecraftKey.class))).thenAnswer(i -> {
-				if(LootTables.a().contains(i.getArgument(0))) {
+				if (LootTables.a().contains(i.getArgument(0))) {
 					return net.minecraft.server.v1_16_R3.LootTable.EMPTY;
 				} else {
 					return null;
@@ -854,34 +763,87 @@ public class MockNMS extends ArgumentNMS {
 							.filter(e -> e.isAlive())
 							.map(EntityType::getKey)
 							.map(k -> new MinecraftKey("minecraft", "entities/" + k.getKey())),
-						LootTables.a().stream()
-					)
+						LootTables.a().stream())
 					.collect(Collectors.toSet());
 			});
 			return lootTables;
 		});
-		
-		// Advancement argument
+
+		// AdvancementArgument
 		Mockito.when(minecraftServerMock.getAdvancementData()).thenReturn(advancementDataWorld);
+
+		// TeamArgument
+		ScoreboardServer scoreboardServerMock = Mockito.mock(ScoreboardServer.class);
+		Mockito.when(scoreboardServerMock.getTeam(anyString())).thenAnswer(invocation -> { // Scoreboard#getTeam is used for 1.16.5 instead of Scoreboard#getPlayerTeam
+			String teamName = invocation.getArgument(0);
+			Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+			if (team == null) {
+				return null;
+			} else {
+				return new ScoreboardTeam(scoreboardServerMock, teamName);
+			}
+		});
+		Mockito.when(minecraftServerMock.getScoreboard()).thenReturn(scoreboardServerMock); // MinecraftServer#getScoreboard
+
+		// WorldArgument (Dimension)
+		Mockito.when(minecraftServerMock.getWorldServer(any(ResourceKey.class))).thenAnswer(invocation -> {
+			// Get the ResourceKey<World> and extract the world name from it
+			ResourceKey<net.minecraft.server.v1_16_R3.World> resourceKey = invocation.getArgument(0);
+			String worldName = resourceKey.a().getKey();
+
+			// Get the world via Bukkit (returns a WorldMock) and create a
+			// CraftWorld clone of it for WorldServer.getWorld()
+			World world = Bukkit.getServer().getWorld(worldName);
+			if (world == null) {
+				return null;
+			} else {
+				CraftWorld craftWorldMock = Mockito.mock(CraftWorld.class);
+				Mockito.when(craftWorldMock.getName()).thenReturn(world.getName());
+				Mockito.when(craftWorldMock.getUID()).thenReturn(world.getUID());
+
+				// Create our return WorldServer object
+				WorldServer bukkitWorldServerMock = Mockito.mock(WorldServer.class);
+				Mockito.when(bukkitWorldServerMock.getWorld()).thenReturn(craftWorldMock);
+				return bukkitWorldServerMock;
+			}
+		});
+
+		Mockito.when(minecraftServerMock.getPlayerList()).thenAnswer(i -> playerListMock);
+		Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenAnswer(i -> players);
+
+		// Player argument
+		UserCache userCacheMock = Mockito.mock(UserCache.class);
+		Mockito.when(userCacheMock.getProfile(anyString())).thenAnswer(invocation -> {
+			String playerName = invocation.getArgument(0);
+			for (EntityPlayer onlinePlayer : players) {
+				if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+					return new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName);
+				}
+			}
+			return null;
+		});
+		Mockito.when(minecraftServerMock.getUserCache()).thenReturn(userCacheMock);
+
 		return (T) minecraftServerMock;
 	}
-	
+
 	static AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
 
-	public static org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
-		advancementDataWorld.REGISTRY.advancements.put(new MinecraftKey(key.toString()), new Advancement(new MinecraftKey(key.toString()), null, null, null, new HashMap<>(), null));
+	public org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
+		advancementDataWorld.REGISTRY.advancements.put(new MinecraftKey(key.toString()),
+			new Advancement(new MinecraftKey(key.toString()), null, null, null, new HashMap<>(), null));
 		return new org.bukkit.advancement.Advancement() {
-			
+
 			@Override
 			public NamespacedKey getKey() {
 				return key;
 			}
-			
+
 			@Override
 			public Collection<String> getCriteria() {
 				return List.of();
 			}
 		};
 	}
-	
+
 }

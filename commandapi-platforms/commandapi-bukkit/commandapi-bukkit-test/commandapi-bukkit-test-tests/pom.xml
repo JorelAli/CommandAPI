@@ -88,6 +88,11 @@
 			<artifactId>commandapi-bukkit-shade</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<!-- This is literally just for testing, we're not actually packaging this -->
 		<dependency>
@@ -135,14 +140,12 @@
 	<profiles>
 		<profile>
 			<id>Minecraft_1_19_2</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
 					<version>${project.version}</version>
+					<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>io.papermc.paper</groupId>
@@ -207,6 +210,9 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<!-- 
 			<activation>
 				<activeByDefault>true</activeByDefault>
