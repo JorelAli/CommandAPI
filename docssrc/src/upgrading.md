@@ -148,13 +148,13 @@ $$\downarrow$$
 
 ```gradle,Gradle
 dependencies {
-    compileOnly "dev.jorel:commandapi-bukkit-kotlin:9.0.0"
+    implementation "dev.jorel:commandapi-bukkit-kotlin:9.0.0"
 }
 ```
 
 ```kotlin,Kotlin_Gradle
 dependencies {
-    compileOnly("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
 }
 ```
 
