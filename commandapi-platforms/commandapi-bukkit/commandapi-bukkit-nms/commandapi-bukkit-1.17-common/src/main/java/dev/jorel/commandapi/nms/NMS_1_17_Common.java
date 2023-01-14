@@ -75,6 +75,8 @@ import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -82,6 +84,7 @@ import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
@@ -93,6 +96,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -127,6 +131,7 @@ import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -573,6 +578,29 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 				yield NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
 			}
 			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
+	}
+	
+	@Override
+	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
+		return switch (provider) {
+			case FUNCTION -> (context, builder) -> {
+				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
+				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
+				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
+			};
+			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
+			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
+			case ADVANCEMENTS -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
+					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
+			};
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
+			};
+			case BIOMES -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_BIOMES;
+			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
 

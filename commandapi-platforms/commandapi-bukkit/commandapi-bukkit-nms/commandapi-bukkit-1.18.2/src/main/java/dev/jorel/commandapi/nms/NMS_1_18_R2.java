@@ -84,6 +84,8 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
@@ -92,6 +94,7 @@ import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -105,6 +108,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -144,6 +148,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.MinecraftServer.ReloadableResources;
 import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackResources;
@@ -257,7 +262,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 		return ItemArgument.item();
 	}
 
-	@Differs(from = "1.18", by = "Implementation of synthetic biome argument")
+	@Differs(from = "1.18.1", by = "Implementation of synthetic biome argument")
 	@Override
 	public ArgumentType<?> _ArgumentSyntheticBiome() {
 		return ResourceOrTagLocationArgument.resourceOrTag(Registry.BIOME_REGISTRY);
@@ -637,6 +642,30 @@ public class NMS_1_18_R2 extends NMS_Common {
 				yield NamespacedKey.fromString(soundResource.getNamespace() + ":" + soundResource.getPath());
 			}
 			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
+	}
+	
+	@Override
+	@Differs(from = "1.18.1", by = "Use of argument synthetic biome's listSuggestions method")
+	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
+		return switch (provider) {
+			case FUNCTION -> (context, builder) -> {
+				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
+				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
+				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
+			};
+			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
+			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
+			case ADVANCEMENTS -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
+					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
+			};
+			case LOOT_TABLES -> (cmdCtx, builder) -> {
+				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
+			};
+			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
+			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
 

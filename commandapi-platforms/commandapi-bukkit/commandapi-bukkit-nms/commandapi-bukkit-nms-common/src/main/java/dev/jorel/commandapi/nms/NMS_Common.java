@@ -639,28 +639,14 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
 	//  this doesn't blow up, but it should be covered by the default case (empty)
 	@Override
-	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
-	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
-		return switch (provider) {
-			case FUNCTION -> (context, builder) -> {
-				ServerFunctionManager functionData = this.<MinecraftServer>getMinecraftServer().getFunctions();
-				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
-				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
-			};
-			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
-			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getAdvancements().getAllAdvancements()
-					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
-			};
-			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getLootTables().getIds(), builder);
-			};
-			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
-			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
-			default -> (context, builder) -> Suggestions.empty();
-		};
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, info = """
+		The various methods that this uses is obfuscated to different method
+		names for different versions. For example, getMinecraftServer().getLootTables.getIds()
+		is mapped to a different method in 1.18 compared to 1.19.2. This also has various other
+		implications across all sorts of versions, so it's much more reliable to just implement
+		them in every version.
+		""")
+	public abstract SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider);
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, from = "1.18.2", to = "1.19")
