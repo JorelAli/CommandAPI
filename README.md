@@ -376,7 +376,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                 <b>⚠️ This version is incompatible with with any plugin that used the CommandAPI version 8.7.x or below! (See documentation for more information)</b><br>
                 <b>New features:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/360 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/360, https://github.com/JorelAli/CommandAPI/pull/369 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/162, https://github.com/JorelAli/CommandAPI/issues/387, https://github.com/JorelAli/CommandAPI/pull/393 Added optional arguments</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
                     <li>Reworked the implementation of <code>ItemArgument</code>, so the <code>ItemStack</code> count is correctly reflected and <code>ItemMeta</code> is properly assigned</li>
@@ -402,6 +402,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>https://github.com/JorelAli/CommandAPI/issues/384 Fixed various particle data not being documented for the <code>ParticleArgument</code> documentation page</li>
                     <li>Fixed broken links in the documentation (using <a href="https://github.com/Michael-F-Bryan/mdbook-linkcheck">Michael-F-Bryan/mdbook-linkcheck</a>)</li>
                     <li>Refactored documentation argument page names for consistency</li>
+                    <li>Added Kotlin DSL examples</li>
                 </ul>
                 <b>Other changes:</b>
                 <ul>
