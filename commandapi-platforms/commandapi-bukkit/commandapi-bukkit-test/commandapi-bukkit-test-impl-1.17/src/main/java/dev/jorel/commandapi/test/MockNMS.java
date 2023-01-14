@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +59,6 @@ import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementList;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.commands.synchronization.ArgumentTypes;
@@ -261,7 +261,7 @@ public class MockNMS extends ArgumentNMS {
 
 			// Advancement argument
 			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
-			Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(mockAdvancementDataWorld());
+			Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(advancementDataWorld);
 			Mockito.when(css.getServer()).thenReturn(minecraftServerMock);
 
 			// Entity selector argument
@@ -360,16 +360,6 @@ public class MockNMS extends ArgumentNMS {
 			});
 		}
 		return css;
-	}
-
-	public ServerAdvancementManager mockAdvancementDataWorld() {
-		ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
-		AdvancementList advancements = advancementDataWorld.advancements;
-		// Advancement advancements = (Advancement) getField(ServerAdvancementManager.class, "c", advancementDataWorld);
-
-		advancements.advancements.put(new ResourceLocation("my:advancement"), new Advancement(new ResourceLocation("my:advancement"), null, null, null, new HashMap<>(), null));
-		advancements.advancements.put(new ResourceLocation("my:advancement2"), new Advancement(new ResourceLocation("my:advancement2"), null, null, null, new HashMap<>(), null));
-		return advancementDataWorld;
 	}
 
 	public static Object getField(Class<?> className, String fieldName, Object instance) {
@@ -843,6 +833,7 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public <T> T getMinecraftServer() {
 		MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
+		
 		// LootTableArgument
 		Mockito.when(minecraftServerMock.getLootTables()).thenAnswer(invocation -> {
 			LootTables lootTables = Mockito.mock(LootTables.class);
@@ -867,7 +858,28 @@ public class MockNMS extends ArgumentNMS {
 			});
 			return lootTables;
 		});
+		
+		// Advancement argument
+		Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(advancementDataWorld);
 		return (T) minecraftServerMock;
+	}
+	
+	static ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
+
+	public static org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
+		advancementDataWorld.advancements.advancements.put(new ResourceLocation(key.toString()), new Advancement(new ResourceLocation(key.toString()), null, null, null, new HashMap<>(), null));
+		return new org.bukkit.advancement.Advancement() {
+			
+			@Override
+			public NamespacedKey getKey() {
+				return key;
+			}
+			
+			@Override
+			public Collection<String> getCriteria() {
+				return List.of();
+			}
+		};
 	}
 
 }

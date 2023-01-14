@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +41,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Streams;
@@ -58,6 +61,8 @@ import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
+import io.papermc.paper.advancement.AdvancementDisplay;
+import net.kyori.adventure.text.Component;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementList;
@@ -206,7 +211,7 @@ public class MockNMS extends ArgumentNMS {
 	@SuppressWarnings("unchecked")
 	public static void unregisterAllPotionEffects() {
 		PotionEffectType[] byId = (PotionEffectType[]) getField(PotionEffectType.class, "byId", null);
-		for (int i = 0; i < 34; i++) {
+		for (int i = 0; i < byId.length; i++) {
 			byId[i] = null;
 		}
 
@@ -216,13 +221,7 @@ public class MockNMS extends ArgumentNMS {
 		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
 		byKey.clear();
 
-		try {
-			Field field = PotionEffectType.class.getDeclaredField("acceptingNew");
-			field.setAccessible(true);
-			field.set(null, true);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -234,13 +233,7 @@ public class MockNMS extends ArgumentNMS {
 		Map<NamespacedKey, Enchantment> byKey = (Map<NamespacedKey, Enchantment>) getField(Enchantment.class, "byKey", null);
 		byKey.clear();
 
-		try {
-			Field field = Enchantment.class.getDeclaredField("acceptingNew");
-			field.setAccessible(true);
-			field.set(null, true);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		setField(Enchantment.class, "acceptingNew", null, true);
 	}
 
 	@Override
@@ -286,7 +279,7 @@ public class MockNMS extends ArgumentNMS {
 
 			// Advancement argument
 			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
-			Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(mockAdvancementDataWorld());
+			Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(advancementDataWorld);
 			Mockito.when(css.getServer()).thenReturn(minecraftServerMock);
 
 			// Entity selector argument
@@ -385,16 +378,6 @@ public class MockNMS extends ArgumentNMS {
 			});
 		}
 		return css;
-	}
-
-	public ServerAdvancementManager mockAdvancementDataWorld() {
-		ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
-		AdvancementList advancements = advancementDataWorld.advancements;
-		// Advancement advancements = (Advancement) getField(ServerAdvancementManager.class, "c", advancementDataWorld);
-
-		advancements.advancements.put(new ResourceLocation("my:advancement"), new Advancement(new ResourceLocation("my:advancement"), null, null, null, new HashMap<>(), null));
-		advancements.advancements.put(new ResourceLocation("my:advancement2"), new Advancement(new ResourceLocation("my:advancement2"), null, null, null, new HashMap<>(), null));
-		return advancementDataWorld;
 	}
 
 	public static Object getField(Class<?> className, String fieldName, Object instance) {
@@ -868,6 +851,7 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public <T> T getMinecraftServer() {
 		MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
+
 		// LootTableArgument
 		Mockito.when(minecraftServerMock.getLootTables()).thenAnswer(invocation -> {
 			LootTables lootTables = Mockito.mock(LootTables.class);
@@ -892,7 +876,53 @@ public class MockNMS extends ArgumentNMS {
 			});
 			return lootTables;
 		});
+		
+		// Advancement argument
+		Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(advancementDataWorld);
 		return (T) minecraftServerMock;
+	}
+	
+	static ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
+
+	public static org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
+		advancementDataWorld.advancements.advancements.put(new ResourceLocation(key.toString()), new Advancement(new ResourceLocation(key.toString()), null, null, null, new HashMap<>(), null));
+		return new org.bukkit.advancement.Advancement() {
+			
+			@Override
+			public NamespacedKey getKey() {
+				return key;
+			}
+			
+			@Override
+			public Collection<String> getCriteria() {
+				return List.of();
+			}
+
+			@Override
+			public @Nullable AdvancementDisplay getDisplay() {
+				return null;
+			}
+
+			@Override
+			public @NotNull Component displayName() {
+				return null;
+			}
+
+			@Override
+			public org.bukkit.advancement.@Nullable Advancement getParent() {
+				return null;
+			}
+
+			@Override
+			public @NotNull @Unmodifiable Collection<org.bukkit.advancement.Advancement> getChildren() {
+				return null;
+			}
+
+			@Override
+			public org.bukkit.advancement.@NotNull Advancement getRoot() {
+				return null;
+			}
+		};
 	}
 
 

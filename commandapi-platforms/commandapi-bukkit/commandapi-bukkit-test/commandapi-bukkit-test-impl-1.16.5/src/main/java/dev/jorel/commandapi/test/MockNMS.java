@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -265,7 +266,7 @@ public class MockNMS extends ArgumentNMS {
 
 			// Advancement argument
 			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
-			Mockito.when(minecraftServerMock.getAdvancementData()).thenReturn(mockAdvancementDataWorld());
+			Mockito.when(minecraftServerMock.getAdvancementData()).thenReturn(advancementDataWorld);
 			Mockito.when(clw.getServer()).thenReturn(minecraftServerMock);
 
 			// Entity selector argument
@@ -364,16 +365,6 @@ public class MockNMS extends ArgumentNMS {
 			});
 		}
 		return clw;
-	}
-
-	public AdvancementDataWorld mockAdvancementDataWorld() {
-		AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
-		Advancements advancements = advancementDataWorld.REGISTRY;
-		// Advancement advancements = (Advancement) getField(ServerAdvancementManager.class, "c", advancementDataWorld);
-
-		advancements.advancements.put(new MinecraftKey("my:advancement"), new Advancement(new MinecraftKey("my:advancement"), null, null, null, new HashMap<>(), null));
-		advancements.advancements.put(new MinecraftKey("my:advancement2"), new Advancement(new MinecraftKey("my:advancement2"), null, null, null, new HashMap<>(), null));
-		return advancementDataWorld;
 	}
 
 	public static Object getField(Class<?> className, String fieldName, Object instance) {
@@ -831,6 +822,11 @@ public class MockNMS extends ArgumentNMS {
 		};
 	}
 	
+	public static org.bukkit.advancement.Advancement[] getAdvancements() {
+		return null;
+		
+	}
+	
 	public static String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
 	}
@@ -839,6 +835,7 @@ public class MockNMS extends ArgumentNMS {
 	@Override
 	public <T> T getMinecraftServer() {
 		MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
+		
 		// LootTableArgument
 		Mockito.when(minecraftServerMock.getLootTableRegistry()).thenAnswer(invocation -> {
 			LootTableRegistry lootTables = Mockito.mock(LootTableRegistry.class);
@@ -863,7 +860,28 @@ public class MockNMS extends ArgumentNMS {
 			});
 			return lootTables;
 		});
+		
+		// Advancement argument
+		Mockito.when(minecraftServerMock.getAdvancementData()).thenReturn(advancementDataWorld);
 		return (T) minecraftServerMock;
 	}
+	
+	static AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
 
+	public static org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
+		advancementDataWorld.REGISTRY.advancements.put(new MinecraftKey(key.toString()), new Advancement(new MinecraftKey(key.toString()), null, null, null, new HashMap<>(), null));
+		return new org.bukkit.advancement.Advancement() {
+			
+			@Override
+			public NamespacedKey getKey() {
+				return key;
+			}
+			
+			@Override
+			public Collection<String> getCriteria() {
+				return List.of();
+			}
+		};
+	}
+	
 }
