@@ -394,6 +394,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <b>Bugs found (and fixed) as a result of the testing matrix:</b>
                     <ul>
                         <li>Fixed <code>TeamArgument</code> not working on Minecraft 1.17</li>
+                        <li>Fixed <code>IntegerRangeArgument</code> and <code>FloatRangeArgument</code> not working on Minecraft 1.16.4 and 1.16.5</li>
                     </ul>
                 </ul>
                 <b>Documentation changes:</b>

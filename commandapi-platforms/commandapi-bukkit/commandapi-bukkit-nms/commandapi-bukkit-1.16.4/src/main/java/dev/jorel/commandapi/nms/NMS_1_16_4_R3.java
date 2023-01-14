@@ -287,13 +287,13 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() { return ArgumentEntitySummon.a(); }
 
-	@Differs(from = "1.16.2", by = "new ArgumentCriterionValue.a() -> ArgumentCriterionValue.a()")
+	@Differs(from = "1.16.2", by = "new ArgumentCriterionValue.a() -> ArgumentCriterionValue.b()")
 	@Override
-	public ArgumentType<?> _ArgumentFloatRange() { return ArgumentCriterionValue.a(); }
+	public ArgumentType<?> _ArgumentFloatRange() { return ArgumentCriterionValue.b(); }
 
-	@Differs(from = "1.16.2", by = "new ArgumentCriterionValue.b() -> ArgumentCriterionValue.b()")
+	@Differs(from = "1.16.2", by = "new ArgumentCriterionValue.b() -> ArgumentCriterionValue.a()")
 	@Override
-	public ArgumentType<?> _ArgumentIntRange() { return ArgumentCriterionValue.b(); }
+	public ArgumentType<?> _ArgumentIntRange() { return ArgumentCriterionValue.a(); }
 
 	@Override
 	public ArgumentType<?> _ArgumentItemPredicate() { return ArgumentItemPredicate.a(); }
