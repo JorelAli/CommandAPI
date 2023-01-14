@@ -2,16 +2,13 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.jorel.commandapi.arguments.DoubleArgument;
-import dev.jorel.commandapi.arguments.FloatArgument;
+import dev.jorel.commandapi.arguments.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.BooleanArgument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -175,7 +172,6 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertNoMoreResults(results);
 	}
 
-	// TODO: Long
 	@Test
 	public void executionTestWithFloatArgument() {
 		Mut<Float> results = Mut.of();
@@ -324,6 +320,112 @@ public class ArgumentPrimitiveTests extends TestBase {
 
 		// /test 30
 		assertCommandFailsWith(player, "test 30", "Double must not be more than 20.0, found 30.0 at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithLongArgument() {
+		Mut<Long> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new LongArgument("value"))
+			.executesPlayer((player, args) -> {
+				results.set((long) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test 10
+		server.dispatchCommand(player, "test 10");
+		assertEquals(10, results.get());
+
+		// /test -10
+		server.dispatchCommand(player, "test -10");
+		assertEquals(-10, results.get());
+
+		// /test 0
+		server.dispatchCommand(player, "test 0");
+		assertEquals(0, results.get());
+
+		// /test 9223372036854775807
+		server.dispatchCommand(player, "test 9223372036854775807");
+		assertEquals(Long.MAX_VALUE, results.get());
+
+		// /test -9223372036854775808
+		server.dispatchCommand(player, "test -9223372036854775808");
+		assertEquals(Long.MIN_VALUE, results.get());
+
+		// /test 123hello
+		assertCommandFailsWith(player, "test 123hello", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
+
+		// /test hello123
+		assertCommandFailsWith(player, "test hello123", "Expected long at position 5: test <--[HERE]");
+
+		// /test 9223372036854775808
+		assertCommandFailsWith(player, "test 9223372036854775808", "Invalid long '9223372036854775808' at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithBoundedLongArgument() {
+		Mut<Long> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new LongArgument("value", 10))
+			.executesPlayer((player, args) -> {
+				results.set((long) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test 10
+		server.dispatchCommand(player, "test 10");
+		assertEquals(10, results.get());
+
+		// /test 20
+		server.dispatchCommand(player, "test 20");
+		assertEquals(20, results.get());
+
+		// /test 0
+		assertCommandFailsWith(player, "test 0", "Long must not be less than 10, found 0 at position 5: test <--[HERE]");
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithDoubleBoundedLongArgument() {
+		Mut<Long> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new LongArgument("value", 10, 20))
+			.executesPlayer((player, args) -> {
+				results.set((long) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test 10
+		server.dispatchCommand(player, "test 10");
+		assertEquals(10, results.get());
+
+		// /test 15
+		server.dispatchCommand(player, "test 15");
+		assertEquals(15, results.get());
+
+		// /test 20
+		server.dispatchCommand(player, "test 20");
+		assertEquals(20, results.get());
+
+		// /test 0
+		assertCommandFailsWith(player, "test 0", "Long must not be less than 10, found 0 at position 5: test <--[HERE]");
+
+		// /test 30
+		assertCommandFailsWith(player, "test 30", "Long must not be more than 20, found 30 at position 5: test <--[HERE]");
 
 		assertNoMoreResults(results);
 	}
