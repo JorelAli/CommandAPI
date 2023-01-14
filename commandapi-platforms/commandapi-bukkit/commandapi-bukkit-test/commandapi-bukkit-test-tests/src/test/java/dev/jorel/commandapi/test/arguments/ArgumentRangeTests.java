@@ -90,7 +90,7 @@ public class ArgumentRangeTests extends TestBase {
 		assertCommandFailsWith(player, "test hello123..10", "Expected value or range of values at position 5: test <--[HERE]");
 
 		// test 123hello..10
-		assertCommandFailsWith(player, "test123hello..10", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
+		assertCommandFailsWith(player, "test 123hello..10", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
