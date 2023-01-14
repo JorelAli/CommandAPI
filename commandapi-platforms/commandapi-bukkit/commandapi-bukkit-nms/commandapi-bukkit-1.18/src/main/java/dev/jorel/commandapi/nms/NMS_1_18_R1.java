@@ -591,18 +591,18 @@ public class NMS_1_18_R1 extends NMS_Common {
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
-				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
+				ServerFunctionManager functionData = this.<MinecraftServer>getMinecraftServer().getFunctions();
 				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
 				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
 			};
 			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
 			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
+				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getAdvancements().getAllAdvancements()
 					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
 			};
 			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
+				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getLootTables().getIds(), builder);
 			};
 			case BIOMES -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_BIOMES;
 			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
