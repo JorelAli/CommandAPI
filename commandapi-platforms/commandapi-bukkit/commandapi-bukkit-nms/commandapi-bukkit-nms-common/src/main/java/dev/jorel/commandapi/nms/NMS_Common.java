@@ -663,7 +663,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return TeamArgument.getTeam(cmdCtx, key).getName();
 	}
 

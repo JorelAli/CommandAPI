@@ -297,10 +297,10 @@ public class MockNMS extends ArgumentNMS {
 				String playerName = invocation.getArgument(0);
 				for(ServerPlayer onlinePlayer : players) {
 					if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-						return Optional.of(new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName));
+						return new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName);
 					}
 				}
-				return Optional.empty();
+				return null;
 			});
 			Mockito.when(minecraftServerMock.getProfileCache()).thenReturn(userCacheMock);
 			
@@ -724,6 +724,7 @@ public class MockNMS extends ArgumentNMS {
 			org.bukkit.loot.LootTables.VILLAGE_WEAPONSMITH,
 			org.bukkit.loot.LootTables.WOODLAND_MANSION,
 			org.bukkit.loot.LootTables.ARMOR_STAND,
+			org.bukkit.loot.LootTables.AXOLOTL,
 			org.bukkit.loot.LootTables.BAT,
 			org.bukkit.loot.LootTables.BEE,
 			org.bukkit.loot.LootTables.BLAZE,
@@ -737,13 +738,15 @@ public class MockNMS extends ArgumentNMS {
 			org.bukkit.loot.LootTables.DONKEY,
 			org.bukkit.loot.LootTables.DROWNED,
 			org.bukkit.loot.LootTables.ELDER_GUARDIAN,
+			org.bukkit.loot.LootTables.ENDER_DRAGON,
 			org.bukkit.loot.LootTables.ENDERMAN,
 			org.bukkit.loot.LootTables.ENDERMITE,
-			org.bukkit.loot.LootTables.ENDER_DRAGON,
 			org.bukkit.loot.LootTables.EVOKER,
 			org.bukkit.loot.LootTables.FOX,
 			org.bukkit.loot.LootTables.GHAST,
 			org.bukkit.loot.LootTables.GIANT,
+			org.bukkit.loot.LootTables.GLOW_SQUID,
+			org.bukkit.loot.LootTables.GOAT,
 			org.bukkit.loot.LootTables.GUARDIAN,
 			org.bukkit.loot.LootTables.HOGLIN,
 			org.bukkit.loot.LootTables.HORSE,

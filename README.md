@@ -388,6 +388,14 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Fixed tags showing up in the <code>BiomeArgument</code> when they shouldn't have been doing so</li>
                     <li>Fixed <code>LocationArgument</code> with <code>BLOCK_POSITION</code> not returning locations in unloaded chunks</li>
                 </ul>
+                <b>Testing matrix:</b>
+                <ul>
+                    <li>Created the testing matrix to perform multi-Minecraft-version testing</li>
+                    <b>Bugs found (and fixed) as a result of the testing matrix:</b>
+                    <ul>
+                        <li>Fixed <code>TeamArgument</code> not working on Minecraft 1.17</li>
+                    </ul>
+                </ul>
                 <b>Documentation changes:</b>
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/384 Fixed various particle data not being documented for the <code>ParticleArgument</code> documentation page</li>

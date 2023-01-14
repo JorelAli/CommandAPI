@@ -105,6 +105,7 @@ import net.minecraft.commands.arguments.ItemEnchantmentArgument;
 import net.minecraft.commands.arguments.MobEffectArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.TeamArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -612,6 +613,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 			result[i] = convertFunction(customFunctions.get(i));
 		}
 		return result;
+	}
+
+	@Override
+	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return TeamArgument.getTeam(cmdCtx, key).getName();
 	}
 
 	@Override

@@ -44,6 +44,8 @@ jobs:
         run: |
             mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
             mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_18
+            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_17
+            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_16_5
             mvn clean package -pl :commandapi-bukkit-test-tests-1.18 -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
 
       - name: Upload CommandAPI (Bukkit) plugin artifact
