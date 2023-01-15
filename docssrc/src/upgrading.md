@@ -124,13 +124,13 @@ Additionally, when using the Kotlin DSL for Bukkit, instead of using `commandapi
 
 ```gradle,Gradle
 dependencies {
-    compileOnly "dev.jorel:commandapi-kotlin:9.0.0"
+    implementation "dev.jorel:commandapi-kotlin:9.0.0"
 }
 ```
 
 ```kotlin,Kotlin_Gradle
 dependencies {
-    compileOnly("dev.jorel:commandapi-kotlin:9.0.0")
+    implementation("dev.jorel:commandapi-kotlin:9.0.0")
 }
 ```
 
