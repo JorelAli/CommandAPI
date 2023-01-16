@@ -29,6 +29,7 @@ import net.minecraft.server.v1_14_R1.IBlockData;
 import net.minecraft.server.v1_14_R1.ICompletionProvider;
 import net.minecraft.server.v1_14_R1.ItemStack;
 import net.minecraft.server.v1_14_R1.MinecraftKey;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.ParticleParamBlock;
 import net.minecraft.server.v1_14_R1.ParticleParamItem;
@@ -52,12 +53,12 @@ public class NMS_1_14_3 extends NMS_1_14 {
 		return new String[] { "1.14.3" };
 	}
 
-	@Differs(from = "1.14", by = "MINECRAFT_SERVER.getAdvancementData().b() -> MINECRAFT_SERVER.getAdvancementData().a(). functionData.g() -> functionData.h()")
+	@Differs(from = "1.14", by = "this.<MinecraftServer>getMinecraftServer().getAdvancementData().b() -> this.<MinecraftServer>getMinecraftServer().getAdvancementData().a(). functionData.g() -> functionData.h()")
 	@Override
 	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
-				CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
+				CustomFunctionData functionData = this.<MinecraftServer>getMinecraftServer().getFunctionData();
 				ICompletionProvider.a(functionData.h().a(), builder, "#");
 				return ICompletionProvider.a(functionData.c().keySet(), builder);
 			};
@@ -65,21 +66,21 @@ public class NMS_1_14_3 extends NMS_1_14 {
 			case SOUNDS -> CompletionProviders.c;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
 				return ICompletionProvider
-					.a(MINECRAFT_SERVER.getAdvancementData().a().stream().map(Advancement::getName), builder);
+					.a(this.<MinecraftServer>getMinecraftServer().getAdvancementData().a().stream().map(Advancement::getName), builder);
 			};
 			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return ICompletionProvider.a(MINECRAFT_SERVER.getLootTableRegistry().a(), builder);
+				return ICompletionProvider.a(this.<MinecraftServer>getMinecraftServer().getLootTableRegistry().a(), builder);
 			};
 			case ENTITIES -> CompletionProviders.d;
 			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
 
-	@Differs(from = "1.14", by = "MINECRAFT_SERVER.getFunctionData().g() -> MINECRAFT_SERVER.getFunctionData().h()")
+	@Differs(from = "1.14", by = "this.<MinecraftServer>getMinecraftServer().getFunctionData().g() -> this.<MinecraftServer>getMinecraftServer().getFunctionData().h()")
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		List<CustomFunction> customFunctions = new ArrayList<>(
-			MINECRAFT_SERVER.getFunctionData().h().b(new MinecraftKey(key.getNamespace(), key.getKey())).a());
+			this.<MinecraftServer>getMinecraftServer().getFunctionData().h().b(new MinecraftKey(key.getNamespace(), key.getKey())).a());
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
@@ -87,11 +88,11 @@ public class NMS_1_14_3 extends NMS_1_14 {
 		return result;
 	}
 
-	@Differs(from = "1.14", by = "MINECRAFT_SERVER.getFunctionData().g() -> MINECRAFT_SERVER.getFunctionData().h()")
+	@Differs(from = "1.14", by = "this.<MinecraftServer>getMinecraftServer().getFunctionData().g() -> this.<MinecraftServer>getMinecraftServer().getFunctionData().h()")
 	@Override
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().h().a()) {
+		for (MinecraftKey key : this.<MinecraftServer>getMinecraftServer().getFunctionData().h().a()) {
 			functions.add(fromMinecraftKey(key));
 		}
 		return functions;

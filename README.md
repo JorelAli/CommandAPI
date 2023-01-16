@@ -44,23 +44,23 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 
 | Minecraft version  | Compatible versions         | Latest compatible<br>version | Minimum Java<br>version required<br>to run latest version |
 |--------------------|-----------------------------|------------------------------|-----------------------------------------------------------|
-| **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 8.7.3 | 8.7.3                        | 16                                                        |
-| **1.17**           | 6.0.x - 8.7.3               | 8.7.3                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 8.7.3               | 8.7.3                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 8.7.3               | 8.7.3                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 8.7.3               | 8.7.3                        | 16                                                        |
-| **1.19**           | 8.3.0 - 8.7.3               | 8.7.3                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 8.7.3               | 8.7.3                        | 16                                                        |
-| **1.19.2**         | 8.5.1 - 8.7.3               | 8.7.3                        | 16                                                        |
-| **1.19.3**         | 8.7.0 - 8.7.3               | 8.7.3                        | 16                                                        |
+| **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 8.7.4 | 8.7.4                        | 16                                                        |
+| **1.17**           | 6.0.x - 8.7.4               | 8.7.4                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 8.7.4               | 8.7.4                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 8.7.4               | 8.7.4                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 8.7.4               | 8.7.4                        | 16                                                        |
+| **1.19**           | 8.3.0 - 8.7.4               | 8.7.4                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 8.7.4               | 8.7.4                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 8.7.4               | 8.7.4                        | 16                                                        |
+| **1.19.3**         | 8.7.0 - 8.7.4               | 8.7.4                        | 16                                                        |
 
 -----
 
@@ -376,7 +376,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                 <b>⚠️ This version is incompatible with with any plugin that used the CommandAPI version 8.7.x or below! (See documentation for more information)</b><br>
                 <b>New features:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/360 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/360, https://github.com/JorelAli/CommandAPI/pull/369 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/162, https://github.com/JorelAli/CommandAPI/issues/387, https://github.com/JorelAli/CommandAPI/pull/393 Added optional arguments</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
                     <li>Reworked the implementation of <code>ItemArgument</code>, so the <code>ItemStack</code> count is correctly reflected and <code>ItemMeta</code> is properly assigned</li>
@@ -388,11 +388,21 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Fixed tags showing up in the <code>BiomeArgument</code> when they shouldn't have been doing so</li>
                     <li>Fixed <code>LocationArgument</code> with <code>BLOCK_POSITION</code> not returning locations in unloaded chunks</li>
                 </ul>
+                <b>Testing matrix:</b>
+                <ul>
+                    <li>Created the testing matrix to perform multi-Minecraft-version testing</li>
+                    <b>Bugs found (and fixed) as a result of the testing matrix:</b>
+                    <ul>
+                        <li>Fixed <code>TeamArgument</code> not working on Minecraft 1.17</li>
+                        <li>Fixed <code>IntegerRangeArgument</code> and <code>FloatRangeArgument</code> not working on Minecraft 1.16.4 and 1.16.5</li>
+                    </ul>
+                </ul>
                 <b>Documentation changes:</b>
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/384 Fixed various particle data not being documented for the <code>ParticleArgument</code> documentation page</li>
                     <li>Fixed broken links in the documentation (using <a href="https://github.com/Michael-F-Bryan/mdbook-linkcheck">Michael-F-Bryan/mdbook-linkcheck</a>)</li>
                     <li>Refactored documentation argument page names for consistency</li>
+                    <li>Added Kotlin DSL examples</li>
                 </ul>
                 <b>Other changes:</b>
                 <ul>
@@ -409,6 +419,14 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Fixed building the CommandAPI example projects not failing if they failed to compile</li>
                     <li>Added the CommandAPI documentation to GitHub Actions</li>
                     <li>Added deployment of snapshot builds to GitHub Actions</li>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>8.7.4</b></td>
+            <td valign="top">January 2023</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixed <code>LootTableArgument</code> (function, recipe, sound, advancement, biome and entities) in 1.17 - 1.19.3</li>
                 </ul>
             </td>
         </tr>

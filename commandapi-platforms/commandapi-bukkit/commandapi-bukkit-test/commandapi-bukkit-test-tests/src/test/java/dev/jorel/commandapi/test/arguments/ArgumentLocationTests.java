@@ -49,7 +49,7 @@ public class ArgumentLocationTests extends TestBase {
 	 *********/
 	
 	@Test
-	public void executionTestWithLocationArgument() {
+	public void executionTestWithLocationArgumentPrecisePosition() {
 		Mut<Location> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -63,7 +63,15 @@ public class ArgumentLocationTests extends TestBase {
 		
 		// /test 1 10 15
 		server.dispatchCommand(player, "test 1 10 15");
-		assertLocationEquals(new Location(null, 1.5, 10.0, 15.5), results.get());
+		assertLocationEquals(new Location(null, 1.5, 10.0, 15.5), results.get()); // TODO: This looks sus. Why does it add .5 to the x and z?
+		
+		// /test 1 10 15
+		server.dispatchCommand(player, "test 1.0 10.0 15.0");
+		assertLocationEquals(new Location(null, 1.0, 10.0, 15.0), results.get());
+		
+		// /test 1.2 10.2 15.2
+		server.dispatchCommand(player, "test 1.2 10.2 15.2");
+		assertLocationEquals(new Location(null, 1.2, 10.2, 15.2), results.get());
 		
 		// test ~ ~5 ~
 		// Where the player's position is (2, 2, 2)
@@ -120,6 +128,57 @@ public class ArgumentLocationTests extends TestBase {
 //		assertEquals("2.0, 7.0, 2.0", player.nextMessage());
 //		assertEquals("2.0, 7.0", player.nextMessage());
 //		assertEquals("2.0, 7.0", player.nextMessage());
+	}
+	
+	@Test
+	public void executionTestWithLocationArgumentBlockPosition() {
+		Mut<Location> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new LocationArgument("location", LocationType.BLOCK_POSITION))
+			.executesPlayer((player, args) -> {
+				results.set((Location) args.get(0));
+			})
+			.register();
+	
+		PlayerMock player = server.addPlayer();
+		
+		// /test 1 10 15
+		server.dispatchCommand(player, "test 1 10 15");
+		assertLocationEquals(new Location(null, 1, 10, 15), results.get());
+		
+		// test ~ ~5 ~
+		// Where the player's position is (2, 2, 2)
+		player.setLocation(new Location(player.getWorld(), 2, 2.5, 2));
+		server.dispatchCommand(player, "test ~ ~5 ~");
+		assertLocationEquals(new Location(null, 2, 7, 2), results.get());
+		
+		// Test ^ ^ ^ (local) coordinates
+		{
+			/**
+			 * For the horizontal rotation ( yaw ), -180.0 for due north, -90.0 for due
+			 * east, 0.0 for due south, 90.0 for due west, to 179.9 for just west of due
+			 * north, before wrapping back around to -180.0. For the vertical rotation (
+			 * pitch ), -90.0 for straight up to 90.0 for straight down.
+			 * 
+			 * X gives your distance east of the origin, and Z gives the distance south.
+			 */
+
+			// test ^ ^ ^5
+			// Where the player's position is (2, 2, 2), facing south (positive Z)
+			player.setLocation(new Location(player.getWorld(), 2, 2, 2, 0.0f, 0.0f));
+			server.dispatchCommand(player, "test ^ ^ ^5");
+			assertLocationEquals(new Location(null, 2, 2, 7), results.get());
+			
+			// As defined in https://minecraft.fandom.com/wiki/Coordinates#Local_coordinates:
+			// For example, /tp ^ ^ ^5 teleports the player 5 blocks forward. If they turn
+			// around and repeat the command, they are teleported back to where they
+			// started.
+			
+			player.setLocation(new Location(player.getWorld(), 2, 2, 2, -180.0f, 0.0f));
+			server.dispatchCommand(player, "test ^ ^ ^5");
+			assertLocationEquals(new Location(null, 1, 2, -3), results.get()); // TODO: Very sus, why does the y coordinate become 1? 
+		}
 	}
 
 //	@Test

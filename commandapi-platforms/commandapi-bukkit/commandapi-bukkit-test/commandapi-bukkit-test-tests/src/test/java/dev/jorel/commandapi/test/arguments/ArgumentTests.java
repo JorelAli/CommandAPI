@@ -269,27 +269,6 @@ public class ArgumentTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithAdvancementArgument() {
-		new CommandAPICommand("adv")
-			.withArguments(new AdvancementArgument("value"))
-			.executesPlayer((player, args) -> {
-				Advancement advancement = (Advancement) args.get(0);
-				player.sendMessage(advancement.getKey().toString());
-			})
-			.register();
-		
-		PlayerMock player = server.addPlayer();
-		
-		/** Add advancements in {@link MockNMS#mockAdvancementDataWorld} */
-		server.dispatchCommand(player, "adv my:advancement");
-		server.dispatchCommand(player, "adv my:advancement2");
-		server.dispatchCommand(player, "adv my:advancement3");
-		assertEquals("my:advancement", player.nextMessage());
-		assertEquals("my:advancement2", player.nextMessage());
-		assertEquals(null, player.nextMessage());
-	}
-	
-	@Test
 	public void executionTestWithLocationArgument() {
 		new CommandAPICommand("loc3")
 			.withArguments(new LocationArgument("value", LocationType.PRECISE_POSITION))

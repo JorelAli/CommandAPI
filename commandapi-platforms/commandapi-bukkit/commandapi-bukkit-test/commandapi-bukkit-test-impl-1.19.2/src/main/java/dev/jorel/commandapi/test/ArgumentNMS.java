@@ -61,7 +61,7 @@ import net.minecraft.resources.ResourceKey;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends CommandAPIBukkit<CommandSourceStack> {
 
-	public final NMS<?> BASE_NMS;
+	public NMS<?> BASE_NMS;
 
 	public ArgumentNMS(NMS<?> baseNMS) {
 		this.BASE_NMS = baseNMS;

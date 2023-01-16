@@ -8,13 +8,15 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.bukkit.Bukkit;
@@ -37,9 +39,9 @@ import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
 
+import com.google.common.collect.Streams;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
@@ -50,13 +52,13 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementList;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.commands.synchronization.ArgumentTypes;
@@ -73,6 +75,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
@@ -81,6 +85,11 @@ public class MockNMS extends ArgumentNMS {
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
+
+		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
+		// Stub in our getMinecraftServer implementation
+		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
+		BASE_NMS = nms;
 
 		// Initialize WorldVersion (game version)
 		SharedConstants.tryDetectVersion();
@@ -95,25 +104,16 @@ public class MockNMS extends ArgumentNMS {
 		// How convenient!
 		Bootstrap.bootStrap();
 		
-		// Sometimes, and I have no idea why, Bootstrap.bootStrap() only works
-		// on the very first test in the test suite. After that, everything else
-		// doesn't work. At this point, we'll use the ServerMock#createPotionEffectTypes
-		// method (which unfortunately is private and pure, so instead of using reflection
-		// we'll just implement it right here instead)
-		@SuppressWarnings("unchecked")
-		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
-		if(byKey.isEmpty()) {
-			createPotionEffectTypes();
-		}
+		createPotionEffectTypes();
 		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
 		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
 		// 1.19 ones!)
 		registerDefaultEnchantments();
 	}
 	
-	private static void registerPotionEffectType(int id, @NotNull String name, boolean instant, int rgb) {
+	private static void registerPotionEffectType(int id, String name, boolean instant, int rgb) {
 		NamespacedKey key = NamespacedKey.minecraft(name.toLowerCase(Locale.ROOT));
-		PotionEffectType type = new MockPotionEffectType(key, id, name, instant, Color.fromRGB(rgb));
+		PotionEffectType type = new MockPotionEffectType(id, name, instant, Color.fromRGB(rgb));
 		PotionEffectType.registerPotionEffectType(type);
 	}
 	
@@ -195,23 +195,14 @@ public class MockNMS extends ArgumentNMS {
 	@SuppressWarnings("unchecked")
 	public static void unregisterAllPotionEffects() {
 		PotionEffectType[] byId = (PotionEffectType[]) getField(PotionEffectType.class, "byId", null);
-		for (int i = 0; i < 34; i++) {
+		for (int i = 0; i < byId.length; i++) {
 			byId[i] = null;
 		}
 
 		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) getField(PotionEffectType.class, "byName", null);
 		byName.clear();
 
-		Map<NamespacedKey, PotionEffectType> byKey = (Map<NamespacedKey, PotionEffectType>) getField(PotionEffectType.class, "byKey", null);
-		byKey.clear();
-
-		try {
-			Field field = PotionEffectType.class.getDeclaredField("acceptingNew");
-			field.setAccessible(true);
-			field.set(null, true);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -223,13 +214,8 @@ public class MockNMS extends ArgumentNMS {
 		Map<NamespacedKey, Enchantment> byKey = (Map<NamespacedKey, Enchantment>) getField(Enchantment.class, "byKey", null);
 		byKey.clear();
 
-		try {
-			Field field = Enchantment.class.getDeclaredField("acceptingNew");
-			field.setAccessible(true);
-			field.set(null, true);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		setField(Enchantment.class, "acceptingNew", null, true);
+
 	}
 
 	@Override
@@ -275,7 +261,7 @@ public class MockNMS extends ArgumentNMS {
 
 			// Advancement argument
 			MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
-			Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(mockAdvancementDataWorld());
+			Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(advancementDataWorld);
 			Mockito.when(css.getServer()).thenReturn(minecraftServerMock);
 
 			// Entity selector argument
@@ -310,10 +296,10 @@ public class MockNMS extends ArgumentNMS {
 				String playerName = invocation.getArgument(0);
 				for(ServerPlayer onlinePlayer : players) {
 					if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-						return Optional.of(new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName));
+						return new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName);
 					}
 				}
-				return Optional.empty();
+				return null;
 			});
 			Mockito.when(minecraftServerMock.getProfileCache()).thenReturn(userCacheMock);
 			
@@ -374,16 +360,6 @@ public class MockNMS extends ArgumentNMS {
 			});
 		}
 		return css;
-	}
-
-	public ServerAdvancementManager mockAdvancementDataWorld() {
-		ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
-		AdvancementList advancements = advancementDataWorld.advancements;
-		// Advancement advancements = (Advancement) getField(ServerAdvancementManager.class, "c", advancementDataWorld);
-
-		advancements.advancements.put(new ResourceLocation("my:advancement"), new Advancement(new ResourceLocation("my:advancement"), null, null, null, new HashMap<>(), null));
-		advancements.advancements.put(new ResourceLocation("my:advancement2"), new Advancement(new ResourceLocation("my:advancement2"), null, null, null, new HashMap<>(), null));
-		return advancementDataWorld;
 	}
 
 	public static Object getField(Class<?> className, String fieldName, Object instance) {
@@ -692,8 +668,218 @@ public class MockNMS extends ArgumentNMS {
 		};
 	}
 	
+	public static org.bukkit.loot.LootTables[] getLootTables() {
+		return new org.bukkit.loot.LootTables[] {
+			// org.bukkit.loot.LootTables.EMPTY,
+			org.bukkit.loot.LootTables.ABANDONED_MINESHAFT,
+			org.bukkit.loot.LootTables.BURIED_TREASURE,
+			org.bukkit.loot.LootTables.DESERT_PYRAMID,
+			org.bukkit.loot.LootTables.END_CITY_TREASURE,
+			org.bukkit.loot.LootTables.IGLOO_CHEST,
+			org.bukkit.loot.LootTables.JUNGLE_TEMPLE,
+			org.bukkit.loot.LootTables.JUNGLE_TEMPLE_DISPENSER,
+			org.bukkit.loot.LootTables.NETHER_BRIDGE,
+			org.bukkit.loot.LootTables.PILLAGER_OUTPOST,
+			org.bukkit.loot.LootTables.BASTION_TREASURE,
+			org.bukkit.loot.LootTables.BASTION_OTHER,
+			org.bukkit.loot.LootTables.BASTION_BRIDGE,
+			org.bukkit.loot.LootTables.BASTION_HOGLIN_STABLE,
+			org.bukkit.loot.LootTables.RUINED_PORTAL,
+			org.bukkit.loot.LootTables.SHIPWRECK_MAP,
+			org.bukkit.loot.LootTables.SHIPWRECK_SUPPLY,
+			org.bukkit.loot.LootTables.SHIPWRECK_TREASURE,
+			org.bukkit.loot.LootTables.SIMPLE_DUNGEON,
+			org.bukkit.loot.LootTables.SPAWN_BONUS_CHEST,
+			org.bukkit.loot.LootTables.STRONGHOLD_CORRIDOR,
+			org.bukkit.loot.LootTables.STRONGHOLD_CROSSING,
+			org.bukkit.loot.LootTables.STRONGHOLD_LIBRARY,
+			org.bukkit.loot.LootTables.UNDERWATER_RUIN_BIG,
+			org.bukkit.loot.LootTables.UNDERWATER_RUIN_SMALL,
+			org.bukkit.loot.LootTables.VILLAGE_ARMORER,
+			org.bukkit.loot.LootTables.VILLAGE_BUTCHER,
+			org.bukkit.loot.LootTables.VILLAGE_CARTOGRAPHER,
+			org.bukkit.loot.LootTables.VILLAGE_DESERT_HOUSE,
+			org.bukkit.loot.LootTables.VILLAGE_FISHER,
+			org.bukkit.loot.LootTables.VILLAGE_FLETCHER,
+			org.bukkit.loot.LootTables.VILLAGE_MASON,
+			org.bukkit.loot.LootTables.VILLAGE_PLAINS_HOUSE,
+			org.bukkit.loot.LootTables.VILLAGE_SAVANNA_HOUSE,
+			org.bukkit.loot.LootTables.VILLAGE_SHEPHERD,
+			org.bukkit.loot.LootTables.VILLAGE_SNOWY_HOUSE,
+			org.bukkit.loot.LootTables.VILLAGE_TAIGA_HOUSE,
+			org.bukkit.loot.LootTables.VILLAGE_TANNERY,
+			org.bukkit.loot.LootTables.VILLAGE_TEMPLE,
+			org.bukkit.loot.LootTables.VILLAGE_TOOLSMITH,
+			org.bukkit.loot.LootTables.VILLAGE_WEAPONSMITH,
+			org.bukkit.loot.LootTables.WOODLAND_MANSION,
+			org.bukkit.loot.LootTables.ARMOR_STAND,
+			org.bukkit.loot.LootTables.AXOLOTL,
+			org.bukkit.loot.LootTables.BAT,
+			org.bukkit.loot.LootTables.BEE,
+			org.bukkit.loot.LootTables.BLAZE,
+			org.bukkit.loot.LootTables.CAT,
+			org.bukkit.loot.LootTables.CAVE_SPIDER,
+			org.bukkit.loot.LootTables.CHICKEN,
+			org.bukkit.loot.LootTables.COD,
+			org.bukkit.loot.LootTables.COW,
+			org.bukkit.loot.LootTables.CREEPER,
+			org.bukkit.loot.LootTables.DOLPHIN,
+			org.bukkit.loot.LootTables.DONKEY,
+			org.bukkit.loot.LootTables.DROWNED,
+			org.bukkit.loot.LootTables.ELDER_GUARDIAN,
+			org.bukkit.loot.LootTables.ENDER_DRAGON,
+			org.bukkit.loot.LootTables.ENDERMAN,
+			org.bukkit.loot.LootTables.ENDERMITE,
+			org.bukkit.loot.LootTables.EVOKER,
+			org.bukkit.loot.LootTables.FOX,
+			org.bukkit.loot.LootTables.GHAST,
+			org.bukkit.loot.LootTables.GIANT,
+			org.bukkit.loot.LootTables.GLOW_SQUID,
+			org.bukkit.loot.LootTables.GOAT,
+			org.bukkit.loot.LootTables.GUARDIAN,
+			org.bukkit.loot.LootTables.HOGLIN,
+			org.bukkit.loot.LootTables.HORSE,
+			org.bukkit.loot.LootTables.HUSK,
+			org.bukkit.loot.LootTables.ILLUSIONER,
+			org.bukkit.loot.LootTables.IRON_GOLEM,
+			org.bukkit.loot.LootTables.LLAMA,
+			org.bukkit.loot.LootTables.MAGMA_CUBE,
+			org.bukkit.loot.LootTables.MOOSHROOM,
+			org.bukkit.loot.LootTables.MULE,
+			org.bukkit.loot.LootTables.OCELOT,
+			org.bukkit.loot.LootTables.PANDA,
+			org.bukkit.loot.LootTables.PARROT,
+			org.bukkit.loot.LootTables.PHANTOM,
+			org.bukkit.loot.LootTables.PIG,
+			org.bukkit.loot.LootTables.PIGLIN,
+			org.bukkit.loot.LootTables.PIGLIN_BRUTE,
+			org.bukkit.loot.LootTables.PILLAGER,
+			org.bukkit.loot.LootTables.PLAYER,
+			org.bukkit.loot.LootTables.POLAR_BEAR,
+			org.bukkit.loot.LootTables.PUFFERFISH,
+			org.bukkit.loot.LootTables.RABBIT,
+			org.bukkit.loot.LootTables.RAVAGER,
+			org.bukkit.loot.LootTables.SALMON,
+			org.bukkit.loot.LootTables.SHULKER,
+			org.bukkit.loot.LootTables.SILVERFISH,
+			org.bukkit.loot.LootTables.SKELETON,
+			org.bukkit.loot.LootTables.SKELETON_HORSE,
+			org.bukkit.loot.LootTables.SLIME,
+			org.bukkit.loot.LootTables.SNOW_GOLEM,
+			org.bukkit.loot.LootTables.SPIDER,
+			org.bukkit.loot.LootTables.SQUID,
+			org.bukkit.loot.LootTables.STRAY,
+			org.bukkit.loot.LootTables.STRIDER,
+			org.bukkit.loot.LootTables.TRADER_LLAMA,
+			org.bukkit.loot.LootTables.TROPICAL_FISH,
+			org.bukkit.loot.LootTables.TURTLE,
+			org.bukkit.loot.LootTables.VEX,
+			org.bukkit.loot.LootTables.VILLAGER,
+			org.bukkit.loot.LootTables.VINDICATOR,
+			org.bukkit.loot.LootTables.WANDERING_TRADER,
+			org.bukkit.loot.LootTables.WITCH,
+			org.bukkit.loot.LootTables.WITHER,
+			org.bukkit.loot.LootTables.WITHER_SKELETON,
+			org.bukkit.loot.LootTables.WOLF,
+			org.bukkit.loot.LootTables.ZOGLIN,
+			org.bukkit.loot.LootTables.ZOMBIE,
+			org.bukkit.loot.LootTables.ZOMBIE_HORSE,
+			org.bukkit.loot.LootTables.ZOMBIE_VILLAGER,
+			org.bukkit.loot.LootTables.ZOMBIFIED_PIGLIN,
+			org.bukkit.loot.LootTables.ARMORER_GIFT,
+			org.bukkit.loot.LootTables.BUTCHER_GIFT,
+			org.bukkit.loot.LootTables.CARTOGRAPHER_GIFT,
+			org.bukkit.loot.LootTables.CAT_MORNING_GIFT,
+			org.bukkit.loot.LootTables.CLERIC_GIFT,
+			org.bukkit.loot.LootTables.FARMER_GIFT,
+			org.bukkit.loot.LootTables.FISHERMAN_GIFT,
+			org.bukkit.loot.LootTables.FISHING,
+			org.bukkit.loot.LootTables.FISHING_FISH,
+			org.bukkit.loot.LootTables.FISHING_JUNK,
+			org.bukkit.loot.LootTables.FISHING_TREASURE,
+			org.bukkit.loot.LootTables.FLETCHER_GIFT,
+			org.bukkit.loot.LootTables.LEATHERWORKER_GIFT,
+			org.bukkit.loot.LootTables.LIBRARIAN_GIFT,
+			org.bukkit.loot.LootTables.MASON_GIFT,
+			org.bukkit.loot.LootTables.SHEPHERD_GIFT,
+			org.bukkit.loot.LootTables.TOOLSMITH_GIFT,
+			org.bukkit.loot.LootTables.WEAPONSMITH_GIFT,
+			org.bukkit.loot.LootTables.PIGLIN_BARTERING,
+			org.bukkit.loot.LootTables.SHEEP,
+			org.bukkit.loot.LootTables.SHEEP_BLACK,
+			org.bukkit.loot.LootTables.SHEEP_BLUE,
+			org.bukkit.loot.LootTables.SHEEP_BROWN,
+			org.bukkit.loot.LootTables.SHEEP_CYAN,
+			org.bukkit.loot.LootTables.SHEEP_GRAY,
+			org.bukkit.loot.LootTables.SHEEP_GREEN,
+			org.bukkit.loot.LootTables.SHEEP_LIGHT_BLUE,
+			org.bukkit.loot.LootTables.SHEEP_LIGHT_GRAY,
+			org.bukkit.loot.LootTables.SHEEP_LIME,
+			org.bukkit.loot.LootTables.SHEEP_MAGENTA,
+			org.bukkit.loot.LootTables.SHEEP_ORANGE,
+			org.bukkit.loot.LootTables.SHEEP_PINK,
+			org.bukkit.loot.LootTables.SHEEP_PURPLE,
+			org.bukkit.loot.LootTables.SHEEP_RED,
+			org.bukkit.loot.LootTables.SHEEP_WHITE,
+			org.bukkit.loot.LootTables.SHEEP_YELLOW
+		};
+	}
+
 	public static String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
 		throw new Error("Can't get legacy NMS PotionEffectName in this version: 1.17");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getMinecraftServer() {
+		MinecraftServer minecraftServerMock = Mockito.mock(MinecraftServer.class);
+
+		// LootTableArgument
+		Mockito.when(minecraftServerMock.getLootTables()).thenAnswer(invocation -> {
+			LootTables lootTables = Mockito.mock(LootTables.class);
+			Mockito.when(lootTables.get(any(ResourceLocation.class))).thenAnswer(i -> {
+				if(BuiltInLootTables.all().contains(i.getArgument(0))) {
+					return net.minecraft.world.level.storage.loot.LootTable.EMPTY;
+				} else {
+					return null;
+				}
+			});
+			Mockito.when(lootTables.getIds()).thenAnswer(i -> {
+				return Streams
+				.concat(
+					Arrays.stream(getEntityTypes())
+						.filter(e -> !e.equals(EntityType.UNKNOWN))
+						.filter(e -> e.isAlive())
+						.map(EntityType::getKey)
+						.map(k -> new ResourceLocation("minecraft", "entities/" + k.getKey())),
+					BuiltInLootTables.all().stream()
+				)
+				.collect(Collectors.toSet());
+			});
+			return lootTables;
+		});
+
+		// Advancement argument
+		Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(advancementDataWorld);
+		return (T) minecraftServerMock;
+	}
+
+	static ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
+
+	public static org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
+		advancementDataWorld.advancements.advancements.put(new ResourceLocation(key.toString()), new Advancement(new ResourceLocation(key.toString()), null, null, null, new HashMap<>(), null));
+		return new org.bukkit.advancement.Advancement() {
+
+			@Override
+			public NamespacedKey getKey() {
+				return key;
+			}
+
+			@Override
+			public Collection<String> getCriteria() {
+				return List.of();
+			}
+		};
 	}
 
 	@Override

@@ -347,7 +347,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> getMinecraftServer().getFunctions()
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions()
 			.execute(commandFunction, css);
 
 		CommandFunction.Entry[] cArr = commandFunction.getEntries();
@@ -415,7 +415,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
 	}
 
 	@Override
@@ -480,13 +480,13 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final SimpleFunctionWrapper getFunction(NamespacedKey key) {
 		return convertFunction(
-			getMinecraftServer().getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
+			this.<MinecraftServer>getMinecraftServer().getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
 	}
 
 	@Override
 	public final Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : getMinecraftServer().getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
@@ -544,11 +544,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
 	}
 
-	/*
-	 * This should return MINECRAFT_SERVER
-	 */
-	public abstract MinecraftServer getMinecraftServer();
-
 	@Override
 	public final <NBTContainer> Object getNBTCompound(CommandContext<CommandSourceStack> cmdCtx, String key,
 		Function<Object, NBTContainer> nbtContainerConstructor) {
@@ -605,7 +600,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final Rotation getRotation(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		Vec2 rotation = RotationArgument.getRotation(cmdCtx, key).getRotation(cmdCtx.getSource());
-		return new Rotation(rotation.x, rotation.y);
+		return new Rotation(rotation.y, rotation.x);
 	}
 
 	@Override
@@ -644,28 +639,14 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
 	//  this doesn't blow up, but it should be covered by the default case (empty)
 	@Override
-	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
-	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
-		return switch (provider) {
-			case FUNCTION -> (context, builder) -> {
-				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
-				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
-				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
-			};
-			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
-			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
-					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
-			};
-			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
-			};
-			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
-			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
-			default -> (context, builder) -> Suggestions.empty();
-		};
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, info = """
+		The various methods that this uses is obfuscated to different method
+		names for different versions. For example, getMinecraftServer().getLootTables.getIds()
+		is mapped to a different method in 1.18 compared to 1.19.2. This also has various other
+		implications across all sorts of versions, so it's much more reliable to just implement
+		them in every version.
+		""")
+	public abstract SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider);
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, from = "1.18.2", to = "1.19")
@@ -675,14 +656,14 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : getMinecraftServer().getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
 	}
 
 	@Override
-	public final String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	public String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return TeamArgument.getTeam(cmdCtx, key).getName();
 	}
 

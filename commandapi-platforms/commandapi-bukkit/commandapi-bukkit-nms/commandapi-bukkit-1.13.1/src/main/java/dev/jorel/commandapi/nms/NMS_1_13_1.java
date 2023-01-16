@@ -81,7 +81,6 @@ import java.util.function.ToIntFunction;
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
-	protected static final MinecraftServer MINECRAFT_SERVER;
 	private static final VarHandle LootTableRegistry_e;
 	private static final VarHandle SimpleHelpMap_helpTopics;
 	private static final VarHandle ParticleParamBlock_c;
@@ -92,12 +91,6 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		if(Bukkit.getServer() instanceof CraftServer server) {
-			MINECRAFT_SERVER = server.getServer();
-		} else {
-			MINECRAFT_SERVER = null;
-		}
-
 		VarHandle ltr_e = null;
 		VarHandle shm_ht = null;
 		VarHandle ppb_c = null;
@@ -353,7 +346,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CustomFunction customFunction) {
-		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> MINECRAFT_SERVER.getFunctionData().a(customFunction, clw);
+		ToIntFunction<CommandListenerWrapper> appliedObj = clw -> this.<MinecraftServer>getMinecraftServer().getFunctionData().a(customFunction, clw);
 
 		Object[] cArr = customFunction.b();
 		String[] result = new String[cArr.length];
@@ -365,7 +358,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
-		MINECRAFT_SERVER.vanillaCommandDispatcher.a(file);
+		this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a(file);
 	}
 
 	@Override
@@ -428,7 +421,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return MINECRAFT_SERVER.vanillaCommandDispatcher.a();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a();
 	}
 
 	@Override
@@ -456,9 +449,9 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 		} else if (sender instanceof CraftMinecartCommand minecartCommandSender) {
 			return minecartCommandSender.getHandle().getCommandBlock().getWrapper();
 		} else if (sender instanceof RemoteConsoleCommandSender) {
-			return ((DedicatedServer) MINECRAFT_SERVER).remoteControlCommandListener.f();
+			return ((DedicatedServer) this.<MinecraftServer>getMinecraftServer()).remoteControlCommandListener.f();
 		} else if (sender instanceof ConsoleCommandSender) {
-			return MINECRAFT_SERVER.getServerCommandListener();
+			return this.<MinecraftServer>getMinecraftServer().getServerCommandListener();
 		} else if (sender instanceof ProxiedNativeCommandSender proxiedCommandSender) {
 			return proxiedCommandSender.getHandle();
 		} else {
@@ -478,7 +471,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	@Differs(from = "1.13", by = "Implements getDimension for DimensionArgument")
 	@Override
 	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return MINECRAFT_SERVER.getWorldServer(ArgumentDimension.a(cmdCtx, key)).getWorld();
+		return this.<MinecraftServer>getMinecraftServer().getWorldServer(ArgumentDimension.a(cmdCtx, key)).getWorld();
 	}
 
 	@Differs(from = "1.13", by = "Implements getEnvironment for EnvironmentArgument")
@@ -572,13 +565,13 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return convertFunction(MINECRAFT_SERVER.getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())));
+		return convertFunction(this.<MinecraftServer>getMinecraftServer().getFunctionData().a(new MinecraftKey(key.getNamespace(), key.getKey())));
 	}
 
 	@Override
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().c().keySet()) {
+		for (MinecraftKey key : this.<MinecraftServer>getMinecraftServer().getFunctionData().c().keySet()) {
 			functions.add(fromMinecraftKey(key));
 		}
 		return functions;
@@ -648,7 +641,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	@Override
 	public org.bukkit.loot.LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		MinecraftKey minecraftKey = ArgumentMinecraftKeyRegistered.c(cmdCtx, key);
-		return new CraftLootTable(fromMinecraftKey(minecraftKey), MINECRAFT_SERVER.getLootTableRegistry().getLootTable(minecraftKey));
+		return new CraftLootTable(fromMinecraftKey(minecraftKey), this.<MinecraftServer>getMinecraftServer().getLootTableRegistry().getLootTable(minecraftKey));
 	}
 
 	@Override
@@ -746,7 +739,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	@Override
 	public Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		Vec2F vec = ArgumentRotation.a(cmdCtx, key).b(cmdCtx.getSource());
-		return new Rotation(vec.i, vec.j);
+		return new Rotation(vec.j, vec.i);
 	}
 
 	@Override
@@ -817,15 +810,15 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	public SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
-				CustomFunctionData functionData = MINECRAFT_SERVER.getFunctionData();
+				CustomFunctionData functionData = this.<MinecraftServer>getMinecraftServer().getFunctionData();
 				ICompletionProvider.a(functionData.g().a(), builder, "#");
 				return ICompletionProvider.a(functionData.c().keySet(), builder);
 			};
 			case RECIPES -> CompletionProviders.b;
 			case SOUNDS -> CompletionProviders.c;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> ICompletionProvider.a(MINECRAFT_SERVER.getAdvancementData().b().stream().map(Advancement::getName), builder);
+			case ADVANCEMENTS -> (cmdCtx, builder) -> ICompletionProvider.a(this.<MinecraftServer>getMinecraftServer().getAdvancementData().b().stream().map(Advancement::getName), builder);
 			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) LootTableRegistry_e.get(MINECRAFT_SERVER.getLootTableRegistry());
+				Map<MinecraftKey, LootTable> map = (Map<MinecraftKey, LootTable>) LootTableRegistry_e.get(this.<MinecraftServer>getMinecraftServer().getLootTableRegistry());
 				return ICompletionProvider.a(map.keySet(), builder);
 			};
 			case ENTITIES -> CompletionProviders.d;
@@ -835,7 +828,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		List<CustomFunction> customFunctions = new ArrayList<>(MINECRAFT_SERVER.getFunctionData().g().b(new MinecraftKey(key.getNamespace(), key.getKey())).a());
+		List<CustomFunction> customFunctions = new ArrayList<>(this.<MinecraftServer>getMinecraftServer().getFunctionData().g().b(new MinecraftKey(key.getNamespace(), key.getKey())).a());
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
@@ -846,7 +839,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	@Override
 	public Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> functions = new HashSet<>();
-		for (MinecraftKey key : MINECRAFT_SERVER.getFunctionData().g().a()) {
+		for (MinecraftKey key : this.<MinecraftServer>getMinecraftServer().getFunctionData().g().a()) {
 			functions.add(fromMinecraftKey(key));
 		}
 		return functions;
@@ -882,7 +875,7 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 
 	@Override
 	public void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommandDispatcher().a(((CraftPlayer) player).getHandle());
+		this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 
 	@Override
@@ -893,6 +886,16 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	@Override
 	public Message generateMessageFromJson(String json) {
 		return ChatSerializer.a(json);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getMinecraftServer() {
+		if(Bukkit.getServer() instanceof CraftServer server) {
+			return (T) server.getServer();
+		} else {
+			return null;
+		}
 	}
 
 }

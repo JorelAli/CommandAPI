@@ -53,7 +53,7 @@ import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends CommandAPIBukkit<CommandListenerWrapper> {
 
-	public final NMS<?> BASE_NMS;
+	public NMS<?> BASE_NMS;
 
 	public ArgumentNMS(NMS<?> baseNMS) {
 		this.BASE_NMS = baseNMS;
