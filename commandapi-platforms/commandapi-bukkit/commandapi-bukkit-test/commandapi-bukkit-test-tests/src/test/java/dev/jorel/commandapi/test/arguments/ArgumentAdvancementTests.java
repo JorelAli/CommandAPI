@@ -121,10 +121,11 @@ public class ArgumentAdvancementTests extends TestBase {
 		assertEquals(advancements.stream().map(NamespacedKey::toString).sorted().toList(), server.getSuggestions(player, "test "));
 		
 		// /test adventure/a
-		// TODO: Write this test case (should have all entries starting with a? Might also have spyglass_at_dragon?)
+		assertEquals(advancements.stream().map(NamespacedKey::toString).filter(key -> key.startsWith("minecraft:adventure/a")).sorted().toList(),
+			server.getSuggestions(player, "test adventure/a"));
 		
 		// /test x
-		// TODO: Write this test case (should have no entries)
+		assertEquals(List.of(), server.getSuggestions(player, "test x"));
 	}
 
 }
