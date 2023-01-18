@@ -77,7 +77,7 @@ public class MockNMS extends Enums {
 
 	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
-		
+
 		// Stub in our getMinecraftServer implementation
 		@SuppressWarnings("rawtypes")
 		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
@@ -96,7 +96,7 @@ public class MockNMS extends Enums {
 		// Invoke Minecraft's registry. This also initializes all argument types.
 		// How convenient!
 		Bootstrap.bootStrap();
-		
+
 		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
 		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
 		// 1.19 ones!)
@@ -108,7 +108,7 @@ public class MockNMS extends Enums {
 	 * Registry manipulation *
 	 *************************/
 
-	public static void unregisterAllPotionEffects() {
+	private void unregisterAllPotionEffects() {
 		PotionEffectType[] byId = getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);
 		for (int i = 0; i < byId.length; i++) {
 			byId[i] = null;
@@ -159,7 +159,7 @@ public class MockNMS extends Enums {
 		registerPotionEffectType(32, "HERO_OF_THE_VILLAGE", false, 4521796);
 		PotionEffectType.stopAcceptingRegistrations();
 	}
-	
+
 	private static void registerPotionEffectType(int id, String name, boolean instant, int rgb) {
 		PotionEffectType.registerPotionEffectType(new MockPotionEffectType(id, name, instant, Color.fromRGB(rgb)));
 	}
@@ -171,17 +171,17 @@ public class MockNMS extends Enums {
 	}
 
 	private void registerDefaultEnchantments() {
-		for(Enchantment enchantment : getEnchantments()) {
+		for (Enchantment enchantment : getEnchantments()) {
 			if (Enchantment.getByKey(enchantment.getKey()) == null) {
 				Enchantment.registerEnchantment(new EnchantmentMock(enchantment.getKey(), enchantment.getKey().getKey()));
 			}
 		}
 	}
-	
+
 	/**************************
 	 * MockPlatform overrides *
 	 **************************/
-	
+
 	@Override
 	public ItemFactory getItemFactory() {
 		return CraftItemFactory.instance();
@@ -208,8 +208,7 @@ public class MockNMS extends Enums {
 
 	List<ServerPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		CommandSender sender = senderWrapper.getSource();
@@ -220,7 +219,7 @@ public class MockNMS extends Enums {
 			// LocationArgument
 			Location loc = player.getLocation();
 			Mockito.when(css.getPosition()).thenReturn(new Vec3(loc.getX(), loc.getY(), loc.getZ()));
-			
+
 			ServerLevel worldServerMock = Mockito.mock(ServerLevel.class);
 			Mockito.when(css.getLevel()).thenReturn(worldServerMock);
 			Mockito.when(css.getLevel().hasChunkAt(any(BlockPos.class))).thenReturn(true);
@@ -231,7 +230,7 @@ public class MockNMS extends Enums {
 			Mockito.when(css.getServer()).thenAnswer(s -> getMinecraftServer());
 
 			// EntitySelectorArgument
-			for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				ServerPlayer entityPlayerMock = Mockito.mock(ServerPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
 				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
@@ -239,13 +238,13 @@ public class MockNMS extends Enums {
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
 				players.add(entityPlayerMock);
 			}
-			
-			if(playerListMock == null) {
+
+			if (playerListMock == null) {
 				playerListMock = Mockito.mock(PlayerList.class);
 				Mockito.when(playerListMock.getPlayerByName(anyString())).thenAnswer(invocation -> {
 					String playerName = invocation.getArgument(0);
-					for(ServerPlayer onlinePlayer : players) {
-						if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+					for (ServerPlayer onlinePlayer : players) {
+						if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
 							return onlinePlayer;
 						}
 					}
@@ -257,19 +256,20 @@ public class MockNMS extends Enums {
 			Mockito.when(css.levels()).thenAnswer(invocation -> {
 				Set<ResourceKey<Level>> set = new HashSet<>();
 				// We only need to implement resourceKey.a()
-				
-				for(World world : Bukkit.getWorlds()) {
+
+				for (World world : Bukkit.getWorlds()) {
+					@SuppressWarnings("unchecked")
 					ResourceKey<Level> key = Mockito.mock(ResourceKey.class);
 					Mockito.when(key.location()).thenReturn(new ResourceLocation(world.getName()));
 					set.add(key);
 				}
-				
+
 				return set;
 			});
-			
+
 			// RotationArgument
 			Mockito.when(css.getRotation()).thenReturn(new Vec2(loc.getYaw(), loc.getPitch()));
-			
+
 			// CommandSourceStack#getAllTeams
 			Mockito.when(css.getAllTeams()).thenAnswer(invocation -> {
 				return Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList();
@@ -280,7 +280,7 @@ public class MockNMS extends Enums {
 
 	@Override
 	public void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
-			throws IOException {
+		throws IOException {
 		Files
 			.asCharSink(file, StandardCharsets.UTF_8)
 			.write(new GsonBuilder()
@@ -293,12 +293,12 @@ public class MockNMS extends Enums {
 	public World getWorldForCSS(CommandSourceStack clw) {
 		return new WorldMock();
 	}
-	
+
 	@Override
 	public String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
 		throw new Error("Can't get legacy NMS PotionEffectName in this version: 1.17");
 	}
-	
+
 	MinecraftServer minecraftServerMock = null;
 
 	@SuppressWarnings("unchecked")
@@ -308,12 +308,12 @@ public class MockNMS extends Enums {
 			return (T) minecraftServerMock;
 		}
 		minecraftServerMock = Mockito.mock(MinecraftServer.class);
-		
+
 		// LootTableArgument
 		Mockito.when(minecraftServerMock.getLootTables()).thenAnswer(invocation -> {
 			LootTables lootTables = Mockito.mock(LootTables.class);
 			Mockito.when(lootTables.get(any(ResourceLocation.class))).thenAnswer(i -> {
-				if(BuiltInLootTables.all().contains(i.getArgument(0))) {
+				if (BuiltInLootTables.all().contains(i.getArgument(0))) {
 					return net.minecraft.world.level.storage.loot.LootTable.EMPTY;
 				} else {
 					return null;
@@ -321,21 +321,20 @@ public class MockNMS extends Enums {
 			});
 			Mockito.when(lootTables.getIds()).thenAnswer(i -> {
 				return Streams
-				.concat(
-					Arrays.stream(getEntityTypes())
-						.filter(e -> !e.equals(EntityType.UNKNOWN))
-						.filter(e -> e.isAlive())
-						.map(EntityType::getKey)
-						.map(k -> new ResourceLocation("minecraft", "entities/" + k.getKey())),
-					BuiltInLootTables.all().stream()
-				)
-				.collect(Collectors.toSet());
+					.concat(
+						Arrays.stream(getEntityTypes())
+							.filter(e -> !e.equals(EntityType.UNKNOWN))
+							.filter(e -> e.isAlive())
+							.map(EntityType::getKey)
+							.map(k -> new ResourceLocation("minecraft", "entities/" + k.getKey())),
+						BuiltInLootTables.all().stream())
+					.collect(Collectors.toSet());
 			});
 			return lootTables;
 		});
-		
+
 		// AdvancementArgument
-		Mockito.when(minecraftServerMock.getAdvancements()).thenReturn(advancementDataWorld);
+		Mockito.when(minecraftServerMock.getAdvancements()).thenAnswer(i -> advancementDataWorld);
 
 		// TeamArgument
 		ServerScoreboard scoreboardServerMock = Mockito.mock(ServerScoreboard.class);
@@ -355,56 +354,57 @@ public class MockNMS extends Enums {
 			// Get the ResourceKey<World> and extract the world name from it
 			ResourceKey<Level> resourceKey = invocation.getArgument(0);
 			String worldName = resourceKey.location().getPath();
-			
+
 			// Get the world via Bukkit (returns a WorldMock) and create a
 			// CraftWorld clone of it for WorldServer.getWorld()
 			World world = Bukkit.getServer().getWorld(worldName);
-			if(world == null) {
+			if (world == null) {
 				return null;
 			} else {
 				CraftWorld craftWorldMock = Mockito.mock(CraftWorld.class);
 				Mockito.when(craftWorldMock.getName()).thenReturn(world.getName());
 				Mockito.when(craftWorldMock.getUID()).thenReturn(world.getUID());
-				
+
 				// Create our return WorldServer object
 				ServerLevel bukkitWorldServerMock = Mockito.mock(ServerLevel.class);
 				Mockito.when(bukkitWorldServerMock.getWorld()).thenReturn(craftWorldMock);
 				return bukkitWorldServerMock;
 			}
 		});
-		
+
 		// Player lists
-		Mockito.when(minecraftServerMock.getPlayerList()).thenReturn(playerListMock);
-		Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenReturn(players);
-		
+		Mockito.when(minecraftServerMock.getPlayerList()).thenAnswer(i -> playerListMock);
+		Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenAnswer(i -> players);
+
 		// PlayerArgument
 		GameProfileCache userCacheMock = Mockito.mock(GameProfileCache.class);
 		Mockito.when(userCacheMock.get(anyString())).thenAnswer(invocation -> {
 			String playerName = invocation.getArgument(0);
-			for(ServerPlayer onlinePlayer : players) {
-				if(onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+			for (ServerPlayer onlinePlayer : players) {
+				if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
 					return new GameProfile(onlinePlayer.getBukkitEntity().getUniqueId(), playerName);
 				}
 			}
 			return null;
 		});
 		Mockito.when(minecraftServerMock.getProfileCache()).thenReturn(userCacheMock);
-		
+
 		return (T) minecraftServerMock;
 	}
-	
+
 	static ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
 
 	@Override
 	public org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
-		advancementDataWorld.advancements.advancements.put(new ResourceLocation(key.toString()), new Advancement(new ResourceLocation(key.toString()), null, null, null, new HashMap<>(), null));
+		advancementDataWorld.advancements.advancements.put(new ResourceLocation(key.toString()),
+			new Advancement(new ResourceLocation(key.toString()), null, null, null, new HashMap<>(), null));
 		return new org.bukkit.advancement.Advancement() {
-			
+
 			@Override
 			public NamespacedKey getKey() {
 				return key;
 			}
-			
+
 			@Override
 			public Collection<String> getCriteria() {
 				return List.of();

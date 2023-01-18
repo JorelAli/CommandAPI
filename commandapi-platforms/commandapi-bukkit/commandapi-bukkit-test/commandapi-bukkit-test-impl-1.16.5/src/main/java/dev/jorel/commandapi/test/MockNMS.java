@@ -216,7 +216,6 @@ public class MockNMS extends Enums {
 	List<EntityPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		CommandSender sender = senderWrapper.getSource();
@@ -266,6 +265,7 @@ public class MockNMS extends Enums {
 				// We only need to implement resourceKey.a()
 
 				for (World world : Bukkit.getWorlds()) {
+					@SuppressWarnings("unchecked")
 					ResourceKey<net.minecraft.server.v1_16_R3.World> key = Mockito.mock(ResourceKey.class);
 					Mockito.when(key.a()).thenReturn(new MinecraftKey(world.getName()));
 					set.add(key);
