@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,8 +35,6 @@ import org.bukkit.scoreboard.Team;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Streams;
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 
@@ -48,12 +45,10 @@ import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.nms.NMS;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
-import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -75,12 +70,11 @@ import net.minecraft.world.scores.PlayerTeam;
 
 public class MockNMS extends Enums {
 
-	public MockNMS(NMS<?> baseNMS) {
+	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
 
 		// Stub in our getMinecraftServer implementation
-		@SuppressWarnings("rawtypes")
-		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
+		CommandAPIBukkit<?> nms = Mockito.spy(BASE_NMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		BASE_NMS = nms;
 
@@ -278,15 +272,11 @@ public class MockNMS extends Enums {
 		return css;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
+	public void createDispatcherFile(File file, CommandDispatcher dispatcher)
 		throws IOException {
-		Files
-			.asCharSink(file, StandardCharsets.UTF_8)
-			.write(new GsonBuilder()
-				.setPrettyPrinting()
-				.create()
-				.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
+		BASE_NMS.createDispatcherFile(file, dispatcher);
 	}
 
 	@Override

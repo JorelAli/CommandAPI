@@ -30,9 +30,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
+import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -52,9 +52,9 @@ import net.minecraft.commands.CommandSourceStack;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
-	public NMS<?> BASE_NMS;
+	public CommandAPIBukkit<?> BASE_NMS;
 
-	public ArgumentNMS(NMS<?> baseNMS) {
+	public ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
 		this.BASE_NMS = baseNMS;
 	}
 

@@ -101,11 +101,7 @@ public class MockNMS extends Enums {
 		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
 		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
 		// 1.19 ones!)
-		// TODO: See if we actually need this check or not, or if we can just go
-		// straight to registering potion effects
-		if (getFieldAs(PotionEffectType.class, "byKey", null, Map.class).isEmpty()) {
-			registerDefaultPotionEffects();
-		}
+		registerDefaultPotionEffects();
 		registerDefaultEnchantments();
 	}
 
@@ -289,14 +285,7 @@ public class MockNMS extends Enums {
 	@Override
 	public void createDispatcherFile(File file, CommandDispatcher dispatcher)
 		throws IOException {
-		// TODO: Refactor this out
 		BASE_NMS.createDispatcherFile(file, dispatcher);
-//		Files
-//			.asCharSink(file, StandardCharsets.UTF_8)
-//			.write(new GsonBuilder()
-//				.setPrettyPrinting()
-//				.create()
-//				.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}
 
 	@Override
