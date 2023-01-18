@@ -82,9 +82,8 @@ public class ArgumentPotionTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_16_5));
 		for (PotionEffectType potionEffect : MockPlatform.getInstance().getPotionEffects()) {
-			server.dispatchCommand(player, "test " + MockPlatform.getInstance().getNMSPotionEffectName_1_16_5(potionEffect));
+			server.dispatchCommand(player, "test " + MockPlatform.getInstance().getBukkitPotionEffectTypeName(potionEffect));
 			assertEquals(potionEffect, results.get());
 		}
 
@@ -104,13 +103,11 @@ public class ArgumentPotionTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		
-		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_16_5));
 
 		// /test minecraft:
 		assertEquals(
 			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
-				.map(MockPlatform.getInstance()::getNMSPotionEffectName_1_16_5)
+				.map(MockPlatform.getInstance()::getBukkitPotionEffectTypeName)
 				.sorted()
 				.toList(),
 			server.getSuggestions(player, "test minecraft:")
@@ -119,7 +116,7 @@ public class ArgumentPotionTests extends TestBase {
 		// /test minecraft:s
 		assertEquals(
 			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
-				.map(MockPlatform.getInstance()::getNMSPotionEffectName_1_16_5)
+				.map(MockPlatform.getInstance()::getBukkitPotionEffectTypeName)
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()
 				.toList(),
@@ -128,7 +125,7 @@ public class ArgumentPotionTests extends TestBase {
 		// /test s
 		assertEquals(
 			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
-				.map(MockPlatform.getInstance()::getNMSPotionEffectName_1_16_5)
+				.map(MockPlatform.getInstance()::getBukkitPotionEffectTypeName)
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()
 				.toList(),

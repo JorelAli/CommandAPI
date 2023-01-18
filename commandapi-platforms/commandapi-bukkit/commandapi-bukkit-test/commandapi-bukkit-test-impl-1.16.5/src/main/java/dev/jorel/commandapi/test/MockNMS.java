@@ -293,7 +293,7 @@ public class MockNMS extends Enums {
 
 	@SuppressWarnings({ "deprecation", "null" })
 	@Override
-	public String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
+	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
 	}
 

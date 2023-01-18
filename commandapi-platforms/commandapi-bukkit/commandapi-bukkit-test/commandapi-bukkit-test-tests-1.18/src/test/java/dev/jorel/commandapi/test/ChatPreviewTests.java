@@ -59,6 +59,7 @@ public class ChatPreviewTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 		boolean commandResult = server.dispatchCommand(player, "chatarg blah");
+		// TODO: This doesn't actually test previewing!
 		assertTrue(commandResult);
 		assertEquals(ChatColor.BOLD + "blah", player.nextMessage());
 	}

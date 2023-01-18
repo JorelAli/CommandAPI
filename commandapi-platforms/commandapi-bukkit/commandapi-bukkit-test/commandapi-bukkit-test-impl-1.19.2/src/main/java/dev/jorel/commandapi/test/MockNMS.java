@@ -304,8 +304,8 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
-		throw new Error("Can't get legacy NMS PotionEffectName in this version: 1.19.2");
+	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
+		return potionEffectType.getKey().asString();
 	}
 
 	MinecraftServer minecraftServerMock = null;

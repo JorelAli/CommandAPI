@@ -61,6 +61,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTables;
@@ -284,9 +285,10 @@ public class MockNMS extends Enums {
 		return new WorldMock();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
-		throw new Error("Can't get legacy NMS PotionEffectName in this version: 1.17");
+	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
+		return MobEffect.byId(potionEffectType.getId()).getDescriptionId().replace("effect.minecraft.", "minecraft:");
 	}
 
 	MinecraftServer minecraftServerMock = null;

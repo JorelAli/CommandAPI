@@ -156,7 +156,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 * @param potionEffectType the potion effect to get the namespaced key for
 	 * @return a Minecraft namespaced key name for a potion effect
 	 */
-	public abstract String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType);
+	public abstract String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType);
 
 	/***********************
 	 * Bukkit "enum" lists *

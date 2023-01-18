@@ -58,7 +58,6 @@
 	</repositories>
 
 	<dependencies>
-
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
