@@ -139,6 +139,9 @@
 	<profiles>
 		<profile>
 			<id>Minecraft_1_19_2</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -209,9 +212,6 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<!-- 
 			<activation>
 				<activeByDefault>true</activeByDefault>
