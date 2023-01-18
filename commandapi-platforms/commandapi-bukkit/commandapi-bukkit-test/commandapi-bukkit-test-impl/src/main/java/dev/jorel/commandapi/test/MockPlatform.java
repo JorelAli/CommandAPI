@@ -170,6 +170,10 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	public abstract org.bukkit.potion.PotionEffectType[] getPotionEffects();
 
+	/**
+	 * @return A list of all item names, sorted in alphabetical order. Each item
+	 * is prefixed with {@code minecraft:}
+	 */
 	public abstract List<String> getAllItemNames();
 
 }

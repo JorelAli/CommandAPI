@@ -86,6 +86,7 @@ public class MockNMS extends Enums {
 		super(baseNMS);
 
 		// Stub in our getMinecraftServer implementation
+		@SuppressWarnings("rawtypes")
 		CommandAPIBukkit nms = Mockito.spy((CommandAPIBukkit) BASE_NMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		BASE_NMS = nms;
@@ -223,7 +224,7 @@ public class MockNMS extends Enums {
 		Mockito.when(clw.getBukkitSender()).thenReturn(sender);
 
 		if (sender instanceof Player player) {
-			// Location argument
+			// LocationArgument
 			Location loc = player.getLocation();
 			Mockito.when(clw.getPosition()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
 
@@ -233,9 +234,10 @@ public class MockNMS extends Enums {
 //			Mockito.when(clw.getWorld().isInWorldBounds(any(BlockPosition.class))).thenReturn(true);
 			Mockito.when(clw.k()).thenReturn(Anchor.EYES);
 
+			// Get mocked MinecraftServer
 			Mockito.when(clw.getServer()).thenAnswer(s -> getMinecraftServer());
 
-			// Entity selector argument
+			// EntitySelectorArgument
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				EntityPlayer entityPlayerMock = Mockito.mock(EntityPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
@@ -258,6 +260,7 @@ public class MockNMS extends Enums {
 				});
 			}
 
+			// CommandListenerWrapper#levels
 			Mockito.when(clw.p()).thenAnswer(invocation -> {
 				Set<ResourceKey<net.minecraft.server.v1_16_R3.World>> set = new HashSet<>();
 				// We only need to implement resourceKey.a()
@@ -298,6 +301,7 @@ public class MockNMS extends Enums {
 		return new WorldMock();
 	}
 
+	@SuppressWarnings({ "deprecation", "null" })
 	@Override
 	public String getNMSPotionEffectName_1_16_5(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
@@ -376,10 +380,11 @@ public class MockNMS extends Enums {
 			}
 		});
 
+		// Player lists
 		Mockito.when(minecraftServerMock.getPlayerList()).thenAnswer(i -> playerListMock);
 		Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenAnswer(i -> players);
 
-		// Player argument
+		// PlayerArgument
 		UserCache userCacheMock = Mockito.mock(UserCache.class);
 		Mockito.when(userCacheMock.getProfile(anyString())).thenAnswer(invocation -> {
 			String playerName = invocation.getArgument(0);
