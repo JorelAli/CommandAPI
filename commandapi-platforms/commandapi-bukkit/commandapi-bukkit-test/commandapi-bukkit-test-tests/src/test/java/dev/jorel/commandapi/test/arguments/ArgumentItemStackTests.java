@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -23,9 +22,9 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
+import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-import net.minecraft.core.IRegistry;
 
 /**
  * Tests for the {@link ItemStackArgument}
@@ -44,19 +43,6 @@ public class ArgumentItemStackTests extends TestBase {
 	@AfterEach
 	public void tearDown() {
 		super.tearDown();
-	}
-	
-	/**
-	 * @return A list of all item names, sorted in alphabetical order. Each item
-	 * is prefixed with {@code minecraft:}
-	 */
-	private List<String> getAllItemNames() {
-		// Registry.ITEM
-		return StreamSupport.stream(IRegistry.Y.spliterator(), false)
-			.map(Object::toString)
-			.map(s -> "minecraft:" + s)
-			.sorted()
-			.toList();
 	}
 
 	/*********
@@ -179,12 +165,12 @@ public class ArgumentItemStackTests extends TestBase {
 
 		// /test
 		// All items should be suggested
-		assertEquals(getAllItemNames(), server.getSuggestions(player, "test "));
+		assertEquals(MockPlatform.getInstance().getAllItemNames(), server.getSuggestions(player, "test "));
 
 		// /test x
 		// All items starting with 'a' should be suggested, as well as items which
 		// are underscore-separated and start with 'a', such as 'wooden_axe'
-		assertEquals(getAllItemNames().stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
+		assertEquals(MockPlatform.getInstance().getAllItemNames().stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
 		
 		// test dirt
 		// Completed item names should suggest open brackets

@@ -433,6 +433,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	/********************
 	 * Suggestion tests *
 	 ********************/
+
 	@Test
 	public void suggestionTestWithBooleanArgument() {
 		new CommandAPICommand("test")
