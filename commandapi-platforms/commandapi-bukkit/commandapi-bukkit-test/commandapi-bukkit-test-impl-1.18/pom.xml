@@ -93,7 +93,7 @@
 			<artifactId>commandapi-bukkit-shade</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- Version-specific dependencies -->
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>

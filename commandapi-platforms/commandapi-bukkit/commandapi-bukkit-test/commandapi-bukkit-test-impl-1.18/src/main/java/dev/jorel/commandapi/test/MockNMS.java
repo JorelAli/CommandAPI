@@ -233,7 +233,7 @@ public class MockNMS extends Enums {
 			// Get mocked MinecraftServer
 			Mockito.when(css.getServer()).thenAnswer(s -> getMinecraftServer());
 
-			// Entity selector argument
+			// EntitySelectorArgument
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				ServerPlayer entityPlayerMock = Mockito.mock(ServerPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
@@ -270,7 +270,7 @@ public class MockNMS extends Enums {
 				return set;
 			});
 
-			// Rotation argument
+			// RotationArgument
 			Mockito.when(css.getRotation()).thenReturn(new Vec2(loc.getYaw(), loc.getPitch()));
 
 			// CommandSourceStack#getAllTeams
