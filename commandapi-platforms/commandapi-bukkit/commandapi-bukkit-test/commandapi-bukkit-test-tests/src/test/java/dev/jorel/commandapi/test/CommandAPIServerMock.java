@@ -1,5 +1,8 @@
 package dev.jorel.commandapi.test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -50,7 +53,8 @@ public class CommandAPIServerMock extends ServerMock {
 	public boolean dispatchCommand(CommandSender sender, String commandLine) {
 		try {
 			return dispatchThrowableCommand(sender, commandLine);
-		} catch (CommandSyntaxException e1) {
+		} catch (CommandSyntaxException e) {
+			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableCommand() instead.", e);
 			return false;
 		}
 	}
