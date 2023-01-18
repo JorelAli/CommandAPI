@@ -49,7 +49,6 @@ public class ArgumentItemStackTests extends TestBase {
 	 * Tests *
 	 *********/
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void executionTestWithItemStackArgument() {
 		Mut<ItemStack> results = Mut.of();
@@ -114,10 +113,10 @@ public class ArgumentItemStackTests extends TestBase {
 			ItemStack actual = results.get();
 			assertEquals(Material.DIAMOND_PICKAXE, actual.getType());
 			assertEquals(1, actual.getAmount());
-			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_ENCHANTS));
-			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES));
-			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE));
-			assertTrue(actual.hasItemFlag(ItemFlag.HIDE_DESTROYS));
+			assertTrue(actual.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS));
+			assertTrue(actual.getItemMeta().hasItemFlag(ItemFlag.HIDE_ATTRIBUTES));
+			assertTrue(actual.getItemMeta().hasItemFlag(ItemFlag.HIDE_UNBREAKABLE));
+			assertTrue(actual.getItemMeta().hasItemFlag(ItemFlag.HIDE_DESTROYS));
 		}
 
 		// /test firework_rocket{Fireworks:{Explosions:[{Type:3b,Flicker:1b,Colors:[I;4312372],FadeColors:[I;11743532]}],Flight:1b}}
