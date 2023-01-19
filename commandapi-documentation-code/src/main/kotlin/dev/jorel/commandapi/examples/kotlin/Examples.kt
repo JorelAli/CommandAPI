@@ -43,6 +43,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Team
 import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -467,11 +468,7 @@ fun teamarguments() {
 CommandAPICommand("togglepvp")
     .withArguments(TeamArgument("team"))
     .executes(CommandExecutor { _, args ->
-        // The TeamArgument must be casted to a String
-        val teamName = args[0] as String
-
-        // A team name can be turned into a Team using getTeam(String)
-        val team = Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)!!
+        val team = args[0] as Team
 
         // Toggle pvp
         team.setAllowFriendlyFire(team.allowFriendlyFire())

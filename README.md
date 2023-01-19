@@ -380,6 +380,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>https://github.com/JorelAli/CommandAPI/issues/162, https://github.com/JorelAli/CommandAPI/issues/387, https://github.com/JorelAli/CommandAPI/pull/393 Added optional arguments</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
                     <li>Reworked the implementation of <code>ItemArgument</code>, so the <code>ItemStack</code> count is correctly reflected and <code>ItemMeta</code> is properly assigned</li>
+                    <li>Made the `TeamArgument` return a `Team` instead of a String</li>
                 </ul>
                 <b>Bug fixes:</b>
                 <ul>

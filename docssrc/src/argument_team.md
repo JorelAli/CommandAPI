@@ -1,6 +1,6 @@
 # Team arguments
 
-The `TeamArgument` class interacts with the Minecraft scoreboard and represents a team. Similar to the `ObjectiveArgument` class, the `TeamArgument` class must be casted to a String.
+The `TeamArgument` class interacts with the Minecraft scoreboard and represents a team.
 
 <div class="example">
 
@@ -12,7 +12,7 @@ Let's say we want to create a command to toggle the state of friendly fire in a 
 /togglepvp <team>
 ```
 
-To do this, given a team we want to use the `setAllowFriendlyFire(boolean)` function. As with the `ObjectiveArgument`, we must convert the `String` into a `Team` object.
+To do this, given a team we want to use the `setAllowFriendlyFire(boolean)` function.
 
 <div class="multi-pre">
 

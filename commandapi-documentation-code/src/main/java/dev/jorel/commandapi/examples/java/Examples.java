@@ -511,11 +511,7 @@ new CommandAPICommand("unregisterall")
 new CommandAPICommand("togglepvp")
     .withArguments(new TeamArgument("team"))
     .executes((sender, args) -> {
-        // The TeamArgument must be casted to a String
-        String teamName = (String) args.get(0);
-        
-        // A team name can be turned into a Team using getTeam(String)
-        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+        Team team = (Team) args.get(0);
         
         // Toggle pvp
         team.setAllowFriendlyFire(team.allowFriendlyFire());
