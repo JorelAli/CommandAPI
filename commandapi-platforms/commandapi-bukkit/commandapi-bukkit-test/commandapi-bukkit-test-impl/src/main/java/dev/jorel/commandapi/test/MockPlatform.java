@@ -169,6 +169,8 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	public abstract org.bukkit.loot.LootTables[] getLootTables();
 
 	public abstract org.bukkit.potion.PotionEffectType[] getPotionEffects();
+	
+	public abstract org.bukkit.Sound[] getSounds();
 
 	/**
 	 * @return A list of all item names, sorted in alphabetical order. Each item

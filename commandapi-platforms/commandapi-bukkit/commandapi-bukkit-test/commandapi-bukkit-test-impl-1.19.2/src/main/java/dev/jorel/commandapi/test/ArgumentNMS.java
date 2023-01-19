@@ -50,6 +50,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -133,7 +134,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentItemPredicate() {
-		return BASE_NMS._ArgumentItemPredicate();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(HolderLookup.forRegistry(Registry.ITEM)); // Registry.ITEM
+		return ItemPredicateArgument.itemPredicate(buildContextMock);
 	}
 
 	@Override
