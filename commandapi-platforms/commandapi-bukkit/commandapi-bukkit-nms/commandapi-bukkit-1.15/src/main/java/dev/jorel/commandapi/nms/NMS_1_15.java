@@ -914,7 +914,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	@Override
 	public Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		String teamName = ArgumentScoreboardTeam.a(cmdCtx, key).getName();
-		return Bukkit.getScoreboardManager().getNewScoreboard().getTeam(teamName);
+		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 	}
 
 	@Override
