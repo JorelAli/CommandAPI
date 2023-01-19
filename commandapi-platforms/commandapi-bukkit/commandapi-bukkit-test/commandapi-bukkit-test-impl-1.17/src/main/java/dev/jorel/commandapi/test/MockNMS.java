@@ -269,6 +269,9 @@ public class MockNMS extends Enums {
 			Mockito.when(css.getAllTeams()).thenAnswer(invocation -> {
 				return Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList();
 			});
+			
+			// SoundArgument
+			Mockito.when(css.getAvailableSoundEvents()).thenAnswer(invocation -> Registry.SOUND_EVENT.keySet());
 		}
 		return css;
 	}

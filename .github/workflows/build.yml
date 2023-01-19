@@ -19,6 +19,9 @@ jobs:
         os: [ubuntu-20.04]
     runs-on: ${{ matrix.os }}
     steps:
+
+      ### Set up ###
+
       - name: Checkout the CommandAPI repository
         uses: actions/checkout@v3
 
@@ -28,6 +31,8 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java }}
           cache: maven
+
+      ### Compilation ###
 
       - name: Build the CommandAPI (Bukkit+Velocity) using maven
         run: mvn clean install --batch-mode -P Platform.Bukkit,Platform.Velocity
@@ -40,39 +45,6 @@ jobs:
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_R1
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_3_R2;
 
-      - name: Run Bukkit unit tests across all versions
-        run: |
-            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
-            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_18
-            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_17
-            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_16_5
-            mvn clean package -pl :commandapi-bukkit-test-tests-1.18 -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
-
-      - name: Upload CommandAPI (Bukkit) plugin artifact
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v3
-        with:
-          name: CommandAPI (plugin)
-          path: |
-            commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/CommandAPI*.jar
-            !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*sources.jar
-            !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*javadoc.jar
-
-      - name: Build CommandAPI example Bukkit plugins in examples/ folder
-        run: cd ./examples; ./build.sh;
-
-      - name: Run markdownlint on all documentation Markdown documents
-        uses: DavidAnson/markdownlint-cli2-action@v8
-        with:
-          globs: 'docssrc/src/*.md'
-
-      - name: Build the documentation with mdBook
-        run: |
-          cd docssrc
-          curl -LJO https://github.com/JorelAli/mdBook/releases/download/v0.4.21-fa6/mdbook-fa6 && chmod +x mdbook-fa6
-          mkdir -p mdbook-linkcheck && cd "$_" && curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && unzip "$_" && chmod +x mdbook-linkcheck && export PATH=$PWD:$PATH && cd ..
-          ./mdbook-fa6 build
-      
       # - name: validate version-specific dependencies (nms-common)
       #   run: |
       #     nms_common_path="commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/target/classes/dev/jorel/commandapi/nms/NMS_Common.class"
@@ -90,6 +62,55 @@ jobs:
       #             echo "NMS Common has no version-specific dependencies :)"
       #         fi
       #     fi
+
+      ### Bukkit tests across all NMS versions ###
+      # Dev note: Yes, I know I could put this under one run section, but it's a million times easier
+      # to see which version failed when it's got the version name and subsection in GitHub Actions
+
+      - name: Run Bukkit unit tests across all versions (1.19.2)
+        run: |
+            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
+            mvn clean package -pl :commandapi-bukkit-test-tests-1.18 -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
+
+      - name: Run Bukkit unit tests across all versions (1.18)
+        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_18
+
+      - name: Run Bukkit unit tests across all versions (1.17)
+        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_17
+
+      - name: Run Bukkit unit tests across all versions (1.16.5)
+        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_16_5
+
+      ### Upload .jar artifacts ###
+
+      - name: Upload CommandAPI (Bukkit) plugin artifact
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
+        uses: actions/upload-artifact@v3
+        with:
+          name: CommandAPI (plugin)
+          path: |
+            commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/CommandAPI*.jar
+            !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*sources.jar
+            !commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/*javadoc.jar
+
+      ### Examples ###
+
+      - name: Build CommandAPI example Bukkit plugins in examples/ folder
+        run: cd ./examples; ./build.sh;
+
+      ### Documentation ###
+
+      - name: Run markdownlint on all documentation Markdown documents
+        uses: DavidAnson/markdownlint-cli2-action@v8
+        with:
+          globs: 'docssrc/src/*.md'
+
+      - name: Build the documentation with mdBook
+        run: |
+          cd docssrc
+          curl -LJO https://github.com/JorelAli/mdBook/releases/download/v0.4.21-fa6/mdbook-fa6 && chmod +x mdbook-fa6
+          mkdir -p mdbook-linkcheck && cd "$_" && curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && unzip "$_" && chmod +x mdbook-linkcheck && export PATH=$PWD:$PATH && cd ..
+          ./mdbook-fa6 build
 
   snapshot-deploy:
     needs: build # Only run if "build" succeeds
