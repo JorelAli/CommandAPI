@@ -144,6 +144,7 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.scoreboard.Team;
 
 // Mojang-Mapped reflection
 /**
@@ -616,8 +617,9 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return TeamArgument.getTeam(cmdCtx, key).getName();
+	public Team getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		String teamName = TeamArgument.getTeam(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 	}
 
 	@Override

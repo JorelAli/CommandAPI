@@ -70,6 +70,7 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.scoreboard.Team;
 
 public interface NMS<CommandListenerWrapper> {
 
@@ -403,7 +404,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Set<NamespacedKey> getTags();
 
-	String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

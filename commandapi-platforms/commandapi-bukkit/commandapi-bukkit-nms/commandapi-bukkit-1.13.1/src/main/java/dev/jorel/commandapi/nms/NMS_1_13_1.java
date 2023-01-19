@@ -156,6 +156,7 @@ import net.minecraft.server.v1_13_R2.ParticleParamRedstone;
 import net.minecraft.server.v1_13_R2.ShapeDetectorBlock;
 import net.minecraft.server.v1_13_R2.Vec2F;
 import net.minecraft.server.v1_13_R2.Vec3D;
+import org.bukkit.scoreboard.Team;
 
 /**
  * NMS implementation for Minecraft 1.13.1
@@ -936,7 +937,10 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	}
 
 	@Override
-	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException { return ArgumentScoreboardTeam.a(cmdCtx, key).getName(); }
+	public Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		String teamName = ArgumentScoreboardTeam.a(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getNewScoreboard().getTeam(teamName);
+	}
 
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {

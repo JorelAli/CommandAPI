@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.scoreboard.Team;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,21 +41,22 @@ public class ArgumentTeamTests extends TestBase {
 
 	@Test
 	public void executionTestWithTeamArgument() {
-		Mut<String> results = Mut.of();
+		Mut<Team> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new TeamArgument("team"))
 			.executesPlayer((player, args) -> {
-				results.set((String) args.get("team"));
+				results.set((Team) args.get("team"));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
 		Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam("myteam");
+		Team myTeam = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("myteam");
 		
 		server.dispatchCommand(player, "test myteam");
-		assertEquals("myteam", results.get());
+		assertEquals(myTeam, results.get());
 
 		// /test blah
 		// Fails because 'blah' is not a valid Team

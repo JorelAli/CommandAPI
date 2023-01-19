@@ -45,6 +45,7 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandSourceStack;
+import org.bukkit.scoreboard.Team;
 
 /**
  * Argument related method implementations
@@ -478,7 +479,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public Team getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getTeam(cmdCtx, key);
 	}
 
