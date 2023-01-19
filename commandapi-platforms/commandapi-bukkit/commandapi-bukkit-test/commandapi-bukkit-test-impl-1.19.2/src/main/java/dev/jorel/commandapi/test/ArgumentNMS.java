@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
 import org.mockito.Mockito;
 
 import com.mojang.brigadier.Message;
@@ -500,7 +501,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public Team getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getTeam(cmdCtx, key);
 	}
 

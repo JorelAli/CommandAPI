@@ -167,6 +167,7 @@ import net.minecraft.server.v1_16_R2.SystemUtils;
 import net.minecraft.server.v1_16_R2.Unit;
 import net.minecraft.server.v1_16_R2.Vec2F;
 import net.minecraft.server.v1_16_R2.Vec3D;
+import org.bukkit.scoreboard.Team;
 
 /**
  * NMS implementation for Minecraft 1.16.2 and 1.16.3
@@ -927,8 +928,9 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
-	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentScoreboardTeam.a(cmdCtx, key).getName();
+	public Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		String teamName = ArgumentScoreboardTeam.a(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 	}
 
 	@Override

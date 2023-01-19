@@ -124,6 +124,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.world.phys.Vec2;
+import org.bukkit.scoreboard.Team;
 
 /**
  * Common NMS code To ensure that this code actually works across all versions
@@ -663,8 +664,9 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return TeamArgument.getTeam(cmdCtx, key).getName();
+	public Team getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		String teamName = TeamArgument.getTeam(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 	}
 
 	@Override
