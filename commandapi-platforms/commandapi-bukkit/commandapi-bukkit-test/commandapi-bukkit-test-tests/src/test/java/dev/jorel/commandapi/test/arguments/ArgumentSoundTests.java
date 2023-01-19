@@ -85,17 +85,6 @@ public class ArgumentSoundTests extends TestBase {
 			assertEquals(sound, results.get());
 		}
 
-		// /test adventure/adventuring_time
-//		server.dispatchCommand(player, "test adventure/adventuring_time");
-//		assertEquals(NamespacedKey.minecraft("adventure/adventuring_time"), results.get().getKey());
-//		
-//		// /test minecraft:adventure/adventuring_time
-//		server.dispatchCommand(player, "test minecraft:adventure/adventuring_time");
-//		assertEquals(NamespacedKey.minecraft("adventure/adventuring_time"), results.get().getKey());
-//
-//		// /test namespace:group/unknown_Sound
-//		assertCommandFailsWith(player, "test namespace:group/unknown_Sound", "Unknown Sound: namespace:group/unknown_Sound");
-
 		assertNoMoreResults(results);
 	}
 
