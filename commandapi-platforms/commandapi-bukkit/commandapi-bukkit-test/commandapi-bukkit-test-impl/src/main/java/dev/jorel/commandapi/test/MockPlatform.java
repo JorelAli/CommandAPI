@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.internal.bind.JsonTreeReader;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 
@@ -185,15 +186,27 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 		try {
 			jar = new JarFile(minecraftServerClass.getProtectionDomain().getCodeSource().getLocation().getPath());
 		} catch (IOException e) {
-			e.printStackTrace();
-			return list;
+			throw new Error("Failed to load any recipes for testing!", e);
 		}
 		// Iterate over everything in the jar 
 		jar.entries().asIterator().forEachRemaining(entry -> {
 			if(entry.getName().startsWith("data/minecraft/recipes/") && entry.getName().endsWith(".json")) {
 				// If it's what we want, read everything
 				InputStream is = minecraftServerClass.getClassLoader().getResourceAsStream(entry.getName());
-				String jsonStr = new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
+				String jsonStr = new BufferedReader(new InputStreamReader(is))
+					.lines()
+					.map(line -> {
+						// We can't load tags in the testing environment. If we have any recipes that
+						// use tags as ingredients (e.g. wooden_axe or charcoal), we'll get an illegal
+						// state exception from TagUtil complaining that a tag has been used before it
+						// was bound. To mitigate this, we simply remove all tags and put in a dummy
+						// item (in this case, stick)
+						if(line.contains("\"tag\": ")) {
+							return "\"item\": \"minecraft:stick\"";
+						}
+						return line;
+					})
+					.collect(Collectors.joining("\n"));
 				// Get the resource location (file name, no extension, no path) and parse the JSON.
 				// Using deprecated method as the alternative doesn't exist in 1.17
 				JsonObject parsedJson = new JsonParser().parse(jsonStr).getAsJsonObject();
