@@ -3,12 +3,19 @@ package dev.jorel.commandapi.test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +23,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -38,9 +47,12 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.spigotmc.AsyncCatcher;
 
 import com.google.common.collect.Streams;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 
@@ -69,6 +81,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTables;
@@ -83,6 +97,59 @@ public class MockNMS extends Enums {
 		if (src != null) {
 			System.err.println("Loading PotionEffectType sources from " + src.getLocation());
 		}
+	}
+
+	/**
+	 * https://www.uofr.net/~greg/java/get-resource-listing.html
+	 * List directory contents for a resource folder. Not recursive.
+	 * This is basically a brute-force implementation.
+	 * Works for regular files and also JARs.
+	 * 
+	 * @author Greg Briggs
+	 * @param clazz Any java class that lives in the same place as the resources you want.
+	 * @param path Should end with "/", but not start with one.
+	 * @return Just the name of each member item, not the full paths.
+	 * @throws URISyntaxException 
+	 * @throws IOException 
+	 */
+	String[] getResourceListing(Class clazz, String path) throws URISyntaxException, IOException {
+		URL dirURL = clazz.getClassLoader().getResource(path);
+		if (dirURL != null && dirURL.getProtocol().equals("file")) {
+			/* A file path: easy enough */
+			return new File(dirURL.toURI()).list();
+		} 
+
+		if (dirURL == null) {
+			/* 
+			 * In case of a jar file, we can't actually find a directory.
+			 * Have to assume the same jar as clazz.
+			 */
+			String me = clazz.getName().replace(".", "/")+".class";
+			dirURL = clazz.getClassLoader().getResource(me);
+		}
+
+		if (dirURL.getProtocol().equals("jar")) {
+			/* A JAR path */
+			String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
+			JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+			Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+			Set<String> result = new HashSet<String>(); //avoid duplicates in case it is a subdirectory
+			while(entries.hasMoreElements()) {
+				String name = entries.nextElement().getName();
+				if (name.startsWith(path)) { //filter according to the path
+					String entry = name.substring(path.length());
+					int checkSubdir = entry.indexOf("/");
+					if (checkSubdir >= 0) {
+						// if it is a subdirectory, we just return the directory name
+						entry = entry.substring(0, checkSubdir);
+					}
+					result.add(entry);
+				}
+			}
+			return result.toArray(new String[result.size()]);
+		} 
+
+		throw new UnsupportedOperationException("Cannot list files for URL "+dirURL);
 	}
 
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
@@ -112,6 +179,39 @@ public class MockNMS extends Enums {
 		// 1.19 ones!)
 		registerDefaultPotionEffects();
 		registerDefaultEnchantments();
+		
+		this.recipeManager = new RecipeManager();
+		
+		List<Recipe<?>> recipes = new ArrayList<>();
+		try {
+			AsyncCatcher.enabled = false;
+//			MockedStatic<MinecraftServer> staticMocker = Mockito.mockStatic(MinecraftServer.class);
+//			staticMocker.when(MinecraftServer::getServer).thenAnswer(i -> Mockito.mock(MinecraftServer.class));
+			
+//			System.out.println("Resources:");
+			for(String str : getResourceListing(MinecraftServer.class, "data/minecraft/recipes/")) {
+				if(str.isBlank()) {
+					continue;
+				}
+//				System.out.println(str);
+//				System.out.println("data/minecraft/recipes/" + str);
+				InputStream is = MinecraftServer.class.getClassLoader().getResourceAsStream("data/minecraft/recipes/" + str);
+				String jsonStr = new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
+//				System.out.println(jsonStr);
+//				System.out.println("Registering " + str.substring(0, str.indexOf(".")));
+				Recipe recipe = RecipeManager.fromJson(new ResourceLocation(str.substring(0, str.indexOf("."))), JsonParser.parseString(jsonStr).getAsJsonObject());
+				recipes.add(recipe);
+			}
+			
+//			staticMocker.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		recipeManager.replaceRecipes(recipes);
+		System.out.println("Registered " + recipes.size() + " recipes");
+//		System.exit(1);
+
 	}
 
 	/*************************
@@ -290,6 +390,9 @@ public class MockNMS extends Enums {
 			
 			// SoundArgument
 			Mockito.when(css.getAvailableSoundEvents()).thenAnswer(invocation -> Registry.SOUND_EVENT.keySet());
+			
+			// RecipeArgument
+//			Mockito.when(css.getRecipeNames()).thenAnswer(invocation -> Registry.recipRECIPE_SERIALIZER.keySet().stream());
 		}
 		return css;
 	}
@@ -312,6 +415,7 @@ public class MockNMS extends Enums {
 	}
 
 	MinecraftServer minecraftServerMock = null;
+	final RecipeManager recipeManager;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -394,7 +498,7 @@ public class MockNMS extends Enums {
 		Mockito.when(minecraftServerMock.getPlayerList()).thenAnswer(i -> playerListMock);
 		Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenAnswer(i -> players);
 
-		// Player argument
+		// PlayerArgument
 		GameProfileCache userCacheMock = Mockito.mock(GameProfileCache.class);
 		Mockito.when(userCacheMock.get(anyString())).thenAnswer(invocation -> {
 			String playerName = invocation.getArgument(0);
@@ -406,6 +510,9 @@ public class MockNMS extends Enums {
 			return Optional.empty();
 		});
 		Mockito.when(minecraftServerMock.getProfileCache()).thenReturn(userCacheMock);
+		
+		// RecipeArgument
+		Mockito.when(minecraftServerMock.getRecipeManager()).thenAnswer(i -> this.recipeManager);
 
 		return (T) minecraftServerMock;
 	}
