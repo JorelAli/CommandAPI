@@ -24,6 +24,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemFactory;
@@ -35,6 +36,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.mockito.Mockito;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
@@ -50,8 +52,10 @@ import net.minecraft.server.v1_16_R3.Advancement;
 import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
+import net.minecraft.server.v1_16_R3.CraftingManager;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.LootTableRegistry;
 import net.minecraft.server.v1_16_R3.LootTables;
@@ -59,6 +63,7 @@ import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.MobEffectList;
 import net.minecraft.server.v1_16_R3.PlayerList;
+import net.minecraft.server.v1_16_R3.Recipes;
 import net.minecraft.server.v1_16_R3.ResourceKey;
 import net.minecraft.server.v1_16_R3.ScoreboardServer;
 import net.minecraft.server.v1_16_R3.ScoreboardTeam;
@@ -76,6 +81,12 @@ public class MockNMS extends Enums {
 			System.err.println("Loading PotionEffectType sources from " + src.getLocation());
 		}
 	}
+
+	static AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
+	MinecraftServer minecraftServerMock = null;
+	List<EntityPlayer> players = new ArrayList<>();
+	PlayerList playerListMock;
+	final CraftingManager recipeManager;
 
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
@@ -103,6 +114,9 @@ public class MockNMS extends Enums {
 		// 1.19 ones!)
 		registerDefaultPotionEffects();
 		registerDefaultEnchantments();
+
+		this.recipeManager = new CraftingManager();
+		registerDefaultRecipes();
 	}
 
 	/*************************
@@ -179,6 +193,26 @@ public class MockNMS extends Enums {
 		}
 	}
 	
+	private void registerDefaultRecipes() {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		List<IRecipe<?>> recipes = (List) getRecipes(MinecraftServer.class)
+			.stream()
+			.map(p -> CraftingManager.a(new MinecraftKey(p.first()), p.second()))
+			.toList();
+		
+		// 1.16 and below doesn't have the lovely CraftingManager#replaceRecipes method
+		// that 1.17+ has, so we'll just stub it in here:
+		Map<Recipes<?>, Object2ObjectLinkedOpenHashMap<MinecraftKey, IRecipe<?>>> map = new HashMap<>();
+		for(IRecipe<?> recipe : recipes) {
+			Map<MinecraftKey, IRecipe<?>> innerMap = map.computeIfAbsent(recipe.g(), r -> new Object2ObjectLinkedOpenHashMap<>());
+			
+			final MinecraftKey recipeID = recipe.getKey();
+			innerMap.put(recipeID, recipe);
+		}
+		
+		setField(CraftingManager.class, "recipes", recipeManager, ImmutableMap.copyOf(map));
+	}
+	
 	/**************************
 	 * MockPlatform overrides *
 	 **************************/
@@ -206,9 +240,6 @@ public class MockNMS extends Enums {
 	public SimpleCommandMap getSimpleCommandMap() {
 		return ((ServerMock) Bukkit.getServer()).getCommandMap();
 	}
-
-	List<EntityPlayer> players = new ArrayList<>();
-	PlayerList playerListMock;
 
 	@Override
 	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
@@ -278,6 +309,9 @@ public class MockNMS extends Enums {
 			
 			// SoundArgument
 			Mockito.when(clw.n()).thenAnswer(invocation -> IRegistry.SOUND_EVENT.keySet());
+			
+			// RecipeArgument
+			Mockito.when(clw.o()).thenAnswer(invocation -> recipeManager.d());
 		}
 		return clw;
 	}
@@ -299,8 +333,12 @@ public class MockNMS extends Enums {
 	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
 	}
-
-	MinecraftServer minecraftServerMock = null;
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<NamespacedKey> getAllRecipes() {
+		return recipeManager.d().map(k -> new NamespacedKey(k.getNamespace(), k.getKey())).toList();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -389,11 +427,12 @@ public class MockNMS extends Enums {
 			return null;
 		});
 		Mockito.when(minecraftServerMock.getUserCache()).thenReturn(userCacheMock);
+		
+		// RecipeArgument
+		Mockito.when(minecraftServerMock.getCraftingManager()).thenAnswer(i -> this.recipeManager);
 
 		return (T) minecraftServerMock;
 	}
-
-	static AdvancementDataWorld advancementDataWorld = new AdvancementDataWorld(null);
 
 	@Override
 	public org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
