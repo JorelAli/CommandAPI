@@ -68,6 +68,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTables;
@@ -76,6 +78,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 
 public class MockNMS extends Enums {
+
+	static ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
+
+	MinecraftServer minecraftServerMock = null;
+	List<ServerPlayer> players = new ArrayList<>();
+	PlayerList playerListMock;
+	final RecipeManager recipeManager;
 
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
@@ -103,6 +112,9 @@ public class MockNMS extends Enums {
 		// 1.19 ones!)
 		registerDefaultPotionEffects();
 		registerDefaultEnchantments();
+
+		this.recipeManager = new RecipeManager();
+		registerDefaultRecipes();
 	}
 
 	/*************************
@@ -181,6 +193,15 @@ public class MockNMS extends Enums {
 		}
 	}
 
+	private void registerDefaultRecipes() {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		List<Recipe<?>> recipes = (List) getRecipes(MinecraftServer.class)
+			.stream()
+			.map(p -> RecipeManager.fromJson(new ResourceLocation(p.first()), p.second()))
+			.toList();
+		recipeManager.replaceRecipes(recipes);
+	}
+
 	/**************************
 	 * MockPlatform overrides *
 	 **************************/
@@ -208,9 +229,6 @@ public class MockNMS extends Enums {
 	public SimpleCommandMap getSimpleCommandMap() {
 		return ((ServerMock) Bukkit.getServer()).getCommandMap();
 	}
-
-	List<ServerPlayer> players = new ArrayList<>();
-	PlayerList playerListMock;
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
@@ -277,9 +295,12 @@ public class MockNMS extends Enums {
 			Mockito.when(css.getAllTeams()).thenAnswer(invocation -> {
 				return Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList();
 			});
-			
+
 			// SoundArgument
 			Mockito.when(css.getAvailableSoundEvents()).thenAnswer(invocation -> Registry.SOUND_EVENT.keySet());
+			
+			// RecipeArgument
+			Mockito.when(css.getRecipeNames()).thenAnswer(invocation -> recipeManager.getRecipeIds());
 		}
 		return css;
 	}
@@ -300,8 +321,11 @@ public class MockNMS extends Enums {
 	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
 		return potionEffectType.getKey().asString();
 	}
-
-	MinecraftServer minecraftServerMock = null;
+	
+	@Override
+	public List<NamespacedKey> getAllRecipes() {
+		return recipeManager.getRecipeIds().map(k -> new NamespacedKey(k.getNamespace(), k.getPath())).toList();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -390,11 +414,12 @@ public class MockNMS extends Enums {
 			return Optional.empty();
 		});
 		Mockito.when(minecraftServerMock.getProfileCache()).thenReturn(userCacheMock);
+		
+		// RecipeArgument
+		Mockito.when(minecraftServerMock.getRecipeManager()).thenAnswer(i -> this.recipeManager);
 
 		return (T) minecraftServerMock;
 	}
-
-	static ServerAdvancementManager advancementDataWorld = new ServerAdvancementManager(null);
 
 	@Override
 	public org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {

@@ -195,7 +195,9 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 				InputStream is = minecraftServerClass.getClassLoader().getResourceAsStream(entry.getName());
 				String jsonStr = new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
 				// Get the resource location (file name, no extension, no path) and parse the JSON.
-				list.add(new Pair<>(entry.getName().substring("data/minecraft/recipes/".length(), entry.getName().lastIndexOf(".")), JsonParser.parseString(jsonStr).getAsJsonObject()));
+				// Using deprecated method as the alternative doesn't exist in 1.17
+				JsonObject parsedJson = new JsonParser().parse(jsonStr).getAsJsonObject();
+				list.add(new Pair<>(entry.getName().substring("data/minecraft/recipes/".length(), entry.getName().lastIndexOf(".")), parsedJson));
 			}
 		});
 		return list;
@@ -221,6 +223,6 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 */
 	public abstract List<String> getAllItemNames();
 	
-	public List<NamespacedKey> getAllRecipes() {return List.of();}
+	public abstract List<NamespacedKey> getAllRecipes();
 
 }
