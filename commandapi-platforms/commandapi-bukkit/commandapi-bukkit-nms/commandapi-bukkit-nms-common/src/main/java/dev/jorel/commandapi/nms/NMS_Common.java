@@ -60,13 +60,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -77,7 +78,6 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.Overridden;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
-import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -94,7 +94,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.AngleArgument;
 import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
@@ -122,10 +121,7 @@ import net.minecraft.commands.arguments.item.FunctionArgument;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.world.phys.Vec2;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
 
 /**
  * Common NMS code To ensure that this code actually works across all versions
@@ -595,10 +591,12 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		throws CommandSyntaxException;
 
 	@Override
-	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
-		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, info = """
+		1.17 has what appears to be a different obfuscation for recipe.getId().
+		I can't be bothered to figure out what it is, but all I know is it doesn't work,
+		and we need to move it outta here!
+		""")
+	public abstract Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	public final Rotation getRotation(CommandContext<CommandSourceStack> cmdCtx, String key) {

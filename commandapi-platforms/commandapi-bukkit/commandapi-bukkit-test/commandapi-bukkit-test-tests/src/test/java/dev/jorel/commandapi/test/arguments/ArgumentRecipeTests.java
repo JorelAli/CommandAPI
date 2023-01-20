@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.bukkit.Keyed;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,21 +56,12 @@ public class ArgumentRecipeTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// /test entity.enderman.death
-//		server.dispatchCommand(player, "test entity.enderman.death");
-//		assertEquals(Recipe.ENTITY_ENDERMAN_DEATH, results.get());
-//		
-//		// /test minecraft:entity.enderman.death
-//		server.dispatchCommand(player, "test minecraft:entity.enderman.death");
-//		assertEquals(Recipe.ENTITY_ENDERMAN_DEATH, results.get());
-//
-//		// TODO: This test returns null, instead of throwing an exception of a Recipe not existing.
-//		// This HAS to be documented in both the JavaDocs and the main documentation - the CommandAPI
-//		// assumes everything is non-null UNLESS explicitly stated
-//		
-//		// /test unknownRecipe
-//		server.dispatchCommand(player, "test unknownRecipe");
-//		assertEquals(null, results.get());
+		// /test diamond_pickaxe
+		server.dispatchCommand(player, "test diamond_pickaxe");
+		assertEquals(new ItemStack(Material.DIAMOND_PICKAXE), results.get().getResult());
+
+		// /test unknownRecipe
+		assertCommandFailsWith(player, "test unknownrecipe", "Unknown recipe: minecraft:unknownrecipe");
 
 		assertNoMoreResults(results);
 	}
@@ -132,7 +125,6 @@ public class ArgumentRecipeTests extends TestBase {
 				.sorted()
 				.toList(),
 			server.getSuggestions(player, "test minecraft:s"));
-
 	}
 
 }

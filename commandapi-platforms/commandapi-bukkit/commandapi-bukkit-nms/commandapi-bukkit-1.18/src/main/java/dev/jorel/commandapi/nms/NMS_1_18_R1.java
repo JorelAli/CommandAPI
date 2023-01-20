@@ -94,6 +94,7 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -542,6 +543,12 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return PotionEffectType.getByKey(fromResourceLocation(Registry.MOB_EFFECT.getKey(MobEffectArgument.getEffect(cmdCtx, key))));
+	}
+
+	@Override
+	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
+		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
 	}
 
 	@Override
