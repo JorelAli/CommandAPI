@@ -383,6 +383,12 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Made the <code>TeamArgument</code> return a <code>Team</code> instead of a String</li>
                     <li>Made the <code>ObjectiveArgument</code> return a <code>Objective</code> instead of a String</li>
                 </ul>
+                <b>Kotlin DSL changes:</b>
+                <ul>
+                    <li>Implemented resulting executors</li>
+                    <li>Implemented the <code>FunctionArgument</code></li>
+                    <li>Several improvements for the <code>CommandAPICommand</code> DSL</li>
+                </ul>
                 <b>Bug fixes:</b>
                 <ul>
                     <li>Fixed <code>commandapi-preprocessor</code> appearing in the plugin and shaded jar file</li>
