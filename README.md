@@ -373,14 +373,15 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
             <td valign="top"><b>9.0.0</b></td>
             <td valign="top">??? 2023</td>
             <td valign="top">
-                <b>⚠️ This version is incompatible with with any plugin that used the CommandAPI version 8.7.x or below! (See documentation for more information)</b><br>
+                <b>⚠️ This version is incompatible with any plugin that used the CommandAPI version 8.7.x or below! (See documentation for more information)</b><br>
                 <b>New features:</b>
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/360, https://github.com/JorelAli/CommandAPI/pull/369 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/162, https://github.com/JorelAli/CommandAPI/issues/387, https://github.com/JorelAli/CommandAPI/pull/393 Added optional arguments</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
                     <li>Reworked the implementation of <code>ItemArgument</code>, so the <code>ItemStack</code> count is correctly reflected and <code>ItemMeta</code> is properly assigned</li>
-                    <li>Made the `TeamArgument` return a `Team` instead of a String</li>
+                    <li>Made the <code>TeamArgument</code> return a <code>Team</code> instead of a String</li>
+                    <li>Made the <code>ObjectiveArgument</code> return a <code>Objective</code> instead of a String</li>
                 </ul>
                 <b>Bug fixes:</b>
                 <ul>

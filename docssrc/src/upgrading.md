@@ -349,3 +349,37 @@ new CommandAPICommand("team")
 ```
 
 </div>
+
+-----
+
+### Changes to the `ObjectiveArgument`
+
+The `ObjectiveArgument` has been updated to no longer use a `String` as its return type. Instead, you can now just use an `Objective` object directly:
+
+<div class="multi-pre">
+
+```java,8.7.x
+new CommandAPICommand("objective")
+    .withArguments(new ObjectiveArgument("objective"))
+    .executes((sender, args) -> {
+        Objective objective = (String) args.get("objective");
+    })
+    .register();
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.0
+new CommandAPICommand("objective")
+    .withArguments(new ObjectiveArgument("objective"))
+    .executes((sender, args) -> {
+        Objective objective = (Objective) args.get("objective");
+    })
+    .register();
+```
+
+</div>

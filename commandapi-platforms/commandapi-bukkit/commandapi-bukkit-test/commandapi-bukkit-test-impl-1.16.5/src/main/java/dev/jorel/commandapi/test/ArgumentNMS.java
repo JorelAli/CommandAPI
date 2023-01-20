@@ -45,6 +45,7 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
 /**
@@ -402,7 +403,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 	}
 
 	@Override
-	public String getObjective(CommandContext cmdCtx, String key)
+	public Objective getObjective(CommandContext cmdCtx, String key)
 		throws IllegalArgumentException, CommandSyntaxException {
 		return BASE_NMS.getObjective(cmdCtx, key);
 	}

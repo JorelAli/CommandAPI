@@ -43,6 +43,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.Team
 import org.bukkit.util.EulerAngle
 import java.util.*
@@ -433,11 +434,7 @@ fun objectiveargument() {
 CommandAPICommand("sidebar")
     .withArguments(ObjectiveArgument("objective"))
     .executes(CommandExecutor { _, args ->
-        // The ObjectArgument must be casted to a String
-        val objectiveName = args[0] as String
-
-        // An objective name can be turned into an Objective using getObjective(String)
-        val objective = Bukkit.getScoreboardManager().mainScoreboard.getObjective(objectiveName)
+        val objective = args[0] as Objective
 
         // Set display slot
         objective?.displaySlot = DisplaySlot.SIDEBAR

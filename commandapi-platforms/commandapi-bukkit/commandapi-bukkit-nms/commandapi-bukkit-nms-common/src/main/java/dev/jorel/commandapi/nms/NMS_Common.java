@@ -124,6 +124,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.world.phys.Vec2;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
 /**
@@ -552,9 +553,10 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final String getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
+	public final Objective getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException {
-		return ObjectiveArgument.getObjective(cmdCtx, key).getName();
+		String objectiveName = ObjectiveArgument.getObjective(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
 	}
 
 	@Override

@@ -153,6 +153,7 @@ import net.minecraft.server.v1_14_R1.ParticleParamRedstone;
 import net.minecraft.server.v1_14_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_14_R1.Vec2F;
 import net.minecraft.server.v1_14_R1.Vec3D;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
 /**
@@ -730,8 +731,9 @@ public class NMS_1_14 extends NMSWrapper_1_14 {
 	}
 
 	@Override
-	public String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException {
-		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
+	public Objective getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException {
+		String objectiveName = ArgumentScoreboardObjective.a(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
 	}
 
 	@Override

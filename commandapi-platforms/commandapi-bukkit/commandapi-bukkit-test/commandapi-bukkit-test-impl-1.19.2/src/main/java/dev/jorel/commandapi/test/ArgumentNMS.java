@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 import org.mockito.Mockito;
 
@@ -424,7 +425,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public String getObjective(CommandContext cmdCtx, String key)
+	public Objective getObjective(CommandContext cmdCtx, String key)
 		throws IllegalArgumentException, CommandSyntaxException {
 		return BASE_NMS.getObjective(cmdCtx, key);
 	}

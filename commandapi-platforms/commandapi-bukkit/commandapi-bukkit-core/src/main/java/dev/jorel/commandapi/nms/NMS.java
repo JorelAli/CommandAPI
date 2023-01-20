@@ -70,6 +70,7 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
 public interface NMS<CommandListenerWrapper> {
@@ -356,7 +357,7 @@ public interface NMS<CommandListenerWrapper> {
 	<NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 		Function<Object, NBTContainer> nbtContainerConstructor);
 
-	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+	Objective getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 		throws IllegalArgumentException, CommandSyntaxException;
 
 	String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key);

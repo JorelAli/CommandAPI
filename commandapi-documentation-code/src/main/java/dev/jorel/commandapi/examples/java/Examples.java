@@ -475,11 +475,7 @@ new CommandAPICommand("clearobjectives")
 new CommandAPICommand("sidebar")
     .withArguments(new ObjectiveArgument("objective"))
     .executes((sender, args) -> {
-        // The ObjectArgument must be casted to a String
-        String objectiveName = (String) args.get(0);
-        
-        // An objective name can be turned into an Objective using getObjective(String)
-        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+        Objective objective = (Objective) args.get(0);
         
         // Set display slot
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
