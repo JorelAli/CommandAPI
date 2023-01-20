@@ -72,16 +72,17 @@ public class ArgumentRecipeTests extends TestBase {
 
 		assertNoMoreResults(results);
 	}
-	
+
 	@Test
 	public void executionTestWithRecipeArgumentKeyed() {
-		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_16));
-		
+
 		// In 1.16 onwards, recipes are implemented using ComplexRecipe, which
 		// is simply a recipe that extends Keyed. Because we don't have access
 		// to ComplexRecipe in pre-1.16 versions, it's simpler to just check
 		// against Keyed instead - we're already doing normal ItemStack result
 		// checks in the other test method.
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_16));
+
 		Mut<Keyed> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -92,8 +93,8 @@ public class ArgumentRecipeTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		
-		for(NamespacedKey str : MockPlatform.getInstance().getAllRecipes()) {
+
+		for (NamespacedKey str : MockPlatform.getInstance().getAllRecipes()) {
 			server.dispatchCommand(player, "test " + str.toString());
 			assertEquals(str, results.get().getKey());
 		}
@@ -120,7 +121,7 @@ public class ArgumentRecipeTests extends TestBase {
 			MockPlatform.getInstance().getAllRecipes().stream()
 				.map(k -> k.toString())
 				.sorted()
-				.toList(), 
+				.toList(),
 			server.getSuggestions(player, "test "));
 
 		// /test minecraft:s
@@ -131,7 +132,7 @@ public class ArgumentRecipeTests extends TestBase {
 				.sorted()
 				.toList(),
 			server.getSuggestions(player, "test minecraft:s"));
-		
+
 	}
 
 }
