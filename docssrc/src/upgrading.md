@@ -328,7 +328,8 @@ The `TeamArgument` has been updated to no longer use a `String` as its return ty
 new CommandAPICommand("team")
     .withArguments(new TeamArgument("team"))
     .executes((sender, args) -> {
-        Team team = (String) args.get("team");
+        String teamName = (String) args.get("team");
+        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
     })
     .register();
 ```
@@ -362,7 +363,8 @@ The `ObjectiveArgument` has been updated to no longer use a `String` as its retu
 new CommandAPICommand("objective")
     .withArguments(new ObjectiveArgument("objective"))
     .executes((sender, args) -> {
-        Objective objective = (String) args.get("objective");
+        String objectiveName = (String) args.get("objective");
+        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
     })
     .register();
 ```
