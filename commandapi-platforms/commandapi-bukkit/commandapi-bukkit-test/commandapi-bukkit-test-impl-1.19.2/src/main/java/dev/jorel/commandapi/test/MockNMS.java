@@ -47,7 +47,6 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.spigotmc.AsyncCatcher;
 
@@ -212,6 +211,11 @@ public class MockNMS extends Enums {
 		System.out.println("Registered " + recipes.size() + " recipes");
 //		System.exit(1);
 
+	}
+	
+	@Override
+	public List<NamespacedKey> getAllRecipes() {
+		return recipeManager.getRecipeIds().map(k -> new NamespacedKey(k.getNamespace(), k.getPath())).toList();
 	}
 
 	/*************************
@@ -392,7 +396,7 @@ public class MockNMS extends Enums {
 			Mockito.when(css.getAvailableSoundEvents()).thenAnswer(invocation -> Registry.SOUND_EVENT.keySet());
 			
 			// RecipeArgument
-//			Mockito.when(css.getRecipeNames()).thenAnswer(invocation -> Registry.recipRECIPE_SERIALIZER.keySet().stream());
+			Mockito.when(css.getRecipeNames()).thenAnswer(invocation -> recipeManager.getRecipeIds());
 		}
 		return css;
 	}

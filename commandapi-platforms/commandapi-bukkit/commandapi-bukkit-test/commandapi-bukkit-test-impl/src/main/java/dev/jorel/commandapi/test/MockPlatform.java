@@ -177,5 +177,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 * is prefixed with {@code minecraft:}
 	 */
 	public abstract List<String> getAllItemNames();
+	
+	public List<NamespacedKey> getAllRecipes() {return List.of();}
 
 }

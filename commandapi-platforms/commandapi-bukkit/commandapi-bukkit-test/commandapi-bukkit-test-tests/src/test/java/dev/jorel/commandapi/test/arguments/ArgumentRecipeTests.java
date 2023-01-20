@@ -3,8 +3,6 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.util.Arrays;
-
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Recipe;
@@ -95,9 +93,9 @@ public class ArgumentRecipeTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 		
-		for(String str : MockPlatform.getInstance().getAllItemNames()) {
-			server.dispatchCommand(player, "test " + str);
-			assertEquals(NamespacedKey.fromString(str), results.get());
+		for(NamespacedKey str : MockPlatform.getInstance().getAllRecipes()) {
+			server.dispatchCommand(player, "test " + str.toString());
+			assertEquals(str, results.get().getKey());
 		}
 
 		assertNoMoreResults(results);
@@ -119,14 +117,16 @@ public class ArgumentRecipeTests extends TestBase {
 
 		// /test
 		assertEquals(
-			MockPlatform.getInstance().getAllItemNames().stream()
+			MockPlatform.getInstance().getAllRecipes().stream()
+				.map(k -> k.toString())
 				.sorted()
 				.toList(), 
 			server.getSuggestions(player, "test "));
 
 		// /test minecraft:s
 		assertEquals(
-			MockPlatform.getInstance().getAllItemNames().stream()
+			MockPlatform.getInstance().getAllRecipes().stream()
+				.map(k -> k.toString())
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()
 				.toList(),
