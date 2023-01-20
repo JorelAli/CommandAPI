@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,16 +53,21 @@ public class ArgumentSoundTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// /test adventure/adventuring_time
-//		server.dispatchCommand(player, "test adventure/adventuring_time");
-//		assertEquals(NamespacedKey.minecraft("adventure/adventuring_time"), results.get().getKey());
-//		
-//		// /test minecraft:adventure/adventuring_time
-//		server.dispatchCommand(player, "test minecraft:adventure/adventuring_time");
-//		assertEquals(NamespacedKey.minecraft("adventure/adventuring_time"), results.get().getKey());
-//
-//		// /test namespace:group/unknown_Sound
-//		assertCommandFailsWith(player, "test namespace:group/unknown_Sound", "Unknown Sound: namespace:group/unknown_Sound");
+		// /test entity.enderman.death
+		server.dispatchCommand(player, "test entity.enderman.death");
+		assertEquals(Sound.ENTITY_ENDERMAN_DEATH, results.get());
+		
+		// /test minecraft:entity.enderman.death
+		server.dispatchCommand(player, "test minecraft:entity.enderman.death");
+		assertEquals(Sound.ENTITY_ENDERMAN_DEATH, results.get());
+
+		// TODO: This test returns null, instead of throwing an exception of a sound not existing.
+		// This HAS to be documented in both the JavaDocs and the main documentation - the CommandAPI
+		// assumes everything is non-null UNLESS explicitly stated
+		
+		// /test unknownsound
+		server.dispatchCommand(player, "test unknownsound");
+		assertEquals(null, results.get());
 
 		assertNoMoreResults(results);
 	}
@@ -87,13 +92,45 @@ public class ArgumentSoundTests extends TestBase {
 
 		assertNoMoreResults(results);
 	}
+	
+	@Test
+	public void executionTestWithSoundArgumentNamespaced() {
+		Mut<NamespacedKey> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new SoundArgument.NamespacedKey("sound"))
+			.executesPlayer((player, args) -> {
+				results.set((NamespacedKey) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test entity.enderman.death
+		server.dispatchCommand(player, "test entity.enderman.death");
+		assertEquals(NamespacedKey.minecraft("entity.enderman.death"), results.get());
+		
+		// /test minecraft:entity.enderman.death
+		server.dispatchCommand(player, "test minecraft:entity.enderman.death");
+		assertEquals(NamespacedKey.minecraft("entity.enderman.death"), results.get());
+		
+		// /test unknownsound
+		server.dispatchCommand(player, "test unknownsound");
+		assertEquals(NamespacedKey.minecraft("unknownsound"), results.get());
+		
+		// /test mynamespace:unknownsound
+		server.dispatchCommand(player, "test mynamespace:unknownsound");
+		assertEquals(new NamespacedKey("mynamespace", "unknownsound"), results.get());
+
+		assertNoMoreResults(results);
+	}
 
 	/********************
 	 * Suggestion tests *
 	 ********************/
 
 	@Test
-	public void suggestionTestWithAxisArgument() {
+	public void suggestionTestWithSoundArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new SoundArgument("Sound"))
 			.executesPlayer((player, args) -> {
@@ -110,12 +147,14 @@ public class ArgumentSoundTests extends TestBase {
 				.toList(), 
 			server.getSuggestions(player, "test "));
 
-		// /test
-//		assertEquals(Sounds.stream().map(NamespacedKey::toString).sorted().toList(), server.getSuggestions(player, "test "));
-//		
-//		// /test adventure/a
-//		assertEquals(Sounds.stream().map(NamespacedKey::toString).filter(key -> key.startsWith("minecraft:adventure/a")).sorted().toList(),
-//			server.getSuggestions(player, "test adventure/a"));
+		// /test minecraft:s
+		assertEquals(
+			Arrays.stream(MockPlatform.getInstance().getSounds())
+				.map(s -> s.getKey().toString())
+				.filter(s -> s.startsWith("minecraft:s"))
+				.sorted()
+				.toList(),
+			server.getSuggestions(player, "test minecraft:s"));
 		
 	}
 
