@@ -13,6 +13,7 @@ import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Tests for the primitive arguments {@link BooleanArgument},
@@ -198,11 +199,13 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertEquals(0.0F, results.get());
 
 		// /test Float.MAX_VALUE
-		server.dispatchCommand(player, "test %f".formatted(Float.MAX_VALUE));
+		String floatMaxValue = String.format(Locale.ENGLISH, "%f", Float.MAX_VALUE);
+		server.dispatchCommand(player, "test " + floatMaxValue);
 		assertEquals(Float.MAX_VALUE, results.get());
 
 		// /test -Float.MAX_VALUE
-		server.dispatchCommand(player, "test %f".formatted(-Float.MAX_VALUE));
+		String floatMinValue = String.format(Locale.ENGLISH, "%f", -Float.MAX_VALUE);
+		server.dispatchCommand(player, "test " + floatMinValue);
 		assertEquals(-Float.MAX_VALUE, results.get());
 
 		// /test 123hello
@@ -274,11 +277,13 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertEquals(0.0, results.get());
 
 		// /test Double.MAX_VALUE
-		server.dispatchCommand(player, "test %f".formatted(Double.MAX_VALUE));
+		String doubleMaxValue = String.format(Locale.ENGLISH, "%f", Double.MAX_VALUE);
+		server.dispatchCommand(player, "test " + doubleMaxValue);
 		assertEquals(Double.MAX_VALUE, results.get());
 
 		// /test -Double.MAX_VALUE
-		server.dispatchCommand(player, "test %f".formatted(-Double.MAX_VALUE));
+		String doubleMinValue = String.format(Locale.ENGLISH, "%f", -Double.MAX_VALUE);
+		server.dispatchCommand(player, "test " + doubleMinValue);
 		assertEquals(-Double.MAX_VALUE, results.get());
 
 		// /test 123hello

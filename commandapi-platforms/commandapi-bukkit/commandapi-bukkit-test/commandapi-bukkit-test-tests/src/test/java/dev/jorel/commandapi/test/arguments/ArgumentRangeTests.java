@@ -12,6 +12,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -108,8 +110,8 @@ public class ArgumentRangeTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		String floatMinValue = "%f".formatted(-Float.MAX_VALUE);
-		String floatMaxValue = "%f".formatted(Float.MAX_VALUE);
+		String floatMinValue = String.format(Locale.ENGLISH, "%f", -Float.MAX_VALUE);
+		String floatMaxValue = String.format(Locale.ENGLISH, "%f", Float.MAX_VALUE);
 
 		// /test 0.0..10.0
 		FloatRange testZeroToTen = new FloatRange(0.0F, 10.0F);
