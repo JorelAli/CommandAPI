@@ -167,5 +167,7 @@ public class ArgumentLiteralTests extends TestBase {
 		// /test
 		assertEquals(List.of("literal1", "literal2"), server.getSuggestions(player, "test "));
 	}
+	
+	// TODO: Some tests revolving around case sensitivity would be good!
 
 }
