@@ -29,6 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
+import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 
 public abstract class TestBase {
 
@@ -53,6 +54,8 @@ public abstract class TestBase {
 		}
 		MockBukkit.unmock();
 	}
+
+	public static final PlayerCommandExecutor P_EXEC = (player, args) -> {};
 	
 	private void resetAllPotions() {
 		PotionEffectType[] arr = (PotionEffectType[]) MockNMS.getField(PotionEffectType.class, "byId", null);
