@@ -11,6 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -79,6 +81,23 @@ public class ArgumentGreedyStringTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register());
 
+	}
+
+	/********************
+	 * Suggestion tests *
+	 ********************/
+
+	@Test
+	public void suggestionTestWithGreedyStringArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new GreedyStringArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
 	}
 
 }

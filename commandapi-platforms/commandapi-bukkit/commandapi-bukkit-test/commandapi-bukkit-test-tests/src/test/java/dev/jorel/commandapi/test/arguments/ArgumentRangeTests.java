@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -153,6 +154,36 @@ public class ArgumentRangeTests extends TestBase {
 		assertCommandFailsWith(player, "test 123hello..10.0", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
 
 		assertNoMoreResults(results);
+	}
+
+	/********************
+	 * Suggestion tests *
+	 ********************/
+
+	@Test
+	public void suggestionTestWithIntegerRangeArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new IntegerRangeArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
+	}
+
+	@Test
+	public void suggestionTestWithFloatRangeArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new FloatRangeArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
 	}
 
 }

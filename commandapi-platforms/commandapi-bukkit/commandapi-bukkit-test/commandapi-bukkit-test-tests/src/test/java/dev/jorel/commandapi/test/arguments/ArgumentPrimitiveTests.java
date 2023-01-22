@@ -466,4 +466,56 @@ public class ArgumentPrimitiveTests extends TestBase {
 		assertEquals(List.of(), server.getSuggestions(player, "test x"));
 	}
 
+	@Test
+	public void suggestionTestWithIntegerArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new IntegerArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
+	}
+
+	@Test
+	public void suggestionTestWithLongArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new LongArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
+	}
+
+	@Test
+	public void suggestionTestWithFloatArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new FloatArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
+	}
+
+	@Test
+	public void suggestionTestWithDoubleArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new DoubleArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
+	}
+
 }
