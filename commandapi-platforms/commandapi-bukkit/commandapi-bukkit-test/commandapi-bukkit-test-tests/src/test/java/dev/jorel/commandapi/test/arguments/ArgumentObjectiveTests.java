@@ -53,7 +53,7 @@ public class ArgumentObjectiveTests extends TestBase {
 		PlayerMock player = server.addPlayer();
 		// TODO: This test is skipped and I have no idea why it is skipped. This needs to be looked into
 
-		Bukkit.getScoreboardManager().getMainScoreboard().registerNewObjective("test-objective", "dummy", Component.empty());
+		Bukkit.getScoreboardManager().getMainScoreboard().registerNewObjective("test-objective", "dummy");
 		Objective testObjective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective("test-objective");
 
 		// /test test-objective
@@ -61,7 +61,7 @@ public class ArgumentObjectiveTests extends TestBase {
 		assertEquals(testObjective, results.get());
 
 		// /test my-objective
-		assertCommandFailsWith(player, "test my-objective", "Unknown objective: 'my-objective'");
+		assertCommandFailsWith(player, "test my-objective", "Unknown scoreboard objective 'test-objective'");
 
 		assertNoMoreResults(results);
 	}

@@ -265,11 +265,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentScoreboardObjective() {
-		return ObjectiveArgument.objective();
-	}
-
-	@Override
 	public final ArgumentType<?> _ArgumentScoreboardSlot() {
 		return ScoreboardSlotArgument.displaySlot();
 	}

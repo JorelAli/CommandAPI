@@ -32,6 +32,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import net.minecraft.commands.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -99,15 +100,6 @@ import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.DimensionArgument;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.ItemEnchantmentArgument;
-import net.minecraft.commands.arguments.MobEffectArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.TeamArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -241,6 +233,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	@Override
 	public ArgumentType<?> _ArgumentParticle() {
 		return ParticleArgument.particle();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentScoreboardObjective() {
+		return ObjectiveArgument.objective();
 	}
 
 	@Override
