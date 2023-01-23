@@ -55,7 +55,7 @@ class CommandAPICommandTests : TestBase() {
 		val results: Mut<String> = Mut.of()
 
 		commandAPICommand("test") {
-			stringArgument("value")
+			stringArgument("value", optional = true) // TODO: Check this! I think you meant to put optional = true here?
 			playerExecutor { player, args ->
 				val string: String = args.getOrDefault("value", "DefaultValue") as String
 				results.set(string)
