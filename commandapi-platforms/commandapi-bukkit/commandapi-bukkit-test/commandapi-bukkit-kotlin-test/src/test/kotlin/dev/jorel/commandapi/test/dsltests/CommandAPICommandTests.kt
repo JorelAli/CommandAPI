@@ -55,9 +55,9 @@ class CommandAPICommandTests : TestBase() {
 		val results: Mut<String> = Mut.of()
 
 		commandAPICommand("test") {
-			stringArgument("value", optional = true) // TODO: Check this! I think you meant to put optional = true here?
+			stringArgument("value")
 			playerExecutor { player, args ->
-				val string: String = args.getOrDefault("value", "DefaultValue") as String
+				val string: String = args["value"] as String
 				results.set(string)
 			}
 		}
@@ -65,8 +65,7 @@ class CommandAPICommandTests : TestBase() {
 		val player: PlayerMock = server.addPlayer()
 
 		// /test
-		server.dispatchCommand(player, "test")
-		assertEquals("DefaultValue", results.get())
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
 
 		// /test hello
 		server.dispatchCommand(player, "test hello")
