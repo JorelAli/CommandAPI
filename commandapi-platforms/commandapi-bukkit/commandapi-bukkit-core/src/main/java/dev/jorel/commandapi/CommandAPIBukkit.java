@@ -192,7 +192,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	private void fixPermissions() {
 		// Get the command map to find registered commands
 		CommandMap map = paper.getCommandMap();
-		final Map<String, CommandPermission> PERMISSIONS_TO_FIX = CommandAPIHandler.getInstance().REGISTERED_PERMISSIONS;
+		final Map<String, CommandPermission> PERMISSIONS_TO_FIX = CommandAPIHandler.getInstance().registeredPermissions;
 
 		if (!PERMISSIONS_TO_FIX.isEmpty()) {
 			CommandAPI.logInfo("Linking permissions to commands:");

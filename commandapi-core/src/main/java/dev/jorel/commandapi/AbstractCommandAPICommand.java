@@ -50,7 +50,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 *
 	 * @param commandName The name of the command to create
 	 */
-	public AbstractCommandAPICommand(String commandName) {
+	protected AbstractCommandAPICommand(String commandName) {
 		super(commandName);
 		this.isConverted = false;
 	}
@@ -276,8 +276,8 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 				if (argumentsToRegister.isEmpty()) {
 					handler.register(meta, argumentsArray, executor, isConverted);
 				} else {
-					for (Argument[] arguments : argumentsToRegister) {
-						handler.register(meta, arguments, executor, isConverted);
+					for (Argument[] args : argumentsToRegister) {
+						handler.register(meta, args, executor, isConverted);
 					}
 				}
 			}

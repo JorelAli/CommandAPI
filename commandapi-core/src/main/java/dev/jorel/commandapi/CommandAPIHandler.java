@@ -20,6 +20,25 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -32,27 +51,19 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.arguments.*;
+
+import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.CustomProvidedArgument;
+import dev.jorel.commandapi.arguments.Literal;
+import dev.jorel.commandapi.arguments.MultiLiteral;
+import dev.jorel.commandapi.arguments.PreviewInfo;
+import dev.jorel.commandapi.arguments.Previewable;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.executors.CommandArguments;
+import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-
-// TODO: We can use the Adventure API on Paper and Velocity (NOT SPIGOT)
-//  and I'm not sure if we can use the Adventure API on Fabric, so let's
-//  assume we can't until we figure that out.
 
 /**
  * The "brains" behind the CommandAPI.
@@ -111,8 +122,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	// but this IS a generic class caching system and we don't want derpy memory leaks
 	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
 
-	final TreeMap<String, CommandPermission> REGISTERED_PERMISSIONS = new TreeMap<>();
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
+	final TreeMap<String, CommandPermission> registeredPermissions = new TreeMap<>();
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
 
@@ -123,7 +134,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		this.registeredCommands = new ArrayList<>();
 		this.previewableArguments = new HashMap<>();
 
-		instance = this;
+		CommandAPIHandler.instance = this;
 	}
 
 	public void onLoad(CommandAPIConfig<?> config) {
@@ -320,12 +331,12 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
 			Predicate<CommandSender> requirements) {
 		// If commandName was already registered, always use the first permission used
-		if (REGISTERED_PERMISSIONS.containsKey(commandName.toLowerCase())) {
-			if (!REGISTERED_PERMISSIONS.get(commandName.toLowerCase()).equals(permission)) {
-				permission = REGISTERED_PERMISSIONS.get(commandName.toLowerCase());
+		if (registeredPermissions.containsKey(commandName.toLowerCase())) {
+			if (!registeredPermissions.get(commandName.toLowerCase()).equals(permission)) {
+				permission = registeredPermissions.get(commandName.toLowerCase());
 			}
 		} else {
-			REGISTERED_PERMISSIONS.put(commandName.toLowerCase(), permission);
+			registeredPermissions.put(commandName.toLowerCase(), permission);
 		}
 
 		// Register permission to the platform's registry, if both exist
@@ -356,7 +367,12 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				// Op permission set
 				satisfiesPermissions = sender.isOp();
 			} else {
-				satisfiesPermissions = permission.getPermission().isEmpty() || sender.hasPermission(permission.getPermission().get());
+				final Optional<String> optionalPerm = permission.getPermission();
+				if(optionalPerm.isPresent()) {
+					satisfiesPermissions = sender.hasPermission(optionalPerm.get());
+				} else {
+					satisfiesPermissions = true;
+				}
 			}
 		}
 		if (permission.isNegated()) {
@@ -817,13 +833,11 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 *         {@link Component}. If such a function is not available, this will
 	 *         return a function that always returns null.
 	 */
+	@SuppressWarnings("unchecked")
 	public Optional<PreviewableFunction<?>> lookupPreviewable(List<String> path) {
 		final Previewable<?, ?> previewable = previewableArguments.get(path);
-		if (previewable != null && previewable.getPreview().isPresent()) {
-			// Yeah, don't even question this logic of getting the value of an
-			// optional and then wrapping it in an optional again. Java likes it
-			// and complains if you don't do this. Not sure why.
-			return Optional.of(previewable.getPreview().get());
+		if (previewable != null) {
+			return (Optional<PreviewableFunction<?>>) (Optional<?>) previewable.getPreview();
 		} else {
 			return Optional.empty();
 		}
