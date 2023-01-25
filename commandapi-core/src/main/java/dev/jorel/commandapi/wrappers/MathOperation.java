@@ -20,79 +20,82 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 /**
  * A representation of the math operations for the Minecraft scoreboard
  */
+@SuppressWarnings("null")
 public enum MathOperation {
-	
+
 	/**
 	 * Addition of two values (+=)
 	 */
-	ADD("+=", (val1, val2) -> val1 + val2), 
-	
+	ADD("+=", (val1, val2) -> val1 + val2),
+
 	/**
 	 * Assignment of a value (=)
 	 */
-	ASSIGN("=", (val1, val2) -> val2), 
-	
+	ASSIGN("=", (val1, val2) -> val2),
+
 	/**
 	 * Division of a value by another value (/=)
 	 */
-	DIVIDE("/=", (val1, val2) -> val1 / val2), 
-	
+	DIVIDE("/=", (val1, val2) -> val1 / val2),
+
 	/**
 	 * The maximum value of two values (&gt;)
 	 */
-	MAX(">", (val1, val2) -> Math.max(val1, val2)), 
-	
+	MAX(">", Math::max),
+
 	/**
 	 * The minimum value of two values (&lt;)
 	 */
-	MIN("<", (val1, val2) -> Math.min(val1, val2)), 
-	
+	MIN("<", Math::min),
+
 	/**
 	 * Modulo of a value by another value (%=)
 	 */
-	MOD("%=", (val1, val2) -> val1 % val2), 
-	
+	MOD("%=", (val1, val2) -> val1 % val2),
+
 	/**
-	 * Multiplication of a value by another value (*=) 
+	 * Multiplication of a value by another value (*=)
 	 */
-	MULTIPLY("*=", (val1, val2) -> val1 * val2), 
-	
+	MULTIPLY("*=", (val1, val2) -> val1 * val2),
+
 	/**
 	 * Subtraction of a value by another value (-=)
 	 */
-	SUBTRACT("-=", (val1, val2) -> val1 - val2), 
-	
+	SUBTRACT("-=", (val1, val2) -> val1 - val2),
+
 	/**
 	 * Swap the results of two values (&gt;&lt;)
 	 */
 	SWAP("><", (val1, val2) -> val2);
-	
+
 	private String stringValue;
-	private BiFunction<Float, Float, Float> application;
-	
+	private BinaryOperator<Float> application;
+
 	/**
 	 * Construct a MathOperation with its respective Minecraft string value
+	 * 
 	 * @param stringValue
 	 */
-	MathOperation(String stringValue, BiFunction<Float, Float, Float> application) {
+	MathOperation(String stringValue, BinaryOperator<Float> application) {
 		this.stringValue = stringValue;
 		this.application = application;
 	}
 
 	/**
 	 * Returns the Minecraft string value of this MathOperation
+	 * 
 	 * @return the Minecraft string value of this MathOperation
 	 */
 	@Override
 	public String toString() {
 		return this.stringValue;
 	}
-	
+
 	/**
 	 * Creates a MathOperation from the Minecraft string representation (e.g. "=" or
 	 * "/=")
@@ -102,16 +105,17 @@ public enum MathOperation {
 	 * @throws IllegalArgumentException if the input is not a valid MathOperation
 	 */
 	public static MathOperation fromString(String input) {
-		for(MathOperation mathOp : MathOperation.values()) {
-			if(mathOp.stringValue.equals(input)) {
+		for (MathOperation mathOp : MathOperation.values()) {
+			if (mathOp.stringValue.equals(input)) {
 				return mathOp;
 			}
 		}
 		throw new IllegalArgumentException(input + " is not a valid MathOperation");
 	}
-	
+
 	/**
 	 * Applies the current MathOperation to two ints
+	 * 
 	 * @param val1 the base int to operate on
 	 * @param val2 the new value to operate with
 	 * @return a int that is the result of applying this math operation
@@ -119,9 +123,10 @@ public enum MathOperation {
 	public int apply(int val1, int val2) {
 		return (int) apply((float) val1, (float) val2);
 	}
-	
+
 	/**
 	 * Applies the current MathOperation to two floats
+	 * 
 	 * @param val1 the base float to operate on
 	 * @param val2 the new value to operate with
 	 * @return a float that is the result of applying this math operation

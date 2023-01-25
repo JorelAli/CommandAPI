@@ -97,7 +97,7 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	 * @param resultantNode the node that was registered
 	 * @param aliasNodes    any alias nodes that were also registered as a part of this registration process
 	 */
-	public abstract void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException;
+	public abstract void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
 	 * Registers a Brigadier command node and returns the built node.

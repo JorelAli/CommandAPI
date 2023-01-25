@@ -102,6 +102,7 @@ public class SuggestionsBranch<CommandSender> {
 					sender, previousArguments, errorContext, new ArrayList<>(processedArguments), new StringBuilder(currentInput)
 				));
 			} catch (CommandSyntaxException ignored) {
+				assert true;
 			}
 		}
 

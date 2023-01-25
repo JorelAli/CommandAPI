@@ -247,47 +247,47 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		if (!CommandAPI.canRegister()) {
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
-		try {
-			Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 
-			// Check GreedyArgument constraints
-			for (int i = 0, numGreedyArgs = 0; i < argumentsArray.length; i++) {
-				if (argumentsArray[i] instanceof GreedyArgument) {
-					if (++numGreedyArgs > 1 || i != argumentsArray.length - 1) {
-						throw new GreedyArgumentException(argumentsArray);
-					}
-				}
+		Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
+
+		// Check GreedyArgument constraints
+		checkGreedyArgumentConstraints(argumentsArray);
+
+		// Assign the command's permissions to arguments if the arguments don't already
+		// have one
+		for (Argument argument : argumentsArray) {
+			if (argument.getArgumentPermission() == null) {
+				argument.withPermission(meta.permission);
 			}
+		}
 
-			// Assign the command's permissions to arguments if the arguments don't already
-			// have one
-			for (Argument argument : argumentsArray) {
-				if (argument.getArgumentPermission() == null) {
-					argument.withPermission(meta.permission);
-				}
-			}
-
+		if (executor.hasAnyExecutors()) {
+			// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
+			CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
+			
 			// Create a List<Argument[]> that is used to register optional arguments
-			List<Argument[]> argumentsToRegister = getArgumentsToRegister(argumentsArray);
+			for (Argument[] args : getArgumentsToRegister(argumentsArray)) {
+				handler.register(meta, args, executor, isConverted);
+			}
+		}
 
-			if (executor.hasAnyExecutors()) {
-				// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
-				CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
-				if (argumentsToRegister.isEmpty()) {
-					handler.register(meta, argumentsArray, executor, isConverted);
-				} else {
-					for (Argument[] args : argumentsToRegister) {
-						handler.register(meta, args, executor, isConverted);
-					}
+		// Convert subcommands into multiliteral arguments
+		for (Impl subcommand : this.subcommands) {
+			flatten(this.copy(), new ArrayList<>(), subcommand);
+		}
+	}
+	
+	// Checks that greedy arguments don't have any other arguments at the end,
+	// and only zero or one greedy argument is present in an array of arguments
+	private void checkGreedyArgumentConstraints(Argument[] argumentsArray) {
+		boolean hasSeenGreedyArgument = false;
+		for (int i = 0; i < argumentsArray.length; i++) {
+			if (argumentsArray[i] instanceof GreedyArgument) {
+				if (hasSeenGreedyArgument || i != argumentsArray.length - 1) {
+					throw new GreedyArgumentException(argumentsArray);
 				}
+				hasSeenGreedyArgument = true;
 			}
-
-			// Convert subcommands into multiliteral arguments
-			for (Impl subcommand : this.subcommands) {
-				flatten(this.copy(), new ArrayList<>(), subcommand);
-			}
-		} catch (CommandSyntaxException | IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -324,12 +324,19 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		if (firstOptionalArgumentIndex != -1) {
 			for (int i = 0; i <= argumentsArray.length; i++) {
 				if (i >= firstOptionalArgumentIndex) {
-					Argument[] arguments = (Argument[]) new AbstractArgument[i];
-					System.arraycopy(argumentsArray, 0, arguments, 0, i);
-					argumentsToRegister.add(arguments);
+					Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
+					System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
+					argumentsToRegister.add(optionalArguments);
 				}
 			}
 		}
+		
+		// If there were no optional arguments, let's just return the array of
+		// arguments we were going to register normally.
+		if(argumentsToRegister.isEmpty()) {
+			argumentsToRegister.add(argumentsArray);
+		}
+
 		return argumentsToRegister;
 	}
 }
