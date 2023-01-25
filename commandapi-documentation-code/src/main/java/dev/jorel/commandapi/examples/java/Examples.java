@@ -190,7 +190,7 @@ new CommandAPICommand("searchrange")
 /* ANCHOR_END: rangedarguments */
 }
 
-{
+void greedystringarguments() {
 /* ANCHOR: greedystringarguments */
 new CommandAPICommand("message")
     .withArguments(new PlayerArgument("target"))
@@ -202,13 +202,14 @@ new CommandAPICommand("message")
 /* ANCHOR_END: greedystringarguments */
 }
 
-{
+void locationarguments() {
 /* ANCHOR: locationarguments */
 new CommandAPICommand("break")
     // We want to target blocks in particular, so use BLOCK_POSITION
     .withArguments(new LocationArgument("block", LocationType.BLOCK_POSITION))
     .executesPlayer((player, args) -> {
-        ((Location) args.get(0)).getBlock().setType(Material.AIR);
+        Location location = (Location) args.get(0);
+        location.getBlock().setType(Material.AIR);
     })
     .register();
 /* ANCHOR_END: locationarguments */
@@ -287,7 +288,7 @@ new CommandAPICommand("pbroadcast")
 new CommandAPICommand("broadcast")
     .withArguments(new ChatArgument("message").withPreview(info -> {
         // Convert parsed BaseComponent[] to plain text
-        String plainText = BaseComponent.toPlainText((BaseComponent[]) info.parsedInput());
+        String plainText = BaseComponent.toPlainText(info.parsedInput());
 
         // Translate the & in plain text and generate a new BaseComponent[]
         return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText));
@@ -305,7 +306,7 @@ new CommandAPICommand("broadcast")
 new CommandAPICommand("broadcast")
     .withArguments(new AdventureChatArgument("message").withPreview(info -> {
         // Convert parsed Component to plain text
-        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) info.parsedInput());
+        String plainText = PlainTextComponentSerializer.plainText().serialize(info.parsedInput());
 
         // Translate the & in plain text and generate a new Component
         return LegacyComponentSerializer.legacyAmpersand().deserialize(plainText);
@@ -313,7 +314,7 @@ new CommandAPICommand("broadcast")
     .executesPlayer((player, args) -> {
         // The user still entered legacy text. We need to properly convert this
         // to a Component by converting to plain text then to Component
-        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) args.get(0));
+        String plainText = PlainTextComponentSerializer.plainText().serialize(args.get(0));
         Bukkit.broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(plainText));
     })
     .register();
@@ -323,7 +324,7 @@ new CommandAPICommand("broadcast")
 new CommandAPICommand("broadcast")
     .withArguments(new ChatArgument("message").usePreview(true).withPreview(info -> {
         // Convert parsed BaseComponent[] to plain text
-        String plainText = BaseComponent.toPlainText((BaseComponent[]) info.parsedInput());
+        String plainText = BaseComponent.toPlainText(info.parsedInput());
 
         // Translate the & in plain text and generate a new BaseComponent[]
         return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText));
@@ -338,7 +339,7 @@ new CommandAPICommand("broadcast")
 new CommandAPICommand("broadcast")
     .withArguments(new AdventureChatArgument("message").usePreview(true).withPreview(info -> {
         // Convert parsed Component to plain text
-        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) info.parsedInput());
+        String plainText = PlainTextComponentSerializer.plainText().serialize(info.parsedInput());
 
         // Translate the & in plain text and generate a new Component
         return LegacyComponentSerializer.legacyAmpersand().deserialize(plainText);
@@ -549,7 +550,7 @@ new CommandAPICommand("setbiome")
 /* ANCHOR_END: biomearguments */
 }
 
-{
+void blockstateargument() {
 /* ANCHOR: blockstateargument */
 new CommandAPICommand("set")
     .withArguments(new BlockStateArgument("block"))
@@ -565,7 +566,7 @@ new CommandAPICommand("set")
 /* ANCHOR_END: blockstateargument */
 }
 
-{
+void enchantmentarguments() {
 /* ANCHOR: enchantmentarguments */
 new CommandAPICommand("enchantitem")
     .withArguments(new EnchantmentArgument("enchantment"))
@@ -581,7 +582,7 @@ new CommandAPICommand("enchantitem")
 /* ANCHOR_END: enchantmentarguments */
 }
 
-{
+void worldarguments() {
 /* ANCHOR: worldarguments */
 new CommandAPICommand("unloadworld")
     .withArguments(new WorldArgument("world"))
@@ -595,7 +596,7 @@ new CommandAPICommand("unloadworld")
 /* ANCHOR_END: worldarguments */
 }
 
-{
+void itemstackarguments() {
 /* ANCHOR: itemstackarguments */
 new CommandAPICommand("item")
     .withArguments(new ItemStackArgument("itemstack"))
@@ -606,7 +607,7 @@ new CommandAPICommand("item")
 /* ANCHOR_END: itemstackarguments */
 }
 
-{
+void loottablearguments() {
 /* ANCHOR: loottablearguments */
 new CommandAPICommand("giveloottable")
     .withArguments(new LootTableArgument("loottable"))
@@ -628,7 +629,7 @@ new CommandAPICommand("giveloottable")
 /* ANCHOR_END: loottablearguments */
 }
 
-{
+void mathoperationarguments() {
 /* ANCHOR: mathoperationarguments */
 new CommandAPICommand("changelevel")
     .withArguments(new PlayerArgument("player"))
@@ -645,7 +646,7 @@ new CommandAPICommand("changelevel")
 /* ANCHOR_END: mathoperationarguments */
 }
 
-{
+void particlearguments() {
 /* ANCHOR: particlearguments */
 new CommandAPICommand("showparticle")
     .withArguments(new ParticleArgument("particle"))
@@ -687,7 +688,7 @@ new CommandAPICommand("potion")
 /* ANCHOR_END: potioneffectarguments */
 }
 
-{
+void recipearguments() {
 /* ANCHOR: recipearguments */
 new CommandAPICommand("giverecipe")
     .withArguments(new RecipeArgument("recipe"))
@@ -699,7 +700,7 @@ new CommandAPICommand("giverecipe")
 /* ANCHOR_END: recipearguments */
 }
 
-{
+void recipearguments2() {
 /* ANCHOR: recipearguments2 */
 new CommandAPICommand("unlockrecipe")
     .withArguments(new PlayerArgument("player"))
@@ -714,7 +715,7 @@ new CommandAPICommand("unlockrecipe")
 /* ANCHOR_END: recipearguments2 */
 }
 
-{
+void soundarguments() {
 /* ANCHOR: soundarguments */
 new CommandAPICommand("sound")
     .withArguments(new SoundArgument("sound"))
@@ -755,7 +756,7 @@ new CommandAPICommand("bigmsg")
 /* ANCHOR_END: timearguments */
 }
 
-{
+void blockpredicatearguments() {
 /* ANCHOR: blockpredicatearguments */
 Argument<?>[] arguments = new Argument<?>[] {
     new IntegerArgument("radius"),
@@ -798,7 +799,7 @@ new CommandAPICommand("replace")
 /* ANCHOR_END: blockpredicatearguments2 */
 }
 
-{
+void itemstackpredicatearguments() {
 /* ANCHOR: itemstackpredicatearguments */
 // Register our command
 new CommandAPICommand("rem")
@@ -860,7 +861,7 @@ new CommandAPICommand("mycommand")
 /* ANCHOR_END: literalarguments */
 }
 
-{
+void literalarguments2() {
 /* ANCHOR: literalarguments2 */
 // Create a map of gamemode names to their respective objects
 HashMap<String, GameMode> gamemodes = new HashMap<>();
@@ -870,22 +871,22 @@ gamemodes.put("spectator", GameMode.SPECTATOR);
 gamemodes.put("survival", GameMode.SURVIVAL);
 
 // Iterate over the map
-for(String key : gamemodes.keySet()) {
-    
+for(Entry<String, GameMode> entry : gamemodes.entrySet()) {
+
     // Register the command as usual
     new CommandAPICommand("changegamemode")
-        .withArguments(new LiteralArgument(key))
+        .withArguments(new LiteralArgument(entry.getKey()))
         .executesPlayer((player, args) -> {
             // Retrieve the object from the map via the key and NOT the args[]
-            player.setGameMode(gamemodes.get(key));
+            player.setGameMode(entry.getValue());
         })
         .register();
-}    
+}
 /* ANCHOR_END: literalarguments2 */
 }
 
 @SuppressWarnings("unused")
-void d(){
+void literalarguments3(){
 /* ANCHOR: literalarguments3 */
 new CommandAPICommand("mycommand")
     .withArguments(LiteralArgument.of("hello"))
@@ -907,7 +908,7 @@ new CommandAPICommand("mycommand")
 /* ANCHOR_END: literalarguments3 */
 }
 
-{
+void multiliteralarguments() {
 /* ANCHOR: multiliteralarguments */
 new CommandAPICommand("gamemode")
     .withArguments(new MultiLiteralArgument("adventure", "creative", "spectator", "survival"))
@@ -932,7 +933,7 @@ new CommandAPICommand("gamemode")
 /* ANCHOR_END: multiliteralarguments */
 }
 
-{
+void customarguments() {
 /* ANCHOR: customarguments */
 new CommandAPICommand("tpworld")
     .withArguments(worldArgument("world"))
@@ -964,7 +965,7 @@ public Argument<World> worldArgument(String nodeName) {
 }
 /* ANCHOR_END: customarguments2 */
 
-{
+void functionarguments() {
 /* ANCHOR: functionarguments */
 new CommandAPICommand("runfunc")
     .withArguments(new FunctionArgument("function"))
@@ -978,7 +979,7 @@ new CommandAPICommand("runfunc")
 /* ANCHOR_END: functionarguments */
 }
 
-{
+void functionarguments2() {
 /* ANCHOR: functionarguments2 */
 new CommandAPICommand("runfunction")
     .withArguments(new FunctionArgument("function"))
@@ -1408,15 +1409,15 @@ arguments.add(new PlayerArgument("player")
         String partyName = partyMembers.get(((Player) info.sender()).getUniqueId());
         
         // Find the party members
-        for (UUID uuid : partyMembers.keySet()) {
+        for (Entry<UUID, String> entry : partyMembers.entrySet()) {
             
             // Ignore yourself
-            if (uuid.equals(((Player) info.sender()).getUniqueId())) {
+            if (entry.getKey().equals(((Player) info.sender()).getUniqueId())) {
                 continue;
             } else {
                 // If the party member is in the same party as you
-                if (partyMembers.get(uuid).equals(partyName)) {
-                    Player target = Bukkit.getPlayer(uuid);
+                if (entry.getValue().equals(partyName)) {
+                    Player target = Bukkit.getPlayer(entry.getKey());
                     if (target.isOnline()) {
                         // Add them if they are online
                         playersToTeleportTo.add(target);
@@ -1544,7 +1545,7 @@ ArgumentBuilder denominator = Brigadier.fromArgument(denominatorArgument)
         int denom = (int) args[1];
         
         // Return boolean with a num/denom chance
-        return Math.ceil(Math.random() * (double) denom) <= (double) num;
+        return Math.ceil(Math.random() * denom) <= num;
     }, arguments));
 /* ANCHOR_END: declarefork */
 
@@ -2051,7 +2052,7 @@ ArgumentSuggestions<CommandSender> commandSuggestions = (info, builder) -> {
     return Brigadier
         .getCommandDispatcher()
         .getCompletionSuggestions(parseResults)
-        .thenApply((suggestionsObject) -> {
+        .thenApply(suggestionsObject -> {
             // Brigadier's suggestions
             Suggestions suggestions = (Suggestions) suggestionsObject;
 

@@ -27,14 +27,14 @@ import java.util.Objects;
  */
 public class Time {
 
-	private String time;
+	private String timeString;
 	
 	/**
 	 * Constructs a Time object from a given String
 	 * @param time the String to use 
 	 */
 	private Time(String time) {
-		this.time = time;
+		this.timeString = time;
 	}
 
 	/**
@@ -69,12 +69,12 @@ public class Time {
 	 */
 	@Override
 	public String toString() {
-		return this.time;
+		return this.timeString;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(time);
+		return Objects.hash(timeString);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class Time {
 		if (!(obj instanceof Time other)) {
 			return false;
 		}
-		return Objects.equals(time, other.time);
+		return Objects.equals(timeString, other.timeString);
 	}
 	
 }

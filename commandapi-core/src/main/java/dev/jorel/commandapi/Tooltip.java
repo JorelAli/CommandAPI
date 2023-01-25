@@ -41,11 +41,11 @@ import java.util.stream.Stream;
 public class Tooltip<S> {
 
 	private final S object;
-	private final Message tooltip;
+	private final Message tooltipMessage;
 
 	protected Tooltip(S object, Message tooltip) {
 		this.object = object;
-		this.tooltip = tooltip;
+		this.tooltipMessage = tooltip;
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class Tooltip<S> {
 	 * @return the formatted tooltip for this object
 	 */
 	public Message getTooltip() {
-		return tooltip;
+		return tooltipMessage;
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class Tooltip<S> {
 	 * @return the mapping function from this tooltip into a StringTooltip
 	 */
 	public static <S> Function<Tooltip<S>, StringTooltip> build(Function<S, String> mapper) {
-		return t -> StringTooltip.ofMessage(mapper.apply(t.object), t.tooltip);
+		return t -> StringTooltip.ofMessage(mapper.apply(t.object), t.tooltipMessage);
 	}
 
 	/**

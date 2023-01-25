@@ -28,15 +28,15 @@ public class Execution<CommandSender, Argument extends AbstractArgument<?, ?, Ar
 		@SuppressWarnings("unchecked")
 		CommandAPIPlatform<Argument, CommandSender, ?> platform = (CommandAPIPlatform<Argument, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
 		AbstractCommandAPICommand<?, Argument, CommandSender> command = platform.newConcreteCommandAPICommand(meta);
-		command.withArguments(arguments);
-		command.setExecutor(executor);
+		command.withArguments(this.arguments);
+		command.setExecutor(this.executor);
 		command.register();
 	}
 
 	public Execution<CommandSender, Argument> prependedBy(Argument argument) {
-		List<Argument> arguments = new ArrayList<>();
-		arguments.add(argument);
-		arguments.addAll(this.arguments);
-		return new Execution<>(arguments, executor);
+		List<Argument> args = new ArrayList<>();
+		args.add(argument);
+		args.addAll(this.arguments);
+		return new Execution<>(args, this.executor);
 	}
 }
