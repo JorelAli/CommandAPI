@@ -106,7 +106,7 @@ new CommandAPICommand("broadcastmsg")
 /* ANCHOR_END: commandregistration */
 }
 
-{
+void commandunregistration() {
 /* ANCHOR: commandunregistration */
 // Unregister the gamemode command from the server (by force)
 CommandAPI.unregister("gamemode", true);
@@ -120,7 +120,7 @@ new CommandAPICommand("gamemode")
     .register();
 /* ANCHOR_END: commandunregistration */
 }
-{
+void booleanargs() {
 /* ANCHOR: booleanargs */
 // Load keys from config file
 String[] configKeys = getConfig().getKeys(true).toArray(new String[0]);
@@ -137,7 +137,7 @@ new CommandAPICommand("editconfig")
 }
 /* ANCHOR_END: booleanargs */
 
-{
+void rangedarguments() {
 /* ANCHOR: rangedarguments */
 new CommandAPICommand("searchrange")
     .withArguments(new IntegerRangeArgument("range")) // Range argument
@@ -215,7 +215,7 @@ new CommandAPICommand("break")
 /* ANCHOR_END: locationarguments */
 }
 
-{
+void rotationarguments() {
 /* ANCHOR: rotationarguments */
 new CommandAPICommand("rotate")
     .withArguments(new RotationArgument("rotation"))
@@ -352,7 +352,7 @@ new CommandAPICommand("broadcast")
 }
 
 
-{
+void argumentAdventureChatComponent() {
 /* ANCHOR: ArgumentAdventureChatComponent */
 new CommandAPICommand("showbook")
     .withArguments(new PlayerArgument("target"))
@@ -373,7 +373,7 @@ new CommandAPICommand("showbook")
 /* ANCHOR_END: ArgumentAdventureChatComponent */
 }
 
-{
+void argumentAdventureChat() {
 /* ANCHOR: ArgumentAdventureChat */
 new CommandAPICommand("pbroadcast")
     .withArguments(new AdventureChatArgument("message"))
@@ -388,7 +388,7 @@ new CommandAPICommand("pbroadcast")
 /* ANCHOR_END: ArgumentAdventureChat */
 }
 
-{
+void entityselectorarguments() {
 /* ANCHOR: entityselectorarguments */
 new CommandAPICommand("remove")
     // Using a collective entity selector to select multiple entities
@@ -407,7 +407,7 @@ new CommandAPICommand("remove")
 /* ANCHOR_END: entityselectorarguments */
 }
 
-{
+void entitytypearguments() {
 /* ANCHOR: entitytypearguments */
 new CommandAPICommand("spawnmob")
     .withArguments(new EntityTypeArgument("entity"))
@@ -421,7 +421,7 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR_END: entitytypearguments */
 }
 
-{
+void scoreholderargument() {
 /* ANCHOR: scoreholderargument */
 new CommandAPICommand("reward")
     // We want multiple players, so we use ScoreHolderType.MULTIPLE in the constructor
@@ -439,7 +439,7 @@ new CommandAPICommand("reward")
 /* ANCHOR_END: scoreholderargument */
 }
 
-{
+void scoreholderargument2() {
 Object[] args = new Object[0];
 @SuppressWarnings("unchecked")
 // This example isn't used because for some reason, mdbook doesn't render it properly
@@ -458,7 +458,7 @@ for(String str : entitiesAndPlayers) {
 /* ANCHOR_END: scoreholderargument_2 */
 }
 
-{
+void scoreboardslotargument() {
 /* ANCHOR: scoreboardslotargument */
 new CommandAPICommand("clearobjectives")
     .withArguments(new ScoreboardSlotArgument("slot"))
@@ -471,7 +471,7 @@ new CommandAPICommand("clearobjectives")
 /* ANCHOR_END: scoreboardslotargument */
 }
 
-{
+void objectiveargument() {
 /* ANCHOR: objectiveargument */
 new CommandAPICommand("sidebar")
     .withArguments(new ObjectiveArgument("objective"))
@@ -503,7 +503,7 @@ new CommandAPICommand("unregisterall")
 /* ANCHOR_END: objectivecriteriaarguments */
 }
 
-{
+void teamarguments() {
 /* ANCHOR: teamarguments */
 new CommandAPICommand("togglepvp")
     .withArguments(new TeamArgument("team"))
@@ -517,7 +517,7 @@ new CommandAPICommand("togglepvp")
 /* ANCHOR_END: teamarguments */
 }
 
-{
+void advancementarguments() {
 /* ANCHOR: advancementarguments */
 new CommandAPICommand("award")
     .withArguments(new PlayerArgument("player"))
@@ -536,7 +536,7 @@ new CommandAPICommand("award")
 /* ANCHOR_END: advancementarguments */
 }
 
-{
+void biomearguments() {
 /* ANCHOR: biomearguments */
 new CommandAPICommand("setbiome")
     .withArguments(new BiomeArgument("biome"))
@@ -668,7 +668,7 @@ new CommandAPICommand("showparticle")
 /* ANCHOR_END: particlearguments2 */
 }
 
-{
+void potioneffectarguments() {
 /* ANCHOR: potioneffectarguments */
 new CommandAPICommand("potion")
     .withArguments(new PlayerArgument("target"))
@@ -781,7 +781,7 @@ new CommandAPICommand("replace")
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
-                    if (Math.sqrt((x * x) + (y * y) + (z * z)) <= radius) {
+                    if (Math.sqrt(((x * x) + (y * y) + (z * z))) <= radius) {
                         Block block = center.getWorld().getBlockAt(x + center.getBlockX(), y + center.getBlockY(), z + center.getBlockZ());
                         
                         // If that block matches a block from the predicate, set it
@@ -927,6 +927,9 @@ new CommandAPICommand("gamemode")
             case "survival":
                 player.setGameMode(GameMode.SURVIVAL);
                 break;
+            default:
+                player.sendMessage("Invalid gamemode: " + args.get(0));
+                break;
         }
     }) 
     .register();
@@ -995,13 +998,14 @@ new CommandAPICommand("runfunction")
 /* ANCHOR_END: functionarguments2 */
 }
 
-{
+void permissions() {
 /* ANCHOR: permissions */
 // Register the /god command with the permission node "command.god"
 new CommandAPICommand("god")
     .withPermission(CommandPermission.fromString("command.god"))
     .executesPlayer((player, args) -> {
         player.setInvulnerable(true);
+        player.sendMessage("God mode enabled");
     })
     .register();
 /* ANCHOR_END: permissions */
@@ -1012,12 +1016,13 @@ new CommandAPICommand("god")
     .withPermission("command.god")
     .executesPlayer((player, args) -> {
         player.setInvulnerable(true);
+        player.sendMessage("God mode enabled");
     })
     .register();
 /* ANCHOR_END: permissions2 */
 }
 
-{
+void permissions31() {
 /* ANCHOR: permissions3_1 */
 // Register /kill command normally. Since no permissions are applied, anyone can run this command
 new CommandAPICommand("kill")
@@ -1028,7 +1033,7 @@ new CommandAPICommand("kill")
 /* ANCHOR_END: permissions3_1 */
 }
 
-{
+void permissions32() {
 /* ANCHOR: permissions3_2 */
 // Adds the OP permission to the "target" argument. The sender requires OP to execute /kill <target>
 new CommandAPICommand("kill")
@@ -1040,8 +1045,17 @@ new CommandAPICommand("kill")
 /* ANCHOR_END: permissions3_2 */
 }
 
+private static class Economy {
+    static void updateBalance(Player player, double amount) {
+        throw new UnsupportedOperationException();
+    }
 
-{
+    static String getBalance(Player player) {
+        throw new UnsupportedOperationException();
+    }
+}
+
+void permissions4() {
 /* ANCHOR: permissions4 */
 // /economy - requires the permission "economy.self" to execute
 new CommandAPICommand("economy")
@@ -1057,7 +1071,9 @@ new CommandAPICommand("economy")
     .withArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
         Player target = (Player) args.get(0);
-        // Send executor, the targets balance here.
+
+        // Send a message to the executor with the the target's balance
+        player.sendMessage(target.getName() + "'s balance: " + Economy.getBalance(target));
     })
     .register();
 
@@ -1069,7 +1085,9 @@ new CommandAPICommand("economy")
     .executesPlayer((player, args) -> {
         Player target = (Player) args.get(0);
         double amount = (Double) args.get(1);
-        // Update player balance here
+
+        // Update the target player's balance
+        Economy.updateBalance(target, amount);
     })
     .register();
 
@@ -1085,7 +1103,7 @@ new CommandAPICommand("economy")
 /* ANCHOR_END: permissions4 */
 }
 
-{
+void aliases() {
 /* ANCHOR: aliases */
 new CommandAPICommand("getpos")
     // Declare your aliases
@@ -1112,7 +1130,7 @@ new CommandAPICommand("getpos")
 /* ANCHOR_END: aliases */
 }
 
-{
+void normalcommandexecutors() {
 /* ANCHOR: normalcommandexecutors */
 new CommandAPICommand("suicide")
     .executesPlayer((player, args) -> {
@@ -1122,7 +1140,7 @@ new CommandAPICommand("suicide")
 /* ANCHOR_END: normalcommandexecutors */
 }
 
-{
+void normalcommandexecutors2() {
 /* ANCHOR: normalcommandexecutors2 */
 new CommandAPICommand("suicide")
     .executesPlayer((player, args) -> {
@@ -1136,7 +1154,7 @@ new CommandAPICommand("suicide")
 /* ANCHOR_END: normalcommandexecutors2 */
 }
 
-{
+void normalcommandexecutors3() {
 /* ANCHOR: normalcommandexecutors3 */
 new CommandAPICommand("suicide")
     .executes((sender, args) -> {
@@ -1153,7 +1171,7 @@ new CommandAPICommand("suicide")
 }
 
 @SuppressWarnings("deprecation")
-void normalcommandexecutors3() {
+void normalcommandexecutors31() {
 /* ANCHOR: normalcommandexecutors3_1 */
 // Create our command
 new CommandAPICommand("broadcastmsg")
@@ -1168,7 +1186,7 @@ new CommandAPICommand("broadcastmsg")
 /* ANCHOR_END: normalcommandexecutors3_1 */
 }
 
-{
+void proxysender() {
 /* ANCHOR: proxysender */
 new CommandAPICommand("killme")
     .executesPlayer((player, args) -> {
@@ -1178,7 +1196,7 @@ new CommandAPICommand("killme")
 /* ANCHOR_END: proxysender */
 }
 
-{
+void proxysender2() {
 /* ANCHOR: proxysender2 */
 new CommandAPICommand("killme")
     .executesPlayer((player, args) -> {
@@ -1194,7 +1212,7 @@ new CommandAPICommand("killme")
 /* ANCHOR_END: proxysender2 */
 }
 
-{
+void nativesender() {
 /* ANCHOR: nativesender */
 new CommandAPICommand("break")
     .executesNative((sender, args) -> {
@@ -1207,17 +1225,17 @@ new CommandAPICommand("break")
 /* ANCHOR_END: nativesender */
 }
 
-{
+void resultingcommandexecutor() {
 /* ANCHOR: resultingcommandexecutor */
 new CommandAPICommand("randnum")
     .executes((sender, args) -> {
-        return new Random().nextInt();
+        return ThreadLocalRandom.current().nextInt();
     })
     .register();
 /* ANCHOR_END: resultingcommandexecutor */
 }
 
-{
+void resultingcommandexecutor2() {
 /* ANCHOR: resultingcommandexecutor2 */
 // Register random number generator command from 1 to 99 (inclusive)
 new CommandAPICommand("randomnumber")
@@ -1243,7 +1261,7 @@ new CommandAPICommand("givereward")
 /* ANCHOR_END: resultingcommandexecutor3 */
 }
 
-{
+void commandfailures() {
 /* ANCHOR: commandfailures */
 // Array of fruit
 String[] fruit = new String[] {"banana", "apple", "orange"};
@@ -1265,7 +1283,7 @@ new CommandAPICommand("getfruit")
 /* ANCHOR_END: commandfailures */
 }
 
-{
+void argumentsyntax1() {
 /* ANCHOR: argumentsyntax1 */
 new CommandAPICommand("mycommand")
     .withArguments(new StringArgument("arg0"))
@@ -1295,7 +1313,7 @@ new CommandAPICommand("mycommand")
     ;
 }
 
-{
+void argumentsayhicmd() {
 /* ANCHOR: argumentsayhicmd */
 new CommandAPICommand("sayhi")
     .withOptionalArguments(new PlayerArgument("target"))
@@ -1311,7 +1329,7 @@ new CommandAPICommand("sayhi")
 /* ANCHOR_END: argumentsayhicmd */
 }
 
-{
+void argumentsayhicmd2() {
 /* ANCHOR: argumentsayhicmd2 */
 new CommandAPICommand("sayhi")
     .withOptionalArguments(new PlayerArgument("target"))
@@ -1342,7 +1360,7 @@ new CommandAPICommand("cmd")
 /* ANCHOR_END: argumentcasting */
 }
 
-{
+void requirements() {
 /* ANCHOR: requirements */
 new CommandAPICommand("repair")
     .withRequirement(sender -> ((Player) sender).getLevel() >= 30)
@@ -1351,8 +1369,8 @@ new CommandAPICommand("repair")
         // Repair the item back to full durability
         ItemStack is = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = is.getItemMeta();
-        if (itemMeta instanceof Damageable) {
-            ((Damageable) itemMeta).setDamage(0);
+        if (itemMeta instanceof Damageable damageable) {
+            damageable.setDamage(0);
             is.setItemMeta(itemMeta);
         }
         
@@ -1363,7 +1381,7 @@ new CommandAPICommand("repair")
 /* ANCHOR_END: requirements */
 }
 
-{
+void requirementsmap() {
 /* ANCHOR: requirementsmap */
 Map<UUID, String> partyMembers = new HashMap<>();
 /* ANCHOR_END: requirementsmap */
@@ -1456,7 +1474,7 @@ new CommandAPICommand("party")
 /* ANCHOR_END: updatingrequirements */
 }
 
-{
+void multiplerequirements() {
 /* ANCHOR: multiplerequirements */
 new CommandAPICommand("someCommand")
     .withRequirement(sender -> ((Player) sender).getLevel() >= 30)
@@ -1469,7 +1487,7 @@ new CommandAPICommand("someCommand")
 /* ANCHOR_END: multiplerequirements */
 }
 
-{
+void predicatetips() {
 Map<UUID, String> partyMembers = new HashMap<>();
 /* ANCHOR: predicatetips */
 Predicate<CommandSender> testIfPlayerHasParty = sender -> {
@@ -1489,7 +1507,7 @@ arguments.add(new LiteralArgument("tp").withRequirement(testIfPlayerHasParty));
 /* ANCHOR_END: predicatetips3 */
 }
 
-{
+void converter2() {
 /* ANCHOR: converter2 */
 JavaPlugin essentials = (JavaPlugin) Bukkit.getPluginManager().getPlugin("Essentials");
 
@@ -1561,7 +1579,7 @@ Brigadier.getRootNode().getChild("execute").getChild("if").addChild(randomChance
 /* ANCHOR_END: brigadier */
 }
 
-{
+void subcommands() {
 
 /* ANCHOR: subcommandspart */
 CommandAPICommand groupAdd = new CommandAPICommand("add")
@@ -1648,7 +1666,7 @@ new CommandAPICommand("mycmd")
 /* ANCHOR_END: help2 */
 }
 
-{
+void anglearguments() {
     // NOTE: This example isn't used!
 /* ANCHOR: anglearguments */
 new CommandAPICommand("yaw")
@@ -1662,7 +1680,7 @@ new CommandAPICommand("yaw")
 /* ANCHOR_END: anglearguments */
 }
 
-{
+void listed() {
 /* ANCHOR: listed */
 new CommandAPICommand("mycommand")
     .withArguments(new PlayerArgument("player"))
@@ -1678,7 +1696,7 @@ new CommandAPICommand("mycommand")
 /* ANCHOR_END: listed */
 }
 
-{
+void tooltips1() {
 /* ANCHOR: Tooltips1 */
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new StringArgument("emote")
@@ -1709,13 +1727,16 @@ new CommandAPICommand("emote")
         case "glare":
             target.sendMessage(player.getName() + " gives you the death glare...");
             break;
+        default:
+            player.sendMessage("Invalid emote '" + emote + "'!");
+            break;
         }
     })
     .register();
 /* ANCHOR_END: Tooltips2 */
 }
 
-{
+void tooltips4() {
 /* ANCHOR: Tooltips4 */
 CustomItem[] customItems = new CustomItem[] {
     new CustomItem(new ItemStack(Material.DIAMOND_SWORD), "God sword", "A sword from the heavens"),
@@ -1739,7 +1760,7 @@ new CommandAPICommand("giveitem")
 /* ANCHOR_END: Tooltips4 */
 }
 
-{
+void safetooltips() {
 /* ANCHOR: SafeTooltips */
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new LocationArgument("location")
@@ -1763,7 +1784,7 @@ new CommandAPICommand("warp")
 /* ANCHOR_END: SafeTooltips2 */
 }
 
-{
+void argumentsuggestionsprevious() {
 /* ANCHOR: ArgumentSuggestionsPrevious */
 // Declare our arguments as normal
 List<Argument<?>> arguments = new ArrayList<>();
@@ -1801,7 +1822,7 @@ new CommandAPICommand("localmsg")
 /* ANCHOR_END: ArgumentSuggestionsPrevious */
 }
 
-{
+void argumentSuggestions22() {
 /* ANCHOR: ArgumentSuggestions2_2 */
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new PlayerArgument("friend").replaceSuggestions(ArgumentSuggestions.strings(info ->
@@ -1818,7 +1839,7 @@ new CommandAPICommand("friendtp")
 /* ANCHOR_END: ArgumentSuggestions2_2 */
 }
 
-{
+void argumentSuggestions1() {
 Map<String, Location> warps = new HashMap<>();
 /* ANCHOR: ArgumentSuggestions1 */
 List<Argument<?>> arguments = new ArrayList<>();
@@ -1837,7 +1858,7 @@ new CommandAPICommand("warp")
 }
 
 @SuppressWarnings("deprecation")
-void SafeRecipeArguments() {
+void safeRecipeArguments() {
 /* ANCHOR: SafeRecipeArguments */
 // Create our itemstack
 ItemStack emeraldSword = new ItemStack(Material.DIAMOND_SWORD);
@@ -1879,7 +1900,7 @@ new CommandAPICommand("giverecipe")
 /* ANCHOR_END: SafeRecipeArguments_2 */
 }
 
-{
+void safemobspawnarguments() {
 /* ANCHOR: SafeMobSpawnArguments */
 EntityType[] forbiddenMobs = new EntityType[] {EntityType.ENDER_DRAGON, EntityType.WITHER};
 List<EntityType> allowedMobs = new ArrayList<>(Arrays.asList(EntityType.values()));
@@ -1912,7 +1933,7 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR_END: SafeMobSpawnArguments_3 */
 }
 
-{
+void safePotionArguments() {
 /* ANCHOR: SafePotionArguments */
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new EntitySelectorArgument.OnePlayer("target"));
@@ -1940,7 +1961,7 @@ new CommandAPICommand("removeeffect")
 /* ANCHOR_END: SafePotionArguments_2 */
 }
 
-{
+void wtfisthismethodihavenoideawhatthisiscanwegetridofitplz() {
     // A really simple example showing how you can use the new suggestion system
     final String[] fruits = new String[] { "Apple", "Apricot", "Artichoke", "Asparagus", "Atemoya", "Avocado",
             "Bamboo Shoots", "Banana", "Bean Sprouts", "Beans", "Beets", "Blackberries", "Blueberries", "Boniato",
@@ -1969,7 +1990,7 @@ new CommandAPICommand("removeeffect")
         .register();
 }
 
-{
+void commandapiconfigsilent() {
 JavaPlugin plugin = new JavaPlugin() {};
 
 /* ANCHOR: CommandAPIConfigSilent */
@@ -1977,7 +1998,7 @@ CommandAPI.onLoad(new CommandAPIBukkitConfig(plugin).silentLogs(true));
 /* ANCHOR_END: CommandAPIConfigSilent */
 }
 
-{
+void asyncreadfile() {
 
 JavaPlugin plugin = new JavaPlugin() {};
 /* ANCHOR: asyncreadfile */
@@ -2044,7 +2065,8 @@ ArgumentSuggestions<CommandSender> commandSuggestions = (info, builder) -> {
         .parse(info.currentArg(), Brigadier.getBrigadierSourceFromCommandSender(info.sender()));
     
     // Intercept any parsing errors indicating an invalid command
-    for (CommandSyntaxException exception : parseResults.getExceptions().values()) {
+    if(!parseResults.getExceptions().isEmpty()) {
+        CommandSyntaxException exception = parseResults.getExceptions().values().iterator().next();
         // Raise the error, with the cursor offset to line up with the argument
         throw new CommandSyntaxException(exception.getType(), exception.getRawMessage(), exception.getInput(), exception.getCursor() + start);
     }
@@ -2129,7 +2151,7 @@ new CommandAPICommand("emoji")
 /* ANCHOR_END: BrigadierSuggestions3 */
 }
 
-{
+void commandtree() {
 new CommandTree("treeexample")
     // Set the aliases as you normally would 
     .withAliases("treealias")
@@ -2189,9 +2211,9 @@ new CommandTree("signedit")
                 .executesPlayer((player, args) -> {
                     // /signedit set <line_number> <text>
                     Sign sign = getTargetSign(player);
-                    int line_number = (int) args.get(0);
+                    int lineNumber = (int) args.get(0);
                     String text = (String) args.get(1);
-                    sign.setLine(line_number - 1, text);
+                    sign.setLine(lineNumber - 1, text);
                     sign.update(true);
                  }))))
     .then(new LiteralArgument("clear")
@@ -2199,8 +2221,8 @@ new CommandTree("signedit")
             .executesPlayer((player, args) -> {
                 // /signedit clear <line_number>
                 Sign sign = getTargetSign(player);
-                int line_number = (int) args.get(0);
-                sign.setLine(line_number - 1, "");
+                int lineNumber = (int) args.get(0);
+                sign.setLine(lineNumber - 1, "");
                 sign.update(true);
             })))
     .then(new LiteralArgument("copy")
@@ -2208,16 +2230,16 @@ new CommandTree("signedit")
             .executesPlayer((player, args) -> {
                 // /signedit copy <line_number>
                 Sign sign = getTargetSign(player);
-                int line_number = (int) args.get(0);
-                player.setMetadata("copied_sign_text", new FixedMetadataValue(this, sign.getLine(line_number - 1)));
+                int lineNumber = (int) args.get(0);
+                player.setMetadata("copied_sign_text", new FixedMetadataValue(this, sign.getLine(lineNumber - 1)));
             })))
     .then(new LiteralArgument("paste")
         .then(new IntegerArgument("line_number", 1, 4)
             .executesPlayer((player, args) -> {
                 // /signedit copy <line_number>
                 Sign sign = getTargetSign(player);
-                int line_number = (int) args.get(0);
-                sign.setLine(line_number - 1, player.getMetadata("copied_sign_text").get(0).asString());
+                int lineNumber = (int) args.get(0);
+                sign.setLine(lineNumber - 1, player.getMetadata("copied_sign_text").get(0).asString());
                 sign.update(true);
             })))
     .register();
@@ -2233,7 +2255,7 @@ public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
     }
 }
 
-{
+void commandArgumentSudo() {
 /* ANCHOR: command_argument_sudo */
 new CommandAPICommand("sudo")
     .withArguments(new PlayerArgument("target"))
@@ -2248,7 +2270,7 @@ new CommandAPICommand("sudo")
 /* ANCHOR_END: command_argument_sudo */
 }
 
-{
+void commandArgumentBranchGive() {
 
 /* ANCHOR: command_argument_branch_give */
 SuggestionsBranch.suggest(
@@ -2308,12 +2330,12 @@ new CommandArgument("command")
 /* ANCHOR: ArgumentSuggestions2_1 */
 class Friends {
     
-    static Map<UUID, String[]> friends = new HashMap<>();
+    static Map<UUID, String[]> friendsMap = new HashMap<>();
     
     public static String[] getFriends(CommandSender sender) {
         if (sender instanceof Player player) {
             // Look up friends in a database or file
-            return friends.get(player.getUniqueId());
+            return friendsMap.get(player.getUniqueId());
         } else {
             return new String[0];
         }
