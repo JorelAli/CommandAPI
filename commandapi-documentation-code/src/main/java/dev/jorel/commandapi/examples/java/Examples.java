@@ -314,7 +314,7 @@ new CommandAPICommand("broadcast")
     .executesPlayer((player, args) -> {
         // The user still entered legacy text. We need to properly convert this
         // to a Component by converting to plain text then to Component
-        String plainText = PlainTextComponentSerializer.plainText().serialize(args.get(0));
+        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) args.get(0));
         Bukkit.broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(plainText));
     })
     .register();
