@@ -421,6 +421,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Added a live dev build of the documentation at <a href="https://commandapi-live-docs.jorel.dev/">commandapi-live-docs.jorel.dev</a></li>
                     <li>Improved mobile support for the CommandAPI home page</li>
                     <li>Added the CommandAPI's Modrinth link to the CommandAPI home page</li>
+                    <li>Dropped support for Minecraft 1.13 - 1.14.4. Please use an older version of the CommandAPI, or raise an issue on GitHub to bring back support for these versions</li>
                 </ul>
                 <b>GitHub Actions changes:</b>
                 <ul>
