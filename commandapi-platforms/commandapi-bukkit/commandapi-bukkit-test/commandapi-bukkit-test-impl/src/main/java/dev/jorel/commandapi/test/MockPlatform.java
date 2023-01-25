@@ -23,7 +23,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.internal.bind.JsonTreeReader;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 
@@ -44,9 +43,9 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 		return (MockPlatform<CLW>) instance;
 	}
 
-	public MockPlatform() {
-		if (instance == null) {
-			instance = this;
+	protected MockPlatform() {
+		if (MockPlatform.instance == null) {
+			MockPlatform.instance = this;
 		} else {
 			// wtf why was this called twice?
 		}
@@ -73,47 +72,47 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	@Override
 	public final void resendPackets(Player player) {
-		return; // There's nothing to do here, we can't "send packets to players"
+		// There's nothing to do here, we can't "send packets to players"
 	}
 
 	@Override
 	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	@Override
 	public final String convert(ItemStack is) {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	@Override
 	public final String convert(ParticleData<?> particle) {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	@Override
 	public final String convert(PotionEffectType potion) {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	@Override
 	public final String convert(Sound sound) {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	@Override
 	public final HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	@Override
 	public final boolean isVanillaCommandWrapper(Command command) {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	@Override
 	public final void reloadDataPacks() {
-		throw new Error("unimplemented");
+		throw new UnimplementedError();
 	}
 
 	/******************
@@ -140,12 +139,11 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T getFieldAs(Class<?> className, String fieldName, Object instance, Class<T> asType) {
 		try {
 			Field field = className.getDeclaredField(fieldName);
 			field.setAccessible(true);
-			return (T) field.get(instance);
+			return asType.cast(field.get(instance));
 		} catch (ReflectiveOperationException e) {
 			return null;
 		}
@@ -168,7 +166,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 */
 	public abstract String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType);
 	
-	static record Pair<A, B>(A first, B second) {};
+	static record Pair<A, B>(A first, B second) {}
 	
 	/**
 	 * Gets recipes from {@code data/minecraft/recipes/<file>.json}. Parses them and
@@ -182,38 +180,45 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	public final List<Pair<String, JsonObject>> getRecipes(Class<?> minecraftServerClass) {
 		List<Pair<String, JsonObject>> list = new ArrayList<>();
 		// Get the spigot-x.x.x-Rx.x-SNAPSHOT.jar file
-		JarFile jar = null;
-		try {
-			jar = new JarFile(minecraftServerClass.getProtectionDomain().getCodeSource().getLocation().getPath());
+		try(JarFile jar = new JarFile(minecraftServerClass.getProtectionDomain().getCodeSource().getLocation().getPath())) {
+			// Iterate over everything in the jar 
+			jar.entries().asIterator().forEachRemaining(entry -> {
+				if(entry.getName().startsWith("data/minecraft/recipes/") && entry.getName().endsWith(".json")) {
+					// If it's what we want, read everything
+					InputStream is = minecraftServerClass.getClassLoader().getResourceAsStream(entry.getName());
+					String jsonStr = new BufferedReader(new InputStreamReader(is))
+						.lines()
+						.map(line -> {
+							// We can't load tags in the testing environment. If we have any recipes that
+							// use tags as ingredients (e.g. wooden_axe or charcoal), we'll get an illegal
+							// state exception from TagUtil complaining that a tag has been used before it
+							// was bound. To mitigate this, we simply remove all tags and put in a dummy
+							// item (in this case, stick)
+							if(line.contains("\"tag\": ")) {
+								return "\"item\": \"minecraft:stick\"";
+							}
+							return line;
+						})
+						.collect(Collectors.joining("\n"));
+					// Get the resource location (file name, no extension, no path) and parse the JSON.
+					// Using deprecated method as the alternative doesn't exist in 1.17
+					@SuppressWarnings("deprecation")
+					JsonObject parsedJson = new JsonParser().parse(jsonStr).getAsJsonObject();
+					list.add(new Pair<>(entry.getName().substring("data/minecraft/recipes/".length(), entry.getName().lastIndexOf(".")), parsedJson));
+				}
+			});
 		} catch (IOException e) {
-			throw new Error("Failed to load any recipes for testing!", e);
+			throw new IllegalStateException("Failed to load any recipes for testing!", e);
 		}
-		// Iterate over everything in the jar 
-		jar.entries().asIterator().forEachRemaining(entry -> {
-			if(entry.getName().startsWith("data/minecraft/recipes/") && entry.getName().endsWith(".json")) {
-				// If it's what we want, read everything
-				InputStream is = minecraftServerClass.getClassLoader().getResourceAsStream(entry.getName());
-				String jsonStr = new BufferedReader(new InputStreamReader(is))
-					.lines()
-					.map(line -> {
-						// We can't load tags in the testing environment. If we have any recipes that
-						// use tags as ingredients (e.g. wooden_axe or charcoal), we'll get an illegal
-						// state exception from TagUtil complaining that a tag has been used before it
-						// was bound. To mitigate this, we simply remove all tags and put in a dummy
-						// item (in this case, stick)
-						if(line.contains("\"tag\": ")) {
-							return "\"item\": \"minecraft:stick\"";
-						}
-						return line;
-					})
-					.collect(Collectors.joining("\n"));
-				// Get the resource location (file name, no extension, no path) and parse the JSON.
-				// Using deprecated method as the alternative doesn't exist in 1.17
-				JsonObject parsedJson = new JsonParser().parse(jsonStr).getAsJsonObject();
-				list.add(new Pair<>(entry.getName().substring("data/minecraft/recipes/".length(), entry.getName().lastIndexOf(".")), parsedJson));
-			}
-		});
+		
 		return list;
+	}
+	
+	@SuppressWarnings("serial")
+	private static class UnimplementedError extends Error {
+		public UnimplementedError() {
+			super("Unimplemented");
+		}
 	}
 
 	/***********************

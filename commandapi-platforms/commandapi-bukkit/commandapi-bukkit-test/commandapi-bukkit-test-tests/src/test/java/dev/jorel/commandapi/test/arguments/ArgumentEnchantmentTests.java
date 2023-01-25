@@ -21,7 +21,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link EnchantmentArgument}
  */
-public class ArgumentEnchantmentTests extends TestBase {
+class ArgumentEnchantmentTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -42,7 +42,7 @@ public class ArgumentEnchantmentTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithEnchantmentArgument() {
+	void executionTestWithEnchantmentArgument() {
 		Mut<Enchantment> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -70,7 +70,7 @@ public class ArgumentEnchantmentTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithEnchantmentArgumentAllEnchantments() {
+	void executionTestWithEnchantmentArgumentAllEnchantments() {
 		Mut<Enchantment> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -95,7 +95,7 @@ public class ArgumentEnchantmentTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithEnchantmentArgument() {
+	void suggestionTestWithEnchantmentArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new EnchantmentArgument("enchantment"))
 			.executesPlayer((player, args) -> {

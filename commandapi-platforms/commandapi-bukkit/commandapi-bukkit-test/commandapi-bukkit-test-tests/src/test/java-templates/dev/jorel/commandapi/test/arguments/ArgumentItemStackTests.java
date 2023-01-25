@@ -29,7 +29,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link ItemStackArgument}
  */
-public class ArgumentItemStackTests extends TestBase {
+class ArgumentItemStackTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -51,7 +51,7 @@ public class ArgumentItemStackTests extends TestBase {
 
 	@SuppressWarnings("deprecation")
 	@Test
-	public void executionTestWithItemStackArgument() {
+	void executionTestWithItemStackArgument() {
 		Mut<ItemStack> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -155,7 +155,7 @@ public class ArgumentItemStackTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithItemStackArgument() {
+	void suggestionTestWithItemStackArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ItemStackArgument("item"))
 			.executesPlayer((player, args) -> {

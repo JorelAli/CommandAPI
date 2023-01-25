@@ -20,7 +20,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link LiteralArgument}
  */
-public class ArgumentLiteralTests extends TestBase {
+class ArgumentLiteralTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentLiteralTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithLiteralArgument() {
+	void executionTestWithLiteralArgument() {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -62,7 +62,7 @@ public class ArgumentLiteralTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithLiteralArgumentListed() {
+	void executionTestWithLiteralArgumentListed() {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -87,7 +87,7 @@ public class ArgumentLiteralTests extends TestBase {
 	 ********************/
 	
 	@Test
-	public void dispatcherTestWithLiteralArgument() {
+	void dispatcherTestWithLiteralArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new LiteralArgument("literal"))
 			.executesPlayer(P_EXEC)
@@ -115,7 +115,7 @@ public class ArgumentLiteralTests extends TestBase {
 	 *********************************/
 
 	@Test
-	public void exceptionTestWithLiteralArgumentInvalid() {
+	void exceptionTestWithLiteralArgumentInvalid() {
 		// Test literal argument with null
 		assertThrows(BadLiteralException.class, () -> new LiteralArgument(null));
 		
@@ -138,7 +138,7 @@ public class ArgumentLiteralTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithLiteralArgument() {
+	void suggestionTestWithLiteralArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new LiteralArgument("literal"))
 			.executesPlayer(P_EXEC)
@@ -151,7 +151,7 @@ public class ArgumentLiteralTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithTwoLiteralArguments() {
+	void suggestionTestWithTwoLiteralArguments() {
 		new CommandAPICommand("test")
 			.withArguments(new LiteralArgument("literal1"))
 			.executesPlayer(P_EXEC)

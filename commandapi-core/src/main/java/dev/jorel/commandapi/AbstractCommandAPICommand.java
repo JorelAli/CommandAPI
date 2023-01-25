@@ -280,13 +280,13 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	// Checks that greedy arguments don't have any other arguments at the end,
 	// and only zero or one greedy argument is present in an array of arguments
 	private void checkGreedyArgumentConstraints(Argument[] argumentsArray) {
-		boolean hasSeenGreedyArgument = false;
 		for (int i = 0; i < argumentsArray.length; i++) {
-			if (argumentsArray[i] instanceof GreedyArgument) {
-				if (hasSeenGreedyArgument || i != argumentsArray.length - 1) {
-					throw new GreedyArgumentException(argumentsArray);
-				}
-				hasSeenGreedyArgument = true;
+			// If we've seen a greedy argument that isn't at the end, then that
+			// also covers the case of seeing more than one greedy argument, as
+			// if there are more than one greedy arguments, one of them must not
+			// be at the end!
+			if (argumentsArray[i] instanceof GreedyArgument && i != argumentsArray.length - 1) {
+				throw new GreedyArgumentException(argumentsArray);
 			}
 		}
 	}

@@ -36,7 +36,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
  * Tests for the {@link ParticleArgument}
  */
 @SuppressWarnings("rawtypes")
-public class ArgumentParticleTests extends TestBase {
+class ArgumentParticleTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -176,7 +176,7 @@ public class ArgumentParticleTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithParticleArgumentBasicParticles() {
+	void executionTestWithParticleArgumentBasicParticles() {
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -198,7 +198,7 @@ public class ArgumentParticleTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithParticleArgumentBlocks() {
+	void executionTestWithParticleArgumentBlocks() {
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -220,7 +220,7 @@ public class ArgumentParticleTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithParticleArgumentDust() {
+	void executionTestWithParticleArgumentDust() {
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -244,7 +244,7 @@ public class ArgumentParticleTests extends TestBase {
 
 	/* ${ifdef.1.17}
 	@Test
-	public void executionTestWithParticleArgumentDustTransition() {
+	void executionTestWithParticleArgumentDustTransition() {
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -268,7 +268,7 @@ public class ArgumentParticleTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithParticleArgumentItem() {
+	void executionTestWithParticleArgumentItem() {
 		Mut<ParticleData> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -291,7 +291,7 @@ public class ArgumentParticleTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithParticleArgumentSculkCharge() {
+	void executionTestWithParticleArgumentSculkCharge() {
 		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19), "Sculk charge particle only exists in 1.19+");
 		Mut<ParticleData> results = Mut.of();
 
@@ -314,7 +314,7 @@ public class ArgumentParticleTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithParticleArgumentShriek() {
+	void executionTestWithParticleArgumentShriek() {
 		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19), "Shriek particle only exists in 1.19+");
 		Mut<ParticleData> results = Mut.of();
 
@@ -337,7 +337,7 @@ public class ArgumentParticleTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithParticleArgumentVibration() {
+	void executionTestWithParticleArgumentVibration() {
 		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19), "Vibration particle only exists in 1.19+");
 		Mut<ParticleData> results = Mut.of();
 

@@ -19,7 +19,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link AxisArgument}
  */
-public class ArgumentAxisTests extends TestBase {
+class ArgumentAxisTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentAxisTests extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void executionTestWithAxisArgument() {
+	void executionTestWithAxisArgument() {
 		Mut<EnumSet<Axis>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -80,7 +80,7 @@ public class ArgumentAxisTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithAxisArgument() {
+	void suggestionTestWithAxisArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new AxisArgument("axis"))
 			.executesPlayer((player, args) -> {

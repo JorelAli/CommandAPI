@@ -20,7 +20,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link EntitySelectorArgument}
  */
-public class ArgumentEntitySelectorTests extends TestBase {
+class ArgumentEntitySelectorTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentEntitySelectorTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithEntitySelectorArgumentOnePlayer() {
+	void executionTestWithEntitySelectorArgumentOnePlayer() {
 		Mut<Player> results = Mut.of();
 		
 		new CommandAPICommand("test")
@@ -83,7 +83,7 @@ public class ArgumentEntitySelectorTests extends TestBase {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void executionTestWithEntitySelectorArgumentManyPlayers() {
+	void executionTestWithEntitySelectorArgumentManyPlayers() {
 		Mut<Collection<Player>> results = Mut.of();
 		
 		new CommandAPICommand("test")
@@ -107,7 +107,7 @@ public class ArgumentEntitySelectorTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithEntitySelectorArgumentOneEntity() {
+	void executionTestWithEntitySelectorArgumentOneEntity() {
 		Mut<Entity> results = Mut.of();
 		
 		new CommandAPICommand("test")
@@ -145,7 +145,7 @@ public class ArgumentEntitySelectorTests extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void executionTestWithEntitySelectorArgumentManyEntities() {
+	void executionTestWithEntitySelectorArgumentManyEntities() {
 		Mut<Collection<Entity>> results = Mut.of();
 		
 		new CommandAPICommand("test")

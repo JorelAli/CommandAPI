@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for the {@link GreedyStringArgument}
  */
-public class ArgumentGreedyStringTests extends TestBase {
+class ArgumentGreedyStringTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -40,7 +40,7 @@ public class ArgumentGreedyStringTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithGreedyStringArgument() {
+	void executionTestWithGreedyStringArgument() {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -73,7 +73,7 @@ public class ArgumentGreedyStringTests extends TestBase {
 	}
 
 	@Test
-	public void exceptionTestWithGreedyStringArgument() {
+	void exceptionTestWithGreedyStringArgument() {
 
 		assertThrows(GreedyArgumentException.class, () -> new CommandAPICommand("test")
 			.withArguments(new GreedyStringArgument("greedy"))
@@ -88,7 +88,7 @@ public class ArgumentGreedyStringTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithGreedyStringArgument() {
+	void suggestionTestWithGreedyStringArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new GreedyStringArgument("value"))
 			.executesPlayer(P_EXEC)

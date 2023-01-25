@@ -18,7 +18,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link ChatColorArgument}
  */
-public class ArgumentChatColorTests extends TestBase {
+class ArgumentChatColorTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -40,7 +40,7 @@ public class ArgumentChatColorTests extends TestBase {
 
 	@SuppressWarnings("unused")
 	@Test
-	public void executionTestWithChatColorArgument() {
+	void executionTestWithChatColorArgument() {
 		Mut<ChatColor> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -88,7 +88,7 @@ public class ArgumentChatColorTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithChatColorArgument() {
+	void suggestionTestWithChatColorArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ChatColorArgument("color"))
 			.executesPlayer((player, args) -> {

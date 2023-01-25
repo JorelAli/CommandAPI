@@ -19,7 +19,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link dev.jorel.commandapi.arguments.AdvancementArgument}
  */
-public class ArgumentAdvancementTests extends TestBase {
+class ArgumentAdvancementTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -40,7 +40,7 @@ public class ArgumentAdvancementTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithAdvancementArgument() {
+	void executionTestWithAdvancementArgument() {
 		Mut<Advancement> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -73,7 +73,7 @@ public class ArgumentAdvancementTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithAxisArgument() {
+	void suggestionTestWithAxisArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new AdvancementArgument("advancement"))
 			.executesPlayer((player, args) -> {

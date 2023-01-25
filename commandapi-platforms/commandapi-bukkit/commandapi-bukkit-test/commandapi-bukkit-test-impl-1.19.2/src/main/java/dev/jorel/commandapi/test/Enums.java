@@ -9,7 +9,7 @@ import dev.jorel.commandapi.CommandAPIBukkit;
 
 public abstract class Enums extends ArgumentNMS {
 
-	public Enums(CommandAPIBukkit<?> baseNMS) {
+	protected Enums(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
 	}
 

@@ -20,7 +20,7 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
  * Tests for command semantics
  */
 @SuppressWarnings("unused")
-public class CommandTests extends TestBase {
+class CommandTests extends TestBase {
 	
 	/*********
 	 * Setup *
@@ -41,62 +41,52 @@ public class CommandTests extends TestBase {
 	 *********/
 
 	@Test
-	public void testGreedyStringArgumentNotAtEnd() {
+	void testGreedyStringArgumentNotAtEnd() {
+		
+		// Shouldn't throw, greedy argument is at the end
+		CommandAPICommand validGreedyCommand = new CommandAPICommand("test")
+			.withArguments(new StringArgument("arg1"))
+			.withArguments(new GreedyStringArgument("arg2"))
+			.executes((sender, args) -> {
+				String arg1 = (String) args.get(0);
+				String arg2 = (String) args.get(0);
+			});
+		
 		assertDoesNotThrow(() -> {
-			new CommandAPICommand("test")
-				.withArguments(new StringArgument("arg1"))
-				.withArguments(new GreedyStringArgument("arg2"))
-				.executes((sender, args) -> {
-					String arg1 = (String) args.get(0);
-					String arg2 = (String) args.get(0);
-				})
-				.register();
+			validGreedyCommand.register();
 		});
 
+		// Should throw, greedy argument is not at the end
+		CommandAPICommand invalidGreedyCommand = new CommandAPICommand("test")
+			.withArguments(new GreedyStringArgument("arg1"))
+			.withArguments(new StringArgument("arg2"))
+			.executes((sender, args) -> {
+				String arg1 = (String) args.get(0);
+				String arg2 = (String) args.get(0);
+			});
+
 		assertThrows(GreedyArgumentException.class, () -> {
-			new CommandAPICommand("test")
-				.withArguments(new GreedyStringArgument("arg1"))
-				.withArguments(new StringArgument("arg2"))
-				.executes((sender, args) -> {
-					String arg1 = (String) args.get(0);
-					String arg2 = (String) args.get(0);
-				})
-				.register();
+			invalidGreedyCommand.register();
 		});
 	}
 
 	@Test
-	public void testInvalidCommandName() {
+	void testInvalidCommandName() {
 		assertThrows(InvalidCommandNameException.class, () -> {
-			new CommandAPICommand((String) null)
-				.withArguments(new StringArgument("arg1"))
-				.executes((sender, args) -> {
-					String arg1 = (String) args.get(0);
-				})
-				.register();
+			new CommandAPICommand((String) null);
 		});
 		
 		assertThrows(InvalidCommandNameException.class, () -> {
-			new CommandAPICommand("")
-				.withArguments(new StringArgument("arg1"))
-				.executes((sender, args) -> {
-					String arg1 = (String) args.get(0);
-				})
-				.register();
+			new CommandAPICommand("");
 		});
 		
 		assertThrows(InvalidCommandNameException.class, () -> {
-			new CommandAPICommand("my command")
-				.withArguments(new StringArgument("arg1"))
-				.executes((sender, args) -> {
-					String arg1 = (String) args.get(0);
-				})
-				.register();
+			new CommandAPICommand("my command");
 		});
 	}
 	
 	@Test
-	public void testNoExecutor() {
+	void testNoExecutor() {
 		// TODO: Catch this case. Need to check if has no executor AND has no
 		//  subcommand or otherwise when .register() called
 		new CommandAPICommand("test")

@@ -18,7 +18,7 @@ import dev.jorel.commandapi.test.TestBase;
  * Tests for the {@link TimeArgument}
  */
 @SuppressWarnings("null")
-public class ArgumentTimeTests extends TestBase {
+class ArgumentTimeTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -39,7 +39,7 @@ public class ArgumentTimeTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithTimeArgument() {
+	void executionTestWithTimeArgument() {
 		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -91,7 +91,7 @@ public class ArgumentTimeTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithTimeArgument() {
+	void suggestionTestWithTimeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new TimeArgument("color"))
 			.executesPlayer((player, args) -> {

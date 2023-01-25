@@ -19,7 +19,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link PotionEffectArgument}
  */
-public class ArgumentPotionTests extends TestBase {
+class ArgumentPotionTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -40,7 +40,7 @@ public class ArgumentPotionTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithPotionEffectArgumentWithNamespaces() {
+	void executionTestWithPotionEffectArgumentWithNamespaces() {
 		Mut<PotionEffectType> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -68,7 +68,7 @@ public class ArgumentPotionTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithPotionEffectArgumentAllPotionEffects() {
+	void executionTestWithPotionEffectArgumentAllPotionEffects() {
 		Mut<PotionEffectType> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -93,7 +93,7 @@ public class ArgumentPotionTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithPotionEffectArgument() {
+	void suggestionTestWithPotionEffectArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new PotionEffectArgument("potion"))
 			.executesPlayer((player, args) -> {

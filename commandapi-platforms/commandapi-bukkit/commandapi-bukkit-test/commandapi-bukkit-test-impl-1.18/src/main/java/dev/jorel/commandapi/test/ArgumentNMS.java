@@ -56,7 +56,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	public CommandAPIBukkit<?> BASE_NMS;
 
-	public ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
+	protected ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
 		this.BASE_NMS = baseNMS;
 	}
 

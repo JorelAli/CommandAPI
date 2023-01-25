@@ -20,7 +20,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link LootTableArgument}
  */
-public class ArgumentLootTableTests extends TestBase {
+class ArgumentLootTableTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentLootTableTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithLootTableArgument() {
+	void executionTestWithLootTableArgument() {
 		Mut<LootTable> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -65,7 +65,7 @@ public class ArgumentLootTableTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithLootTableArgument() {
+	void suggestionTestWithLootTableArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new LootTableArgument("loottable"))
 			.executesPlayer((player, args) -> {

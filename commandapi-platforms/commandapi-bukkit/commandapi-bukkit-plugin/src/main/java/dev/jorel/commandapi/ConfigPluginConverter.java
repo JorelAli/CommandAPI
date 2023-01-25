@@ -35,11 +35,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * Reads YAML, generates command objects
  */
+// TODO: Implement this, or move it to another branch, we shouldn't be shipping this unless it's feature ready
 class ConfigPluginConverter {
 
 	/**
 	 * If this is a pre-8.6.0 configuration
 	 */
+	
 	private boolean isLegacyConfig;
 
 	private PluginToConvert[] pluginsToConvert;

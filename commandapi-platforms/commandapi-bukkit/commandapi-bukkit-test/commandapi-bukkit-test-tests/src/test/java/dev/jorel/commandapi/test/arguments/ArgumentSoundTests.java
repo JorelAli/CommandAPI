@@ -20,7 +20,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link SoundArgument}
  */
-public class ArgumentSoundTests extends TestBase {
+class ArgumentSoundTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentSoundTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithSoundArgument() {
+	void executionTestWithSoundArgument() {
 		Mut<Sound> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -73,7 +73,7 @@ public class ArgumentSoundTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithSoundArgumentAllSounds() {
+	void executionTestWithSoundArgumentAllSounds() {
 		Mut<Sound> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -94,7 +94,7 @@ public class ArgumentSoundTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithSoundArgumentNamespaced() {
+	void executionTestWithSoundArgumentNamespaced() {
 		Mut<NamespacedKey> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -130,7 +130,7 @@ public class ArgumentSoundTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithSoundArgument() {
+	void suggestionTestWithSoundArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new SoundArgument("Sound"))
 			.executesPlayer((player, args) -> {
