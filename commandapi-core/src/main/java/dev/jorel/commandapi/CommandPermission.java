@@ -20,56 +20,40 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A representation of permission nodes for commands. Represents permission nodes, being op and having all permissions
+ * A representation of permission nodes for commands. Represents permission
+ * nodes, being op and having all permissions
  */
 public class CommandPermission {
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (negated ? 1231 : 1237);
-		result = prime * result + ((permission == null) ? 0 : permission.hashCode());
-		result = prime * result + ((permissionNode == null) ? 0 : permissionNode.hashCode());
-		return result;
+	private enum PermissionNode {
+		/**
+		 * Command can be run with no permissions
+		 */
+		NONE,
+
+		/**
+		 * A player that has to be an operator to run a command
+		 */
+		OP;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CommandPermission other = (CommandPermission) obj;
-		if (negated != other.negated)
-			return false;
-		if (permission == null) {
-			if (other.permission != null)
-				return false;
-		} else if (!permission.equals(other.permission))
-			return false;
-		if (permissionNode != other.permissionNode)
-			return false;
-		return true;
-	}
+	/**
+	 * Command can be run with no permissions
+	 */
+	public static final CommandPermission NONE = new CommandPermission(PermissionNode.NONE);
 
 	/**
 	 * A player that has to be an operator to run a command
 	 */
-	public static CommandPermission OP = new CommandPermission(PermissionNode.OP);
-	
-	/**
-	 * Command can be run with no permissions
-	 */
-	public static CommandPermission NONE = new CommandPermission(PermissionNode.NONE);
-	
+	public static final CommandPermission OP = new CommandPermission(PermissionNode.OP);
+
 	/**
 	 * Generates a new CommandPermission from a permission node
+	 * 
 	 * @param permission the permission node
 	 * @return a new CommandPermission
 	 */
@@ -77,74 +61,85 @@ public class CommandPermission {
 		return new CommandPermission(permission);
 	}
 
-	private String permission;
-	private PermissionNode permissionNode;
 	private boolean negated = false;
-	
+
+	private String permission;
+
+	private PermissionNode permissionNode;
+
+	/**
+	 * Represents either no permission or OP status in order to run a command
+	 * 
+	 * @param permissionNode The enumerated type of what permission is required to
+	 *                       run this command
+	 */
+	private CommandPermission(PermissionNode permissionNode) {
+		this.permission = null;
+		this.permissionNode = permissionNode;
+	}
+
 	/**
 	 * Represents a single permission required to execute a command
+	 * 
 	 * @param permission The permission node the sender requires to run this command
 	 */
 	private CommandPermission(String permission) {
 		this.permission = permission;
 		this.permissionNode = null;
 	}
-	
-	/**
-	 * Represents either no permission or OP status in order to run a command
-	 * @param permissionNode The enumerated type of what permission is required to run this command
-	 */
-	private CommandPermission(PermissionNode permissionNode) {
-		this.permission = null;
-		this.permissionNode = permissionNode;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof CommandPermission)) {
+			return false;
+		}
+		CommandPermission other = (CommandPermission) obj;
+		return negated == other.negated && Objects.equals(permission, other.permission) && permissionNode == other.permissionNode;
 	}
-	
-	Optional<String> getPermission() {
-		return Optional.ofNullable(this.permission);
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(negated, permission, permissionNode);
 	}
-	
-	PermissionNode getPermissionNode() {
-		return this.permissionNode;
-	}
-	
-	boolean isNegated() {
-		return this.negated;
-	}
-	
-	CommandPermission negate() {
-		this.negated = true;
-		return this;
-	}
-	
+
 	/**
 	 * Returns a human-readable string of this CommandPermission
+	 * 
 	 * @return a human-readable string of this CommandPermission
 	 */
 	@Override
 	public String toString() {
 		final String result;
-		if(permissionNode != null) {
-			if(permissionNode == PermissionNode.OP) {
+		if (permissionNode != null) {
+			if (permissionNode == PermissionNode.OP) {
 				result = "OP";
 			} else {
-				result =  "NONE";
+				result = "NONE";
 			}
 		} else {
 			result = permission;
 		}
 		return (negated ? "not " : "") + result;
 	}
-	
-	private enum PermissionNode {
-		/**
-		 * A player that has to be an operator to run a command
-		 */
-		OP, 
-		
-		/**
-		 * Command can be run with no permissions
-		 */
-		NONE;
+
+	Optional<String> getPermission() {
+		return Optional.ofNullable(this.permission);
 	}
-	
+
+	PermissionNode getPermissionNode() {
+		return this.permissionNode;
+	}
+
+	boolean isNegated() {
+		return this.negated;
+	}
+
+	CommandPermission negate() {
+		this.negated = true;
+		return this;
+	}
+
 }

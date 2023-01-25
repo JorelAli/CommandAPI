@@ -1,7 +1,6 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Arrays;
 
@@ -12,9 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
-import dev.jorel.commandapi.test.MockNMS;
+import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -82,9 +80,8 @@ public class ArgumentPotionTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_16_5));
-		for (PotionEffectType potionEffect : MockNMS.getPotionEffects()) {
-			server.dispatchCommand(player, "test " + MockNMS.getNMSPotionEffectName_1_16_5(potionEffect));
+		for (PotionEffectType potionEffect : MockPlatform.getInstance().getPotionEffects()) {
+			server.dispatchCommand(player, "test " + MockPlatform.getInstance().getBukkitPotionEffectTypeName(potionEffect));
 			assertEquals(potionEffect, results.get());
 		}
 
@@ -104,13 +101,11 @@ public class ArgumentPotionTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		
-		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_16_5));
 
 		// /test minecraft:
 		assertEquals(
-			Arrays.stream(MockNMS.getPotionEffects())
-				.map(MockNMS::getNMSPotionEffectName_1_16_5)
+			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
+				.map(MockPlatform.getInstance()::getBukkitPotionEffectTypeName)
 				.sorted()
 				.toList(),
 			server.getSuggestions(player, "test minecraft:")
@@ -118,8 +113,8 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test minecraft:s
 		assertEquals(
-			Arrays.stream(MockNMS.getPotionEffects())
-				.map(MockNMS::getNMSPotionEffectName_1_16_5)
+			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
+				.map(MockPlatform.getInstance()::getBukkitPotionEffectTypeName)
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()
 				.toList(),
@@ -127,8 +122,8 @@ public class ArgumentPotionTests extends TestBase {
 
 		// /test s
 		assertEquals(
-			Arrays.stream(MockNMS.getPotionEffects())
-				.map(MockNMS::getNMSPotionEffectName_1_16_5)
+			Arrays.stream(MockPlatform.getInstance().getPotionEffects())
+				.map(MockPlatform.getInstance()::getBukkitPotionEffectTypeName)
 				.filter(s -> s.startsWith("minecraft:s"))
 				.sorted()
 				.toList(),

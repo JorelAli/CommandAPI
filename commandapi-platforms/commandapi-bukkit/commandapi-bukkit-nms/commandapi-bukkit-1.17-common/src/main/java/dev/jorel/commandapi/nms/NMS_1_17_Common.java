@@ -106,7 +106,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
@@ -515,6 +517,12 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
+		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
+	}
+
+	@Override
 	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
@@ -591,8 +599,9 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return TeamArgument.getTeam(cmdCtx, key).getName();
+	public Team getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		String teamName = TeamArgument.getTeam(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 	}
 
 	@Override

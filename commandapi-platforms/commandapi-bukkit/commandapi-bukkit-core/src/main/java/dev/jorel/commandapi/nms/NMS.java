@@ -47,6 +47,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 import java.util.function.Function;
@@ -336,7 +338,7 @@ public interface NMS<CommandListenerWrapper> {
 	<NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 		Function<Object, NBTContainer> nbtContainerConstructor);
 
-	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+	Objective getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 		throws IllegalArgumentException, CommandSyntaxException;
 
 	String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key);
@@ -384,7 +386,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Set<NamespacedKey> getTags();
 
-	String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 

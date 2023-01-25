@@ -1,5 +1,8 @@
 package dev.jorel.commandapi.test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -50,7 +53,8 @@ public class CommandAPIServerMock extends ServerMock {
 	public boolean dispatchCommand(CommandSender sender, String commandLine) {
 		try {
 			return dispatchThrowableCommand(sender, commandLine);
-		} catch (CommandSyntaxException e1) {
+		} catch (CommandSyntaxException e) {
+			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableCommand() instead.", e);
 			return false;
 		}
 	}
@@ -113,7 +117,7 @@ public class CommandAPIServerMock extends ServerMock {
 	public ItemFactory getItemFactory() {
 		// Thanks MockBukkit, but we REALLY need to access
 		// the raw CraftItemMeta objects for the ItemStackArgument <3
-		return MockNMS.getItemFactory();
+		return MockPlatform.getInstance().getItemFactory();
 	}
 
 	// Advancements
@@ -121,11 +125,11 @@ public class CommandAPIServerMock extends ServerMock {
 	List<Advancement> advancements = new ArrayList<>();
 	
 	public void addAdvancement(NamespacedKey key) {
-		advancements.add(MockNMS.addAdvancement(key));
+		advancements.add(MockPlatform.getInstance().addAdvancement(key));
 	}
 	
 	public void addAdvancements(Collection<NamespacedKey> key) {
-		key.forEach(s -> advancements.add(MockNMS.addAdvancement(s)));
+		key.forEach(this::addAdvancement);
 	}
 	
 	@Override

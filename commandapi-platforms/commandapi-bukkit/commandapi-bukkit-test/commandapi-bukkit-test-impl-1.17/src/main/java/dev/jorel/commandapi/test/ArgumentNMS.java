@@ -33,7 +33,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -46,16 +45,18 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandSourceStack;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 /**
  * Argument related method implementations
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public abstract class ArgumentNMS extends CommandAPIBukkit<CommandSourceStack> {
+public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
-	public NMS<?> BASE_NMS;
+	public CommandAPIBukkit<?> BASE_NMS;
 
-	public ArgumentNMS(NMS<?> baseNMS) {
+	public ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
 		this.BASE_NMS = baseNMS;
 	}
 
@@ -402,7 +403,7 @@ public abstract class ArgumentNMS extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public String getObjective(CommandContext cmdCtx, String key)
+	public Objective getObjective(CommandContext cmdCtx, String key)
 		throws IllegalArgumentException, CommandSyntaxException {
 		return BASE_NMS.getObjective(cmdCtx, key);
 	}
@@ -479,7 +480,7 @@ public abstract class ArgumentNMS extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public String getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+	public Team getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return BASE_NMS.getTeam(cmdCtx, key);
 	}
 

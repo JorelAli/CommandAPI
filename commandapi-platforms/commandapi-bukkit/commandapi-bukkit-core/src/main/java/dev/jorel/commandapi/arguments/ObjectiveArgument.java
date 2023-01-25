@@ -30,7 +30,7 @@ import org.bukkit.scoreboard.Objective;
  * 
  * @since 3.0
  */
-public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective> {
+public class ObjectiveArgument extends SafeOverrideableArgument<Objective, Objective> {
 
 	/**
 	 * An Objective argument. Represents a scoreboard objective
@@ -41,8 +41,8 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	}
 
 	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
+	public Class<Objective> getPrimitiveType() {
+		return Objective.class;
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	}
 	
 	@Override
-	public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Objective parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getObjective(cmdCtx, key);
 	}
 }

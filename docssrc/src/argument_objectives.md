@@ -9,11 +9,7 @@ In the CommandAPI, objectives are split into two classes:
 
 ## Objective argument
 
-The objective argument refers to a single scoreboard objective. Unconventionally, the `ObjectiveArgument` must be cast to `String` due to implementation limitations.
-
-> **Developer's Note:**
->
-> The two classes `ObjectiveArgument` and `TeamArgument` must both be cast to `String`, as opposed to `Objective` and `Team` respectively. This is due to the fact that commands are typically registered in the `onLoad()` method during a plugin's initialization. At this point in the server start-up sequence, the main server scoreboard is not initialized, so it cannot be used.
+The objective argument refers to a single scoreboard objective.
 
 <div class="example">
 
@@ -24,8 +20,6 @@ As an example, let's create a command to move an objective to a player's sidebar
 ```mccmd
 /sidebar <objective>
 ```
-
-Given that an objective has to be casted to a String, we have to find a way to convert it from its name to a Bukkit `Objective` object. We can do that by using the `getObjective(String)` method from a Bukkit `Scoreboard`:
 
 <div class="multi-pre">
 

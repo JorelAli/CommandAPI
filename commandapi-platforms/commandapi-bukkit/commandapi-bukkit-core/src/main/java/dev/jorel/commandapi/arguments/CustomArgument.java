@@ -20,15 +20,15 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.CommandAPIHandler;
+
 import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.CommandAPI;
-import org.bukkit.command.CommandSender;
+import dev.jorel.commandapi.CommandAPIHandler;
 
 /**
  * An argument that represents any custom object
@@ -45,49 +45,6 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 
 	private final CustomArgumentInfoParser<T, B> infoParser;
 	private final Argument<B> base;
-
-	/**
-	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
-	 * 
-	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentInfo} parser object which includes
-	 *                 information such as the command sender, previously declared
-	 *                 arguments and current input. This parser should return an
-	 *                 object of your choice.
-	 * @deprecated Use
-	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
-	 *             with {@link TextArgument} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser) {
-		this(nodeName, parser, false);
-	}
-
-	/**
-	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
-	 * 
-	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentInfo} parser object which includes
-	 *                 information such as the command sender, previously declared
-	 *                 arguments and current input. This parser should return an
-	 *                 object of your choice.
-	 * @param keyed    Whether this argument can accept Minecraft's
-	 *                 <code>NamespacedKey</code> as valid arguments
-	 * @deprecated Use
-	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
-	 *             with {@link TextArgument} or {@link NamespacedKeyArgument} instead
-	 */
-	@SuppressWarnings("unchecked")
-	@Deprecated(forRemoval = true)
-	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
-		super(nodeName, keyed ? StringArgumentType.string()
-				: CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered());
-		this.base = (Argument<B>) new DummyArgument(nodeName, keyed);
-		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
-		CommandAPI.logWarning(
-				"Registering CustomArgument " + nodeName + " with legacy registration method. This may not work!\n"
-						+ "Consider using new CustomArgument(Argument, CustomArgumentInfoParser)");
-	}
 
 	/**
 	 * Creates a CustomArgument with a valid parser, with an underlying base
@@ -358,35 +315,5 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 		 * @throws CustomArgumentException if an error occurs during parsing
 		 */
 		public T apply(CustomArgumentInfo<B> info) throws CustomArgumentException;
-	}
-
-	@Deprecated
-	private static class DummyArgument extends Argument<String> {
-
-		private final boolean keyed;
-
-		private DummyArgument(String nodeName, boolean keyed) {
-			super(nodeName, keyed ? StringArgumentType.string()
-					: CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered());
-			this.keyed = keyed;
-		}
-
-		@Override
-		public Class<String> getPrimitiveType() {
-			return String.class;
-		}
-
-		@Override
-		public CommandAPIArgumentType getArgumentType() {
-			return keyed ? CommandAPIArgumentType.PRIMITIVE_STRING : CommandAPIArgumentType.NAMESPACED_KEY;
-		}
-
-		@Override
-		public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
-				throws CommandSyntaxException {
-			return keyed ?
-				CommandAPIBukkit.<Source>get().getMinecraftKey(cmdCtx, key).toString() :
-				cmdCtx.getArgument(key, String.class);
-		}
 	}
 }

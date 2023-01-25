@@ -57,6 +57,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
@@ -664,8 +666,9 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	}
 
 	@Override
-	public String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException {
-		return ArgumentScoreboardObjective.a(cmdCtx, key).getName();
+	public Objective getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws IllegalArgumentException, CommandSyntaxException {
+		String objectiveName = ArgumentScoreboardObjective.a(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
 	}
 
 	@Override
@@ -846,7 +849,10 @@ public class NMS_1_13_1 extends NMSWrapper_1_13_1 {
 	}
 
 	@Override
-	public String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException { return ArgumentScoreboardTeam.a(cmdCtx, key).getName(); }
+	public Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		String teamName = ArgumentScoreboardTeam.a(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+	}
 
 	@Override
 	public int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {

@@ -2,6 +2,10 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
-import dev.jorel.commandapi.test.MockNMS;
+import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -78,12 +82,54 @@ public class ArgumentEnchantmentTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		for (Enchantment enchantment : MockNMS.getEnchantments()) {
+		for (Enchantment enchantment : MockPlatform.getInstance().getEnchantments()) {
 			server.dispatchCommand(player, "test " + enchantment.getKey().getKey());
 			assertEquals(enchantment, results.get());
 		}
 
 		assertNoMoreResults(results);
+	}
+
+	/********************
+	 * Suggestion tests *
+	 ********************/
+
+	@Test
+	public void suggestionTestWithEnchantmentArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new EnchantmentArgument("enchantment"))
+			.executesPlayer((player, args) -> {
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+		
+		// /test
+		// All enchantments should be suggested
+		assertEquals(
+			Arrays.stream(MockPlatform.getInstance().getEnchantments())
+				.map(e -> e.getKey())
+				.map(NamespacedKey::toString)
+				.sorted()
+				.toList(),
+			server.getSuggestions(player, "test minecraft:")
+		);
+		
+		// /test p
+		// All enchantments starting with p should be suggested
+		assertEquals(
+			Arrays.stream(MockPlatform.getInstance().getEnchantments())
+				.map(e -> e.getKey())
+				.filter(s -> s.toString().contains(":p") || s.toString().contains("_p"))
+				.map(NamespacedKey::toString)
+				.sorted()
+				.toList(),
+			server.getSuggestions(player, "test p")
+		);
+
+		// /test x
+		// No enchantments should be suggested
+		assertEquals(List.of(), server.getSuggestions(player, "test x"));
 	}
 
 }

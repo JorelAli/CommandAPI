@@ -229,19 +229,6 @@ public final class CommandAPI {
 	 * @param message Description of the error message
 	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
 	 * {@link CommandSyntaxException}
-	 * @deprecated Please use {@link CommandAPI#failWithString(String)} instead
-	 */
-	@Deprecated
-	public static WrapperCommandSyntaxException fail(String message) {
-		return failWithString(message);
-	}
-
-	/**
-	 * Forces a command to return a success value of 0
-	 *
-	 * @param message Description of the error message
-	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
-	 * {@link CommandSyntaxException}
 	 */
 	public static WrapperCommandSyntaxException failWithString(String message) {
 		return failWithMessage(Tooltip.messageFromString(message));

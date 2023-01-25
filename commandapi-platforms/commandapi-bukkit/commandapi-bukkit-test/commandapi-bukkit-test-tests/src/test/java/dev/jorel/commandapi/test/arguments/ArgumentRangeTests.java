@@ -6,10 +6,14 @@ import dev.jorel.commandapi.arguments.IntegerRangeArgument;
 import dev.jorel.commandapi.arguments.FloatRangeArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
+import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -36,7 +40,6 @@ public class ArgumentRangeTests extends TestBase {
 	 * Tests *
 	 *********/
 
-	// TODO: FloatRange
 	@Test
 	public void executionTestWithIntegerRangeArgument() {
 		Mut<IntegerRange> results = Mut.of();
@@ -93,6 +96,94 @@ public class ArgumentRangeTests extends TestBase {
 		assertCommandFailsWith(player, "test 123hello..10", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
 
 		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithFloatRangeArgument() {
+		Mut<FloatRange> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new FloatRangeArgument("value"))
+			.executesPlayer((player, args) -> {
+				results.set((FloatRange) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		String floatMinValue = String.format(Locale.ENGLISH, "%f", -Float.MAX_VALUE);
+		String floatMaxValue = String.format(Locale.ENGLISH, "%f", Float.MAX_VALUE);
+
+		// /test 0.0..10.0
+		FloatRange testZeroToTen = new FloatRange(0.0F, 10.0F);
+		server.dispatchCommand(player, "test 0.0..10.0");
+		assertEquals(testZeroToTen, results.get());
+
+		// /test -10.0..0.0
+		FloatRange testMinusTenToZero = new FloatRange(-10.0F, 0.0F);
+		server.dispatchCommand(player, "test -10.0..0.0");
+		assertEquals(testMinusTenToZero, results.get());
+
+		// /test 10.0
+		FloatRange testTenToTen = new FloatRange(10.0F, 10.0F);
+		server.dispatchCommand(player, "test 10.0");
+		assertEquals(testTenToTen, results.get());
+
+		// /test -Float.MAX_VALUE..Float.MAX_VALUE
+		FloatRange testMinIntToMaxInt = new FloatRange(-Float.MAX_VALUE, Float.MAX_VALUE);
+		String floatMinToMax = "test " + floatMinValue + ".." + floatMaxValue;
+		server.dispatchCommand(player, floatMinToMax);
+		assertEquals(testMinIntToMaxInt, results.get());
+
+		// /test ..Float.MAX_VALUE
+		FloatRange testMinIntToMaxIntWithoutLower = FloatRange.floatRangeLessThanOrEq(Float.MAX_VALUE);
+		String floatUntilMax = "test .." + floatMaxValue;
+		server.dispatchCommand(player, floatUntilMax);
+		assertEquals(testMinIntToMaxIntWithoutLower, results.get());
+
+		// /test -2147483648..
+		FloatRange testMinIntToMaxIntWithoutUpper = FloatRange.floatRangeGreaterThanOrEq(-Float.MAX_VALUE);
+		String floatFromMin = "test " + floatMinValue + "..";
+		server.dispatchCommand(player, floatFromMin);
+		assertEquals(testMinIntToMaxIntWithoutUpper, results.get());
+
+		// test hello123..10.0
+		assertCommandFailsWith(player, "test hello123..10.0", "Expected value or range of values at position 5: test <--[HERE]");
+
+		// test 123hello..10.0
+		assertCommandFailsWith(player, "test 123hello..10.0", "Expected whitespace to end one argument, but found trailing data at position 8: test 123<--[HERE]");
+
+		assertNoMoreResults(results);
+	}
+
+	/********************
+	 * Suggestion tests *
+	 ********************/
+
+	@Test
+	public void suggestionTestWithIntegerRangeArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new IntegerRangeArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
+	}
+
+	@Test
+	public void suggestionTestWithFloatRangeArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new FloatRangeArgument("value"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of(), server.getSuggestions(player, "test "));
 	}
 
 }

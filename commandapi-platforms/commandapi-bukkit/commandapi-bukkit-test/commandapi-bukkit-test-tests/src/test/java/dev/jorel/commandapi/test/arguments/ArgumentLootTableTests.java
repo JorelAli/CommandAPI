@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.LootTableArgument;
-import dev.jorel.commandapi.test.MockNMS;
+import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -74,7 +74,7 @@ public class ArgumentLootTableTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		assertEquals(Arrays.stream(MockNMS.getLootTables()).map(lt -> lt.getKey().toString())
+		assertEquals(Arrays.stream(MockPlatform.getInstance().getLootTables()).map(lt -> lt.getKey().toString())
 			.sorted().toList(), server.getSuggestions(player, "test "));
 	}
 

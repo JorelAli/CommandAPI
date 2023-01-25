@@ -475,11 +475,7 @@ new CommandAPICommand("clearobjectives")
 new CommandAPICommand("sidebar")
     .withArguments(new ObjectiveArgument("objective"))
     .executes((sender, args) -> {
-        // The ObjectArgument must be casted to a String
-        String objectiveName = (String) args.get(0);
-        
-        // An objective name can be turned into an Objective using getObjective(String)
-        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+        Objective objective = (Objective) args.get(0);
         
         // Set display slot
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -511,11 +507,7 @@ new CommandAPICommand("unregisterall")
 new CommandAPICommand("togglepvp")
     .withArguments(new TeamArgument("team"))
     .executes((sender, args) -> {
-        // The TeamArgument must be casted to a String
-        String teamName = (String) args.get(0);
-        
-        // A team name can be turned into a Team using getTeam(String)
-        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+        Team team = (Team) args.get(0);
         
         // Toggle pvp
         team.setAllowFriendlyFire(team.allowFriendlyFire());

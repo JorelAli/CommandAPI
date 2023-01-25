@@ -58,7 +58,6 @@
 	</repositories>
 
 	<dependencies>
-
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -86,6 +85,11 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-shade</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -143,6 +147,7 @@
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
 					<version>${project.version}</version>
+					<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>io.papermc.paper</groupId>

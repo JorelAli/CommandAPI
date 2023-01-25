@@ -28,7 +28,7 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -354,7 +354,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * from {@code argument}
 	 */
 	public List<String> getEntityNames(Object argument) {
-		return Arrays.asList(new String[]{null});
+		return Collections.singletonList(null);
 	}
 
 	@Override

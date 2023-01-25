@@ -58,12 +58,7 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.19</artifactId>
-			<version>2.29.0</version>
-		</dependency>
+		<!-- Main dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -71,10 +66,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>5.8.2</version>
-			<scope>test</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.6.1</version>
+		</dependency>
+		<dependency>
+			<!-- This is literally just for testing, we're not actually packaging this -->
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.11.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.mojang</groupId>
@@ -82,7 +83,23 @@
 			<version>1.0.17</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-shade</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
+		<!-- Version-specific dependencies -->
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.18</artifactId>
+			<version>2.27.0</version>
+		</dependency>
 		<dependency>
 			<groupId>io.papermc.paper</groupId>
 			<artifactId>paper-api</artifactId>
@@ -91,27 +108,8 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version> <!-- VERY IMPORTANT: CHECK 1.19-R0.1-SNAPSHOT WHICH HAS WEIRD FAILING TESTS!!!!! -->
+			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>4.6.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-shade</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<!-- This is literally just for testing, we're not actually packaging this -->
-		<dependency>
-			<groupId>de.tr7zw</groupId>
-			<artifactId>item-nbt-api</artifactId>
-			<version>2.11.1</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

@@ -315,3 +315,73 @@ CommandAPIBukkit.failWithAdventureComponent(...);
 ### Removal of the `EnvironmentArgument`
 
 The `EnvironmentArgument` has been removed in this update, as it was implemented incorrectly and is not fit for purpose. Instead, the CommandAPI has the more accurate `WorldArgument`.
+
+-----
+
+### Changes to the `TeamArgument`
+
+The `TeamArgument` has been updated to no longer use a `String` as its return type. Instead, you can now just use a `Team` object directly:
+
+<div class="multi-pre">
+
+```java,8.7.x
+new CommandAPICommand("team")
+    .withArguments(new TeamArgument("team"))
+    .executes((sender, args) -> {
+        String teamName = (String) args.get("team");
+        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+    })
+    .register();
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.0
+new CommandAPICommand("team")
+    .withArguments(new TeamArgument("team"))
+    .executes((sender, args) -> {
+        Team team = (Team) args.get("team");
+    })
+    .register();
+```
+
+</div>
+
+-----
+
+### Changes to the `ObjectiveArgument`
+
+The `ObjectiveArgument` has been updated to no longer use a `String` as its return type. Instead, you can now just use an `Objective` object directly:
+
+<div class="multi-pre">
+
+```java,8.7.x
+new CommandAPICommand("objective")
+    .withArguments(new ObjectiveArgument("objective"))
+    .executes((sender, args) -> {
+        String objectiveName = (String) args.get("objective");
+        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+    })
+    .register();
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.0
+new CommandAPICommand("objective")
+    .withArguments(new ObjectiveArgument("objective"))
+    .executes((sender, args) -> {
+        Objective objective = (Objective) args.get("objective");
+    })
+    .register();
+```
+
+</div>

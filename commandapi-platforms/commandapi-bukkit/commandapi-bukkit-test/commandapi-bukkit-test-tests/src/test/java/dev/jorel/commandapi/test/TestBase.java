@@ -10,8 +10,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -26,6 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
+import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 
 public abstract class TestBase {
 
@@ -50,6 +54,8 @@ public abstract class TestBase {
 		}
 		MockBukkit.unmock();
 	}
+
+	public static final PlayerCommandExecutor P_EXEC = (player, args) -> {};
 	
 	private void resetAllPotions() {
 		PotionEffectType[] arr = (PotionEffectType[]) MockNMS.getField(PotionEffectType.class, "byId", null);
@@ -114,6 +120,19 @@ public abstract class TestBase {
 				}
 			}
 		).collect(Collectors.toList()));
+	}
+	
+	public <T> void compareLists(Collection<T> list1, Collection<T> list2) {
+		Set<T> s1 = new LinkedHashSet<>(list1);
+		Set<T> s2 = new LinkedHashSet<>(list2);
+		
+		Set<T> s1_2 = new LinkedHashSet<>(list1);
+		Set<T> s2_2 = new LinkedHashSet<>(list2);
+		
+		s1.removeAll(s2);
+		s2_2.removeAll(s1_2);
+		System.out.println("List 1 has the following extra items: " + s1);
+		System.out.println("List 2 has the following extra items: " + s2_2);
 	}
 
 }
