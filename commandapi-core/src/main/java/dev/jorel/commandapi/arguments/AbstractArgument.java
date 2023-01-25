@@ -20,15 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.*;
-
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.AbstractArgumentTree;
+import dev.jorel.commandapi.CommandPermission;
 
 /**
  * The core abstract class for Command API arguments
@@ -291,7 +293,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * from {@code argument}
 	 */
 	public List<String> getEntityNames(Object argument) {
-		return Arrays.asList(new String[]{null});
+		return Collections.singletonList(null);
 	}
 
 	@Override
