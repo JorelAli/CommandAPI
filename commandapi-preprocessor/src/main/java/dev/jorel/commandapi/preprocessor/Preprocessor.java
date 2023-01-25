@@ -21,8 +21,6 @@
 package dev.jorel.commandapi.preprocessor;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -34,35 +32,35 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.tools.Diagnostic.Kind;
 
 /**
- * The main entry point for the CommandAPI annotation preprocessor
+ * The main entry point for the internal CommandAPI annotation preprocessor.
+ * This has nothing to do with registering commmands using annotations!
  */
 public class Preprocessor extends AbstractProcessor {
 
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
-		return new HashSet<String>(Arrays.asList(
+		return Set.of(
 			RequireField.class.getCanonicalName(),
 			RequireFields.class.getCanonicalName(),
 			NMSMeta.class.getCanonicalName(),
-			Differs.class.getCanonicalName()
-		));
+			Differs.class.getCanonicalName());
 	}
 
 	@Override
 	public SourceVersion getSupportedSourceVersion() {
 		return SourceVersion.latestSupported();
 	}
-	
+
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		//Handle single annotations of AssertField
-		for(Element element : roundEnv.getElementsAnnotatedWith(RequireField.class)) {
+		// Handle single annotations of AssertField
+		for (Element element : roundEnv.getElementsAnnotatedWith(RequireField.class)) {
 			processRequireField(element.getAnnotation(RequireField.class));
 		}
-		
-		//Handle multiple annotations of AssertField
-		for(Element element : roundEnv.getElementsAnnotatedWith(RequireFields.class)) {
-			for(RequireField requireField : element.getAnnotation(RequireFields.class).value()) {
+
+		// Handle multiple annotations of AssertField
+		for (Element element : roundEnv.getElementsAnnotatedWith(RequireFields.class)) {
+			for (RequireField requireField : element.getAnnotation(RequireFields.class).value()) {
 				processRequireField(requireField);
 			}
 		}
@@ -95,40 +93,54 @@ public class Preprocessor extends AbstractProcessor {
 		Class<?> in;
 		try {
 			in = field.in();
-		} catch(MirroredTypeException e) {
+		} catch (MirroredTypeException e) {
 			in = fromMirror(e);
 		}
-		
+
 		Class<?> type;
 		try {
 			type = field.ofType();
-		} catch(MirroredTypeException e) {
+		} catch (MirroredTypeException e) {
 			type = fromMirror(e);
 		}
 		
+		if(in == null || type == null) {
+			String message = String.format("Failed to initialize field %s %s.%s for @RequireField check. Somehow one of these is null? ",
+				field.ofType(),
+				field.in(),
+				field.name());
+			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
+			return;
+		}
+
 		Field classField;
 		try {
 			classField = in.getDeclaredField(field.name());
-		} catch (NoSuchFieldException | SecurityException e) {
-			String message = String.format("Field: %s %s.%s does not exist", type.getSimpleName(), in.getSimpleName(), field.name());
-			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
-			return;
 		} catch (NullPointerException e) {
-			String message = String.format("Field: %s ??.%s does not exist. The class for this field is also missing!", type.getSimpleName(), field.name());
+			String message = String.format("Field: %s ??.%s does not exist. The class for this field is also missing!",
+				type.getSimpleName(),
+				field.name());
+			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
+			return;
+		} catch (NoSuchFieldException | SecurityException e) {
+			String message = String.format("Field: %s %s.%s does not exist",
+				type.getSimpleName(),
+				in.getSimpleName(),
+				field.name());
 			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
 			return;
 		}
-		
-		if(!classField.getType().getCanonicalName().equals(type.getCanonicalName())) {
+
+		if (!classField.getType().getCanonicalName().equals(type.getCanonicalName())) {
 			String message = String.format("Field: %s %s.%s does not exist. Instead found field: %s %s.%s",
-					type.getCanonicalName(), 
-					in.getSimpleName(),
-					field.name(), 
-					classField.getType().getCanonicalName(),
-					in.getSimpleName(),
-					field.name());
+				type.getCanonicalName(),
+				in.getSimpleName(),
+				field.name(),
+				classField.getType().getCanonicalName(),
+				in.getSimpleName(),
+				field.name());
 			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
 		}
-		
+
 	}
 }

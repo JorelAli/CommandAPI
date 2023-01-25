@@ -36,6 +36,10 @@ import java.util.List;
  * @since 1.3
  */
 public class EntitySelectorArgument {
+	
+	private EntitySelectorArgument() {
+		throw new IllegalStateException("Use EntitySelectorArgument.OneEntity/OnePlayer/ManyEntities/ManyPlayers instead");
+	}
 
 	/**
 	 * An argument that represents a single entity
