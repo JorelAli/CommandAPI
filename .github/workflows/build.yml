@@ -6,9 +6,6 @@
 name: build
 on:
   push:
-    branches:
-      - dev/dev
-      - master
   pull_request:
     types: [opened, synchronize, reopened]
 
