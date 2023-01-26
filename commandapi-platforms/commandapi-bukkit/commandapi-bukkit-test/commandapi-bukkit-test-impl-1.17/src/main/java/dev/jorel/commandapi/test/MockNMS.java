@@ -84,9 +84,9 @@ public class MockNMS extends Enums {
 		super(baseNMS);
 
 		// Stub in our getMinecraftServer implementation
-		CommandAPIBukkit<?> nms = Mockito.spy(BASE_NMS);
+		CommandAPIBukkit<?> nms = Mockito.spy(super.baseNMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
-		BASE_NMS = nms;
+		super.baseNMS = nms;
 
 		// Initialize WorldVersion (game version)
 		SharedConstants.tryDetectVersion();
@@ -214,7 +214,7 @@ public class MockNMS extends Enums {
 
 	@Override
 	public String[] compatibleVersions() {
-		return BASE_NMS.compatibleVersions();
+		return baseNMS.compatibleVersions();
 	}
 
 	@Override
@@ -301,7 +301,7 @@ public class MockNMS extends Enums {
 	@Override
 	public void createDispatcherFile(File file, CommandDispatcher dispatcher)
 		throws IOException {
-		BASE_NMS.createDispatcherFile(file, dispatcher);
+		baseNMS.createDispatcherFile(file, dispatcher);
 	}
 
 	@Override

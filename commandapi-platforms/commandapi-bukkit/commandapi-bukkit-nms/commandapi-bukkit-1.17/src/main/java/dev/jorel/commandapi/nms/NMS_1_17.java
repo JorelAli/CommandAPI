@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Keyed;
 import org.bukkit.inventory.Recipe;
 
 import dev.jorel.commandapi.CommandAPI;
