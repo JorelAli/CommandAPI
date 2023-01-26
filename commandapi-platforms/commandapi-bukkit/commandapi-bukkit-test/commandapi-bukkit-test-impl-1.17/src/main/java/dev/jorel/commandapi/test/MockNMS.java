@@ -315,6 +315,7 @@ public class MockNMS extends Enums {
 		return MobEffect.byId(potionEffectType.getId()).getDescriptionId().replace("effect.minecraft.", "minecraft:");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<NamespacedKey> getAllRecipes() {
 		return recipeManager.getRecipeIds().map(k -> new NamespacedKey(k.getNamespace(), k.getPath())).toList();

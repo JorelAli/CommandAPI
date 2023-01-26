@@ -39,7 +39,6 @@ import java.util.function.ToIntFunction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -50,7 +49,6 @@ import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -364,11 +362,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
-	}
-
-	@Override
-	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 	
 	@Differs(from = "1.19.2", by = "Use of ResourceArgument")

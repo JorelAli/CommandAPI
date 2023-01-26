@@ -53,7 +53,6 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -521,11 +520,6 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentDimension.a(cmdCtx, key).getWorld();
-	}
-
-	@Override
-	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override

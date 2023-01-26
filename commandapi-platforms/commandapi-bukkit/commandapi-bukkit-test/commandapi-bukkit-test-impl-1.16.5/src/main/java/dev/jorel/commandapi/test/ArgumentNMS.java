@@ -319,11 +319,6 @@ public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Environment getEnvironment(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getEnvironment(cmdCtx, key);
-	}
-
-	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
 		return baseNMS.getFloatRange(cmdCtx, key);
 	}
