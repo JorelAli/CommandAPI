@@ -155,7 +155,8 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 	 */
 	@Override
 	public CommandArgument replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
-		return replaceSuggestions(suggestions);
+		replacements = SuggestionsBranch.suggest(suggestions);
+		return this;
 	}
 
 	/**

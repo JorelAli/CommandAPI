@@ -397,7 +397,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Fixed tags showing up in the <code>BiomeArgument</code> when they shouldn't have been doing so</li>
                     <li>Fixed <code>LocationArgument</code> with <code>BLOCK_POSITION</code> not returning locations in unloaded chunks</li>
                 </ul>
-                <b>Testing matrix:</b>
+                <b>Testing and validation:</b>
                 <ul>
                     <li>Created the testing matrix to perform multi-Minecraft-version testing</li>
                     <b>Bugs found (and fixed) as a result of the testing matrix:</b>
@@ -405,6 +405,12 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                         <li>Fixed <code>IntegerRangeArgument</code> and <code>FloatRangeArgument</code> not working on Minecraft 1.16.4 and 1.16.5</li>
                         <li>Fixed <code>RecipeArgument</code> not working on Minecraft 1.17</li>
                         <li>Fixed <code>TeamArgument</code> not working on Minecraft 1.17</li>
+                        <li>Fixed commands with no executors not being caught by the CommandAPI</li>
+                    </ul>
+                    <li>Integrated the CommandAPI repository with SonarCloud to identify bugs and improve the internal code</li>
+                    <b>Bugs found (and fixed) as a result of using SonarCloud:</b>
+                    <ul>
+                        <li>Fixed the <code>FunctionArgument</code> not correctly retrieving datapack (function) tags in 1.17+</li>
                     </ul>
                 </ul>
                 <b>Documentation changes:</b>

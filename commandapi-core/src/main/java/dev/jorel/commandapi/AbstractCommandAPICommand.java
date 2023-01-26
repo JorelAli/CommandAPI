@@ -20,17 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.GreedyArgument;
-import dev.jorel.commandapi.exceptions.GreedyArgumentException;
-import dev.jorel.commandapi.exceptions.OptionalArgumentException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+
+import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.GreedyArgument;
+import dev.jorel.commandapi.exceptions.GreedyArgumentException;
+import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
+import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -140,7 +139,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
-	public Impl withSubcommands(Impl... subcommands) {
+	public Impl withSubcommands(@SuppressWarnings("unchecked") Impl... subcommands) {
 		this.subcommands.addAll(Arrays.asList(subcommands));
 		return instance();
 	}
@@ -205,6 +204,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	// Expands subcommands into arguments. This method should be static (it
 	// shouldn't be accessing/depending on any of the contents of the current class instance)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static <Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>, Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender>
 	void flatten(Impl rootCommand, List<Argument> prevArguments, Impl subcommand) {
 		// Get the list of literals represented by the current subcommand. This
@@ -241,6 +241,25 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
+	
+	boolean hasAnyExecutors() {
+		if (this.executor.hasAnyExecutors()) {
+			return true;
+		} else {
+			for(Impl subcommand : this.subcommands) {
+				if (subcommand.hasAnyExecutors()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private void checkHasExecutors() {
+		if(!hasAnyExecutors()) {
+			throw new MissingCommandExecutorException(this.meta.commandName);
+		}
+	}
 
 	@Override
 	public void register() {
@@ -248,11 +267,13 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 
+		@SuppressWarnings("unchecked")
 		Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 
 		// Check GreedyArgument constraints
 		checkGreedyArgumentConstraints(argumentsArray);
-
+		checkHasExecutors();
+		
 		// Assign the command's permissions to arguments if the arguments don't already
 		// have one
 		for (Argument argument : argumentsArray) {
@@ -263,6 +284,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 		if (executor.hasAnyExecutors()) {
 			// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
+			@SuppressWarnings("unchecked")
 			CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
 			
 			// Create a List<Argument[]> that is used to register optional arguments
@@ -307,13 +329,14 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		// Check optional argument constraints
 		// They can only be at the end, no required argument can follow an optional argument
 		int firstOptionalArgumentIndex = -1;
-		for (int i = 0, optionalArgumentIndex = -1; i < argumentsArray.length; i++) {
+		boolean seenOptionalArgument = false;
+		for (int i = 0; i < argumentsArray.length; i++) {
 			if (argumentsArray[i].isOptional()) {
 				if (firstOptionalArgumentIndex == -1) {
 					firstOptionalArgumentIndex = i;
 				}
-				optionalArgumentIndex = i;
-			} else if (optionalArgumentIndex != -1) {
+				seenOptionalArgument = true;
+			} else if (seenOptionalArgument) {
 				// Argument is not optional
 				throw new OptionalArgumentException(meta.commandName);
 			}
@@ -324,6 +347,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		if (firstOptionalArgumentIndex != -1) {
 			for (int i = 0; i <= argumentsArray.length; i++) {
 				if (i >= firstOptionalArgumentIndex) {
+					@SuppressWarnings("unchecked")
 					Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
 					System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
 					argumentsToRegister.add(optionalArguments);

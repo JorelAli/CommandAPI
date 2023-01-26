@@ -15,6 +15,7 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
+import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 
 /**
  * Tests for command semantics
@@ -87,11 +88,21 @@ class CommandTests extends TestBase {
 	
 	@Test
 	void testNoExecutor() {
-		// TODO: Catch this case. Need to check if has no executor AND has no
-		//  subcommand or otherwise when .register() called
-		new CommandAPICommand("test")
-			.withArguments(new StringArgument("arg1"))
-			.register();
+		// This command has no executor, should complain because this isn't runnable
+		CommandAPICommand commandWithNoExecutors = new CommandAPICommand("test")
+			.withArguments(new StringArgument("arg1"));
+		
+		assertThrows(MissingCommandExecutorException.class, () -> {
+			commandWithNoExecutors.register();
+		});
+		
+		// This command has no subcommands, should complain because this isn't runnable
+		CommandAPICommand commandWithNoRunnableSubcommands = new CommandAPICommand("test")
+			.withSubcommand(new CommandAPICommand("sub"));
+		
+		assertThrows(MissingCommandExecutorException.class, () -> {
+			commandWithNoRunnableSubcommands.register();
+		});
 	}
 
 }
