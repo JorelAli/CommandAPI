@@ -6,7 +6,7 @@ import java.util.*
  * A mutable wrapper of an object, as a list
  *
  * @param <T>
-</T> */
+ */
 class Mut<T : Any> private constructor() {
 	private val value: Deque<Optional<T>>
 
