@@ -21,6 +21,7 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Keyed;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -505,5 +507,21 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	 */
 	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
 		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
+	}
+	
+	protected void registerBukkitRecipesSafely(Iterator<Recipe> recipes) {
+		Recipe recipe;
+		while (recipes.hasNext()) {
+			recipe = recipes.next();
+			try {
+				Bukkit.addRecipe(recipe);
+				if (recipe instanceof Keyed keyedRecipe) {
+					CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
+				}
+			} catch (IllegalStateException e) { // From CraftingManager - "Duplicate recipe ignored with ID %id%"
+				assert true; // Can't re-register registered recipes. Not an error.
+			}
+		}
+		
 	}
 }

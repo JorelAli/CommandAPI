@@ -12,6 +12,7 @@ import dev.jorel.commandapi.StringTooltip;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -125,13 +126,13 @@ public class ListArgumentCommon<T> extends Argument<List> {
 		for (String str : strArr) {
 			boolean addedItem = false;
 			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
-			for (IStringTooltip value : values.keySet()) {
-				if (value.getSuggestion().equals(str)) {
+			for (Entry<IStringTooltip, T> entry : values.entrySet()) {
+				if (entry.getKey().getSuggestion().equals(str)) {
 					if (allowDuplicates) {
-						list.add(values.get(value));
+						list.add(entry.getValue());
 					} else {
-						if (!list.contains(values.get(value))) {
-							list.add(values.get(value));
+						if (!list.contains(entry.getValue())) {
+							list.add(entry.getValue());
 						} else {
 							context.setCursor(cursor);
 							throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);

@@ -2248,7 +2248,7 @@ new CommandTree("signedit")
 
 public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
     Block block = player.getTargetBlock(null, 256);
-    if (block != null && block.getState() instanceof Sign sign) {
+    if (block.getState() instanceof Sign sign) {
         return sign;
     } else {
         throw CommandAPI.failWithString("You're not looking at a sign!");

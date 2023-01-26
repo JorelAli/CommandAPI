@@ -358,7 +358,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return getFunction(key);
+		return BASE_NMS.getFunction(key);
 	}
 
 	@Override
