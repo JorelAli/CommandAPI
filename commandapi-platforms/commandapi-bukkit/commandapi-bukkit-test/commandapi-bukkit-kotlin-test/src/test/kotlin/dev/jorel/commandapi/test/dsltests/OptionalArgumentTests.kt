@@ -58,6 +58,8 @@ class OptionalArgumentTests: TestBase() {
 
 	@Test
 	fun exceptionTestWithCommandAPICommandAndOptionalArgumentMethod() {
+		// This throws an OptionalArgumentException because
+		// a required argument is declared after an optional argument
 		assertThrows<OptionalArgumentException> {
 			commandAPICommand("test") {
 				optionalArgument(StringArgument("value"))

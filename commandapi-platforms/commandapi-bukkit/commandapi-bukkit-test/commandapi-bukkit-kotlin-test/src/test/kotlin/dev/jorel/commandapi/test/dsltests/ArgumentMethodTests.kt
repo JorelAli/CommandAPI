@@ -54,6 +54,9 @@ class ArgumentMethodTests : TestBase() {
 		server.dispatchCommand(player, "test world")
 		assertEquals("world", results.get())
 
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
+
 		assertNoMoreResults(results)
 	}
 
@@ -78,6 +81,9 @@ class ArgumentMethodTests : TestBase() {
 		// /test world
 		server.dispatchCommand(player, "test world")
 		assertEquals("world", results.get())
+
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
 
 		assertNoMoreResults(results)
 	}

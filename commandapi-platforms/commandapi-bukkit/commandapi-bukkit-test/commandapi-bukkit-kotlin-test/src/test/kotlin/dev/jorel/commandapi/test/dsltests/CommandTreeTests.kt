@@ -86,6 +86,12 @@ class CommandTreeTests : TestBase() {
 		server.dispatchCommand(player, "test two three")
 		assertEquals("/test two three", results.get())
 
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
+
+		// /test three
+		assertCommandFailsWith(player, "test three", "Incorrect argument for command at position 5: test <--[HERE]")
+
 		assertNoMoreResults(results)
 	}
 

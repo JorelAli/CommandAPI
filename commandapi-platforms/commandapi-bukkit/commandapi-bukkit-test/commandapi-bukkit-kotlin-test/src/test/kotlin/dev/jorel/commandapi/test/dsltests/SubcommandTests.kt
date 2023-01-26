@@ -58,6 +58,9 @@ class SubcommandTests : TestBase() {
 		server.dispatchCommand(player, "test two")
 		assertEquals("/test two", results.get())
 
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
+
 		assertNoMoreResults(results)
 	}
 
@@ -91,6 +94,9 @@ class SubcommandTests : TestBase() {
 		// /test two
 		server.dispatchCommand(player, "test two")
 		assertEquals("/test two", results.get())
+
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
 
 		assertNoMoreResults(results)
 	}
