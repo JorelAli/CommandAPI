@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 /**
  * An argument that represents a key-value pair.
+ * <p>
+ * The map has a key of type {@link String} and a value of type {@link String}
  *
  * @since 9.0.0
  *
@@ -83,35 +85,41 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 					keyBuilder.setLength(0);
 					isAKeyBeingBuilt = false;
 					isAValueBeingBuilt = true;
-				} else if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
-				} else {
-					keyBuilder.append(currentChar);
-					validateKey(visitedCharacters, keyPattern, keyBuilder);
+					continue;
 				}
+				if (currentChar == '"') {
+					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
+				}
+				keyBuilder.append(currentChar);
+				validateKey(visitedCharacters, keyPattern, keyBuilder);
 			} else if (isAValueBeingBuilt) {
 				if (isFirstValueCharacter) {
 					validateValueStart(currentChar, visitedCharacters);
 					isFirstValueCharacter = false;
-				} else if (currentChar == '\\') {
+					continue;
+				}
+				if (currentChar == '\\') {
 					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
 						valueBuilder.append('\\');
+						continue;
 					}
-				} else if (currentChar == '"') {
+					continue;
+				}
+				if (currentChar == '"') {
 					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
 						valueBuilder.append('"');
-					} else {
-						mapValue = valueMapper.apply(valueBuilder.toString());
-						valueBuilder.setLength(0);
-						isFirstValueCharacter = true;
-						results.put(mapKey, mapValue);
-						mapKey = null;
-
-						isAValueBeingBuilt = false;
+						continue;
 					}
-				} else {
-					valueBuilder.append(currentChar);
+					mapValue = valueMapper.apply(valueBuilder.toString());
+					valueBuilder.setLength(0);
+					isFirstValueCharacter = true;
+					results.put(mapKey, mapValue);
+					mapKey = null;
+
+					isAValueBeingBuilt = false;
+					continue;
 				}
+				valueBuilder.append(currentChar);
 			} else {
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;

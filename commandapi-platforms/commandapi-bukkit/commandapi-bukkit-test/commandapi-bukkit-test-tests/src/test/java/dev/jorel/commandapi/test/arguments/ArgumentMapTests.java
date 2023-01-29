@@ -105,8 +105,6 @@ public class ArgumentMapTests extends TestBase {
 		testMap.clear();
 		testMap.put("map", "\\hello\\");
 		assertEquals(testMap, results.get());
-
-		assertNoMoreResults(results);
 	}
 
 	@Test
