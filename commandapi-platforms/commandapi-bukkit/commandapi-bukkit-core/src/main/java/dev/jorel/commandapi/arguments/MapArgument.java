@@ -11,8 +11,6 @@ import java.util.regex.Pattern;
 
 /**
  * An argument that represents a key-value pair.
- * <p>
- * The map has a key of type {@link String} and a value of type {@link String}
  *
  * @since 9.0.0
  *
@@ -85,41 +83,35 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 					keyBuilder.setLength(0);
 					isAKeyBeingBuilt = false;
 					isAValueBeingBuilt = true;
-					continue;
-				}
-				if (currentChar == '"') {
+				} else if (currentChar == '"') {
 					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
+				} else {
+					keyBuilder.append(currentChar);
+					validateKey(visitedCharacters, keyPattern, keyBuilder);
 				}
-				keyBuilder.append(currentChar);
-				validateKey(visitedCharacters, keyPattern, keyBuilder);
 			} else if (isAValueBeingBuilt) {
 				if (isFirstValueCharacter) {
 					validateValueStart(currentChar, visitedCharacters);
 					isFirstValueCharacter = false;
-					continue;
-				}
-				if (currentChar == '\\') {
+				} else if (currentChar == '\\') {
 					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
 						valueBuilder.append('\\');
-						continue;
 					}
-					continue;
-				}
-				if (currentChar == '"') {
+				} else if (currentChar == '"') {
 					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
 						valueBuilder.append('"');
-						continue;
-					}
-					mapValue = valueMapper.apply(valueBuilder.toString());
-					valueBuilder.setLength(0);
-					isFirstValueCharacter = true;
-					results.put(mapKey, mapValue);
-					mapKey = null;
+					} else {
+						mapValue = valueMapper.apply(valueBuilder.toString());
+						valueBuilder.setLength(0);
+						isFirstValueCharacter = true;
+						results.put(mapKey, mapValue);
+						mapKey = null;
 
-					isAValueBeingBuilt = false;
-					continue;
+						isAValueBeingBuilt = false;
+					}
+				} else {
+					valueBuilder.append(currentChar);
 				}
-				valueBuilder.append(currentChar);
 			} else {
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;
