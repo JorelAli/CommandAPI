@@ -72,7 +72,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		boolean isAValueBeingBuilt = false;
 		boolean isFirstValueCharacter = true;
 
-		Pattern keyPattern = Pattern.compile("([a-zA-Z]+)");
+		Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\\.]+)");
 
 		StringBuilder keyBuilder = new StringBuilder();
 		StringBuilder valueBuilder = new StringBuilder();
@@ -165,7 +165,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		String context = visitedCharacters.toString();
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z!");
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers and periods!");
 	}
 
 	private CommandSyntaxException throwValueEarlyStart(StringBuilder visitedCharacters, String delimiter) {

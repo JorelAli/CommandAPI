@@ -136,13 +136,9 @@ public class ArgumentMapTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// Test invalid key
-		// /test map1:"test1"
-		assertCommandFailsWith(player, "test map1:\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z! at position 4: map1<--[HERE]");
-
 		// Test wrong delimiter
 		// /test map="test1"
-		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z! at position 4: map=<--[HERE]");
+		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods! at position 4: map=<--[HERE]");
 
 		// Test no delimiter
 		// /test map"test1"
@@ -189,6 +185,76 @@ public class ArgumentMapTests extends TestBase {
 		server.dispatchCommand(player, "test map:\"598\" age:\"18\" someThirdValue:\"19999\"");
 		testMap.put("someThirdValue", 19999);
 		assertEquals(testMap, results.get());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithFloatKey() {
+		Mut<HashMap<Float, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String>("map")
+				.withKeyType(MapArgumentKeyType.FLOAT)
+				.withValueMapper(s -> s)
+				.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set((HashMap<Float, String>) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test 3.5:"Hello World" 12.25:"This is a test!"
+		server.dispatchCommand(player, "test 3.5:\"Hello World\" 12.25:\"This is a test!\"");
+		HashMap<Float, String> testMap = new HashMap<>();
+		testMap.put(3.5F, "Hello World");
+		testMap.put(12.25F, "This is a test!");
+		assertEquals(testMap, results.get());
+
+		// /test 3.5:"Hello World" 12.25:"This is a test!" 6.25:"And this is a third value!"
+		server.dispatchCommand(player, "test 3.5:\"Hello World\" 12.25:\"This is a test!\" 6.25:\"And this is a third value!\"");
+		testMap.put(6.25F, "And this is a third value!");
+		assertEquals(testMap, results.get());
+
+		// /test 3,5:"Hello world!"
+		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods! at position 2: 3,<--[HERE]");
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithIntegerKey() {
+		Mut<HashMap<Integer, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String>("map")
+				.withKeyType(MapArgumentKeyType.INT)
+				.withValueMapper(s -> s)
+				.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set((HashMap<Integer, String>) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test 3:"Hello World" 12:"This is a test!"
+		server.dispatchCommand(player, "test 3:\"Hello World\" 12:\"This is a test!\"");
+		HashMap<Integer, String> testMap = new HashMap<>();
+		testMap.put(3, "Hello World");
+		testMap.put(12, "This is a test!");
+		assertEquals(testMap, results.get());
+
+		// /test 3:"Hello World" 12:"This is a test!" 6:"And this is a third value!"
+		server.dispatchCommand(player, "test 3:\"Hello World\" 12:\"This is a test!\" 6:\"And this is a third value!\"");
+		testMap.put(6, "And this is a third value!");
+		assertEquals(testMap, results.get());
+
+		// /test 3.5:"Hello world!"
+		assertThrows(NumberFormatException.class, () -> server.dispatchCommand(player, "test 3.5:\"Hello world!\""));
 
 		assertNoMoreResults(results);
 	}
