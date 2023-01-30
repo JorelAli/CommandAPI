@@ -50,6 +50,8 @@ public class ArgumentMapTests extends TestBase {
 			.withArguments(new MapArgumentBuilder<String>("map", ':')
 				.withKeyType(MapArgumentKeyType.STRING)
 				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
 				.build()
 			)
 			.executesPlayer((player, args) -> {
@@ -86,6 +88,8 @@ public class ArgumentMapTests extends TestBase {
 			.withArguments(new MapArgumentBuilder<String>("map", ':')
 				.withKeyType(MapArgumentKeyType.STRING)
 				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
 				.build()
 			)
 			.executesPlayer((player, args) -> {
@@ -117,6 +121,8 @@ public class ArgumentMapTests extends TestBase {
 				.withArguments(new MapArgumentBuilder<Integer>("map", '=')
 					.withKeyType(MapArgumentKeyType.STRING)
 					.withValueMapper(Integer::valueOf)
+					.withoutKeyList()
+					.withoutValueList()
 					.build()
 				)
 				.withArguments(new StringArgument("string"))
@@ -128,6 +134,8 @@ public class ArgumentMapTests extends TestBase {
 			.withArguments(new MapArgumentBuilder<String>("map", ':')
 				.withKeyType(MapArgumentKeyType.STRING)
 				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
 				.build()
 			)
 			.executesPlayer((player, args) -> {
@@ -161,6 +169,8 @@ public class ArgumentMapTests extends TestBase {
 			.withArguments(new MapArgumentBuilder<Integer>("map")
 				.withKeyType(MapArgumentKeyType.STRING)
 				.withValueMapper(Integer::valueOf)
+				.withoutKeyList()
+				.withoutValueList()
 				.build()
 			)
 			.executesPlayer((player, args) -> {
@@ -197,6 +207,8 @@ public class ArgumentMapTests extends TestBase {
 			.withArguments(new MapArgumentBuilder<String>("map")
 				.withKeyType(MapArgumentKeyType.FLOAT)
 				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
 				.build()
 			)
 			.executesPlayer((player, args) -> {
@@ -232,6 +244,8 @@ public class ArgumentMapTests extends TestBase {
 			.withArguments(new MapArgumentBuilder<String>("map")
 				.withKeyType(MapArgumentKeyType.INT)
 				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
 				.build()
 			)
 			.executesPlayer((player, args) -> {

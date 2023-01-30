@@ -2,6 +2,7 @@ package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -62,32 +63,111 @@ public class MapArgumentBuilder<V> {
 		 * @param valueMapper the mapping function that creates an instance of <code>V</code>
 		 * @return this map argument builder
 		 */
-		public MapArgumentBuilderFinished withValueMapper(Function<String, V> valueMapper) {
-			return new MapArgumentBuilderFinished(valueMapper);
+		public MapArgumentBuilderSuggestsKey withValueMapper(Function<String, V> valueMapper) {
+			return new MapArgumentBuilderSuggestsKey(valueMapper);
 		}
 
 		/**
 		 * An intermediary class for the {@link MapArgumentBuilder}
 		 */
-		public class MapArgumentBuilderFinished {
+		public class MapArgumentBuilderSuggestsKey {
 
 			private final Function<String, V> valueMapper;
 
-			public MapArgumentBuilderFinished(Function<String, V> valueMapper) {
+			public MapArgumentBuilderSuggestsKey(Function<String, V> valueMapper) {
 				this.valueMapper = valueMapper;
 			}
 
 			/**
-			 * Builds this {@link MapArgument}
+			 * Provides a list of values to suggest when a value was typed.
 			 *
-			 * @return a new {@link MapArgument}
+			 * @param keyList A list of keys to suggest.
+			 * @return this map argument builder
 			 */
-			public MapArgument<?, V> build() {
-				return switch (keyType) {
-					case STRING -> new MapArgument<String, V>(nodeName, delimiter, keyType, valueMapper);
-					case FLOAT -> new MapArgument<Float, V>(nodeName, delimiter, keyType, valueMapper);
-					case INT -> new MapArgument<Integer, V>(nodeName, delimiter, keyType, valueMapper);
-				};
+			public MapArgumentBuilderSuggestsValue withKeyList(List<String> keyList) {
+				return new MapArgumentBuilderSuggestsValue(keyList);
+			}
+
+			/**
+			 * When using this method, no key suggestions are displayed
+			 *
+			 * @return this map argument builder
+			 */
+			public MapArgumentBuilderSuggestsValue withoutKeyList() {
+				return withKeyList(List.of());
+			}
+
+			/**
+			 * An intermediary class for the {@link MapArgumentBuilder}
+			 */
+			public class MapArgumentBuilderSuggestsValue {
+
+				private final List<String> keyList;
+
+				public MapArgumentBuilderSuggestsValue(List<String> keyList) {
+					this.keyList = keyList;
+				}
+
+				/**
+				 * Provides a list of values to suggest after a key was typed. Using this method will not allow writing values more than once!
+				 * <p>
+				 * If you want to allow that, please use the {@link #withValueList(List, boolean)} method!
+				 *
+				 * @param valueList A list of values to suggest. The values need to be Strings, so they can be suggested
+				 * @return this map argument builder
+				 */
+				public MapArgumentBuilderFinished withValueList(List<String> valueList) {
+					return withValueList(valueList, false);
+				}
+
+				/**
+				 * Provides a list of values to suggest after a key was typed.
+				 *
+				 * @param valueList A list of values to suggest. The values need to be Strings, so they can be suggested
+				 * @param allowDuplicates Decides if a value can be written more than once
+				 * @return this map argument builder
+				 */
+				public MapArgumentBuilderFinished withValueList(List<String> valueList, boolean allowDuplicates) {
+					return new MapArgumentBuilderFinished(valueList, allowDuplicates);
+				}
+
+				/**
+				 * When using this method, no value suggestions are displayed!
+				 *
+				 * @return this map argument builder
+				 */
+				public MapArgumentBuilderFinished withoutValueList() {
+					return withValueList(List.of());
+				}
+
+				/**
+				 * An intermediary class for the {@link MapArgumentBuilder}
+				 */
+				public class MapArgumentBuilderFinished {
+
+					private final List<String> valueList;
+					private final boolean allowValueDuplicates;
+
+					public MapArgumentBuilderFinished(List<String> valueList, boolean allowValueDuplicates) {
+						this.valueList = valueList;
+						this.allowValueDuplicates = allowValueDuplicates;
+					}
+
+					/**
+					 * Builds this {@link MapArgument}
+					 *
+					 * @return a new {@link MapArgument}
+					 */
+					public MapArgument<?, V> build() {
+						return switch (keyType) {
+							case STRING -> new MapArgument<String, V>(nodeName, delimiter, keyType, valueMapper, keyList, valueList, allowValueDuplicates);
+							case FLOAT -> new MapArgument<Float, V>(nodeName, delimiter, keyType, valueMapper, keyList, valueList, allowValueDuplicates);
+							case INT -> new MapArgument<Integer, V>(nodeName, delimiter, keyType, valueMapper, keyList, valueList, allowValueDuplicates);
+						};
+					}
+
+				}
+
 			}
 
 		}
