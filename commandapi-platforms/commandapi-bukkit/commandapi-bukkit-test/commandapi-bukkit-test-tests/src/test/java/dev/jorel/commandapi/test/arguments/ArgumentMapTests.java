@@ -8,6 +8,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
+import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,8 +47,8 @@ public class ArgumentMapTests extends TestBase {
 		Mut<HashMap<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyMapper(s -> s)
+			.withArguments(new MapArgumentBuilder<String>("map", ':')
+				.withKeyType(MapArgumentKeyType.STRING)
 				.withValueMapper(s -> s)
 				.build()
 			)
@@ -82,8 +83,8 @@ public class ArgumentMapTests extends TestBase {
 		Mut<HashMap<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyMapper(s -> s)
+			.withArguments(new MapArgumentBuilder<String>("map", ':')
+				.withKeyType(MapArgumentKeyType.STRING)
 				.withValueMapper(s -> s)
 				.build()
 			)
@@ -113,8 +114,8 @@ public class ArgumentMapTests extends TestBase {
 		// A GreedyArgumentException should be thrown when it is not the last argument.
 		assertThrows(GreedyArgumentException.class, () -> {
 			new CommandAPICommand("test")
-				.withArguments(new MapArgumentBuilder<String, Integer>("map", '=')
-					.withKeyMapper(s -> s)
+				.withArguments(new MapArgumentBuilder<Integer>("map", '=')
+					.withKeyType(MapArgumentKeyType.STRING)
 					.withValueMapper(Integer::valueOf)
 					.build()
 				)
@@ -124,8 +125,8 @@ public class ArgumentMapTests extends TestBase {
 		});
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyMapper(s -> s)
+			.withArguments(new MapArgumentBuilder<String>("map", ':')
+				.withKeyType(MapArgumentKeyType.STRING)
 				.withValueMapper(s -> s)
 				.build()
 			)
@@ -150,6 +151,46 @@ public class ArgumentMapTests extends TestBase {
 		// Test without closing quotation mark
 		// /test map:"test1
 		assertCommandFailsWith(player, "test map:\"test1", "Could not parse command: A value has to end with a quotation mark! at position 10: map:\"test1<--[HERE]");
+
+		// Test without any quotation marks
+		// /test map:5
+		assertCommandFailsWith(player, "test map:5", "Could not parse command: A value has to start with a quotation mark! at position 4: map:<--[HERE]");
+	}
+
+	@Test
+	public void executionTestWithOtherKeyValuePairs() {
+		Mut<HashMap<String, Integer>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<Integer>("map")
+				.withKeyType(MapArgumentKeyType.STRING)
+				.withValueMapper(Integer::valueOf)
+				.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set((HashMap<String, Integer>) args.get("map"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test map:"598"
+		server.dispatchCommand(player, "test map:\"598\"");
+		Map<String, Integer> testMap = new HashMap<>();
+		testMap.put("map", 598);
+		assertEquals(testMap, results.get());
+
+		// /test map:"598" age:"18"
+		server.dispatchCommand(player, "test map:\"598\" age:\"18\"");
+		testMap.put("age", 18);
+		assertEquals(testMap, results.get());
+
+		// /test map:"598" age:"18" someThirdValue:"19999"
+		server.dispatchCommand(player, "test map:\"598\" age:\"18\" someThirdValue:\"19999\"");
+		testMap.put("someThirdValue", 19999);
+		assertEquals(testMap, results.get());
+
+		assertNoMoreResults(results);
 	}
 
 }

@@ -4,6 +4,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 
 import java.util.HashMap;
 import java.util.function.Function;
@@ -26,7 +27,7 @@ import java.util.regex.Pattern;
 public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgument {
 
 	private final char delimiter;
-	private final Function<String, K> keyMapper;
+	private final Function<String, ?> keyMapper;
 	private final Function<String, V> valueMapper;
 
 	/**
@@ -35,12 +36,17 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 	 * @param nodeName the name to assign to this argument node
 	 * @param delimiter This is used to separate key-value pairs
 	 */
-	MapArgument(String nodeName, char delimiter, Function<String, K> keyMapper, Function<String, V> valueMapper) {
+	MapArgument(String nodeName, char delimiter, MapArgumentKeyType keyType, Function<String, V> valueMapper) {
 		super(nodeName, StringArgumentType.greedyString());
 
 		this.delimiter = delimiter;
-		this.keyMapper = keyMapper;
 		this.valueMapper = valueMapper;
+
+		this.keyMapper = switch (keyType) {
+			case STRING -> (s -> s);
+			case INT -> (Integer::valueOf);
+			case FLOAT -> (Float::valueOf);
+		};
 	}
 
 	@Override
@@ -53,6 +59,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		return CommandAPIArgumentType.MAP;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <Source> HashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		String rawValues = cmdCtx.getArgument(key, String.class);
@@ -78,7 +85,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
 				if (currentChar == delimiter) {
-					mapKey = keyMapper.apply(keyBuilder.toString());
+					mapKey = (K) keyMapper.apply(keyBuilder.toString());
 
 					// No need to check the key here because we already know it only consists of letters
 

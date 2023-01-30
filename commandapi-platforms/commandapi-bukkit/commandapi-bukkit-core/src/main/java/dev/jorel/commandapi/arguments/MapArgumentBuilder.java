@@ -1,14 +1,15 @@
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
+
 import java.util.function.Function;
 
 /**
  * A builder to create a {@link MapArgument}
  *
- * @param <K>
- * @param <V>
+ * @param <V> The type of values this map should contain
  */
-public class MapArgumentBuilder<K, V> {
+public class MapArgumentBuilder<V> {
 
 	private final String nodeName;
 	private final char delimiter;
@@ -39,8 +40,8 @@ public class MapArgumentBuilder<K, V> {
 	 *
 	 * @return this map argument builder
 	 */
-	public MapArgumentBuilderValueMapper withKeyMapper(Function<String, K> keyMapper) {
-		return new MapArgumentBuilderValueMapper(keyMapper);
+	public MapArgumentBuilderValueMapper withKeyType(MapArgumentKeyType keyType) {
+		return new MapArgumentBuilderValueMapper(keyType);
 	}
 
 	/**
@@ -48,10 +49,10 @@ public class MapArgumentBuilder<K, V> {
 	 */
 	public class MapArgumentBuilderValueMapper {
 
-		private final Function<String, K> keyMapper;
+		private final MapArgumentKeyType keyType;
 
-		public MapArgumentBuilderValueMapper(Function<String, K> keyMapper) {
-			this.keyMapper = keyMapper;
+		public MapArgumentBuilderValueMapper(MapArgumentKeyType keyType) {
+			this.keyType = keyType;
 		}
 
 		/**
@@ -81,8 +82,12 @@ public class MapArgumentBuilder<K, V> {
 			 *
 			 * @return a new {@link MapArgument}
 			 */
-			public MapArgument<K, V> build() {
-				return new MapArgument<>(nodeName, delimiter, keyMapper, valueMapper);
+			public MapArgument<?, V> build() {
+				return switch (keyType) {
+					case STRING -> new MapArgument<String, V>(nodeName, delimiter, keyType, valueMapper);
+					case FLOAT -> new MapArgument<Float, V>(nodeName, delimiter, keyType, valueMapper);
+					case INT -> new MapArgument<Integer, V>(nodeName, delimiter, keyType, valueMapper);
+				};
 			}
 
 		}
