@@ -15,6 +15,9 @@ import java.util.regex.Pattern;
  *
  * @since 9.0.0
  *
+ * @param <K> The type of keys this map will contain
+ * @param <V> The type of values this map will contain
+ *
  * @apiNote Returns a {@link HashMap} object
  */
 @SuppressWarnings("rawtypes")
