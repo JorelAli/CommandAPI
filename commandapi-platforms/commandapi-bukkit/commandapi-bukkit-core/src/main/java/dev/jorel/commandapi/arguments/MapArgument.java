@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
 
 /**
  * An argument that represents a key-value pair.
- * <p>
- * The map has a key of type {@link String} and a value of type {@link String}
  *
  * @since 9.0.0
  *
