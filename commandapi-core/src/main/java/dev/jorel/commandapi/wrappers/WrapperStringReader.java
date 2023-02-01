@@ -177,4 +177,22 @@ public class WrapperStringReader {
 			throw new WrapperCommandSyntaxException(e);
 		}
 	}
+
+	// Comparison methods
+	@Override
+	public boolean equals(Object other) {
+		if (this == other) return true;
+		if (!(other instanceof WrapperStringReader wsr)) return false;
+		return this.stringReader.equals(wsr.stringReader);
+	}
+
+	@Override
+	public int hashCode() {
+		return stringReader.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return stringReader.toString();
+	}
 }
