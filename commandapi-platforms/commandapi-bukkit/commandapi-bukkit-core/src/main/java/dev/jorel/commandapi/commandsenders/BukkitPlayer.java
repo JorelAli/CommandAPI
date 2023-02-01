@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.commandsenders;
 import org.bukkit.entity.Player;
 
-public class BukkitPlayer extends AbstractPlayer<Player> implements BukkitCommandSender<Player> {
+public class BukkitPlayer implements AbstractPlayer<Player>, BukkitCommandSender<Player> {
 
 	private final Player player;
 	

@@ -1053,6 +1053,10 @@ private static class Economy {
     static String getBalance(Player player) {
         throw new UnsupportedOperationException();
     }
+
+    static void resetBalance(Player target) {
+        throw new UnsupportedOperationException();
+    }
 }
 
 void permissions4() {
@@ -1097,7 +1101,9 @@ new CommandAPICommand("economy")
     .withArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
         Player target = (Player) args.get(0);
+
         // Reset target balance here
+        Economy.resetBalance(target);
     })
     .register();
 /* ANCHOR_END: permissions4 */

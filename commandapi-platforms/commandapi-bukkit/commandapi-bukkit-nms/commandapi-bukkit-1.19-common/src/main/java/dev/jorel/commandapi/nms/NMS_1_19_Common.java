@@ -191,6 +191,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
+@SuppressWarnings("resource")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
 	private static final VarHandle SimpleHelpMap_helpTopics;

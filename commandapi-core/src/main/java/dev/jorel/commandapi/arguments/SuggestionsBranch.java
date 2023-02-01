@@ -66,6 +66,7 @@ public class SuggestionsBranch<CommandSender> {
 		return getNextSuggestion(sender, previousArguments, new StringReader(String.join(" ", previousArguments)), new ArrayList<>(), new StringBuilder());
 	}
 
+	@SuppressWarnings("unchecked")
 	private ArgumentSuggestions<CommandSender> getNextSuggestion(CommandSender sender, String[] previousArguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) throws CommandSyntaxException {
 		if (branches.isEmpty() && suggestions.isEmpty()) {
 			return null;

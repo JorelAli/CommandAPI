@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Recipe;
@@ -48,6 +49,7 @@ public class NMS_1_17_R1 extends NMS_1_17_Common {
 		return new String[] { "1.17.1" };
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
@@ -88,7 +90,18 @@ public class NMS_1_17_R1 extends NMS_1_17_Common {
 			registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
+			StringWriter stringWriter = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(stringWriter);
+			e.printStackTrace(printWriter);
+
+			CommandAPI.logError(
+				"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
+					+ stringWriter.toString());
+		
+			// (╯°□°)╯︵ ┻━┻
+			Thread.currentThread().interrupt();
+		} catch (ExecutionException e) {
 			StringWriter stringWriter = new StringWriter();
 			PrintWriter printWriter = new PrintWriter(stringWriter);
 			e.printStackTrace(printWriter);

@@ -395,6 +395,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * multiliteral arguments were present (and expanded) and returns false if
 	 * multiliteral arguments were not present.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean expandMultiLiterals(CommandMetaData<CommandSender> meta, final Argument[] args,
 			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
 
@@ -705,7 +706,10 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		if (file != null) {
 			try {
 				file.getParentFile().mkdirs();
-				file.createNewFile();
+				if (file.createNewFile()) {
+					// Cool, we've created the file
+					assert true;
+				}
 			} catch (IOException e) {
 				CommandAPI.logError("Failed to create the required directories for " + file.getName() + ": " + e.getMessage());
 				return;
