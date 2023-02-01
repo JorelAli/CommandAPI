@@ -19,7 +19,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link TeamArgument}
  */
-public class ArgumentTeamTests extends TestBase {
+class ArgumentTeamTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -40,7 +40,7 @@ public class ArgumentTeamTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithTeamArgument() {
+	void executionTestWithTeamArgument() {
 		Mut<Team> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -70,7 +70,7 @@ public class ArgumentTeamTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithTeamArgument() {
+	void suggestionTestWithTeamArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new TeamArgument("team"))
 			.executesPlayer((player, args) -> {

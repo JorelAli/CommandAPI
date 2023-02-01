@@ -77,10 +77,11 @@ public class AdventureChatArgument extends Argument<Component> implements Greedy
 		final CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		Component component = CommandAPIBukkit.<CommandSourceStack>get().getAdventureChat(cmdCtx, key);
 
-		if (this.usePreview && getPreview().isPresent() && sender instanceof Player player) {
+		Optional<PreviewableFunction<Component>> previewOptional = getPreview();
+		if (this.usePreview && previewOptional.isPresent() && sender instanceof Player player) {
 			try {
-				Component previewComponent = getPreview().get()
-					.generatePreview(new PreviewInfo<Component>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+				Component previewComponent = previewOptional.get()
+					.generatePreview(new PreviewInfo<>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 
 				component = previewComponent;
 			} catch (WrapperCommandSyntaxException e) {

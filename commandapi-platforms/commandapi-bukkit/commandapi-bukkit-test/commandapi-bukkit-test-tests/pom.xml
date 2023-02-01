@@ -66,12 +66,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>5.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.mojang</groupId>
 			<artifactId>brigadier</artifactId>
 			<version>1.0.17</version>
@@ -170,16 +164,6 @@
 					<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
 					<version>${project.version}</version>
 				</dependency>
-				<!-- <dependency>
-					<groupId>com.github.seeseemelk</groupId>
-					<artifactId>MockBukkit-v1.18</artifactId>
-					<version>2.27.0</version>
-				</dependency> -->
-				<!--<dependency>
-					<groupId>io.papermc.paper</groupId>
-					<artifactId>paper-api</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
-				</dependency>-->
 				<dependency>
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
@@ -212,21 +196,12 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
-			<!-- 
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation> -->
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.16.5</artifactId>
 					<version>${project.version}</version>
 				</dependency>
-				<!-- <dependency>
-					<groupId>com.github.seeseemelk</groupId>
-					<artifactId>MockBukkit-v1.18</artifactId>
-					<version>2.27.0</version>
-				</dependency> -->
 				<dependency>
 					<groupId>com.destroystokyo.paper</groupId>
 					<artifactId>paper-api</artifactId>

@@ -20,6 +20,10 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
+
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -45,6 +49,9 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 
 	private final CustomArgumentInfoParser<T, B> infoParser;
 	private final Argument<B> base;
+
+	private static final String INPUT = "%input%";
+	private static final String FULL_INPUT = "%finput%";
 
 	/**
 	 * Creates a CustomArgument with a valid parser, with an underlying base
@@ -92,20 +99,20 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 
 	@Override
 	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
-			throws CommandSyntaxException {
+		throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
 		final B parsedInput = base.parseArgumentHandleError(cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo<B>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
-					previousArgs, customresult, parsedInput));
+			return infoParser.apply(new CustomArgumentInfo<>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
+				previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
 		} catch (Exception e) {
 			String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
-					.appendArgInput().appendHere().toString().replace("%input%", customresult)
-					.replace("%finput%", cmdCtx.getInput());
+				.appendArgInput().appendHere().toString().replace(INPUT, customresult)
+				.replace(FULL_INPUT, cmdCtx.getInput());
 			throw new SimpleCommandExceptionType(() -> errorMsg).create();
 		}
 	}
@@ -113,7 +120,10 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 	/**
 	 * MessageBuilder is used to create error messages for invalid argument inputs
 	 */
-	public static class MessageBuilder {
+	public static class MessageBuilder implements Serializable {
+
+		private static final long serialVersionUID = 838497662821791798L;
+
 		StringBuilder builder;
 
 		/**
@@ -144,7 +154,7 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 		 * @return A reference to this object
 		 */
 		public MessageBuilder appendArgInput() {
-			builder.append("%input%");
+			builder.append(INPUT);
 			return this;
 		}
 
@@ -159,7 +169,7 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 		 * @return A reference to this object
 		 */
 		public MessageBuilder appendFullInput() {
-			builder.append("%finput%");
+			builder.append(FULL_INPUT);
 			return this;
 		}
 
@@ -248,11 +258,9 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 		public CommandSyntaxException toCommandSyntax(String result, CommandContext<?> cmdCtx) {
 			if (errorMessage == null) {
 				// Deal with MessageBuilder
-				String errorMsg = errorMessageBuilder.toString().replace("%input%", result).replace("%finput%",
-						cmdCtx.getInput());
-				return new SimpleCommandExceptionType(() -> {
-					return errorMsg;
-				}).create();
+				String errorMsg = errorMessageBuilder.toString().replace(INPUT, result).replace(FULL_INPUT,
+					cmdCtx.getInput());
+				return new SimpleCommandExceptionType(() -> errorMsg).create();
 			} else {
 				// Deal with String
 				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
@@ -274,28 +282,59 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 	 * @param currentInput the current input, when parsed with the underlying base
 	 *                     argument.
 	 */
-	public record CustomArgumentInfo<B> (
-			/**
-			 * sender - the sender that types this argument
-			 */
-			CommandSender sender,
+	public record CustomArgumentInfo<B>(
+		/**
+		 * sender - the sender that types this argument
+		 */
+		CommandSender sender,
 
-			/**
-			 * previousArgs - an array of previously declared (parsed) arguments. This can
-			 * be used as if it were arguments in a command executor method
-			 */
-			Object[] previousArgs,
+		/**
+		 * previousArgs - an array of previously declared (parsed) arguments. This can
+		 * be used as if it were arguments in a command executor method
+		 */
+		Object[] previousArgs,
 
-			/**
-			 * input - the current input which the user has typed for this argument
-			 */
-			String input,
+		/**
+		 * input - the current input which the user has typed for this argument
+		 */
+		String input,
 
-			/**
-			 * currentInput - the current input, when parsed with the underlying base
-			 * argument.
-			 */
-			B currentInput) {
+		/**
+		 * currentInput - the current input, when parsed with the underlying base
+		 * argument.
+		 */
+		B currentInput) {
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + Arrays.deepHashCode(previousArgs);
+			result = prime * result + Objects.hash(currentInput, input, sender);
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (!(obj instanceof CustomArgumentInfo)) {
+				return false;
+			}
+			@SuppressWarnings("rawtypes")
+			CustomArgumentInfo other = (CustomArgumentInfo) obj;
+			return Objects.equals(currentInput, other.currentInput) &&
+				Objects.equals(input, other.input) &&
+				Arrays.deepEquals(previousArgs, other.previousArgs) &&
+				Objects.equals(sender, other.sender);
+		}
+
+		@Override
+		public String toString() {
+			return "CustomArgumentInfo [sender=" + sender + ", previousArgs=" + Arrays.toString(previousArgs) + ", input=" + input + ", currentInput=" + currentInput + "]";
+		}
+		
 	}
 
 	/**

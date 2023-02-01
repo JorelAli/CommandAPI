@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +35,7 @@ import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 public abstract class TestBase {
 
 	public CommandAPIServerMock server;
-	public Main plugin;
+	public JavaPlugin plugin;
 	public MCVersion version;
 	
 	public TestBase() {
@@ -42,37 +43,42 @@ public abstract class TestBase {
 	}
 
 	public void setUp() {
-		resetAllPotions();
+		setUp(Main.class);
+	}
+
+	public <T extends JavaPlugin> void setUp(Class<T> pluginClass) {
+		// resetAllPotions();
 		server = MockBukkit.mock(new CommandAPIServerMock());
-		plugin = MockBukkit.load(Main.class);
+		plugin = MockBukkit.load(pluginClass);
 	}
 
 	public void tearDown() {
-		Bukkit.getScheduler().cancelTasks(plugin);
-		if (plugin != null) {
-			plugin.onDisable();
+		if(server != null) {
+			Bukkit.getScheduler().cancelTasks(plugin);
+			if (plugin != null) {
+				plugin.onDisable();
+			}
+			MockBukkit.unmock();
 		}
-		MockBukkit.unmock();
 	}
 
 	public static final PlayerCommandExecutor P_EXEC = (player, args) -> {};
 	
 	private void resetAllPotions() {
-		PotionEffectType[] arr = (PotionEffectType[]) MockNMS.getField(PotionEffectType.class, "byId", null);
+		PotionEffectType[] arr = MockPlatform.getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);
 		for(int i = 0; i < arr.length; i++) {
 			arr[i] = null;
 		}
-		@SuppressWarnings("unchecked")
-		Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) MockNMS.getField(PotionEffectType.class, "byName", null);
-		byName.clear();
+		
+		MockPlatform.getFieldAs(PotionEffectType.class, "byName", null, Map.class).clear();
 		
 		@SuppressWarnings("unchecked")
-		Map<String, PotionEffectType> byKey = (Map<String, PotionEffectType>) MockNMS.getField(PotionEffectType.class, "byKey", null);
+		Map<String, PotionEffectType> byKey = MockPlatform.getFieldAs(PotionEffectType.class, "byName", null, Map.class);
 		if(byKey != null) {
 			byKey.clear();
 		}
 		
-		MockNMS.setField(PotionEffectType.class, "acceptingNew", null, true);
+		MockPlatform.setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
 	public <T> void assertStoresResult(CommandSender sender, String command, Mut<T> queue, T expected) {

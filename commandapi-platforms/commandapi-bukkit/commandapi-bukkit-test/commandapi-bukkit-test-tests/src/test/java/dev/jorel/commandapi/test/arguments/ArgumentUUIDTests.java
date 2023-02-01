@@ -19,7 +19,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link UUIDArgument}
  */
-public class ArgumentUUIDTests extends TestBase {
+class ArgumentUUIDTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -68,7 +68,7 @@ public class ArgumentUUIDTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithUUIDArgument() {
+	void suggestionTestWithUUIDArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new UUIDArgument("uuid"))
 			.executesPlayer((player, args) -> {

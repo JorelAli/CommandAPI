@@ -59,6 +59,7 @@ import net.minecraft.server.v1_16_R3.ParticleParamRedstone;
 public class NMS_1_16_R3 extends NMS_1_16_4_R3 {
 
 	@Differs(from = "1.16.4", by = "Use of non-deprecated NamespacedKey.fromString method")
+	@Override
 	protected NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getKey());
 	}

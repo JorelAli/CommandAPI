@@ -41,6 +41,8 @@ import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
  * Main CommandAPI plugin entrypoint
  */
 public class CommandAPIMain extends JavaPlugin {
+	
+	private static final String PLUGINS_TO_CONVERT = "plugins-to-convert";
 
 	@Override
 	public void onLoad() {
@@ -77,14 +79,18 @@ public class CommandAPIMain extends JavaPlugin {
 		MinecraftVersion.disableUpdateCheck();
 
 		// Convert all plugins to be converted
-		if (!fileConfig.getList("plugins-to-convert").isEmpty()
-			&& fileConfig.getMapList("plugins-to-convert").isEmpty()) {
+		if (!fileConfig.getList(PLUGINS_TO_CONVERT).isEmpty()
+			&& fileConfig.getMapList(PLUGINS_TO_CONVERT).isEmpty()) {
 			CommandAPI.logError("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
 		}
 
+		convertCommands(fileConfig);
+	}
+	
+	private void convertCommands(FileConfiguration fileConfig) {
 		// Load all plugins at the same time
 		Map<JavaPlugin, String[]> pluginsToConvert = new HashMap<>();
-		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
+		for (Map<?, ?> map : fileConfig.getMapList(PLUGINS_TO_CONVERT)) {
 			String[] pluginCommands;
 			if (map.values().size() == 1 && map.values().iterator().next() == null) {
 				pluginCommands = new String[0];
@@ -94,19 +100,14 @@ public class CommandAPIMain extends JavaPlugin {
 				pluginCommands = commands.toArray(new String[0]);
 			}
 
-			String pluginName = (String) map.keySet().iterator().next();
-			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if (plugin != null) {
-				if (plugin instanceof JavaPlugin javaPlugin) {
-					pluginsToConvert.put(javaPlugin, pluginCommands);
-				} else {
-					new InvalidPluginException("Plugin " + pluginName + " is not a JavaPlugin!").printStackTrace();
-				}
-			} else {
-				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
-					.printStackTrace();
+			// Get the plugin, if it doesn't exist, scream in the console (but
+			// don't crash, we want to continue!)
+			final JavaPlugin plugin = getAndValidatePlugin((String) map.keySet().iterator().next());
+			if(plugin != null) {
+				pluginsToConvert.put(plugin, pluginCommands);
 			}
 		}
+
 		// Convert plugin commands
 		for (Entry<JavaPlugin, String[]> pluginToConvert : pluginsToConvert.entrySet()) {
 			if (pluginToConvert.getValue().length == 0) {
@@ -145,6 +146,21 @@ public class CommandAPIMain extends JavaPlugin {
 				sender.sendMessage("We will consider your feedback: \"" + args.get(1) + "\"");
 			})
 			.register();
+	}
+	
+	private JavaPlugin getAndValidatePlugin(String pluginName) {
+		Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+		if (plugin != null) {
+			if (plugin instanceof JavaPlugin javaPlugin) {
+				return javaPlugin;
+			} else {
+				new InvalidPluginException("Plugin " + pluginName + " is not a JavaPlugin!").printStackTrace();
+			}
+		} else {
+			new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
+				.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

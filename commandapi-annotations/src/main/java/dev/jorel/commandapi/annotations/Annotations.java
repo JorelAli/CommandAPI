@@ -109,7 +109,7 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 @AutoService(Processor.class)
 public class Annotations extends AbstractProcessor {
 
-	private final Class<?>[] ARGUMENT_ANNOTATIONS = new Class<?>[] { AAdvancementArgument.class,
+	private static final Class<?>[] ARGUMENT_ANNOTATIONS = new Class<?>[] { AAdvancementArgument.class,
 		AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
 		AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
 		ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
@@ -144,7 +144,7 @@ public class Annotations extends AbstractProcessor {
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		for (Element element : roundEnv.getElementsAnnotatedWith(Command.class)) {
 			try {
-				processCommand(roundEnv, element);
+				processCommand(element);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -183,8 +183,7 @@ public class Annotations extends AbstractProcessor {
 				imports.add(CommandPermission.class.getCanonicalName());
 			}
 			
-			if(methodElement instanceof ExecutableElement) {
-				ExecutableElement method = (ExecutableElement) methodElement;
+			if(methodElement instanceof ExecutableElement method) {
 				for(VariableElement parameter : method.getParameters()) {
 					Annotation argument = getArgument(parameter);
 					if(argument != null) {
@@ -221,10 +220,9 @@ public class Annotations extends AbstractProcessor {
 		String previousImport = "";
 		for(String import_ : calculateImports(classElement)) {
 			// Separate different packages
-			if(previousImport.contains(".") && import_.contains(".")) {
-				if(!previousImport.substring(0, previousImport.indexOf(".")).equals(import_.substring(0, import_.indexOf(".")))) {
+			if(previousImport.contains(".") && import_.contains(".") &&
+				!previousImport.substring(0, previousImport.indexOf(".")).equals(import_.substring(0, import_.indexOf(".")))) {
 					out.println();
-				}
 			}
 			// Don't import stuff like "String"
 			if(!import_.contains(".") || import_.contains("<")) {
@@ -417,7 +415,7 @@ public class Annotations extends AbstractProcessor {
 		}
 	}
 
-	private <T extends Annotation> void processCommand(RoundEnvironment roundEnv, Element classElement) throws IOException {
+	private void processCommand(Element classElement) throws IOException {
 		TypeElement commandClass = (TypeElement) classElement;
 		JavaFileObject builderFile = processingEnv.getFiler().createSourceFile(commandClass.getQualifiedName() + "$Command");
 		int indent = 0;

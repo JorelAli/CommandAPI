@@ -20,7 +20,7 @@ import java.util.Locale;
  * {@link IntegerArgument} etc.
  */
 @SuppressWarnings("null")
-public class ArgumentPrimitiveTests extends TestBase {
+class ArgumentPrimitiveTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithBooleanArgument() {
+	void executionTestWithBooleanArgument() {
 		Mut<Boolean> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -68,7 +68,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithIntegerArgument() {
+	void executionTestWithIntegerArgument() {
 		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -113,7 +113,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithBoundedIntegerArgument() {
+	void executionTestWithBoundedIntegerArgument() {
 		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -140,7 +140,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithDoubleBoundedIntegerArgument() {
+	void executionTestWithDoubleBoundedIntegerArgument() {
 		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -174,7 +174,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithFloatArgument() {
+	void executionTestWithFloatArgument() {
 		Mut<Float> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -218,7 +218,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithFloatBoundedArgument() {
+	void executionTestWithFloatBoundedArgument() {
 		Mut<Float> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -252,7 +252,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithDoubleArgument() {
+	void executionTestWithDoubleArgument() {
 		Mut<Double> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -296,7 +296,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithDoubleBoundedArgument() {
+	void executionTestWithDoubleBoundedArgument() {
 		Mut<Double> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -330,7 +330,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithLongArgument() {
+	void executionTestWithLongArgument() {
 		Mut<Long> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -375,7 +375,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithBoundedLongArgument() {
+	void executionTestWithBoundedLongArgument() {
 		Mut<Long> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -402,7 +402,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithDoubleBoundedLongArgument() {
+	void executionTestWithDoubleBoundedLongArgument() {
 		Mut<Long> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -440,7 +440,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithBooleanArgument() {
+	void suggestionTestWithBooleanArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new BooleanArgument("value"))
 			.executesPlayer((player, args) -> {
@@ -467,7 +467,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithIntegerArgument() {
+	void suggestionTestWithIntegerArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new IntegerArgument("value"))
 			.executesPlayer(P_EXEC)
@@ -480,7 +480,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithLongArgument() {
+	void suggestionTestWithLongArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new LongArgument("value"))
 			.executesPlayer(P_EXEC)
@@ -493,7 +493,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithFloatArgument() {
+	void suggestionTestWithFloatArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new FloatArgument("value"))
 			.executesPlayer(P_EXEC)
@@ -506,7 +506,7 @@ public class ArgumentPrimitiveTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithDoubleArgument() {
+	void suggestionTestWithDoubleArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new DoubleArgument("value"))
 			.executesPlayer(P_EXEC)

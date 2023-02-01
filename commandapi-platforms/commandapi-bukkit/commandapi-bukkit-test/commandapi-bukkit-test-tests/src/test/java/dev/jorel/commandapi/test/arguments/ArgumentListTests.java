@@ -20,7 +20,7 @@ import dev.jorel.commandapi.test.TestBase;
  * Tests for the {@link ListArgument}
  */
 @SuppressWarnings("unchecked")
-public class ArgumentListTests extends TestBase {
+class ArgumentListTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentListTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithListArgument() {
+	void executionTestWithListArgument() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -72,7 +72,7 @@ public class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithListArgumentWithDuplicates() {
+	void executionTestWithListArgumentWithDuplicates() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -104,7 +104,7 @@ public class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithListArgumentWithConstantList() {
+	void executionTestWithListArgumentWithConstantList() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -135,7 +135,7 @@ public class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithListArgumentWithFunctionList() {
+	void executionTestWithListArgumentWithFunctionList() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -174,7 +174,7 @@ public class ArgumentListTests extends TestBase {
 	 ***************************************/
 
 	@Test
-	public void executionTestWithListTextArgument() {
+	void executionTestWithListTextArgument() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -205,7 +205,7 @@ public class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithListTextArgumentWithDuplicates() {
+	void executionTestWithListTextArgumentWithDuplicates() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -237,7 +237,7 @@ public class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithListTextArgumentWithConstantList() {
+	void executionTestWithListTextArgumentWithConstantList() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -268,7 +268,7 @@ public class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithListTextArgumentWithFunctionList() {
+	void executionTestWithListTextArgumentWithFunctionList() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -303,7 +303,7 @@ public class ArgumentListTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithListTextArgumentAfterListTextArgument() {
+	void executionTestWithListTextArgumentAfterListTextArgument() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -336,7 +336,7 @@ public class ArgumentListTests extends TestBase {
 	 ****************************/
 
 	@Test
-	public void executionTestWithListArgumentWithNonStringMapper() {
+	void executionTestWithListArgumentWithNonStringMapper() {
 		Mut<List<Material>> results = Mut.of();
 
 		new CommandAPICommand("list")
@@ -367,7 +367,7 @@ public class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithListArgumentWithDefaultDelimiter() {
+	void executionTestWithListArgumentWithDefaultDelimiter() {
 		Mut<List<String>> results = Mut.of();
 
 		new CommandAPICommand("list")

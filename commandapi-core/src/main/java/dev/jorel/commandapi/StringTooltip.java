@@ -20,13 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.Message;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
+
+import com.mojang.brigadier.Message;
 
 /**
  * Represents a suggestion for an argument with a hover tooltip text for that
@@ -104,7 +105,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated string
 	 * 	tooltips
 	 */
-	public static Collection<StringTooltip> generateStrings(Function<String, String> tooltipGenerator, String... suggestions) {
+	public static Collection<StringTooltip> generateStrings(UnaryOperator<String> tooltipGenerator, String... suggestions) {
 		return generate(tooltipGenerator, StringTooltip::ofString, suggestions);
 	}
 
@@ -118,7 +119,7 @@ public class StringTooltip implements IStringTooltip {
 	 * @return a collection of {@link StringTooltip} objects from the provided suggestions, with the generated string
 	 * 	tooltips
 	 */
-	public static Collection<StringTooltip> generateStrings(Function<String, String> tooltipGenerator, Collection<String> suggestions) {
+	public static Collection<StringTooltip> generateStrings(UnaryOperator<String> tooltipGenerator, Collection<String> suggestions) {
 		return generate(tooltipGenerator, StringTooltip::ofString, suggestions);
 	}
 

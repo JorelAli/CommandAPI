@@ -37,7 +37,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 	protected final Player player;
 	protected final Connection connection;
 
-	public NMS_1_19_Common_ChatPreviewHandler(CommandAPIBukkit<CommandSourceStack> platform, Plugin plugin, Player player) {
+	protected NMS_1_19_Common_ChatPreviewHandler(CommandAPIBukkit<CommandSourceStack> platform, Plugin plugin, Player player) {
 		this.platform = platform;
 		this.plugin = plugin;
 		this.player = player;

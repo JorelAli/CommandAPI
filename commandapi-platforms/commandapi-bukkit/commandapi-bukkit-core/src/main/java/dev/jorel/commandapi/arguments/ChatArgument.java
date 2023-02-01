@@ -20,19 +20,21 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Optional;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIHandler;
+
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import net.md_5.bungee.api.chat.BaseComponent;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.Optional;
 
 /**
  * An argument that represents chat with entity selectors
@@ -77,14 +79,13 @@ public class ChatArgument extends Argument<BaseComponent[]> implements GreedyArg
 		final CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		BaseComponent[] component = CommandAPIBukkit.<CommandSourceStack>get().getChat(cmdCtx, key);
 
-		if (getPreview().isPresent() && sender instanceof Player player) {
+		Optional<PreviewableFunction<BaseComponent[]>> previewOptional = getPreview();
+		if (this.usePreview && previewOptional.isPresent() && sender instanceof Player player) {
 			try {
-				BaseComponent[] previewComponent = getPreview().get()
-					.generatePreview(new PreviewInfo<BaseComponent[]>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
+				BaseComponent[] previewComponent = previewOptional.get()
+					.generatePreview(new PreviewInfo<>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 
-				if (this.usePreview) {
-					component = previewComponent;
-				}
+				component = previewComponent;
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			}

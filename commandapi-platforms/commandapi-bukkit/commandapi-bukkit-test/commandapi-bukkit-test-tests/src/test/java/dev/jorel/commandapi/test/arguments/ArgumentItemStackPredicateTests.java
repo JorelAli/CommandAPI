@@ -1,6 +1,5 @@
 package dev.jorel.commandapi.test.arguments;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.function.Predicate;
@@ -20,7 +19,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link ItemStackPredicateArgument}
  */
-public class ArgumentItemStackPredicateTests extends TestBase {
+class ArgumentItemStackPredicateTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +40,7 @@ public class ArgumentItemStackPredicateTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithItemStackPredicateArgument() {
+	void executionTestWithItemStackPredicateArgument() {
 		Mut<Predicate<ItemStack>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -82,7 +81,7 @@ public class ArgumentItemStackPredicateTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithItemStackPredicateArgument() {
+	void suggestionTestWithItemStackPredicateArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ItemStackPredicateArgument("predicate"))
 			.executesPlayer((player, args) -> {

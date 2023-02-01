@@ -89,7 +89,6 @@ import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -321,11 +320,6 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
-	}
-
-	@Override
-	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override
@@ -641,20 +635,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 		try {
 			completablefuture.get().updateGlobals();
 
-			// Register recipes again because reloading datapacks removes all non-vanilla
-			// recipes
-			Recipe recipe;
-			while (recipes.hasNext()) {
-				recipe = recipes.next();
-				try {
-					Bukkit.addRecipe(recipe);
-					if (recipe instanceof Keyed keyedRecipe) {
-						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
-					}
-				} catch (Exception e) {
-					continue; // Can't re-register registered recipes. Not an error.
-				}
-			}
+			// Register recipes again because reloading datapacks
+			// removes all non-vanilla recipes
+			registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {

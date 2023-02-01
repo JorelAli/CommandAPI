@@ -87,6 +87,10 @@
 			dependencies to dependents of commandapi-core. -->
 		<paper.version>1.19.2-R0.1-SNAPSHOT</paper.version>
 		<auto-service.version>1.0.1</auto-service.version>
+
+		<!-- sonarcloud CI -->
+		<sonar.organization>jorel-ali</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<build>

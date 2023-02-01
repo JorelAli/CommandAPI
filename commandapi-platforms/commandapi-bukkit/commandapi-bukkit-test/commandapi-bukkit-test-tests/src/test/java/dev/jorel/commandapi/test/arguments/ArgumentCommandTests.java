@@ -24,7 +24,7 @@ import dev.jorel.commandapi.wrappers.CommandResult;
 /**
  * Tests for the {@link CommandArgument}
  */
-public class ArgumentCommandTests extends TestBase {
+class ArgumentCommandTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -45,7 +45,7 @@ public class ArgumentCommandTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithCommandArgumentBukkitCommand() {
+	void executionTestWithCommandArgumentBukkitCommand() {
 		Mut<CommandResult> results = Mut.of();
 
 		// Check command retrieval from CommandMap
@@ -71,7 +71,7 @@ public class ArgumentCommandTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithCommandArgumentRestrictedCommandReplaceSuggestions() {
+	void executionTestWithCommandArgumentRestrictedCommandReplaceSuggestions() {
 		Mut<CommandResult> results = Mut.of();
 
 		// Check replaceSuggestions
@@ -133,7 +133,7 @@ public class ArgumentCommandTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithCommandArgumentMultipleCommandBranchingSuggestions() {
+	void executionTestWithCommandArgumentMultipleCommandBranchingSuggestions() {
 		Mut<CommandResult> results = Mut.of();
 
 		// Check branching suggestions

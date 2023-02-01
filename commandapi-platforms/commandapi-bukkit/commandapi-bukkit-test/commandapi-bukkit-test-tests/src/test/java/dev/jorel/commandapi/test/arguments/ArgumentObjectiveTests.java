@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests for the {@link ObjectiveArgument}
  */
-public class ArgumentObjectiveTests extends TestBase {
+class ArgumentObjectiveTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -37,7 +37,7 @@ public class ArgumentObjectiveTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithObjectiveArgument() {
+	void executionTestWithObjectiveArgument() {
 		Mut<Objective> results = Mut.of();
 
 		new CommandAPICommand("test")

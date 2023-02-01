@@ -17,7 +17,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 /**
  * Tests for the {@link MathOperationArgument}
  */
-public class ArgumentMathOperationTests extends TestBase {
+class ArgumentMathOperationTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -38,7 +38,7 @@ public class ArgumentMathOperationTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithMathOperationArgumentArgument() {
+	void executionTestWithMathOperationArgumentArgument() {
 		Mut<MathOperation> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -94,7 +94,7 @@ public class ArgumentMathOperationTests extends TestBase {
 
 	@SuppressWarnings("null")
 	@Test
-	public void executionTestWithMathOperationArgumentArgumentApplication() {
+	void executionTestWithMathOperationArgumentArgumentApplication() {
 		Mut<Integer> results = Mut.of();
 
 		new CommandAPICommand("test")

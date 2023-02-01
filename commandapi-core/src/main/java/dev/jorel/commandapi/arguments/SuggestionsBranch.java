@@ -66,11 +66,16 @@ public class SuggestionsBranch<CommandSender> {
 		return getNextSuggestion(sender, previousArguments, new StringReader(String.join(" ", previousArguments)), new ArrayList<>(), new StringBuilder());
 	}
 
+	@SuppressWarnings("unchecked")
 	private ArgumentSuggestions<CommandSender> getNextSuggestion(CommandSender sender, String[] previousArguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) throws CommandSyntaxException {
-		if (branches.size() == 0 && suggestions.size() == 0) return null;
+		if (branches.isEmpty() && suggestions.isEmpty()) {
+			return null;
+		}
 		for (ArgumentSuggestions<CommandSender> currentSuggestion : suggestions) {
 			// If all the arguments were processed, this suggestion is next
-			if (processedArguments.size() == previousArguments.length) return currentSuggestion;
+			if (processedArguments.size() == previousArguments.length) {
+				return currentSuggestion;
+			}
 			String currentArgument = previousArguments[processedArguments.size()];
 			errorContext.setCursor(currentInput.length());
 
@@ -80,10 +85,11 @@ public class SuggestionsBranch<CommandSender> {
 				SuggestionsBuilder builder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
 				currentSuggestion.suggest(info, builder);
 				if (builder.build().getList().stream().map(Suggestion::getText).noneMatch(currentArgument::equals)) {
-					if (processedArguments.size() == 0)
+					if (processedArguments.isEmpty()) {
 						throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(errorContext);
-					else
+					} else {
 						throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(errorContext);
+					}
 				}
 			}
 			currentInput.append(currentArgument).append(" ");
@@ -97,24 +103,28 @@ public class SuggestionsBranch<CommandSender> {
 					sender, previousArguments, errorContext, new ArrayList<>(processedArguments), new StringBuilder(currentInput)
 				));
 			} catch (CommandSyntaxException ignored) {
+				assert true;
 			}
 		}
 
-		if (mergedBranches.size() == 0) {
+		if (mergedBranches.isEmpty()) {
 			// If all branches had errors there were no valid paths
-			if (processedArguments.size() == 0)
+			if (processedArguments.isEmpty()) {
 				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(errorContext);
-			else
+			} else {
 				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(errorContext);
+			}
 		}
 
 		if (mergedBranches.size() == 1) {
 			return mergedBranches.get(0);
 		} else {
 			if (mergedBranches.contains(null)) {
-				if (mergedBranches.stream().allMatch(Objects::isNull)) return null;
-				else
+				if (mergedBranches.stream().allMatch(Objects::isNull)) {
+					return null;
+				} else {
 					throw new SimpleCommandExceptionType(new LiteralMessage("Multiple paths for a SuggestionsBranch must either be all null or all non-null")).createWithContext(errorContext);
+				}
 			} else {
 				return ArgumentSuggestions.merge(mergedBranches.toArray(ArgumentSuggestions[]::new));
 			}
@@ -130,7 +140,9 @@ public class SuggestionsBranch<CommandSender> {
 	 */
 	public void enforceReplacements(CommandSender sender, String... arguments) throws CommandSyntaxException {
 		EnforceReplacementsResult result = enforceReplacements(sender, arguments, new StringReader(String.join(" ", arguments)), new ArrayList<>(), new StringBuilder());
-		if (result.type != ExceptionType.NO_ERROR) throw result.exception;
+		if (result.type != ExceptionType.NO_ERROR) {
+			throw result.exception;
+		}
 	}
 
 	private record EnforceReplacementsResult(ExceptionType type, CommandSyntaxException exception) {
@@ -159,15 +171,17 @@ public class SuggestionsBranch<CommandSender> {
 	}
 
 	private EnforceReplacementsResult enforceReplacements(CommandSender sender, String[] arguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) {
-		if (branches.size() == 0 && suggestions.size() == 0)
+		if (branches.isEmpty() && suggestions.isEmpty()) {
 			return new EnforceReplacementsResult(ExceptionType.NO_ERROR, null);
+		}
 
 		for (ArgumentSuggestions<CommandSender> currentSuggestion : suggestions) {
 			String currentArgument;
-			if (processedArguments.size() >= arguments.length)
+			if (processedArguments.size() >= arguments.length) {
 				currentArgument = "";
-			else
+			} else {
 				currentArgument = arguments[processedArguments.size()];
+			}
 			errorContext.setCursor(currentInput.length());
 
 			if (currentSuggestion != null) {
@@ -181,23 +195,27 @@ public class SuggestionsBranch<CommandSender> {
 				}
 				List<String> results = builder.build().getList().stream().map(Suggestion::getText).toList();
 				if (currentArgument.isEmpty()) {
-					if (results.size() == 0)
+					if (results.isEmpty()) {
 						// Arguments ended at same time as suggestions
 						return EnforceReplacementsResult.withContext(ExceptionType.NO_ERROR, errorContext);
-					else
+					} else {
 						return EnforceReplacementsResult.withContext(ExceptionType.NOT_ENOUGH_ARGUMENTS, errorContext);
+					}
 				} else if (!results.contains(currentArgument)) {
-					if (processedArguments.size() == 0)
+					if (processedArguments.isEmpty()) {
 						return EnforceReplacementsResult.withContext(ExceptionType.UNKNOWN_COMMAND, errorContext);
-					else
+					} else {
 						return EnforceReplacementsResult.withContext(ExceptionType.UNKNOWN_ARGUMENT, errorContext);
+					}
 				}
 			}
 			currentInput.append(currentArgument).append(" ");
 			processedArguments.add(currentArgument);
 		}
 
-		if (branches.size() == 0) return new EnforceReplacementsResult(ExceptionType.NO_ERROR, null);
+		if (branches.isEmpty()) {
+			return new EnforceReplacementsResult(ExceptionType.NO_ERROR, null);
+		}
 
 		// Check the branches to see if the arguments fit and try to choose an appropriate response
 		EnforceReplacementsResult finalResult = EnforceReplacementsResult.withContext(ExceptionType.UNKNOWN, errorContext);

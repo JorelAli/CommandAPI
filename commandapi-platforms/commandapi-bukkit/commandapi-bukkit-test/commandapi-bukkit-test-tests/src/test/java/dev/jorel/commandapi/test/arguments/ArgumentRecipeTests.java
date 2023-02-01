@@ -23,7 +23,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link RecipeArgument}
  */
-public class ArgumentRecipeTests extends TestBase {
+class ArgumentRecipeTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -44,7 +44,7 @@ public class ArgumentRecipeTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithRecipeArgument() {
+	void executionTestWithRecipeArgument() {
 		Mut<Recipe> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -67,7 +67,7 @@ public class ArgumentRecipeTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithRecipeArgumentKeyed() {
+	void executionTestWithRecipeArgumentKeyed() {
 
 		// In 1.16 onwards, recipes are implemented using ComplexRecipe, which
 		// is simply a recipe that extends Keyed. Because we don't have access
@@ -100,7 +100,7 @@ public class ArgumentRecipeTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithRecipeArgument() {
+	void suggestionTestWithRecipeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new RecipeArgument("recipe"))
 			.executesPlayer((player, args) -> {

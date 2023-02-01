@@ -22,7 +22,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link EntityTypeArgument}
  */
-public class ArgumentEntityTypeTests extends TestBase {
+class ArgumentEntityTypeTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -58,7 +58,7 @@ public class ArgumentEntityTypeTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithEntityTypeArgument() {
+	void executionTestWithEntityTypeArgument() {
 		Mut<EntityType> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -86,7 +86,7 @@ public class ArgumentEntityTypeTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithEntityTypeArgumentAllEntityTypes() {
+	void executionTestWithEntityTypeArgumentAllEntityTypes() {
 		Mut<EntityType> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -111,7 +111,7 @@ public class ArgumentEntityTypeTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithEntityTypeArgument() {
+	void suggestionTestWithEntityTypeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new EntityTypeArgument("entity"))
 			.executesPlayer((player, args) -> {

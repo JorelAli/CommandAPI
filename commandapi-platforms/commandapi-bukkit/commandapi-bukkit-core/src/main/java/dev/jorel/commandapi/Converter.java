@@ -20,23 +20,25 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.executors.ExecutionInfo;
-import dev.jorel.commandapi.executors.CommandArguments;
-import dev.jorel.commandapi.executors.NativeCommandExecutor;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.*;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.executors.NativeCommandExecutor;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 /**
  * 'Simple' conversion of Plugin commands
@@ -128,6 +130,7 @@ public final class Converter {
 		// No arguments
 		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
 			Bukkit.dispatchCommand(mergeProxySender(sender), commandName);
+			return;
 		}).register();
 
 		// Multiple arguments
@@ -142,6 +145,18 @@ public final class Converter {
 		multiArgs.setConverted(true);
 		multiArgs.register();
 	}
+	
+	private static String[] unpackAliases(Object aliasObj) {
+		if (aliasObj == null) {
+			return new String[0];
+		} else if (aliasObj instanceof String aliasStr) {
+			return new String[] { aliasStr };
+		} else if (aliasObj instanceof List<?> aliasList) {
+			return aliasList.toArray(new String[0]);
+		} else {
+			throw new IllegalStateException("Invalid type for aliases. Expected String or List, but got " + aliasObj.getClass().getSimpleName());
+		}
+	}
 
 	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument<?>> arguments) {
 		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
@@ -155,17 +170,7 @@ public final class Converter {
 		}
 
 		// Convert stupid YAML aliases to a String[] for CommandAPI
-		String[] aliases = null;
-		Object aliasObj = cmdData.get("aliases");
-		if (aliasObj == null) {
-			aliases = new String[0];
-		} else if (aliasObj instanceof String aliasStr) {
-			aliases = new String[] { aliasStr };
-		} else if (aliasObj instanceof List<?> aliasList) {
-			aliases = aliasList.toArray(new String[0]);
-		} else {
-			throw new IllegalStateException("Invalid type for aliases. Expected String or List, but got " + aliasObj.getClass().getSimpleName());
-		}
+		String[] aliases = unpackAliases(cmdData.get("aliases"));
 		if (aliases.length != 0) {
 			CommandAPI.logInfo("Aliases for command /" + commandName + " found. Using aliases " + Arrays.deepToString(aliases));
 		}
@@ -199,8 +204,8 @@ public final class Converter {
 					? sender.getCallee()
 					: mergeProxySender(sender);
 
-			if (args.args() instanceof String[]) {
-				command.execute(proxiedSender, commandName, (String[]) args.args());
+			if (args.args() instanceof String[] argsArr) {
+				command.execute(proxiedSender, commandName, argsArr);
 			} else {
 				command.execute(proxiedSender, commandName, new String[0]);
 			}

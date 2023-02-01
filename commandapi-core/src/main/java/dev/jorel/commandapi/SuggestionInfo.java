@@ -20,6 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * A class that represents information which you can use to generate
  * suggestions.
@@ -32,23 +35,52 @@ package dev.jorel.commandapi;
  *                     "/mycmd tes" will return "tes"
  */
 public record SuggestionInfo<CommandSender>(
-		/** @param sender - the CommandSender typing this command */
-		CommandSender sender,
+	/** @param sender - the CommandSender typing this command */
+	CommandSender sender,
 
-		/**
-		 * @param previousArgs - the list of previously declared (and parsed) arguments
-		 */
-		Object[] previousArgs,
+	/**
+	 * @param previousArgs - the list of previously declared (and parsed) arguments
+	 */
+	Object[] previousArgs,
 
-		/**
-		 * @param currentInput - a string representing the full current input (including
-		 *                     /)
-		 */
-		String currentInput,
+	/**
+	 * @param currentInput - a string representing the full current input (including
+	 *                     /)
+	 */
+	String currentInput,
 
-		/**
-		 * @param currentArg - the current partially typed argument. For example "/mycmd
-		 *                   tes" will return "tes"
-		 */
-		String currentArg) {
+	/**
+	 * @param currentArg - the current partially typed argument. For example "/mycmd
+	 *                   tes" will return "tes"
+	 */
+	String currentArg) {
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(previousArgs);
+		result = prime * result + Objects.hash(currentArg, currentInput, sender);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof SuggestionInfo)) {
+			return false;
+		}
+		@SuppressWarnings("rawtypes")
+		SuggestionInfo other = (SuggestionInfo) obj;
+		return Objects.equals(currentArg, other.currentArg) && Objects.equals(currentInput, other.currentInput) && Arrays.deepEquals(previousArgs, other.previousArgs)
+			&& Objects.equals(sender, other.sender);
+	}
+
+	@Override
+	public String toString() {
+		return "SuggestionInfo [sender=" + sender + ", previousArgs=" + Arrays.toString(previousArgs) + ", currentInput=" + currentInput + ", currentArg=" + currentArg + "]";
+	}
+
 }

@@ -16,7 +16,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 /**
  * Tests for the {@link RotationArgument}
  */
-public class ArgumentRotationTests extends TestBase {
+class ArgumentRotationTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -37,7 +37,7 @@ public class ArgumentRotationTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithRotationArgumentWithNamespaces() {
+	void executionTestWithRotationArgumentWithNamespaces() {
 		Mut<Rotation> results = Mut.of();
 
 		new CommandAPICommand("test")

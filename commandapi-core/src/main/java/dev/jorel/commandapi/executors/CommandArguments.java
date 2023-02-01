@@ -127,26 +127,27 @@ public class CommandArguments {
 		return argsMap.getOrDefault(nodeName, defaultValue.get());
 	}
 	
-	// Unchecked methods. These are the same as the methods above, but use
-	// unchecked generics to conform to the type they are declared as. In Java,
-	// the normal methods (checked) require casting:
-	//
-	//   CommandArguments args = ...;
-	//   String myString = (String) args.get("target");
-	//
-	// However, these unchecked methods don't require casting:
-	//
-	//   CommandArguments args = ...;
-	//   String myString = args.getUnchecked("target");
-	//
-	// These methods are to be avoided in Kotlin as Kotlin's type inference
-	// system cannot infer the type variable T by default and would require
-	// explicit generic type parameters or type declaration, as well as a
-	// non-null assertion operator:
-	//
-	//   val args: CommandArguments = ...
-	//   val myString = args.<String>getUnchecked("target")!!  // Needs this
-	//   val myString: String = args.getUnchecked(0)!!         // Or this
+	/** Unchecked methods. These are the same as the methods above, but use
+	 * unchecked generics to conform to the type they are declared as. In Java,
+	 * the normal methods (checked) require casting:
+	 *
+	 *   CommandArguments args = ...;
+	 *   String myString = (String) args.get("target");
+	 *
+	 * However, these unchecked methods don't require casting:
+	 *
+	 *   CommandArguments args = ...;
+	 *   String myString = args.getUnchecked("target");
+	 *
+	 * These methods are to be avoided in Kotlin as Kotlin's type inference
+	 * system cannot infer the type variable T by default and would require
+	 * explicit generic type parameters or type declaration, as well as a
+	 * non-null assertion operator:
+	 *
+	 *   val args: CommandArguments = ...
+	 *   val myString = args.<String>getUnchecked("target")!!  // Needs this
+	 *   val myString: String = args.getUnchecked(0)!!         // Or this
+	 */
 
 	/**
 	 * Returns an argument by its position

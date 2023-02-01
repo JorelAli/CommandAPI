@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests for the range arguments {@link IntegerRangeArgument} and {@link FloatRangeArgument}
  */
-public class ArgumentRangeTests extends TestBase {
+class ArgumentRangeTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,7 +41,7 @@ public class ArgumentRangeTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithIntegerRangeArgument() {
+	void executionTestWithIntegerRangeArgument() {
 		Mut<IntegerRange> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -99,7 +99,7 @@ public class ArgumentRangeTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithFloatRangeArgument() {
+	void executionTestWithFloatRangeArgument() {
 		Mut<FloatRange> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -161,7 +161,7 @@ public class ArgumentRangeTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithIntegerRangeArgument() {
+	void suggestionTestWithIntegerRangeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new IntegerRangeArgument("value"))
 			.executesPlayer(P_EXEC)
@@ -174,7 +174,7 @@ public class ArgumentRangeTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithFloatRangeArgument() {
+	void suggestionTestWithFloatRangeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new FloatRangeArgument("value"))
 			.executesPlayer(P_EXEC)

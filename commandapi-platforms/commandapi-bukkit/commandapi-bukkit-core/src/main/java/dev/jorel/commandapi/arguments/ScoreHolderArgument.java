@@ -33,6 +33,10 @@ import java.util.Collection;
  */
 public class ScoreHolderArgument {
 
+	private ScoreHolderArgument() {
+		throw new IllegalStateException("Use ScoreHolderArgument.Single or ScoreHolderArgument.Multiple instead");
+	}
+
 	/**
 	 * An argument that represents a scoreholder's name
 	 *

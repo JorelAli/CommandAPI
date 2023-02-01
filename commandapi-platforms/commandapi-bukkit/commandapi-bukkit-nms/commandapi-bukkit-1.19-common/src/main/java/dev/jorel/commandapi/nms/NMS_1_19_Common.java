@@ -108,7 +108,6 @@ import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -164,6 +163,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
+@SuppressWarnings("resource")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
 	private static final VarHandle SimpleHelpMap_helpTopics;
@@ -464,11 +464,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
-	}
-
-	@Override
-	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override
@@ -882,20 +877,10 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 		// Run the completableFuture (and bind tags?)
 		try {
-			// Register recipes again because reloading datapacks removes all non-vanilla
-			// recipes
-			Recipe recipe;
-			while (recipes.hasNext()) {
-				recipe = recipes.next();
-				try {
-					Bukkit.addRecipe(recipe);
-					if (recipe instanceof Keyed keyedRecipe) {
-						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
-					}
-				} catch (Exception e) {
-					continue; // Can't re-register registered recipes. Not an error.
-				}
-			}
+
+			// Register recipes again because reloading datapacks
+			// removes all non-vanilla recipes
+			registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {

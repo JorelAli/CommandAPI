@@ -24,9 +24,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Keyed;
 import org.bukkit.inventory.Recipe;
 
 import dev.jorel.commandapi.CommandAPI;
@@ -49,6 +49,7 @@ public class NMS_1_17 extends NMS_1_17_Common {
 		return new String[] { "1.17" };
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
@@ -84,23 +85,23 @@ public class NMS_1_17 extends NMS_1_17_Common {
 		try {
 			completablefuture.get().updateGlobals();
 
-			// Register recipes again because reloading datapacks removes all non-vanilla
-			// recipes
-			Recipe recipe;
-			while (recipes.hasNext()) {
-				recipe = recipes.next();
-				try {
-					Bukkit.addRecipe(recipe);
-					if (recipe instanceof Keyed keyedRecipe) {
-						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
-					}
-				} catch (Exception e) {
-					continue; // Can't re-register registered recipes. Not an error.
-				}
-			}
+			// Register recipes again because reloading datapacks
+			// removes all non-vanilla recipes
+			registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
+			StringWriter stringWriter = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(stringWriter);
+			e.printStackTrace(printWriter);
+
+			CommandAPI.logError(
+				"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
+					+ stringWriter.toString());
+		
+			// (╯°□°)╯︵ ┻━┻
+			Thread.currentThread().interrupt();
+		} catch (ExecutionException e) {
 			StringWriter stringWriter = new StringWriter();
 			PrintWriter printWriter = new PrintWriter(stringWriter);
 			e.printStackTrace(printWriter);

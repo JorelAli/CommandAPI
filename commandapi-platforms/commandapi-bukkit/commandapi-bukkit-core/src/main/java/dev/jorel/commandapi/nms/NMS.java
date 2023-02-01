@@ -33,7 +33,6 @@ import dev.jorel.commandapi.wrappers.*;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
-import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -291,8 +290,6 @@ public interface NMS<CommandListenerWrapper> {
 	BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-
-	Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException; // Throws exception in 1.19.3
 

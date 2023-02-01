@@ -13,7 +13,6 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -23,6 +22,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -45,8 +46,6 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
 
 /**
  * Argument related method implementations
@@ -54,444 +53,439 @@ import org.bukkit.scoreboard.Team;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 
-	public CommandAPIBukkit<?> BASE_NMS;
+	CommandAPIBukkit<?> baseNMS;
 
-	public ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
-		this.BASE_NMS = baseNMS;
+	protected ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
+		this.baseNMS = baseNMS;
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
-		return BASE_NMS._ArgumentAngle();
+		return baseNMS._ArgumentAngle();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAxis() {
-		return BASE_NMS._ArgumentAxis();
+		return baseNMS._ArgumentAxis();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockPredicate() {
-		return BASE_NMS._ArgumentBlockPredicate();
+		return baseNMS._ArgumentBlockPredicate();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockState() {
-		return BASE_NMS._ArgumentBlockState();
+		return baseNMS._ArgumentBlockState();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentChat() {
-		return BASE_NMS._ArgumentChat();
+		return baseNMS._ArgumentChat();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentChatComponent() {
-		return BASE_NMS._ArgumentChatComponent();
+		return baseNMS._ArgumentChatComponent();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentChatFormat() {
-		return BASE_NMS._ArgumentChatFormat();
+		return baseNMS._ArgumentChatFormat();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentDimension() {
-		return BASE_NMS._ArgumentDimension();
+		return baseNMS._ArgumentDimension();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
-		return BASE_NMS._ArgumentEnchantment();
+		return baseNMS._ArgumentEnchantment();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
-		return BASE_NMS._ArgumentEntity(subType);
+		return baseNMS._ArgumentEntity(subType);
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() {
-		return BASE_NMS._ArgumentEntitySummon();
+		return baseNMS._ArgumentEntitySummon();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentFloatRange() {
-		return BASE_NMS._ArgumentFloatRange();
+		return baseNMS._ArgumentFloatRange();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
-		return BASE_NMS._ArgumentIntRange();
+		return baseNMS._ArgumentIntRange();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentItemPredicate() {
-		return BASE_NMS._ArgumentItemPredicate();
+		return baseNMS._ArgumentItemPredicate();
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentItemStack() {
-		return BASE_NMS._ArgumentItemStack();
+		return baseNMS._ArgumentItemStack();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentMathOperation() {
-		return BASE_NMS._ArgumentMathOperation();
+		return baseNMS._ArgumentMathOperation();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
-		return BASE_NMS._ArgumentMinecraftKeyRegistered();
+		return baseNMS._ArgumentMinecraftKeyRegistered();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentMobEffect() {
-		return BASE_NMS._ArgumentMobEffect();
+		return baseNMS._ArgumentMobEffect();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentNBTCompound() {
-		return BASE_NMS._ArgumentNBTCompound();
+		return baseNMS._ArgumentNBTCompound();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentParticle() {
-		return BASE_NMS._ArgumentParticle();
+		return baseNMS._ArgumentParticle();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentPosition() {
-		return BASE_NMS._ArgumentPosition();
+		return baseNMS._ArgumentPosition();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentPosition2D() {
-		return BASE_NMS._ArgumentPosition2D();
+		return baseNMS._ArgumentPosition2D();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentProfile() {
-		return BASE_NMS._ArgumentProfile();
+		return baseNMS._ArgumentProfile();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentRotation() {
-		return BASE_NMS._ArgumentRotation();
+		return baseNMS._ArgumentRotation();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreboardCriteria() {
-		return BASE_NMS._ArgumentScoreboardCriteria();
+		return baseNMS._ArgumentScoreboardCriteria();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreboardObjective() {
-		return BASE_NMS._ArgumentScoreboardObjective();
+		return baseNMS._ArgumentScoreboardObjective();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreboardSlot() {
-		return BASE_NMS._ArgumentScoreboardSlot();
+		return baseNMS._ArgumentScoreboardSlot();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreboardTeam() {
-		return BASE_NMS._ArgumentScoreboardTeam();
+		return baseNMS._ArgumentScoreboardTeam();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentScoreholder(ArgumentSubType subType) {
-		return BASE_NMS._ArgumentScoreholder(subType);
+		return baseNMS._ArgumentScoreholder(subType);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
-		return BASE_NMS._ArgumentSyntheticBiome();
+		return baseNMS._ArgumentSyntheticBiome();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentTag() {
-		return BASE_NMS._ArgumentTag();
+		return baseNMS._ArgumentTag();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentTime() {
-		return BASE_NMS._ArgumentTime();
+		return baseNMS._ArgumentTime();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentUUID() {
-		return BASE_NMS._ArgumentUUID();
+		return baseNMS._ArgumentUUID();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentVec2() {
-		return BASE_NMS._ArgumentVec2();
+		return baseNMS._ArgumentVec2();
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentVec3() {
-		return BASE_NMS._ArgumentVec3();
+		return baseNMS._ArgumentVec3();
 	}
 
 	@Override
 	public Message generateMessageFromJson(final String json) {
-		return BASE_NMS.generateMessageFromJson(json);
+		return baseNMS.generateMessageFromJson(json);
 	}
 
 	@Override
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getAdvancement(cmdCtx, key);
+		return baseNMS.getAdvancement(cmdCtx, key);
 	}
 
 	@Override
 	public Component getAdventureChat(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
-		return BASE_NMS.getAdventureChat(cmdCtx, key);
+		return baseNMS.getAdventureChat(cmdCtx, key);
 	}
 
 	@Override
 	public Component getAdventureChatComponent(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getAdventureChatComponent(cmdCtx, key);
+		return baseNMS.getAdventureChatComponent(cmdCtx, key);
 	}
 
 	@Override
 	public float getAngle(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getAngle(cmdCtx, key);
+		return baseNMS.getAngle(cmdCtx, key);
 	}
 
 	@Override
 	public EnumSet<Axis> getAxis(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getAxis(cmdCtx, key);
+		return baseNMS.getAxis(cmdCtx, key);
 	}
 
 	@Override
 	public Object getBiome(CommandContext cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		return BASE_NMS.getBiome(cmdCtx, key, subType);
+		return baseNMS.getBiome(cmdCtx, key, subType);
 	}
 
 	@Override
 	public Predicate<Block> getBlockPredicate(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
-		return BASE_NMS.getBlockPredicate(cmdCtx, key);
+		return baseNMS.getBlockPredicate(cmdCtx, key);
 	}
 
 	@Override
 	public BlockData getBlockState(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getBlockState(cmdCtx, key);
+		return baseNMS.getBlockState(cmdCtx, key);
 	}
 
 	@Override
 	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getChat(cmdCtx, key);
+		return baseNMS.getChat(cmdCtx, key);
 	}
 
 	@Override
 	public ChatColor getChatColor(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getChatColor(cmdCtx, key);
+		return baseNMS.getChatColor(cmdCtx, key);
 	}
 
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getChatComponent(cmdCtx, key);
+		return baseNMS.getChatComponent(cmdCtx, key);
 	}
 
 	@Override
 	public World getDimension(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getDimension(cmdCtx, key);
+		return baseNMS.getDimension(cmdCtx, key);
 	}
 
 	@Override
 	public Enchantment getEnchantment(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getEnchantment(cmdCtx, key);
+		return baseNMS.getEnchantment(cmdCtx, key);
 	}
 
 	@Override
 	public Object getEntitySelector(CommandContext cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		return BASE_NMS.getEntitySelector(cmdCtx, key, subType);
+		return baseNMS.getEntitySelector(cmdCtx, key, subType);
 	}
 
 	@Override
 	public EntityType getEntityType(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
-		return BASE_NMS.getEntityType(cmdCtx, key);
-	}
-
-	@Override
-	public Environment getEnvironment(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getEnvironment(cmdCtx, key);
+		return baseNMS.getEntityType(cmdCtx, key);
 	}
 
 	@Override
 	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getFloatRange(cmdCtx, key);
+		return baseNMS.getFloatRange(cmdCtx, key);
 	}
 
 	@Override
 	public FunctionWrapper[] getFunction(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
-		return BASE_NMS.getFunction(cmdCtx, key);
+		return baseNMS.getFunction(cmdCtx, key);
 	}
 
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return getFunction(key);
+		return baseNMS.getFunction(key);
 	}
 
 	@Override
 	public Set<NamespacedKey> getFunctions() {
-		return BASE_NMS.getFunctions();
+		return baseNMS.getFunctions();
 	}
 
 	@Override
 	public IntegerRange getIntRange(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getIntRange(cmdCtx, key);
+		return baseNMS.getIntRange(cmdCtx, key);
 	}
 
 	@Override
 	public ItemStack getItemStack(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
-		return BASE_NMS.getItemStack(cmdCtx, key);
+		return baseNMS.getItemStack(cmdCtx, key);
 	}
 
 	@Override
 	public Predicate<ItemStack> getItemStackPredicate(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
-		return BASE_NMS.getItemStackPredicate(cmdCtx, key);
+		return baseNMS.getItemStackPredicate(cmdCtx, key);
 	}
 
 	@Override
 	public Location2D getLocation2DBlock(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getLocation2DBlock(cmdCtx, key);
+		return baseNMS.getLocation2DBlock(cmdCtx, key);
 	}
 
 	@Override
 	public Location2D getLocation2DPrecise(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getLocation2DPrecise(cmdCtx, key);
+		return baseNMS.getLocation2DPrecise(cmdCtx, key);
 	}
 
 	@Override
 	public Location getLocationBlock(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		return BASE_NMS.getLocationBlock(cmdCtx, str);
+		return baseNMS.getLocationBlock(cmdCtx, str);
 	}
 
 	@Override
 	public final Location getLocationPrecise(CommandContext cmdCtx, String str) throws CommandSyntaxException {
-		return BASE_NMS.getLocationPrecise(cmdCtx, str);
+		return baseNMS.getLocationPrecise(cmdCtx, str);
 	}
 
 	@Override
 	public LootTable getLootTable(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getLootTable(cmdCtx, key);
+		return baseNMS.getLootTable(cmdCtx, key);
 	}
 
 	@Override
 	public MathOperation getMathOperation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getMathOperation(cmdCtx, key);
+		return baseNMS.getMathOperation(cmdCtx, key);
 	}
 
 	@Override
 	public NamespacedKey getMinecraftKey(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getMinecraftKey(cmdCtx, key);
+		return baseNMS.getMinecraftKey(cmdCtx, key);
 	}
 
 	@Override
 	public <NBTContainer> Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key,
 		Function<Object, NBTContainer> nbtContainerConstructor) {
-		return BASE_NMS.getNBTCompound((CommandContext) cmdCtx, key, nbtContainerConstructor);
+		return baseNMS.getNBTCompound((CommandContext) cmdCtx, key, nbtContainerConstructor);
 	}
 
 	@Override
 	public Objective getObjective(CommandContext cmdCtx, String key)
 		throws IllegalArgumentException, CommandSyntaxException {
-		return BASE_NMS.getObjective(cmdCtx, key);
+		return baseNMS.getObjective(cmdCtx, key);
 	}
 
 	@Override
 	public String getObjectiveCriteria(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getObjectiveCriteria(cmdCtx, key);
+		return baseNMS.getObjectiveCriteria(cmdCtx, key);
 	}
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getOfflinePlayer(cmdCtx, key);
+		return baseNMS.getOfflinePlayer(cmdCtx, key);
 	}
 
 	@Override
 	public ParticleData<?> getParticle(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getParticle(cmdCtx, key);
+		return baseNMS.getParticle(cmdCtx, key);
 	}
 
 	@Override
 	public Player getPlayer(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getPlayer(cmdCtx, key);
+		return baseNMS.getPlayer(cmdCtx, key);
 	}
 
 	@Override
 	public PotionEffectType getPotionEffect(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
-		return BASE_NMS.getPotionEffect(cmdCtx, key);
+		return baseNMS.getPotionEffect(cmdCtx, key);
 	}
 
 	@Override
 	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getRecipe(cmdCtx, key);
+		return baseNMS.getRecipe(cmdCtx, key);
 	}
 
 	@Override
 	public Rotation getRotation(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getRotation(cmdCtx, key);
+		return baseNMS.getRotation(cmdCtx, key);
 	}
 
 	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getScoreboardSlot(cmdCtx, key);
+		return baseNMS.getScoreboardSlot(cmdCtx, key);
 	}
 
 	@Override
 	public Collection<String> getScoreHolderMultiple(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getScoreHolderMultiple(cmdCtx, key);
+		return baseNMS.getScoreHolderMultiple(cmdCtx, key);
 	}
 
 	@Override
 	public String getScoreHolderSingle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getScoreHolderSingle(cmdCtx, key);
+		return baseNMS.getScoreHolderSingle(cmdCtx, key);
 	}
 
 	@Override
 	public Object getSound(CommandContext cmdCtx, String key, ArgumentSubType subType) {
-		return BASE_NMS.getSound(cmdCtx, key, subType);
+		return baseNMS.getSound(cmdCtx, key, subType);
 	}
 
 	@Override
 	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
-		return BASE_NMS.getSuggestionProvider(provider);
+		return baseNMS.getSuggestionProvider(provider);
 	}
 
 	@Override
 	public SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		return BASE_NMS.getTag(key);
+		return baseNMS.getTag(key);
 	}
 
 	@Override
 	public Set<NamespacedKey> getTags() {
-		return BASE_NMS.getTags();
+		return baseNMS.getTags();
 	}
 
 	@Override
 	public Team getTeam(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return BASE_NMS.getTeam(cmdCtx, key);
+		return baseNMS.getTeam(cmdCtx, key);
 	}
 
 	@Override
 	public int getTime(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getTime(cmdCtx, key);
+		return baseNMS.getTime(cmdCtx, key);
 	}
 
 	@Override
 	public UUID getUUID(CommandContext cmdCtx, String key) {
-		return BASE_NMS.getUUID(cmdCtx, key);
+		return baseNMS.getUUID(cmdCtx, key);
 	}
 
 }

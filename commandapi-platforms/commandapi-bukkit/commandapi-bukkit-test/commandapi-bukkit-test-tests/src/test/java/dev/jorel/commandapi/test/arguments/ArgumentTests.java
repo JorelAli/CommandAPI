@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
-import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -36,7 +34,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 /**
  * Tests for the 40+ arguments in dev.jorel.commandapi.arguments
  */
-public class ArgumentTests extends TestBase {
+class ArgumentTests extends TestBase {
 	
 	/*********
 	 * Setup *
@@ -57,7 +55,7 @@ public class ArgumentTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTest() {
+	void executionTest() {
 		new CommandAPICommand("test")
 			.executesPlayer((player, args) -> {
 				player.sendMessage("success");
@@ -71,7 +69,7 @@ public class ArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithStringArgument() {
+	void executionTestWithStringArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new StringArgument("value"))
 			.executesPlayer((player, args) -> {
@@ -124,7 +122,7 @@ public class ArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithCommandTree() {
+	void executionTestWithCommandTree() {
 		Mut<String> result = Mut.of();
 		new CommandTree("test").executes(givePosition("", result))
 			.then(new LiteralArgument("1").executes(givePosition("1", result))
@@ -269,7 +267,7 @@ public class ArgumentTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithLocationArgument() {
+	void executionTestWithLocationArgument() {
 		new CommandAPICommand("loc3")
 			.withArguments(new LocationArgument("value", LocationType.PRECISE_POSITION))
 			.executesPlayer((player, args) -> {
@@ -325,7 +323,7 @@ public class ArgumentTests extends TestBase {
 	}
 	
 	@RepeatedTest(10)
-	public void executionTestWithGreedyStringArgument() {
+	void executionTestWithGreedyStringArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new GreedyStringArgument("value"))
 			.executesPlayer((player, args) -> {
@@ -346,7 +344,7 @@ public class ArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithPlayerArgument() {
+	void executionTestWithPlayerArgument() {
 		Mut<Player> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -366,7 +364,7 @@ public class ArgumentTests extends TestBase {
 	}
 
 	@Test // Pre-#321 
-	public void executionTwoCommandsSameArgumentDifferentName() {
+	void executionTwoCommandsSameArgumentDifferentName() {
 		Mut<String> str1 = Mut.of();
 		Mut<String> str2 = Mut.of();
 
@@ -392,7 +390,7 @@ public class ArgumentTests extends TestBase {
 	}
 	
 	@Test // Pre-#321
-	public void executionTwoCommandsSameArgumentDifferentNameDifferentImplementation() {
+	void executionTwoCommandsSameArgumentDifferentNameDifferentImplementation() {
 		Mut<Integer> int1 = Mut.of();
 		Mut<Integer> int2 = Mut.of();
 
@@ -418,7 +416,7 @@ public class ArgumentTests extends TestBase {
 	}
 	
 	@Test // Pre-#321
-	public void executionTwoCommandsSameArgumentDifferentNameDifferentImplementation2() {
+	void executionTwoCommandsSameArgumentDifferentNameDifferentImplementation2() {
 		Mut<Integer> int1 = Mut.of();
 		Mut<Integer> int2 = Mut.of();
 

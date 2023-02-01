@@ -24,7 +24,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 /**
  * Tests for the {@link ChatComponentArgument} and {@link AdventureChatComponentArgument}
  */
-public class ArgumentChatComponentTests extends TestBase {
+class ArgumentChatComponentTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -70,7 +70,7 @@ public class ArgumentChatComponentTests extends TestBase {
 	 *********/
 	
 	@Test
-	public void executionTestWithSpigotChatComponentArgument() {
+	void executionTestWithSpigotChatComponentArgument() {
 		Mut<BaseComponent[]> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -103,7 +103,7 @@ public class ArgumentChatComponentTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithAdventureChatComponentArgument() {
+	void executionTestWithAdventureChatComponentArgument() {
 		Mut<Component> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -140,7 +140,7 @@ public class ArgumentChatComponentTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithSpigotChatComponentArgument() {
+	void suggestionTestWithSpigotChatComponentArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ChatComponentArgument("text"))
 			.executesPlayer((player, args) -> {
@@ -159,7 +159,7 @@ public class ArgumentChatComponentTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithAdventureChatComponentArgument() {
+	void suggestionTestWithAdventureChatComponentArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new AdventureChatComponentArgument("text"))
 			.executesPlayer((player, args) -> {

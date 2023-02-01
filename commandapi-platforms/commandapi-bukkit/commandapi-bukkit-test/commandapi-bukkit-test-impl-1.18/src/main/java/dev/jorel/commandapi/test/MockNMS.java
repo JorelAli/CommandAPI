@@ -90,9 +90,9 @@ public class MockNMS extends Enums {
 		super(baseNMS);
 
 		// Stub in our getMinecraftServer implementation
-		CommandAPIBukkit<?> nms = Mockito.spy(BASE_NMS);
+		CommandAPIBukkit<?> nms = Mockito.spy(super.baseNMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
-		BASE_NMS = nms;
+		super.baseNMS = nms;
 
 		// Initialize WorldVersion (game version)
 		SharedConstants.tryDetectVersion();
@@ -222,7 +222,7 @@ public class MockNMS extends Enums {
 
 	@Override
 	public String[] compatibleVersions() {
-		return BASE_NMS.compatibleVersions();
+		return baseNMS.compatibleVersions();
 	}
 
 	@Override
@@ -309,7 +309,7 @@ public class MockNMS extends Enums {
 	@Override
 	public void createDispatcherFile(File file, CommandDispatcher dispatcher)
 		throws IOException {
-		BASE_NMS.createDispatcherFile(file, dispatcher);
+		baseNMS.createDispatcherFile(file, dispatcher);
 	}
 
 	@Override
@@ -439,27 +439,27 @@ public class MockNMS extends Enums {
 
 			@Override
 			public @Nullable AdvancementDisplay getDisplay() {
-				return null;
+				throw new IllegalStateException("getDisplay is unimplemented");
 			}
 
 			@Override
 			public @NotNull Component displayName() {
-				return null;
+				throw new IllegalStateException("displayName is unimplemented");
 			}
 
 			@Override
 			public org.bukkit.advancement.@Nullable Advancement getParent() {
-				return null;
+				throw new IllegalStateException("getParent is unimplemented");
 			}
 
 			@Override
 			public @NotNull @Unmodifiable Collection<org.bukkit.advancement.Advancement> getChildren() {
-				return null;
+				throw new IllegalStateException("getChildren is unimplemented");
 			}
 
 			@Override
 			public org.bukkit.advancement.@NotNull Advancement getRoot() {
-				return null;
+				throw new IllegalStateException("getRoot is unimplemented");
 			}
 		};
 	}

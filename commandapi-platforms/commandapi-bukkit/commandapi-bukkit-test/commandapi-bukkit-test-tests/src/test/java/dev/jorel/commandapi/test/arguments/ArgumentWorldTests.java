@@ -18,7 +18,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link WorldArgument}
  */
-public class ArgumentWorldTests extends TestBase {
+class ArgumentWorldTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -39,7 +39,7 @@ public class ArgumentWorldTests extends TestBase {
 	 *********/
 
 	@Test
-	public void executionTestWithWorldArgument() {
+	void executionTestWithWorldArgument() {
 		Mut<World> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -89,7 +89,7 @@ public class ArgumentWorldTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithWorldArgument() {
+	void suggestionTestWithWorldArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new WorldArgument("world"))
 			.executesPlayer((player, args) -> {

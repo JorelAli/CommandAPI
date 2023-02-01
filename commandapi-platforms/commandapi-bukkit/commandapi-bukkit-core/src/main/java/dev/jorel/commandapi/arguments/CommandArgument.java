@@ -153,10 +153,10 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 	 *                    to create these.
 	 * @return the current argument
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public CommandArgument replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
-		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
+		replacements = SuggestionsBranch.suggest(suggestions);
+		return this;
 	}
 
 	/**

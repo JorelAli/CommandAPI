@@ -17,7 +17,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link LocationArgument}
  */
-public class ArgumentLocationTests extends TestBase {
+class ArgumentLocationTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -49,7 +49,7 @@ public class ArgumentLocationTests extends TestBase {
 	 *********/
 	
 	@Test
-	public void executionTestWithLocationArgumentPrecisePosition() {
+	void executionTestWithLocationArgumentPrecisePosition() {
 		Mut<Location> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -131,7 +131,7 @@ public class ArgumentLocationTests extends TestBase {
 	}
 	
 	@Test
-	public void executionTestWithLocationArgumentBlockPosition() {
+	void executionTestWithLocationArgumentBlockPosition() {
 		Mut<Location> results = Mut.of();
 
 		new CommandAPICommand("test")

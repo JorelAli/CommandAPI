@@ -24,7 +24,6 @@ import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.command.ProxiedCommandSender
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import org.bukkit.Sound
 import java.util.function.Predicate
 
 inline fun commandAPICommand(name: String, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register()

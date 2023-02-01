@@ -18,7 +18,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for optional arguments
  */
-public class OptionalArgumentTests extends TestBase {
+class OptionalArgumentTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -39,7 +39,7 @@ public class OptionalArgumentTests extends TestBase {
 	 *********/
 
 	@Test
-	public void testNormalArgument() {
+	void testNormalArgument() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")
@@ -58,7 +58,7 @@ public class OptionalArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void testOptionalArgument() {
+	void testOptionalArgument() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")
@@ -77,7 +77,7 @@ public class OptionalArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void testTwoOptionalArguments() {
+	void testTwoOptionalArguments() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")
@@ -126,7 +126,7 @@ public class OptionalArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void testOptionalArgumentDefault() {
+	void testOptionalArgumentDefault() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")
@@ -146,7 +146,7 @@ public class OptionalArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void testOptionalArgumentDefaultWithSupplier() {
+	void testOptionalArgumentDefaultWithSupplier() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")
@@ -166,7 +166,7 @@ public class OptionalArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void testOptionalArgumentWithIndex() {
+	void testOptionalArgumentWithIndex() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")
@@ -185,7 +185,7 @@ public class OptionalArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void testOptionalArgumentDefaultWithIndex() {
+	void testOptionalArgumentDefaultWithIndex() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")
@@ -204,7 +204,7 @@ public class OptionalArgumentTests extends TestBase {
 	}
 
 	@Test
-	public void testOptionalArgumentDefaultWithIndexWithSupplier() {
+	void testOptionalArgumentDefaultWithIndexWithSupplier() {
 		Mut<String> type = Mut.of();
 
 		new CommandAPICommand("test")

@@ -320,11 +320,6 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
-	}
-
-	@Override
 	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and

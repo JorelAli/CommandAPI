@@ -21,7 +21,7 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 	 *
 	 * @param commandName The name of the command to create
 	 */
-	public AbstractCommandTree(final String commandName) {
+	protected AbstractCommandTree(final String commandName) {
 		super(commandName);
 	}
 
@@ -42,8 +42,7 @@ public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl,
 	public void register() {
 		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
 		if (this.executor.hasAnyExecutors()) {
-			// For some reason, the compiler complains that it can't infer Execution's type if it isn't defined here
-			executions.add(new Execution<CommandSender, Argument>(new ArrayList<>(), this.executor));
+			executions.add(new Execution<>(List.<Argument>of(), this.executor));
 		}
 		for (AbstractArgumentTree<?, Argument, CommandSender> tree : arguments) {
 			executions.addAll(tree.getExecutions());
