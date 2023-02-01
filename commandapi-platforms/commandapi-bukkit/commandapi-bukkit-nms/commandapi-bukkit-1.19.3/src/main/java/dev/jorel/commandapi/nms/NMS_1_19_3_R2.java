@@ -808,6 +808,9 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 			registerArgument.invoke(null, BuiltInRegistries.COMMAND_ARGUMENT_TYPE, "commandapi:exception_handler",
 				ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentInfo_1_19_3<>());
+
+			// Refreeze registry
+			isFrozen.set(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, true);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
