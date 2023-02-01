@@ -162,6 +162,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
+@RequireField(in = MappedRegistry.class, name = "ca", ofType = boolean.class)
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
 @SuppressWarnings("resource")
 public abstract class NMS_1_19_Common extends NMS_Common {

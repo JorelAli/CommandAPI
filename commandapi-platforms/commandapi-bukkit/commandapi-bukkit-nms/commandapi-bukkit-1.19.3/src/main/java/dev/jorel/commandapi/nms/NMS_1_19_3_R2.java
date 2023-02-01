@@ -154,6 +154,7 @@ import java.util.function.ToIntFunction;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
+@RequireField(in = MappedRegistry.class, name = "l", ofType = boolean.class)
 @Differs(from = "1.19.2", by = "Chat preview removed")
 public class NMS_1_19_3_R2 extends NMS_Common {
 
