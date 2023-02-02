@@ -146,19 +146,19 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test wrong delimiter
 		// /test map="test1"
-		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods! at position 4: map=<--[HERE]");
+		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods at position 4: map=<--[HERE]");
 
 		// Test no delimiter
 		// /test map"test1"
-		assertCommandFailsWith(player, "test map\"test1\"", "Could not parse command: You have to separate a key/value pair with a ':'! at position 4: map\"<--[HERE]");
+		assertCommandFailsWith(player, "test map\"test1\"", "Could not parse command: You must separate a key/value pair with a ':' at position 4: map\"<--[HERE]");
 
 		// Test without closing quotation mark
 		// /test map:"test1
-		assertCommandFailsWith(player, "test map:\"test1", "Could not parse command: A value has to end with a quotation mark! at position 10: map:\"test1<--[HERE]");
+		assertCommandFailsWith(player, "test map:\"test1", "Could not parse command: A value must end with a quotation mark at position 10: map:\"test1<--[HERE]");
 
 		// Test without any quotation marks
 		// /test map:5
-		assertCommandFailsWith(player, "test map:5", "Could not parse command: A value has to start with a quotation mark! at position 4: map:<--[HERE]");
+		assertCommandFailsWith(player, "test map:5", "Could not parse command: A value must start with a quotation mark at position 4: map:<--[HERE]");
 	}
 
 	@Test

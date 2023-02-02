@@ -4,6 +4,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 
 import java.util.ArrayList;
@@ -25,10 +26,6 @@ import java.util.regex.Pattern;
 //  it is disabled because it takes ages to compile on my computer
 //  and since I develop the MapArgument I thought it might be good
 //  to disable that module
-
-// TODO: Enable disabled modules again.
-//  They are disabled so building time doesn't take minutes
-//  when compiling everything again after making a change
 public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgument {
 
 	private final char delimiter;
@@ -68,6 +65,9 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		applySuggestions();
 	}
 
+	private String currentKey = "";
+	private String currentValue = "";
+
 	private void applySuggestions() {
 		super.replaceSuggestions((info, builder) -> {
 			String currentArgument = info.currentArg();
@@ -80,14 +80,18 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 			switch (getSuggestionCode(currentArgument, keyValues, valueValues)) {
 				case 0 -> {
 					for (String key : keyValues) {
-						builder.suggest(key);
+						if (key.startsWith(currentKey)) {
+							builder.suggest(key);
+						}
 					}
 				}
 				case 1 -> builder.suggest(String.valueOf(delimiter));
 				case 2 -> builder.suggest("\"");
 				case 3 -> {
 					for (String value : valueValues) {
-						builder.suggest(value);
+						if (value.startsWith(currentValue)) {
+							builder.suggest(value);
+						}
 					}
 				}
 			}
@@ -132,6 +136,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 			currentIndex++;
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
+				currentValue = "";
 				if (currentChar == delimiter) {
 					mapKey = (K) keyMapper.apply(keyBuilder.toString());
 					keyBuilder.setLength(0);
@@ -144,6 +149,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
 				}
 				keyBuilder.append(currentChar);
+				currentKey = keyBuilder.toString();
 				validateKey(visitedCharacters, keyPattern, keyBuilder);
 				for (String key : keys) {
 					if (key.equals(keyBuilder.toString())) {
@@ -186,6 +192,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 						continue;
 					}
 					mapValue = valueMapper.apply(valueBuilder.toString());
+					currentKey = "";
 					valueBuilder.setLength(0);
 					isFirstValueCharacter = true;
 					enteredValues.add(mapKey + ":\"" + mapValue + "\"");
@@ -200,6 +207,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 					continue;
 				}
 				valueBuilder.append(currentChar);
+				currentValue = valueBuilder.toString();
 				for (String value : values) {
 					if (value.equals(valueBuilder.toString())) {
 						returnCode = 2;
@@ -214,7 +222,6 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 				}
 			}
 		}
-		validateValueInput(valueBuilder, visitedCharacters);
 		return returnCode;
 	}
 
@@ -316,7 +323,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 			String context = visitedCharacters.toString();
 			StringReader reader = new StringReader(context.substring(0, context.length() - 1));
 			reader.setCursor(context.substring(0, context.length() - 1).length());
-			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value has to start with a quotation mark!");
+			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must start with a quotation mark");
 		}
 	}
 
@@ -324,7 +331,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		if (valueBuilder.length() != 0) {
 			StringReader reader = new StringReader(visitedCharacters.toString());
 			reader.setCursor(visitedCharacters.toString().length());
-			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value has to end with a quotation mark!");
+			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must end with a quotation mark");
 		}
 	}
 
@@ -332,14 +339,14 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		String context = visitedCharacters.toString();
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers and periods!");
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers and periods");
 	}
 
 	private CommandSyntaxException throwValueEarlyStart(StringBuilder visitedCharacters, String delimiter) {
 		String context = visitedCharacters.toString();
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You have to separate a key/value pair with a '" + delimiter + "'!");
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
 	}
 
 }
