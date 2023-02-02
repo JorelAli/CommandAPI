@@ -19,6 +19,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> implements ArgumentS
 
 	@Override
 	@Differs(from = {"1.13", "1.14", "1.15", "1.16.1"}, by = "ArgumentRegistry.a -> ArgumentRegistry.b")
+	// serializeToNetwork
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
 			// Remove this key from packet
@@ -51,6 +52,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> implements ArgumentS
 
 	@Override
 	@Differs(from = {"1.13", "1.14", "1.15", "1.16.1"}, by = "ArgumentRegistry.a -> ArgumentRegistry.b")
+	// serializeToJson
 	public void a(ExceptionHandlingArgumentType<T> argument, JsonObject properties) {
 		try {
 			ArgumentType<T> baseType = argument.baseType();
@@ -78,6 +80,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> implements ArgumentS
 	}
 
 	@Override
+	// deserializeFromNetwork
 	public ExceptionHandlingArgumentType<T> b(PacketDataSerializer packetDataSerializer) {
 		// Since this class overrides its ArgumentRegistry key with the baseType's,
 		// this class's key should never show up in a packet and this method should never

@@ -17,6 +17,7 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 	private static Method getInfo = null;
 
 	@Override
+	// serializeToNetwork
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
 			// Remove this key from packet
@@ -48,6 +49,7 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 	}
 
 	@Override
+	// serializeToJson
 	public void a(ExceptionHandlingArgumentType<T> argument, JsonObject properties) {
 		try {
 			ArgumentType<T> baseType = argument.baseType();
@@ -75,6 +77,7 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 	}
 
 	@Override
+	// deserializeFromNetwork
 	public ExceptionHandlingArgumentType<T> b(PacketDataSerializer packetDataSerializer) {
 		// Since this class overrides its ArgumentRegistry key with the baseType's,
 		// this class's key should never show up in a packet and this method should never
