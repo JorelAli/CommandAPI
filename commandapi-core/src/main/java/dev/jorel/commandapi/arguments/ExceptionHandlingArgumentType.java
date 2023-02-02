@@ -20,7 +20,16 @@ import java.util.concurrent.CompletableFuture;
  * @param errorHandler The {@link InitialParseExceptionHandler} that handles intercepted {@link CommandSyntaxException}
  * @param <T> The object returned when the wrapped {@link ArgumentType} is parsed
  */
-public record ExceptionHandlingArgumentType<T>(ArgumentType<T> baseType, InitialParseExceptionHandler<T> errorHandler) implements ArgumentType<T> {
+public record ExceptionHandlingArgumentType<T>(
+	/**
+	 * @param baseType The {@link ArgumentType} this object is wrapping
+	 */
+	ArgumentType<T> baseType,
+	/**
+	 * @param errorHandler The {@link InitialParseExceptionHandler} that handles intercepted {@link CommandSyntaxException}
+	 */
+	InitialParseExceptionHandler<T> errorHandler)
+	implements ArgumentType<T> {
 
 	@Override
 	public T parse(StringReader stringReader) throws CommandSyntaxException {

@@ -10,5 +10,21 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * @param input The raw object returned by the initial Brigadier parse for the Argument
  * @param previousArguments The previously parsed arguments that came before this argument
  */
-public record ArgumentParseExceptionContext<CommandSender>(WrapperCommandSyntaxException exception, CommandSender sender, Object input, Object[] previousArguments) {
+public record ArgumentParseExceptionContext<CommandSender>(
+	/**
+	 * @param exception The CommandSyntaxException that was thrown when the Argument failed to parse
+	 */
+	WrapperCommandSyntaxException exception,
+	/**
+	 * @param sender The CommandSender who sent the command that caused the exception
+	 */
+	CommandSender sender,
+	/**
+	 * @param input The raw object returned by the initial Brigadier parse for the Argument
+	 */
+	Object input,
+	/**
+	 * @param previousArguments The previously parsed arguments that came before this argument
+	 */
+	Object[] previousArguments) {
 }

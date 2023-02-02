@@ -11,7 +11,16 @@ import dev.jorel.commandapi.wrappers.WrapperStringReader;
  *
  * @param exception The {@link CommandSyntaxException} that was thrown when the ArgumentType failed to parse.
  * @param stringReader The {@link StringReader} used for reading in the command.
- *                     The cursor is at the beginning of the argument.
+ *                     The cursor will be at the beginning of the argument.
  */
-public record InitialParseExceptionContext(WrapperCommandSyntaxException exception, WrapperStringReader stringReader) {
+public record InitialParseExceptionContext(
+	/**
+	 * @param exception The {@link CommandSyntaxException} that was thrown when the ArgumentType failed to parse.
+	 */
+	WrapperCommandSyntaxException exception,
+	/**
+	 * @param stringReader The {@link StringReader} used for reading in the command.
+	 *                     The cursor will be at the beginning of the argument.
+	 */
+	WrapperStringReader stringReader) {
 }
