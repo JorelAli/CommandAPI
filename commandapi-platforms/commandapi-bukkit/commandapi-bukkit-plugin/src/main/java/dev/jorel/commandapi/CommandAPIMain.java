@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.MapArgument;
+import dev.jorel.commandapi.arguments.MapArgumentBuilder;
+import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
@@ -83,6 +86,19 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		convertCommands(fileConfig);
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String>("map")
+				.withKeyType(MapArgumentKeyType.STRING)
+				.withValueMapper(s -> s)
+				.withKeyList(List.of("name", "age", "brand", "harvey"))
+				.withValueList(List.of("dummy", "specter", "mercedes", "18"))
+				.build()
+			)
+			.executesPlayer((player, args) -> {
+				player.sendMessage(args.get("map").toString());
+			})
+			.register();
 	}
 	
 	private void convertCommands(FileConfiguration fileConfig) {

@@ -94,7 +94,7 @@ public class MapArgumentBuilder<V> {
 			 * @return this map argument builder
 			 */
 			public MapArgumentBuilderSuggestsValue withoutKeyList() {
-				return withKeyList(List.of());
+				return withKeyList(null);
 			}
 
 			/**
@@ -137,7 +137,7 @@ public class MapArgumentBuilder<V> {
 				 * @return this map argument builder
 				 */
 				public MapArgumentBuilderFinished withoutValueList() {
-					return withValueList(List.of());
+					return withValueList(null);
 				}
 
 				/**
