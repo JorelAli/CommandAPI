@@ -27,6 +27,9 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 			}
 			Object myInfo = getInfo.invoke(null, argument);
 
+			// TODO: This Field reflection (and others in this class) acts on the class ArgumentRegistry.a. This inner
+			//  class is package-private, and the @RequireField annotation doesn't currently support that. We would like
+			//  to check this reflection at compile-time though, but the preprocess needs to be expanded first
 			Field keyField = CommandAPIHandler.getField(myInfo.getClass(), "c");
 			String myKey = keyField.get(myInfo).toString();
 			byte[] myKeyBytes = myKey.getBytes(StandardCharsets.UTF_8);
