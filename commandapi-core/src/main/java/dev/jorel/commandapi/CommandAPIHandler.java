@@ -40,7 +40,6 @@ import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
@@ -797,8 +796,9 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 		InitialParseExceptionArgument<T, ?> iPEA = (InitialParseExceptionArgument<T, ?>) argument.instance();
 
-		if (iPEA.getInitialParseExceptionHandler().isEmpty()) return rawType;
-		return new ExceptionHandlingArgumentType<>(rawType, iPEA.getInitialParseExceptionHandler().get());
+		Optional<InitialParseExceptionHandler<T>> handler = iPEA.getInitialParseExceptionHandler();
+		if (handler.isEmpty()) return rawType;
+		return new ExceptionHandlingArgumentType<>(rawType, handler.get());
 	}
 
 	Object[] generatePreviousArguments(CommandContext<Source> context, Argument[] args, String nodeName)
@@ -856,7 +856,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @param path a list of Strings representing the path (names of command nodes)
 	 *             to (and including) the previewable argument
 	 * @return a function that takes in a {@link PreviewInfo} and returns a
-	 *         {@link Component}. If such a function is not available, this will
+	 *         Component representing the preview. If such a function is not available, this will
 	 *         return a function that always returns null.
 	 */
 	@SuppressWarnings("unchecked")
