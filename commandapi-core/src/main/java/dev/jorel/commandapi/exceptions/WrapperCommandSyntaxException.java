@@ -164,4 +164,21 @@ public class WrapperCommandSyntaxException extends Exception {
 		return this.exception.getCursor();
 	}
 
+	// Comparison methods
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(!(obj instanceof WrapperCommandSyntaxException wCSE)) return false;
+		return this.exception.equals(wCSE.exception);
+	}
+
+	@Override
+	public int hashCode() {
+		return exception.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return exception.toString();
+	}
 }
