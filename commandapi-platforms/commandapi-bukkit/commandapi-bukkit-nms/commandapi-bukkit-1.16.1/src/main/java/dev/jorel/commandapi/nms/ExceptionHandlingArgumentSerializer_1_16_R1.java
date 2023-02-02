@@ -8,24 +8,31 @@ import net.minecraft.server.v1_16_R1.ArgumentRegistry;
 import net.minecraft.server.v1_16_R1.ArgumentSerializer;
 import net.minecraft.server.v1_16_R1.PacketDataSerializer;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
+	private static final VarHandle ArgumentRegistry_getInfo;
 
-	private static Method getInfo = null;
+	// Compute all var handles all in one go so we don't do this during main server runtime
+	static {
+		VarHandle ar_a = null;
+		try {
+			ar_a = MethodHandles.privateLookupIn(ArgumentRegistry.class, MethodHandles.lookup())
+				.findVarHandle(ArgumentRegistry.class, "a", ArgumentType.class);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+		ArgumentRegistry_getInfo = ar_a;
+	}
 
 	@Override
 	// serializeToNetwork
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
-			// Remove this key from packet
-			if(getInfo == null) {
-				getInfo = ArgumentRegistry.class.getDeclaredMethod("a", ArgumentType.class);
-				getInfo.setAccessible(true);
-			}
-			Object myInfo = getInfo.invoke(null, argument);
+			Object myInfo = ArgumentRegistry_getInfo.get(argument);
 
 			// TODO: This Field reflection (and others in this class) acts on the class ArgumentRegistry.a. This inner
 			//  class is package-private, and the @RequireField annotation doesn't currently support that. We would like
@@ -38,7 +45,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentS
 
 			// Add baseType key instead
 			ArgumentType<T> baseType = argument.baseType();
-			Object baseInfo = getInfo.invoke(null, baseType);
+			Object baseInfo = ArgumentRegistry_getInfo.get(baseType);
 			String baseKey = keyField.get(baseInfo).toString();
 			packetDataSerializer.a(baseKey);
 
@@ -57,11 +64,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentS
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			if(getInfo == null) {
-				getInfo = ArgumentRegistry.class.getDeclaredMethod("a", ArgumentType.class);
-				getInfo.setAccessible(true);
-			}
-			Object baseInfo = getInfo.invoke(null, baseType);
+			Object baseInfo = ArgumentRegistry_getInfo.get(baseType);
 
 			Field keyField = CommandAPIHandler.getField(baseInfo.getClass(), "c");
 			properties.addProperty("baseType", keyField.get(baseInfo).toString());

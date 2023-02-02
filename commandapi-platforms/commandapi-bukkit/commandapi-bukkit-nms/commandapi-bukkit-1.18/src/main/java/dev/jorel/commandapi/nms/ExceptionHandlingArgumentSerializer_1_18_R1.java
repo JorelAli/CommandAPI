@@ -8,22 +8,31 @@ import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.network.FriendlyByteBuf;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 public class ExceptionHandlingArgumentSerializer_1_18_R1<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
-	private static Method getInfo = null;
+	private static final VarHandle ArgumentTypes_getInfo;
+
+	// Compute all var handles all in one go so we don't do this during main server runtime
+	static {
+		VarHandle ar_b = null;
+		try {
+			ar_b = MethodHandles.privateLookupIn(ArgumentTypes.class, MethodHandles.lookup())
+				.findVarHandle(ArgumentTypes.class, "b", ArgumentType.class);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+		ArgumentTypes_getInfo = ar_b;
+	}
 
 	@Override
 	public void serializeToNetwork(ExceptionHandlingArgumentType<T> argument, FriendlyByteBuf friendlyByteBuf) {
 		try {
 			// Remove this key from packet
-			if(getInfo == null) {
-				getInfo = ArgumentTypes.class.getDeclaredMethod("b", ArgumentType.class);
-				getInfo.setAccessible(true);
-			}
-			Object myInfo = getInfo.invoke(null, argument);
+			Object myInfo = ArgumentTypes_getInfo.get(argument);
 
 			// TODO: This Field reflection (and others in this class) acts on the class ArgumentTypes.Entry. This inner
 			//  class is private, and the @RequireField annotation doesn't currently support that. We would like
@@ -36,7 +45,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R1<T> implements ArgumentS
 
 			// Add baseType key instead
 			ArgumentType<T> baseType = argument.baseType();
-			Object baseInfo = getInfo.invoke(null, baseType);
+			Object baseInfo = ArgumentTypes_getInfo.get(baseType);
 			String baseKey = keyField.get(baseInfo).toString();
 			friendlyByteBuf.writeUtf(baseKey);
 
@@ -54,11 +63,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R1<T> implements ArgumentS
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			if(getInfo == null) {
-				getInfo = ArgumentTypes.class.getDeclaredMethod("b", ArgumentType.class);
-				getInfo.setAccessible(true);
-			}
-			Object baseInfo = getInfo.invoke(null, baseType);
+			Object baseInfo = ArgumentTypes_getInfo.get(baseType);
 
 			Field keyField = CommandAPIHandler.getField(baseInfo.getClass(), "c");
 			properties.addProperty("baseType", keyField.get(baseInfo).toString());
