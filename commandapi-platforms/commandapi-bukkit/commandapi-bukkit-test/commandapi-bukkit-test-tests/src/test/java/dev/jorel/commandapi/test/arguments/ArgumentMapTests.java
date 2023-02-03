@@ -8,7 +8,6 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,8 +46,8 @@ public class ArgumentMapTests extends TestBase {
 		Mut<HashMap<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String>("map", ':')
-				.withKeyType(MapArgumentKeyType.STRING)
+			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
+				.withKeyType(s -> s)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -85,8 +84,8 @@ public class ArgumentMapTests extends TestBase {
 		Mut<HashMap<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String>("map", ':')
-				.withKeyType(MapArgumentKeyType.STRING)
+			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
+				.withKeyType(s -> s)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -118,8 +117,8 @@ public class ArgumentMapTests extends TestBase {
 		// A GreedyArgumentException should be thrown when it is not the last argument.
 		assertThrows(GreedyArgumentException.class, () -> {
 			new CommandAPICommand("test")
-				.withArguments(new MapArgumentBuilder<Integer>("map", '=')
-					.withKeyType(MapArgumentKeyType.STRING)
+				.withArguments(new MapArgumentBuilder<String, Integer>("map", '=')
+					.withKeyType(s -> s)
 					.withValueMapper(Integer::valueOf)
 					.withoutKeyList()
 					.withoutValueList()
@@ -131,8 +130,8 @@ public class ArgumentMapTests extends TestBase {
 		});
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String>("map", ':')
-				.withKeyType(MapArgumentKeyType.STRING)
+			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
+				.withKeyType(s -> s)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -166,8 +165,8 @@ public class ArgumentMapTests extends TestBase {
 		Mut<HashMap<String, Integer>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<Integer>("map")
-				.withKeyType(MapArgumentKeyType.STRING)
+			.withArguments(new MapArgumentBuilder<String, Integer>("map")
+				.withKeyType(s -> s)
 				.withValueMapper(Integer::valueOf)
 				.withoutKeyList()
 				.withoutValueList()
@@ -204,8 +203,8 @@ public class ArgumentMapTests extends TestBase {
 		Mut<HashMap<Float, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String>("map")
-				.withKeyType(MapArgumentKeyType.FLOAT)
+			.withArguments(new MapArgumentBuilder<Float, String>("map")
+				.withKeyType(Float::valueOf)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -241,8 +240,8 @@ public class ArgumentMapTests extends TestBase {
 		Mut<HashMap<Integer, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String>("map")
-				.withKeyType(MapArgumentKeyType.INT)
+			.withArguments(new MapArgumentBuilder<Integer, String>("map")
+				.withKeyType(Integer::valueOf)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()

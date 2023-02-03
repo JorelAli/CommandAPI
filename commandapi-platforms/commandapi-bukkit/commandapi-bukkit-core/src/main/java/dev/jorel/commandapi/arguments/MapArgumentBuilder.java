@@ -1,16 +1,15 @@
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
-
 import java.util.List;
 import java.util.function.Function;
 
 /**
  * A builder to create a {@link MapArgument}
  *
+ * @param <K> The type of keys this map should contain
  * @param <V> The type of values this map should contain
  */
-public class MapArgumentBuilder<V> {
+public class MapArgumentBuilder<K, V> {
 
 	private final String nodeName;
 	private final char delimiter;
@@ -41,8 +40,8 @@ public class MapArgumentBuilder<V> {
 	 *
 	 * @return this map argument builder
 	 */
-	public MapArgumentBuilderValueMapper withKeyType(MapArgumentKeyType keyType) {
-		return new MapArgumentBuilderValueMapper(keyType);
+	public MapArgumentBuilderValueMapper withKeyType(Function<String, K> keyMapper) {
+		return new MapArgumentBuilderValueMapper(keyMapper);
 	}
 
 	/**
@@ -50,10 +49,10 @@ public class MapArgumentBuilder<V> {
 	 */
 	public class MapArgumentBuilderValueMapper {
 
-		private final MapArgumentKeyType keyType;
+		private final Function<String, K> keyMapper;
 
-		public MapArgumentBuilderValueMapper(MapArgumentKeyType keyType) {
-			this.keyType = keyType;
+		public MapArgumentBuilderValueMapper(Function<String, K> keyMapper) {
+			this.keyMapper = keyMapper;
 		}
 
 		/**
@@ -158,12 +157,8 @@ public class MapArgumentBuilder<V> {
 					 *
 					 * @return a new {@link MapArgument}
 					 */
-					public MapArgument<?, V> build() {
-						return switch (keyType) {
-							case STRING -> new MapArgument<String, V>(nodeName, delimiter, keyType, valueMapper, keyList, valueList, allowValueDuplicates);
-							case FLOAT -> new MapArgument<Float, V>(nodeName, delimiter, keyType, valueMapper, keyList, valueList, allowValueDuplicates);
-							case INT -> new MapArgument<Integer, V>(nodeName, delimiter, keyType, valueMapper, keyList, valueList, allowValueDuplicates);
-						};
+					public MapArgument<K, V> build() {
+						return new MapArgument<>(nodeName, delimiter, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
 					}
 
 				}

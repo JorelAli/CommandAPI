@@ -4,7 +4,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,21 +44,16 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 	 * @param nodeName  the name to assign to this argument node
 	 * @param delimiter This is used to separate key-value pairs
 	 */
-	MapArgument(String nodeName, char delimiter, MapArgumentKeyType keyType, Function<String, V> valueMapper, List<String> keyList, List<String> valueList, boolean allowValueDuplicates) {
+	MapArgument(String nodeName, char delimiter, Function<String, K> keyMapper, Function<String, V> valueMapper, List<String> keyList, List<String> valueList, boolean allowValueDuplicates) {
 		super(nodeName, StringArgumentType.greedyString());
 
 		this.delimiter = delimiter;
+		this.keyMapper = keyMapper;
 		this.valueMapper = valueMapper;
 
 		this.keyList = keyList == null ? new ArrayList<>() : new ArrayList<>(keyList);
 		this.valueList = valueList == null ? new ArrayList<>() : new ArrayList<>(valueList);
 		this.allowValueDuplicates = allowValueDuplicates;
-
-		this.keyMapper = switch (keyType) {
-			case STRING -> (s -> s);
-			case INT -> (Integer::valueOf);
-			case FLOAT -> (Float::valueOf);
-		};
 
 		applySuggestions();
 	}
