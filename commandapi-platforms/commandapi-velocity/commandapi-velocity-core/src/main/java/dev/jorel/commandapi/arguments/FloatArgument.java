@@ -24,6 +24,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents primitive Java floats
@@ -73,7 +74,7 @@ public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
 	}
 
 	@Override
-	public <Source> Float parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Float parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -110,7 +111,7 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	}
 
 	@Override
-	public <CommandSourceStack> List<T> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> List<T> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
 		for (T object : supplier.apply(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource())) {
