@@ -316,31 +316,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			return new ValueHolder(false, true, false, mapKey, mapValue);
 		}
 		if (currentChar == '"') {
-			if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-				valueBuilder.append('"');
-				for (String value : values) {
-					if (value.equals(valueBuilder.toString())) {
-						suggestionInfo.setSuggestionCode(2);
-						break;
-					}
-					suggestionInfo.setSuggestionCode(3);
-				}
-				return new ValueHolder(false, true, false, mapKey, mapValue);
-			}
-			mapValue = valueMapper.apply(valueBuilder.toString());
-			currentKey = "";
-			suggestionInfo.setCurrentKey(currentKey);
-
-			enteredValues.add(mapKey + ":\"" + mapValue + "\"");
-			keys.remove(enteredValues.get(enteredValues.size() - 1).split(":")[0]);
-			if (!allowValueDuplicates) {
-				values.remove(valueBuilder.toString());
-			}
-
-			valueBuilder.setLength(0);
-			suggestionInfo.setSuggestionCode(0);
-
-			return new ValueHolder(false, false, true, null, mapValue);
+			return currentCharacterQuotationMark(rawValuesChars, currentIndex, valueBuilder, values, keys, suggestionInfo, mapKey, mapValue, currentKey);
 		}
 		valueBuilder.append(currentChar);
 		currentValue = valueBuilder.toString();
@@ -353,6 +329,35 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			suggestionInfo.setSuggestionCode(3);
 		}
 		return new ValueHolder(false, true, false, mapKey, mapValue);
+	}
+
+	private ValueHolder currentCharacterQuotationMark(char[] rawValuesChars, int currentIndex, StringBuilder valueBuilder, List<String> values, List<String> keys,
+	                                                  MapArgumentSuggestionInfo suggestionInfo, K mapKey, V mapValue, String currentKey) {
+		if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
+			valueBuilder.append('"');
+			for (String value : values) {
+				if (value.equals(valueBuilder.toString())) {
+					suggestionInfo.setSuggestionCode(2);
+					break;
+				}
+				suggestionInfo.setSuggestionCode(3);
+			}
+			return new ValueHolder(false, true, false, mapKey, mapValue);
+		}
+		mapValue = valueMapper.apply(valueBuilder.toString());
+		currentKey = "";
+		suggestionInfo.setCurrentKey(currentKey);
+
+		enteredValues.add(mapKey + ":\"" + mapValue + "\"");
+		keys.remove(enteredValues.get(enteredValues.size() - 1).split(":")[0]);
+		if (!allowValueDuplicates) {
+			values.remove(valueBuilder.toString());
+		}
+
+		valueBuilder.setLength(0);
+		suggestionInfo.setSuggestionCode(0);
+
+		return new ValueHolder(false, false, true, null, mapValue);
 	}
 
 	private class MapArgumentSuggestionInfo {
@@ -393,6 +398,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 						}
 					}
 				}
+				default -> {}
 			}
 			return builder.buildFuture();
 		}
