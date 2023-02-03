@@ -96,7 +96,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	}
 
 	/**
-	 * Parses an argument using {@link Argument#parseArgument(CommandContext, String, Object[])}.
+	 * Parses an argument using {@link Argument#parseArgument(CommandContext, String, CommandArguments)}.
 	 * If the parse fails and a {@link CommandSyntaxException} is thrown, the exception is passed to
 	 * the active {@link ArgumentParseExceptionHandler} for this argument, which can be defined by
 	 * developer using {@link Argument#withArgumentParseExceptionHandler(ArgumentParseExceptionHandler)}.
@@ -106,13 +106,13 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * @param <CommandSourceStack> the command source type
 	 * @param cmdCtx               the context which ran this command
 	 * @param key                  the name of the argument node
-	 * @param previousArgs         an array of previously declared arguments
+	 * @param previousArgs         a {@link CommandArguments} object holding previous parsed arguments
 	 * @return the parsed object represented by this argument, or the object returned by
 	 * the active {@link ArgumentParseExceptionHandler} if parsing fails
 	 * @throws CommandSyntaxException if parsing fails and
 	 * the active {@link ArgumentParseExceptionHandler} throws an exception as well
 	 */
-	public final <CommandSourceStack> T parseArgumentHandleError(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public final <CommandSourceStack> T parseArgumentHandleError(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		try {
 			return parseArgument(cmdCtx, key, previousArgs);
 		} catch (CommandSyntaxException original) {
