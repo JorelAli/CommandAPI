@@ -27,6 +27,7 @@ import dev.jorel.commandapi.AbstractArgumentTree;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 import java.util.Collections;
 import java.util.List;
@@ -137,11 +138,11 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * @param <Source>     the command source type
 	 * @param cmdCtx       the context which ran this command
 	 * @param key          the name of the argument node
-	 * @param previousArgs an array of previously declared arguments
+	 * @param previousArgs a {@link CommandArguments} object holding previous parsed arguments
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <Source> T parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
+	public abstract <Source> T parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //

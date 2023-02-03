@@ -24,6 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * A pseudo-argument representing a single literal string
@@ -77,7 +78,7 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	}
 
 	@Override
-	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return literal;
 	}
 }

@@ -250,7 +250,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	}
 
 	/**
-	 * Converts the List&lt;Argument> into an Object[] for command execution
+	 * Converts the List&lt;Argument> into a {@link CommandArguments} for command execution
 	 * 
 	 * @param cmdCtx the command context that will execute this command
 	 * @param args   the map of strings to arguments
@@ -268,7 +268,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		// Populate array
 		for (Argument argument : args) {
 			if (argument.isListed()) {
-				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray());
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap));
 				argList.add(parsedArgument);
 				argsMap.put(argument.getNodeName(), parsedArgument);
 			}
@@ -286,7 +286,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @return the Argument's corresponding object
 	 * @throws CommandSyntaxException when the input for the argument isn't formatted correctly
 	 */
-	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, Object[] previousArgs) throws CommandSyntaxException {
+	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, CommandArguments previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
 			return value.parseArgumentHandleError(cmdCtx, key, previousArgs);
 		} else {
@@ -801,10 +801,13 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		return new ExceptionHandlingArgumentType<>(rawType, handler.get());
 	}
 
-	Object[] generatePreviousArguments(CommandContext<Source> context, Argument[] args, String nodeName)
+	CommandArguments generatePreviousArguments(CommandContext<Source> context, Argument[] args, String nodeName)
 			throws CommandSyntaxException {
 		// Populate Object[], which is our previously filled arguments
 		List<Object> previousArguments = new ArrayList<>();
+
+		// LinkedHashMap for arguments
+		Map<String, Object> argsMap = new LinkedHashMap<>();
 
 		for (Argument arg : args) {
 			if (arg.getNodeName().equals(nodeName) && !(arg instanceof Literal)) {
@@ -813,7 +816,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 			Object result;
 			try {
-				result = parseArgument(context, arg.getNodeName(), arg, previousArguments.toArray());
+				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap));
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Redirected commands don't parse previous arguments properly. Simplest way to
@@ -827,9 +830,10 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 			}
 			if (arg.isListed()) {
 				previousArguments.add(result);
+				argsMap.put(arg.getNodeName(), result);
 			}
 		}
-		return previousArguments.toArray();
+		return new CommandArguments(previousArguments.toArray(), argsMap);
 	}
 
 	SuggestionProvider<Source> toSuggestions(Argument theArgument, Argument[] args,

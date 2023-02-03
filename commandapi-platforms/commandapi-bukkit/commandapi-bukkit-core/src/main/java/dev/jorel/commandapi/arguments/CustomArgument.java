@@ -20,19 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Objects;
-
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.command.CommandSender;
+
+import java.io.Serializable;
 
 /**
  * An argument that represents any custom object
@@ -98,7 +95,7 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 	}
 
 	@Override
-	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs)
 		throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
@@ -274,9 +271,8 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 	 * argument's parser.
 	 * 
 	 * @param sender       the sender that types this argument
-	 * @param previousArgs an array of previously declared (parsed) arguments. This
-	 *                     can be used as if it were arguments in a command executor
-	 *                     method
+	 * @param previousArgs previousArgs - a {@link CommandArguments} object holding previously declared (parsed)
+	 *                     arguments. This can be used as if it were arguments in a command executor method.
 	 * @param input        the current input which the user has typed for this
 	 *                     argument
 	 * @param currentInput the current input, when parsed with the underlying base
@@ -289,10 +285,10 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 		CommandSender sender,
 
 		/**
-		 * previousArgs - an array of previously declared (parsed) arguments. This can
-		 * be used as if it were arguments in a command executor method
+		 * previousArgs - a {@link CommandArguments} object holding previously declared (parsed) arguments. This can
+		 * be used as if it were arguments in a command executor method.
 		 */
-		Object[] previousArgs,
+		CommandArguments previousArgs,
 
 		/**
 		 * input - the current input which the user has typed for this argument
@@ -304,37 +300,6 @@ public class CustomArgument<T, B> extends Argument<T> implements ICustomArgument
 		 * argument.
 		 */
 		B currentInput) {
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + Arrays.deepHashCode(previousArgs);
-			result = prime * result + Objects.hash(currentInput, input, sender);
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (!(obj instanceof CustomArgumentInfo)) {
-				return false;
-			}
-			@SuppressWarnings("rawtypes")
-			CustomArgumentInfo other = (CustomArgumentInfo) obj;
-			return Objects.equals(currentInput, other.currentInput) &&
-				Objects.equals(input, other.input) &&
-				Arrays.deepEquals(previousArgs, other.previousArgs) &&
-				Objects.equals(sender, other.sender);
-		}
-
-		@Override
-		public String toString() {
-			return "CustomArgumentInfo [sender=" + sender + ", previousArgs=" + Arrays.toString(previousArgs) + ", input=" + input + ", currentInput=" + currentInput + "]";
-		}
-		
 	}
 
 	/**

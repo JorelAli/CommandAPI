@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.World;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -60,7 +61,7 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> implem
 	}
 
 	@Override
-	public <CommandSourceStack> World parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> World parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getDimension(cmdCtx, key);
 	}
 }

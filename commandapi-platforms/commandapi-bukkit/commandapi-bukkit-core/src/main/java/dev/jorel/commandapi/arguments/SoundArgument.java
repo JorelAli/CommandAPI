@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Sound;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -58,7 +59,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	}
 
 	@Override
-	public <CommandSourceStack> Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return (Sound) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_SOUND);
 	}
 
@@ -95,7 +96,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 		}
 
 		@Override
-		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return (org.bukkit.NamespacedKey) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_NAMESPACEDKEY);
 		}
 

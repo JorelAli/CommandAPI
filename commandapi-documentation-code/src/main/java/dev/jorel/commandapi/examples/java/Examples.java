@@ -1802,7 +1802,7 @@ arguments.add(new IntegerArgument("radius"));
 arguments.add(new PlayerArgument("target").replaceSuggestions(ArgumentSuggestions.strings(info -> {
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
-    int radius = (int) info.previousArgs()[0];
+    int radius = (int) info.previousArgs().get(0);
     
     // Get nearby entities within the provided radius
     Player player = (Player) info.sender();
@@ -1945,7 +1945,7 @@ List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new EntitySelectorArgument.OnePlayer("target"));
 arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(
     info -> {
-        Player target = (Player) info.previousArgs()[0];
+        Player target = (Player) info.previousArgs().get(0);
         
         // Convert PotionEffect[] into PotionEffectType[]
         return target.getActivePotionEffects().stream()

@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Axis;
 
 import java.util.EnumSet;
@@ -40,7 +41,7 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y
 	 * and z
-	 * 
+	 *
 	 * @param nodeName the name of the node for argument
 	 */
 	public AxisArgument(String nodeName) {
@@ -60,7 +61,8 @@ public class AxisArgument extends SafeOverrideableArgument<EnumSet, EnumSet<Axis
 
 	@Override
 	public <CommandSourceStack> EnumSet<Axis> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key,
-                                                            Object[] previousArgs) throws CommandSyntaxException {
+															CommandArguments previousArgs)
+		throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getAxis(cmdCtx, key);
 	}
 }
