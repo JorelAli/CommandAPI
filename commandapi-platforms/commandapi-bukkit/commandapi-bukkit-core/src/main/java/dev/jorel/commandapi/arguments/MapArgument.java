@@ -20,10 +20,6 @@ import java.util.regex.Pattern;
  * @since 9.0.0
  */
 @SuppressWarnings("rawtypes")
-// TODO: Enable commandapi-bukkit-kotlin-test again
-//  it is disabled because it takes ages to compile on my computer
-//  and since I develop the MapArgument I thought it might be good
-//  to disable that module
 public class MapArgument<K, V> extends Argument<LinkedHashMap> implements GreedyArgument {
 
 	private final char delimiter;
