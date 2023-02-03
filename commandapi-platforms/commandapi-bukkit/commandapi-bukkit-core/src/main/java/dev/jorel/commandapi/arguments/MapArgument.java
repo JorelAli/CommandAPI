@@ -224,6 +224,8 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;
 					keyBuilder.append(currentChar);
+					suggestionInfo.setSuggestionCode(0);
+					suggestionInfo.setCurrentKey(keyBuilder.toString());
 				}
 			}
 		}
