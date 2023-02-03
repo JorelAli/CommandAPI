@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  *
  * @param <K> The type of keys this map will contain
  * @param <V> The type of values this map will contain
- * @apiNote Returns a {@link HashMap} object
+ * @apiNote Returns a {@link LinkedHashMap} object
  * @since 9.0.0
  */
 @SuppressWarnings("rawtypes")
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 //  it is disabled because it takes ages to compile on my computer
 //  and since I develop the MapArgument I thought it might be good
 //  to disable that module
-public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgument {
+public class MapArgument<K, V> extends Argument<LinkedHashMap> implements GreedyArgument {
 
 	private final char delimiter;
 	private final Function<String, ?> keyMapper;
@@ -233,8 +233,8 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 	}
 
 	@Override
-	public Class<HashMap> getPrimitiveType() {
-		return HashMap.class;
+	public Class<LinkedHashMap> getPrimitiveType() {
+		return LinkedHashMap.class;
 	}
 
 	@Override
@@ -244,9 +244,9 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <Source> HashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		String rawValues = cmdCtx.getArgument(key, String.class);
-		HashMap<K, V> results = new HashMap<>();
+		LinkedHashMap<K, V> results = new LinkedHashMap<>();
 
 		K mapKey = null;
 		V mapValue;
