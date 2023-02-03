@@ -4,7 +4,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.wrappers.MapArgumentKeyType;
 
 import java.util.ArrayList;
@@ -65,31 +64,36 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		applySuggestions();
 	}
 
-	private String currentKey = "";
-	private String currentValue = "";
-
 	private void applySuggestions() {
 		super.replaceSuggestions((info, builder) -> {
 			String currentArgument = info.currentArg();
 
-			builder = builder.createOffset(builder.getStart() + currentArgument.length());
-
 			List<String> keyValues = new ArrayList<>(keyList);
 			List<String> valueValues = new ArrayList<>(valueList);
 
-			switch (getSuggestionCode(currentArgument, keyValues, valueValues)) {
+			MapArgumentSuggestionInfo suggestionInfo = getSuggestionCode(currentArgument, keyValues, valueValues);
+
+			switch (suggestionInfo.getSuggestionCode()) {
 				case 0 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentKey().length());
 					for (String key : keyValues) {
-						if (key.startsWith(currentKey)) {
+						if (key.startsWith(suggestionInfo.getCurrentKey())) {
 							builder.suggest(key);
 						}
 					}
 				}
-				case 1 -> builder.suggest(String.valueOf(delimiter));
-				case 2 -> builder.suggest("\"");
+				case 1 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length());
+					builder.suggest(String.valueOf(delimiter));
+				}
+				case 2 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length());
+					builder.suggest("\"");
+				}
 				case 3 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentValue().length());
 					for (String value : valueValues) {
-						if (value.startsWith(currentValue)) {
+						if (value.startsWith(suggestionInfo.getCurrentValue())) {
 							builder.suggest(value);
 						}
 					}
@@ -112,14 +116,17 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 	 * @return An integer based on what to suggest
 	 */
 	@SuppressWarnings("unchecked")
-	private int getSuggestionCode(String currentArgument, List<String> keys, List<String> values) throws CommandSyntaxException {
+	private MapArgumentSuggestionInfo getSuggestionCode(String currentArgument, List<String> keys, List<String> values) throws CommandSyntaxException {
 		K mapKey = null;
 		V mapValue;
 
-		int returnCode = -1;
+		String currentKey = "";
+		String currentValue = "";
+
+		MapArgumentSuggestionInfo suggestionInfo = new MapArgumentSuggestionInfo(currentKey, currentValue, -1, 0);
 
 		if (currentArgument.equals("")) {
-			returnCode = 0;
+			suggestionInfo.setSuggestionCode(0);
 		}
 
 		boolean isAKeyBeingBuilt = true;
@@ -137,12 +144,13 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
 				currentValue = "";
+				suggestionInfo.setCurrentValue(currentValue);
 				if (currentChar == delimiter) {
 					mapKey = (K) keyMapper.apply(keyBuilder.toString());
 					keyBuilder.setLength(0);
 					isAKeyBeingBuilt = false;
 					isAValueBeingBuilt = true;
-					returnCode = 2;
+					suggestionInfo.setSuggestionCode(2);
 					continue;
 				}
 				if (currentChar == '"') {
@@ -150,18 +158,19 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 				}
 				keyBuilder.append(currentChar);
 				currentKey = keyBuilder.toString();
+				suggestionInfo.setCurrentKey(currentKey);
 				validateKey(visitedCharacters, keyPattern, keyBuilder);
 				for (String key : keys) {
 					if (key.equals(keyBuilder.toString())) {
-						returnCode = 1;
+						suggestionInfo.setSuggestionCode(1);
 						break;
 					}
-					returnCode = 0;
+					suggestionInfo.setSuggestionCode(0);
 				}
 			} else if (isAValueBeingBuilt) {
 				if (isFirstValueCharacter) {
 					validateValueStart(currentChar, visitedCharacters); // currentChar should be a quotation mark
-					returnCode = 3;
+					suggestionInfo.setSuggestionCode(3);
 					isFirstValueCharacter = false;
 					continue;
 				}
@@ -170,10 +179,10 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 						valueBuilder.append('\\');
 						for (String value : values) {
 							if (value.equals(valueBuilder.toString())) {
-								returnCode = 2;
+								suggestionInfo.setSuggestionCode(2);
 								break;
 							}
-							returnCode = 3;
+							suggestionInfo.setSuggestionCode(3);
 						}
 						continue;
 					}
@@ -184,15 +193,16 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 						valueBuilder.append('"');
 						for (String value : values) {
 							if (value.equals(valueBuilder.toString())) {
-								returnCode = 2;
+								suggestionInfo.setSuggestionCode(2);
 								break;
 							}
-							returnCode = 3;
+							suggestionInfo.setSuggestionCode(3);
 						}
 						continue;
 					}
 					mapValue = valueMapper.apply(valueBuilder.toString());
 					currentKey = "";
+					suggestionInfo.setCurrentKey(currentKey);
 					valueBuilder.setLength(0);
 					isFirstValueCharacter = true;
 					enteredValues.add(mapKey + ":\"" + mapValue + "\"");
@@ -203,17 +213,18 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 					mapKey = null;
 
 					isAValueBeingBuilt = false;
-					returnCode = 0;
+					suggestionInfo.setSuggestionCode(0);
 					continue;
 				}
 				valueBuilder.append(currentChar);
 				currentValue = valueBuilder.toString();
+				suggestionInfo.setCurrentValue(currentValue);
 				for (String value : values) {
 					if (value.equals(valueBuilder.toString())) {
-						returnCode = 2;
+						suggestionInfo.setSuggestionCode(2);
 						break;
 					}
-					returnCode = 3;
+					suggestionInfo.setSuggestionCode(3);
 				}
 			} else {
 				if (currentChar != ' ') {
@@ -222,7 +233,7 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 				}
 			}
 		}
-		return returnCode;
+		return suggestionInfo;
 	}
 
 	@Override
@@ -347,6 +358,53 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
+	}
+
+	private static class MapArgumentSuggestionInfo {
+
+		private String currentKey;
+		private String currentValue;
+		private int suggestionCode;
+		private int builderStart;
+
+		MapArgumentSuggestionInfo(String currentKey, String currentValue, int suggestionCode, int builderStart) {
+			this.currentKey = currentKey;
+			this.currentValue = currentValue;
+			this.suggestionCode = suggestionCode;
+			this.builderStart = builderStart;
+		}
+
+		public String getCurrentKey() {
+			return currentKey;
+		}
+
+		public void setCurrentKey(String currentKey) {
+			this.currentKey = currentKey;
+		}
+
+		public String getCurrentValue() {
+			return currentValue;
+		}
+
+		public void setCurrentValue(String currentValue) {
+			this.currentValue = currentValue;
+		}
+
+		public int getSuggestionCode() {
+			return suggestionCode;
+		}
+
+		public void setSuggestionCode(int suggestionCode) {
+			this.suggestionCode = suggestionCode;
+		}
+
+		public int getBuilderStart() {
+			return builderStart;
+		}
+
+		public void setBuilderStart(int builderStart) {
+			this.builderStart = builderStart;
+		}
 	}
 
 }
