@@ -86,19 +86,6 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		convertCommands(fileConfig);
-
-		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String>("map")
-				.withKeyType(MapArgumentKeyType.STRING)
-				.withValueMapper(s -> s)
-				.withKeyList(List.of("name", "age", "brand", "harvey"))
-				.withValueList(List.of("dummy", "specter", "mercedes", "18"))
-				.build()
-			)
-			.executesPlayer((player, args) -> {
-				player.sendMessage(args.get("map").toString());
-			})
-			.register();
 	}
 	
 	private void convertCommands(FileConfiguration fileConfig) {
