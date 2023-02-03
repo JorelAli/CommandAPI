@@ -4,10 +4,13 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -63,34 +66,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 			MapArgumentSuggestionInfo suggestionInfo = getSuggestionCode(currentArgument, keyValues, valueValues);
 
-			switch (suggestionInfo.getSuggestionCode()) {
-				case 0 -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentKey().length());
-					for (String key : keyValues) {
-						if (key.startsWith(suggestionInfo.getCurrentKey())) {
-							builder.suggest(key);
-						}
-					}
-				}
-				case 1 -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length());
-					builder.suggest(String.valueOf(delimiter));
-				}
-				case 2 -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length());
-					builder.suggest("\"");
-				}
-				case 3 -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentValue().length());
-					for (String value : valueValues) {
-						if (value.startsWith(suggestionInfo.getCurrentValue())) {
-							builder.suggest(value);
-						}
-					}
-				}
-			}
-
-			return builder.buildFuture();
+			return suggestionInfo.provideSuggestions(builder, currentArgument, keyValues, valueValues);
 		});
 	}
 
@@ -105,15 +81,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	 *
 	 * @return An integer based on what to suggest
 	 */
-	@SuppressWarnings("unchecked")
 	private MapArgumentSuggestionInfo getSuggestionCode(String currentArgument, List<String> keys, List<String> values) throws CommandSyntaxException {
 		K mapKey = null;
-		V mapValue;
 
 		String currentKey = "";
 		String currentValue = "";
 
-		MapArgumentSuggestionInfo suggestionInfo = new MapArgumentSuggestionInfo(currentKey, currentValue, -1, 0);
+		MapArgumentSuggestionInfo suggestionInfo = new MapArgumentSuggestionInfo(currentKey, currentValue, -1);
 
 		if (currentArgument.equals("")) {
 			suggestionInfo.setSuggestionCode(0);
@@ -133,91 +107,16 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			currentIndex++;
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
-				currentValue = "";
-				suggestionInfo.setCurrentValue(currentValue);
-				if (currentChar == delimiter) {
-					mapKey = (K) keyMapper.apply(keyBuilder.toString());
-					keyBuilder.setLength(0);
-					isAKeyBeingBuilt = false;
-					isAValueBeingBuilt = true;
-					suggestionInfo.setSuggestionCode(2);
-					continue;
-				}
-				if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
-				}
-				keyBuilder.append(currentChar);
-				currentKey = keyBuilder.toString();
-				suggestionInfo.setCurrentKey(currentKey);
-				validateKey(visitedCharacters, keyPattern, keyBuilder);
-				for (String key : keys) {
-					if (key.equals(keyBuilder.toString())) {
-						suggestionInfo.setSuggestionCode(1);
-						break;
-					}
-					suggestionInfo.setSuggestionCode(0);
-				}
+				ValueHolder valueHolder = aKeyIsSuggested(currentChar, suggestionInfo, currentKey, currentValue, keyBuilder, null, visitedCharacters, keys);
+				mapKey = valueHolder.getMapKey();
+				isAKeyBeingBuilt = valueHolder.isAKeyBeingBuilt();
+				isAValueBeingBuilt = valueHolder.isAValueBeingBuilt();
 			} else if (isAValueBeingBuilt) {
-				if (isFirstValueCharacter) {
-					validateValueStart(currentChar, visitedCharacters); // currentChar should be a quotation mark
-					suggestionInfo.setSuggestionCode(3);
-					isFirstValueCharacter = false;
-					continue;
-				}
-				if (currentChar == '\\') {
-					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						valueBuilder.append('\\');
-						for (String value : values) {
-							if (value.equals(valueBuilder.toString())) {
-								suggestionInfo.setSuggestionCode(2);
-								break;
-							}
-							suggestionInfo.setSuggestionCode(3);
-						}
-						continue;
-					}
-					continue;
-				}
-				if (currentChar == '"') {
-					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						valueBuilder.append('"');
-						for (String value : values) {
-							if (value.equals(valueBuilder.toString())) {
-								suggestionInfo.setSuggestionCode(2);
-								break;
-							}
-							suggestionInfo.setSuggestionCode(3);
-						}
-						continue;
-					}
-					mapValue = valueMapper.apply(valueBuilder.toString());
-					currentKey = "";
-					suggestionInfo.setCurrentKey(currentKey);
-					isFirstValueCharacter = true;
-
-					enteredValues.add(mapKey + ":\"" + mapValue + "\"");
-					keys.remove(enteredValues.get(enteredValues.size() - 1).split(":")[0]);
-					if (!allowValueDuplicates) {
-						values.remove(valueBuilder.toString());
-					}
-
-					valueBuilder.setLength(0);
-					mapKey = null;
-
-					isAValueBeingBuilt = false;
-					suggestionInfo.setSuggestionCode(0);
-					continue;
-				}
-				valueBuilder.append(currentChar);
-				currentValue = valueBuilder.toString();
-				suggestionInfo.setCurrentValue(currentValue);
-				for (String value : values) {
-					if (value.equals(valueBuilder.toString())) {
-						suggestionInfo.setSuggestionCode(2);
-						break;
-					}
-					suggestionInfo.setSuggestionCode(3);
-				}
+				ValueHolder valueHolder = aValueIsSuggested(isFirstValueCharacter, currentChar, rawValuesChars,
+					currentIndex, visitedCharacters, valueBuilder, suggestionInfo, keys, values, currentKey, currentValue, mapKey, null);
+				isAKeyBeingBuilt = valueHolder.isAKeyBeingBuilt();
+				isAValueBeingBuilt = valueHolder.isAValueBeingBuilt();
+				isFirstValueCharacter = valueHolder.isFirstValueCharacter();
 			} else {
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;
@@ -240,14 +139,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandAPIArgumentType.MAP;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		String rawValues = cmdCtx.getArgument(key, String.class);
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
 
 		K mapKey = null;
-		V mapValue;
 
 		boolean isAKeyBeingBuilt = true;
 		boolean isAValueBeingBuilt = false;
@@ -263,49 +160,16 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			currentIndex++;
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
-				if (currentChar == delimiter) {
-					mapKey = (K) keyMapper.apply(keyBuilder.toString());
-
-					// No need to check the key here because we already know it only consists of letters
-
-					keyBuilder.setLength(0);
-					isAKeyBeingBuilt = false;
-					isAValueBeingBuilt = true;
-					continue;
-				}
-				if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
-				}
-				keyBuilder.append(currentChar);
-				validateKey(visitedCharacters, keyPattern, keyBuilder);
+				ValueHolder valueHolder = aKeyIsBuilt(currentChar, keyBuilder, mapKey, visitedCharacters);
+				mapKey = valueHolder.getMapKey();
+				isAKeyBeingBuilt = valueHolder.isAKeyBeingBuilt();
+				isAValueBeingBuilt = valueHolder.isAValueBeingBuilt();
 			} else if (isAValueBeingBuilt) {
-				if (isFirstValueCharacter) {
-					validateValueStart(currentChar, visitedCharacters);
-					isFirstValueCharacter = false;
-					continue;
-				}
-				if (currentChar == '\\') {
-					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						valueBuilder.append('\\');
-						continue;
-					}
-					continue;
-				}
-				if (currentChar == '"') {
-					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						valueBuilder.append('"');
-						continue;
-					}
-					mapValue = valueMapper.apply(valueBuilder.toString());
-					valueBuilder.setLength(0);
-					isFirstValueCharacter = true;
-					results.put(mapKey, mapValue);
-					mapKey = null;
-
-					isAValueBeingBuilt = false;
-					continue;
-				}
-				valueBuilder.append(currentChar);
+				ValueHolder valueHolder = aValueIsBuilt(currentChar, rawValuesChars, currentIndex, isFirstValueCharacter, visitedCharacters, mapKey, valueBuilder, results);
+				isAKeyBeingBuilt = valueHolder.isAKeyBeingBuilt();
+				isAValueBeingBuilt = valueHolder.isAValueBeingBuilt();
+				isFirstValueCharacter = valueHolder.isFirstValueCharacter();
+				mapKey = valueHolder.getMapKey();
 			} else {
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;
@@ -354,18 +218,183 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
 	}
 
-	private static class MapArgumentSuggestionInfo {
+	@SuppressWarnings("unchecked")
+	private ValueHolder aKeyIsBuilt(char currentChar, StringBuilder keyBuilder, K mapKey, StringBuilder visitedCharacters) throws CommandSyntaxException {
+		if (currentChar == delimiter) {
+			mapKey = (K) keyMapper.apply(keyBuilder.toString());
+
+			// No need to check the key here because we already know it only consists of letters
+
+			keyBuilder.setLength(0);
+			return new ValueHolder(false, true, false, mapKey, null);
+		}
+		if (currentChar == '"') {
+			throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
+		}
+		keyBuilder.append(currentChar);
+		validateKey(visitedCharacters, keyPattern, keyBuilder);
+		return new ValueHolder(true, false, false, mapKey, null);
+	}
+
+	private ValueHolder aValueIsBuilt(char currentChar, char[] rawValuesChars, int currentIndex, boolean isFirstValueCharacter, StringBuilder visitedCharacters,
+	                                  K mapKey, StringBuilder valueBuilder, LinkedHashMap<K, V> results) throws CommandSyntaxException {
+		if (isFirstValueCharacter) {
+			validateValueStart(currentChar, visitedCharacters);
+			return new ValueHolder(false, true, false, mapKey, null);
+		}
+		if (currentChar == '\\') {
+			if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
+				valueBuilder.append('\\');
+				return new ValueHolder(false, true, false, mapKey, null);
+			}
+			return new ValueHolder(false, true, false, mapKey, null);
+		}
+		if (currentChar == '"') {
+			if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
+				valueBuilder.append('"');
+				return new ValueHolder(false, true, false, mapKey, null);
+			}
+			V mapValue = valueMapper.apply(valueBuilder.toString());
+			valueBuilder.setLength(0);
+			results.put(mapKey, mapValue);
+
+			return new ValueHolder(false, false, true, null, null);
+		}
+		valueBuilder.append(currentChar);
+		return new ValueHolder(false, true, false, mapKey, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	private ValueHolder aKeyIsSuggested(char currentChar, MapArgumentSuggestionInfo suggestionInfo, String currentKey, String currentValue,
+	                                    StringBuilder keyBuilder, K mapKey, StringBuilder visitedCharacters, List<String> keys) throws CommandSyntaxException {
+		currentValue = "";
+		suggestionInfo.setCurrentValue(currentValue);
+		if (currentChar == delimiter) {
+			mapKey = (K) keyMapper.apply(keyBuilder.toString());
+			keyBuilder.setLength(0);
+			suggestionInfo.setSuggestionCode(2);
+			return new ValueHolder(false, true, false, mapKey, null);
+		}
+		if (currentChar == '"') {
+			throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
+		}
+		keyBuilder.append(currentChar);
+		currentKey = keyBuilder.toString();
+		suggestionInfo.setCurrentKey(currentKey);
+		validateKey(visitedCharacters, keyPattern, keyBuilder);
+		for (String key : keys) {
+			if (key.equals(keyBuilder.toString())) {
+				suggestionInfo.setSuggestionCode(1);
+				break;
+			}
+			suggestionInfo.setSuggestionCode(0);
+		}
+		return new ValueHolder(true, false, false, mapKey, null);
+	}
+
+	private ValueHolder aValueIsSuggested(boolean isFirstValueCharacter, char currentChar, char[] rawValuesChars, int currentIndex,
+	                                      StringBuilder visitedCharacters, StringBuilder valueBuilder, MapArgumentSuggestionInfo suggestionInfo,
+	                                      List<String> keys, List<String> values, String currentKey, String currentValue,
+	                                      K mapKey, V mapValue) throws CommandSyntaxException {
+		if (isFirstValueCharacter) {
+			validateValueStart(currentChar, visitedCharacters); // currentChar should be a quotation mark
+			suggestionInfo.setSuggestionCode(3);
+			return new ValueHolder(false, true, false, mapKey, mapValue);
+		}
+		if (currentChar == '\\') {
+			if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
+				valueBuilder.append('\\');
+				for (String value : values) {
+					if (value.equals(valueBuilder.toString())) {
+						suggestionInfo.setSuggestionCode(2);
+						break;
+					}
+					suggestionInfo.setSuggestionCode(3);
+				}
+				return new ValueHolder(false, true, false, mapKey, mapValue);
+			}
+			return new ValueHolder(false, true, false, mapKey, mapValue);
+		}
+		if (currentChar == '"') {
+			if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
+				valueBuilder.append('"');
+				for (String value : values) {
+					if (value.equals(valueBuilder.toString())) {
+						suggestionInfo.setSuggestionCode(2);
+						break;
+					}
+					suggestionInfo.setSuggestionCode(3);
+				}
+				return new ValueHolder(false, true, false, mapKey, mapValue);
+			}
+			mapValue = valueMapper.apply(valueBuilder.toString());
+			currentKey = "";
+			suggestionInfo.setCurrentKey(currentKey);
+
+			enteredValues.add(mapKey + ":\"" + mapValue + "\"");
+			keys.remove(enteredValues.get(enteredValues.size() - 1).split(":")[0]);
+			if (!allowValueDuplicates) {
+				values.remove(valueBuilder.toString());
+			}
+
+			valueBuilder.setLength(0);
+			suggestionInfo.setSuggestionCode(0);
+
+			return new ValueHolder(false, false, true, null, mapValue);
+		}
+		valueBuilder.append(currentChar);
+		currentValue = valueBuilder.toString();
+		suggestionInfo.setCurrentValue(currentValue);
+		for (String value : values) {
+			if (value.equals(valueBuilder.toString())) {
+				suggestionInfo.setSuggestionCode(2);
+				break;
+			}
+			suggestionInfo.setSuggestionCode(3);
+		}
+		return new ValueHolder(false, true, false, mapKey, mapValue);
+	}
+
+	private class MapArgumentSuggestionInfo {
 
 		private String currentKey;
 		private String currentValue;
 		private int suggestionCode;
-		private int builderStart;
 
-		MapArgumentSuggestionInfo(String currentKey, String currentValue, int suggestionCode, int builderStart) {
+		MapArgumentSuggestionInfo(String currentKey, String currentValue, int suggestionCode) {
 			this.currentKey = currentKey;
 			this.currentValue = currentValue;
 			this.suggestionCode = suggestionCode;
-			this.builderStart = builderStart;
+		}
+
+		public CompletableFuture<Suggestions> provideSuggestions(SuggestionsBuilder builder, String currentArgument, List<String> keyValues, List<String> valueValues) {
+			switch (getSuggestionCode()) {
+				case 0 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length() - getCurrentKey().length());
+					for (String key : keyValues) {
+						if (key.startsWith(getCurrentKey())) {
+							builder.suggest(key);
+						}
+					}
+				}
+				case 1 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length());
+					builder.suggest(String.valueOf(delimiter));
+				}
+				case 2 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length());
+					builder.suggest("\"");
+				}
+				case 3 -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length() - getCurrentValue().length());
+					for (String value : valueValues) {
+						if (value.startsWith(getCurrentValue())) {
+							builder.suggest(value);
+						}
+					}
+				}
+			}
+			return builder.buildFuture();
 		}
 
 		public String getCurrentKey() {
@@ -391,14 +420,44 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		public void setSuggestionCode(int suggestionCode) {
 			this.suggestionCode = suggestionCode;
 		}
+	}
 
-		public int getBuilderStart() {
-			return builderStart;
+	private class ValueHolder {
+
+		K mapKey;
+		V mapValue;
+		boolean isAKeyBeingBuilt;
+		boolean isAValueBeingBuilt;
+		boolean isFirstValueCharacter;
+
+		ValueHolder(boolean isAKeyBeingBuilt, boolean isAValueBeingBuilt, boolean isFirstValueCharacter, K mapKey, V mapValue) {
+			this.mapKey = mapKey;
+			this.mapValue = mapValue;
+			this.isAKeyBeingBuilt = isAKeyBeingBuilt;
+			this.isAValueBeingBuilt = isAValueBeingBuilt;
+			this.isFirstValueCharacter = isFirstValueCharacter;
 		}
 
-		public void setBuilderStart(int builderStart) {
-			this.builderStart = builderStart;
+		public K getMapKey() {
+			return mapKey;
 		}
+
+		public V getMapValue() {
+			return mapValue;
+		}
+
+		public boolean isAKeyBeingBuilt() {
+			return isAKeyBeingBuilt;
+		}
+
+		public boolean isAValueBeingBuilt() {
+			return isAValueBeingBuilt;
+		}
+
+		public boolean isFirstValueCharacter() {
+			return isFirstValueCharacter;
+		}
+
 	}
 
 }
