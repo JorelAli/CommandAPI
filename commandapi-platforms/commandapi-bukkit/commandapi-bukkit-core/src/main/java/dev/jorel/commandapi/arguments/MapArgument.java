@@ -51,8 +51,8 @@ public class MapArgument<K, V> extends Argument<HashMap> implements GreedyArgume
 		this.delimiter = delimiter;
 		this.valueMapper = valueMapper;
 
-		this.keyList = new ArrayList<>(keyList);
-		this.valueList = new ArrayList<>(valueList);
+		this.keyList = keyList == null ? new ArrayList<>() : new ArrayList<>(keyList);
+		this.valueList = valueList == null ? new ArrayList<>() : new ArrayList<>(valueList);
 		this.allowValueDuplicates = allowValueDuplicates;
 
 		this.keyMapper = switch (keyType) {

@@ -231,7 +231,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test 3,5:"Hello world!"
-		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods! at position 2: 3,<--[HERE]");
+		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods at position 2: 3,<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
