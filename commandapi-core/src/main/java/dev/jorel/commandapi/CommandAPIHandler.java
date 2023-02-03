@@ -20,6 +20,25 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -32,27 +51,19 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.arguments.*;
+
+import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.CustomProvidedArgument;
+import dev.jorel.commandapi.arguments.Literal;
+import dev.jorel.commandapi.arguments.MultiLiteral;
+import dev.jorel.commandapi.arguments.PreviewInfo;
+import dev.jorel.commandapi.arguments.Previewable;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.executors.CommandArguments;
+import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-
-// TODO: We can use the Adventure API on Paper and Velocity (NOT SPIGOT)
-//  and I'm not sure if we can use the Adventure API on Fabric, so let's
-//  assume we can't until we figure that out.
 
 /**
  * The "brains" behind the CommandAPI.
@@ -64,7 +75,7 @@ import java.util.function.Predicate;
  */
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
-	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
+	private static final VarHandle COMMANDCONTEXT_ARGUMENTS;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -111,8 +122,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	// but this IS a generic class caching system and we don't want derpy memory leaks
 	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
 
-	final TreeMap<String, CommandPermission> REGISTERED_PERMISSIONS = new TreeMap<>();
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
+	final TreeMap<String, CommandPermission> registeredPermissions = new TreeMap<>();
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
 
@@ -123,7 +134,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		this.registeredCommands = new ArrayList<>();
 		this.previewableArguments = new HashMap<>();
 
-		instance = this;
+		CommandAPIHandler.instance = this;
 	}
 
 	public void onLoad(CommandAPIConfig<?> config) {
@@ -147,12 +158,16 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 	public void onDisable() {
 		platform.onDisable();
-		instance = null;
+		CommandAPIHandler.resetInstance();
+	}
+	
+	private static void resetInstance() {
+		CommandAPIHandler.instance = null;
 	}
 
 	public static CommandAPIHandler<?, ?, ?> getInstance() {
-		if(instance != null) {
-			return instance;
+		if(CommandAPIHandler.instance != null) {
+			return CommandAPIHandler.instance;
 		} else {
 			throw new IllegalStateException("Tried to access CommandAPIHandler instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
 		}
@@ -172,10 +187,10 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<Source> generateCommand(Argument[] args, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) throws CommandSyntaxException {
+	Command<Source> generateCommand(Argument[] args, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
 
 		// Generate our command from executor
-		return (cmdCtx) -> {
+		return cmdCtx -> {
 			AbstractCommandSender<? extends CommandSender> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
 			CommandArguments commandArguments = argsToCommandArgs(cmdCtx, args);
 			ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> executionInfo = new ExecutionInfo<>() {
@@ -249,7 +264,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	}
 
 	/**
-	 * Converts the List&lt;Argument> into an Object[] for command execution
+	 * Converts the List&lt;Argument> into a {@link CommandArguments} for command execution
 	 * 
 	 * @param cmdCtx the command context that will execute this command
 	 * @param args   the map of strings to arguments
@@ -267,7 +282,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		// Populate array
 		for (Argument argument : args) {
 			if (argument.isListed()) {
-				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, argList.toArray());
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap));
 				argList.add(parsedArgument);
 				argsMap.put(argument.getNodeName(), parsedArgument);
 			}
@@ -285,7 +300,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @return the Argument's corresponding object
 	 * @throws CommandSyntaxException when the input for the argument isn't formatted correctly
 	 */
-	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, Object[] previousArgs) throws CommandSyntaxException {
+	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, CommandArguments previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
 			return value.parseArgument(cmdCtx, key, previousArgs);
 		} else {
@@ -320,12 +335,12 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
 			Predicate<CommandSender> requirements) {
 		// If commandName was already registered, always use the first permission used
-		if (REGISTERED_PERMISSIONS.containsKey(commandName.toLowerCase())) {
-			if (!REGISTERED_PERMISSIONS.get(commandName.toLowerCase()).equals(permission)) {
-				permission = REGISTERED_PERMISSIONS.get(commandName.toLowerCase());
+		if (registeredPermissions.containsKey(commandName.toLowerCase())) {
+			if (!registeredPermissions.get(commandName.toLowerCase()).equals(permission)) {
+				permission = registeredPermissions.get(commandName.toLowerCase());
 			}
 		} else {
-			REGISTERED_PERMISSIONS.put(commandName.toLowerCase(), permission);
+			registeredPermissions.put(commandName.toLowerCase(), permission);
 		}
 
 		// Register permission to the platform's registry, if both exist
@@ -356,7 +371,12 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				// Op permission set
 				satisfiesPermissions = sender.isOp();
 			} else {
-				satisfiesPermissions = permission.getPermission().isEmpty() || sender.hasPermission(permission.getPermission().get());
+				final Optional<String> optionalPerm = permission.getPermission();
+				if(optionalPerm.isPresent()) {
+					satisfiesPermissions = sender.hasPermission(optionalPerm.get());
+				} else {
+					satisfiesPermissions = true;
+				}
 			}
 		}
 		if (permission.isNegated()) {
@@ -375,9 +395,9 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * multiliteral arguments were present (and expanded) and returns false if
 	 * multiliteral arguments were not present.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean expandMultiLiterals(CommandMetaData<CommandSender> meta, final Argument[] args,
-			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
-			throws CommandSyntaxException, IOException {
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
 
 		// "Expands" our MultiLiterals into Literals
 		for (int index = 0; index < args.length; index++) {
@@ -424,34 +444,28 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 			}
 		}
 		for (int i = 0; i < args.length; i++) {
-			// Avoid IAOOBEs
-			if (regArgs.size() == i && regArgs.size() < args.length) {
-				break;
-			}
-			// We want to ensure all node names are the same
-			if (!regArgs.get(i)[0].equals(args[i].getNodeName())) {
+			// Avoid IAOOBEs and ensure all node names are the same
+			if ((regArgs.size() == i && regArgs.size() < args.length) || (!regArgs.get(i)[0].equals(args[i].getNodeName()))) {
 				break;
 			}
 			// This only applies to the last argument
-			if (i == args.length - 1) {
-				if (!regArgs.get(i)[1].equals(args[i].getClass().getSimpleName())) {
-					// Command it conflicts with
-					StringBuilder builder2 = new StringBuilder();
-					for (String[] arg : regArgs) {
-						builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
-					}
-
-					CommandAPI.logError("""
-							Failed to register command:
-
-							  %s %s
-
-							Because it conflicts with this previously registered command:
-
-							  %s %s
-							""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
-					return true;
+			if (i == args.length - 1 && !regArgs.get(i)[1].equals(args[i].getClass().getSimpleName())) {
+				// Command it conflicts with
+				StringBuilder builder2 = new StringBuilder();
+				for (String[] arg : regArgs) {
+					builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
 				}
+
+				CommandAPI.logError("""
+					Failed to register command:
+
+					  %s %s
+
+					Because it conflicts with this previously registered command:
+
+					  %s %s
+					""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
+				return true;
 			}
 		}
 		return false;
@@ -463,6 +477,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 		// Handle Literal arguments
 		if (innerArg instanceof Literal) {
+			@SuppressWarnings("unchecked")
 			Literal<? extends Argument> literalArgument = (Literal<? extends Argument>) innerArg;
 			return getLiteralArgumentBuilderArgument(literalArgument.getLiteral(), innerArg.getArgumentPermission(),
 					innerArg.getRequirements()).executes(command);
@@ -488,6 +503,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 			// Handle Literal arguments
 			if (outerArg instanceof Literal) {
+				@SuppressWarnings("unchecked")
 				Literal<? extends Argument> literalArgument = (Literal<? extends Argument>) outerArg;
 				outer = getLiteralArgumentBuilderArgument(literalArgument.getLiteral(),
 					outerArg.getArgumentPermission(), outerArg.getRequirements()).then(outer);
@@ -536,8 +552,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 	// Builds a command then registers it
 	void register(CommandMetaData<CommandSender> meta, final Argument[] args,
-			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted)
-			throws CommandSyntaxException, IOException {
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
 
 		// "Expands" our MultiLiterals into Literals
 		if (expandMultiLiterals(meta, args, executor, converted)) {
@@ -556,27 +571,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 		// #312 Safeguard against duplicate node names. This only applies to
 		// required arguments (i.e. not literal arguments)
-		{
-			Set<String> argumentNames = new HashSet<>();
-			for (Argument arg : args) {
-				// We shouldn't find MultiLiteralArguments at this point, only LiteralArguments
-				if (!(arg instanceof Literal)) {
-					if (argumentNames.contains(arg.getNodeName())) {
-						CommandAPI.logError("""
-								Failed to register command:
-
-								  %s %s
-
-								Because the following argument shares the same node name as another argument:
-
-								  %s
-								""".formatted(meta.commandName, humanReadableCommandArgSyntax, arg.toString()));
-						return;
-					} else {
-						argumentNames.add(arg.getNodeName());
-					}
-				}
-			}
+		if(!checkForDuplicateArgumentNodeNames(args, humanReadableCommandArgSyntax, meta.commandName)) {
+			return;
 		}
 
 		// Expand metaData into named variables
@@ -665,21 +661,66 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 //				}
 //			});
 		// We never know if this is "the last command" and we want dynamic (even if
-		// partial)
-		// command registration. Generate the dispatcher file!
+		// partial) command registration. Generate the dispatcher file!
+		writeDispatcherToFile();
+
+		platform.postCommandRegistration(resultantNode, aliasNodes);
+	}
+	
+	/**
+	 * Checks for duplicate argument node names and logs them as errors in the
+	 * console
+	 * 
+	 * @param args                          the list of arguments
+	 * @param humanReadableCommandArgSyntax the human readable command argument
+	 *                                      syntax
+	 * @param commandName                   the name of the command
+	 * @return true if there were no duplicate argument node names, false otherwise
+	 */
+	private boolean checkForDuplicateArgumentNodeNames(Argument[] args, String humanReadableCommandArgSyntax, String commandName) {
+		Set<String> argumentNames = new HashSet<>();
+		for (Argument arg : args) {
+			// We shouldn't find MultiLiteralArguments at this point, only LiteralArguments
+			if (!(arg instanceof Literal)) {
+				if (argumentNames.contains(arg.getNodeName())) {
+					CommandAPI.logError("""
+						Failed to register command:
+
+						  %s %s
+
+						Because the following argument shares the same node name as another argument:
+
+						  %s
+						""".formatted(commandName, humanReadableCommandArgSyntax, arg.toString()));
+					return false;
+				} else {
+					argumentNames.add(arg.getNodeName());
+				}
+			}
+		}
+		return true;
+	}
+	
+	private void writeDispatcherToFile() {
 		File file = CommandAPI.getConfiguration().getDispatcherFile();
 		if (file != null) {
 			try {
 				file.getParentFile().mkdirs();
-				file.createNewFile();
+				if (file.createNewFile()) {
+					// Cool, we've created the file
+					assert true;
+				}
 			} catch (IOException e) {
-				e.printStackTrace(System.out);
+				CommandAPI.logError("Failed to create the required directories for " + file.getName() + ": " + e.getMessage());
+				return;
 			}
 
-			platform.createDispatcherFile(file, platform.getBrigadierDispatcher());
+			try {
+				platform.createDispatcherFile(file, platform.getBrigadierDispatcher());
+			} catch (IOException e) {
+				CommandAPI.logError("Failed to write command registration info to " + file.getName() + ": " + e.getMessage());
+			}
 		}
-
-		platform.postCommandRegistration(resultantNode, aliasNodes);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -759,10 +800,13 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
 	}
 
-	Object[] generatePreviousArguments(CommandContext<Source> context, Argument[] args, String nodeName)
+	CommandArguments generatePreviousArguments(CommandContext<Source> context, Argument[] args, String nodeName)
 			throws CommandSyntaxException {
 		// Populate Object[], which is our previously filled arguments
 		List<Object> previousArguments = new ArrayList<>();
+
+		// LinkedHashMap for arguments
+		Map<String, Object> argsMap = new LinkedHashMap<>();
 
 		for (Argument arg : args) {
 			if (arg.getNodeName().equals(nodeName) && !(arg instanceof Literal)) {
@@ -771,7 +815,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 			Object result;
 			try {
-				result = parseArgument(context, arg.getNodeName(), arg, previousArguments.toArray());
+				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap));
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Redirected commands don't parse previous arguments properly. Simplest way to
@@ -785,9 +829,10 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 			}
 			if (arg.isListed()) {
 				previousArguments.add(result);
+				argsMap.put(arg.getNodeName(), result);
 			}
 		}
-		return previousArguments.toArray();
+		return new CommandArguments(previousArguments.toArray(), argsMap);
 	}
 
 	SuggestionProvider<Source> toSuggestions(Argument theArgument, Argument[] args,
@@ -817,13 +862,11 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 *         {@link Component}. If such a function is not available, this will
 	 *         return a function that always returns null.
 	 */
+	@SuppressWarnings("unchecked")
 	public Optional<PreviewableFunction<?>> lookupPreviewable(List<String> path) {
 		final Previewable<?, ?> previewable = previewableArguments.get(path);
-		if (previewable != null && previewable.getPreview().isPresent()) {
-			// Yeah, don't even question this logic of getting the value of an
-			// optional and then wrapping it in an optional again. Java likes it
-			// and complains if you don't do this. Not sure why.
-			return Optional.of(previewable.getPreview().get());
+		if (previewable != null) {
+			return (Optional<PreviewableFunction<?>>) (Optional<?>) previewable.getPreview();
 		} else {
 			return Optional.empty();
 		}

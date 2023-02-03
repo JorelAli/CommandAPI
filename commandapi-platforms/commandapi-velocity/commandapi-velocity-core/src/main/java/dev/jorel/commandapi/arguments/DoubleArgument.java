@@ -24,6 +24,7 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents primitive Java doubles
@@ -75,7 +76,7 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 	}
 
 	@Override
-	public <Source> Double parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Double parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

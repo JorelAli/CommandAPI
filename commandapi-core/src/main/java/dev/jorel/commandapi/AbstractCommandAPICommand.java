@@ -20,18 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.GreedyArgument;
-import dev.jorel.commandapi.exceptions.GreedyArgumentException;
-import dev.jorel.commandapi.exceptions.OptionalArgumentException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
+
+import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.GreedyArgument;
+import dev.jorel.commandapi.exceptions.GreedyArgumentException;
+import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
+import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -52,7 +51,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 *
 	 * @param commandName The name of the command to create
 	 */
-	public AbstractCommandAPICommand(String commandName) {
+	protected AbstractCommandAPICommand(String commandName) {
 		super(commandName);
 		this.isConverted = false;
 	}
@@ -142,7 +141,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
-	public Impl withSubcommands(Impl... subcommands) {
+	public Impl withSubcommands(@SuppressWarnings("unchecked") Impl... subcommands) {
 		this.subcommands.addAll(Arrays.asList(subcommands));
 		return instance();
 	}
@@ -207,6 +206,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	// Expands subcommands into arguments. This method should be static (it
 	// shouldn't be accessing/depending on any of the contents of the current class instance)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static <Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>, Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender>
 	void flatten(Impl rootCommand, List<Argument> prevArguments, Impl subcommand) {
 		// Get the list of literals represented by the current subcommand. This
@@ -243,49 +243,75 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
+	
+	boolean hasAnyExecutors() {
+		if (this.executor.hasAnyExecutors()) {
+			return true;
+		} else {
+			for(Impl subcommand : this.subcommands) {
+				if (subcommand.hasAnyExecutors()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private void checkHasExecutors() {
+		if(!hasAnyExecutors()) {
+			throw new MissingCommandExecutorException(this.meta.commandName);
+		}
+	}
 
 	@Override
 	public void register() {
 		if (!CommandAPI.canRegister()) {
 			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
-		try {
-			Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 
-			// Check GreedyArgument constraints
-			for (int i = 0, numGreedyArgs = 0; i < argumentsArray.length; i++) {
-				if (argumentsArray[i] instanceof GreedyArgument) {
-					if (++numGreedyArgs > 1 || i != argumentsArray.length - 1) {
-						throw new GreedyArgumentException(argumentsArray);
-					}
-				}
+		@SuppressWarnings("unchecked")
+		Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
+
+		// Check GreedyArgument constraints
+		checkGreedyArgumentConstraints(argumentsArray);
+		checkHasExecutors();
+		
+		// Assign the command's permissions to arguments if the arguments don't already
+		// have one
+		for (Argument argument : argumentsArray) {
+			if (argument.getArgumentPermission() == null) {
+				argument.withPermission(meta.permission);
 			}
+		}
 
-			// Assign the command's permissions to arguments if the arguments don't already
-			// have one
-			for (Argument argument : argumentsArray) {
-				if (argument.getArgumentPermission() == null) {
-					argument.withPermission(meta.permission);
-				}
-			}
-
+		if (executor.hasAnyExecutors()) {
+			// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
+			@SuppressWarnings("unchecked")
+			CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
+			
 			// Create a List<Argument[]> that is used to register optional arguments
-			List<Argument[]> argumentsToRegister = getArgumentsToRegister(argumentsArray);
-
-			if (executor.hasAnyExecutors()) {
-				// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
-				CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
-				for (Argument[] arguments : argumentsToRegister) {
-					handler.register(meta, arguments, executor, isConverted);
-				}
+			for (Argument[] args : getArgumentsToRegister(argumentsArray)) {
+				handler.register(meta, args, executor, isConverted);
 			}
+		}
 
-			// Convert subcommands into multiliteral arguments
-			for (Impl subcommand : this.subcommands) {
-				flatten(this.copy(), new ArrayList<>(), subcommand);
+		// Convert subcommands into multiliteral arguments
+		for (Impl subcommand : this.subcommands) {
+			flatten(this.copy(), new ArrayList<>(), subcommand);
+		}
+	}
+	
+	// Checks that greedy arguments don't have any other arguments at the end,
+	// and only zero or one greedy argument is present in an array of arguments
+	private void checkGreedyArgumentConstraints(Argument[] argumentsArray) {
+		for (int i = 0; i < argumentsArray.length; i++) {
+			// If we've seen a greedy argument that isn't at the end, then that
+			// also covers the case of seeing more than one greedy argument, as
+			// if there are more than one greedy arguments, one of them must not
+			// be at the end!
+			if (argumentsArray[i] instanceof GreedyArgument && i != argumentsArray.length - 1) {
+				throw new GreedyArgumentException(argumentsArray);
 			}
-		} catch (CommandSyntaxException | IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -325,6 +351,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 			argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
 			currentCommand.addAll(unpackCombinedArguments(next));
 		}
+
 		// All the arguments expanded, also handles when there are no optional arguments
 		argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
 		return argumentsToRegister;

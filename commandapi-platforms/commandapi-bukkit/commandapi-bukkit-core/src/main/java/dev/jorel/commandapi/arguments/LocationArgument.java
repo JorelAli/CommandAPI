@@ -23,10 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Location;
 
 /**
  * An argument that represents the Bukkit {@link Location} object
+ * 
+ * @since 1.1
  * @apiNote Returns a {@link Location} object
  */
 public class LocationArgument extends SafeOverrideableArgument<Location, Location> {
@@ -74,7 +77,7 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	}
 	
 	@Override
-	public <CommandSourceStack> Location parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Location parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return isPrecise ?
 			CommandAPIBukkit.<CommandSourceStack>get().getLocationPrecise(cmdCtx, key) :
 			CommandAPIBukkit.<CommandSourceStack>get().getLocationBlock(cmdCtx, key);

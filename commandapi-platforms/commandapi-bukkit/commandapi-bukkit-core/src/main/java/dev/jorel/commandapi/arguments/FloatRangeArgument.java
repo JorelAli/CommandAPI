@@ -23,10 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.wrappers.FloatRange;
 
 /**
  * An argument that represents a range of float values
+ * 
+ * @since 3.0
  */
 public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange> {
 
@@ -49,7 +52,7 @@ public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, Flo
 	}
 	
 	@Override
-	public <CommandSourceStack> FloatRange parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> FloatRange parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getFloatRange(cmdCtx, key);
 	}
 }

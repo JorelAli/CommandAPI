@@ -20,15 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.World;
 
-import java.util.function.Function;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.CommandAPIBukkit;
 
 /**
  * An argument that represents the Bukkit World object
+ * 
+ * @since 8.6.0
  */
 public class WorldArgument extends SafeOverrideableArgument<World, World> {
 
@@ -38,7 +41,9 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public WorldArgument(String nodeName) {
-		super(nodeName, CommandAPIBukkit.get()._ArgumentDimension(), ((Function<World, String>) World::getName).andThen(String::toLowerCase));
+		// Dev note: DO NOT use a method reference for the World class! See
+		// https://github.com/JorelAli/CommandAPI/issues/397 for more info
+		super(nodeName, CommandAPIBukkit.get()._ArgumentDimension(), world -> world.getName().toLowerCase());
 	}
 
 	@Override
@@ -56,7 +61,7 @@ public class WorldArgument extends SafeOverrideableArgument<World, World> {
 	}
 
 	@Override
-	public <CommandSourceStack> World parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> World parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getDimension(cmdCtx, key);
 	}
 }

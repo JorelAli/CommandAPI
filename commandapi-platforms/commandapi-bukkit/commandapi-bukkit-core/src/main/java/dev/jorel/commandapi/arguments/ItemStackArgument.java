@@ -23,10 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * An argument that represents the Bukkit ItemStack object
+ * 
+ * @since 1.1
  */
 public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack> {
 
@@ -49,7 +52,7 @@ public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemS
 	}
 	
 	@Override
-	public <CommandSourceStack> ItemStack parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> ItemStack parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getItemStack(cmdCtx, key);
 	}
 }

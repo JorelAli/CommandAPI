@@ -23,12 +23,15 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.ChatColor;
 
 import java.util.function.Function;
 
 /**
  * An argument that represents the Bukkit ChatColor object
+ * 
+ * @since 1.1
  * 
  * @apiNote Returns a {@link ChatColor} object
  */
@@ -55,7 +58,7 @@ public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatC
 	}
 	
 	@Override
-	public <CommandSourceStack> ChatColor parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> ChatColor parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getChatColor(cmdCtx, key);
 	}
 }

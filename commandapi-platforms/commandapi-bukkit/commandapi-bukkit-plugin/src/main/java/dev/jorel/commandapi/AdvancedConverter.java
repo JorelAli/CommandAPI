@@ -107,7 +107,7 @@ class AdvancedConverter {
 	 * multiple node names of the form
 	 * {@code (node_name_1|node_name_2|...|node_name_n)}
 	 */
-	private static final Pattern LITERAL_PATTERN = Pattern.compile("\\((\\w+(?:\\|\\w+)*)\\)");
+	private static final Pattern LITERAL_PATTERN = Pattern.compile("\\(\\w+(\\|\\w+)*+\\)");
 
 	private final JavaPlugin plugin;
 	private final String command;
@@ -132,7 +132,7 @@ class AdvancedConverter {
 			CommandAPI.logError(e.getMessage());
 			return;
 		}
-		if (arguments.size() == 0) {
+		if (arguments.isEmpty()) {
 			Converter.convert(plugin, commandName);
 		} else {
 			Converter.convert(plugin, commandName, arguments);
@@ -149,7 +149,7 @@ class AdvancedConverter {
 			CommandAPI.logError(e.getMessage());
 			return;
 		}
-		if (arguments.size() == 0) {
+		if (arguments.isEmpty()) {
 			Converter.convert(commandName);
 		} else {
 			Converter.convert(commandName, arguments);
@@ -170,10 +170,7 @@ class AdvancedConverter {
 		List<Argument<?>> arguments = new ArrayList<>();
 		String[] parts = command.split(" ");
 		for (argumentIndex = 1; argumentIndex < parts.length; argumentIndex++) {
-			Argument<?> argument = parseArgument(parts[argumentIndex]);
-			if (argument != null) {
-				arguments.add(argument);
-			}
+			arguments.add(parseArgument(parts[argumentIndex]));
 		}
 		return arguments;
 	}

@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -32,8 +33,14 @@ import java.util.List;
 
 /**
  * An argument that represents a selection of entities
+ * 
+ * @since 1.3
  */
 public class EntitySelectorArgument {
+	
+	private EntitySelectorArgument() {
+		throw new IllegalStateException("Use EntitySelectorArgument.OneEntity/OnePlayer/ManyEntities/ManyPlayers instead");
+	}
 
 	/**
 	 * An argument that represents a single entity
@@ -61,7 +68,7 @@ public class EntitySelectorArgument {
 		}
 
 		@Override
-		public <CommandSourceStack> Entity parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> Entity parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return (Entity) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_ONE_ENTITY);
 		}
 
@@ -98,7 +105,7 @@ public class EntitySelectorArgument {
 		}
 
 		@Override
-		public <CommandSourceStack> Player parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> Player parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return (Player) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_ONE_PLAYER);
 		}
 
@@ -137,7 +144,7 @@ public class EntitySelectorArgument {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <CommandSourceStack> Collection<Entity> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> Collection<Entity> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return (Collection<Entity>) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_MANY_ENTITIES);
 		}
 
@@ -181,7 +188,7 @@ public class EntitySelectorArgument {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public <CommandSourceStack> Collection<Player> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> Collection<Player> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return (Collection<Player>) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_MANY_PLAYERS);
 		}
 

@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.wrappers.CommandResult;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -16,9 +17,24 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+/**
+ * An argument that represents a command. This allows users
+ * to enter the name and arguments of any other command as
+ * an argument to this command.
+ *
+ * @since 8.6.0
+ *
+ * @apiNote Returns a {@link CommandResult} object
+ */
 public class CommandArgument extends Argument<CommandResult> implements GreedyArgument {
+	/**
+	 * Constructs a {@link CommandArgument} with the given node name.
+	 *
+	 * @param nodeName the name of the node for this argument
+	 */
 	public CommandArgument(String nodeName) {
 		super(nodeName, StringArgumentType.greedyString());
 
@@ -39,7 +55,7 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 				// Suggesting command name
 				ArgumentSuggestions<CommandSender> replacement = replacements.getNextSuggestion(sender);
 				if (replacement != null) {
-					return replacement.suggest(new SuggestionInfo<>(sender, new Object[0], command, command), builder);
+					return replacement.suggest(new SuggestionInfo<>(sender, new CommandArguments(new Object[0], new HashMap<>()), command, command), builder);
 				}
 
 				List<String> results = commandMap.tabComplete(sender, command);
@@ -85,7 +101,7 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 			String[] previousArguments = Arrays.copyOf(arguments, lastIndex);
 			ArgumentSuggestions<CommandSender> replacement = replacements.getNextSuggestion(sender, previousArguments);
 			if (replacement != null) {
-				return replacement.suggest(new SuggestionInfo<>(sender, previousArguments, command, arguments[lastIndex]), builder);
+				return replacement.suggest(new SuggestionInfo<>(sender, new CommandArguments(previousArguments, new HashMap<>()), command, arguments[lastIndex]), builder);
 			}
 
 			// Remove command name from arguments for normal tab-completion
@@ -141,7 +157,8 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 	 */
 	@Override
 	public CommandArgument replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
-		return replaceSuggestions(new ArgumentSuggestions[]{suggestions});
+		replacements = SuggestionsBranch.suggest(suggestions);
+		return this;
 	}
 
 	/**
@@ -173,7 +190,7 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 	}
 
 	@Override
-	public <CommandSourceStack> CommandResult parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> CommandResult parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		// Extract information
 		String command = cmdCtx.getArgument(key, String.class);
 		CommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();

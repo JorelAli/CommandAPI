@@ -23,12 +23,15 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.scoreboard.Objective;
 
 /**
  * An argument that represents the name of a scoreboard objective
+ * 
+ * @since 3.0
  */
-public class ObjectiveArgument extends SafeOverrideableArgument<String, Objective> {
+public class ObjectiveArgument extends SafeOverrideableArgument<Objective, Objective> {
 
 	/**
 	 * An Objective argument. Represents a scoreboard objective
@@ -39,8 +42,8 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	}
 
 	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
+	public Class<Objective> getPrimitiveType() {
+		return Objective.class;
 	}
 	
 	@Override
@@ -49,7 +52,7 @@ public class ObjectiveArgument extends SafeOverrideableArgument<String, Objectiv
 	}
 	
 	@Override
-	public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Objective parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getObjective(cmdCtx, key);
 	}
 }

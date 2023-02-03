@@ -23,10 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 
 /**
  * An argument that represents a range of integer values
+ * 
+ * @since 3.0
  */
 public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange, IntegerRange> {
 
@@ -49,7 +52,7 @@ public class IntegerRangeArgument extends SafeOverrideableArgument<IntegerRange,
 	}
 	
 	@Override
-	public <CommandSourceStack> IntegerRange parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> IntegerRange parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getIntRange(cmdCtx, key);
 	}
 }

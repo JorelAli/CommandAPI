@@ -23,11 +23,14 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 import java.util.UUID;
 
 /**
  * An argument that represents a UUID
+ * 
+ * @since 4.0
  */
 public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	
@@ -50,7 +53,7 @@ public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
 	}
 	
 	@Override
-	public <CommandSourceStack> UUID parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> UUID parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getUUID(cmdCtx, key);
 	}
 }

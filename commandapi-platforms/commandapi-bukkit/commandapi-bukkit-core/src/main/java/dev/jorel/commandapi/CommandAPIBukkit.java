@@ -21,6 +21,7 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Keyed;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -48,16 +50,17 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
-public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argument<?>, CommandSender, Source> implements NMS<Source> {
+public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Argument<?>, CommandSender, Source>, NMS<Source> {
+
 	// References to utility classes
 	private static CommandAPIBukkit<?> instance;
 	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
 
 	// Static VarHandles
-	private final static VarHandle COMMANDNODE_CHILDREN;
-	private final static VarHandle COMMANDNODE_LITERALS;
-	private final static VarHandle COMMANDNODE_ARGUMENTS;
+	private static final VarHandle COMMANDNODE_CHILDREN;
+	private static final VarHandle COMMANDNODE_LITERALS;
+	private static final VarHandle COMMANDNODE_ARGUMENTS;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
@@ -79,13 +82,13 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 		COMMANDNODE_ARGUMENTS = commandNodeArguments;
 	}
 
-	public CommandAPIBukkit() {
-		instance = this;
+	protected CommandAPIBukkit() {
+		CommandAPIBukkit.instance = this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <Source> CommandAPIBukkit<Source> get() {
-		if(instance != null) {
+		if(CommandAPIBukkit.instance != null) {
 			return (CommandAPIBukkit<Source>) instance;
 		} else {
 			throw new IllegalStateException("Tried to access CommandAPIBukkit instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
@@ -107,13 +110,17 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
 		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
-			CommandAPIBukkit.config = new InternalBukkitConfig(bukkitConfig);
+			CommandAPIBukkit.setInternalConfig(new InternalBukkitConfig(bukkitConfig));
 		} else {
 			CommandAPI.logError("CommandAPIBukkit was loaded with non-Bukkit config!");
 			CommandAPI.logError("Attempts to access Bukkit-specific config variables will fail!");
 		}
 
 		checkDependencies();
+	}
+	
+	private static void setInternalConfig(InternalBukkitConfig internalBukkitConfig) {
+		CommandAPIBukkit.config = internalBukkitConfig;
 	}
 
 	private void checkDependencies() {
@@ -192,25 +199,17 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	private void fixPermissions() {
 		// Get the command map to find registered commands
 		CommandMap map = paper.getCommandMap();
-		final Map<String, CommandPermission> PERMISSIONS_TO_FIX = CommandAPIHandler.getInstance().REGISTERED_PERMISSIONS;
+		final Map<String, CommandPermission> permissionsToFix = CommandAPIHandler.getInstance().registeredPermissions;
 
-		if (!PERMISSIONS_TO_FIX.isEmpty()) {
+		if (!permissionsToFix.isEmpty()) {
 			CommandAPI.logInfo("Linking permissions to commands:");
 
-			for (Map.Entry<String, CommandPermission> entry : PERMISSIONS_TO_FIX.entrySet()) {
+			for (Map.Entry<String, CommandPermission> entry : permissionsToFix.entrySet()) {
 				String cmdName = entry.getKey();
 				CommandPermission perm = entry.getValue();
-				CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
+				CommandAPI.logInfo("  " + perm.toString() + " -> /" + cmdName);
 
-				final String permNode;
-				if (perm.isNegated() || perm.equals(CommandPermission.NONE) || perm.equals(CommandPermission.OP)) {
-					permNode = "";
-				} else if (perm.getPermission().isPresent()) {
-					permNode = perm.getPermission().get();
-				} else {
-					// This case should never occur. Worth testing this with some assertion
-					permNode = null;
-				}
+				final String permNode = unpackInternalPermissionNodeString(perm);
 
 				/*
 				 * Sets the permission. If you have to be OP to run this command, we set the
@@ -221,17 +220,27 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 				 * If anyone dares tries to use testPermission() on this command, seriously,
 				 * what are you doing and why?
 				 */
-				Command command = map.getCommand(cmdName);
-				if (command != null && isVanillaCommandWrapper(command)) {
-					command.setPermission(permNode);
-				}
-				command = map.getCommand("minecraft:" + cmdName);
-				if (command != null && isVanillaCommandWrapper(command)) {
-					command.setPermission(permNode);
+				for(Command command : new Command[] { map.getCommand(cmdName), map.getCommand("minecraft:" + cmdName) }) {
+					if (command != null && isVanillaCommandWrapper(command)) {
+						command.setPermission(permNode);
+					}
 				}
 			}
 		}
-		CommandAPI.logNormal("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
+		CommandAPI.logNormal("Linked " + permissionsToFix.size() + " Bukkit permissions to commands");
+	}
+	
+	private String unpackInternalPermissionNodeString(CommandPermission perm) {
+		final Optional<String> optionalPerm = perm.getPermission();
+		if (perm.isNegated() || perm.equals(CommandPermission.NONE) || perm.equals(CommandPermission.OP)) {
+			return "";
+		} else if (optionalPerm.isPresent()) {
+			return optionalPerm.get();
+		} else {
+			throw new IllegalStateException("Invalid permission detected: " + perm +
+				"! This should never happen - if you're seeing this message, please" +
+				"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
+		}
 	}
 
 	/*
@@ -273,18 +282,20 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 		for (RegisteredCommand command : CommandAPIHandler.getInstance().registeredCommands) {
 			// Generate short description
 			final String shortDescription;
-			if (command.shortDescription().isPresent()) {
-				shortDescription = command.shortDescription().get();
-			} else if (command.fullDescription().isPresent()) {
-				shortDescription = command.fullDescription().get();
+			final Optional<String> shortDescriptionOptional = command.shortDescription();
+			final Optional<String> fullDescriptionOptional = command.fullDescription();
+			if (shortDescriptionOptional.isPresent()) {
+				shortDescription = shortDescriptionOptional.get();
+			} else if (fullDescriptionOptional.isPresent()) {
+				shortDescription = fullDescriptionOptional.get();
 			} else {
 				shortDescription = "A Mojang provided command.";
 			}
 
 			// Generate full description
 			StringBuilder sb = new StringBuilder();
-			if (command.fullDescription().isPresent()) {
-				sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(command.fullDescription().get()).append("\n");
+			if (fullDescriptionOptional.isPresent()) {
+				sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(fullDescriptionOptional.get()).append("\n");
 			}
 
 			generateHelpUsage(sb, command);
@@ -394,7 +405,7 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	}
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException {
+	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		// Nothing to do
 	}
 
@@ -435,6 +446,9 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	@Override
 	@Unimplemented(because = {REQUIRES_MINECRAFT_SERVER, VERSION_SPECIFIC_IMPLEMENTATION})
 	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> brigadierDispatcher) throws IOException;
+	
+	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER) // What are the odds?
+	public abstract <T> T getMinecraftServer();
 
 	@Override
 	public CommandAPILogger getLogger() {
@@ -493,5 +507,21 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 	 */
 	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
 		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
+	}
+	
+	protected void registerBukkitRecipesSafely(Iterator<Recipe> recipes) {
+		Recipe recipe;
+		while (recipes.hasNext()) {
+			recipe = recipes.next();
+			try {
+				Bukkit.addRecipe(recipe);
+				if (recipe instanceof Keyed keyedRecipe) {
+					CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
+				}
+			} catch (IllegalStateException e) { // From CraftingManager - "Duplicate recipe ignored with ID %id%"
+				assert true; // Can't re-register registered recipes. Not an error.
+			}
+		}
+		
 	}
 }

@@ -23,13 +23,20 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 import java.util.Collection;
 
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
+ * 
+ * @since 3.0
  */
 public class ScoreHolderArgument {
+
+	private ScoreHolderArgument() {
+		throw new IllegalStateException("Use ScoreHolderArgument.Single or ScoreHolderArgument.Multiple instead");
+	}
 
 	/**
 	 * An argument that represents a scoreholder's name
@@ -57,7 +64,7 @@ public class ScoreHolderArgument {
 		}
 
 		@Override
-		public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderSingle(cmdCtx, key);
 		}
 
@@ -90,7 +97,7 @@ public class ScoreHolderArgument {
 		}
 
 		@Override
-		public <CommandSourceStack> Collection<String> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> Collection<String> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return CommandAPIBukkit.<CommandSourceStack>get().getScoreHolderMultiple(cmdCtx, key);
 		}
 

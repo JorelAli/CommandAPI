@@ -19,7 +19,7 @@ import java.util.List;
  * @param <CommandSender> The class for running platforms commands
  * @param <Source> The class for running Brigadier commands
  */
-public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
+public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
 	// Platform-specific loading, enabling, and disabling tasks
 
 	/**
@@ -97,7 +97,7 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	 * @param resultantNode the node that was registered
 	 * @param aliasNodes    any alias nodes that were also registered as a part of this registration process
 	 */
-	public abstract void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) throws IOException;
+	public abstract void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
 	 * Registers a Brigadier command node and returns the built node.
@@ -133,7 +133,7 @@ public abstract class CommandAPIPlatform<Argument extends AbstractArgument<?, ?,
 	/**
 	 * @return A new default Logger meant for the CommandAPI to use
 	 */
-	public CommandAPILogger getLogger() {
+	public default CommandAPILogger getLogger() {
 		return new CommandAPILogger() {
 			private static final String PREFIX = "[CommandAPI] ";
 			private static final String YELLOW = "\u001B[33m";

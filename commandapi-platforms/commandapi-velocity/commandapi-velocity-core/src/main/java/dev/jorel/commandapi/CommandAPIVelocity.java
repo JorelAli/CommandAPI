@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
-public class CommandAPIVelocity extends CommandAPIPlatform<Argument<?>, CommandSource, CommandSource> {
+public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, CommandSource, CommandSource> {
 	private static CommandAPIVelocity instance;
 	private static InternalVelocityConfig config;
 

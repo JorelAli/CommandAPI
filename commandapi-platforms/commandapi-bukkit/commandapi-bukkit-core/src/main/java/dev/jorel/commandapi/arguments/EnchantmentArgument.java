@@ -23,10 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.enchantments.Enchantment;
 
 /**
  * An argument that represents the Bukkit Enchantment object
+ * 
+ * @since 1.1
  * 
  * @apiNote Returns an {@link Enchantment} object
  */
@@ -51,7 +54,7 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	}
 	
 	@Override
-	public <CommandSourceStack> Enchantment parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Enchantment parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getEnchantment(cmdCtx, key);
 	}
 }

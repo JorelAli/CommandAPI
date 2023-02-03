@@ -24,9 +24,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents an NBTContainer from the NBT API
+ * 
+ * @since 3.0
  */
 public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<NBTContainer, NBTContainer> {
 
@@ -57,7 +60,7 @@ public class NBTCompoundArgument<NBTContainer> extends SafeOverrideableArgument<
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandSourceStack> NBTContainer parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> NBTContainer parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs)
 			throws CommandSyntaxException {
 		return (NBTContainer) CommandAPIBukkit.<CommandSourceStack>get().getNBTCompound(cmdCtx, key, CommandAPI.getConfiguration().getNBTContainerConstructor());
 	}

@@ -1,0 +1,5 @@
+name: CommandAPIKotlinDSLTest
+main: dev.jorel.commandapi.test.Main
+version: 0.0.1
+author: DerEchtePilz
+description: A plugin to test the CommandAPI Kotlin DSL!

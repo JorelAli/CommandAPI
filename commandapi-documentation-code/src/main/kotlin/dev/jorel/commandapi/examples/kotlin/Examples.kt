@@ -43,6 +43,8 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Objective
+import org.bukkit.scoreboard.Team
 import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -432,11 +434,7 @@ fun objectiveargument() {
 CommandAPICommand("sidebar")
     .withArguments(ObjectiveArgument("objective"))
     .executes(CommandExecutor { _, args ->
-        // The ObjectArgument must be casted to a String
-        val objectiveName = args[0] as String
-
-        // An objective name can be turned into an Objective using getObjective(String)
-        val objective = Bukkit.getScoreboardManager().mainScoreboard.getObjective(objectiveName)
+        val objective = args[0] as Objective
 
         // Set display slot
         objective?.displaySlot = DisplaySlot.SIDEBAR
@@ -467,11 +465,7 @@ fun teamarguments() {
 CommandAPICommand("togglepvp")
     .withArguments(TeamArgument("team"))
     .executes(CommandExecutor { _, args ->
-        // The TeamArgument must be casted to a String
-        val teamName = args[0] as String
-
-        // A team name can be turned into a Team using getTeam(String)
-        val team = Bukkit.getScoreboardManager().mainScoreboard.getTeam(teamName)!!
+        val team = args[0] as Team
 
         // Toggle pvp
         team.setAllowFriendlyFire(team.allowFriendlyFire())
@@ -1142,7 +1136,6 @@ CommandAPICommand("break")
 
 fun resultingcommandexecutor() {
 /* ANCHOR: resultingcommandexecutor */
-
 CommandAPICommand("randnum")
     .executes(ResultingCommandExecutor { _, _ ->
         Random.nextInt()

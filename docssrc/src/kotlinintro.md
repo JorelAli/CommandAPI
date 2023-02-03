@@ -8,19 +8,33 @@ This DSL provides many methods to easily add arguments to your command structure
 
 ## Installing the DSL
 
-To install the DSL, you need to add the `commandapi-kotlin` dependency into your `pom.xml` or your `build.gradle`:
+To install the DSL, you need to add the `commandapi-kotlin` dependency into your `pom.xml` or your `build.gradle`, making sure to specify the server flavor you are developing for:
 
 ### Adding the dependency with Maven
 
-```xml
+<div class="linked-multi-pre">
+
+```xml,Bukkit
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-kotlin</artifactId>
+        <artifactId>commandapi-bukkit-kotlin</artifactId>
         <version>9.0.0</version>
     </dependency>
 </dependencies>
 ```
+
+```xml,Velocity
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-velocity-kotlin</artifactId>
+        <version>9.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+</div>
 
 Next, to shade it into your project easily, you need to add the `maven-shade-plugin`:
 
@@ -61,7 +75,7 @@ Next, you need to add Kotlin to your project. For this, you first need to add th
     <dependency>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-stdlib</artifactId>
-        <version>1.7.20</version>
+        <version>1.8.0</version>
     </dependency>
 </dependencies>
 ```
@@ -74,7 +88,7 @@ Finally, you need to add the `kotlin-maven-plugin`:
         <plugin>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-maven-plugin</artifactId>
-            <version>1.7.20</version>
+            <version>1.8.0</version>
             <executions>
                 <execution>
                     <id>compile</id>
@@ -123,15 +137,27 @@ Next, you need to add the dependency:
 
 <div class="multi-pre">
 
-```groovy,build.gradle
+```groovy,Bukkit_build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-kotlin:9.0.0"
+    implementation "dev.jorel:commandapi-bukkit-kotlin:9.0.0"
 }
 ```
 
-```kotlin,build.gradle.kts
+```kotlin,Bukkit_build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-kotlin:9.0.0")
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
+}
+```
+
+```groovy,Velocity_build.gradle
+dependencies {
+    implementation "dev.jorel:commandapi-velocity-kotlin:9.0.0"
+}
+```
+
+```kotlin,Velocity_build.gradle.kts
+dependencies {
+    implementation("dev.jorel:commandapi-velocity-kotlin:9.0.0")
 }
 ```
 
@@ -141,10 +167,10 @@ Finally, you need to add it to the `shadowJar` configuration task and relocate i
 
 <div class="multi-pre">
 
-```groovy,build.gradle
+```groovy,Bukkit_build.gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-kotlin:9.0.0")
+        include dependency("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
     }
     
     // TODO: Change this to my own package name
@@ -152,10 +178,32 @@ shadowJar {
 }
 ```
 
-```kotlin,build.gradle.kts
+```kotlin,Bukkit_build.gradle.kts
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-kotlin:9.0.0")
+        include dependency("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
+    }
+    
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```groovy,Velocity_build.gradle
+shadowJar {
+    dependencies {
+        include dependency("dev.jorel:commandapi-velocity-kotlin:9.0.0")
+    }
+    
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```kotlin,Velocity_build.gradle.kts
+shadowJar {
+    dependencies {
+        include dependency("dev.jorel:commandapi-velocity-kotlin:9.0.0")
     }
     
     // TODO: Change this to my own package name
@@ -171,13 +219,13 @@ You also need to add Kotlin to your project. For this, you first need to add the
 
 ```groovy,build.gradle
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.7.20"
+    id "org.jetbrains.kotlin.jvm" version "1.8.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.8.0"
 }
 ```
 

@@ -121,16 +121,9 @@ public final class Brigadier {
 	 */
 	public static <Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender>
 	Command fromCommand(AbstractCommandAPICommand<?, Argument, CommandSender> command) {
-		try {
-			// Need to cast base handler to make it realize we're using the same CommandSender class
-			CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
-			return handler.generateCommand((Argument[]) command.getArguments().toArray(AbstractArgument[]::new), command.getExecutor(), command.isConverted());
-		} catch (CommandSyntaxException e) {
-			e.printStackTrace();
-		}
-		// This case should never happen, because the exception should be caught
-		// "lower down" in execution
-		return null;
+		// Need to cast base handler to make it realize we're using the same CommandSender class
+		CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
+		return handler.generateCommand((Argument[]) command.getArguments().toArray(AbstractArgument[]::new), command.getExecutor(), command.isConverted());
 	}
 
 	/**

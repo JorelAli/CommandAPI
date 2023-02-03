@@ -23,9 +23,12 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents multiple LiteralArguments
+ * 
+ * @since 4.1
  */
 public class MultiLiteralArgument extends Argument<String> implements MultiLiteral<Argument<String>> {
 	private final String[] literals;
@@ -65,7 +68,7 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	}
 
 	@Override
-	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
 	}
 }

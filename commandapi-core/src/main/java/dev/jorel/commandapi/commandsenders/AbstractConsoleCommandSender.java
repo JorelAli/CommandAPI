@@ -1,4 +1,4 @@
 package dev.jorel.commandapi.commandsenders;
 
-public abstract class AbstractConsoleCommandSender<Source> implements AbstractCommandSender<Source> {
+public interface AbstractConsoleCommandSender<Source> extends AbstractCommandSender<Source> {
 }

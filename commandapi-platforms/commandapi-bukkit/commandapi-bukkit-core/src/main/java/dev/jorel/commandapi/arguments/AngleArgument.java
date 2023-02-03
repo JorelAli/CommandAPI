@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents a yaw angle, measured in degrees with float
@@ -30,6 +31,8 @@ import dev.jorel.commandapi.CommandAPIBukkit;
  * due west, to 179.9 for just west of due north, before wrapping back around to
  * -180.0. Tilde notation can be used to specify a rotation relative to the
  * executor's yaw angle.
+ * 
+ * @since 5.0
  * 
  * @apiNote Returns a {@link float}
  */
@@ -55,7 +58,7 @@ public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
 	}
 
 	@Override
-	public <CommandSourceStack> Float parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> Float parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs)
 		throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getAngle(cmdCtx, key);
 	}

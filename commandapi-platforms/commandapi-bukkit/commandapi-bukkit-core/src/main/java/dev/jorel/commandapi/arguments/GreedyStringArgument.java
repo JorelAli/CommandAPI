@@ -23,9 +23,12 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents arbitrary strings
+ * 
+ * @since 1.4
  */
 public class GreedyStringArgument extends SafeOverrideableArgument<String, String> implements GreedyArgument {
 	/**
@@ -48,7 +51,7 @@ public class GreedyStringArgument extends SafeOverrideableArgument<String, Strin
 	}
 
 	@Override
-	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

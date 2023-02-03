@@ -21,14 +21,15 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
+
+import java.io.Serializable;
 
 /**
  * An argument that represents any custom object
@@ -37,6 +38,8 @@ import org.bukkit.command.CommandSender;
  * @param <B> the return type of the underlying base argument {@code base}. For
  *            example, this would be {@code Integer} for an
  *            {@link IntegerArgument}
+ * 
+ * @since 2.0
  * @apiNote Returns a {@link T} object
  */
 public class CustomArgument<T, B> extends Argument<T> {
@@ -44,48 +47,8 @@ public class CustomArgument<T, B> extends Argument<T> {
 	private final CustomArgumentInfoParser<T, B> infoParser;
 	private final Argument<B> base;
 
-	/**
-	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
-	 * 
-	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentInfo} parser object which includes
-	 *                 information such as the command sender, previously declared
-	 *                 arguments and current input. This parser should return an
-	 *                 object of your choice.
-	 * @deprecated Use
-	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
-	 *             with {@link TextArgument} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser) {
-		this(nodeName, parser, false);
-	}
-
-	/**
-	 * Creates a CustomArgument with a valid parser, defaults to non-keyed argument
-	 * 
-	 * @param nodeName the name of the node for this argument
-	 * @param parser   A {@link CustomArgumentInfo} parser object which includes
-	 *                 information such as the command sender, previously declared
-	 *                 arguments and current input. This parser should return an
-	 *                 object of your choice.
-	 * @param keyed    Whether this argument can accept Minecraft's
-	 *                 <code>NamespacedKey</code> as valid arguments
-	 * @deprecated Use
-	 *             {@link CustomArgument#CustomArgument(Argument, CustomArgumentInfoParser)}
-	 *             with {@link TextArgument} or {@link NamespacedKeyArgument} instead
-	 */
-	@SuppressWarnings("unchecked")
-	@Deprecated(forRemoval = true)
-	public CustomArgument(String nodeName, CustomArgumentInfoParser<T, String> parser, boolean keyed) {
-		super(nodeName, keyed ? StringArgumentType.string()
-				: CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered());
-		this.base = (Argument<B>) new DummyArgument(nodeName, keyed);
-		this.infoParser = (CustomArgumentInfoParser<T, B>) parser;
-		CommandAPI.logWarning(
-				"Registering CustomArgument " + nodeName + " with legacy registration method. This may not work!\n"
-						+ "Consider using new CustomArgument(Argument, CustomArgumentInfoParser)");
-	}
+	private static final String INPUT = "%input%";
+	private static final String FULL_INPUT = "%finput%";
 
 	/**
 	 * Creates a CustomArgument with a valid parser, with an underlying base
@@ -127,21 +90,21 @@ public class CustomArgument<T, B> extends Argument<T> {
 	}
 
 	@Override
-	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
-			throws CommandSyntaxException {
+	public <CommandSourceStack> T parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs)
+		throws CommandSyntaxException {
 		// Get the raw input and parsed input
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
 		final B parsedInput = base.parseArgument(cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo<B>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
-					previousArgs, customresult, parsedInput));
+			return infoParser.apply(new CustomArgumentInfo<>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
+				previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);
 		} catch (Exception e) {
 			String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
-					.appendArgInput().appendHere().toString().replace("%input%", customresult)
-					.replace("%finput%", cmdCtx.getInput());
+				.appendArgInput().appendHere().toString().replace(INPUT, customresult)
+				.replace(FULL_INPUT, cmdCtx.getInput());
 			throw new SimpleCommandExceptionType(() -> errorMsg).create();
 		}
 	}
@@ -149,7 +112,10 @@ public class CustomArgument<T, B> extends Argument<T> {
 	/**
 	 * MessageBuilder is used to create error messages for invalid argument inputs
 	 */
-	public static class MessageBuilder {
+	public static class MessageBuilder implements Serializable {
+
+		private static final long serialVersionUID = 838497662821791798L;
+
 		StringBuilder builder;
 
 		/**
@@ -180,7 +146,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @return A reference to this object
 		 */
 		public MessageBuilder appendArgInput() {
-			builder.append("%input%");
+			builder.append(INPUT);
 			return this;
 		}
 
@@ -195,7 +161,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @return A reference to this object
 		 */
 		public MessageBuilder appendFullInput() {
-			builder.append("%finput%");
+			builder.append(FULL_INPUT);
 			return this;
 		}
 
@@ -284,11 +250,9 @@ public class CustomArgument<T, B> extends Argument<T> {
 		public CommandSyntaxException toCommandSyntax(String result, CommandContext<?> cmdCtx) {
 			if (errorMessage == null) {
 				// Deal with MessageBuilder
-				String errorMsg = errorMessageBuilder.toString().replace("%input%", result).replace("%finput%",
-						cmdCtx.getInput());
-				return new SimpleCommandExceptionType(() -> {
-					return errorMsg;
-				}).create();
+				String errorMsg = errorMessageBuilder.toString().replace(INPUT, result).replace(FULL_INPUT,
+					cmdCtx.getInput());
+				return new SimpleCommandExceptionType(() -> errorMsg).create();
 			} else {
 				// Deal with String
 				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
@@ -302,36 +266,35 @@ public class CustomArgument<T, B> extends Argument<T> {
 	 * argument's parser.
 	 * 
 	 * @param sender       the sender that types this argument
-	 * @param previousArgs an array of previously declared (parsed) arguments. This
-	 *                     can be used as if it were arguments in a command executor
-	 *                     method
+	 * @param previousArgs previousArgs - a {@link CommandArguments} object holding previously declared (parsed)
+	 *                     arguments. This can be used as if it were arguments in a command executor method.
 	 * @param input        the current input which the user has typed for this
 	 *                     argument
 	 * @param currentInput the current input, when parsed with the underlying base
 	 *                     argument.
 	 */
-	public record CustomArgumentInfo<B> (
-			/**
-			 * sender - the sender that types this argument
-			 */
-			CommandSender sender,
+	public record CustomArgumentInfo<B>(
+		/**
+		 * sender - the sender that types this argument
+		 */
+		CommandSender sender,
 
-			/**
-			 * previousArgs - an array of previously declared (parsed) arguments. This can
-			 * be used as if it were arguments in a command executor method
-			 */
-			Object[] previousArgs,
+		/**
+		 * previousArgs - a {@link CommandArguments} object holding previously declared (parsed) arguments. This can
+		 * be used as if it were arguments in a command executor method.
+		 */
+		CommandArguments previousArgs,
 
-			/**
-			 * input - the current input which the user has typed for this argument
-			 */
-			String input,
+		/**
+		 * input - the current input which the user has typed for this argument
+		 */
+		String input,
 
-			/**
-			 * currentInput - the current input, when parsed with the underlying base
-			 * argument.
-			 */
-			B currentInput) {
+		/**
+		 * currentInput - the current input, when parsed with the underlying base
+		 * argument.
+		 */
+		B currentInput) {
 	}
 
 	/**
@@ -351,35 +314,5 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @throws CustomArgumentException if an error occurs during parsing
 		 */
 		public T apply(CustomArgumentInfo<B> info) throws CustomArgumentException;
-	}
-
-	@Deprecated
-	private static class DummyArgument extends Argument<String> {
-
-		private final boolean keyed;
-
-		private DummyArgument(String nodeName, boolean keyed) {
-			super(nodeName, keyed ? StringArgumentType.string()
-					: CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered());
-			this.keyed = keyed;
-		}
-
-		@Override
-		public Class<String> getPrimitiveType() {
-			return String.class;
-		}
-
-		@Override
-		public CommandAPIArgumentType getArgumentType() {
-			return keyed ? CommandAPIArgumentType.PRIMITIVE_STRING : CommandAPIArgumentType.NAMESPACED_KEY;
-		}
-
-		@Override
-		public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs)
-				throws CommandSyntaxException {
-			return keyed ?
-				CommandAPIBukkit.<Source>get().getMinecraftKey(cmdCtx, key).toString() :
-				cmdCtx.getArgument(key, String.class);
-		}
 	}
 }

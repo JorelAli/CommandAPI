@@ -36,7 +36,7 @@ public abstract class AbstractArgumentTree<Impl extends AbstractArgumentTree<Imp
 	 * @param argument the argument to use as the underlying argument for this
 	 *                 argument tree
 	 */
-	public AbstractArgumentTree(final Argument argument) {
+	protected AbstractArgumentTree(final Argument argument) {
 		this.argument = argument;
 		// Copy the executor in case any executions were defined on the argument
 		this.executor = argument.executor;

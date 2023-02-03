@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.commandsenders;
 import com.velocitypowered.api.proxy.Player;
 
-public class VelocityPlayer extends AbstractPlayer<Player> implements VelocityCommandSender<Player> {
+public class VelocityPlayer implements AbstractPlayer<Player>, VelocityCommandSender<Player> {
 
 	private final Player player;
 	

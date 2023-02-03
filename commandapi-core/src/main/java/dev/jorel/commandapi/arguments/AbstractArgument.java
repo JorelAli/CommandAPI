@@ -23,10 +23,12 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.*;
+import dev.jorel.commandapi.AbstractArgumentTree;
+import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -100,11 +102,11 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * @param <Source>     the command source type
 	 * @param cmdCtx       the context which ran this command
 	 * @param key          the name of the argument node
-	 * @param previousArgs an array of previously declared arguments
+	 * @param previousArgs a {@link CommandArguments} object holding previous parsed arguments
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <Source> T parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException;
+	public abstract <Source> T parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException;
 
 	/////////////////
 	// Suggestions //
@@ -336,7 +338,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * from {@code argument}
 	 */
 	public List<String> getEntityNames(Object argument) {
-		return Arrays.asList(new String[]{null});
+		return Collections.singletonList(null);
 	}
 
 	/**

@@ -24,9 +24,12 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents primitive Java ints
+ * 
+ * @since 1.1
  */
 public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> {
 	private IntegerArgument(String nodeName, IntegerArgumentType type) {
@@ -77,7 +80,7 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> 
 	}
 
 	@Override
-	public <Source> Integer parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> Integer parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

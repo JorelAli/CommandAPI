@@ -23,9 +23,12 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents the name of an objective criteria
+ * 
+ * @since 3.0
  */
 public class ObjectiveCriteriaArgument extends Argument<String> {
 
@@ -48,7 +51,7 @@ public class ObjectiveCriteriaArgument extends Argument<String> {
 	}
 	
 	@Override
-	public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getObjectiveCriteria(cmdCtx, key);
 	}
 }

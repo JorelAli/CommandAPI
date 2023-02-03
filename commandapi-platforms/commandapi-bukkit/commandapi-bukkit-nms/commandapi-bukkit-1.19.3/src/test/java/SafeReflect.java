@@ -26,7 +26,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Either;
 
 import dev.jorel.commandapi.preprocessor.RequireField;
+import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.CustomFunctionManager;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 
@@ -35,4 +37,5 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 @RequireField(in = EntitySelector.class, name = "p", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "c", ofType = Either.class)
+@RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class SafeReflect {}

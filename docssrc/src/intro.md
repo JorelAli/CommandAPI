@@ -37,6 +37,15 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.7.0 \\(\rightarrow\\) 9.0.0
+
+> **Developer's Note:**
+>
+> 9.0.0 is a giant update that is incompatible with 8.7.x and prior versions. A lot of the documentation's code examples and explanations have been changed for the various changes made in this version. Please read the [Upgrading guide](./upgrading.md) for information on how to upgrade to 9.0.0.
+
+- Adds the new [Optional arguments](./optional_arguments.md) section
+- Adds Kotlin DSL code examples to all code examples
+
 ### Documentation changes 8.6.0 \\(\rightarrow\\) 8.7.0
 
 > **Developer's Note:**

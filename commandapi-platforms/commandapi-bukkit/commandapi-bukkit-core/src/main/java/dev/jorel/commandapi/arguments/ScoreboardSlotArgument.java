@@ -23,10 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
 /**
  * An argument that represents the Bukkit ScoreboardSlot object
+ * 
+ * @since 3.0
  */
 public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardSlot, ScoreboardSlot> {
 
@@ -49,7 +52,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	}
 	
 	@Override
-	public <CommandSourceStack> ScoreboardSlot parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> ScoreboardSlot parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getScoreboardSlot(cmdCtx, key);
 	}
 }

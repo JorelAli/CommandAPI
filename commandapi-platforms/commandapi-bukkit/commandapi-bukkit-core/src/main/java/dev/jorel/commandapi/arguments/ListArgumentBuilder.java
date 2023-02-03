@@ -153,18 +153,6 @@ public class ListArgumentBuilder<T> {
 			private ListArgumentBuilderFinished(Function<T, IStringTooltip> mapper) {
 				this.mapper = mapper;
 			}
-
-			/**
-			 * Builds this list argument.
-			 * 
-			 * @return a {@link ListArgument}
-			 * 
-			 * @deprecated Use {@link #buildGreedy()} instead
-			 */
-			@Deprecated(since = "8.6.0", forRemoval = false)
-			public ListArgument<T> build() {
-				return buildGreedy();
-			}
 			
 			/**
 			 * Builds this list argument.

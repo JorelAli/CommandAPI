@@ -23,9 +23,12 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents a simple String
+ * 
+ * @since 1.1
  */
 public class StringArgument extends Argument<String> {
 	/**
@@ -47,7 +50,7 @@ public class StringArgument extends Argument<String> {
 	}
 
 	@Override
-	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

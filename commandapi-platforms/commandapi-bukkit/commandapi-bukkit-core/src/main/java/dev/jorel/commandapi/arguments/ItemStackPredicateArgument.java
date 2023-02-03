@@ -23,12 +23,15 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Predicate;
 
 /**
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
+ * 
+ * @since 4.0
  */
 @SuppressWarnings("rawtypes")
 public class ItemStackPredicateArgument extends Argument<Predicate> {
@@ -52,7 +55,7 @@ public class ItemStackPredicateArgument extends Argument<Predicate> {
 	}
 	
 	@Override
-	public <CommandSourceStack> Predicate<ItemStack> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Predicate<ItemStack> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getItemStackPredicate(cmdCtx, key);
 	}
 }

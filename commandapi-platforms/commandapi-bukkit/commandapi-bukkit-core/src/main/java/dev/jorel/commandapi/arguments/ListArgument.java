@@ -30,6 +30,8 @@ import java.util.function.Function;
  * An argument that accepts a list of objects
  * 
  * @param <T> the type that this list argument generates a list of.
+ * 
+ * @since 8.2.0
  */
 public class ListArgument<T> extends ListArgumentCommon<T> implements GreedyArgument {
 

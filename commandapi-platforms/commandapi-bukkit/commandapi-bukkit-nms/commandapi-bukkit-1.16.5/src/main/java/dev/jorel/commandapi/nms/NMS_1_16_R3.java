@@ -30,6 +30,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import net.minecraft.server.v1_16_R3.ArgumentPredicateItemStack;
 import net.minecraft.server.v1_16_R3.CustomFunctionManager;
 import net.minecraft.server.v1_16_R3.DataPackResources;
 import net.minecraft.server.v1_16_R3.EntitySelector;
@@ -37,6 +38,7 @@ import net.minecraft.server.v1_16_R3.IBlockData;
 import net.minecraft.server.v1_16_R3.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R3.ItemStack;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.ParticleParamBlock;
 import net.minecraft.server.v1_16_R3.ParticleParamItem;
 import net.minecraft.server.v1_16_R3.ParticleParamRedstone;
@@ -53,9 +55,11 @@ import net.minecraft.server.v1_16_R3.ParticleParamRedstone;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
+@RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_16_R3 extends NMS_1_16_4_R3 {
 
 	@Differs(from = "1.16.4", by = "Use of non-deprecated NamespacedKey.fromString method")
+	@Override
 	protected NamespacedKey fromMinecraftKey(MinecraftKey key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getKey());
 	}

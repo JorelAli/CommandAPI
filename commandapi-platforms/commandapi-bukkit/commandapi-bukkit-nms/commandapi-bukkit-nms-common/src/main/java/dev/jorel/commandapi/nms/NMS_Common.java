@@ -32,6 +32,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -46,7 +47,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
@@ -60,13 +60,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -77,7 +78,6 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.Overridden;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
-import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -94,7 +94,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.AngleArgument;
 import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
@@ -122,7 +121,6 @@ import net.minecraft.commands.arguments.item.FunctionArgument;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.world.phys.Vec2;
 
 /**
@@ -347,7 +345,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> getMinecraftServer().getFunctions()
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions()
 			.execute(commandFunction, css);
 
 		CommandFunction.Entry[] cArr = commandFunction.getEntries();
@@ -380,9 +378,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key);
-
-	@Override
 	public final float getAngle(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return AngleArgument.getAngle(cmdCtx, key);
 	}
@@ -402,9 +397,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException;
-
-	@Override
 	@Unimplemented(because = NAME_CHANGED, from = "getWorld()", to = "f()", in = "1.19")
 	public abstract Predicate<Block> getBlockPredicate(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException;
@@ -413,9 +405,10 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftBlockData")
 	public abstract BlockData getBlockState(CommandContext<CommandSourceStack> cmdCtx, String key);
 
+	@SuppressWarnings("resource")
 	@Override
 	public CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
 	}
 
 	@Override
@@ -425,7 +418,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final ChatColor getChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return ChatColor.getByChar(ColorArgument.getColor(cmdCtx, key).code);
+		return ChatColor.getByChar(ColorArgument.getColor(cmdCtx, key).getChar());
 	}
 
 	@Override
@@ -446,22 +439,12 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
-	}
-
-	@Override
-	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
-	}
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftWorld", info = "CraftWorld is implicitly referenced by ServerLevel#getWorld, due to package renaming, it can't resolve at runtime")
+	public abstract World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
 	public abstract Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
-
-	@Override
-	public abstract Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType)
-		throws CommandSyntaxException;
 
 	@Override
 	@Unimplemented(because = NAME_CHANGED, from = "getKey()", to = "a()", in = "1.19")
@@ -470,8 +453,10 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		MinMaxBounds.Doubles range = RangeArgument.Floats.getRange(cmdCtx, key);
-		double low = range.getMin() == null ? -Float.MAX_VALUE : range.getMin();
-		double high = range.getMax() == null ? Float.MAX_VALUE : range.getMax();
+		final Double lowBoxed = range.getMin();
+		final Double highBoxed = range.getMax();
+		final double low = lowBoxed == null ? -Float.MAX_VALUE : lowBoxed;
+		final double high = highBoxed == null ? Float.MAX_VALUE : highBoxed;
 		return new FloatRange((float) low, (float) high);
 	}
 
@@ -481,14 +466,21 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		return convertFunction(
-			getMinecraftServer().getFunctions().get(new ResourceLocation(key.getNamespace(), key.getKey())).get());
+		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
+		Optional<CommandFunction> commandFunctionOptional = this.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
+		if(commandFunctionOptional.isPresent()) {
+			return convertFunction(commandFunctionOptional.get());
+		} else {
+			throw new IllegalStateException("Failed to get defined function " + key
+				+ "! This should never happen - please report this to the CommandAPI"
+				+ "developers, we'd love to know how you got this error message!");
+		}
 	}
 
 	@Override
 	public final Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : getMinecraftServer().getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
@@ -497,8 +489,10 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final IntegerRange getIntRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		MinMaxBounds.Ints range = RangeArgument.Ints.getRange(cmdCtx, key);
-		int low = range.getMin() == null ? Integer.MIN_VALUE : range.getMin();
-		int high = range.getMax() == null ? Integer.MAX_VALUE : range.getMax();
+		final Integer lowBoxed = range.getMin();
+		final Integer highBoxed = range.getMax();
+		final int low = lowBoxed == null ? Integer.MIN_VALUE : lowBoxed;
+		final int high = highBoxed == null ? Integer.MAX_VALUE : highBoxed;
 		return new IntegerRange(low, high);
 	}
 
@@ -546,11 +540,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
 	}
 
-	/*
-	 * This should return MINECRAFT_SERVER
-	 */
-	public abstract MinecraftServer getMinecraftServer();
-
 	@Override
 	public final <NBTContainer> Object getNBTCompound(CommandContext<CommandSourceStack> cmdCtx, String key,
 		Function<Object, NBTContainer> nbtContainerConstructor) {
@@ -558,9 +547,10 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final String getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
+	public final Objective getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException {
-		return ObjectiveArgument.getObjective(cmdCtx, key).getName();
+		String objectiveName = ObjectiveArgument.getObjective(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
 	}
 
 	@Override
@@ -570,13 +560,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final OfflinePlayer getOfflinePlayer(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		OfflinePlayer target = Bukkit
-			.getOfflinePlayer(GameProfileArgument.getGameProfiles(cmdCtx, key).iterator().next().getId());
-		if (target == null) {
-			throw GameProfileArgument.ERROR_UNKNOWN_PLAYER.create();
-		} else {
-			return target;
-		}
+		return Bukkit.getOfflinePlayer(GameProfileArgument.getGameProfiles(cmdCtx, key).iterator().next().getId());
 	}
 
 	@Override
@@ -599,15 +583,17 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		throws CommandSyntaxException;
 
 	@Override
-	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
-		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, info = """
+		1.17 has what appears to be a different obfuscation for recipe.getId().
+		I can't be bothered to figure out what it is, but all I know is it doesn't work,
+		and we need to move it outta here!
+		""")
+	public abstract Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
 	public final Rotation getRotation(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		Vec2 rotation = RotationArgument.getRotation(cmdCtx, key).getRotation(cmdCtx.getSource());
-		return new Rotation(rotation.x, rotation.y);
+		return new Rotation(rotation.y, rotation.x);
 	}
 
 	@Override
@@ -643,31 +629,15 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftSound")
 	public abstract Object getSound(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType);
 
-	// TODO: This differs from 1.18 -> 1.18.2 due to biome suggestions. Need to ensure
-	//  this doesn't blow up, but it should be covered by the default case (empty)
 	@Override
-	@Differs(from = "1.18", by = "Use of argument synthetic biome's listSuggestions method")
-	public final SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
-		return switch (provider) {
-			case FUNCTION -> (context, builder) -> {
-				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
-				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
-				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
-			};
-			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
-			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
-			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
-					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
-			};
-			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
-			};
-			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
-			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
-			default -> (context, builder) -> Suggestions.empty();
-		};
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, info = """
+		The various methods that this uses is obfuscated to different method
+		names for different versions. For example, getMinecraftServer().getLootTables.getIds()
+		is mapped to a different method in 1.18 compared to 1.19.2. This also has various other
+		implications across all sorts of versions, so it's much more reliable to just implement
+		them in every version.
+		""")
+	public abstract SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider);
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, from = "1.18.2", to = "1.19")
@@ -677,29 +647,27 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	public final Set<NamespacedKey> getTags() {
 		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : getMinecraftServer().getFunctions().getFunctionNames()) {
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
 			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
 	}
 
 	@Override
-	public final String getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return TeamArgument.getTeam(cmdCtx, key).getName();
+	public Team getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		String teamName = TeamArgument.getTeam(cmdCtx, key).getName();
+		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
 	}
 
 	@Override
 	public final int getTime(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return (int) cmdCtx.getArgument(key, Integer.class);
+		return cmdCtx.getArgument(key, Integer.class);
 	}
 
 	@Override
 	public final UUID getUUID(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return UuidArgument.getUuid(cmdCtx, key);
 	}
-
-	@Override
-	public abstract World getWorldForCSS(CommandSourceStack css);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")

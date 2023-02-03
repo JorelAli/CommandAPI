@@ -23,12 +23,15 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.scoreboard.Team;
 
 /**
  * An argument that represents the name of a scoreboard Team
+ * 
+ * @since 3.0
  */
-public class TeamArgument extends SafeOverrideableArgument<String, Team> {
+public class TeamArgument extends SafeOverrideableArgument<Team, Team> {
 
 	/**
 	 * A Team argument. Represents a scoreboard Team
@@ -39,8 +42,8 @@ public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 	}
 
 	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
+	public Class<Team> getPrimitiveType() {
+		return Team.class;
 	}
 	
 	@Override
@@ -49,7 +52,7 @@ public class TeamArgument extends SafeOverrideableArgument<String, Team> {
 	}
 	
 	@Override
-	public <CommandSourceStack> String parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Team parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return CommandAPIBukkit.<CommandSourceStack>get().getTeam(cmdCtx, key);
 	}
 }

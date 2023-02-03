@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.Sound;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -29,6 +30,8 @@ import dev.jorel.commandapi.CommandAPIBukkit;
 
 /**
  * An argument that represents the Bukkit Sound object
+ * 
+ * @since 2.1
  */
 public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements CustomProvidedArgument {
 	
@@ -56,7 +59,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	}
 	
 	@Override
-	public <CommandSourceStack> Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> Sound parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return (Sound) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_SOUND);
 	}
 
@@ -93,7 +96,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 		}
 
 		@Override
-		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return (org.bukkit.NamespacedKey) CommandAPIBukkit.<CommandSourceStack>get().getSound(cmdCtx, key, ArgumentSubType.SOUND_NAMESPACEDKEY);
 		}
 

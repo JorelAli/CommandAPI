@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
+import java.util.Objects;
+
 /**
  * A class representing a range of integers
  */
@@ -94,6 +96,22 @@ public class IntegerRange {
 		} else {
 			return this.low + ".." + this.high;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(high, low);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof IntegerRange other)) {
+			return false;
+		}
+		return high == other.high && low == other.low;
 	}
 	
 }

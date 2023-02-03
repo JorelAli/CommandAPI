@@ -23,12 +23,15 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.block.Biome;
 
 import java.util.function.Function;
 
 /**
  * An argument that represents the Bukkit Biome object
+ * 
+ * @since 3.0
  * 
  * @apiNote Returns a {@link Biome} object
  */
@@ -60,7 +63,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 	}
 
 	@Override
-	public <CommandSourceStack> Biome parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Object[] previousArgs)
+	public <CommandSourceStack> Biome parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs)
 		throws CommandSyntaxException {
 		return (Biome) CommandAPIBukkit.<CommandSourceStack>get().getBiome(cmdCtx, key, ArgumentSubType.BIOME_BIOME);
 	}
@@ -99,7 +102,7 @@ public class BiomeArgument extends SafeOverrideableArgument<Biome, Biome> implem
 
 		@Override
 		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx,
-			String key, Object[] previousArgs) throws CommandSyntaxException {
+                                                                           String key, CommandArguments previousArgs) throws CommandSyntaxException {
 			return (org.bukkit.NamespacedKey) CommandAPIBukkit.<CommandSourceStack>get().getBiome(cmdCtx, key, ArgumentSubType.BIOME_NAMESPACEDKEY);
 		}
 
