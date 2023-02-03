@@ -193,13 +193,15 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					mapValue = valueMapper.apply(valueBuilder.toString());
 					currentKey = "";
 					suggestionInfo.setCurrentKey(currentKey);
-					valueBuilder.setLength(0);
 					isFirstValueCharacter = true;
+
 					enteredValues.add(mapKey + ":\"" + mapValue + "\"");
 					keys.remove(enteredValues.get(enteredValues.size() - 1).split(":")[0]);
 					if (!allowValueDuplicates) {
-						values.remove(enteredValues.get(enteredValues.size() - 1).split(":")[0].replace("\"", ""));
+						values.remove(valueBuilder.toString());
 					}
+
+					valueBuilder.setLength(0);
 					mapKey = null;
 
 					isAValueBeingBuilt = false;
