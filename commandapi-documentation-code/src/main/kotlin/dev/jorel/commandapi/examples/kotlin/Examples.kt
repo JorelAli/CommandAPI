@@ -49,6 +49,7 @@ import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
+import kotlin.collections.LinkedHashMap
 import kotlin.random.Random
 
 class Examples : JavaPlugin() {
@@ -934,6 +935,40 @@ CommandAPICommand("runfunction")
     })
     .register()
 /* ANCHOR_END: functionarguments2 */
+}
+
+fun mapargument() {
+/* ANCHOR: mapargument */
+CommandAPICommand("sendmessage")
+    // Parameter 'delimiter' is missing, delimiter will be a colon
+    .withArguments(MapArgumentBuilder<Player, String>("message")
+
+        // Providing a key mapper to convert a String into a Player
+        .withKeyMapper { s: String -> Bukkit.getPlayer(s) }
+
+        // Providing a value mapper to leave the message how it was sent
+        .withValueMapper { s: String -> s }
+
+        // Providing a list of player names to be used as keys
+        .withKeyList(Bukkit.getOnlinePlayers().map { player: Player -> player.name }.toList())
+
+        // Don't provide a list of values so messages can be chosen without restrictions
+        .withoutValueList()
+
+        // Build the MapArgument
+        .build()
+    )
+    .executesPlayer(PlayerCommandExecutor { _, args ->
+        // The MapArgument returns a LinkedHashMap
+        val map: LinkedHashMap<Player, String> = args["message"] as LinkedHashMap<Player, String>
+
+        // Sending the messages to the players
+        for (messageRecipient in map.keys) {
+            messageRecipient.sendMessage(map[messageRecipient]!!)
+        }
+    })
+    .register()
+/* ANCHOR_END: mapargument */
 }
 
 fun permissions() {

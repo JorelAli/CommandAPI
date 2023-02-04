@@ -1081,6 +1081,40 @@ commandAPICommand("runfunction") {
 /* ANCHOR_END: functionarguments2 */
 }
 
+fun mapargument() {
+/* ANCHOR: mapargument */
+commandAPICommand("sendmessage") {
+    // Parameter 'delimiter' is missing, delimiter will be a colon
+    argument(MapArgumentBuilder<Player, String>("message")
+
+        // Providing a key mapper to convert a String into a Player
+        .withKeyMapper { s: String -> Bukkit.getPlayer(s) }
+
+        // Providing a value mapper to leave the message how it was sent
+        .withValueMapper { s: String -> s }
+
+        // Providing a list of player names to be used as keys
+        .withKeyList(Bukkit.getOnlinePlayers().map { player: Player -> player.name }.toList())
+
+        // Don't provide a list of values so messages can be chosen without restrictions
+        .withoutValueList()
+
+        // Build the MapArgument
+        .build()
+    )
+    playerExecutor { _, args ->
+        // The MapArgument returns a LinkedHashMap
+        val map: LinkedHashMap<Player, String> = args["message"] as LinkedHashMap<Player, String>
+
+        // Sending the messages to the players
+        for (messageRecipient in map.keys) {
+            messageRecipient.sendMessage(map[messageRecipient]!!)
+        }
+    }
+}
+/* ANCHOR_END: mapargument */
+}
+
 fun permissions() {
 /* ANCHOR: permissions */
 // Register the /god command with the permission node "command.god"
