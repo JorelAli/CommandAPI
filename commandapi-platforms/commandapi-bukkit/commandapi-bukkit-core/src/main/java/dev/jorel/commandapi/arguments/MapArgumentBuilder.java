@@ -40,7 +40,7 @@ public class MapArgumentBuilder<K, V> {
 	 *
 	 * @return this map argument builder
 	 */
-	public MapArgumentBuilderValueMapper withKeyType(Function<String, K> keyMapper) {
+	public MapArgumentBuilderValueMapper withKeyMapper(Function<String, K> keyMapper) {
 		return new MapArgumentBuilderValueMapper(keyMapper);
 	}
 

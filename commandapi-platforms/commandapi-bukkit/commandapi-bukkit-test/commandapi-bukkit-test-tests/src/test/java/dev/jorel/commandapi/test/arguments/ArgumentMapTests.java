@@ -8,7 +8,6 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +48,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyType(s -> s)
+				.withKeyMapper(s -> s)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -87,7 +86,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyType(s -> s)
+				.withKeyMapper(s -> s)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -120,7 +119,7 @@ public class ArgumentMapTests extends TestBase {
 		assertThrows(GreedyArgumentException.class, () -> {
 			new CommandAPICommand("test")
 				.withArguments(new MapArgumentBuilder<String, Integer>("map", '=')
-					.withKeyType(s -> s)
+					.withKeyMapper(s -> s)
 					.withValueMapper(Integer::valueOf)
 					.withoutKeyList()
 					.withoutValueList()
@@ -133,7 +132,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyType(s -> s)
+				.withKeyMapper(s -> s)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -168,7 +167,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, Integer>("map")
-				.withKeyType(s -> s)
+				.withKeyMapper(s -> s)
 				.withValueMapper(Integer::valueOf)
 				.withoutKeyList()
 				.withoutValueList()
@@ -206,7 +205,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<Float, String>("map")
-				.withKeyType(Float::valueOf)
+				.withKeyMapper(Float::valueOf)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -243,7 +242,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<Integer, String>("map")
-				.withKeyType(Integer::valueOf)
+				.withKeyMapper(Integer::valueOf)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
@@ -279,7 +278,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map")
-				.withKeyType(s -> s)
+				.withKeyMapper(s -> s)
 				.withValueMapper(s -> s)
 				.withKeyList(List.of("optionOne", "optionTwo", "optionThree"))
 				.withValueList(List.of("solutionOne", "solutionTwo", "solutionThree"))
@@ -307,7 +306,7 @@ public class ArgumentMapTests extends TestBase {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map")
-				.withKeyType(s -> s)
+				.withKeyMapper(s -> s)
 				.withValueMapper(s -> s)
 				.withoutKeyList()
 				.withoutValueList()
