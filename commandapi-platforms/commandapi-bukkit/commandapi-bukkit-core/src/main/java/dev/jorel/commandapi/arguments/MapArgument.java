@@ -368,14 +368,14 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key) {
 		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
+		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
 	}
 
 	private CommandSyntaxException throwInvalidValue(StringBuilder visitedCharacters, String value) {
 		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
+		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value: " + value);
 	}

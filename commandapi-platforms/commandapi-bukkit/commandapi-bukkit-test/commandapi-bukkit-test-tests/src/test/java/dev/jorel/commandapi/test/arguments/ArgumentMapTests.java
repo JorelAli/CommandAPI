@@ -12,7 +12,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,7 +44,7 @@ public class ArgumentMapTests extends TestBase {
 
 	@Test
 	public void executionTestWithMapArgument() {
-		Mut<HashMap<String, String>> results = Mut.of();
+		Mut<LinkedHashMap<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
@@ -54,7 +55,7 @@ public class ArgumentMapTests extends TestBase {
 				.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((HashMap<String, String>) args.get("map"));
+				results.set((LinkedHashMap<String, String>) args.get("map"));
 			})
 			.register();
 
@@ -62,7 +63,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// /test map:"cool map"
 		server.dispatchCommand(player, "test map:\"cool map\"");
-		Map<String, String> testMap = new HashMap<>();
+		Map<String, String> testMap = new LinkedHashMap<>();
 		testMap.put("map", "cool map");
 		assertEquals(testMap, results.get());
 
@@ -81,7 +82,7 @@ public class ArgumentMapTests extends TestBase {
 
 	@Test
 	public void executionTestWithMapArgumentAndSpecialValues() {
-		Mut<HashMap<String, String>> results = Mut.of();
+		Mut<LinkedHashMap<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
@@ -92,7 +93,7 @@ public class ArgumentMapTests extends TestBase {
 				.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((HashMap<String, String>) args.get("map"));
+				results.set((LinkedHashMap<String, String>) args.get("map"));
 			})
 			.register();
 
@@ -100,7 +101,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// /test map:"\"hello\""
 		server.dispatchCommand(player, "test map:\"\\\"hello\\\"\"");
-		Map<String, String> testMap = new HashMap<>();
+		Map<String, String> testMap = new LinkedHashMap<>();
 		testMap.put("map", "\"hello\"");
 		assertEquals(testMap, results.get());
 
@@ -162,7 +163,7 @@ public class ArgumentMapTests extends TestBase {
 
 	@Test
 	public void executionTestWithOtherKeyValuePairs() {
-		Mut<HashMap<String, Integer>> results = Mut.of();
+		Mut<LinkedHashMap<String, Integer>> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, Integer>("map")
@@ -173,7 +174,7 @@ public class ArgumentMapTests extends TestBase {
 				.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((HashMap<String, Integer>) args.get("map"));
+				results.set((LinkedHashMap<String, Integer>) args.get("map"));
 			})
 			.register();
 
@@ -181,7 +182,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// /test map:"598"
 		server.dispatchCommand(player, "test map:\"598\"");
-		Map<String, Integer> testMap = new HashMap<>();
+		Map<String, Integer> testMap = new LinkedHashMap<>();
 		testMap.put("map", 598);
 		assertEquals(testMap, results.get());
 
@@ -200,7 +201,7 @@ public class ArgumentMapTests extends TestBase {
 
 	@Test
 	public void executionTestWithFloatKey() {
-		Mut<HashMap<Float, String>> results = Mut.of();
+		Mut<LinkedHashMap<Float, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<Float, String>("map")
@@ -211,7 +212,7 @@ public class ArgumentMapTests extends TestBase {
 				.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((HashMap<Float, String>) args.get(0));
+				results.set((LinkedHashMap<Float, String>) args.get(0));
 			})
 			.register();
 
@@ -219,7 +220,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// /test 3.5:"Hello World" 12.25:"This is a test!"
 		server.dispatchCommand(player, "test 3.5:\"Hello World\" 12.25:\"This is a test!\"");
-		HashMap<Float, String> testMap = new HashMap<>();
+		LinkedHashMap<Float, String> testMap = new LinkedHashMap<>();
 		testMap.put(3.5F, "Hello World");
 		testMap.put(12.25F, "This is a test!");
 		assertEquals(testMap, results.get());
@@ -237,7 +238,7 @@ public class ArgumentMapTests extends TestBase {
 
 	@Test
 	public void executionTestWithIntegerKey() {
-		Mut<HashMap<Integer, String>> results = Mut.of();
+		Mut<LinkedHashMap<Integer, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<Integer, String>("map")
@@ -248,7 +249,7 @@ public class ArgumentMapTests extends TestBase {
 				.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((HashMap<Integer, String>) args.get(0));
+				results.set((LinkedHashMap<Integer, String>) args.get(0));
 			})
 			.register();
 
@@ -256,7 +257,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// /test 3:"Hello World" 12:"This is a test!"
 		server.dispatchCommand(player, "test 3:\"Hello World\" 12:\"This is a test!\"");
-		HashMap<Integer, String> testMap = new HashMap<>();
+		LinkedHashMap<Integer, String> testMap = new LinkedHashMap<>();
 		testMap.put(3, "Hello World");
 		testMap.put(12, "This is a test!");
 		assertEquals(testMap, results.get());
@@ -271,5 +272,33 @@ public class ArgumentMapTests extends TestBase {
 
 		assertNoMoreResults(results);
 	}
+
+	@Test
+	public void executionTestWithSuggestions() {
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map")
+				.withKeyType(s -> s)
+				.withValueMapper(s -> s)
+				.withKeyList(List.of("optionOne", "optionTwo", "optionThree"))
+				.withValueList(List.of("solutionOne", "solutionTwo", "solutionThree"))
+				.build()
+			)
+			.executesPlayer((player, args) -> {
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// From previous test we know everything works so here only exceptions will be tested
+
+		// Test invalid key
+		// /test optionOne:"solutionTwo" optionFour:"solutionOne"
+		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 35: ...optionFour<--[HERE]");
+
+		// Test invalid value
+		// /test optionOne:"solutionOne" optionTwo:"solutionFour"
+		assertCommandFailsWith(player, "test optionOne:\"solutionOne\" optionTwo:\"solutionFour\"", "Could not parse command: Invalid value: solutionFour at position 48: ...lutionFour<--[HERE]");
+ 	}
 
 }
