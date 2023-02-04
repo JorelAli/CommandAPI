@@ -29,6 +29,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	private final List<String> keyList;
 	private final List<String> valueList;
 	private final boolean allowValueDuplicates;
+	private final boolean keyListEmpty;
+	private final boolean valueListEmpty;
 
 	private final List<String> enteredValues = new ArrayList<>();
 
@@ -50,6 +52,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		this.keyList = keyList == null ? new ArrayList<>() : new ArrayList<>(keyList);
 		this.valueList = valueList == null ? new ArrayList<>() : new ArrayList<>(valueList);
 		this.allowValueDuplicates = allowValueDuplicates;
+
+		this.keyListEmpty = keyList == null;
+		this.valueListEmpty = valueList == null;
 
 		applySuggestions();
 	}
@@ -264,6 +269,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
 				if (currentChar == delimiter) {
+					if (!keyList.contains(keyBuilder.toString()) && !keyListEmpty) {
+						throw throwInvalidKey(visitedCharacters, keyBuilder.toString());
+					}
+
 					mapKey = (K) keyMapper.apply(keyBuilder.toString());
 
 					// No need to check the key here because we already know it only consists of letters
@@ -295,6 +304,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
 						valueBuilder.append('"');
 						continue;
+					}
+					if (!valueList.contains(valueBuilder.toString()) && !valueListEmpty) {
+						throw throwInvalidValue(visitedCharacters, valueBuilder.toString());
 					}
 					mapValue = valueMapper.apply(valueBuilder.toString());
 					valueBuilder.setLength(0);
@@ -352,6 +364,20 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
+	}
+
+	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context);
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
+	}
+
+	private CommandSyntaxException throwInvalidValue(StringBuilder visitedCharacters, String value) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context);
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value: " + value);
 	}
 
 	private static class MapArgumentSuggestionInfo {
