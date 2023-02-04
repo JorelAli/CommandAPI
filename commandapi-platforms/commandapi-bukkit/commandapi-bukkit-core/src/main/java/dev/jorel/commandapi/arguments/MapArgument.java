@@ -274,6 +274,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					}
 
 					mapKey = (K) keyMapper.apply(keyBuilder.toString());
+					if (results.containsKey(mapKey)) {
+						throw duplicateKey(visitedCharacters);
+					}
 
 					// No need to check the key here because we already know it only consists of letters
 
@@ -309,6 +312,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 						throw throwInvalidValue(visitedCharacters, valueBuilder.toString());
 					}
 					mapValue = valueMapper.apply(valueBuilder.toString());
+
+					if (results.containsValue(mapValue) && !allowValueDuplicates) {
+						throw duplicateValue(visitedCharacters);
+					}
+
 					valueBuilder.setLength(0);
 					isFirstValueCharacter = true;
 					results.put(mapKey, mapValue);
@@ -378,6 +386,20 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value: " + value);
+	}
+
+	private CommandSyntaxException duplicateKey(StringBuilder visitedCharacters) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate keys are not allowed");
+	}
+
+	private CommandSyntaxException duplicateValue(StringBuilder visitedCharacters) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate values are not allowed here");
 	}
 
 	private static class MapArgumentSuggestionInfo {
