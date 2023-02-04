@@ -8,6 +8,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -274,7 +275,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithSuggestions() {
+	public void executionTestWithSuggestionsWithContents() {
 
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map")
@@ -284,8 +285,7 @@ public class ArgumentMapTests extends TestBase {
 				.withValueList(List.of("solutionOne", "solutionTwo", "solutionThree"))
 				.build()
 			)
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();
@@ -300,5 +300,36 @@ public class ArgumentMapTests extends TestBase {
 		// /test optionOne:"solutionOne" optionTwo:"solutionFour"
 		assertCommandFailsWith(player, "test optionOne:\"solutionOne\" optionTwo:\"solutionFour\"", "Could not parse command: Invalid value: solutionFour at position 48: ...lutionFour<--[HERE]");
  	}
+
+	@Test
+	public void executionTestWithoutSuggestions() {
+		Mut<LinkedHashMap<String, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map")
+				.withKeyType(s -> s)
+				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
+				.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set((LinkedHashMap<String, String>) args.get("map"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Theoretically with this command, every key/value pair should be possible
+		LinkedHashMap<String, String> testMap = new LinkedHashMap<>();
+		testMap.put("key1", "value1");
+		testMap.put("key2", "value2");
+
+		// /test key1:"value1" key2:"value2"
+		server.dispatchCommand(player, "test key1:\"value1\" key2:\"value2\"");
+		assertEquals(testMap, results.get());
+
+		assertNoMoreResults(results);
+	}
 
 }
