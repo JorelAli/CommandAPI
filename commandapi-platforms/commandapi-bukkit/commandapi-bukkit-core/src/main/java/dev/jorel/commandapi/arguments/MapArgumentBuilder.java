@@ -2,6 +2,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
 /**
  * A builder to create a {@link MapArgument}
@@ -104,6 +105,12 @@ public class MapArgumentBuilder<K, V> {
 				private final List<String> keyList;
 
 				public MapArgumentBuilderSuggestsValue(List<String> keyList) {
+					Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\\.]+)");
+					for (String key : keyList) {
+						if (keyPattern.matcher(key).matches()) {
+							throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9\\.]+)'! It may only contain letters from a-z and A-Z, numbers and periods.");
+						}
+					}
 					this.keyList = keyList;
 				}
 
