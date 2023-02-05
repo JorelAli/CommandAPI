@@ -110,11 +110,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	 *
 	 * @return An enum value based on what to suggest
 	 */
-	@SuppressWarnings("unchecked")
 	private MapArgumentSuggestionInfo getSuggestionCode(String currentArgument, List<String> keys, List<String> values) throws CommandSyntaxException {
-		K mapKey = null;
-		V mapValue;
-
 		String currentKey = "";
 		String currentValue = "";
 
@@ -141,8 +137,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				currentValue = "";
 				suggestionInfo.setCurrentValue(currentValue);
 				if (currentChar == delimiter) {
-					mapKey = (K) keyMapper.apply(keyBuilder.toString());
-					keyBuilder.setLength(0);
 					isAKeyBeingBuilt = false;
 					isAValueBeingBuilt = true;
 					suggestionInfo.setSuggestionCode(SuggestionCode.QUOTATION_MARK_SUGGESTION);
@@ -195,19 +189,17 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 						}
 						continue;
 					}
-					mapValue = valueMapper.apply(valueBuilder.toString());
 					currentKey = "";
 					suggestionInfo.setCurrentKey(currentKey);
 					isFirstValueCharacter = true;
 
-					enteredValues.add(mapKey + ":\"" + mapValue + "\"");
-					keys.remove(enteredValues.get(enteredValues.size() - 1).split(":")[0]);
+					keys.remove(keyBuilder.toString());
 					if (!allowValueDuplicates) {
 						values.remove(valueBuilder.toString());
 					}
 
+					keyBuilder.setLength(0);
 					valueBuilder.setLength(0);
-					mapKey = null;
 
 					isAValueBeingBuilt = false;
 					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
