@@ -41,7 +41,7 @@ $$\downarrow$$
 
 ### Providing mapper functions
 
-For the rest of this page, let's assume keys are `String`s and values are `Integer`s. The mapper functions are used to parse the argument when entered. Because a `GreedyStringArgument`
+The mapper functions are used to parse the argument when entered. Because a `GreedyStringArgument`
 returns a `String`, we need a way to convert a `String` into an object specified by the type parameters.
 
 When providing mappers, you first need to provide the key mapper:
@@ -107,11 +107,11 @@ To finish building the `MapArgument`, you have to call the `build()` method. Thi
 public MapArgument<K, V> build();
 ```
 
-<div class="example">
-
 ----
 
 ## Examples
+
+<div class="example">
 
 ### Example - /sendmessage command
 
