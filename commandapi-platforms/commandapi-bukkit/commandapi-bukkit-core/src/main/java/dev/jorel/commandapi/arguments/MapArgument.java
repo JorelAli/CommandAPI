@@ -32,8 +32,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	private final boolean keyListEmpty;
 	private final boolean valueListEmpty;
 
-	private final List<String> enteredValues = new ArrayList<>();
-
 	private final Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\\.]+)");
 
 	/**
