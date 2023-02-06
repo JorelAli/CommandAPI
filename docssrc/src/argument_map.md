@@ -141,7 +141,7 @@ To implement that, we create a command that uses a `MapArgument` and use `Player
 
 <div class="warning">
 
-Developer's Note:
+**Developer's Note:**
 
 The `MapArgument` is very strict and doesn't have room for any errors. The syntax for key/value pairs of the `MapArgument` is as following:
 
