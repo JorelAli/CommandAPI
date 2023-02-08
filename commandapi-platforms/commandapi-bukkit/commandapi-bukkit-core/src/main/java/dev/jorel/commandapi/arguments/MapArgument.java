@@ -260,7 +260,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			if (isAKeyBeingBuilt) {
 				if (currentChar == delimiter) {
 					if (!keyList.contains(keyBuilder.toString()) && !keyListEmpty) {
-						throw throwInvalidKey(visitedCharacters, keyBuilder.toString());
+						throw throwInvalidKey(visitedCharacters, keyBuilder.toString(), true);
+					}
+
+					if (currentIndex == rawValuesChars.length - 1) {
+						throw missingQuotationMark(visitedCharacters);
 					}
 
 					mapKey = (K) keyMapper.apply(keyBuilder.toString());
@@ -279,10 +283,22 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
 				}
 				keyBuilder.append(currentChar);
-				validateKey(visitedCharacters, keyPattern, keyBuilder);
+				boolean isInvalidKey = validateKey(visitedCharacters, keyPattern, keyBuilder);
+				if (isInvalidKey) {
+					if (currentIndex == rawValuesChars.length - 1) {
+						throw throwInvalidKey(visitedCharacters, keyBuilder.toString(), false);
+					}
+				} else {
+					if (currentIndex == rawValuesChars.length - 1) {
+						throw missingDelimiter(visitedCharacters);
+					}
+				}
 			} else if (isAValueBeingBuilt) {
 				if (isFirstValueCharacter) {
 					validateValueStart(currentChar, visitedCharacters);
+					if (currentIndex == rawValuesChars.length - 1) {
+						throw missingValue(visitedCharacters);
+					}
 					isFirstValueCharacter = false;
 					continue;
 				}
@@ -327,10 +343,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return results;
 	}
 
-	private void validateKey(StringBuilder visitedCharacters, Pattern keyPattern, StringBuilder keyBuilder) throws CommandSyntaxException {
+	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, StringBuilder keyBuilder) throws CommandSyntaxException {
 		if (!keyPattern.matcher(keyBuilder.toString()).matches()) {
 			throw throwInvalidKeyCharacter(visitedCharacters);
 		}
+		return !keyList.contains(keyBuilder.toString());
 	}
 
 	private void validateValueStart(char currentChar, StringBuilder visitedCharacters) throws CommandSyntaxException {
@@ -364,9 +381,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
 	}
 
-	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key) {
+	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key, boolean cutLastCharacter) {
 		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
+		StringReader reader = (cutLastCharacter) ? new StringReader(context.substring(0, context.length() - 1)) : new StringReader(context);
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
 	}
@@ -390,6 +407,27 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate values are not allowed here");
+	}
+
+	private CommandSyntaxException missingDelimiter(StringBuilder visitedCharacters) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context);
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Delimiter required after writing a key");
+	}
+
+	private CommandSyntaxException missingQuotationMark(StringBuilder visitedCharacters) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context);
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Quotation mark required after writing the delimiter");
+	}
+
+	private CommandSyntaxException missingValue(StringBuilder visitedCharacters) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context);
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Value required after opening quotation mark");
 	}
 
 	private static class MapArgumentSuggestionInfo {
