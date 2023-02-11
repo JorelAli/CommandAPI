@@ -125,7 +125,7 @@ public class Annotations extends AbstractProcessor {
 			AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class, AParticleArgument.class, APlayerArgument.class,
 			APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class, AScoreboardSlotArgument.class,
 			AScoreHolderArgument.class, ASoundArgument.class, AStringArgument.class, ATeamArgument.class,
-			ATextArgument.class, ATimeArgument.class, AUUIDArgument.class };
+			ATextArgument.class, ATimeArgument.class, AUUIDArgument.class, AWorldArgument.class};
 
 	// List of stuff we can deal with
 	@Override
