@@ -100,6 +100,7 @@ import dev.jorel.commandapi.annotations.arguments.ATeamArgument;
 import dev.jorel.commandapi.annotations.arguments.ATextArgument;
 import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
 import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
+import dev.jorel.commandapi.annotations.arguments.AWorldArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
 import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
