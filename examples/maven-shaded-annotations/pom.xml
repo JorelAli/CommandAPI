@@ -20,12 +20,12 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-shade</artifactId>
-			<version>8.5.1</version>
+			<version>8.7.5</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-annotations</artifactId>
-			<version>8.5.1</version>
+			<version>8.7.5</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -50,7 +50,7 @@
 						<path>
 							<groupId>dev.jorel</groupId>
 							<artifactId>commandapi-annotations</artifactId>
-							<version>8.5.1</version>
+							<version>8.7.5</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
