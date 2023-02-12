@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -96,17 +95,21 @@ public class CustomArgument<T, B> extends Argument<T> {
 		final String customresult = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
 		final B parsedInput = base.parseArgument(cmdCtx, key, previousArgs);
 
+		String errorMessage;
 		try {
 			return infoParser.apply(new CustomArgumentInfo<>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
 				previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
-			throw e.toCommandSyntax(customresult, cmdCtx);
+			errorMessage = e.errorMessage == null ?
+				e.errorMessageBuilder.toString() :
+				e.errorMessage;
 		} catch (Exception e) {
-			String errorMsg = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
-				.appendArgInput().appendHere().toString().replace(INPUT, customresult)
-				.replace(FULL_INPUT, cmdCtx.getInput());
-			throw new SimpleCommandExceptionType(() -> errorMsg).create();
+			errorMessage = new MessageBuilder("Error in executing command ").appendFullInput().append(" - ")
+				.appendArgInput().appendHere().toString();
 		}
+
+		String finalErrorMessage = errorMessage.replace(INPUT, customresult).replace(FULL_INPUT, cmdCtx.getInput());
+		throw new SimpleCommandExceptionType(() -> finalErrorMessage).create();
 	}
 
 	/**
@@ -238,27 +241,6 @@ public class CustomArgument<T, B> extends Argument<T> {
 			this.errorMessage = null;
 			this.errorMessageBuilder = errorMessage;
 		}
-
-		/**
-		 * Converts this CustomArgumentException into a CommandSyntaxException
-		 * 
-		 * @param result the argument that the user entered that caused this exception
-		 *               to arise
-		 * @param cmdCtx the command context that executed this command
-		 * @return a Brigadier CommandSyntaxException
-		 */
-		public CommandSyntaxException toCommandSyntax(String result, CommandContext<?> cmdCtx) {
-			if (errorMessage == null) {
-				// Deal with MessageBuilder
-				String errorMsg = errorMessageBuilder.toString().replace(INPUT, result).replace(FULL_INPUT,
-					cmdCtx.getInput());
-				return new SimpleCommandExceptionType(() -> errorMsg).create();
-			} else {
-				// Deal with String
-				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
-			}
-		}
-
 	}
 
 	/**
