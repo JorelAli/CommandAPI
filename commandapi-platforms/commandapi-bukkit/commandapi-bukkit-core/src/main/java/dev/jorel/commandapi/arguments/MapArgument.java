@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class MapArgument<K, V> extends Argument<LinkedHashMap> implements GreedyArgument {
 
 	private final char delimiter;
-	private final Function<String, ?> keyMapper;
+	private final Function<String, K> keyMapper;
 	private final Function<String, V> valueMapper;
 
 	private final List<String> keyList;
@@ -237,11 +237,15 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandAPIArgumentType.MAP;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		String rawValues = cmdCtx.getArgument(key, String.class);
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
+		
+		// TODO: Temporary, will be replaced
+		if(true) {
+			return parseMapArgument(rawValues);
+		}
 
 		K mapKey = null;
 		V mapValue;
@@ -252,6 +256,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		
 		StringBuilder keyValueBuffer = new StringBuilder();
 		StringBuilder visitedCharacters = new StringBuilder();
+		
+		StringReader reader = new StringReader(rawValues);
 
 		char[] rawValuesChars = rawValues.toCharArray();
 		int currentIndex = -1;
@@ -345,6 +351,114 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		validateValueInput(keyValueBuffer, visitedCharacters);
 		return results;
 	}
+	
+	@SuppressWarnings("unchecked")
+	private LinkedHashMap<K, V> parseMapArgument(String rawValues) throws CommandSyntaxException {
+		StringReader reader = new StringReader(rawValues);
+		LinkedHashMap<K, V> result = new LinkedHashMap<>();
+
+		// Start reading
+		while (reader.canRead()) {
+			// Add the key and values
+			final Pair pair = readKeyValuePair(reader);
+			result.put((K) pair.key(), (V) pair.value());
+
+			reader.skipWhitespace();
+		}
+
+		return result;
+	}
+
+	record Pair<K, V>(K key, V value) {
+	}
+
+	private K parseKey(StringReader reader) throws CommandSyntaxException {
+		StringBuilder buffer = new StringBuilder();
+		while (reader.canRead()) {
+			// It's whitespace, skip
+			if (reader.peek() == ' ') {
+				// Keep going
+				reader.skipWhitespace();
+			}
+
+			// We're about to read a delimiter. Validate the key and return it
+			else if (reader.peek() == delimiter) {
+				final String key = buffer.toString();
+				if (!keyList.contains(key) && !keyListEmpty) {
+					throw exceptionInvalidKey(reader, key);
+				}
+				reader.skip();
+				return keyMapper.apply(key);
+			}
+
+			// We've read a ", error because that's invalid
+			else if (reader.peek() == '"') {
+				throw throwValueEarlyStart(new StringBuilder(reader.toString()), String.valueOf(delimiter));
+			}
+
+			// We've read a valid key character, continue
+			else {
+				buffer.append(reader.read());
+			}
+		}
+		return null;
+	}
+
+	private V parseValue(StringReader reader) {
+		StringBuilder buffer = new StringBuilder();
+		boolean seenStart = false;
+		while (reader.canRead()) {
+			// We've read a " character. If it's the start, note that down. If
+			// it's the end, return the value. We don't have to worry about
+			// escaping with \ because we've handled that below
+			if (reader.peek() == '"') {
+				reader.skip();
+				if (seenStart) {
+					// we're now at the end
+					reader.skipWhitespace();
+					return valueMapper.apply(buffer.toString());
+				} else {
+					seenStart = true;
+				}
+			}
+
+			// We've read a \ character. If there's a subsequent one, add it and skip
+			else if (reader.peek() == '\\') {
+				// Skip it, it's an escape character, we're not including it in
+				// the buffer
+				reader.skip();
+				
+				// Check the next character. If it's a \ or a ", we write that
+				// character and skip over it.
+				if(reader.peek() == '\\' || reader.peek() == '"') {
+					buffer.append(reader.peek());
+					reader.skip();
+				}
+			}
+
+			// It's a valid key character, continue
+			else {
+				buffer.append(reader.read());
+			}
+		}
+		return null;
+	}
+	
+	private Pair<K, V> readKeyValuePair(StringReader reader) throws CommandSyntaxException {
+		// Read the key
+		K key = parseKey(reader);
+		
+		// Check if there's nonsense going on
+		if(!reader.canRead()) {
+			throw missingQuotationMark(new StringBuilder(reader.toString()));
+		}
+
+		// Read the value
+		V value = parseValue(reader);
+		
+		// Profit!
+		return new Pair<>(key, value);
+	}
 
 	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, String keyValueBufferString) throws CommandSyntaxException {
 		if (!keyPattern.matcher(keyValueBufferString).matches()) {
@@ -382,6 +496,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
+	}
+	
+	private CommandSyntaxException exceptionInvalidKey(StringReader reader, String key) {
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
 	}
 
 	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key, boolean cutLastCharacter) {
