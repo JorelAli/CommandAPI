@@ -450,28 +450,29 @@ new CommandArgument("command")
 /* ANCHOR_END: argumentCommand4 */
 }
 
-void argument_custom() {
+class argument_custom {
 /* ANCHOR: argumentCustom1 */
 // Function that returns our custom argument
 public Argument<World> customWorldArgument(String nodeName) {
-    
+
     // Construct our CustomArgument that takes in a String input and returns a World object
     return new CustomArgument<World, String>(new StringArgument(nodeName), info -> {
         // Parse the world from our input
         World world = Bukkit.getWorld(info.input());
-    
+
         if (world == null) {
             throw new CustomArgumentException(new MessageBuilder("Unknown world: ").appendArgInput());
         } else {
             return world;
         }
-    }).replaceSuggestions(ArgumentSuggestions.strings(info -> 
+    }).replaceSuggestions(ArgumentSuggestions.strings(info ->
         // List of world names on the server
         Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new))
     );
 }
 /* ANCHOR_END: argumentCustom1 */
 
+{
 /* ANCHOR: argumentCustom2 */
 new CommandAPICommand("tpworld")
     .withArguments(customWorldArgument("world"))
@@ -480,6 +481,7 @@ new CommandAPICommand("tpworld")
     })
     .register();
 /* ANCHOR_END: argumentCustom2 */
+}
 }
 
 void argumentEnchantment() {
