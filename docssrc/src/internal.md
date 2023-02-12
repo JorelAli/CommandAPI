@@ -46,7 +46,7 @@ The CommandAPI's arguments are representations of the different arguments that t
 | `minecraft:objective_criteria` | [`ObjectiveCriteriaArgument`](./argument_objectives.md#objective-criteria-argument) |
 | `minecraft:operation` | [`MathOperationArgument`](./argument_mathoperation.md) |
 | `minecraft:particle` | [`ParticleArgument`](./argument_particle.md) |
-| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./argument_biome.md)<br />[`CustomArgument<T>`](./argument_custom.md)<br />[`LootTableArgument`](./argument_loottable.md)<br />[`NamespacedKeyArgument`](./argument_namespacedkey.md)<br />[`RecipeArgument`](./argument_recipe.md)<br />[`SoundArgument`](./soundargument.md) |
+| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./argument_biome.md)<br />[`CustomArgument<T>`](./argument_custom.md)<br />[`LootTableArgument`](./argument_loottable.md)<br />[`NamespacedKeyArgument`](./argument_namespacedkey.md)<br />[`RecipeArgument`](./argument_recipe.md)<br />[`SoundArgument`](./argument_sound.md) |
 | `minecraft:rotation` | [`RotationArgument`](./argument_rotation.md) |
 | `minecraft:score_holder` | [`ScoreHolderArgument`](./argument_scoreboards.md#score-holder-argument) |
 | `minecraft:scoreboard_slot` | [`ScoreboardSlotArgument`](./argument_scoreboards.md#scoreboard-slot-argument) |
