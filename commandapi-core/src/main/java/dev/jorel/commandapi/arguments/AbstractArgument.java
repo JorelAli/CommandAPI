@@ -106,7 +106,14 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <Source> T parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException;
+	public <Source> T parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
+		// We want people to be able to use the CommandAPI without needing Brigadier as a dependency
+		// If we make this method abstract, then when developers extend CustomArgument, the compiler
+		// seems to look at this method. If brigadier isn't present, the compiler freaks out that
+		// it doesn't know what the classes that are part of this method mean and errors. Adding this
+		// implementation (while functionally useless) helps the compiler chill.
+		throw new IllegalStateException(":( You need to implement this method!");
+	}
 
 	/////////////////
 	// Suggestions //
