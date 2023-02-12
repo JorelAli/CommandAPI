@@ -19,7 +19,7 @@ With this syntax, we can easily create our command:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:itemstackarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentItemStack1}}
 ```
 
 ```kotlin,Kotlin

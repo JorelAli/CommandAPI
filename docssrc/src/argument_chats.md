@@ -31,7 +31,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatcolorarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChats1}}
 ```
 
 ```kotlin,Kotlin

@@ -23,7 +23,7 @@ First, we declare our arguments. We want to use the `BlockPredicateArgument` sin
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:blockpredicatearguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentBlockPredicate1}}
 ```
 
 ```kotlin,Kotlin
@@ -41,7 +41,7 @@ Lastly, we register our command as normal using the `register()` method.
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:blockpredicatearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentBlockPredicate2}}
 ```
 
 ```kotlin,Kotlin

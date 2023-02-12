@@ -19,7 +19,7 @@ As such, we easily implement it by specifying the `RecipeArgument`, casting it a
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:recipearguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentRecipe1}}
 ```
 
 ```kotlin,Kotlin
@@ -49,7 +49,7 @@ This is then implemented trivially as follows:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:recipearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentRecipe2}}
 ```
 
 ```kotlin,Kotlin

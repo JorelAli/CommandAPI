@@ -29,11 +29,11 @@ This command simply plays the provided sound to the current player:
 <div class="multi-pre">
 
 ```java,Java_(Sound)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:soundarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentSound1}}
 ```
 
 ```java,Java_(NamespacedKey)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:soundarguments2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentSound2}}
 ```
 
 ```kotlin,Kotlin_(Sound)

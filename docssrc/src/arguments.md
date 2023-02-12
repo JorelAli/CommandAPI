@@ -26,7 +26,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentsyntax1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments1}}
 ```
 
 ```kotlin,Kotlin
@@ -42,7 +42,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentsyntax2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments2}}
 ```
 
 ```kotlin,Kotlin
@@ -58,7 +58,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentsyntax3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments3}}
 ```
 
 ```kotlin,Kotlin
@@ -80,7 +80,7 @@ To access arguments, they have to be casted to the type that the argument repres
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentcasting}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments4}}
 ```
 
 ```kotlin,Kotlin

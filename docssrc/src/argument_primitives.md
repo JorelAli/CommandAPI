@@ -35,7 +35,7 @@ We first retrieve the keys from the configuration file using the typical Bukkit 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:booleanargs}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentPrimitives1}}
 ```
 
 ```kotlin,Kotlin

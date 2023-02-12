@@ -41,7 +41,7 @@ Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive)
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:scoreholderargument}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentScoreboards1}}
 ```
 
 ```kotlin,Kotlin
@@ -111,7 +111,7 @@ We implement this simply by using the `ScoreboardSlotArgument` as our argument, 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:scoreboardslotargument}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentScoreboards2}}
 ```
 
 ```kotlin,Kotlin

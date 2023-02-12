@@ -19,7 +19,7 @@ Using the world from the `WorldArgument`, we can then unload the world safely us
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:worldarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentWorld1}}
 ```
 
 ```kotlin,Kotlin

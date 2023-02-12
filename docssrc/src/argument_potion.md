@@ -19,7 +19,7 @@ In this example, we utilize some of the other arguments that we've described ear
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:potioneffectarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentPotion1}}
 ```
 
 ```kotlin,Kotlin

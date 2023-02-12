@@ -47,7 +47,7 @@ As an example, let's declare the literal "hello" as a valid literal for this com
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:literalarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentliteral1}}
 ```
 
 ```kotlin,Kotlin
@@ -65,7 +65,7 @@ The `LiteralArgument` class also provides the `LiteralArgument.of()` and `Litera
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:literalarguments3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLiteral2}}
 ```
 
 ```kotlin,Kotlin
@@ -97,7 +97,7 @@ This is a demonstration of how you could create a command similar to Minecraft's
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:literalarguments2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLiteral3}}
 ```
 
 ```kotlin,Kotlin

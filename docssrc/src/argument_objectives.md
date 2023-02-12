@@ -24,7 +24,7 @@ As an example, let's create a command to move an objective to a player's sidebar
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:objectiveargument}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentObjectives1}}
 ```
 
 ```kotlin,Kotlin
@@ -60,7 +60,7 @@ To do this, we're going to take advantage of Bukkit's `Scoreboard.getObjectivesB
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:objectivecriteriaarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentObjectives2}}
 ```
 
 ```kotlin,Kotlin

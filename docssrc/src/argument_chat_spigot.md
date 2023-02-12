@@ -83,7 +83,7 @@ Now we can create our book command. We use the player as the main target by usin
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatcomponentarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatSpigot1}}
 ```
 
 ```kotlin,Kotlin
@@ -129,7 +129,7 @@ _Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatSpigot2}}
 ```
 
 ```kotlin,Kotlin

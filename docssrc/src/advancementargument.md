@@ -19,7 +19,7 @@ Since we require a player, we will use the `PlayerArgument` for this example. Gi
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:advancementarguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:advancementArgument1}}
 ```
 
 ```kotlin,Kotlin

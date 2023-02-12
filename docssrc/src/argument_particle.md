@@ -52,7 +52,7 @@ With this, we can simply spawn the particle using the `World.spawnParticle(Parti
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:particlearguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentParticle1}}
 ```
 
 ```kotlin,Kotlin
@@ -84,7 +84,7 @@ In this case, we'll use the `World.spawnParticle(Particle particle, Location loc
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:particlearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentParticle2}}
 ```
 
 ```kotlin,Kotlin
