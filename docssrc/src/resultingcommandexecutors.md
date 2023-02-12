@@ -27,7 +27,7 @@ Say we want a command that returns a random number as a result. This can then be
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingcommandexecutor}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingCommandExecutors1}}
 ```
 
 ```kotlin,Kotlin
@@ -62,7 +62,7 @@ Since we're declaring commands that are to be used in `/execute`, we must ensure
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingcommandexecutor2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingCommandExecutors2}}
 ```
 
 ```kotlin,Kotlin
@@ -80,7 +80,7 @@ Now we write our implementation for `/givereward`. In this example, we use the `
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingcommandexecutor3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingCommandExecutors3}}
 ```
 
 ```kotlin,Kotlin

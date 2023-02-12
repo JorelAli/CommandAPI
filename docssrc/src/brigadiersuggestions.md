@@ -25,7 +25,7 @@ For this command, we'll use a `GreedyStringArgument` as if we were making a gene
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:BrigadierSuggestions3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadierSuggestions1}}
 ```
 
 ```kotlin,Kotlin
@@ -59,7 +59,7 @@ For this command, we'll use a `GreedyStringArgument` because that allows users t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:BrigadierSuggestions1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadierSuggestions2}}
 ```
 
 ```kotlin,Kotlin
@@ -93,7 +93,7 @@ We use the command suggestions declared above by using the `replaceSuggestions` 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:BrigadierSuggestions2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadierSuggestions3}}
 ```
 
 ```kotlin,Kotlin

@@ -19,7 +19,7 @@ We then implement our warp teleporting command using `replaceSuggestions()` on t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:ArgumentSuggestions1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions1}}
 ```
 
 ```kotlin,Kotlin
@@ -57,7 +57,7 @@ Let's say we have a simple class to get the friends of a command sender:
 <div class="multi-pre">
 
 ```java,Java
-public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:ArgumentSuggestions2_1}}
+public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions2}}
 ```
 
 ```kotlin,Kotlin
@@ -71,7 +71,7 @@ We can then use this to generate our suggested list of friends:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:ArgumentSuggestions2_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions3}}
 ```
 
 ```kotlin,Kotlin
@@ -131,7 +131,7 @@ When run, this command will send a message to a target player within the provide
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:ArgumentSuggestionsPrevious}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions4}}
 ```
 
 ```kotlin,Kotlin

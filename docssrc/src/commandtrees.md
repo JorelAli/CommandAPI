@@ -67,7 +67,7 @@ We can do this by adding a `PlayerArgument` to our command. As described above, 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:CommandTree_sayhi1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandTrees1}}
 ```
 
 ```kotlin,Kotlin
@@ -106,7 +106,7 @@ Say we wanted to create a plugin to let a user edit signs. We have a single comm
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:CommandTree_signedit}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandTrees2}}
 ```
 
 ```kotlin,Kotlin

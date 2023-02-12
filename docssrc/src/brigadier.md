@@ -98,7 +98,7 @@ Now that we've established what we want, we can finally begin writing the code! 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:declareliteral}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier1}}
 ```
 
 ```kotlin,Kotlin
@@ -112,7 +112,7 @@ With that completed, we can now create our "argument" to this predicate. To do t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:declarearguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier2}}
 ```
 
 ```kotlin,Kotlin
@@ -126,7 +126,7 @@ Now we're going to get into the very nitty-gritty part - the predicate declarati
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:declareargumentbuilders}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier3}}
 ```
 
 ```kotlin,Kotlin
@@ -140,7 +140,7 @@ Now we'll define our predicate. Since this is sort of a "meta-command" (it direc
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:declarefork}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier4}}
 ```
 
 ```kotlin,Kotlin
@@ -154,7 +154,7 @@ Finally, we can now link everything up. We know that `numerator` comes first, **
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:declarerandomchance}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier5}}
 ```
 
 ```kotlin,Kotlin
@@ -168,7 +168,7 @@ Finally, we "register" the command. In this case, we're actually just adding the
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:injectintoroot}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier6}}
 ```
 
 ```kotlin,Kotlin
@@ -186,7 +186,7 @@ So, hopefully that wasn't too confusing! If you're still lost, here's the whole 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier7}}
 ```
 
 ```kotlin,Kotlin

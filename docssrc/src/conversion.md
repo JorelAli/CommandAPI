@@ -42,7 +42,7 @@ As you can see, it declares 3 commands: `/gmc`, `/gms` and `/i`. We can now begi
 <div class="multi-pre">
 
 ```java,Java
-public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:converter}}
+public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:conversion1}}
 ```
 
 ```kotlin,Kotlin
@@ -98,7 +98,7 @@ With the EssentialsX plugin, the `<speed>` value can only take numbers between 0
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:converter2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:conversion2}}
 ```
 
 ```kotlin,Kotlin

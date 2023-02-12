@@ -30,7 +30,7 @@ Say we created a command `/god` that sets a player as being invulnerable. Since 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions1}}
 ```
 
 ```kotlin,Kotlin
@@ -93,7 +93,7 @@ We first declare the command as normal. Nothing fancy is going on here:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions3_1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions3}}
 ```
 
 ```kotlin,Kotlin
@@ -111,7 +111,7 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions3_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4}}
 ```
 
 ```kotlin,Kotlin
@@ -160,7 +160,7 @@ We first declare the command as normal. Nothing fancy is going on here:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions5}}
 ```
 
 ```kotlin,Kotlin

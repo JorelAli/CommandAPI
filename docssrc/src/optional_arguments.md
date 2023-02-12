@@ -30,7 +30,7 @@ For that, we are going to register a command `/sayhi`. To add optional arguments
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentsayhicmd}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:optionalArguments1}}
 ```
 
 ```kotlin,Kotlin
@@ -103,7 +103,7 @@ This is how the `getOrDefault` method is being implemented:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentsayhicmd2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:optionalArguments2}}
 ```
 
 ```kotlin,Kotlin

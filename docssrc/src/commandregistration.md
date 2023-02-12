@@ -7,7 +7,7 @@ I think the easiest way to explain it is with an example:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandregistration}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandRegistration1}}
 ```
 
 ```kotlin,Kotlin
@@ -217,7 +217,7 @@ To replace a command, we can first unregister it and then register our implement
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandunregistration}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandRegistration2}}
 ```
 
 ```kotlin,Kotlin

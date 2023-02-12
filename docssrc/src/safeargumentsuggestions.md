@@ -126,7 +126,7 @@ To do this, we first register our custom items:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeRecipeArguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions1}}
 ```
 
 ```kotlin,Kotlin
@@ -144,7 +144,7 @@ Once we've done that, we can now include them in our command registration. To do
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeRecipeArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions2}}
 ```
 
 ```kotlin,Kotlin
@@ -174,7 +174,7 @@ Now say that we don't want non-op players to spawn bosses. To do this, we'll cre
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeMobSpawnArguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions3}}
 ```
 
 ```kotlin,Kotlin
@@ -188,7 +188,7 @@ We then use our safe arguments to return an `EntityType[]` as the list of values
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeMobSpawnArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions4}}
 ```
 
 ```kotlin,Kotlin
@@ -202,7 +202,7 @@ Now we register our command as normal:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeMobSpawnArguments_3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions5}}
 ```
 
 ```kotlin,Kotlin
@@ -232,7 +232,7 @@ Now, we don't want to remove a potion effect that already exists on a player, so
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafePotionArguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions6}}
 ```
 
 ```kotlin,Kotlin
@@ -246,7 +246,7 @@ And then we can register our command as normal:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafePotionArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions7}}
 ```
 
 ```kotlin,Kotlin

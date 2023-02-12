@@ -11,7 +11,7 @@ Say we have a command which kills the sender of a command. This is easily implem
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:proxysender}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:proxySender1}}
 ```
 
 ```kotlin,Kotlin
@@ -35,7 +35,7 @@ To handle this case, we can use the `.executesProxy()` method to ensure that the
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:proxysender2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:proxySender2}}
 ```
 
 ```kotlin,Kotlin
