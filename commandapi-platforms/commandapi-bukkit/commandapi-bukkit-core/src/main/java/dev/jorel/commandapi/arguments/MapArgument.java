@@ -146,7 +146,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				keyBuilder.append(currentChar);
 				currentKey = keyBuilder.toString();
 				suggestionInfo.setCurrentKey(currentKey);
-				validateKey(visitedCharacters, keyPattern, keyBuilder);
+				validateKey(visitedCharacters, keyPattern, keyBuilder.toString());
 				for (String key : keys) {
 					if (key.equals(keyBuilder.toString())) {
 						suggestionInfo.setSuggestionCode(SuggestionCode.DELIMITER_SUGGESTION);
@@ -249,9 +249,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		boolean isAKeyBeingBuilt = true;
 		boolean isAValueBeingBuilt = false;
 		boolean isFirstValueCharacter = true;
-
-		StringBuilder keyBuilder = new StringBuilder();
-		StringBuilder valueBuilder = new StringBuilder();
+		
+		StringBuilder keyValueBuffer = new StringBuilder();
 		StringBuilder visitedCharacters = new StringBuilder();
 
 		char[] rawValuesChars = rawValues.toCharArray();
@@ -261,22 +260,22 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
 				if (currentChar == delimiter) {
-					if (!keyList.contains(keyBuilder.toString()) && !keyListEmpty) {
-						throw throwInvalidKey(visitedCharacters, keyBuilder.toString(), true);
+					if (!keyList.contains(keyValueBuffer.toString()) && !keyListEmpty) {
+						throw throwInvalidKey(visitedCharacters, keyValueBuffer.toString(), true);
 					}
 
 					if (currentIndex == rawValuesChars.length - 1) {
 						throw missingQuotationMark(visitedCharacters);
 					}
 
-					mapKey = (K) keyMapper.apply(keyBuilder.toString());
+					mapKey = (K) keyMapper.apply(keyValueBuffer.toString());
 					if (results.containsKey(mapKey)) {
 						throw duplicateKey(visitedCharacters);
 					}
 
 					// No need to check the key here because we already know it only consists of letters
 
-					keyBuilder.setLength(0);
+					keyValueBuffer.setLength(0);
 					isAKeyBeingBuilt = false;
 					isAValueBeingBuilt = true;
 					continue;
@@ -284,14 +283,14 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				if (currentChar == '"') {
 					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
 				}
-				keyBuilder.append(currentChar);
-				boolean isInvalidKey = validateKey(visitedCharacters, keyPattern, keyBuilder);
-				if (isInvalidKey) {
-					if (currentIndex == rawValuesChars.length - 1) {
-						throw throwInvalidKey(visitedCharacters, keyBuilder.toString(), false);
-					}
-				} else {
-					if (currentIndex == rawValuesChars.length - 1) {
+				keyValueBuffer.append(currentChar);
+
+				final String keyValueBufferString = keyValueBuffer.toString();
+				final boolean isInvalidKey = validateKey(visitedCharacters, keyPattern, keyValueBufferString);
+				if (currentIndex == rawValuesChars.length - 1) {
+					if (isInvalidKey) {
+						throw throwInvalidKey(visitedCharacters, keyValueBufferString, false);
+					} else {
 						throw missingDelimiter(visitedCharacters);
 					}
 				}
@@ -307,26 +306,26 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				}
 				if (currentChar == '\\') {
 					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						valueBuilder.append('\\');
+						keyValueBuffer.append('\\');
 						continue;
 					}
 					continue;
 				}
 				if (currentChar == '"') {
 					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						valueBuilder.append('"');
+						keyValueBuffer.append('"');
 						continue;
 					}
-					if (!valueList.contains(valueBuilder.toString()) && !valueListEmpty) {
-						throw throwInvalidValue(visitedCharacters, valueBuilder.toString());
+					if (!valueList.contains(keyValueBuffer.toString()) && !valueListEmpty) {
+						throw throwInvalidValue(visitedCharacters, keyValueBuffer.toString());
 					}
-					mapValue = valueMapper.apply(valueBuilder.toString());
+					mapValue = valueMapper.apply(keyValueBuffer.toString());
 
 					if (results.containsValue(mapValue) && !allowValueDuplicates) {
 						throw duplicateValue(visitedCharacters);
 					}
 
-					valueBuilder.setLength(0);
+					keyValueBuffer.setLength(0);
 					isFirstValueCharacter = true;
 					results.put(mapKey, mapValue);
 					mapKey = null;
@@ -334,24 +333,24 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					isAValueBeingBuilt = false;
 					continue;
 				}
-				valueBuilder.append(currentChar);
+				keyValueBuffer.append(currentChar);
 			}
 			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;
-					keyBuilder.append(currentChar);
+					keyValueBuffer.append(currentChar);
 				}
 			}
 		}
-		validateValueInput(valueBuilder, visitedCharacters);
+		validateValueInput(keyValueBuffer, visitedCharacters);
 		return results;
 	}
 
-	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, StringBuilder keyBuilder) throws CommandSyntaxException {
-		if (!keyPattern.matcher(keyBuilder.toString()).matches()) {
+	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, String keyValueBufferString) throws CommandSyntaxException {
+		if (!keyPattern.matcher(keyValueBufferString).matches()) {
 			throw throwInvalidKeyCharacter(visitedCharacters);
 		}
-		return !keyList.contains(keyBuilder.toString());
+		return !keyList.contains(keyValueBufferString);
 	}
 
 	private void validateValueStart(char currentChar, StringBuilder visitedCharacters) throws CommandSyntaxException {
