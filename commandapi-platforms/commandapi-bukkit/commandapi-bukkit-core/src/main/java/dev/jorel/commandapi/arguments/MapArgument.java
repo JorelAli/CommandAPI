@@ -154,7 +154,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					}
 					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
 				}
-			} else if (isAValueBeingBuilt) {
+			}
+			if (isAValueBeingBuilt) {
 				if (isFirstValueCharacter) {
 					validateValueStart(currentChar, visitedCharacters); // currentChar should be a quotation mark
 					suggestionInfo.setSuggestionCode(SuggestionCode.VALUE_SUGGESTION);
@@ -213,7 +214,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					}
 					suggestionInfo.setSuggestionCode(SuggestionCode.VALUE_SUGGESTION);
 				}
-			} else {
+			}
+			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;
 					keyBuilder.append(currentChar);
@@ -293,7 +295,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 						throw missingDelimiter(visitedCharacters);
 					}
 				}
-			} else if (isAValueBeingBuilt) {
+			}
+			if (isAValueBeingBuilt) {
 				if (isFirstValueCharacter) {
 					validateValueStart(currentChar, visitedCharacters);
 					if (currentIndex == rawValuesChars.length - 1) {
@@ -332,7 +335,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					continue;
 				}
 				valueBuilder.append(currentChar);
-			} else {
+			}
+			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
 				if (currentChar != ' ') {
 					isAKeyBeingBuilt = true;
 					keyBuilder.append(currentChar);
