@@ -136,6 +136,37 @@ class ArgumentListTests extends TestBase {
 	}
 	
 	@Test
+	void executionTestWithListArgumentWithConstantListArray() {
+		Mut<List<String>> results = Mut.of();
+
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList("cat", "wolf", "axolotl")
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+				results.set((List<String>) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		
+		// /list cat, wolf, axolotl
+		server.dispatchCommand(player, "list cat, wolf, axolotl");
+		assertEquals(List.of("cat", "wolf", "axolotl"), results.get());
+		
+		// /list cat, wolf, axolotl, wolf
+		// No duplicates allowed
+		assertCommandFailsWith(player, "list cat, wolf, axolotl, wolf", "Duplicate arguments are not allowed at position 20: ... axolotl, <--[HERE]");
+		
+		// /list axolotl, wolf, chicken, cat
+		// Can't have unspecified "chicken" in the list
+		assertCommandFailsWith(player, "list axolotl, wolf, chicken, cat", "Item is not allowed in list at position 15: ...tl, wolf, <--[HERE]");
+		
+		assertNoMoreResults(results);
+	}
+	
+	@Test
 	void executionTestWithListArgumentWithFunctionList() {
 		Mut<List<String>> results = Mut.of();
 

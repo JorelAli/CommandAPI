@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -77,7 +78,14 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	@Override
 	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		throw new UnimplementedError();
+		// We don't want to call the NMS implementation of addToHelpMap because
+		// that uses reflection to access SimpleHelpMap. Luckily for us, the
+		// HelpMapMock's addTopic implementation is exactly what we want! - it
+		// uses Map#put() with no restrictions, whereas SimpleHelpMap#addTopic
+		// only adds the help topic if the topic name doesn't already exist
+		for(HelpTopic topic : helpTopicsToAdd.values()) {
+			Bukkit.getServer().getHelpMap().addTopic(topic);
+		}
 	}
 
 	@Override
@@ -101,18 +109,13 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	@Override
-	public final HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
-		throw new UnimplementedError();
-	}
-
-	@Override
 	public final boolean isVanillaCommandWrapper(Command command) {
 		throw new UnimplementedError();
 	}
 
 	@Override
 	public final void reloadDataPacks() {
-		throw new UnimplementedError();
+		System.out.println("Called 'reloadDataPacks'. (There's not actually anything to do here...)");
 	}
 
 	/******************
