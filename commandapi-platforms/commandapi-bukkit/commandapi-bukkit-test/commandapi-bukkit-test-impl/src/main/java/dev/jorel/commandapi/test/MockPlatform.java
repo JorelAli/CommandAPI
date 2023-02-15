@@ -115,7 +115,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	@Override
 	public final void reloadDataPacks() {
-		System.out.println("Called 'reloadDataPacks'. (There's not actually anything to do here...)");
+		assert true; // Nothing to do here
 	}
 
 	/******************

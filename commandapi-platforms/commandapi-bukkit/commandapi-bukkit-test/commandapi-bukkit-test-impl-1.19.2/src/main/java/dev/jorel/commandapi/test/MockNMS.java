@@ -32,6 +32,7 @@ import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemFactory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -671,5 +672,10 @@ public class MockNMS extends Enums {
 //			}
 //		}
 //	}
+	
+	@Override
+	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
+		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
+	}
 
 }
