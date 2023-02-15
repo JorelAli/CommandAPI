@@ -30,6 +30,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
+import dev.jorel.commandapi.PaperImplementations;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 
 public abstract class TestBase {
@@ -139,6 +140,10 @@ public abstract class TestBase {
 		s2_2.removeAll(s1_2);
 		System.out.println("List 1 has the following extra items: " + s1);
 		System.out.println("List 2 has the following extra items: " + s2_2);
+	}
+	
+	public static void disablePaperImplementations() {
+		MockPlatform.setField(PaperImplementations.class, "isPaperPresent", MockPlatform.get().getPaper(), false);
 	}
 
 }

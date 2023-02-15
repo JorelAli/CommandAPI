@@ -31,6 +31,7 @@ class OnEnableTests extends TestBase {
 
 	@Test
 	void testOnEnableExecution() {
+		disablePaperImplementations();
 		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
 	}
 

@@ -44,6 +44,7 @@ class CommandHelpTests extends TestBase {
 			})
 			.register();
 
+		disablePaperImplementations();
 		server.getScheduler().performOneTick();
 		Player player = server.addPlayer("APlayer");
 
@@ -68,6 +69,7 @@ class CommandHelpTests extends TestBase {
 			})
 			.register();
 
+		disablePaperImplementations();
 		server.getScheduler().performOneTick();
 		Player player = server.addPlayer("APlayer");
 
@@ -91,6 +93,7 @@ class CommandHelpTests extends TestBase {
 			})
 			.register();
 
+		disablePaperImplementations();
 		server.getScheduler().performOneTick();
 		Player player = server.addPlayer("APlayer");
 
@@ -114,6 +117,7 @@ class CommandHelpTests extends TestBase {
 			})
 			.register();
 
+		disablePaperImplementations();
 		server.getScheduler().performOneTick();
 		Player player = server.addPlayer("APlayer");
 
@@ -138,6 +142,7 @@ class CommandHelpTests extends TestBase {
 			})
 			.register();
 
+		disablePaperImplementations();
 		server.getScheduler().performOneTick();
 		Player player = server.addPlayer("APlayer");
 
@@ -169,6 +174,7 @@ class CommandHelpTests extends TestBase {
 			})
 			.register();
 
+		disablePaperImplementations();
 		server.getScheduler().performOneTick();
 		Player player = server.addPlayer("APlayer");
 
@@ -202,6 +208,7 @@ class CommandHelpTests extends TestBase {
 			})
 			.register();
 
+		disablePaperImplementations();
 		server.getScheduler().performOneTick();
 		Player player = server.addPlayer("APlayer");
 
