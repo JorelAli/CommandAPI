@@ -293,11 +293,11 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test invalid key
 		// /test optionOne:"solutionTwo" optionFour:"solutionOne"
-		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 35: ...optionFour<--[HERE]");
+		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 34: ...optionFour<--[HERE]");
 
 		// Test invalid value
 		// /test optionOne:"solutionOne" optionTwo:"solutionFour"
-		assertCommandFailsWith(player, "test optionOne:\"solutionOne\" optionTwo:\"solutionFour\"", "Could not parse command: Invalid value: solutionFour at position 48: ...lutionFour<--[HERE]");
+		assertCommandFailsWith(player, "test optionOne:\"solutionOne\" optionTwo:\"solutionFour\"", "Could not parse command: Invalid value: solutionFour at position 47: ...lutionFour<--[HERE]");
  	}
 
 	@Test

@@ -3,6 +3,7 @@ package dev.jorel.commandapi.arguments;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -246,136 +247,19 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	@Override
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
 		String rawValues = cmdCtx.getArgument(key, String.class);
+		StringReader reader = new StringReader(rawValues);
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
-		
-		// TODO: Temporary, will be replaced
-		if(true) {
-			return parseMapArgument(rawValues);
-		}
-
-		K mapKey = null;
-		V mapValue;
-
-		boolean isAKeyBeingBuilt = true;
-		boolean isAValueBeingBuilt = false;
-		boolean isFirstValueCharacter = true;
-		
-		StringBuilder keyValueBuffer = new StringBuilder();
-		StringBuilder visitedCharacters = new StringBuilder();
-		
-		StringReader reader = new StringReader(rawValues);
-
-		char[] rawValuesChars = rawValues.toCharArray();
-		int currentIndex = -1;
-		for (char currentChar : rawValuesChars) {
-			currentIndex++;
-			visitedCharacters.append(currentChar);
-			if (isAKeyBeingBuilt) {
-				if (currentChar == delimiter) {
-					if (!keyList.contains(keyValueBuffer.toString()) && !keyListEmpty) {
-						throw throwInvalidKey(visitedCharacters, keyValueBuffer.toString(), true);
-					}
-
-					if (currentIndex == rawValuesChars.length - 1) {
-						throw missingQuotationMark(visitedCharacters);
-					}
-
-					mapKey = (K) keyMapper.apply(keyValueBuffer.toString());
-					if (results.containsKey(mapKey)) {
-						throw duplicateKey(visitedCharacters);
-					}
-
-					// No need to check the key here because we already know it only consists of letters
-
-					keyValueBuffer.setLength(0);
-					isAKeyBeingBuilt = false;
-					isAValueBeingBuilt = true;
-					continue;
-				}
-				if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
-				}
-				keyValueBuffer.append(currentChar);
-
-				final String keyValueBufferString = keyValueBuffer.toString();
-				final boolean isInvalidKey = validateKey(visitedCharacters, KEY_PATTERN, keyValueBufferString);
-				if (currentIndex == rawValuesChars.length - 1) {
-					if (isInvalidKey) {
-						throw throwInvalidKey(visitedCharacters, keyValueBufferString, false);
-					} else {
-						throw missingDelimiter(visitedCharacters);
-					}
-				}
-			}
-			if (isAValueBeingBuilt) {
-				if (isFirstValueCharacter) {
-					validateValueStart(currentChar, visitedCharacters);
-					if (currentIndex == rawValuesChars.length - 1) {
-						throw missingValue(visitedCharacters);
-					}
-					isFirstValueCharacter = false;
-					continue;
-				}
-				if (currentChar == '\\') {
-					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						keyValueBuffer.append('\\');
-						continue;
-					}
-					continue;
-				}
-				if (currentChar == '"') {
-					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						keyValueBuffer.append('"');
-						continue;
-					}
-					if (!valueList.contains(keyValueBuffer.toString()) && !valueListEmpty) {
-						throw throwInvalidValue(visitedCharacters, keyValueBuffer.toString());
-					}
-					mapValue = valueMapper.apply(keyValueBuffer.toString());
-
-					if (results.containsValue(mapValue) && !allowValueDuplicates) {
-						throw duplicateValue(visitedCharacters);
-					}
-
-					keyValueBuffer.setLength(0);
-					isFirstValueCharacter = true;
-					results.put(mapKey, mapValue);
-					mapKey = null;
-
-					isAValueBeingBuilt = false;
-					continue;
-				}
-				keyValueBuffer.append(currentChar);
-			}
-			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
-				if (currentChar != ' ') {
-					isAKeyBeingBuilt = true;
-					keyValueBuffer.append(currentChar);
-				}
-			}
-		}
-		validateValueInput(keyValueBuffer, visitedCharacters);
-		return results;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private LinkedHashMap<K, V> parseMapArgument(String rawValues) throws CommandSyntaxException {
-		StringReader reader = new StringReader(rawValues);
-		LinkedHashMap<K, V> result = new LinkedHashMap<>();
 
 		// Start reading
 		while (reader.canRead()) {
 			// Add the key and values
-			final Pair pair = parseKeyValuePair(reader);
-			result.put((K) pair.key(), (V) pair.value());
+			final Map.Entry<K, V> keyValuePair = parseKeyValuePair(reader);
+			results.put(keyValuePair.getKey(), keyValuePair.getValue());
 
 			reader.skipWhitespace();
 		}
 
-		return result;
-	}
-
-	record Pair<K, V>(K key, V value) {
+		return results;
 	}
 
 	private K parseKey(StringReader reader) throws CommandSyntaxException {
@@ -397,7 +281,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 			// We've read a ", error because that's invalid
 			else if (reader.peek() == '"') {
-				throw throwValueEarlyStart(new StringBuilder(reader.toString()), String.valueOf(delimiter));
+				reader.read();
+				throw exceptionValueEarlyStart(reader);
 			}
 
 			// We've read a valid key character, continue
@@ -409,7 +294,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return null;
 	}
 
-	private V parseValue(StringReader reader) {
+	private V parseValue(StringReader reader) throws CommandSyntaxException {
+		// Check we start with "
+		validateValueStart(reader);
+
 		StringBuilder buffer = new StringBuilder();
 		boolean seenStart = false;
 		while (reader.canRead()) {
@@ -420,8 +308,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				reader.skip();
 				if (seenStart) {
 					// we're now at the end
+					final String value = buffer.toString();
+					validateValue(reader, value);
 					reader.skipWhitespace();
-					return valueMapper.apply(buffer.toString());
+					return valueMapper.apply(value);
 				} else {
 					seenStart = true;
 				}
@@ -446,10 +336,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				buffer.append(reader.read());
 			}
 		}
-		return null;
+		
+		throw exceptionValueMissingEndingQuote(reader);
 	}
 	
-	private Pair<K, V> parseKeyValuePair(StringReader reader) throws CommandSyntaxException {
+	private Map.Entry<K, V> parseKeyValuePair(StringReader reader) throws CommandSyntaxException {
 		// Read the key
 		K key = parseKey(reader);
 		
@@ -462,7 +353,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		V value = parseValue(reader);
 		
 		// Profit!
-		return new Pair<>(key, value);
+		return Map.entry(key, value);
 	}
 	
 	/**************
@@ -494,7 +385,32 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		}
 	}
 	
-
+	/**
+	 * Validates that the reader has a starting quote character
+	 * @param reader the current string reader
+	 * @throws CommandSyntaxException if the current reader does not have a " character
+	 */
+	private void validateValueStart(StringReader reader) throws CommandSyntaxException {
+		if (reader.peek() != '"') {
+			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must start with a quotation mark");
+		}
+	}
+	
+	/**
+	 * Validates whether the provided value is in the list of possible values
+	 * @param reader the current string reader
+	 * @param value the value to validate
+	 * @throws CommandSyntaxException if the provided value is not in the list of possible values
+	 */
+	private void validateValue(StringReader reader, String value) throws CommandSyntaxException {
+		if (!valueList.contains(value) && !valueListEmpty) {
+			// Go back a step. We don't want to include the trailing " character
+			reader.setCursor(reader.getCursor() - 1);
+			throw exceptionInvalidValue(reader, value);
+		}
+	}
+	
+	@Deprecated
 	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, String keyValueBufferString) throws CommandSyntaxException {
 		if (!keyPattern.matcher(keyValueBufferString).matches()) {
 			throw throwInvalidKeyCharacter(visitedCharacters);
@@ -502,6 +418,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return !keyList.contains(keyValueBufferString);
 	}
 
+	@Deprecated
 	private void validateValueStart(char currentChar, StringBuilder visitedCharacters) throws CommandSyntaxException {
 		if (currentChar != '"') {
 			String context = visitedCharacters.toString();
@@ -511,12 +428,17 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		}
 	}
 
+	@Deprecated
 	private void validateValueInput(StringBuilder valueBuilder, StringBuilder visitedCharacters) throws CommandSyntaxException {
 		if (valueBuilder.length() != 0) {
 			StringReader reader = new StringReader(visitedCharacters.toString());
 			reader.setCursor(visitedCharacters.toString().length());
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must end with a quotation mark");
 		}
+	}
+	
+	private CommandSyntaxException exceptionValueMissingEndingQuote(StringReader reader) throws CommandSyntaxException {
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must end with a quotation mark");
 	}
 	
 	private CommandSyntaxException exceptionInvalidKeyCharacter(StringReader reader) {
@@ -530,7 +452,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers and periods");
 	}
+	
 
+	private CommandSyntaxException exceptionValueEarlyStart(StringReader reader) {
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
+	}
+
+	@Deprecated
 	private CommandSyntaxException throwValueEarlyStart(StringBuilder visitedCharacters, String delimiter) {
 		String context = visitedCharacters.toString();
 		StringReader reader = new StringReader(context);
@@ -542,13 +470,19 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
 	}
 
+	@Deprecated
 	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key, boolean cutLastCharacter) {
 		String context = visitedCharacters.toString();
 		StringReader reader = (cutLastCharacter) ? new StringReader(context.substring(0, context.length() - 1)) : new StringReader(context);
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
 	}
+	
+	private CommandSyntaxException exceptionInvalidValue(StringReader reader, String value) {
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value: " + value);
+	}
 
+	@Deprecated
 	private CommandSyntaxException throwInvalidValue(StringBuilder visitedCharacters, String value) {
 		String context = visitedCharacters.toString();
 		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
