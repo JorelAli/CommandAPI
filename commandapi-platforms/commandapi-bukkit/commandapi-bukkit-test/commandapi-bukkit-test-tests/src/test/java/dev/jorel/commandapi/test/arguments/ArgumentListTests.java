@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ListArgument;
 import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.test.Mut;
@@ -395,5 +396,90 @@ class ArgumentListTests extends TestBase {
 		assertCommandFailsWith(player, "list axolotl wolf chicken cat", "Item is not allowed in list at position 13: ...lotl wolf <--[HERE]");
 		
 		assertNoMoreResults(results);
+	}
+	
+	/********************
+	 * Suggestion tests *
+	 ********************/
+
+	@Test
+	void suggestionTestWithListArgument() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list
+		// All values should be suggested
+		assertEquals(List.of("axolotl", "cat", "wolf"), server.getSuggestions(player, "list "));
+		
+		// /list cat 
+		// All values should be suggested except for "cat"
+		assertEquals(List.of("axolotl", "wolf"), server.getSuggestions(player, "list cat "));
+	}
+
+	@Test
+	void suggestionTestWithListArgumentWithDuplicates() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values")
+				.allowDuplicates(true)
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list
+		// All values should be suggested
+		assertEquals(List.of("axolotl", "cat", "wolf"), server.getSuggestions(player, "list "));
+		
+		// /list cat 
+		// All values should also be suggested
+		assertEquals(List.of("axolotl", "cat", "wolf"), server.getSuggestions(player, "list cat "));
+	}
+	
+	@Test
+	void suggestionTestWithListArgumentDelimiter() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list
+		// The delimiter should be suggested
+		assertEquals(List.of("cat, "), server.getSuggestions(player, "list cat"));
+	}
+	
+	@Test
+	void suggestionTestWithListArgumentText() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildText())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list "cat
+		// All values should be suggested except for "cat"
+		assertEquals(List.of("axolotl", "wolf"), server.getSuggestions(player, "list \"cat "));
 	}
 }
