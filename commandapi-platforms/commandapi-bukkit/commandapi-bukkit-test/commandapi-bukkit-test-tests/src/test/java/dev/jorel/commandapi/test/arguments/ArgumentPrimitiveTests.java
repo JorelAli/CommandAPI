@@ -1,19 +1,28 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import dev.jorel.commandapi.arguments.*;
+import java.util.List;
+import java.util.Locale;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.DoubleArgument;
+import dev.jorel.commandapi.arguments.FloatArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.LongArgument;
+import dev.jorel.commandapi.exceptions.BadLiteralException;
+import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Tests for the primitive arguments {@link BooleanArgument},
@@ -433,6 +442,34 @@ class ArgumentPrimitiveTests extends TestBase {
 		assertCommandFailsWith(player, "test 30", "Long must not be more than 20, found 30 at position 5: test <--[HERE]");
 
 		assertNoMoreResults(results);
+	}
+	
+	/*********************************
+	 * Instantiation exception tests *
+	 *********************************/
+
+	@Test
+	void exceptionTestWithIntegerArgumentInvalid() {
+		// Test with max value less than min value
+		assertThrows(InvalidRangeException.class, () -> new IntegerArgument("value", 20, 10));
+	}
+	
+	@Test
+	void exceptionTestWithLongArgumentInvalid() {
+		// Test with max value less than min value
+		assertThrows(InvalidRangeException.class, () -> new LongArgument("value", 20l, 10l));
+	}
+	
+	@Test
+	void exceptionTestWithFloatArgumentInvalid() {
+		// Test with max value less than min value
+		assertThrows(InvalidRangeException.class, () -> new FloatArgument("value", 20.0f, 10.0f));
+	}
+	
+	@Test
+	void exceptionTestWithDoubleArgumentInvalid() {
+		// Test with max value less than min value
+		assertThrows(InvalidRangeException.class, () -> new DoubleArgument("value", 20.0, 10.0));
 	}
 
 	/********************
