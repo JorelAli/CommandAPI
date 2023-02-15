@@ -1,15 +1,16 @@
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 /**
  * An argument that represents a key-value pair.
@@ -32,7 +33,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	private final boolean keyListEmpty;
 	private final boolean valueListEmpty;
 
-	private final Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\\.]+)");
+	private static final Pattern KEY_PATTERN = Pattern.compile("[a-zA-Z0-9\\.]+");
 
 	/**
 	 * Constructs a {@link MapArgument}
@@ -69,11 +70,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			switch (suggestionInfo.getSuggestionCode()) {
 				case KEY_SUGGESTION -> {
 					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentKey().length());
-					for (String key : keyValues) {
-						if (key.startsWith(suggestionInfo.getCurrentKey())) {
-							builder.suggest(key);
-						}
-					}
+					populateSuggestions(builder, keyValues, suggestionInfo.getCurrentKey());
 				}
 				case DELIMITER_SUGGESTION -> {
 					builder = builder.createOffset(builder.getStart() + currentArgument.length());
@@ -85,16 +82,21 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				}
 				case VALUE_SUGGESTION -> {
 					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentValue().length());
-					for (String value : valueValues) {
-						if (value.startsWith(suggestionInfo.getCurrentValue())) {
-							builder.suggest(value);
-						}
-					}
+					populateSuggestions(builder, valueValues, suggestionInfo.getCurrentValue());
 				}
 			}
 
 			return builder.buildFuture();
 		});
+	}
+	
+	// Does what it says on the tin.
+	private void populateSuggestions(SuggestionsBuilder builder, Iterable<String> values, String prefix) {
+		for (String value : values) {
+			if (value.startsWith(prefix)) {
+				builder.suggest(value);
+			}
+		}
 	}
 
 	/**
@@ -146,7 +148,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				keyBuilder.append(currentChar);
 				currentKey = keyBuilder.toString();
 				suggestionInfo.setCurrentKey(currentKey);
-				validateKey(visitedCharacters, keyPattern, keyBuilder.toString());
+				validateKey(visitedCharacters, KEY_PATTERN, keyBuilder.toString());
 				for (String key : keys) {
 					if (key.equals(keyBuilder.toString())) {
 						suggestionInfo.setSuggestionCode(SuggestionCode.DELIMITER_SUGGESTION);
@@ -236,6 +238,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.MAP;
 	}
+	
+	/***********
+	 * Parsing *
+	 ***********/
 
 	@Override
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
@@ -292,7 +298,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				keyValueBuffer.append(currentChar);
 
 				final String keyValueBufferString = keyValueBuffer.toString();
-				final boolean isInvalidKey = validateKey(visitedCharacters, keyPattern, keyValueBufferString);
+				final boolean isInvalidKey = validateKey(visitedCharacters, KEY_PATTERN, keyValueBufferString);
 				if (currentIndex == rawValuesChars.length - 1) {
 					if (isInvalidKey) {
 						throw throwInvalidKey(visitedCharacters, keyValueBufferString, false);
@@ -360,7 +366,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		// Start reading
 		while (reader.canRead()) {
 			// Add the key and values
-			final Pair pair = readKeyValuePair(reader);
+			final Pair pair = parseKeyValuePair(reader);
 			result.put((K) pair.key(), (V) pair.value());
 
 			reader.skipWhitespace();
@@ -384,9 +390,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			// We're about to read a delimiter. Validate the key and return it
 			else if (reader.peek() == delimiter) {
 				final String key = buffer.toString();
-				if (!keyList.contains(key) && !keyListEmpty) {
-					throw exceptionInvalidKey(reader, key);
-				}
+				validateKey(reader, key);
 				reader.skip();
 				return keyMapper.apply(key);
 			}
@@ -399,6 +403,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			// We've read a valid key character, continue
 			else {
 				buffer.append(reader.read());
+				validateKeyPattern(reader, buffer.toString());
 			}
 		}
 		return null;
@@ -444,7 +449,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return null;
 	}
 	
-	private Pair<K, V> readKeyValuePair(StringReader reader) throws CommandSyntaxException {
+	private Pair<K, V> parseKeyValuePair(StringReader reader) throws CommandSyntaxException {
 		// Read the key
 		K key = parseKey(reader);
 		
@@ -459,6 +464,36 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		// Profit!
 		return new Pair<>(key, value);
 	}
+	
+	/**************
+	 * Validation *
+	 **************/
+	
+	/**
+	 * Fully validates whether the provided key is correct
+	 * @param reader the current string reader
+	 * @param key the key to validate
+	 * @throws CommandSyntaxException if the provided key is not valid
+	 */
+	private void validateKey(StringReader reader, String key) throws CommandSyntaxException {
+		if (!keyList.contains(key) && !keyListEmpty) {
+			throw exceptionInvalidKey(reader, key);
+		}
+		validateKeyPattern(reader, key);
+	}
+	
+	/**
+	 * Validates whether the provided key matches {@link MapArgument#KEY_PATTERN}
+	 * @param reader the current string reader
+	 * @param key the key to validate
+	 * @throws CommandSyntaxException if the provided key does not match {@link MapArgument#KEY_PATTERN}
+	 */
+	private void validateKeyPattern(StringReader reader, String key) throws CommandSyntaxException {
+		if (!KEY_PATTERN.matcher(key).matches()) {
+			throw exceptionInvalidKeyCharacter(reader);
+		}
+	}
+	
 
 	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, String keyValueBufferString) throws CommandSyntaxException {
 		if (!keyPattern.matcher(keyValueBufferString).matches()) {
@@ -483,7 +518,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must end with a quotation mark");
 		}
 	}
+	
+	private CommandSyntaxException exceptionInvalidKeyCharacter(StringReader reader) {
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers and periods");
+	}
 
+	@Deprecated
 	private CommandSyntaxException throwInvalidKeyCharacter(StringBuilder visitedCharacters) {
 		String context = visitedCharacters.toString();
 		StringReader reader = new StringReader(context);
