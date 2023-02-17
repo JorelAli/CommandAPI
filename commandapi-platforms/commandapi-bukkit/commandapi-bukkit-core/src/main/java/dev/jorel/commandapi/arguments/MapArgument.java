@@ -4,6 +4,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -239,7 +240,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		String rawValues = cmdCtx.getArgument(key, String.class);
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
 
