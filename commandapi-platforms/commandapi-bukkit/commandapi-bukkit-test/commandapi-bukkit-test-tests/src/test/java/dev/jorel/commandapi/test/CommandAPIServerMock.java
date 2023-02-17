@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Keyed;
@@ -77,6 +78,27 @@ public class CommandAPIServerMock extends ServerMock {
 		}
 
 		return suggestionsAsStrings;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<Suggestion> getSuggestionsWithTooltips(CommandSender sender, String commandLine) {
+		CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
+		Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
+		ParseResults parseResults = dispatcher.parse(commandLine, css);
+		Suggestions suggestions = null;
+		try {
+			suggestions = (Suggestions) dispatcher.getCompletionSuggestions(parseResults).get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+			suggestions = new Suggestions(StringRange.at(0), new ArrayList<>()); // Empty suggestions
+		}
+
+		List<Suggestion> suggestionsList = new ArrayList<>();
+		for (Suggestion suggestion : suggestions.getList()) {
+			suggestionsList.add(suggestion);
+		}
+
+		return suggestionsList;
 	}
 
 //	@Override
