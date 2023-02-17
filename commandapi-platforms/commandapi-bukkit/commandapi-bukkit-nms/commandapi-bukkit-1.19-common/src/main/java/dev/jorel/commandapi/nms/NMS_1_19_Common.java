@@ -51,7 +51,6 @@ import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -192,6 +191,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
+@SuppressWarnings("resource")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
 	private static final VarHandle SimpleHelpMap_helpTopics;
@@ -492,11 +492,6 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
-	}
-
-	@Override
-	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
 	}
 
 	@Override

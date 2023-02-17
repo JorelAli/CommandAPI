@@ -26,7 +26,6 @@ import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -34,7 +33,6 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -62,6 +60,8 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -167,8 +167,6 @@ import net.minecraft.server.v1_16_R2.SystemUtils;
 import net.minecraft.server.v1_16_R2.Unit;
 import net.minecraft.server.v1_16_R2.Vec2F;
 import net.minecraft.server.v1_16_R2.Vec3D;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
 
 /**
  * NMS implementation for Minecraft 1.16.2 and 1.16.3
@@ -569,11 +567,6 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
-	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ArgumentDimension.a(cmdCtx, key).getWorld().getEnvironment();
-	}
-
-	@Override
 	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return new CraftEnchantment(ArgumentEnchantment.a(cmdCtx, key));
 	}
@@ -832,7 +825,7 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
+		return ScoreboardSlot.ofMinecraft(ArgumentScoreboardSlot.a(cmdCtx, key));
 	}
 
 	@Override

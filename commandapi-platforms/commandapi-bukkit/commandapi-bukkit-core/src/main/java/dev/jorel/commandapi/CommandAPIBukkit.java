@@ -50,7 +50,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 @RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
-public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argument<?>, CommandSender, Source> implements NMS<Source> {
+public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Argument<?>, CommandSender, Source>, NMS<Source> {
 
 	// References to utility classes
 	private static CommandAPIBukkit<?> instance;
@@ -262,14 +262,18 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 				for (String arg : rCommand.argsAsStr()) {
 					usageString.append("<").append(arg.split(":")[0]).append("> ");
 				}
-				usages.add(usageString.toString());
+				usages.add(usageString.toString().trim());
 			}
 		}
 
 		// If 1 usage, put it on the same line, otherwise format like a list
-		if (usages.size() == 1) {
+		if (usages.isEmpty()) {
+			throw new IllegalStateException("Empty usage list when generating help! " + 
+				"This should never happen - if you're seeing this message, please" +
+				"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
+		} else if (usages.size() == 1) {
 			sb.append(usages.get(0));
-		} else if (usages.size() > 1) {
+		} else {
 			for (String usage : usages) {
 				sb.append("\n- ").append(usage);
 			}
@@ -317,17 +321,15 @@ public abstract class CommandAPIBukkit<Source> extends CommandAPIPlatform<Argume
 
 			for (String alias : command.aliases()) {
 				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
-				if (command.aliases().length > 0) {
-					currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
+				currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
 
-					// We want to get all aliases (including the original command name),
-					// except for the current alias
-					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
-					aliases.add(command.commandName());
-					aliases.remove(alias);
+				// We want to get all aliases (including the original command name),
+				// except for the current alias
+				List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
+				aliases.add(command.commandName());
+				aliases.remove(alias);
 
-					currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
-				}
+				currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
 
 				// Don't override the plugin help topic
 				commandPrefix = generateCommandHelpPrefix(alias);

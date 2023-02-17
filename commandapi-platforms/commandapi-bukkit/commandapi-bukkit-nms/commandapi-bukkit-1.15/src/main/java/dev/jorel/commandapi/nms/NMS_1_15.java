@@ -543,17 +543,6 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	}
 
 	@Override
-	public Environment getEnvironment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		DimensionManager manager = ArgumentDimension.a(cmdCtx, key);
-		return switch (manager.getDimensionID()) {
-			case 0 -> Environment.NORMAL;
-			case -1 -> Environment.NETHER;
-			case 1 -> Environment.THE_END;
-			default -> null;
-		};
-	}
-
-	@Override
 	public Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return new CraftEnchantment(ArgumentEnchantment.a(cmdCtx, key));
 	}
@@ -814,7 +803,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
+		return ScoreboardSlot.ofMinecraft(ArgumentScoreboardSlot.a(cmdCtx, key));
 	}
 
 	@Override

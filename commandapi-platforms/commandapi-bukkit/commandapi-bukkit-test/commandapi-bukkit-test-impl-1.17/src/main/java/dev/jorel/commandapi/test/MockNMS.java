@@ -29,6 +29,7 @@ import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemFactory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -315,6 +316,7 @@ public class MockNMS extends Enums {
 		return MobEffect.byId(potionEffectType.getId()).getDescriptionId().replace("effect.minecraft.", "minecraft:");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<NamespacedKey> getAllRecipes() {
 		return recipeManager.getRecipeIds().map(k -> new NamespacedKey(k.getNamespace(), k.getPath())).toList();
@@ -439,6 +441,11 @@ public class MockNMS extends Enums {
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
+	}
+	
+	@Override
+	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
+		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
 }

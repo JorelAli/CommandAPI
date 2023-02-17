@@ -24,6 +24,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.velocitypowered.api.command.CommandSource;
+import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
  * An argument that represents text, encased in quotes
@@ -49,7 +50,7 @@ public class TextArgument extends Argument<String> {
 	}
 
 	@Override
-	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, Object[] previousArgs) throws CommandSyntaxException {
+	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

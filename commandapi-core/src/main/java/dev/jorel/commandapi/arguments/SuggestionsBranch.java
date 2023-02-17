@@ -7,11 +7,9 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.executors.CommandArguments;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class represents a branch in the suggestions of an argument. Use {@link SuggestionsBranch#suggest(ArgumentSuggestions...)}
@@ -66,6 +64,7 @@ public class SuggestionsBranch<CommandSender> {
 		return getNextSuggestion(sender, previousArguments, new StringReader(String.join(" ", previousArguments)), new ArrayList<>(), new StringBuilder());
 	}
 
+	@SuppressWarnings("unchecked")
 	private ArgumentSuggestions<CommandSender> getNextSuggestion(CommandSender sender, String[] previousArguments, StringReader errorContext, List<String> processedArguments, StringBuilder currentInput) throws CommandSyntaxException {
 		if (branches.isEmpty() && suggestions.isEmpty()) {
 			return null;
@@ -80,7 +79,7 @@ public class SuggestionsBranch<CommandSender> {
 
 			if (currentSuggestion != null) {
 				// Validate argument on the path
-				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, processedArguments.toArray(), currentInput.toString(), "");
+				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, new CommandArguments(processedArguments.toArray(), new HashMap<>()), currentInput.toString(), "");
 				SuggestionsBuilder builder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
 				currentSuggestion.suggest(info, builder);
 				if (builder.build().getList().stream().map(Suggestion::getText).noneMatch(currentArgument::equals)) {
@@ -185,7 +184,7 @@ public class SuggestionsBranch<CommandSender> {
 
 			if (currentSuggestion != null) {
 				// Validate argument on the path
-				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, processedArguments.toArray(), currentInput.toString(), "");
+				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, new CommandArguments(processedArguments.toArray(), new HashMap<>()), currentInput.toString(), "");
 				SuggestionsBuilder builder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
 				try {
 					currentSuggestion.suggest(info, builder);

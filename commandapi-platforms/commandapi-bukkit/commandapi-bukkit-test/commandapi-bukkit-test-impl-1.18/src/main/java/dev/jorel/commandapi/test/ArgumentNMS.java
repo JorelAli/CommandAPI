@@ -13,7 +13,6 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -23,6 +22,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -45,8 +46,6 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandSourceStack;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
 
 /**
  * Argument related method implementations
@@ -316,11 +315,6 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	public EntityType getEntityType(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
 		return baseNMS.getEntityType(cmdCtx, key);
-	}
-
-	@Override
-	public Environment getEnvironment(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getEnvironment(cmdCtx, key);
 	}
 
 	@Override

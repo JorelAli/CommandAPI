@@ -111,7 +111,8 @@ public class CommandAPI {
 			{
 				List<String> platformClassHierarchyList = new ArrayList<>();
 				Class<?> platformClass = platform.getClass();
-				while (platformClass != CommandAPIPlatform.class) {
+				while (platformClass != CommandAPIPlatform.class && platformClass != null) {
+					// TODO: This may be mangled now we don't have a clear linear inheritance of abstract classes
 					platformClassHierarchyList.add(platformClass.getSimpleName());
 					platformClass = platformClass.getSuperclass();
 				}
