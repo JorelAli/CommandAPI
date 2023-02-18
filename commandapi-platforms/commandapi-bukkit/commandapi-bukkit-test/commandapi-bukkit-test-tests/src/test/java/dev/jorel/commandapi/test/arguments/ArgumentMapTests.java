@@ -42,6 +42,8 @@ public class ArgumentMapTests extends TestBase {
 	 * Tests *
 	 *********/
 
+	// TODO: Suggestion test!!!
+
 	@Test
 	public void executionTestWithMapArgument() {
 		Mut<LinkedHashMap<String, String>> results = Mut.of();
@@ -76,6 +78,21 @@ public class ArgumentMapTests extends TestBase {
 		server.dispatchCommand(player, "test map:\"cool map\" foo:\"bar\" test:\"Test value\"");
 		testMap.put("test", "Test value");
 		assertEquals(testMap, results.get());
+
+		// /test map:"cool map" map:"bar"
+		assertCommandFailsWith(player, "test map:\"cool map\" map:\"bar\"", "Could not parse command: Duplicate keys are not allowed at position 19: ...l map\" map<--[HERE]");
+
+		// /test map:
+		assertCommandFailsWith(player, "test map:", "Could not parse command: Quotation mark required after writing the delimiter at position 4: map:<--[HERE]");
+
+		// /test map
+		assertCommandFailsWith(player, "test map", "Could not parse command: Delimiter required after writing a key at position 3: map<--[HERE]");
+
+		// /test map:"
+		assertCommandFailsWith(player, "test map:\"", "Could not parse command: Value required after opening quotation mark at position 5: map:\"<--[HERE]");
+
+		// /test map:"this" otherMap:"this"
+		assertCommandFailsWith(player, "test map:\"this\" otherMap:\"this\"", "Could not parse command: Duplicate values are not allowed here at position 26: ...rMap:\"this<--[HERE]");
 
 		assertNoMoreResults(results);
 	}

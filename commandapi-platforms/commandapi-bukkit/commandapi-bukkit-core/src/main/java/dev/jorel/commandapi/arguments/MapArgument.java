@@ -351,7 +351,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		if (!keyPattern.matcher(keyValueBufferString).matches()) {
 			throw throwInvalidKeyCharacter(visitedCharacters);
 		}
-		return !keyList.contains(keyValueBufferString);
+		return !keyList.contains(keyValueBufferString) && !keyListEmpty;
 	}
 
 	private void validateValueStart(char currentChar, StringBuilder visitedCharacters) throws CommandSyntaxException {
