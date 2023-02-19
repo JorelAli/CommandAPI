@@ -133,10 +133,6 @@ To do this, we first register our custom items:
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeRecipeArguments}}
-```
-
 </div>
 
 Once we've done that, we can now include them in our command registration. To do this, we use `replaceSafeSuggestions(recipes)` and then register our command as normal:
@@ -149,10 +145,6 @@ Once we've done that, we can now include them in our command registration. To do
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions2}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeRecipeArguments_2}}
 ```
 
 </div>
@@ -209,10 +201,6 @@ Now we register our command as normal:
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions5}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeMobSpawnArguments_3}}
-```
-
 </div>
 
 </div>
@@ -251,10 +239,6 @@ And then we can register our command as normal:
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions7}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafePotionArguments_2}}
 ```
 
 </div>

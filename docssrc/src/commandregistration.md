@@ -14,10 +14,6 @@ I think the easiest way to explain it is with an example:
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandRegistration1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:commandregistration}}
-```
-
 </div>
 
 - First, we create a new `CommandAPICommand`, with the name of the command that the sender must enter to run it.
@@ -222,10 +218,6 @@ To replace a command, we can first unregister it and then register our implement
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandRegistration2}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:commandunregistration}}
 ```
 
 </div>

@@ -23,7 +23,7 @@ In this example, we'll show how to use multi literals to declare Minecraft's `/g
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:multiliteralarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentMultiLiteral1}}
 ```
 
 </div>

@@ -73,10 +73,6 @@ We make use of the `ArgumentSuggestions.stringsAsync` method to provide asynchro
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:asyncSuggestions1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:asyncreadfile}}
-```
-
 </div>
 
 </div>

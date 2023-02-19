@@ -74,7 +74,7 @@ Since the underlying implementation of the `NBTCompoundArgument` can change (e.g
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:nbtcompoundarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentNBT1}}
 ```
 
 </div>

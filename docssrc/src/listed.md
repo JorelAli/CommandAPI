@@ -32,10 +32,6 @@ Let's also say that in our implementation of this command, we don't actually per
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:listed1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:listed}}
-```
-
 </div>
 
 In this scenario, the argument `<value>` is not present in the `Object args[]` for the executor.

@@ -32,10 +32,6 @@ For this command, we'll use a `GreedyStringArgument` as if we were making a gene
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:BrigadierSuggestions3}}
-```
-
 </div>
 
 In this example, we simply create the `GreedyStringArgument` and use `replaceSuggestions()` to specify our suggestion rules. We create an offset using the current builder to make suggestions start at the last character (the current builder start `builder.getStart()` and the current length of what the user has already typed `info.currentArg().length()`). Finally, we build the suggestions with `builder.buildFuture()` and then register our command as normal.
@@ -66,10 +62,6 @@ For this command, we'll use a `GreedyStringArgument` because that allows users t
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions2}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:BrigadierSuggestions1}}
-```
-
 </div>
 
 There's a lot to unpack there, but it's generally split up into 4 key sections:
@@ -98,10 +90,6 @@ We use the command suggestions declared above by using the `replaceSuggestions` 
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions3}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:BrigadierSuggestions2}}
 ```
 
 </div>

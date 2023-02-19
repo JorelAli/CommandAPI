@@ -42,10 +42,6 @@ The `run()` method runs the function. The command executor that runs this functi
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionWrapper1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:functionarguments}}
-```
-
 </div>
 
 ### `runAs(Entity)`

@@ -74,10 +74,6 @@ We can do this by adding a `PlayerArgument` to our command. As described above, 
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandTrees1}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:CommandTree_sayhi1}}
-```
-
 </div>
 
 In this example, we have our normal `/sayhi` command using the `executes()` method. We then add a new argument (a new "branch" in our "tree"), the `PlayerArgument`, using the `then()` method. **We want to make this branch executable, so we also use the `executes()` method _on the argument itself_**. To register the full command tree (which includes both `/sayhi` and `/sayhi <target>`), we call `register()` on the `CommandTree` object.
@@ -111,10 +107,6 @@ Say we wanted to create a plugin to let a user edit signs. We have a single comm
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandTrees2}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:CommandTree_signedit}}
 ```
 
 </div>
