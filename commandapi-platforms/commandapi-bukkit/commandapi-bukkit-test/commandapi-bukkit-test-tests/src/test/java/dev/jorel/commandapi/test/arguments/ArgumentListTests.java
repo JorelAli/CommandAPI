@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ListArgument;
 import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.test.Mut;
@@ -110,6 +111,37 @@ class ArgumentListTests extends TestBase {
 		new CommandAPICommand("list")
 			.withArguments(new ListArgumentBuilder<>("values", ", ")
 				.withList(List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+				results.set((List<String>) args.get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer("APlayer");
+		
+		// /list cat, wolf, axolotl
+		server.dispatchCommand(player, "list cat, wolf, axolotl");
+		assertEquals(List.of("cat", "wolf", "axolotl"), results.get());
+		
+		// /list cat, wolf, axolotl, wolf
+		// No duplicates allowed
+		assertCommandFailsWith(player, "list cat, wolf, axolotl, wolf", "Duplicate arguments are not allowed at position 20: ... axolotl, <--[HERE]");
+		
+		// /list axolotl, wolf, chicken, cat
+		// Can't have unspecified "chicken" in the list
+		assertCommandFailsWith(player, "list axolotl, wolf, chicken, cat", "Item is not allowed in list at position 15: ...tl, wolf, <--[HERE]");
+		
+		assertNoMoreResults(results);
+	}
+	
+	@Test
+	void executionTestWithListArgumentWithConstantListArray() {
+		Mut<List<String>> results = Mut.of();
+
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList("cat", "wolf", "axolotl")
 				.withStringMapper()
 				.buildGreedy())
 			.executesPlayer((player, args) -> {
@@ -395,5 +427,90 @@ class ArgumentListTests extends TestBase {
 		assertCommandFailsWith(player, "list axolotl wolf chicken cat", "Item is not allowed in list at position 13: ...lotl wolf <--[HERE]");
 		
 		assertNoMoreResults(results);
+	}
+	
+	/********************
+	 * Suggestion tests *
+	 ********************/
+
+	@Test
+	void suggestionTestWithListArgument() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list
+		// All values should be suggested
+		assertEquals(List.of("axolotl", "cat", "wolf"), server.getSuggestions(player, "list "));
+		
+		// /list cat 
+		// All values should be suggested except for "cat"
+		assertEquals(List.of("axolotl", "wolf"), server.getSuggestions(player, "list cat "));
+	}
+
+	@Test
+	void suggestionTestWithListArgumentWithDuplicates() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values")
+				.allowDuplicates(true)
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list
+		// All values should be suggested
+		assertEquals(List.of("axolotl", "cat", "wolf"), server.getSuggestions(player, "list "));
+		
+		// /list cat 
+		// All values should also be suggested
+		assertEquals(List.of("axolotl", "cat", "wolf"), server.getSuggestions(player, "list cat "));
+	}
+	
+	@Test
+	void suggestionTestWithListArgumentDelimiter() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values", ", ")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildGreedy())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list
+		// The delimiter should be suggested
+		assertEquals(List.of("cat, "), server.getSuggestions(player, "list cat"));
+	}
+	
+	@Test
+	void suggestionTestWithListArgumentText() {
+		new CommandAPICommand("list")
+			.withArguments(new ListArgumentBuilder<>("values")
+				.withList(() -> List.of("cat", "wolf", "axolotl"))
+				.withStringMapper()
+				.buildText())
+			.executesPlayer((player, args) -> {
+			})
+		.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /list "cat
+		// All values should be suggested except for "cat"
+		assertEquals(List.of("axolotl", "wolf"), server.getSuggestions(player, "list \"cat "));
 	}
 }

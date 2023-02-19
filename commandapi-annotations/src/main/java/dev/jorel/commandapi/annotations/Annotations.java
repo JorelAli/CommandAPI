@@ -99,6 +99,7 @@ import dev.jorel.commandapi.annotations.arguments.ATeamArgument;
 import dev.jorel.commandapi.annotations.arguments.ATextArgument;
 import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
 import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
+import dev.jorel.commandapi.annotations.arguments.AWorldArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -124,7 +125,7 @@ public class Annotations extends AbstractProcessor {
 		AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class, AParticleArgument.class, APlayerArgument.class,
 		APotionEffectArgument.class, ARecipeArgument.class, ARotationArgument.class, AScoreboardSlotArgument.class,
 		AScoreHolderArgument.Single.class, AScoreHolderArgument.Multiple.class, ASoundArgument.class, AStringArgument.class, ATeamArgument.class,
-		ATextArgument.class, ATimeArgument.class, AUUIDArgument.class };
+		ATextArgument.class, ATimeArgument.class, AUUIDArgument.class, AWorldArgument.class};
 
 	// List of stuff we can deal with
 	@Override

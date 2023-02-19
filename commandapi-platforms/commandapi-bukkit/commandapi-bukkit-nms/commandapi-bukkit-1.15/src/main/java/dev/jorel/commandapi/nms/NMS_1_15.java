@@ -715,7 +715,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
+		return ScoreboardSlot.ofMinecraft(ArgumentScoreboardSlot.a(cmdCtx, key));
 	}
 
 	@Override

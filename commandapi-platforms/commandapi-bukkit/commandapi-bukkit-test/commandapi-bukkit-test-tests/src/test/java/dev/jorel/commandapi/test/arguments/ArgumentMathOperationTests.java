@@ -2,6 +2,8 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,7 @@ class ArgumentMathOperationTests extends TestBase {
 	 *********/
 
 	@Test
-	void executionTestWithMathOperationArgumentArgument() {
+	void executionTestWithMathOperationArgument() {
 		Mut<MathOperation> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -164,6 +166,27 @@ class ArgumentMathOperationTests extends TestBase {
 		assertEquals(2, results.get());
 
 		assertNoMoreResults(results);
+	}
+
+	/********************
+	 * Suggestion tests *
+	 ********************/
+
+	@Test
+	void suggestionTestWithMathOperationArgument() {
+		new CommandAPICommand("test")
+			.withArguments(new MathOperationArgument("operation"))
+			.executesPlayer((player, args) -> {
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		assertEquals(List.of("%=", "*=", "+=", "-=", "/=", "<", "=", ">", "><"), server.getSuggestions(player, "test "));
+		
+		// /test >
+		assertEquals(List.of("><"), server.getSuggestions(player, "test >"));
 	}
 
 }

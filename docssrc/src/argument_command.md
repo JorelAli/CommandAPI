@@ -119,7 +119,7 @@ Let's also add a restriction that the player can only use diamonds or dirt for t
 
 <div style="position: relative; left: -50px;">
 
-\\(
+\begin{gather}
 \texttt{(start)}\\\\
 \swarrow\hspace{2cm}\searrow\\\\
 \swarrow\hspace{3.4cm}\searrow\\\\
@@ -131,7 +131,7 @@ Let's also add a restriction that the player can only use diamonds or dirt for t
 \hspace{6.7cm}\texttt{minecraft:diamond}\hspace{3cm}\texttt{minecraft:dirt}\\\\
 \hspace{7.5cm}\hspace{4cm}\downarrow\\\\
 \hspace{7.5cm}\hspace{4cm}\texttt{(amount)}\\\\
-\\)
+\end{gather}
 
 </div>
 

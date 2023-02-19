@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -24,12 +25,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.opentest4j.AssertionFailedError;
 
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestion;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
+import dev.jorel.commandapi.PaperImplementations;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 
 public abstract class TestBase {
@@ -139,6 +145,35 @@ public abstract class TestBase {
 		s2_2.removeAll(s1_2);
 		System.out.println("List 1 has the following extra items: " + s1);
 		System.out.println("List 2 has the following extra items: " + s2_2);
+	}
+	
+	public static void disablePaperImplementations() {
+		MockPlatform.setField(PaperImplementations.class, "isPaperPresent", MockPlatform.get().getPaper(), false);
+	}
+	
+	/***************
+	 * Suggestions *
+	 ***************/
+	
+	public Suggestion mkSuggestion(String text, String tooltip) {
+		return new Suggestion(StringRange.at(0), text, new LiteralMessage(tooltip));
+	}
+	
+	// We only care about checking the text and tooltip message, nothing else
+	public boolean suggestionEquals(Suggestion suggestion1, Suggestion suggestion2) {
+		return suggestion1.getText().equals(suggestion2.getText())
+			&& suggestion1.getTooltip().getString().equals(suggestion2.getTooltip().getString());
+	}
+	
+	public void assertSuggestionListEquals(List<Suggestion> list1, List<Suggestion> list2) {
+		if (list1.size() != list2.size()) {
+			throw new AssertionFailedError("List " + list1 + " and " + list2 + " have differing lengths");
+		}
+		for (int i = 0; i < list1.size(); i++) {
+			if(!suggestionEquals(list1.get(i), list2.get(i))) {
+				throw new AssertionFailedError("Expected: <" + list1 + "> but was: <" + list2 + ">");
+			}
+		}
 	}
 
 }
