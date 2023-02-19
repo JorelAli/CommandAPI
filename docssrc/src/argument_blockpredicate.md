@@ -27,7 +27,7 @@ First, we declare our arguments. We want to use the `BlockPredicateArgument` sin
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockpredicatearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentBlockPredicate1}}
 ```
 
 </div>
@@ -45,7 +45,7 @@ Lastly, we register our command as normal using the `register()` method.
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:blockpredicatearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentBlockPredicate2}}
 ```
 
 ```kotlin,Kotlin_DSL

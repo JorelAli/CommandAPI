@@ -42,7 +42,7 @@ We want to put a requirement on this command that the player needs to have at le
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -83,7 +83,7 @@ To represent our party in code, we'll use a simple `Map` called `partyMembers` w
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirementsmap}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -101,7 +101,7 @@ To begin with, let's create the `/party create <partyName>` command. First, we m
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements3}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -121,7 +121,7 @@ Now that we've declared our arguments, we can now declare our main command `/par
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements4}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -141,7 +141,7 @@ So now we've added the ability to create a party if we're not already in it. Now
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements4}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements5}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -161,7 +161,7 @@ Once the arguments have been declared, we can now implement our party teleportat
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements5}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements6}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -250,7 +250,7 @@ When a player creates a new party, we need to ensure that their requirements are
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:updatingrequirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements7}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -282,7 +282,7 @@ For example, you can apply multiple requirements for a command by calling the `w
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:multiplerequirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements8}}
 ```
 
 ```kotlin,Kotlin_DSL

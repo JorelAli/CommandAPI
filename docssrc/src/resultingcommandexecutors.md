@@ -31,7 +31,7 @@ Say we want a command that returns a random number as a result. This can then be
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingcommandexecutor}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingCommandExecutors1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -66,7 +66,7 @@ Since we're declaring commands that are to be used in `/execute`, we must ensure
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingcommandexecutor2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingCommandExecutors2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -84,7 +84,7 @@ Now we write our implementation for `/givereward`. In this example, we use the `
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingcommandexecutor3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingCommandExecutors3}}
 ```
 
 ```kotlin,Kotlin_DSL

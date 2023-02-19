@@ -44,7 +44,7 @@ Now, we can configure the CommandAPI using the `CommandAPI.onLoad()` method to u
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:nbtcompoundargumentonload}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentNBT1}}
 ```
 
 </div>
@@ -70,7 +70,7 @@ Since the underlying implementation of the `NBTCompoundArgument` can change (e.g
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:nbtcompoundarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentNBT2}}
 ```
 
 ```kotlin,Kotlin_DSL

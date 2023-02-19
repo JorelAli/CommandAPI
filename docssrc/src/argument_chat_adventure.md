@@ -33,7 +33,7 @@ We can construct a book using the Adventure API's `Book.book(Component, Componen
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:ArgumentAdventureChatComponent}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -69,7 +69,7 @@ In order to broadcast an Adventure `Component` to all players on the server, we 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:ArgumentAdventureChat}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure2}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -9,7 +9,7 @@ In our [example for creating a party system](./requirements.md#example---a-party
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicateTips1}}
 ```
 
 </div>
@@ -23,7 +23,7 @@ And for our party teleportation command, we had the following code:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirementstp}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicateTips2}}
 ```
 
 </div>
@@ -37,7 +37,7 @@ We can simplify this code by declaring the predicate:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicatetips}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicateTips3}}
 ```
 
 </div>
@@ -51,7 +51,7 @@ Now, we can use the predicate `testIfPlayerHasParty` in our code for creating a 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicatetips2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicateTips4}}
 ```
 
 </div>
@@ -65,7 +65,7 @@ And we can use it again for our code for teleporting to party members:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicatetips3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:predicateTips5}}
 ```
 
 </div>

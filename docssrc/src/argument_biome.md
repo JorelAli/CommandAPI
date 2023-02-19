@@ -23,7 +23,7 @@ And we can set the biome of the current chunk as expected:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:biomearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentBiome1}}
 ```
 
 ```kotlin,Kotlin_DSL

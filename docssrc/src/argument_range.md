@@ -60,7 +60,7 @@ Now, we simply create our arguments using `IntegerRangeArgument` for our range a
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:rangedarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentRange1}}
 ```
 
 ```kotlin,Kotlin_DSL

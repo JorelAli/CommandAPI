@@ -35,7 +35,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatcolorarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChats1}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -51,7 +51,7 @@ First, we'll declare our arguments. Here, we'll use the `stringsWithTooltips` me
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:Tooltips1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:tooltips1}}
 ```
 
 </div>
@@ -65,7 +65,7 @@ Finally, we declare our command as normal:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:Tooltips2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:tooltips2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -106,7 +106,7 @@ public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/co
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:Tooltips3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:tooltips3}}
 ```
 
 </div>
@@ -122,7 +122,7 @@ Let's also say that our plugin has registered lots of `CustomItem`s and has this
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:Tooltips4}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:tooltips4}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -181,7 +181,7 @@ First, we'll declare our arguments. Here, we use a `LocationArgument` and use th
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeTooltips}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:tooltips5}}
 ```
 
 </div>
@@ -195,7 +195,7 @@ In the arguments declaration, we've casted the command sender to a player. To en
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeTooltips2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:tooltips6}}
 ```
 
 ```kotlin,Kotlin_DSL

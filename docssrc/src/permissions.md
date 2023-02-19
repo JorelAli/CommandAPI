@@ -34,7 +34,7 @@ Say we created a command `/god` that sets a player as being invulnerable. Since 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -97,7 +97,7 @@ We first declare the command as normal. Nothing fancy is going on here:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3_1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -115,7 +115,7 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3_2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -164,7 +164,7 @@ We first declare the command as normal. Nothing fancy is going on here:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions5}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -51,7 +51,7 @@ As an example, let's declare the literal "hello" as a valid literal for this com
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:literalarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLiteral1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -69,7 +69,7 @@ The `LiteralArgument` class also provides the `LiteralArgument.of()` and `Litera
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:literalarguments3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLiteral2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -101,7 +101,7 @@ This is a demonstration of how you could create a command similar to Minecraft's
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:literalarguments2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLiteral3}}
 ```
 
 ```kotlin,Kotlin_DSL

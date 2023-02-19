@@ -23,7 +23,7 @@ As such, we easily implement it by specifying the `RecipeArgument`, casting it a
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:recipearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentRecipe1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -53,7 +53,7 @@ This is then implemented trivially as follows:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:recipearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentRecipe2}}
 ```
 
 ```kotlin,Kotlin_DSL

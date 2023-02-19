@@ -26,7 +26,7 @@ Therefore, to gracefully handle this with a proper error message, we use one of 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandfailures}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandFailures1}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -21,7 +21,7 @@ We implement this with a simple for loop over the player's inventory and remove 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:itemstackpredicatearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentItemStackPredicate1}}
 ```
 
 ```kotlin,Kotlin_DSL

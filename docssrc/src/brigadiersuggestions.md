@@ -29,7 +29,7 @@ For this command, we'll use a `GreedyStringArgument` as if we were making a gene
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:BrigadierSuggestions3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -63,7 +63,7 @@ For this command, we'll use a `GreedyStringArgument` because that allows users t
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:BrigadierSuggestions1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -97,7 +97,7 @@ We use the command suggestions declared above by using the `replaceSuggestions` 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:BrigadierSuggestions2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions3}}
 ```
 
 ```kotlin,Kotlin_DSL

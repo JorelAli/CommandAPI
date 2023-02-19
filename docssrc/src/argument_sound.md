@@ -37,11 +37,11 @@ This command simply plays the provided sound to the current player:
 ```
 
 ```kotlin,Kotlin_(Sound)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:soundarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentSound1}}
 ```
 
 ```kotlin,Kotlin_(NamespacedKey)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:soundarguments2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentSound2}}
 ```
 
 ```kotlin,Kotlin_DSL_(Sound)

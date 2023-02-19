@@ -34,7 +34,7 @@ For that, we are going to register a command `/sayhi`. To add optional arguments
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsayhicmd}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:optionalArguments1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -107,7 +107,7 @@ This is how the `getOrDefault` method is being implemented:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsayhicmd2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:optionalArguments2}}
 ```
 
 ```kotlin,Kotlin_DSL

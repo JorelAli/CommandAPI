@@ -23,7 +23,7 @@ In this example, we utilize some of the other arguments that we've described ear
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:potioneffectarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentPotion1}}
 ```
 
 ```kotlin,Kotlin_DSL

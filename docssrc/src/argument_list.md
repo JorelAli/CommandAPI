@@ -137,7 +137,7 @@ To do this, we create a command with an `IntegerArgument` to specify the amount 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:ListArgument_MultiGive}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentList1}}
 ```
 
 ```kotlin,Kotlin_DSL

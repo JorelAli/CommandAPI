@@ -28,7 +28,7 @@ As an example, let's create a command to move an objective to a player's sidebar
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:objectiveargument}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentObjectives1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -64,7 +64,7 @@ To do this, we're going to take advantage of Bukkit's `Scoreboard.getObjectivesB
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:objectivecriteriaarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentObjectives2}}
 ```
 
 ```kotlin,Kotlin_DSL

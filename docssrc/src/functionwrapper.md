@@ -39,7 +39,7 @@ The `run()` method runs the function. The command executor that runs this functi
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionWrapper1}}
 ```
 
 ```kotlin,Kotlin_DSL

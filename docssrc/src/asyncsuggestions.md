@@ -70,7 +70,7 @@ We make use of the `ArgumentSuggestions.stringsAsync` method to provide asynchro
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:asyncreadfile}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:asyncSuggestions1}}
 ```
 
 ```kotlin,Kotlin_DSL

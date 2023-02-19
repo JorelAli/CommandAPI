@@ -29,7 +29,7 @@ Let's also say that in our implementation of this command, we don't actually per
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:listed}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:listed1}}
 ```
 
 ```kotlin,Kotlin_DSL

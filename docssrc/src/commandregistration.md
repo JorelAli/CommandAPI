@@ -11,7 +11,7 @@ I think the easiest way to explain it is with an example:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandregistration}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandRegistration1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -221,7 +221,7 @@ To replace a command, we can first unregister it and then register our implement
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandunregistration}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandRegistration2}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -71,7 +71,7 @@ We can do this by adding a `PlayerArgument` to our command. As described above, 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandTree_sayhi1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandTrees1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -110,7 +110,7 @@ Say we wanted to create a plugin to let a user edit signs. We have a single comm
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandTree_signedit}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandTrees2}}
 ```
 
 ```kotlin,Kotlin_DSL

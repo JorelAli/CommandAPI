@@ -23,7 +23,7 @@ With this syntax, we can easily create our command:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:itemstackarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentItemStack1}}
 ```
 
 ```kotlin,Kotlin_DSL

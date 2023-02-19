@@ -463,20 +463,7 @@ new CommandAPICommand("spawnmob")
 }
 
 void argument_function() {
-// TODO: Is this even used?
 /* ANCHOR: argumentFunction1 */
-new CommandAPICommand("runfunc")
-    .withArguments(new FunctionArgument("function"))
-    .executes((sender, args) -> {
-        FunctionWrapper[] functions = (FunctionWrapper[]) args.get(0);
-        for (FunctionWrapper function : functions) {
-            function.run(); // The command executor in this case is 'sender'
-        }
-    })
-    .register();
-/* ANCHOR_END: argumentFunction1 */
-
-/* ANCHOR: argumentFunction2 */
 new CommandAPICommand("runfunction")
     .withArguments(new FunctionArgument("function"))
     .executes((sender, args) -> {
@@ -488,7 +475,7 @@ new CommandAPICommand("runfunction")
         }
     })
     .register();
-/* ANCHOR_END: argumentFunction2 */
+/* ANCHOR_END: argumentFunction1 */
 }
 
 void argument_itemStack() {
@@ -599,8 +586,8 @@ for(Entry<String, GameMode> entry : gamemodes.entrySet()) {
 /* ANCHOR_END: argumentLiteral3 */
 }
 
-void argument_location() {
-/* ANCHOR: argumentLocation1 */
+void argument_locations() {
+/* ANCHOR: argumentLocations1 */
 new CommandAPICommand("break")
     // We want to target blocks in particular, so use BLOCK_POSITION
     .withArguments(new LocationArgument("block", LocationType.BLOCK_POSITION))
@@ -609,7 +596,7 @@ new CommandAPICommand("break")
         location.getBlock().setType(Material.AIR);
     })
     .register();
-/* ANCHOR_END: argumentLocation1 */
+/* ANCHOR_END: argumentLocations1 */
 }
 
 void argument_lootTable() {
@@ -913,23 +900,6 @@ new CommandAPICommand("clearobjectives")
     })
     .register();
 /* ANCHOR_END: argumentScoreboards2 */
-
-Object[] args = new Object[0];
-@SuppressWarnings("unchecked")
-// This example isn't used because for some reason, mdbook doesn't render it properly
-/* ANCHOR: argumentScoreboards3 */
-Collection<String> entitiesAndPlayers = (Collection<String>) args[0];
-for(String str : entitiesAndPlayers) {
-    try {
-        UUID uuid = UUID.fromString(str);
-        // Is a UUID, so it must by an entity
-        Bukkit.getEntity(uuid);
-    } catch(IllegalArgumentException exception) {
-        // Not a UUID, so it must be a player name
-        Bukkit.getPlayer(str); 
-    }
-}
-/* ANCHOR_END: argumentScoreboards3 */
 }
 
 void argument_sound() {
@@ -1359,9 +1329,7 @@ new CommandTree("sayhi")
         }))
     .register();
 /* ANCHOR_END: commandTrees1 */
-}
 
-{
 /* ANCHOR: commandTrees2 */
 new CommandTree("signedit")
     .then(new LiteralArgument("set")
@@ -1493,7 +1461,7 @@ new CommandAPICommand("runfunc")
 }
 
 void help() {
-/* ANCHOR: help */
+/* ANCHOR: help1 */
 new CommandAPICommand("mycmd")
     .withShortDescription("Says hi")
     .withFullDescription("Broadcasts hi to everyone on the server")
@@ -1501,7 +1469,7 @@ new CommandAPICommand("mycmd")
         Bukkit.broadcastMessage("Hi!");
     })
     .register();
-/* ANCHOR_END: help */
+/* ANCHOR_END: help1 */
 
 /* ANCHOR: help2 */
 new CommandAPICommand("mycmd")

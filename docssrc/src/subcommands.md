@@ -37,7 +37,7 @@ We can implement this by creating a `CommandAPICommand` with the command name `a
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommandspart}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -55,7 +55,7 @@ Similarly, we have another part `remove <permission> <groupName>`. We can declar
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -73,7 +73,7 @@ Finally, we can link everything up together to the `perm` command and register t
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommandsend}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands3}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -93,7 +93,7 @@ Another, more intuitive method, is to shove everything in one go without creatin
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:subcommands4}}
 ```
 
 ```kotlin,Kotlin_DSL

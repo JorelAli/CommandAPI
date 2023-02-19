@@ -46,7 +46,7 @@ public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/co
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:converter}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:conversion1}}
 ```
 
 </div>
@@ -102,7 +102,7 @@ With the EssentialsX plugin, the `<speed>` value can only take numbers between 0
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:converter2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:conversion2}}
 ```
 
 </div>

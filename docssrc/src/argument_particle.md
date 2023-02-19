@@ -56,7 +56,7 @@ With this, we can simply spawn the particle using the `World.spawnParticle(Parti
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:particlearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentParticle1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -88,7 +88,7 @@ In this case, we'll use the `World.spawnParticle(Particle particle, Location loc
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:particlearguments2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentParticle2}}
 ```
 
 ```kotlin,Kotlin_DSL

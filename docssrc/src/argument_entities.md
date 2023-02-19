@@ -36,7 +36,7 @@ Instead, we can combine all of these into one by using the `EntitySelectorArgume
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:entityselectorarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentEntities1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -106,7 +106,7 @@ Since we're trying to specify an entity type, we will use the `EntityTypeArgumen
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:entitytypearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentEntities2}}
 ```
 
 ```kotlin,Kotlin_DSL

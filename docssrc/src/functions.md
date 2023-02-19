@@ -35,7 +35,7 @@ public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/co
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functionregistration}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functions1}}
 ```
 
 ```kotlin,Kotlin_DSL

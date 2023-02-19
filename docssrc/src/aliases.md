@@ -15,7 +15,7 @@ In this example, we register the command `/getpos` that returns the command send
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:aliases}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:aliases1}}
 ```
 
 ```kotlin,Kotlin_DSL

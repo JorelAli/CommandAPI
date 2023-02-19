@@ -102,7 +102,7 @@ Now that we've established what we want, we can finally begin writing the code! 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:declareliteral}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier1}}
 ```
 
 </div>
@@ -116,7 +116,7 @@ With that completed, we can now create our "argument" to this predicate. To do t
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:declarearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier2}}
 ```
 
 </div>
@@ -130,7 +130,7 @@ Now we're going to get into the very nitty-gritty part - the predicate declarati
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:declareargumentbuilders}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier3}}
 ```
 
 </div>
@@ -144,7 +144,7 @@ Now we'll define our predicate. Since this is sort of a "meta-command" (it direc
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:declarefork}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier4}}
 ```
 
 </div>
@@ -158,7 +158,7 @@ Finally, we can now link everything up. We know that `numerator` comes first, **
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:declarerandomchance}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier5}}
 ```
 
 </div>
@@ -172,7 +172,7 @@ Finally, we "register" the command. In this case, we're actually just adding the
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:injectintoroot}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier6}}
 ```
 
 </div>
@@ -190,7 +190,7 @@ So, hopefully that wasn't too confusing! If you're still lost, here's the whole 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier7}}
 ```
 
 </div>

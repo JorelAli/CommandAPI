@@ -97,7 +97,7 @@ This would be ideal for a greedy string, since it can consume all text after the
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:greedystringarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentStrings1}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -30,7 +30,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -46,7 +46,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -62,7 +62,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentsyntax3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments3}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -84,7 +84,7 @@ To access arguments, they have to be casted to the type that the argument repres
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentcasting}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments4}}
 ```
 
 ```kotlin,Kotlin_DSL

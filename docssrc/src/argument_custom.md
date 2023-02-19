@@ -91,7 +91,7 @@ Say we want to create an argument to represents the list of available worlds on 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:customarguments2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCustom1}}
 ```
 
 </div>
@@ -120,7 +120,7 @@ Since we have defined the method `worldArgument()` which automatically generates
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:customarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCustom2}}
 ```
 
 ```kotlin,Kotlin_DSL

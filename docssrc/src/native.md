@@ -57,7 +57,7 @@ As you can see, this command takes no arguments. This is fine, since our "argume
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:nativesender}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:native1}}
 ```
 
 ```kotlin,Kotlin_DSL

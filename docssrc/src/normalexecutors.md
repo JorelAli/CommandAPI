@@ -40,7 +40,7 @@ We use an argument "message" to hold the message to broadcast, we provide some a
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalcommandexecutors3_1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalExecutors1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -88,7 +88,7 @@ Say we wanted to create a command `/suicide`, which kills the player that execut
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalcommandexecutors}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalExecutors2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -118,7 +118,7 @@ Extending on the suicide example above, we could write another implementation fo
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalcommandexecutors2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalExecutors3}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -174,7 +174,7 @@ Expanding on the suicide example above, we can restrict the command to only play
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalcommandexecutors3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:normalExecutors4}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -64,7 +64,7 @@ For example, to load the CommandAPI on Bukkit with all logging disabled, you can
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:CommandAPIConfigSilent}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading1}}
 ```
 
 </div>
@@ -86,7 +86,7 @@ public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/co
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:shading}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading2}}
 ```
 
 </div>

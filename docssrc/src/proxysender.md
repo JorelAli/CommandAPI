@@ -15,7 +15,7 @@ Say we have a command which kills the sender of a command. This is easily implem
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:proxysender}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:proxySender1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -39,7 +39,7 @@ To handle this case, we can use the `.executesProxy()` method to ensure that the
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:proxysender2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:proxySender2}}
 ```
 
 ```kotlin,Kotlin_DSL

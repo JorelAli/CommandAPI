@@ -39,7 +39,7 @@ We first retrieve the keys from the configuration file using the typical Bukkit 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:booleanargs}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentPrimitives1}}
 ```
 
 ```kotlin,Kotlin_DSL

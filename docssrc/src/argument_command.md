@@ -85,7 +85,7 @@ In this example, we want to be able to run any arbitrary command, so we will sim
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_sudo}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -146,7 +146,7 @@ We can implement our `/tp` branch using the `SuggestionsBranch.suggest()` method
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_branch_tp}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand2}}
 ```
 
 </div>
@@ -160,7 +160,7 @@ For the `/give` branch, we can use a similar thing, but we need to tell the Comm
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_branch_give}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand3}}
 ```
 
 </div>
@@ -174,7 +174,7 @@ Adding everything together, we get this fully completed CommandArgument:
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_branch}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand4}}
 ```
 
 </div>

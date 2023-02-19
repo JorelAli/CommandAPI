@@ -67,7 +67,7 @@ As with any command, we declare our arguments, cast them properly and then we wr
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:mathoperationarguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentMathOperation1}}
 ```
 
 ```kotlin,Kotlin_DSL

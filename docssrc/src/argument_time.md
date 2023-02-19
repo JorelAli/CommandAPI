@@ -27,7 +27,7 @@ Say we have a command `bigmsg` that displays a title message to all players for 
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:timearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentTime1}}
 ```
 
 ```kotlin,Kotlin_DSL
