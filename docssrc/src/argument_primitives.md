@@ -35,15 +35,15 @@ We first retrieve the keys from the configuration file using the typical Bukkit 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:booleanargs}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentPrimitives1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:booleanargs}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentPrimitives1}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:booleanargs}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentPrimitives1}}
 ```
 
 </div>

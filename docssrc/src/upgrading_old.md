@@ -104,7 +104,7 @@ new ScoreHolderArgument.Multiple(nodeName);
 
 ### Sound arguments
 
-In 8.6.0, the `SoundArgument` now supports returning a `Sound` or `NamespacedKey` object. More information on how to use this can be found in the [Sound arguments](./soundargument.md) page. `SoundArgument` objects now require a generic type parameter to specify what the return type will be (either `Sound` or `NamespacedKey`). For the default behaviour, use `Sound` as the generic type parameter:
+In 8.6.0, the `SoundArgument` now supports returning a `Sound` or `NamespacedKey` object. More information on how to use this can be found in the [Sound arguments](./argument_sound.md) page. `SoundArgument` objects now require a generic type parameter to specify what the return type will be (either `Sound` or `NamespacedKey`). For the default behaviour, use `Sound` as the generic type parameter:
 
 ```java
 new SoundArgument("sound")
