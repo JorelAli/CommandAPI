@@ -47,7 +47,7 @@ As an example, let's declare the literal "hello" as a valid literal for this com
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentliteral1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLiteral1}}
 ```
 
 ```kotlin,Kotlin
