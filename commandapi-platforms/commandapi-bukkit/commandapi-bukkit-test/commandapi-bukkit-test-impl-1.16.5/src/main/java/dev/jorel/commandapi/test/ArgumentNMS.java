@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import net.minecraft.server.v1_16_R3.ArgumentRegistry;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -490,6 +492,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 
 	@Override
 	public void registerCustomArgumentType() {
-		baseNMS.registerCustomArgumentType();
+		if(!ArgumentRegistry.a(new ExceptionHandlingArgumentType<>(null, null))) {
+			baseNMS.registerCustomArgumentType();
+		}
 	}
 }
