@@ -8,21 +8,36 @@ import dev.jorel.commandapi.preprocessor.Differs;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
-	private static final VarHandle ArgumentTypes_getInfo;
+	private static final MethodHandle ArgumentTypes_getInfo;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		VarHandle ar_b = null;
+		// We need a reference to the class object for ArgumentTypes.Entry, but that inner class is private
+		// We can get an object from ArgumentTypes#get(ResourceLocation), then take its class
+		Class<?> entryClass = null;
+		try {
+			Method getInfoByResourceLocation = ArgumentTypes.class.getDeclaredMethod("a", ResourceLocation.class);
+			getInfoByResourceLocation.setAccessible(true);
+			Object entryObject = getInfoByResourceLocation.invoke(null, new ResourceLocation("entity"));
+			entryClass = entryObject.getClass();
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+
+		MethodHandle ar_b = null;
 		try {
 			ar_b = MethodHandles.privateLookupIn(ArgumentTypes.class, MethodHandles.lookup())
-				.findVarHandle(ArgumentTypes.class, "b", ArgumentType.class);
+				.findStatic(ArgumentTypes.class, "b", MethodType.methodType(entryClass, ArgumentType.class));
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -35,7 +50,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 	public void serializeToNetwork(ExceptionHandlingArgumentType<T> argument, FriendlyByteBuf friendlyByteBuf) {
 		try {
 			// Remove this key from packet
-			Object myInfo = ArgumentTypes_getInfo.get(argument);
+			Object myInfo = ArgumentTypes_getInfo.invoke(argument);
 
 			// TODO: This Field reflection (and others in this class) acts on the class ArgumentTypes.Entry. This inner
 			//  class is private, and the @RequireField annotation doesn't currently support that. We would like
@@ -48,7 +63,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 
 			// Add baseType key instead
 			ArgumentType<T> baseType = argument.baseType();
-			Object baseInfo = ArgumentTypes_getInfo.get(baseType);
+			Object baseInfo = ArgumentTypes_getInfo.invoke(baseType);
 			String baseKey = keyField.get(baseInfo).toString();
 			friendlyByteBuf.writeUtf(baseKey);
 
@@ -56,7 +71,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 			Field subSerializerField = CommandAPIHandler.getField(baseInfo.getClass(), "a");
 			ArgumentSerializer<ArgumentType<T>> subSerializer = (ArgumentSerializer<ArgumentType<T>>) subSerializerField.get(baseInfo);
 			subSerializer.serializeToNetwork(baseType, friendlyByteBuf);
-		} catch (ReflectiveOperationException e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
@@ -68,7 +83,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			Object baseInfo = ArgumentTypes_getInfo.get(baseType);
+			Object baseInfo = ArgumentTypes_getInfo.invoke(baseType);
 
 			Field keyField = CommandAPIHandler.getField(baseInfo.getClass(), "b");
 			properties.addProperty("baseType", keyField.get(baseInfo).toString());
@@ -81,7 +96,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 			if (subProperties.size() > 0) {
 				properties.add("baseProperties", subProperties);
 			}
-		} catch (ReflectiveOperationException e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}

@@ -6,22 +6,37 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import net.minecraft.server.v1_16_R3.ArgumentRegistry;
 import net.minecraft.server.v1_16_R3.ArgumentSerializer;
+import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
-	private static final VarHandle ArgumentRegistry_getInfo;
+	private static final MethodHandle ArgumentRegistry_getInfo;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		VarHandle ar_b = null;
+		// We need a reference to the class object for ArgumentTypes.a, but that inner class is private
+		// We can get an object from ArgumentTypes#get(ResourceLocation), then take its class
+		Class<?> entryClass = null;
+		try {
+			Method getInfoByResourceLocation = ArgumentRegistry.class.getDeclaredMethod("a", MinecraftKey.class);
+			getInfoByResourceLocation.setAccessible(true);
+			Object entryObject = getInfoByResourceLocation.invoke(null, new MinecraftKey("entity"));
+			entryClass = entryObject.getClass();
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+
+		MethodHandle ar_b = null;
 		try {
 			ar_b = MethodHandles.privateLookupIn(ArgumentRegistry.class, MethodHandles.lookup())
-				.findVarHandle(ArgumentRegistry.class, "b", ArgumentType.class);
+				.findStatic(ArgumentRegistry.class, "b", MethodType.methodType(entryClass, ArgumentType.class));
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
@@ -33,7 +48,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
 			// Remove this key from packet
-			Object myInfo = ArgumentRegistry_getInfo.get(argument);
+			Object myInfo = ArgumentRegistry_getInfo.invoke(argument);
 
 			// TODO: This Field reflection (and others in this class) acts on the class ArgumentRegistry.a. This inner
 			//  class is package-private, and the @RequireField annotation doesn't currently support that. We would like
@@ -46,7 +61,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 
 			// Add baseType key instead
 			ArgumentType<T> baseType = argument.baseType();
-			Object baseInfo = ArgumentRegistry_getInfo.get(baseType);
+			Object baseInfo = ArgumentRegistry_getInfo.invoke(baseType);
 			String baseKey = keyField.get(baseInfo).toString();
 			packetDataSerializer.a(baseKey);
 
@@ -54,7 +69,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 			Field subSerializerField = CommandAPIHandler.getField(baseInfo.getClass(), "b");
 			ArgumentSerializer<ArgumentType<T>> subSerializer = (ArgumentSerializer<ArgumentType<T>>) subSerializerField.get(baseInfo);
 			subSerializer.a(baseType, packetDataSerializer);
-		} catch (ReflectiveOperationException e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
@@ -65,7 +80,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			Object baseInfo = ArgumentRegistry_getInfo.get(baseType);
+			Object baseInfo = ArgumentRegistry_getInfo.invoke(baseType);
 
 			Field keyField = CommandAPIHandler.getField(baseInfo.getClass(), "c");
 			properties.addProperty("baseType", keyField.get(baseInfo).toString());
@@ -78,7 +93,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 			if (subProperties.size() > 0) {
 				properties.add("baseProperties", subProperties);
 			}
-		} catch (ReflectiveOperationException e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
