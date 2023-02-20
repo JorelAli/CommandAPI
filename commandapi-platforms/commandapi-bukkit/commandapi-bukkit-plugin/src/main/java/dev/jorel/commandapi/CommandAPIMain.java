@@ -85,6 +85,29 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		convertCommands(fileConfig);
+
+		// TODO: Finish testing, remove this and clean up imports
+		new CommandAPICommand("rate")
+			.withArguments(
+				new IntegerArgument("rating", 0, 10)
+					.withInitialParseExceptionHandler(context -> {
+						String message = context.exception().getMessage();
+						if(message.startsWith("Integer must not be less than")) {
+							context.stringReader().readInt();
+							return 0; // Integer too low, move to 0
+						} else if(message.startsWith("Integer must not be more than")) {
+							context.stringReader().readInt();
+							return 10; // Integer too high, cap to 10
+						} else {
+							throw context.exception(); // Integer wasn't entered, use original exception
+						}
+					}),
+				new GreedyStringArgument("message")
+			).executes((sender, args) -> {
+				sender.sendMessage("Thanks for rating " + args.get(0) + "/10");
+				sender.sendMessage("We will consider your feedback: \"" + args.get(1) + "\"");
+			})
+			.register();
 	}
 	
 	private void convertCommands(FileConfiguration fileConfig) {
@@ -123,29 +146,6 @@ public class CommandAPIMain extends JavaPlugin {
 		for (String commandName : fileConfig.getStringList("other-commands-to-convert")) {
 			new AdvancedConverter(commandName).convertCommand();
 		}
-
-		// TODO: Finish testing, remove this and clean up imports
-		new CommandAPICommand("rate")
-			.withArguments(
-				new IntegerArgument("rating", 0, 10)
-					.withInitialParseExceptionHandler(context -> {
-						String message = context.exception().getMessage();
-						if(message.startsWith("Integer must not be less than")) {
-							context.stringReader().readInt();
-							return 0; // Integer too low, move to 0
-						} else if(message.startsWith("Integer must not be more than")) {
-							context.stringReader().readInt();
-							return 10; // Integer too high, cap to 10
-						} else {
-							throw context.exception(); // Integer wasn't entered, use original exception
-						}
-					}),
-				new GreedyStringArgument("message")
-			).executes((sender, args) -> {
-				sender.sendMessage("Thanks for rating " + args.get(0) + "/10");
-				sender.sendMessage("We will consider your feedback: \"" + args.get(1) + "\"");
-			})
-			.register();
 	}
 	
 	private JavaPlugin getAndValidatePlugin(String pluginName) {

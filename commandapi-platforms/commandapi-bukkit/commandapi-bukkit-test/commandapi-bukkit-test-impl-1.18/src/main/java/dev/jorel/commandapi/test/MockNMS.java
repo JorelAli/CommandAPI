@@ -478,10 +478,4 @@ public class MockNMS extends Enums {
 	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
 		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
-
-	@Override
-	public void registerCustomArgumentType() {
-		// TODO: Make sure this works
-		// Skepter needs to fix ArgumentTypes in this version first?
-	}
 }

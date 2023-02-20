@@ -488,4 +488,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		return baseNMS.getUUID(cmdCtx, key);
 	}
 
+
+	@Override
+	public void registerCustomArgumentType() {
+		baseNMS.registerCustomArgumentType();
+	}
 }
