@@ -37,40 +37,40 @@ Not all arguments support safe suggestions. This is mostly due to implementation
 
 The list of supported arguments are displayed in the following table. The parameter `T` (shown in the method signatures above) are also provided for each argument. This parameter is the same as the cast argument described in [Argument Casting](./arguments.md#argument-casting), except for a few exceptions which are outlined in **bold**.
 
-|                                                     Argument | Class (T)                                      |
-| -----------------------------------------------------------: | :--------------------------------------------- |
-|            [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`           |
-|                               [`AxisArgument`](./argument_axis.md) | `java.util.EnumSet<org.bukkit.Axis>`           |
-|                        [`BiomeArgument`](./argument_biome.md) | `org.bukkit.block.Biome`                       |
-| [`BooleanArgument`](./argument_primitives.md#boolean-arguments) | **`Boolean`**                                  |
-| [`ChatColorArgument`](./argument_chats.md#chat-color-argument) | `org.bukkit.ChatColor`                         |
-| [`DoubleArgument`](./argument_primitives.md#numerical-arguments) | **`Double`**                                   |
-|            [`EnchantmentArgument`](./argument_enchantment.md) | `org.bukkit.enchantments.Enchantment`          |
-| [`EntityTypeArgument`](./argument_entities.md#entity-type-argument) | `org.bukkit.entity.EntityType`                 |
-| [`FloatArgument`](./argument_primitives.md#numerical-arguments) | **`Float`**                                    |
-| [`FloatRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`     |
-|                   [`FunctionArgument`](./functionwrapper.md) | **`org.bukkit.NamespacedKey`**                 |
-| [`GreedyStringArgument`](./argument_strings.md#greedy-string-argument) | `String`                                       |
-| [`IntegerArgument`](./argument_primitives.md#numerical-arguments) | **`Integer`**                                  |
+|                                                                         Argument | Class (T)                                      |
+|---------------------------------------------------------------------------------:|:-----------------------------------------------|
+|                                [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`           |
+|                                             [`AxisArgument`](./argument_axis.md) | `java.util.EnumSet<org.bukkit.Axis>`           |
+|                                           [`BiomeArgument`](./argument_biome.md) | `org.bukkit.block.Biome`                       |
+|                  [`BooleanArgument`](./argument_primitives.md#boolean-arguments) | **`Boolean`**                                  |
+|                   [`ChatColorArgument`](./argument_chats.md#chat-color-argument) | `org.bukkit.ChatColor`                         |
+|                 [`DoubleArgument`](./argument_primitives.md#numerical-arguments) | **`Double`**                                   |
+|                               [`EnchantmentArgument`](./argument_enchantment.md) | `org.bukkit.enchantments.Enchantment`          |
+|              [`EntityTypeArgument`](./argument_entities.md#entity-type-argument) | `org.bukkit.entity.EntityType`                 |
+|                  [`FloatArgument`](./argument_primitives.md#numerical-arguments) | **`Float`**                                    |
+|   [`FloatRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`     |
+|                                       [`FunctionArgument`](./functionwrapper.md) | **`org.bukkit.NamespacedKey`**                 |
+|           [`GreedyStringArgument`](./argument_strings.md#greedy-string-argument) | `String`                                       |
+|                [`IntegerArgument`](./argument_primitives.md#numerical-arguments) | **`Integer`**                                  |
 | [`IntegerRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`   |
-|               [`ItemStackArgument`](./argument_itemstack.md) | `org.bukkit.inventory.ItemStack`               |
-| [`Location2DArgument`](./argument_locations.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`     |
-| [`LocationArgument`](./argument_locations.md#location-3d-space) | `org.bukkit.Location`                          |
-| [`LongArgument`](./argument_primitives.md#numerical-arguments) | **`Long`**                                     |
-|                [`LootTableArgument`](./argument_loottable.md) | `org.bukkit.loot.LootTable`                    |
-|       [`MathOperationArgument`](./argument_mathoperation.md) | `dev.jorel.commandapi.wrappers.MathOperation`  |
-|                   [`NBTCompoundArgument`](./argument_nbt.md) | `de.tr7zw.nbtapi.NBTContainer`                 |
-| [`ObjectiveArgument`](./argument_objectives.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
-| [`OfflinePlayerArgument`](./argument_entities.md#player-argument) | `org.bukkit.OfflinePlayer`                     |
-|                 [`ParticleArgument`](./argument_particle.md) | `org.bukkit.Particle`                          |
-|     [`PlayerArgument`](./argument_entities.md#player-argument) | `org.bukkit.entity.Player`                     |
-|               [`PotionEffectArgument`](./argument_potion.md) | `org.bukkit.potion.PotionEffectType`           |
-|                      [`RecipeArgument`](./argument_recipe.md) | `org.bukkit.inventory.Recipe`                  |
-|                      [`RotationArgument`](./argument_rotation.md) | `dev.jorel.commandapi.wrappers.Rotation`       |
-| [`ScoreboardSlotArgument`](./argument_scoreboards.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot` |
-|                        [`SoundArgument`](./soundargument.md) | `org.bukkit.Sound`                             |
-|                         [`TeamArgument`](./argument_team.md) | **`org.bukkit.scoreboard.Team`**               |
-|                              [`TimeArgument`](./argument_time.md) | **`dev.jorel.commandapi.wrappers.Time`**       |
+|                                   [`ItemStackArgument`](./argument_itemstack.md) | `org.bukkit.inventory.ItemStack`               |
+|                [`Location2DArgument`](./argument_locations.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`     |
+|                  [`LocationArgument`](./argument_locations.md#location-3d-space) | `org.bukkit.Location`                          |
+|                   [`LongArgument`](./argument_primitives.md#numerical-arguments) | **`Long`**                                     |
+|                                   [`LootTableArgument`](./argument_loottable.md) | `org.bukkit.loot.LootTable`                    |
+|                           [`MathOperationArgument`](./argument_mathoperation.md) | `dev.jorel.commandapi.wrappers.MathOperation`  |
+|                                       [`NBTCompoundArgument`](./argument_nbt.md) | `de.tr7zw.nbtapi.NBTContainer`                 |
+|               [`ObjectiveArgument`](./argument_objectives.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
+|                [`OfflinePlayerArgument`](./argument_entities.md#player-argument) | `org.bukkit.OfflinePlayer`                     |
+|                                     [`ParticleArgument`](./argument_particle.md) | `org.bukkit.Particle`                          |
+|                       [`PlayerArgument`](./argument_entities.md#player-argument) | `org.bukkit.entity.Player`                     |
+|                                   [`PotionEffectArgument`](./argument_potion.md) | `org.bukkit.potion.PotionEffectType`           |
+|                                         [`RecipeArgument`](./argument_recipe.md) | `org.bukkit.inventory.Recipe`                  |
+|                                     [`RotationArgument`](./argument_rotation.md) | `dev.jorel.commandapi.wrappers.Rotation`       |
+|   [`ScoreboardSlotArgument`](./argument_scoreboards.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot` |
+|                                           [`SoundArgument`](./argument_sound.md) | `org.bukkit.Sound`                             |
+|                                             [`TeamArgument`](./argument_team.md) | **`org.bukkit.scoreboard.Team`**               |
+|                                             [`TimeArgument`](./argument_time.md) | **`dev.jorel.commandapi.wrappers.Time`**       |
 
 -----
 
@@ -126,15 +126,11 @@ To do this, we first register our custom items:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeRecipeArguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeRecipeArguments}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeRecipeArguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions1}}
 ```
 
 </div>
@@ -144,15 +140,11 @@ Once we've done that, we can now include them in our command registration. To do
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeRecipeArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeRecipeArguments_2}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeRecipeArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions2}}
 ```
 
 </div>
@@ -174,11 +166,11 @@ Now say that we don't want non-op players to spawn bosses. To do this, we'll cre
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeMobSpawnArguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeMobSpawnArguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions3}}
 ```
 
 </div>
@@ -188,11 +180,11 @@ We then use our safe arguments to return an `EntityType[]` as the list of values
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeMobSpawnArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeMobSpawnArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions4}}
 ```
 
 </div>
@@ -202,15 +194,11 @@ Now we register our command as normal:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafeMobSpawnArguments_3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions5}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafeMobSpawnArguments_3}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafeMobSpawnArguments_3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions5}}
 ```
 
 </div>
@@ -232,11 +220,11 @@ Now, we don't want to remove a potion effect that already exists on a player, so
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafePotionArguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions6}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafePotionArguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions6}}
 ```
 
 </div>
@@ -246,15 +234,11 @@ And then we can register our command as normal:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:SafePotionArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions7}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:SafePotionArguments_2}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:SafePotionArguments_2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions7}}
 ```
 
 </div>

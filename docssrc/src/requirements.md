@@ -38,15 +38,11 @@ We want to put a requirement on this command that the player needs to have at le
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:requirements}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:requirements1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:requirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements1}}
 ```
 
 </div>
@@ -79,24 +75,6 @@ To represent our party in code, we'll use a simple `Map` called `partyMembers` w
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:requirementsmap}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirementsmap}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:requirementsmap}}
-```
-
-</div>
-
-To begin with, let's create the `/party create <partyName>` command. First, we must declare our arguments:
-
-<div class="multi-pre">
-
-```java,Java
 {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:requirements2}}
 ```
 
@@ -104,15 +82,9 @@ To begin with, let's create the `/party create <partyName>` command. First, we m
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements2}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:requirements2}}
-```
-
 </div>
 
-In this argument declaration, we put a requirement on the literal `create`, where the player does not have a party. In other words, if the player does not have a party, they are allowed to run `/party create <partyName>`. If a player already has a party, then they won't be allowed to run this command.
-
-Now that we've declared our arguments, we can now declare our main command `/party create <partyName>`. We populate it with the arguments, and we create an entry in our `partyMembers` with the player's UUID and the name of the party that they created. Since this updates the requirements of the player, we'll have to make sure we update it (which is covered in more detail in the section about updating requirements below) - until then, I'll omit this from the code:
+To begin with, let's create the `/party create <partyName>` command. First, we must declare our arguments:
 
 <div class="multi-pre">
 
@@ -124,15 +96,11 @@ Now that we've declared our arguments, we can now declare our main command `/par
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements3}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:requirements3}}
-```
-
 </div>
 
------
+In this argument declaration, we put a requirement on the literal `create`, where the player does not have a party. In other words, if the player does not have a party, they are allowed to run `/party create <partyName>`. If a player already has a party, then they won't be allowed to run this command.
 
-So now we've added the ability to create a party if we're not already in it. Now we need to implement our `party tp <player>` command. Again, we must start by declaring our arguments:
+Now that we've declared our arguments, we can now declare our main command `/party create <partyName>`. We populate it with the arguments, and we create an entry in our `partyMembers` with the player's UUID and the name of the party that they created. Since this updates the requirements of the player, we'll have to make sure we update it (which is covered in more detail in the section about updating requirements below) - until then, I'll omit this from the code:
 
 <div class="multi-pre">
 
@@ -144,15 +112,11 @@ So now we've added the ability to create a party if we're not already in it. Now
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements4}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:requirements4}}
-```
-
 </div>
 
-Notice something here? There's some code repetition for the `withRequirement` method - this is the same predicate that we used earlier, except we remove the negation. If you are interested, you can view the section [Predicate tips](./predicatetips.md) for a method to improve code reuse.
+-----
 
-Once the arguments have been declared, we can now implement our party teleportation command:
+So now we've added the ability to create a party if we're not already in it. Now we need to implement our `party tp <player>` command. Again, we must start by declaring our arguments:
 
 <div class="multi-pre">
 
@@ -164,8 +128,20 @@ Once the arguments have been declared, we can now implement our party teleportat
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements5}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:requirements5}}
+</div>
+
+Notice something here? There's some code repetition for the `withRequirement` method - this is the same predicate that we used earlier, except we remove the negation. If you are interested, you can view the section [Predicate tips](./predicatetips.md) for a method to improve code reuse.
+
+Once the arguments have been declared, we can now implement our party teleportation command:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:requirements6}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements6}}
 ```
 
 </div>
@@ -246,15 +222,11 @@ When a player creates a new party, we need to ensure that their requirements are
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:updatingrequirements}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:requirements7}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:updatingrequirements}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:updatingrequirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements7}}
 ```
 
 </div>
@@ -278,15 +250,11 @@ For example, you can apply multiple requirements for a command by calling the `w
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:multiplerequirements}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:requirements8}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:multiplerequirements}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:multiplerequirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:requirements8}}
 ```
 
 </div>
