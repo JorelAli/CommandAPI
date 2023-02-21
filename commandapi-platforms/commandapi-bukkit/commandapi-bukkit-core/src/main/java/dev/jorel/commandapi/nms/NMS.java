@@ -20,6 +20,8 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
@@ -435,5 +437,39 @@ public interface NMS<CommandListenerWrapper> {
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
 
 	Message generateMessageFromJson(String json);
+	
+	static class SafeVarHandle<Type, FieldType> {
+		
+		private VarHandle handle;
+
+		private SafeVarHandle(VarHandle handle) {
+			this.handle = handle;
+		}
+		
+		static <Type, FieldType> SafeVarHandle<Type, FieldType> of(Class<Type> classType, String fieldName, Class<FieldType> fieldType) throws ReflectiveOperationException {
+			return new SafeVarHandle<>(MethodHandles.privateLookupIn(classType, MethodHandles.lookup()).findVarHandle(classType, fieldName, fieldType));
+		}
+		
+		static <Type, FieldType> SafeVarHandle<Type, FieldType> ofOrNull(Class<Type> classType, String fieldName, Class<FieldType> fieldType) {
+			try {
+				return of(classType, fieldName, fieldType);
+			} catch (ReflectiveOperationException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		FieldType get(Type instance) {
+			return (FieldType) handle.get(instance);
+		}
+		
+		FieldType getStatic() {
+			return (FieldType) handle.get(null);
+		}
+		
+		void set(Type instance, FieldType param) {
+			handle.set(instance, param);
+		}
+	}
 
 }
