@@ -166,29 +166,29 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public class NMS_1_18_R1 extends NMS_Common {
 
-	private static final VarHandle SimpleHelpMap_helpTopics;
-	private static final VarHandle EntityPositionSource_sourceEntity;
-	private static final VarHandle ItemInput_tag;
+	private static final VarHandle helpMapTopics;
+	private static final VarHandle entityPositionSource;
+	private static final VarHandle itemInput;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle shm_ht = null;
-		VarHandle eps_se = null;
-		VarHandle ii_t = null;
+		VarHandle helpTopics = null;
+		VarHandle sourceEntity = null;
+		VarHandle compoundTag = null;
 		try {
-			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
+			helpTopics = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
 					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
+			sourceEntity = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
 					.findVarHandle(EntityPositionSource.class, "d", Optional.class);
-			ii_t = MethodHandles.privateLookupIn(ItemInput.class, MethodHandles.lookup())
+			compoundTag = MethodHandles.privateLookupIn(ItemInput.class, MethodHandles.lookup())
 				.findVarHandle(ItemInput.class, "c", CompoundTag.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		SimpleHelpMap_helpTopics = shm_ht;
-		EntityPositionSource_sourceEntity = eps_se;
-		ItemInput_tag = ii_t;
+		helpMapTopics = helpTopics;
+		entityPositionSource = sourceEntity;
+		itemInput = compoundTag;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -253,7 +253,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 	
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get(Bukkit.getServer().getHelpMap());
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
 		helpTopics.putAll(helpTopicsToAdd);
@@ -422,7 +422,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
 
 		// Try and find the amount from the CompoundTag (if present)
-		final CompoundTag tag = (CompoundTag) ItemInput_tag.get(input);
+		final CompoundTag tag = (CompoundTag) itemInput.get(input);
 		if(tag != null) {
 			// The tag has some extra metadata we need! Get the Count (amount)
 			// and create the ItemStack with the correct metadata
@@ -522,7 +522,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 		}
 		else if (options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
 			positionSource.getPosition(level); // Populate Optional sourceEntity
-			Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
+			Optional<Entity> entity = (Optional<Entity>) entityPositionSource.get(positionSource);
 			destination = new EntityDestination(entity.get().getBukkitEntity());
 		}
 		else {
