@@ -111,8 +111,6 @@ import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,29 +133,16 @@ import java.util.function.ToIntFunction;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public abstract class NMS_1_17_Common extends NMS_Common {
 
-	private static final VarHandle helpMapTopics;
-	private static final VarHandle entityPositionSource;
-	private static final VarHandle itemInput;
+	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<EntityPositionSource, Optional> entityPositionSource;
+	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle helpTopics = null;
-		VarHandle sourceEntity = null;
-		VarHandle compoundTag = null;
-		try {
-			helpTopics = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
-					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			sourceEntity = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
-					.findVarHandle(EntityPositionSource.class, "d", Optional.class);
-			compoundTag = MethodHandles.privateLookupIn(ItemInput.class, MethodHandles.lookup())
-				.findVarHandle(ItemInput.class, "c", CompoundTag.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		helpMapTopics = helpTopics;
-		entityPositionSource = sourceEntity;
-		itemInput = compoundTag;
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "d", Optional.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -223,7 +208,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get(Bukkit.getServer().getHelpMap());
+		@SuppressWarnings("unchecked")
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
@@ -389,7 +375,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
 
 		// Try and find the amount from the CompoundTag (if present)
-		final CompoundTag tag = (CompoundTag) itemInput.get(input);
+		final CompoundTag tag = itemInput.get(input);
 		if(tag != null) {
 			// The tag has some extra metadata we need! Get the Count (amount)
 			// and create the ItemStack with the correct metadata
@@ -493,7 +479,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		}
 		else if (options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
 			positionSource.getPosition(level); // Populate Optional sourceEntity
-			Optional<Entity> entity = (Optional<Entity>) entityPositionSource.get(positionSource);
+			@SuppressWarnings("unchecked")
+			Optional<Entity> entity = entityPositionSource.get(positionSource);
 			destination = new EntityDestination(entity.get().getBukkitEntity());
 		}
 		else {

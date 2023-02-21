@@ -61,8 +61,6 @@ import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
@@ -82,41 +80,20 @@ import java.util.function.ToIntFunction;
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_15 extends NMSWrapper_1_15 {
 
-	private static final VarHandle helpMapTopics;
-	private static final VarHandle particleParamBlockData;
-	private static final VarHandle particleParamItemStack;
-
-	// TODO: What is this representing?
-	private static final VarHandle ParticleParamRedstone_f;
-	private static final VarHandle itemStackPredicateArgument;
+	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
+	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
+	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
+	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle helpTopics = null;
-		VarHandle blockData = null;
-		VarHandle itemStack = null;
-		VarHandle ppr_g = null;
-		VarHandle nbtTagCompound = null;
-		try {
-			helpTopics = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
-					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			blockData = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
-			itemStack = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
-			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamRedstone.class, "f", float.class);
-			nbtTagCompound = MethodHandles.privateLookupIn(ArgumentPredicateItemStack.class, MethodHandles.lookup())
-				.findVarHandle(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		helpMapTopics = helpTopics;
-		particleParamBlockData = blockData;
-		particleParamItemStack = itemStack;
-		ParticleParamRedstone_f = ppr_g;
-		itemStackPredicateArgument = nbtTagCompound;
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
+		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", IBlockData.class);
+		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", ItemStack.class);
+		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", float.class);
+		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -311,7 +288,8 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get(Bukkit.getServer().getHelpMap());
+		@SuppressWarnings("unchecked")
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
@@ -562,7 +540,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		ItemStack itemWithMaybeTag = input.a(1, false);
 
 		// Try and find the amount from the CompoundTag (if present)
-		final NBTTagCompound tag = (NBTTagCompound) itemStackPredicateArgument.get(input);
+		final NBTTagCompound tag = itemStackPredicateArgument.get(input);
 		if(tag != null) {
 			// The tag has some extra metadata we need! Get the Count (amount)
 			// and create the ItemStack with the correct metadata
@@ -660,14 +638,13 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
 		if (particleOptions instanceof ParticleParamBlock options) {
-			IBlockData blockData = (IBlockData) particleParamBlockData.get(options);
-			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(blockData));
+			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(particleParamBlockData.get(options)));
 		}
 		else if (particleOptions instanceof ParticleParamRedstone options) {
 			return getParticleDataAsDustOptions(particle, options);
 		}
 		else if (particleOptions instanceof ParticleParamItem options) {
-			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy((ItemStack) particleParamItemStack.get(options)));
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy(particleParamItemStack.get(options)));
 		}
 		else {
 			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
@@ -683,7 +660,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		final float blue = Float.parseFloat(optionsArr[3]);
 
 		final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
-		return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
+		return new ParticleData<DustOptions>(particle, new DustOptions(color, particleParamRedstoneSize.get(options)));
 	}
 
 	@Override
