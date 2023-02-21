@@ -208,9 +208,7 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
 			blockData = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup())
 					.findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
-
-			// TODO: This shouldn't be reassigned, right?
-			blockData = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup())
+			itemStack = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup())
 					.findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
 			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup())
 					.findVarHandle(ParticleParamRedstone.class, "f", float.class);
