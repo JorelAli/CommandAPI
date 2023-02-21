@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
-	private static final MethodHandle ArgumentRegistry_getInfo;
+	private static final MethodHandle getArgumentTypeInformation;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
@@ -33,21 +33,21 @@ public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentS
 			e.printStackTrace();
 		}
 
-		MethodHandle ar_a = null;
+		MethodHandle argumentRegistryGet = null;
 		try {
-			ar_a = MethodHandles.privateLookupIn(ArgumentRegistry.class, MethodHandles.lookup())
+			argumentRegistryGet = MethodHandles.privateLookupIn(ArgumentRegistry.class, MethodHandles.lookup())
 				.findStatic(ArgumentRegistry.class, "a", MethodType.methodType(entryClass, ArgumentType.class));
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		ArgumentRegistry_getInfo = ar_a;
+		getArgumentTypeInformation = argumentRegistryGet;
 	}
 
 	@Override
 	// serializeToNetwork
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		try {
-			Object myInfo = ArgumentRegistry_getInfo.invoke(argument);
+			Object myInfo = getArgumentTypeInformation.invoke(argument);
 
 			// TODO: This Field reflection (and others in this class) acts on the class ArgumentRegistry.a. This inner
 			//  class is package-private, and the @RequireField annotation doesn't currently support that. We would like
@@ -60,7 +60,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentS
 
 			// Add baseType key instead
 			ArgumentType<T> baseType = argument.baseType();
-			Object baseInfo = ArgumentRegistry_getInfo.invoke(baseType);
+			Object baseInfo = getArgumentTypeInformation.invoke(baseType);
 			String baseKey = keyField.get(baseInfo).toString();
 			packetDataSerializer.a(baseKey);
 
@@ -79,7 +79,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R1<T> implements ArgumentS
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			Object baseInfo = ArgumentRegistry_getInfo.invoke(baseType);
+			Object baseInfo = getArgumentTypeInformation.invoke(baseType);
 
 			Field keyField = CommandAPIHandler.getField(baseInfo.getClass(), "c");
 			properties.addProperty("baseType", keyField.get(baseInfo).toString());

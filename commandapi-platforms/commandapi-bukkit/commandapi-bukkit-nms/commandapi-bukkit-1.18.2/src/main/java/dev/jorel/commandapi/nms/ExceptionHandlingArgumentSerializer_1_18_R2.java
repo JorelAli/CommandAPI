@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
-	private static final MethodHandle ArgumentTypes_getInfo;
+	private static final MethodHandle getArgumentTypeInformation;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
@@ -34,14 +34,14 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 			e.printStackTrace();
 		}
 
-		MethodHandle ar_b = null;
+		MethodHandle argumentTypesGet = null;
 		try {
-			ar_b = MethodHandles.privateLookupIn(ArgumentTypes.class, MethodHandles.lookup())
+			argumentTypesGet = MethodHandles.privateLookupIn(ArgumentTypes.class, MethodHandles.lookup())
 				.findStatic(ArgumentTypes.class, "b", MethodType.methodType(entryClass, ArgumentType.class));
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
-		ArgumentTypes_getInfo = ar_b;
+		getArgumentTypeInformation = argumentTypesGet;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 	public void serializeToNetwork(ExceptionHandlingArgumentType<T> argument, FriendlyByteBuf friendlyByteBuf) {
 		try {
 			// Remove this key from packet
-			Object myInfo = ArgumentTypes_getInfo.invoke(argument);
+			Object myInfo = getArgumentTypeInformation.invoke(argument);
 
 			// TODO: This Field reflection (and others in this class) acts on the class ArgumentTypes.Entry. This inner
 			//  class is private, and the @RequireField annotation doesn't currently support that. We would like
@@ -63,7 +63,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 
 			// Add baseType key instead
 			ArgumentType<T> baseType = argument.baseType();
-			Object baseInfo = ArgumentTypes_getInfo.invoke(baseType);
+			Object baseInfo = getArgumentTypeInformation.invoke(baseType);
 			String baseKey = keyField.get(baseInfo).toString();
 			friendlyByteBuf.writeUtf(baseKey);
 
@@ -83,7 +83,7 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 		try {
 			ArgumentType<T> baseType = argument.baseType();
 
-			Object baseInfo = ArgumentTypes_getInfo.invoke(baseType);
+			Object baseInfo = getArgumentTypeInformation.invoke(baseType);
 
 			Field keyField = CommandAPIHandler.getField(baseInfo.getClass(), "b");
 			properties.addProperty("baseType", keyField.get(baseInfo).toString());
