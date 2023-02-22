@@ -49,7 +49,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.function.Function;
@@ -424,7 +426,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	static class SafeVarHandle<Type, FieldType> {
 
-		private VarHandle handle;
+		private final VarHandle handle;
 
 		private SafeVarHandle(VarHandle handle) {
 			this.handle = handle;
@@ -453,6 +455,41 @@ public interface NMS<CommandListenerWrapper> {
 
 		void set(Type instance, FieldType param) {
 			handle.set(instance, param);
+		}
+	}
+
+	static class SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> {
+
+		private final MethodHandle handle;
+
+		private SafeStaticOneParameterMethodHandle(MethodHandle handle) {
+			this.handle = handle;
+		}
+
+		static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> of(Class<?> classType, String fieldName, Class<ReturnType> returnType, Class<ParameterType> parameterType) throws ReflectiveOperationException {
+			return new SafeStaticOneParameterMethodHandle<>(MethodHandles.privateLookupIn(classType, MethodHandles.lookup()).findStatic(classType, fieldName, MethodType.methodType(returnType, parameterType)));
+		}
+
+		static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> ofOrNull(Class<?> classType, String fieldName, Class<ReturnType> returnType, Class<ParameterType> parameterType) {
+			try {
+				return of(classType, fieldName, returnType, parameterType);
+			} catch (ReflectiveOperationException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		ReturnType invoke(ParameterType parameter) throws Throwable{
+			return (ReturnType) handle.invoke(parameter);
+		}
+
+		ReturnType invokeOrNull(ParameterType parameter) {
+			try {
+				return invoke(parameter);
+			} catch (Throwable e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
 	}
 }

@@ -2,26 +2,26 @@ package dev.jorel.commandapi.nms;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import net.minecraft.server.v1_15_R1.ArgumentRegistry;
 import net.minecraft.server.v1_15_R1.ArgumentSerializer;
 import net.minecraft.server.v1_15_R1.MinecraftKey;
 import net.minecraft.server.v1_15_R1.PacketDataSerializer;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
-	private static final MethodHandle getArgumentTypeInformation;
+	// All the ? here should actually be ArgumentRegistry.a, but that is a private inner class. That makes everything really annoying.
+	// TODO: We want to check this reflection, but we can't give ArgumentRegistry.a to the @RequireField annotation
+	//  Hopefully something works out, but the preprocessor needs to be expanded first
+	private static final NMS.SafeStaticOneParameterMethodHandle<?, ArgumentType> getArgumentTypeInformation;
+	private static final NMS.SafeVarHandle<?, MinecraftKey> serializationKey;
+	private static final NMS.SafeVarHandle<?, ArgumentSerializer> serializer;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		// We need a reference to the class object for ArgumentTypes.a, but that inner class is private
+		// We need a reference to the class object for ArgumentTypes.a
 		// We can get an object from ArgumentTypes#get(ResourceLocation), then take its class
 		Class<?> entryClass = null;
 		try {
@@ -33,68 +33,53 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 			e.printStackTrace();
 		}
 
-		MethodHandle argumentRegistryGet = null;
-		try {
-			argumentRegistryGet = MethodHandles.privateLookupIn(ArgumentRegistry.class, MethodHandles.lookup())
-				.findStatic(ArgumentRegistry.class, "a", MethodType.methodType(entryClass, ArgumentType.class));
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		getArgumentTypeInformation = argumentRegistryGet;
+		getArgumentTypeInformation = NMS.SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentRegistry.class, "a", entryClass, ArgumentType.class);
+		serializationKey = NMS.SafeVarHandle.ofOrNull(entryClass, "c", MinecraftKey.class);
+		serializer = NMS.SafeVarHandle.ofOrNull(entryClass, "b", ArgumentSerializer.class);
+	}
+
+	// Two ? wildcards cannot be directly converted to each other, so we need this silly method to capture one of
+	// those wildcards and convert it to the other
+	private static <T> T captureCast(Object o) {
+		return (T) o;
 	}
 
 	@Override
 	// serializeToNetwork
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
-		try {
-			// Remove this key from packet
-			Object myInfo = getArgumentTypeInformation.invoke(argument);
+		// Remove this key from packet
+		Object myInfo = getArgumentTypeInformation.invokeOrNull(argument);
 
-			// TODO: This Field reflection (and others in this class) acts on the class ArgumentRegistry.a. This inner
-			//  class is package-private, and the @RequireField annotation doesn't currently support that. We would like
-			//  to check this reflection at compile-time though, but the preprocess needs to be expanded first
-			Field keyField = CommandAPIHandler.getField(myInfo.getClass(), "c");
-			String myKey = keyField.get(myInfo).toString();
-			byte[] myKeyBytes = myKey.getBytes(StandardCharsets.UTF_8);
-			// Removing length and size of string, assuming length is always written as 1 byte
-			packetDataSerializer.writerIndex(packetDataSerializer.writerIndex() - myKeyBytes.length - 1);
+		byte[] myKeyBytes = serializationKey.get(captureCast(myInfo)).toString().getBytes(StandardCharsets.UTF_8);
+		// Removing length and size of string, assuming length is always written as 1 byte
+		packetDataSerializer.writerIndex(packetDataSerializer.writerIndex() - myKeyBytes.length - 1);
 
-			// Add baseType key instead
-			ArgumentType<T> baseType = argument.baseType();
-			Object baseInfo = getArgumentTypeInformation.invoke(argument);
-			String baseKey = keyField.get(baseInfo).toString();
-			packetDataSerializer.a(baseKey);
+		// Add baseType key instead
+		ArgumentType<T> baseType = argument.baseType();
+		Object baseInfo = getArgumentTypeInformation.invokeOrNull(argument);
+		String baseKey = serializationKey.get(captureCast(baseInfo)).toString();
+		packetDataSerializer.a(baseKey);
 
-			// Serialize baseType
-			Field subSerializerField = CommandAPIHandler.getField(baseInfo.getClass(), "b");
-			ArgumentSerializer<ArgumentType<T>> subSerializer = (ArgumentSerializer<ArgumentType<T>>) subSerializerField.get(baseInfo);
-			subSerializer.a(baseType, packetDataSerializer);
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+		// Serialize baseType
+		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.get(captureCast(baseInfo));
+		baseSerializer.a(baseType, packetDataSerializer);
 	}
 
 	@Override
 	// serializeToJson
 	public void a(ExceptionHandlingArgumentType<T> argument, JsonObject properties) {
-		try {
-			ArgumentType<T> baseType = argument.baseType();
+		ArgumentType<T> baseType = argument.baseType();
 
-			Object baseInfo = getArgumentTypeInformation.invoke(baseType);
+		Object baseInfo = getArgumentTypeInformation.invokeOrNull(baseType);
 
-			Field keyField = CommandAPIHandler.getField(baseInfo.getClass(), "c");
-			properties.addProperty("baseType", keyField.get(baseInfo).toString());
+		properties.addProperty("baseType", serializationKey.get(captureCast(baseInfo)).toString());
 
-			Field subSerializerField = CommandAPIHandler.getField(baseInfo.getClass(), "b");
-			ArgumentSerializer<ArgumentType<T>> subSerializer = (ArgumentSerializer<ArgumentType<T>>) subSerializerField.get(baseInfo);
+		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.get(captureCast(baseInfo));
 
-			JsonObject subProperties = new JsonObject();
-			subSerializer.a(baseType, subProperties);
-			if (subProperties.size() > 0) {
-				properties.add("baseProperties", subProperties);
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
+		JsonObject subProperties = new JsonObject();
+		baseSerializer.a(baseType, subProperties);
+		if (subProperties.size() > 0) {
+			properties.add("baseProperties", subProperties);
 		}
 	}
 
