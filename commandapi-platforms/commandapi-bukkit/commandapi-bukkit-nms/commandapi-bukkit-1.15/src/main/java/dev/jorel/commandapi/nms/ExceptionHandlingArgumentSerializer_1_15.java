@@ -38,30 +38,24 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 		serializer = NMS.SafeVarHandle.ofOrNull(entryClass, "b", ArgumentSerializer.class);
 	}
 
-	// Two ? wildcards cannot be directly converted to each other, so we need this silly method to capture one of
-	// those wildcards and convert it to the other
-	private static <T> T captureCast(Object o) {
-		return (T) o;
-	}
-
 	@Override
 	// serializeToNetwork
 	public void a(ExceptionHandlingArgumentType<T> argument, PacketDataSerializer packetDataSerializer) {
 		// Remove this key from packet
 		Object myInfo = getArgumentTypeInformation.invokeOrNull(argument);
 
-		byte[] myKeyBytes = serializationKey.get(captureCast(myInfo)).toString().getBytes(StandardCharsets.UTF_8);
+		byte[] myKeyBytes = serializationKey.getUnknownInstanceType(myInfo).toString().getBytes(StandardCharsets.UTF_8);
 		// Removing length and size of string, assuming length is always written as 1 byte
 		packetDataSerializer.writerIndex(packetDataSerializer.writerIndex() - myKeyBytes.length - 1);
 
 		// Add baseType key instead
 		ArgumentType<T> baseType = argument.baseType();
 		Object baseInfo = getArgumentTypeInformation.invokeOrNull(argument);
-		String baseKey = serializationKey.get(captureCast(baseInfo)).toString();
+		String baseKey = serializationKey.getUnknownInstanceType(baseInfo).toString();
 		packetDataSerializer.a(baseKey);
 
 		// Serialize baseType
-		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.get(captureCast(baseInfo));
+		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.getUnknownInstanceType(baseInfo);
 		baseSerializer.a(baseType, packetDataSerializer);
 	}
 
@@ -72,9 +66,9 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 
 		Object baseInfo = getArgumentTypeInformation.invokeOrNull(baseType);
 
-		properties.addProperty("baseType", serializationKey.get(captureCast(baseInfo)).toString());
+		properties.addProperty("baseType", serializationKey.getUnknownInstanceType(baseInfo).toString());
 
-		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.get(captureCast(baseInfo));
+		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.getUnknownInstanceType(baseInfo);
 
 		JsonObject subProperties = new JsonObject();
 		baseSerializer.a(baseType, subProperties);

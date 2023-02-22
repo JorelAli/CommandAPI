@@ -449,6 +449,10 @@ public interface NMS<CommandListenerWrapper> {
 			return (FieldType) handle.get(instance);
 		}
 
+		FieldType getUnknownInstanceType(Object instance) {
+			return (FieldType) handle.get(instance);
+		}
+
 		FieldType getStatic() {
 			return (FieldType) handle.get(null);
 		}
