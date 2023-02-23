@@ -81,15 +81,15 @@ In this example, we want to be able to run any arbitrary command, so we will sim
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:command_argument_sudo}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentCommand1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_sudo}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand1}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:command_argument_sudo}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentCommand1}}
 ```
 
 </div>
@@ -119,7 +119,7 @@ Let's also add a restriction that the player can only use diamonds or dirt for t
 
 <div style="position: relative; left: -50px;">
 
-\\(
+\begin{gather}
 \texttt{(start)}\\\\
 \swarrow\hspace{2cm}\searrow\\\\
 \swarrow\hspace{3.4cm}\searrow\\\\
@@ -131,7 +131,7 @@ Let's also add a restriction that the player can only use diamonds or dirt for t
 \hspace{6.7cm}\texttt{minecraft:diamond}\hspace{3cm}\texttt{minecraft:dirt}\\\\
 \hspace{7.5cm}\hspace{4cm}\downarrow\\\\
 \hspace{7.5cm}\hspace{4cm}\texttt{(amount)}\\\\
-\\)
+\end{gather}
 
 </div>
 
@@ -142,11 +142,11 @@ We can implement our `/tp` branch using the `SuggestionsBranch.suggest()` method
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:command_argument_branch_tp}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentCommand2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_branch_tp}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand2}}
 ```
 
 </div>
@@ -156,11 +156,11 @@ For the `/give` branch, we can use a similar thing, but we need to tell the Comm
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:command_argument_branch_give}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentCommand3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_branch_give}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand3}}
 ```
 
 </div>
@@ -170,11 +170,11 @@ Adding everything together, we get this fully completed CommandArgument:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:command_argument_branch}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentCommand4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:command_argument_branch}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentCommand4}}
 ```
 
 </div>

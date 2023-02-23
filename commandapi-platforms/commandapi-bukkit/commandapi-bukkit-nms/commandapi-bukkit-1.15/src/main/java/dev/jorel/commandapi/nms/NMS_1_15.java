@@ -2,8 +2,6 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +27,6 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
@@ -56,6 +53,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -134,7 +133,6 @@ import net.minecraft.server.v1_15_R1.CompletionProviders;
 import net.minecraft.server.v1_15_R1.CriterionConditionValue;
 import net.minecraft.server.v1_15_R1.CustomFunction;
 import net.minecraft.server.v1_15_R1.CustomFunctionData;
-import net.minecraft.server.v1_15_R1.DimensionManager;
 import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.EntityPlayer;
 import net.minecraft.server.v1_15_R1.EntitySelector;
@@ -155,8 +153,6 @@ import net.minecraft.server.v1_15_R1.ParticleParamRedstone;
 import net.minecraft.server.v1_15_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_15_R1.Vec2F;
 import net.minecraft.server.v1_15_R1.Vec3D;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
 
 /**
  * NMS implementation for Minecraft 1.15, 1.15.1 and 1.15.2
@@ -171,39 +167,20 @@ import org.bukkit.scoreboard.Team;
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_15 extends NMSWrapper_1_15 {
 
-	private static final VarHandle SimpleHelpMap_helpTopics;
-	private static final VarHandle ParticleParamBlock_c;
-	private static final VarHandle ParticleParamItem_c;
-	private static final VarHandle ParticleParamRedstone_f;
-	private static final VarHandle ArgumentPredicateItemStack_c;
+	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
+	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
+	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
+	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle shm_ht = null;
-		VarHandle ppb_c = null;
-		VarHandle ppi_c = null;
-		VarHandle ppr_g = null;
-		VarHandle apis_c = null;
-		try {
-			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
-					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			ppb_c = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
-			ppb_c = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
-			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamRedstone.class, "f", float.class);
-			apis_c = MethodHandles.privateLookupIn(ArgumentPredicateItemStack.class, MethodHandles.lookup())
-				.findVarHandle(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		SimpleHelpMap_helpTopics = shm_ht;
-		ParticleParamBlock_c = ppb_c;
-		ParticleParamItem_c = ppi_c;
-		ParticleParamRedstone_f = ppr_g;
-		ArgumentPredicateItemStack_c = apis_c;
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
+		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", IBlockData.class);
+		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", ItemStack.class);
+		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", float.class);
+		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -398,7 +375,8 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		@SuppressWarnings("unchecked")
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
@@ -649,7 +627,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		ItemStack itemWithMaybeTag = input.a(1, false);
 
 		// Try and find the amount from the CompoundTag (if present)
-		final NBTTagCompound tag = (NBTTagCompound) ArgumentPredicateItemStack_c.get(input);
+		final NBTTagCompound tag = itemStackPredicateArgument.get(input);
 		if(tag != null) {
 			// The tag has some extra metadata we need! Get the Count (amount)
 			// and create the ItemStack with the correct metadata
@@ -747,14 +725,13 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
 		if (particleOptions instanceof ParticleParamBlock options) {
-			IBlockData blockData = (IBlockData) ParticleParamBlock_c.get(options);
-			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(blockData));
+			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(particleParamBlockData.get(options)));
 		}
 		else if (particleOptions instanceof ParticleParamRedstone options) {
 			return getParticleDataAsDustOptions(particle, options);
 		}
 		else if (particleOptions instanceof ParticleParamItem options) {
-			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
+			return new ParticleData<org.bukkit.inventory.ItemStack>(particle, CraftItemStack.asBukkitCopy(particleParamItemStack.get(options)));
 		}
 		else {
 			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
@@ -770,7 +747,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		final float blue = Float.parseFloat(optionsArr[3]);
 
 		final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
-		return new ParticleData<DustOptions>(particle, new DustOptions(color, (float) ParticleParamRedstone_f.get(options)));
+		return new ParticleData<DustOptions>(particle, new DustOptions(color, particleParamRedstoneSize.get(options)));
 	}
 
 	@Override
@@ -803,7 +780,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return new ScoreboardSlot(ArgumentScoreboardSlot.a(cmdCtx, key));
+		return ScoreboardSlot.ofMinecraft(ArgumentScoreboardSlot.a(cmdCtx, key));
 	}
 
 	@Override

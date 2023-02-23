@@ -598,7 +598,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return new ScoreboardSlot(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
+		return ScoreboardSlot.ofMinecraft(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
 	}
 
 	@Override

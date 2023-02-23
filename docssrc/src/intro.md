@@ -53,7 +53,7 @@ Here's the list of changes to the documentation between each update. You can vie
 > `SoundArgument`s written for 8.6.0 are incompatible with this update! Other significant changes to `ScoreHolderArgument` and `EntitySelectorArgument` were made in this update. I highly recommend reading the [Upgrading guide](./upgrading.md) section which covers the changes in more detail and how to update your plugin for this version.
 
 - Updated [Biome arguments](./argument_biome.md) to allow for `NamespacedKey` objects
-- Updated [Sound arguments](./soundargument.md) with the new `NamespacedKey` constructor
+- Updated [Sound arguments](./argument_sound.md) with the new `NamespacedKey` constructor
 - Updated [Scoreboard arguments](./argument_scoreboards.md) with the new `Single` and `Multiple` constructors
 - Updated [Entity & player arguments](./argument_entities.md) to include the new `OneEntity`, `ManyEntities`, `OnePlayer` and `ManyPlayers` constructors
 
@@ -69,7 +69,7 @@ Here's the list of changes to the documentation between each update. You can vie
   - Update [List arguments](./argument_list.md) to include the new `buildGreedy()` and `buildText()` methods
   - Update [Handling command failures](./commandfailures.md) with new methods
   - Update [Argument suggestions with tooltips](./tooltips.md) with new tooltip methods for formatting text
-  - Update [Sound arguments](./soundargument.md) with support for namespaced keys
+  - Update [Sound arguments](./argument_sound.md) with support for namespaced keys
 - Adds documentation for [Kotlin-based commands](./kotlinintro.md) using the Kotlin DSL
 - Update the [Afterword](./afterword.md), giving special credits to some very special contributors!
 

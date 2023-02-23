@@ -19,15 +19,15 @@ We ensure that the location provided is a container (such as a chest or shulkerb
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:loottablearguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLootTable1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:loottablearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLootTable1}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:loottablearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentLootTable1}}
 ```
 
 </div>

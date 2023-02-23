@@ -9,6 +9,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -47,7 +48,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 		if(instance != null) {
 			return instance;
 		} else {
-			throw new IllegalStateException("Tried to access CommandAPIHandler instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
+			throw new IllegalStateException("Tried to access CommandAPIVelocity instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
 		}
 	}
 
@@ -161,13 +162,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 
 	@Override
 	public VelocityCommandSender<? extends CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx, boolean forceNative) {
-		// TODO: This method MAY be completely identical to getCommandSenderFromCommandSource.
-		// In Bukkit, this is NOT the case - we have to apply certain changes based
-		// on the command context - for example, if we're proxying another entity or
-		// otherwise (e.g. native sender)
-		
-		// I'm fairly certain we don't have to do that in Velocity, so we'll just go straight
-		// for this:
+		// Velocity doesn't have proxy senders, so nothing needs to be done with forceNative
 		return getCommandSenderFromCommandSource(cmdCtx.getSource());
 	}
 
@@ -194,8 +189,9 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 
 	@Override
 	public SuggestionProvider<CommandSource> getSuggestionProvider(SuggestionProviders suggestionProvider) {
-		// TODO Auto-generated method stub
-		return null;
+		// There isn't a Velocity Argument that implements CustomProvidedArgument yet, so this method is not used
+		// If you want to use provided suggestions on an argument, implement this method.
+		return (context, builder) -> Suggestions.empty();
 	}
 
 	@Override

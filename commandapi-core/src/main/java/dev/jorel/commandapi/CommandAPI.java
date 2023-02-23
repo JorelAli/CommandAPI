@@ -103,22 +103,23 @@ public class CommandAPI {
 			CommandAPIPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
 			new CommandAPIHandler<>(platform);
 
-			// Finish loading
-			CommandAPIHandler.getInstance().onLoad(config);
-
 			// Log platform load
 			final String platformClassHierarchy;
 			{
 				List<String> platformClassHierarchyList = new ArrayList<>();
 				Class<?> platformClass = platform.getClass();
-				while (platformClass != CommandAPIPlatform.class && platformClass != null) {
-					// TODO: This may be mangled now we don't have a clear linear inheritance of abstract classes
+				// Goes up through class inheritance only
+				// CommandAPIPlatform is an interface, so it is not included
+				while (platformClass != null) {
 					platformClassHierarchyList.add(platformClass.getSimpleName());
 					platformClass = platformClass.getSuperclass();
 				}
 				platformClassHierarchy = String.join(" > ", platformClassHierarchyList);
 			}
 			logNormal("Loaded platform " + platformClassHierarchy);
+
+			// Finish loading
+			CommandAPIHandler.getInstance().onLoad(config);
 
 			loaded = true;
 		} else {
