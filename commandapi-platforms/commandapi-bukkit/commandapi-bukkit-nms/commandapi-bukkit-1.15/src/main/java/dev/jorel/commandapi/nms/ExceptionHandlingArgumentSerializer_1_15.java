@@ -21,8 +21,8 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		// We need a reference to the class object for ArgumentTypes.a
-		// We can get an object from ArgumentTypes#get(ResourceLocation), then take its class
+		// We need a reference to the class object for ArgumentRegistry.a
+		// We can get an object from ArgumentRegistry#get(MinecraftKey), then take its class
 		Class<?> entryClass = null;
 		try {
 			Method getInfoByResourceLocation = ArgumentRegistry.class.getDeclaredMethod("a", MinecraftKey.class);
@@ -70,10 +70,10 @@ public class ExceptionHandlingArgumentSerializer_1_15<T> implements ArgumentSeri
 
 		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.getUnknownInstanceType(baseInfo);
 
-		JsonObject subProperties = new JsonObject();
-		baseSerializer.a(baseType, subProperties);
-		if (subProperties.size() > 0) {
-			properties.add("baseProperties", subProperties);
+		JsonObject baseProperties = new JsonObject();
+		baseSerializer.a(baseType, baseProperties);
+		if (baseProperties.size() > 0) {
+			properties.add("baseProperties", baseProperties);
 		}
 	}
 

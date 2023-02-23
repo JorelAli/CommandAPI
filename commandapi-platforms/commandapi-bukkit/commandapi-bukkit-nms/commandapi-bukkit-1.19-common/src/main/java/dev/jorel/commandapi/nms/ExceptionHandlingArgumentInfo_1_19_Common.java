@@ -3,12 +3,15 @@ package dev.jorel.commandapi.nms;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import dev.jorel.commandapi.preprocessor.Differs;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 
+@Differs(from = {"1.15", "1.16", "1.17", "1.18"},
+	by = "ArgumentType serialization completely different")
 public class ExceptionHandlingArgumentInfo_1_19_Common<T> implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, ExceptionHandlingArgumentInfo_1_19_Common<T>.Template> {
 	@Override
 	public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {

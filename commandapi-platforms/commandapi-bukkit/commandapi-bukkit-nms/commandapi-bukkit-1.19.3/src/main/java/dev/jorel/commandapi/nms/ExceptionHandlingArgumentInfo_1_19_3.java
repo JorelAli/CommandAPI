@@ -11,7 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
 @Differs(from = {"1.19", "1.19.1", "1.19.2"},
-	by = "Registry.COMMAND_ARGUMENT_TYPE renamed to BuiltInRegistries.COMMAND_ARGUMENT_TYPE")
+	by = "Registry.COMMAND_ARGUMENT_TYPE -> BuiltInRegistries.COMMAND_ARGUMENT_TYPE")
 public class ExceptionHandlingArgumentInfo_1_19_3<T> implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T>, ExceptionHandlingArgumentInfo_1_19_3<T>.Template> {
 	@Override
 	public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {
