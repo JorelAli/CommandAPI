@@ -33,7 +33,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> implements Argumen
 			e.printStackTrace();
 		}
 
-		getArgumentTypeInformation = NMS.SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentType.class, "b", entryClass, ArgumentType.class);
+		getArgumentTypeInformation = NMS.SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentRegistry.class, "b", entryClass, ArgumentType.class);
 		serializationKey = NMS.SafeVarHandle.ofOrNull(entryClass, "c", MinecraftKey.class);
 		serializer = NMS.SafeVarHandle.ofOrNull(entryClass, "b", ArgumentSerializer.class);
 	}

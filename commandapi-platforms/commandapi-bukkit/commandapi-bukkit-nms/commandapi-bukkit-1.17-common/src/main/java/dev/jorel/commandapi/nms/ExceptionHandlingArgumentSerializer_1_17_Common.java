@@ -33,7 +33,7 @@ public class ExceptionHandlingArgumentSerializer_1_17_Common<T> implements Argum
 			e.printStackTrace();
 		}
 
-		getArgumentTypeInformation = NMS.SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentType.class, "b", entryClass, ArgumentType.class);
+		getArgumentTypeInformation = NMS.SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentTypes.class, "b", entryClass, ArgumentType.class);
 		serializationKey = NMS.SafeVarHandle.ofOrNull(entryClass, "c", ResourceLocation.class);
 		serializer = NMS.SafeVarHandle.ofOrNull(entryClass, "b", ArgumentSerializer.class);
 	}
