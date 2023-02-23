@@ -10,11 +10,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 
 @Differs(from = {"1.15", "1.16", "1.17", "1.18", "1.18.1"},
 	by = "ArgumentTypes.Entry.c -> ArgumentTypes.Entry.b, ArgumentTypes.Entry.b -> ArgumentTypes.Entry.a")
-public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
+public class ExceptionHandlingArgumentSerializer_1_18_R2<T> extends ExceptionHandlingArgumentSerializer_Common<T, FriendlyByteBuf> implements ArgumentSerializer<ExceptionHandlingArgumentType<T>> {
 	// All the ? here should actually be ArgumentTypes.Entry, but that is a private inner class. That makes everything really annoying.
 	// TODO: We want to check this reflection, but we can't give ArgumentTypes.Entry to the @RequireField annotation
 	//  Hopefully something works out, but the preprocessor needs to be expanded first
@@ -41,41 +40,36 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> implements ArgumentS
 		serializer = NMS.SafeVarHandle.ofOrNull(entryClass, "a", ArgumentSerializer.class);
 	}
 
+	// Serializer_Common methods
+	@Override
+	protected Object getArgumentTypeInformation(ArgumentType<?> argumentType) {
+		return getArgumentTypeInformation.invokeOrNull(argumentType);
+	}
+
+	@Override
+	protected String getSerializationKey(Object info) {
+		return serializationKey.getUnknownInstanceType(info).toString();
+	}
+
+	@Override
+	protected void serializeBaseTypeToNetwork(ArgumentType<T> baseType, Object baseInfo, FriendlyByteBuf packetWriter) {
+		serializer.getUnknownInstanceType(baseInfo).serializeToNetwork(baseType, packetWriter);
+	}
+
+	@Override
+	protected void serializeBaseTypeToJson(ArgumentType<T> baseType, Object baseInfo, JsonObject properties) {
+		serializer.getUnknownInstanceType(baseInfo).serializeToJson(baseType, properties);
+	}
+
+	// ArgumentSerializer methods
 	@Override
 	public void serializeToNetwork(ExceptionHandlingArgumentType<T> argument, FriendlyByteBuf friendlyByteBuf) {
-		// Remove this key from packet
-		Object myInfo = getArgumentTypeInformation.invokeOrNull(argument);
-
-		byte[] myKeyBytes = serializationKey.getUnknownInstanceType(myInfo).toString().getBytes(StandardCharsets.UTF_8);
-		// Removing length and size of string, assuming length is always written as 1 byte
-		friendlyByteBuf.writerIndex(friendlyByteBuf.writerIndex() - myKeyBytes.length - 1);
-
-		// Add baseType key instead
-		ArgumentType<T> baseType = argument.baseType();
-		Object baseInfo = getArgumentTypeInformation.invokeOrNull(baseType);
-		String baseKey = serializationKey.getUnknownInstanceType(baseInfo).toString();
-		friendlyByteBuf.writeUtf(baseKey);
-
-		// Serialize baseType
-		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.getUnknownInstanceType(baseInfo);
-		baseSerializer.serializeToNetwork(baseType, friendlyByteBuf);
+		commonSerializeToNetwork(argument, friendlyByteBuf);
 	}
 
 	@Override
 	public void serializeToJson(ExceptionHandlingArgumentType<T> argument, JsonObject properties) {
-		ArgumentType<T> baseType = argument.baseType();
-
-		Object baseInfo = getArgumentTypeInformation.invokeOrNull(baseType);
-
-		properties.addProperty("baseType", serializationKey.getUnknownInstanceType(baseInfo).toString());
-
-		ArgumentSerializer<ArgumentType<T>> baseSerializer = (ArgumentSerializer<ArgumentType<T>>) serializer.getUnknownInstanceType(baseInfo);
-
-		JsonObject baseProperties = new JsonObject();
-		baseSerializer.serializeToJson(baseType, baseProperties);
-		if (baseProperties.size() > 0) {
-			properties.add("baseProperties", baseProperties);
-		}
+		commonSerializeToJson(argument, properties);
 	}
 
 	@Override

@@ -51,6 +51,15 @@
 			<version>${paper.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Included in Spigot jars, used for common serialization logic -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-buffer</artifactId>
+			<version>4.1.82.Final</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- CommandAPI core -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
@@ -64,7 +73,7 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-	</dependencies>
+    </dependencies>
 	<build>
 		<plugins>
 			<!-- Run commandapi annotation preprocessor -->
