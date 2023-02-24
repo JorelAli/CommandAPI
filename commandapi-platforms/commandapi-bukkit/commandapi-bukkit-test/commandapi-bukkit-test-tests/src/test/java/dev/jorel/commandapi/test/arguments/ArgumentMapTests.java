@@ -417,4 +417,28 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet"), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
 	}
 
+	@Test
+	public void suggestionTestWithMapArgumentAndValueDuplicates() {
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map")
+				.withKeyMapper(s -> s)
+				.withValueMapper(s -> s)
+				.withKeyList(List.of("beautiful", "bold", "crazy", "mighty", "wonderful"))
+				.withValueList(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), true)
+				.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Check if value removal works
+
+		// /test beautiful:"weird"
+		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\""));
+
+		// /test beautiful:"weird" bold:"
+		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
+	}
+
 }
