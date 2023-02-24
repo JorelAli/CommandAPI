@@ -348,4 +348,73 @@ public class ArgumentMapTests extends TestBase {
 		assertNoMoreResults(results);
 	}
 
+	@Test
+	public void suggestionTestWithMapArgumentAndNoValueDuplicates() {
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map")
+				.withKeyMapper(s -> s)
+				.withValueMapper(s -> s)
+				.withKeyList(List.of("beautiful", "bold", "crazy", "mighty", "wonderful"))
+				.withValueList(List.of("chaotic", "majestic", "sunny", "sweet", "weird"))
+				.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Key tests
+
+		// /test
+		assertEquals(List.of("beautiful", "bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test "));
+
+		// /test b
+		assertEquals(List.of("beautiful", "bold"), server.getSuggestions(player, "test b"));
+
+		// /test c
+		assertEquals(List.of("crazy"), server.getSuggestions(player, "test c"));
+
+		// /test m
+		assertEquals(List.of("mighty"), server.getSuggestions(player, "test m"));
+
+		// /test w
+		assertEquals(List.of("wonderful"), server.getSuggestions(player, "test w"));
+
+		// Use "beautiful" for all following tests as the first key
+
+		// /test beautiful
+		assertEquals(List.of(":"), server.getSuggestions(player, "test beautiful"));
+
+		// /test beautiful:
+		assertEquals(List.of("\""), server.getSuggestions(player, "test beautiful:"));
+
+		// /test beautiful:"
+		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), server.getSuggestions(player, "test beautiful:\""));
+
+		// /test beautiful:"s
+		assertEquals(List.of("sunny", "sweet"), server.getSuggestions(player, "test beautiful:\"s"));
+
+		// /test beautiful:"c
+		assertEquals(List.of("chaotic"), server.getSuggestions(player, "test beautiful:\"c"));
+
+		// /test beautiful:"m
+		assertEquals(List.of("majestic"), server.getSuggestions(player, "test beautiful:\"m"));
+
+		// /test beautiful:"w
+		assertEquals(List.of("weird"), server.getSuggestions(player, "test beautiful:\"w"));
+
+		// Use "weird" for all following tests as the first value
+
+		// /test beautiful:"weird
+		assertEquals(List.of("\""), server.getSuggestions(player, "test beautiful:\"weird"));
+
+		// Key-value pair completed, check if value removal works
+
+		// /test beautiful:"weird"
+		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\""));
+
+		// /test beautiful:"weird" bold:"
+		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet"), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
+	}
+
 }
