@@ -46,6 +46,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.Nullable;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -509,24 +510,27 @@ public class CommandAPIHandler<CommandSourceStack> {
 			} else if (perm.getPermission().isPresent()) {
 				permNode = perm.getPermission().get();
 			} else {
-				// TODO: This case should never occur. Worth testing this with some assertion
+				CommandAPI.logError("Invalid state with internal CommandPermission: " + perm);
+				CommandAPI.logError("This should never happen! If you're seeing this message, please get in contact with the CommandAPI developers, we'd love to know how you did this!");
 				permNode = null;
 			}
 
 			/*
 			 * Sets the permission. If you have to be OP to run this command, we set the
-			 * permission to null. Doing so means that Bukkit's "testPermission" will always
-			 * return true, however since the command's permission check occurs internally
-			 * via the CommandAPI, this isn't a problem.
+			 * permission to "null" (empty string). Doing so means that Bukkit's "testPermission"
+			 * will always return true, however since the command's permission check
+			 * occurs internally via the CommandAPI, this isn't a problem.
 			 * 
 			 * If anyone dares tries to use testPermission() on this command, seriously,
 			 * what are you doing and why?
 			 */
-			if (NMS.isVanillaCommandWrapper(map.getCommand(cmdName))) {
-				map.getCommand(cmdName).setPermission(permNode);
+			org.bukkit.command.Command commandMapCommand = map.getCommand(cmdName);
+			if (commandMapCommand != null && NMS.isVanillaCommandWrapper(commandMapCommand)) {
+				commandMapCommand.setPermission(permNode);
 			}
-			if (NMS.isVanillaCommandWrapper(map.getCommand("minecraft:" + cmdName))) {
-				map.getCommand(cmdName).setPermission(permNode);
+			commandMapCommand = map.getCommand("minecraft:" + cmdName);
+			if (commandMapCommand != null && NMS.isVanillaCommandWrapper(commandMapCommand)) {
+				commandMapCommand.setPermission(permNode);
 			}
 		}
 		CommandAPI.logNormal("Linked " + PERMISSIONS_TO_FIX.size() + " Bukkit permissions to commands");
