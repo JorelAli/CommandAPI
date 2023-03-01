@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 public class MapArgument<K, V> extends Argument<LinkedHashMap> implements GreedyArgument {
 
 	private final char delimiter;
-	private final Function<String, ?> keyMapper;
+	private final Function<String, K> keyMapper;
 	private final Function<String, V> valueMapper;
 
 	private final List<String> keyList;
@@ -245,7 +245,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
 
 		K mapKey = null;
-		V mapValue;
+		V mapValue = null;
 
 		boolean isAKeyBeingBuilt = true;
 		boolean isAValueBeingBuilt = false;
@@ -269,7 +269,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 						throw missingQuotationMark(visitedCharacters);
 					}
 
-					mapKey = (K) keyMapper.apply(keyValueBuffer.toString());
+					try {
+						mapKey = keyMapper.apply(keyValueBuffer.toString());
+					} catch (Exception e) {
+						throw cannotParseKey(visitedCharacters, keyValueBuffer);
+					}
+
 					if (results.containsKey(mapKey)) {
 						throw duplicateKey(visitedCharacters);
 					}
@@ -320,7 +325,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					if (!valueList.contains(keyValueBuffer.toString()) && !valueListEmpty) {
 						throw throwInvalidValue(visitedCharacters, keyValueBuffer.toString());
 					}
-					mapValue = valueMapper.apply(keyValueBuffer.toString());
+
+					try {
+						mapValue = valueMapper.apply(keyValueBuffer.toString());
+					} catch (Exception e) {
+						throw cannotParseValue(visitedCharacters, keyValueBuffer);
+					}
 
 					if (results.containsValue(mapValue) && !allowValueDuplicates) {
 						throw duplicateValue(visitedCharacters);
@@ -432,6 +442,20 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Value required after opening quotation mark");
+	}
+
+	private CommandSyntaxException cannotParseKey(StringBuilder visitedCharacters, StringBuilder keyValueBuffer) throws CommandSyntaxException {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
+		reader.setCursor(context.length() - 1);
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key (" + keyValueBuffer + "): cannot be converted to a key");
+	}
+
+	private CommandSyntaxException cannotParseValue(StringBuilder visitedCharacters, StringBuilder keyValueBuffer) throws CommandSyntaxException {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context);
+		reader.setCursor(context.length());
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value (" + keyValueBuffer + "): cannot be converted to a value");
 	}
 
 	private static class MapArgumentSuggestionInfo {

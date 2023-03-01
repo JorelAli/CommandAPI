@@ -213,6 +213,9 @@ public class ArgumentMapTests extends TestBase {
 		testMap.put("someThirdValue", 19999);
 		assertEquals(testMap, results.get());
 
+		// /test map:"598" age:"eighteen"
+		assertCommandFailsWith(player, "test map:\"598\" age:\"eighteen\"", "Could not parse command: Invalid value (eighteen): cannot be converted to a value at position 24: ...\"eighteen\"<--[HERE]");
+
 		assertNoMoreResults(results);
 	}
 
@@ -285,7 +288,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test 3.5:"Hello world!"
-		assertThrows(NumberFormatException.class, () -> server.dispatchCommand(player, "test 3.5:\"Hello world!\""));
+		assertCommandFailsWith(player, "test 3.5:\"Hello world!\"", "Could not parse command: Invalid key (3.5): cannot be converted to a key at position 3: 3.5<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
