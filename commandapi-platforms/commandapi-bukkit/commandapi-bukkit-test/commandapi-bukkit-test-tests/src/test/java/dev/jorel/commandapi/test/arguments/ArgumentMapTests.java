@@ -42,8 +42,6 @@ public class ArgumentMapTests extends TestBase {
 	 * Tests *
 	 *********/
 
-	// TODO: Suggestion test!!!
-
 	@Test
 	public void executionTestWithMapArgument() {
 		Mut<LinkedHashMap<String, String>> results = Mut.of();
@@ -311,9 +309,13 @@ public class ArgumentMapTests extends TestBase {
 
 		// From previous test we know everything works so here only exceptions will be tested
 
-		// Test invalid key
+		// Test invalid completed key
 		// /test optionOne:"solutionTwo" optionFour:"solutionOne"
 		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 35: ...optionFour<--[HERE]");
+
+		// Test invalid not completed key
+		// /test option
+		assertCommandFailsWith(player, "test option", "Could not parse command: Invalid key: option at position 6: option<--[HERE]");
 
 		// Test invalid value
 		// /test optionOne:"solutionOne" optionTwo:"solutionFour"
