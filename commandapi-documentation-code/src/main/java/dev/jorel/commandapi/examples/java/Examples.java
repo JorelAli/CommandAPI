@@ -621,6 +621,40 @@ new CommandAPICommand("giveloottable")
 /* ANCHOR_END: argumentLootTable1 */
 }
 
+void argument_map() {
+/* ANCHOR: argumentMap1 */
+new CommandAPICommand("sendmessage")
+    // Parameter 'delimiter' is missing, delimiter will be a colon
+    .withArguments(new MapArgumentBuilder<Player, String>("message")
+
+        // Providing a key mapper to convert a String into a Player
+        .withKeyMapper(Bukkit::getPlayer)
+
+        // Providing a value mapper to leave the message how it was sent
+        .withValueMapper(s -> s)
+
+        // Providing a list of player names to be used as keys
+        .withKeyList(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList())
+
+        // Don't provide a list of values so messages can be chosen without restrictions
+        .withoutValueList()
+
+        // Build the MapArgument
+        .build()
+    )
+    .executesPlayer((player, args) -> {
+        // The MapArgument returns a LinkedHashMap
+        LinkedHashMap<Player, String> map = (LinkedHashMap<Player, String>) args.get("message");
+
+        // Sending the messages to the players
+        for (Player messageRecipient : map.keySet()) {
+            messageRecipient.sendMessage(map.get(messageRecipient));
+        }
+    })
+    .register();
+/* ANCHOR_END: argumentMap1 */
+}
+
 void argument_mathOperation() {
 /* ANCHOR: argumentMathOperation1 */
 new CommandAPICommand("changelevel")
