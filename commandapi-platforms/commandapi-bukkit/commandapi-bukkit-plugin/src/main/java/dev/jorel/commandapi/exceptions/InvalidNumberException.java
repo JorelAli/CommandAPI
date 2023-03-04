@@ -38,11 +38,7 @@ public class InvalidNumberException extends Exception {
 	
 	private static String format(String input, String command, int index) {
 		String[] parts = command.split(" ");
-		for(int i = 0; i < parts.length; i++) {
-			if(i == index) {
-				parts[i] = parts[i] + "<--[HERE]";
-			}
-		}
+		parts[index] = parts[index] + "<--[HERE]";
 		return "Invalid number found in command '" + String.join(" ", parts) + 
 			"': '" + input + "' is not a valid number!";
 	}

@@ -344,10 +344,6 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
 
 - **Future:**
 
-  **Optional arguments**
-
-  One of the most requested features: adding support for optional arguments! This isn't a simple task, but development has begun into looking at how optional arguments can be incorporated into the CommandAPI.
-
   **Argument conflict detection**
 
   The CommandAPI simply uses the Brigadier system under the hood. This system is prone to _argument conflicts_, which is where certain arguments are given priority over other arguments. (For example "hello" and "123" are both valid string arguments, but if you have a command that has a string argument or an integer argument, Brigadier may ignore the integer argument). In this update, the CommandAPI will try to spot potential conflicts and add a warning in the console. The research required for this is also required in order to implement optional arguments (which is not coming out in this release).

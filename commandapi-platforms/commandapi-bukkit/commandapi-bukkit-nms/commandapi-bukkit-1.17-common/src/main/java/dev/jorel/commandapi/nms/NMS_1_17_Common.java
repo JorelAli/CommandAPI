@@ -22,8 +22,6 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +42,6 @@ import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -68,6 +65,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
@@ -82,10 +80,10 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -146,7 +144,6 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.scoreboard.Team;
 
 // Mojang-Mapped reflection
 /**
@@ -162,29 +159,16 @@ import org.bukkit.scoreboard.Team;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public abstract class NMS_1_17_Common extends NMS_Common {
 
-	private static final VarHandle SimpleHelpMap_helpTopics;
-	private static final VarHandle EntityPositionSource_sourceEntity;
-	private static final VarHandle ItemInput_tag;
+	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<EntityPositionSource, Optional> entityPositionSource;
+	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle shm_ht = null;
-		VarHandle eps_se = null;
-		VarHandle ii_t = null;
-		try {
-			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
-					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
-					.findVarHandle(EntityPositionSource.class, "d", Optional.class);
-			ii_t = MethodHandles.privateLookupIn(ItemInput.class, MethodHandles.lookup())
-				.findVarHandle(ItemInput.class, "c", CompoundTag.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		SimpleHelpMap_helpTopics = shm_ht;
-		EntityPositionSource_sourceEntity = eps_se;
-		ItemInput_tag = ii_t;
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "d", Optional.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -250,7 +234,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		@SuppressWarnings("unchecked")
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
@@ -416,7 +401,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
 
 		// Try and find the amount from the CompoundTag (if present)
-		final CompoundTag tag = (CompoundTag) ItemInput_tag.get(input);
+		final CompoundTag tag = itemInput.get(input);
 		if(tag != null) {
 			// The tag has some extra metadata we need! Get the Count (amount)
 			// and create the ItemStack with the correct metadata
@@ -520,7 +505,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		}
 		else if (options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
 			positionSource.getPosition(level); // Populate Optional sourceEntity
-			Optional<Entity> entity = (Optional<Entity>) EntityPositionSource_sourceEntity.get(positionSource);
+			@SuppressWarnings("unchecked")
+			Optional<Entity> entity = entityPositionSource.get(positionSource);
 			destination = new EntityDestination(entity.get().getBukkitEntity());
 		}
 		else {

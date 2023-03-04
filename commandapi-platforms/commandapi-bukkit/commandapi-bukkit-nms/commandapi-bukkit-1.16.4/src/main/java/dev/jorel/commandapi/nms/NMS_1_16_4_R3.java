@@ -24,8 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -203,44 +201,22 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
-	private static final VarHandle DATAPACKRESOURCES_B;
-	private static final VarHandle SimpleHelpMap_helpTopics;
-	private static final VarHandle ParticleParamBlock_c;
-	private static final VarHandle ParticleParamItem_c;
-	private static final VarHandle ParticleParamRedstone_g;
-	private static final VarHandle ArgumentPredicateItemStack_c;
+	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
+	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
+	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
+	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
+	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle dpr_b = null;
-		VarHandle shm_ht = null;
-		VarHandle ppb_c = null;
-		VarHandle ppi_c = null;
-		VarHandle ppr_g = null;
-		VarHandle apis_c = null;
-		try {
-			dpr_b = MethodHandles.privateLookupIn(DataPackResources.class, MethodHandles.lookup())
-					.findVarHandle(DataPackResources.class, "b", IReloadableResourceManager.class);
-			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
-					.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			ppb_c = MethodHandles.privateLookupIn(ParticleParamBlock.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamBlock.class, "c", IBlockData.class);
-			ppb_c = MethodHandles.privateLookupIn(ParticleParamItem.class, MethodHandles.lookup())
-					.findVarHandle(ParticleParamItem.class, "c", ItemStack.class);
-			ppr_g = MethodHandles.privateLookupIn(ParticleParamRedstone.class, MethodHandles.lookup())
-				.findVarHandle(ParticleParamRedstone.class, "g", float.class);
-			apis_c = MethodHandles.privateLookupIn(ArgumentPredicateItemStack.class, MethodHandles.lookup())
-				.findVarHandle(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		DATAPACKRESOURCES_B = dpr_b;
-		SimpleHelpMap_helpTopics = shm_ht;
-		ParticleParamBlock_c = ppb_c;
-		ParticleParamItem_c = ppi_c;
-		ParticleParamRedstone_g = ppr_g;
-		ArgumentPredicateItemStack_c = apis_c;
+		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", IReloadableResourceManager.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
+		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", IBlockData.class);
+		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", ItemStack.class);
+		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "g", float.class);
+		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -370,7 +346,8 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		@SuppressWarnings("unchecked")
+		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
@@ -626,7 +603,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		ItemStack itemWithMaybeTag = input.a(1, false);
 
 		// Try and find the amount from the CompoundTag (if present)
-		final NBTTagCompound tag = (NBTTagCompound) ArgumentPredicateItemStack_c.get(input);
+		final NBTTagCompound tag = itemStackPredicateArgument.get(input);
 		if(tag != null) {
 			// The tag has some extra metadata we need! Get the Count (amount)
 			// and create the ItemStack with the correct metadata
@@ -723,15 +700,14 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
 		if (particleOptions instanceof ParticleParamBlock options) {
-			IBlockData blockData = (IBlockData) ParticleParamBlock_c.get(options);
-			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(blockData));
+			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(particleParamBlockData.get(options)));
 		}
 		else if (particleOptions instanceof ParticleParamRedstone options) {
 			return getParticleDataAsDustOptions(particle, options);
 		}
 		else if (particleOptions instanceof ParticleParamItem options) {
 			return new ParticleData<org.bukkit.inventory.ItemStack>(particle,
-					CraftItemStack.asBukkitCopy((ItemStack) ParticleParamItem_c.get(options)));
+					CraftItemStack.asBukkitCopy(particleParamItemStack.get(options)));
 		} else {
 			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 			return new ParticleData<Void>(particle, null);
@@ -747,7 +723,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 		final Color color = Color.fromRGB((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F));
 		return new ParticleData<DustOptions>(particle,
-			new DustOptions(color, (float) ParticleParamRedstone_g.get(options)));
+			new DustOptions(color, particleParamRedstoneSize.get(options)));
 	}
 
 	@Override
@@ -916,8 +892,8 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 		// Construct the new CompletableFuture that now uses our updated
 		// datapackResources
-		CompletableFuture<?> unitCompletableFuture = ((IReloadableResourceManager) DATAPACKRESOURCES_B
-				.get(datapackResources)).a(SystemUtils.f(), Runnable::run,
+		CompletableFuture<?> unitCompletableFuture = dataPackResources
+				.get(datapackResources).a(SystemUtils.f(), Runnable::run,
 						this.<MinecraftServer>getMinecraftServer().getResourcePackRepository().f(), CompletableFuture.completedFuture(null));
 
 		CompletableFuture<DataPackResources> completablefuture = unitCompletableFuture

@@ -70,7 +70,7 @@
       - [Particle arguments](./argument_particle.md)
       - [Potion effect arguments](./argument_potion.md)
       - [Recipe arguments](./argument_recipe.md)
-      - [Sound arguments](./soundargument.md)
+      - [Sound arguments](./argument_sound.md)
       - [Time arguments](./argument_time.md)
       - [UUID arguments](./argument_uuid.md)
       - [World arguments](./argument_world.md)
