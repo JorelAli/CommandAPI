@@ -145,7 +145,9 @@ To implement that, we create a command that uses a `MapArgument` and use `Player
 
 The `MapArgument` is very strict and doesn't have room for any errors. The syntax for key/value pairs of the `MapArgument` is as following:
 
-\<key>\<delimiter>"\<value>"
+```txt
+<key><delimiter>"<value>"
+```
 
 Let's say you are on a server with two players, `Player1` and `Player2`. We want to send both of them the message `Hello, <playerName>!`
 To do that, we use the previously declared `sendmessage` command like this:
