@@ -1087,6 +1087,32 @@ commandAPICommand("sayhi") {
     }
 }
 /* ANCHOR_END: optionalArguments2 */
+
+/* ANCHOR: optionalArguments3 */
+commandAPICommand("rate") {
+    argument(StringArgument("topic").setOptional(true).combineWith(IntegerArgument("rating", 0, 10)))
+    playerArgument("target", optional = true)
+    anyExecutor { sender, args ->
+        val topic: String? = args["topic"] as String?
+        if (topic == null) {
+            sender.sendMessage(
+                "Usage: /rate <topic> <rating> <player>(optional)",
+                "Select a topic to rate, then give a rating between 0 and 10",
+                "You can optionally add a player at the end to give the rating to"
+            )
+            return@anyExecutor
+        }
+
+        // We know this is not null because rating is required if topic is given
+        val rating = args["rating"] as Int
+
+        // The target player is optional, so give it a default here
+        val target: CommandSender = args.getOrDefault("target", sender) as CommandSender
+
+        target.sendMessage("Your $topic was rated: $rating/10")
+    }
+}
+/* ANCHOR_END: optionalArguments3 */
 }
 
 fun proxysender() {
