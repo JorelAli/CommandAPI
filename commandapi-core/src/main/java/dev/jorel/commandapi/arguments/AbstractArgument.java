@@ -29,6 +29,7 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -263,6 +264,13 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 		return instance();
 	}
 
+	/**
+	 * Resets the requirements for this command
+	 */
+	void resetRequirements() {
+		this.requirements = s -> true;
+	}
+
 	/////////////////
 	// Listability //
 	/////////////////
@@ -294,6 +302,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	/////////////////
 
 	private boolean isOptional = false;
+	private final List<Argument> combinedArguments = new ArrayList<>();
 
 	/**
 	 * Returns true if this argument will be optional when executing the command this argument is included in
@@ -312,6 +321,42 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 */
 	public Impl setOptional(boolean optional) {
 		this.isOptional = optional;
+		return instance();
+	}
+
+	/**
+	 * Returns a list of arguments linked to this argument.
+	 *
+	 * @return A list of arguments linked to this argument
+	 */
+	public List<Argument> getCombinedArguments() {
+		return combinedArguments;
+	}
+
+	/**
+	 * Returns true if this argument has linked arguments.
+	 *
+	 * @return true if this argument has linked arguments
+	 */
+	public boolean hasCombinedArguments() {
+		return !combinedArguments.isEmpty();
+	}
+
+	/**
+	 * Adds combined arguments to this argument. Combined arguments are used to have required arguments after optional arguments
+	 * by ignoring they exist until they are added to the arguments array for registration.
+	 *
+	 * This method also causes permissions and requirements from this argument to be copied over to the arguments you want to combine
+	 * this argument with. Their permissions and requirements will be ignored.
+	 *
+	 * @param combinedArguments The arguments to combine to this argument
+	 * @return this current argument
+	 */
+	@SafeVarargs
+	public final Impl combineWith(Argument... combinedArguments) {
+		for (Argument argument : combinedArguments) {
+			this.combinedArguments.add(argument);
+		}
 		return instance();
 	}
 
@@ -356,6 +401,18 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 */
 	public List<String> getEntityNames(Object argument) {
 		return Collections.singletonList(null);
+	}
+
+	/**
+	 * Copies permissions and requirements from the provided argument to this argument
+	 * This also resets additional permissions and requirements.
+	 *
+	 * @param argument The argument to copy permissions and requirements from
+	 */
+	public void copyPermissionsAndRequirements(Argument argument) {
+		this.resetRequirements();
+		this.withRequirement(argument.getRequirements());
+		this.withPermission(argument.getArgumentPermission());
 	}
 
 	@Override

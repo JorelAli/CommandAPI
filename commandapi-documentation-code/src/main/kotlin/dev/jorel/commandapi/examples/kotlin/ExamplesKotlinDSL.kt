@@ -468,6 +468,40 @@ commandAPICommand("giveloottable") {
 /* ANCHOR_END: argumentLootTable1 */
 }
 
+fun argument_map() {
+/* ANCHOR: argumentMap1 */
+commandAPICommand("sendmessage") {
+    // Parameter 'delimiter' is missing, delimiter will be a colon
+    argument(MapArgumentBuilder<Player, String>("message")
+
+        // Providing a key mapper to convert a String into a Player
+        .withKeyMapper { s: String -> Bukkit.getPlayer(s) }
+
+        // Providing a value mapper to leave the message how it was sent
+        .withValueMapper { s: String -> s }
+
+        // Providing a list of player names to be used as keys
+        .withKeyList(Bukkit.getOnlinePlayers().map { player: Player -> player.name }.toList())
+
+        // Don't provide a list of values so messages can be chosen without restrictions
+        .withoutValueList()
+
+        // Build the MapArgument
+        .build()
+    )
+    playerExecutor { _, args ->
+        // The MapArgument returns a LinkedHashMap
+        val map: LinkedHashMap<Player, String> = args["message"] as LinkedHashMap<Player, String>
+
+        // Sending the messages to the players
+        for (messageRecipient in map.keys) {
+            messageRecipient.sendMessage(map[messageRecipient]!!)
+        }
+    }
+}
+/* ANCHOR_END: argumentMap1 */
+}
+
 fun argument_mathOperation() {
 /* ANCHOR: argumentMathOperation1 */
 commandAPICommand("changelevel") {
@@ -1053,6 +1087,32 @@ commandAPICommand("sayhi") {
     }
 }
 /* ANCHOR_END: optionalArguments2 */
+
+/* ANCHOR: optionalArguments3 */
+commandAPICommand("rate") {
+    argument(StringArgument("topic").setOptional(true).combineWith(IntegerArgument("rating", 0, 10)))
+    playerArgument("target", optional = true)
+    anyExecutor { sender, args ->
+        val topic: String? = args["topic"] as String?
+        if (topic == null) {
+            sender.sendMessage(
+                "Usage: /rate <topic> <rating> <player>(optional)",
+                "Select a topic to rate, then give a rating between 0 and 10",
+                "You can optionally add a player at the end to give the rating to"
+            )
+            return@anyExecutor
+        }
+
+        // We know this is not null because rating is required if topic is given
+        val rating = args["rating"] as Int
+
+        // The target player is optional, so give it a default here
+        val target: CommandSender = args.getOrDefault("target", sender) as CommandSender
+
+        target.sendMessage("Your $topic was rated: $rating/10")
+    }
+}
+/* ANCHOR_END: optionalArguments3 */
 }
 
 fun proxysender() {

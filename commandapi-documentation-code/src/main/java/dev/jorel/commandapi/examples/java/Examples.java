@@ -621,6 +621,40 @@ new CommandAPICommand("giveloottable")
 /* ANCHOR_END: argumentLootTable1 */
 }
 
+void argument_map() {
+/* ANCHOR: argumentMap1 */
+new CommandAPICommand("sendmessage")
+    // Parameter 'delimiter' is missing, delimiter will be a colon
+    .withArguments(new MapArgumentBuilder<Player, String>("message")
+
+        // Providing a key mapper to convert a String into a Player
+        .withKeyMapper(Bukkit::getPlayer)
+
+        // Providing a value mapper to leave the message how it was sent
+        .withValueMapper(s -> s)
+
+        // Providing a list of player names to be used as keys
+        .withKeyList(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList())
+
+        // Don't provide a list of values so messages can be chosen without restrictions
+        .withoutValueList()
+
+        // Build the MapArgument
+        .build()
+    )
+    .executesPlayer((player, args) -> {
+        // The MapArgument returns a LinkedHashMap
+        LinkedHashMap<Player, String> map = (LinkedHashMap<Player, String>) args.get("message");
+
+        // Sending the messages to the players
+        for (Player messageRecipient : map.keySet()) {
+            messageRecipient.sendMessage(map.get(messageRecipient));
+        }
+    })
+    .register();
+/* ANCHOR_END: argumentMap1 */
+}
+
 void argument_mathOperation() {
 /* ANCHOR: argumentMathOperation1 */
 new CommandAPICommand("changelevel")
@@ -1583,6 +1617,32 @@ new CommandAPICommand("sayhi")
     })
     .register();
 /* ANCHOR_END: optionalArguments2 */
+
+/* ANCHOR: optionalArguments3 */
+new CommandAPICommand("rate")
+    .withOptionalArguments(new StringArgument("topic").combineWith(new IntegerArgument("rating", 0, 10)))
+    .withOptionalArguments(new PlayerArgument("target"))
+    .executes((sender, args) -> {
+        String topic = (String) args.get("topic");
+        if(topic == null) {
+            sender.sendMessage(
+                "Usage: /rate <topic> <rating> <player>(optional)",
+                "Select a topic to rate, then give a rating between 0 and 10",
+                "You can optionally add a player at the end to give the rating to"
+            );
+            return;
+        }
+
+        // We know this is not null because rating is required if topic is given
+        int rating = (int) args.get("rating");
+
+        // The target player is optional, so give it a default here
+        CommandSender target = (CommandSender) args.getOrDefault("target", sender);
+
+        target.sendMessage("Your " + topic + " was rated: " + rating + "/10");
+    })
+    .register();
+/* ANCHOR_END: optionalArguments3 */
 }
 
 void permissions() {

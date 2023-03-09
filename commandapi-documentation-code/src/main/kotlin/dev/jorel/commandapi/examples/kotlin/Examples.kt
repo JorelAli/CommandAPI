@@ -49,6 +49,7 @@ import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
+import kotlin.collections.LinkedHashMap
 import kotlin.random.Random
 
 class Examples : JavaPlugin() {
@@ -561,6 +562,40 @@ CommandAPICommand("giveloottable")
 /* ANCHOR_END: argumentLootTable1 */
 }
 
+fun argument_map() {
+/* ANCHOR: argumentMap1 */
+CommandAPICommand("sendmessage")
+    // Parameter 'delimiter' is missing, delimiter will be a colon
+    .withArguments(MapArgumentBuilder<Player, String>("message")
+
+        // Providing a key mapper to convert a String into a Player
+        .withKeyMapper { s: String -> Bukkit.getPlayer(s) }
+
+        // Providing a value mapper to leave the message how it was sent
+        .withValueMapper { s: String -> s }
+
+        // Providing a list of player names to be used as keys
+        .withKeyList(Bukkit.getOnlinePlayers().map { player: Player -> player.name }.toList())
+
+        // Don't provide a list of values so messages can be chosen without restrictions
+        .withoutValueList()
+
+        // Build the MapArgument
+        .build()
+    )
+    .executesPlayer(PlayerCommandExecutor { _, args ->
+        // The MapArgument returns a LinkedHashMap
+        val map: LinkedHashMap<Player, String> = args["message"] as LinkedHashMap<Player, String>
+
+        // Sending the messages to the players
+        for (messageRecipient in map.keys) {
+            messageRecipient.sendMessage(map[messageRecipient]!!)
+        }
+    })
+    .register()
+/* ANCHOR_END: argumentMap1 */
+}
+
 fun argument_mathOperation() {
 /* ANCHOR: argumentMathOperation1 */
 CommandAPICommand("changelevel")
@@ -768,9 +803,7 @@ CommandAPICommand("giverecipe")
     })
     .register()
 /* ANCHOR_END: argumentRecipe1 */
-}
 
-fun recipearguments2() {
 /* ANCHOR: argumentRecipe2 */
 CommandAPICommand("unlockrecipe")
     .withArguments(PlayerArgument("player"))
@@ -1496,6 +1529,32 @@ CommandAPICommand("sayhi")
     })
     .register()
 /* ANCHOR_END: optionalArguments2 */
+
+/* ANCHOR: optionalArguments3 */
+CommandAPICommand("rate")
+    .withOptionalArguments(StringArgument("topic").combineWith(IntegerArgument("rating", 0, 10)))
+    .withOptionalArguments(PlayerArgument("target"))
+    .executes(CommandExecutor { sender, args ->
+        val topic: String? = args["topic"] as String?
+        if (topic == null) {
+            sender.sendMessage(
+                "Usage: /rate <topic> <rating> <player>(optional)",
+                "Select a topic to rate, then give a rating between 0 and 10",
+                "You can optionally add a player at the end to give the rating to"
+            )
+            return@CommandExecutor
+        }
+
+        // We know this is not null because rating is required if topic is given
+        val rating = args["rating"] as Int
+
+        // The target player is optional, so give it a default here
+        val target: CommandSender = args.getOrDefault("target", sender) as CommandSender
+
+        target.sendMessage("Your $topic was rated: $rating/10")
+    })
+    .register()
+/* ANCHOR_END: optionalArguments3 */
 }
 
 fun permissions() {

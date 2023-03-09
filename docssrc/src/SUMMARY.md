@@ -82,6 +82,7 @@
       - [Literal arguments](./argument_literal.md)
       - [Multi literal arguments](./argument_multiliteral.md)
     - [List arguments](./argument_list.md)
+    - [Map arguments](./argument_map.md)
     - [Command arguments](./argument_command.md)
     - [Custom arguments](./argument_custom.md)
 - [Functions & Tags](./functions.md)

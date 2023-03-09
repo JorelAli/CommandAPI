@@ -48,7 +48,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 		if(instance != null) {
 			return instance;
 		} else {
-			throw new IllegalStateException("Tried to access CommandAPIHandler instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
+			throw new IllegalStateException("Tried to access CommandAPIVelocity instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
 		}
 	}
 

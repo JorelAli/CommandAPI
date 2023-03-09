@@ -4,6 +4,33 @@ This section summarizes the list of things that _could_ go wrong with the Comman
 
 -----
 
+## Argument suggestions are empty or aren't updating
+
+If you've registered a command with an argument and replaced/included additional suggestions, but the suggestions:
+
+- Are empty (e.g. a list of worlds returns no suggestions)
+- Don't update automatically (e.g. a list of players doesn't update when new players join the game)
+
+This is most likely caused by using a constant array instead of using a lambda to dynamically update argument suggestions when the player requests them:
+
+```java
+new StringArgument("players")
+    .replaceSuggestions(ArgumentSuggestions.strings( 
+        Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)
+    ));
+```
+
+$$\downarrow$$
+
+```java
+new StringArgument("players")
+    .replaceSuggestions(ArgumentSuggestions.strings( 
+        info -> Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)
+    ));
+```
+
+-----
+
 ## Permissions don't work (shading the CommandAPI)
 
 If you're shading the CommandAPI and any of the following occur:

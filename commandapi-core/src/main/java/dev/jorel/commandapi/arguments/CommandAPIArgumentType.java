@@ -174,6 +174,11 @@ public enum CommandAPIArgumentType {
 	LOOT_TABLE("api:loot_table"),
 
 	/**
+	 * The MapArgument
+	 */
+	MAP("api:map"),
+
+	/**
 	 * The MathOperationArgument
 	 */
 	MATH_OPERATION("minecraft:operation"),

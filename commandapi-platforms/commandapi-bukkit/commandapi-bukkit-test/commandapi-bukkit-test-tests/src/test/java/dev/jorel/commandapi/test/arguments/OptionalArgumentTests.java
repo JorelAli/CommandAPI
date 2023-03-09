@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import dev.jorel.commandapi.arguments.DoubleArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -123,6 +125,16 @@ class OptionalArgumentTests extends TestBase {
 				})
 				.register();
 		});
+
+		// A required argument following a required argument that is linked
+		// to an optional argument should throw an OptionalArgumentException
+		assertThrows(OptionalArgumentException.class, () -> {
+			new CommandAPICommand("test")
+				.withOptionalArguments(new StringArgument("string1").combineWith(new StringArgument("string2")))
+				.withArguments(new StringArgument("string3"))
+				.executesPlayer(P_EXEC)
+				.register();
+		});
 	}
 
 	@Test
@@ -220,6 +232,46 @@ class OptionalArgumentTests extends TestBase {
 
 		assertEquals("hello", type.get());
 		assertEquals("world", type.get());
+	}
+
+	@Test
+	void testCombinedOptionalArguments() {
+		Mut<Object> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withOptionalArguments(new StringArgument("string").combineWith(new IntegerArgument("number")))
+			.withOptionalArguments(new DoubleArgument("double"))
+			.executesPlayer(info -> {
+				results.set(info.args().get("string"));
+				results.set(info.args().get("number"));
+				results.set(info.args().get("double"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test
+		server.dispatchCommand(player, "test");
+		assertNull(results.get());
+		assertNull(results.get());
+		assertNull(results.get());
+
+		// /test hello
+		assertCommandFailsWith(player, "test hello", "Unknown or incomplete command, see below for error at position 10: test hello<--[HERE]");
+
+		// /test hello 5
+		server.dispatchCommand(player, "test hello 5");
+		assertEquals("hello", results.get());
+		assertEquals(5, results.get());
+		assertNull(results.get());
+
+		// /test hello 5 6.0
+		server.dispatchCommand(player, "test hello 5 6.0");
+		assertEquals("hello", results.get());
+		assertEquals(5, results.get());
+		assertEquals(6.0, results.get());
+
+		assertNoMoreResults(results);
 	}
 
 }

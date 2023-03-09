@@ -22,6 +22,7 @@ package dev.jorel.commandapi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -33,8 +34,9 @@ import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
- * @param <Impl> The class extending this class, used as the return type for chain calls
- * @param <Argument> The implementation of AbstractArgument used by the class extending this class
+ *
+ * @param <Impl>          The class extending this class, used as the return type for chain calls
+ * @param <Argument>      The implementation of AbstractArgument used by the class extending this class
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
 public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>,
@@ -90,7 +92,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Appends the optional arguments to the current command builder.
-	 *
+	 * <p>
 	 * This also calls {@link AbstractArgument#setOptional(boolean)} on each argument to make sure they are optional
 	 *
 	 * @param args A <code>List</code> that represents the arguments that this
@@ -107,7 +109,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	/**
 	 * Appends the optional arguments to the current command builder.
-	 *
+	 * <p>
 	 * This also calls {@link AbstractArgument#setOptional(boolean)} on each argument to make sure they are optional
 	 *
 	 * @param args Arguments that this command can accept
@@ -325,42 +327,46 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 
 	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray) {
 		List<Argument[]> argumentsToRegister = new ArrayList<>();
+		List<Argument> currentCommand = new ArrayList<>();
 
-		// Check optional argument constraints
-		// They can only be at the end, no required argument can follow an optional argument
-		int firstOptionalArgumentIndex = -1;
-		boolean seenOptionalArgument = false;
-		for (int i = 0; i < argumentsArray.length; i++) {
-			if (argumentsArray[i].isOptional()) {
-				if (firstOptionalArgumentIndex == -1) {
-					firstOptionalArgumentIndex = i;
-				}
-				seenOptionalArgument = true;
-			} else if (seenOptionalArgument) {
-				// Argument is not optional
-				throw new OptionalArgumentException(meta.commandName);
+		Iterator<Argument> argumentIterator = List.of(argumentsArray).iterator();
+
+		// Collect all required arguments, adding them as a command once finding the first optional
+		while(argumentIterator.hasNext()) {
+			Argument next = argumentIterator.next();
+			if(next.isOptional()) {
+				argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
+				currentCommand.addAll(unpackCombinedArguments(next));
+				break;
 			}
+			currentCommand.addAll(unpackCombinedArguments(next));
 		}
 
-		// Create a List of arrays that hold arguments to register optional arguments
-		// if optional arguments have been found
-		if (firstOptionalArgumentIndex != -1) {
-			for (int i = 0; i <= argumentsArray.length; i++) {
-				if (i >= firstOptionalArgumentIndex) {
-					@SuppressWarnings("unchecked")
-					Argument[] optionalArguments = (Argument[]) new AbstractArgument[i];
-					System.arraycopy(argumentsArray, 0, optionalArguments, 0, i);
-					argumentsToRegister.add(optionalArguments);
-				}
+		// Collect the optional arguments, adding each one as a valid command
+		while (argumentIterator.hasNext()) {
+			Argument next = argumentIterator.next();
+			if(!next.isOptional()) {
+				throw new OptionalArgumentException(meta.commandName); // non-optional argument after optional
 			}
-		}
-		
-		// If there were no optional arguments, let's just return the array of
-		// arguments we were going to register normally.
-		if(argumentsToRegister.isEmpty()) {
-			argumentsToRegister.add(argumentsArray);
+			argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
+			currentCommand.addAll(unpackCombinedArguments(next));
 		}
 
+		// All the arguments expanded, also handles when there are no optional arguments
+		argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
 		return argumentsToRegister;
+	}
+
+	private List<Argument> unpackCombinedArguments(Argument argument) {
+		if (!argument.hasCombinedArguments()) {
+			return List.of(argument);
+		}
+		List<Argument> combinedArguments = new ArrayList<>();
+		combinedArguments.add(argument);
+		for (Argument subArgument : argument.getCombinedArguments()) {
+			subArgument.copyPermissionsAndRequirements(argument);
+			combinedArguments.addAll(unpackCombinedArguments(subArgument));
+		}
+		return combinedArguments;
 	}
 }

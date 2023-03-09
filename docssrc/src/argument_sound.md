@@ -14,6 +14,12 @@ new SoundArgument("sound");
 new SoundArgument.NamespacedKey("sound");
 ```
 
+<div class="warning">
+
+When using the `Sound` object, the CommandAPI will return `null` if the specified `Sound` could not be found. For this reason, it's recommended to use the `NamespacedKey` object for optimal compatibility with client-side resourcepacks.
+
+</div>
+
 <div class="example">
 
 ### Example - Playing sound to yourself
