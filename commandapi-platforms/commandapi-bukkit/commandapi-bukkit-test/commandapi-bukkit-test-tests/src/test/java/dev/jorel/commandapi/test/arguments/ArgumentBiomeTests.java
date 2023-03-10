@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
@@ -60,9 +61,8 @@ class ArgumentBiomeTests extends TestBase {
 		assertEquals(Biome.PLAINS, results.get());
 		
 		// /test unknownbiome
-		// TODO: This should EITHER return null or Biome.CUSTOM. We haven't decided yet.
-		// server.dispatchCommand(player, "test unknownbiome");
-		// assertEquals(Biome.CUSTOM, results.get());
+		server.dispatchCommand(player, "test unknownbiome");
+		assertNull(results.get());
 
 		assertNoMoreResults(results);
 	}
