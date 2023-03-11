@@ -401,6 +401,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                         <li>Fixed <code>IntegerRangeArgument</code> and <code>FloatRangeArgument</code> not working on Minecraft 1.16.4 and 1.16.5</li>
                         <li>Fixed <code>RecipeArgument</code> not working on Minecraft 1.17</li>
                         <li>Fixed <code>TeamArgument</code> not working on Minecraft 1.17</li>
+                        <li>Fixed <code>AdventureChatArgument</code> not working on Minecraft 1.17</li>
                         <li>Fixed commands with no executors not being caught by the CommandAPI</li>
                     </ul>
                     <li>Integrated the CommandAPI repository with SonarCloud to identify bugs and improve the internal code</li>
