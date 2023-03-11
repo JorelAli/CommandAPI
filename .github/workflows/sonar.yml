@@ -1,4 +1,5 @@
 # Adapted from https://community.sonarsource.com/t/how-to-use-sonarcloud-with-a-forked-repository-on-github/7363/32
+# NOTE: In order for changes to this file to take effect, it must be changed on the master branch
 name: SonarAnalyze
 
 on:
