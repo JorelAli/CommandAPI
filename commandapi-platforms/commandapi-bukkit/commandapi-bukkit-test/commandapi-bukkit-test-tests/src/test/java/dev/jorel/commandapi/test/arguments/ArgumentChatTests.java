@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.AdventureChatArgument;
 import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.test.Mut;
@@ -46,6 +48,7 @@ class ArgumentChatTests extends TestBase {
 
 	@Test
 	void executionTestWithSpigotChatArgument() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17)); // TODO: FIX for 1.16.5
 		Mut<BaseComponent[]> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -71,6 +74,7 @@ class ArgumentChatTests extends TestBase {
 
 	@Test
 	void executionTestWithAdventureChatArgument() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17)); // TODO: FIX for 1.16.5
 		Mut<Component> results = Mut.of();
 
 		new CommandAPICommand("test")

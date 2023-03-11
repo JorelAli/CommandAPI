@@ -53,11 +53,11 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import net.minecraft.server.v1_16_R3.Advancement;
 import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
+import net.minecraft.server.v1_16_R3.ChatComponentText;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.CraftingManager;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.LootTableRegistry;
@@ -271,7 +271,7 @@ public class MockNMS extends Enums {
 				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
 				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
-				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(IChatBaseComponent.ChatSerializer.a(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
+				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
 				players.add(entityPlayerMock);
 			}
 
