@@ -68,8 +68,7 @@ class ArgumentLootTableTests extends TestBase {
 	void suggestionTestWithLootTableArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new LootTableArgument("loottable"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

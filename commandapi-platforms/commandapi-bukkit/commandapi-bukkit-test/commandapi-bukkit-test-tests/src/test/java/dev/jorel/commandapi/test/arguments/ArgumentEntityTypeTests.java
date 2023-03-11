@@ -114,8 +114,7 @@ class ArgumentEntityTypeTests extends TestBase {
 	void suggestionTestWithEntityTypeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new EntityTypeArgument("entity"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

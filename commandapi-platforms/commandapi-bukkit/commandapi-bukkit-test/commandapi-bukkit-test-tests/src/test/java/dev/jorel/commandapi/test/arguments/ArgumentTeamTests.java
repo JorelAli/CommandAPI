@@ -73,8 +73,7 @@ class ArgumentTeamTests extends TestBase {
 	void suggestionTestWithTeamArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new TeamArgument("team"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

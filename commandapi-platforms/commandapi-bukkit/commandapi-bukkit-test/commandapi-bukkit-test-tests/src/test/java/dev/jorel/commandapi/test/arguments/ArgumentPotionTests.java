@@ -96,8 +96,7 @@ class ArgumentPotionTests extends TestBase {
 	void suggestionTestWithPotionEffectArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new PotionEffectArgument("potion"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

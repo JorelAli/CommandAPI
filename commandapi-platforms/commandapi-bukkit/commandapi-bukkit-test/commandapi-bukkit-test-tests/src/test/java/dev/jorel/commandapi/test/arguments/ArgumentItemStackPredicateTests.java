@@ -84,8 +84,7 @@ class ArgumentItemStackPredicateTests extends TestBase {
 	void suggestionTestWithItemStackPredicateArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ItemStackPredicateArgument("predicate"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

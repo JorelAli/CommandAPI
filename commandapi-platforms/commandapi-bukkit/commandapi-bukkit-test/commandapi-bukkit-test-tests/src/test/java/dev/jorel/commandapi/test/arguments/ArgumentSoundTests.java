@@ -129,8 +129,7 @@ class ArgumentSoundTests extends TestBase {
 	void suggestionTestWithSoundArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new SoundArgument("Sound"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

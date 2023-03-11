@@ -153,8 +153,7 @@ public class ArgumentMapTests extends TestBase {
 				.withoutValueList()
 				.build()
 			)
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();
