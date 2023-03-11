@@ -75,7 +75,7 @@ jobs:
 
             # Apply SonarCloud
             - name: SonarCloud Analyze
-              run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JorelAli_CommandAPI -P Platform.Bukkit,Platform.Velocity -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+              run: mvn -B clean install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JorelAli_CommandAPI -P Platform.Bukkit,Platform.Velocity -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
