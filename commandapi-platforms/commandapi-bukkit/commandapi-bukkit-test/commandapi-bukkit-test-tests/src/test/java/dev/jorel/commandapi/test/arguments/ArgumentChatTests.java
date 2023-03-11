@@ -48,7 +48,6 @@ class ArgumentChatTests extends TestBase {
 
 	@Test
 	void executionTestWithSpigotChatArgument() {
-		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17)); // TODO: FIX for 1.16.5
 		Mut<BaseComponent[]> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -74,7 +73,6 @@ class ArgumentChatTests extends TestBase {
 
 	@Test
 	void executionTestWithAdventureChatArgument() {
-		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17)); // TODO: FIX for 1.16.5
 		Mut<Component> results = Mut.of();
 
 		new CommandAPICommand("test")

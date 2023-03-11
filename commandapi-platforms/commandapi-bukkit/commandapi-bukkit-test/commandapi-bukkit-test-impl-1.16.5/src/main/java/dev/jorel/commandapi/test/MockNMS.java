@@ -272,6 +272,7 @@ public class MockNMS extends Enums {
 				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
 				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
+				Mockito.when(entityPlayerMock.getScoreboardDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
 				players.add(entityPlayerMock);
 			}
 
