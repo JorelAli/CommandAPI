@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
@@ -269,6 +270,7 @@ public class MockNMS extends Enums {
 				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
 				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
+				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(net.minecraft.network.chat.Component.literal(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
 				players.add(entityPlayerMock);
 			}
 
@@ -312,6 +314,10 @@ public class MockNMS extends Enums {
 			
 			// RecipeArgument
 			Mockito.when(css.getRecipeNames()).thenAnswer(invocation -> recipeManager.getRecipeIds());
+
+			// ChatArgument, AdventureChatArgument
+			Mockito.when(css.hasPermission(anyInt())).thenAnswer(invocation -> sender.isOp());
+			Mockito.when(css.hasPermission(anyInt(), anyString())).thenAnswer(invocation -> sender.isOp());
 		}
 		return css;
 	}
