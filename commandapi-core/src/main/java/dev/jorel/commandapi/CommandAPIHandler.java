@@ -228,7 +228,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 					@Override
 					public CommandArguments args() {
-						return new CommandArguments(result, new LinkedHashMap<>());
+						return new CommandArguments(result, new LinkedHashMap<>(), cmdCtx.getInput());
 					}
 				};
 
@@ -282,13 +282,13 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		// Populate array
 		for (Argument argument : args) {
 			if (argument.isListed()) {
-				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap));
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap, cmdCtx.getInput()));
 				argList.add(parsedArgument);
 				argsMap.put(argument.getNodeName(), parsedArgument);
 			}
 		}
 
-		return new CommandArguments(argList.toArray(), argsMap);
+		return new CommandArguments(argList.toArray(), argsMap, cmdCtx.getInput());
 	}
 
 	/**
@@ -815,7 +815,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 			Object result;
 			try {
-				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap));
+				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap, context.getInput()));
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Redirected commands don't parse previous arguments properly. Simplest way to
@@ -832,7 +832,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				argsMap.put(arg.getNodeName(), result);
 			}
 		}
-		return new CommandArguments(previousArguments.toArray(), argsMap);
+		return new CommandArguments(previousArguments.toArray(), argsMap, context.getInput());
 	}
 
 	SuggestionProvider<Source> toSuggestions(Argument theArgument, Argument[] args,
