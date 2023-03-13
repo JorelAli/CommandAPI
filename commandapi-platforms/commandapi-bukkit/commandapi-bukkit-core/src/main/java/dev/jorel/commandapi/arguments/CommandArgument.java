@@ -55,7 +55,7 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 				// Suggesting command name
 				ArgumentSuggestions<CommandSender> replacement = replacements.getNextSuggestion(sender);
 				if (replacement != null) {
-					return replacement.suggest(new SuggestionInfo<>(sender, new CommandArguments(new Object[0], new HashMap<>()), command, command), builder);
+					return replacement.suggest(new SuggestionInfo<>(sender, new CommandArguments(new Object[0], new HashMap<>(), info.currentInput()), command, command), builder);
 				}
 
 				List<String> results = commandMap.tabComplete(sender, command);
@@ -101,7 +101,7 @@ public class CommandArgument extends Argument<CommandResult> implements GreedyAr
 			String[] previousArguments = Arrays.copyOf(arguments, lastIndex);
 			ArgumentSuggestions<CommandSender> replacement = replacements.getNextSuggestion(sender, previousArguments);
 			if (replacement != null) {
-				return replacement.suggest(new SuggestionInfo<>(sender, new CommandArguments(previousArguments, new HashMap<>()), command, arguments[lastIndex]), builder);
+				return replacement.suggest(new SuggestionInfo<>(sender, new CommandArguments(previousArguments, new HashMap<>(), info.currentInput()), command, arguments[lastIndex]), builder);
 			}
 
 			// Remove command name from arguments for normal tab-completion
