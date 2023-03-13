@@ -480,8 +480,7 @@ class ArgumentPrimitiveTests extends TestBase {
 	void suggestionTestWithBooleanArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new BooleanArgument("value"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

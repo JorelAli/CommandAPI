@@ -83,8 +83,7 @@ class ArgumentAxisTests extends TestBase {
 	void suggestionTestWithAxisArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new AxisArgument("axis"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

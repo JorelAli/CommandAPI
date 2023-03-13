@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
@@ -52,6 +53,7 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import net.minecraft.server.v1_16_R3.Advancement;
 import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
+import net.minecraft.server.v1_16_R3.ChatComponentText;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.CraftingManager;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
@@ -269,6 +271,8 @@ public class MockNMS extends Enums {
 				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
 				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
+				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
+				Mockito.when(entityPlayerMock.getScoreboardDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
 				players.add(entityPlayerMock);
 			}
 
@@ -313,6 +317,10 @@ public class MockNMS extends Enums {
 
 			// RecipeArgument
 			Mockito.when(clw.o()).thenAnswer(invocation -> recipeManager.d());
+			
+			// ChatArgument, AdventureChatArgument
+			Mockito.when(clw.hasPermission(anyInt())).thenAnswer(invocation -> sender.isOp());
+			Mockito.when(clw.hasPermission(anyInt(), anyString())).thenAnswer(invocation -> sender.isOp());
 		}
 		return clw;
 	}

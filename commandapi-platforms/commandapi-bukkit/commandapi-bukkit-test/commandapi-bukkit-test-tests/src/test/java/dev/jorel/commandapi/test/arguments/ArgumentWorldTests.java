@@ -92,8 +92,7 @@ class ArgumentWorldTests extends TestBase {
 	void suggestionTestWithWorldArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new WorldArgument("world"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

@@ -71,8 +71,7 @@ class ArgumentUUIDTests extends TestBase {
 	void suggestionTestWithUUIDArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new UUIDArgument("uuid"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

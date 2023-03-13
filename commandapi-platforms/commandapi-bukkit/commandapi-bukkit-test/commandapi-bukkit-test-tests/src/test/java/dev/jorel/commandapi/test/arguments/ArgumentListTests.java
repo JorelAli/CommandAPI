@@ -440,8 +440,7 @@ class ArgumentListTests extends TestBase {
 				.withList(() -> List.of("cat", "wolf", "axolotl"))
 				.withStringMapper()
 				.buildGreedy())
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 		.register();
 
 		PlayerMock player = server.addPlayer();
@@ -463,8 +462,7 @@ class ArgumentListTests extends TestBase {
 				.withList(() -> List.of("cat", "wolf", "axolotl"))
 				.withStringMapper()
 				.buildGreedy())
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 		.register();
 
 		PlayerMock player = server.addPlayer();
@@ -485,8 +483,7 @@ class ArgumentListTests extends TestBase {
 				.withList(() -> List.of("cat", "wolf", "axolotl"))
 				.withStringMapper()
 				.buildGreedy())
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 		.register();
 
 		PlayerMock player = server.addPlayer();
@@ -503,8 +500,7 @@ class ArgumentListTests extends TestBase {
 				.withList(() -> List.of("cat", "wolf", "axolotl"))
 				.withStringMapper()
 				.buildText())
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 		.register();
 
 		PlayerMock player = server.addPlayer();

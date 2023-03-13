@@ -60,10 +60,6 @@ class ArgumentSoundTests extends TestBase {
 		// /test minecraft:entity.enderman.death
 		server.dispatchCommand(player, "test minecraft:entity.enderman.death");
 		assertEquals(Sound.ENTITY_ENDERMAN_DEATH, results.get());
-
-		// TODO: This test returns null, instead of throwing an exception of a sound not existing.
-		// This HAS to be documented in both the JavaDocs and the main documentation - the CommandAPI
-		// assumes everything is non-null UNLESS explicitly stated
 		
 		// /test unknownsound
 		server.dispatchCommand(player, "test unknownsound");
@@ -133,8 +129,7 @@ class ArgumentSoundTests extends TestBase {
 	void suggestionTestWithSoundArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new SoundArgument("Sound"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

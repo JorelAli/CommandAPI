@@ -91,8 +91,7 @@ class ArgumentChatColorTests extends TestBase {
 	void suggestionTestWithChatColorArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ChatColorArgument("color"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

@@ -98,8 +98,7 @@ class ArgumentEnchantmentTests extends TestBase {
 	void suggestionTestWithEnchantmentArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new EnchantmentArgument("enchantment"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

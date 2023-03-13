@@ -103,8 +103,7 @@ class ArgumentRecipeTests extends TestBase {
 	void suggestionTestWithRecipeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new RecipeArgument("recipe"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

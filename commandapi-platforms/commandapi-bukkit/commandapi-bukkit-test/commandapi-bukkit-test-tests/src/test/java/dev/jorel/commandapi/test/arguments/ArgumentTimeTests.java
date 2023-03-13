@@ -94,8 +94,7 @@ class ArgumentTimeTests extends TestBase {
 	void suggestionTestWithTimeArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new TimeArgument("color"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

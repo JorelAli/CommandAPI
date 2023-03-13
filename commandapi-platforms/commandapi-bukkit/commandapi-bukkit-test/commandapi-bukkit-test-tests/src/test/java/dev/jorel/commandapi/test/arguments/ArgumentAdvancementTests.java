@@ -76,8 +76,7 @@ class ArgumentAdvancementTests extends TestBase {
 	void suggestionTestWithAxisArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new AdvancementArgument("advancement"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

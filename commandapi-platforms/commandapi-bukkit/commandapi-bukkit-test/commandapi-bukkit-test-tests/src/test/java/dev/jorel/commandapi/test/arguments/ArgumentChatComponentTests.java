@@ -143,8 +143,7 @@ class ArgumentChatComponentTests extends TestBase {
 	void suggestionTestWithSpigotChatComponentArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ChatComponentArgument("text"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();
@@ -162,8 +161,7 @@ class ArgumentChatComponentTests extends TestBase {
 	void suggestionTestWithAdventureChatComponentArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new AdventureChatComponentArgument("text"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

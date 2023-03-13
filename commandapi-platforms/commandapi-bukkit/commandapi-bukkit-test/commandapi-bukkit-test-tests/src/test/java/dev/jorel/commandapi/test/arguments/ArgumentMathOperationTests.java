@@ -176,8 +176,7 @@ class ArgumentMathOperationTests extends TestBase {
 	void suggestionTestWithMathOperationArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new MathOperationArgument("operation"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();

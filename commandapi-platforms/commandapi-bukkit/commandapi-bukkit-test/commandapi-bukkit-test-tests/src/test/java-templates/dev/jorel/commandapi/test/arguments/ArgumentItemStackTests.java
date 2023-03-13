@@ -158,8 +158,7 @@ class ArgumentItemStackTests extends TestBase {
 	void suggestionTestWithItemStackArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new ItemStackArgument("item"))
-			.executesPlayer((player, args) -> {
-			})
+			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();
