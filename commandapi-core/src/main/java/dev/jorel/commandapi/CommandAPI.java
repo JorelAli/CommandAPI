@@ -108,9 +108,9 @@ public class CommandAPI {
 			{
 				List<String> platformClassHierarchyList = new ArrayList<>();
 				Class<?> platformClass = platform.getClass();
-				// Goes up through class inheritance only
+				// Goes up through class inheritance only (ending at Object, but we don't want to include that)
 				// CommandAPIPlatform is an interface, so it is not included
-				while (platformClass != null) {
+				while (platformClass != null && platformClass != Object.class) {
 					platformClassHierarchyList.add(platformClass.getSimpleName());
 					platformClass = platformClass.getSuperclass();
 				}
