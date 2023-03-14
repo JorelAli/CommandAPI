@@ -6,7 +6,7 @@
   "dependencies": {
     "mojangson-parser": "^2.1.5",
     "node-brigadier": "^0.0.12",
-    "webpack": "^5.74.0"
+    "webpack": "^5.76.0"
   },
   "devDependencies": {
     "ts-loader": "^9.4.1",
