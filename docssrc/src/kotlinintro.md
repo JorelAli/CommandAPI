@@ -17,7 +17,7 @@ To install the DSL, you need to add the `commandapi-kotlin` dependency into your
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-kotlin</artifactId>
-        <version>8.7.0</version>
+        <version>8.8.0</version>
     </dependency>
 </dependencies>
 ```
@@ -125,13 +125,13 @@ Next, you need to add the dependency:
 
 ```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-kotlin:8.7.0"
+    implementation "dev.jorel:commandapi-kotlin:8.8.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-kotlin:8.7.0")
+    implementation("dev.jorel:commandapi-kotlin:8.8.0")
 }
 ```
 
@@ -144,7 +144,7 @@ Finally, you need to add it to the `shadowJar` configuration task and relocate i
 ```groovy,build.gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-kotlin:8.7.0")
+        include dependency("dev.jorel:commandapi-kotlin:8.8.0")
     }
     
     // TODO: Change this to my own package name
@@ -155,7 +155,7 @@ shadowJar {
 ```kotlin,build.gradle.kts
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-kotlin:8.7.0")
+        include dependency("dev.jorel:commandapi-kotlin:8.8.0")
     }
     
     // TODO: Change this to my own package name

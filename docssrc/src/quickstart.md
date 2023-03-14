@@ -32,7 +32,7 @@ depend: [CommandAPI]
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-core</artifactId>
-          <version>8.7.0</version>
+          <version>8.8.0</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -53,6 +53,6 @@ depend: [CommandAPI]
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-core:8.7.0"
+      compileOnly "dev.jorel:commandapi-core:8.8.0"
   }
   ```
