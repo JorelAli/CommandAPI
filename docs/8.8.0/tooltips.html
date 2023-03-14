@@ -1,0 +1,474 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Argument suggestions with tooltips - CommandAPI Documentation v8.8.0</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fontawesome/css/fontawesome.css">
+        <link rel="stylesheet" href="fontawesome/css/brands.css">
+        <link rel="stylesheet" href="fontawesome/css/solid.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="style.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Server Owner Usage</li><li class="chapter-item expanded "><a href="installation.html">Installation for server owners</a></li><li class="chapter-item expanded "><a href="config.html">Configuration for server owners</a></li><li class="chapter-item expanded "><a href="conversionforowners.html">Command conversion</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="conversionforownerssingle.html">Single command conversion</a></li><li class="chapter-item expanded "><a href="conversionforownerssingleargs.html">Single command conversion (with arguments)</a></li><li class="chapter-item expanded "><a href="conversionentityselectors.html">Entity selectors</a></li></ol></li><li class="chapter-item expanded "><a href="skippingproxysenders.html">Skipping proxy senders</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Setup</li><li class="chapter-item expanded "><a href="quickstart.html">Setting up your development environment</a></li><li class="chapter-item expanded "><a href="shading.html">Shading the CommandAPI in your plugins</a></li><li class="chapter-item expanded "><a href="annotationsetup.html">Using the annotation system</a></li><li class="chapter-item expanded affix "><li class="part-title">Creating Commands</li><li class="chapter-item expanded "><a href="commandregistration.html">Command registration</a></li><li class="chapter-item expanded "><a href="commandexecutors.html">Command executors</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="normalexecutors.html">Normal command executors</a></li><li class="chapter-item expanded "><a href="proxysender.html">Proxied commandsenders</a></li><li class="chapter-item expanded "><a href="native.html">Native commandsenders</a></li><li class="chapter-item expanded "><a href="resultingcommandexecutors.html">Resulting command executors</a></li><li class="chapter-item expanded "><a href="commandfailures.html">Handling command failures</a></li></ol></li><li class="chapter-item expanded "><a href="arguments.html">Command arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="listed.html">Listed arguments</a></li><li class="chapter-item expanded "><a href="argumentsuggestions.html">Argument suggestions</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="suggestionsinfo.html">The SuggestionsInfo record</a></li><li class="chapter-item "><a href="stringargumentsuggestions.html">String argument suggestions</a></li><li class="chapter-item "><a href="safeargumentsuggestions.html">Safely typed argument suggestions</a></li><li class="chapter-item expanded "><a href="tooltips.html" class="active">Argument suggestions with tooltips</a></li><li class="chapter-item "><a href="asyncsuggestions.html">Asynchronous suggestions</a></li></ol></li><li class="chapter-item expanded "><a href="argumenttypes.html">Argument types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="primitivearguments.html">Primitive arguments</a></li><li class="chapter-item "><a href="rangedarguments.html">Ranged arguments</a></li><li class="chapter-item "><a href="stringarguments.html">String arguments</a></li><li class="chapter-item "><a href="positionargs.html">Positional arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="locationargument.html">Location arguments</a></li><li class="chapter-item "><a href="rotationargs.html">Rotation arguments</a></li><li class="chapter-item "><a href="axisarg.html">AxisArguments</a></li></ol></li><li class="chapter-item "><a href="chatarguments.html">Chat arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="spigotchatarguments.html">Spigot chat arguments</a></li><li class="chapter-item "><a href="adventurechatarguments.html">Adventure chat arguments</a></li><li class="chapter-item "><a href="chatpreview.html">Chat preview</a></li></ol></li><li class="chapter-item "><a href="entityarguments.html">Entity & player arguments</a></li><li class="chapter-item "><a href="scoreboardargs.html">Scoreboard arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="scoreboardarguments.html">Scoreboard arguments</a></li><li class="chapter-item "><a href="objectivearguments.html">Objective arguments</a></li><li class="chapter-item "><a href="teamarguments.html">Team arguments</a></li></ol></li><li class="chapter-item "><a href="miscargs.html">Miscellaneous arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="angleargument.html">Angle arguments</a></li><li class="chapter-item "><a href="advancementargument.html">Advancement arguments</a></li><li class="chapter-item "><a href="biomeargument.html">Biome arguments</a></li><li class="chapter-item "><a href="blockstatearguments.html">BlockState arguments</a></li><li class="chapter-item "><a href="enchantmentargument.html">Enchantment arguments</a></li><li class="chapter-item "><a href="environmentargs.html">Environment arguments</a></li><li class="chapter-item "><a href="itemstackarguments.html">Itemstack arguments</a></li><li class="chapter-item "><a href="loottableargument.html">LootTable argument</a></li><li class="chapter-item "><a href="mathoperationarguments.html">MathOperation arguments</a></li><li class="chapter-item "><a href="namespacedkeyarg.html">NamespacedKey arguments</a></li><li class="chapter-item "><a href="particlearguments.html">Particle arguments</a></li><li class="chapter-item "><a href="potionarguments.html">Potion effect arguments</a></li><li class="chapter-item "><a href="recipeargument.html">Recipe arguments</a></li><li class="chapter-item "><a href="soundargument.html">Sound arguments</a></li><li class="chapter-item "><a href="timeargs.html">Time arguments</a></li><li class="chapter-item "><a href="uuidargs.html">UUID arguments</a></li><li class="chapter-item "><a href="worldarguments.html">World arguments</a></li></ol></li><li class="chapter-item "><a href="predicateargs.html">Predicate arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="blockpredicateargs.html">Block predicate arguments</a></li><li class="chapter-item "><a href="itemstackpredicateargs.html">ItemStack predicate arguments</a></li></ol></li><li class="chapter-item "><a href="nbtarguments.html">NBT arguments</a></li><li class="chapter-item "><a href="litargs.html">Literal arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="literalarguments.html">Literal arguments</a></li><li class="chapter-item "><a href="multilitargs.html">Multi literal arguments</a></li></ol></li><li class="chapter-item "><a href="listarguments.html">List arguments</a></li><li class="chapter-item "><a href="commandarguments.html">Command arguments</a></li><li class="chapter-item "><a href="customarguments.html">Custom arguments</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="functions.html">Functions & Tags</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="functionsetup.html">Setting up functions & tags</a></li><li class="chapter-item expanded "><a href="simplefunctionwrapper.html">The SimpleFunctionWrapper class</a></li><li class="chapter-item expanded "><a href="functionwrapper.html">The FunctionWrapper class</a></li><li class="chapter-item expanded "><a href="functionarguments.html">Function arguments</a></li></ol></li><li class="chapter-item expanded "><a href="permissions.html">Permissions</a></li><li class="chapter-item expanded "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="aliases.html">Aliases</a></li><li class="chapter-item expanded "><a href="help.html">Help</a></li><li class="chapter-item expanded "><a href="subcommands.html">Subcommands</a></li><li class="chapter-item expanded "><a href="commandtrees.html">Command trees</a></li><li class="chapter-item expanded affix "><li class="part-title">Annotation-based Commands</li><li class="chapter-item expanded "><a href="annotationsintro.html">Annotation-based commands</a></li><li class="chapter-item expanded "><a href="annotations.html">Annotations</a></li><li class="chapter-item expanded "><a href="registeringannotations.html">Registering annotation-based commands</a></li><li class="chapter-item expanded affix "><li class="part-title">Kotlin-based Commands</li><li class="chapter-item expanded "><a href="kotlinintro.html">Kotlin-based commands</a></li><li class="chapter-item expanded "><a href="kotlindsl.html">Using the DSL</a></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Utilities</li><li class="chapter-item expanded "><a href="conversion.html">Command conversion</a></li><li class="chapter-item expanded "><a href="reloading.html">Plugin reloading</a></li><li class="chapter-item expanded affix "><li class="part-title">Internal CommandAPI</li><li class="chapter-item expanded "><a href="internal.html">Internal CommandAPI</a></li><li class="chapter-item expanded "><a href="brigadier.html">Brigadier + CommandAPI</a></li><li class="chapter-item expanded "><a href="brigadiersuggestions.html">Brigadier Suggestions</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Java Tips</li><li class="chapter-item expanded "><a href="predicatetips.html">Predicate tips</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Contribution</li><li class="chapter-item expanded "><a href="contributionintro.html">Introduction</a></li><li class="chapter-item expanded "><a href="projectstructure.html">Project Structure</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="upgrading.html">Upgrading guide</a></li><li class="chapter-item expanded affix "><a href="faq.html">FAQ</a></li><li class="chapter-item expanded affix "><a href="incompatibleversions.html">Incompatible version information</a></li><li class="chapter-item expanded affix "><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="afterword.html">Afterword</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fas fa-palette"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="skepter">Skepter Likes Purple</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CommandAPI Documentation v8.8.0</h1>
+
+                    <div class="right-buttons">
+                        <a href="https://www.jorel.dev/CommandAPI/" title="Back to main CommandAPI page" aria-label="Back to main CommandAPI page">
+                            <i id="home-button" class="fas fa-home"></i>
+                        </a>
+                        <a href="https://ko-fi.com/jorelali" title="Donate (ko-fi)" aria-label="Donate (ko-fi)">
+                            <i id="donate-button" class="fas fa-donate"></i>
+                        </a>
+                        <a href="https://discord.com/invite/G4SzSxZ" title="Discord" aria-label="Discord">
+                            <i id="discord-button" class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Page table of contents -->
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        
+                        <h1 id="argument-suggestions-with-tooltips"><a class="header" href="#argument-suggestions-with-tooltips">Argument suggestions with tooltips</a></h1>
+<p><img src="./images/warps.gif" alt="A /warp command with suggestions of various locations. Hovering over the suggestions with the mouse cursor displays tooltips describing what the locations are" /></p>
+<p>The CommandAPI can also display tooltips for specific argument suggestions. These are shown to the user when they hover over a given suggestion and can be used to provide more context to a user about the suggestions that are shown to them. In this section, we'll outline the two ways of creating suggestions with tooltips:</p>
+<ul>
+<li>Normal (String) suggestions with tooltips</li>
+<li>Safely typed suggestions with tooltips</li>
+</ul>
+<p>Tooltips <em>can</em> have formatting to change how the text is displayed by using the <code>ChatColor</code> class.</p>
+<hr />
+<h2 id="tooltips-with-normal-string-based-suggestions"><a class="header" href="#tooltips-with-normal-string-based-suggestions">Tooltips with normal (String-based) suggestions</a></h2>
+<p>To use these features, the CommandAPI includes the <code>stringsWithTooltips</code> methods for arguments, that accept <code>IStringTooltip</code> objects instead of <code>String</code> objects:</p>
+<pre><code class="language-java">ArgumentSuggestions stringsWithTooltips(IStringTooltip... suggestions);
+ArgumentSuggestions stringsWithTooltips(Function&lt;SuggestionInfo, IStringTooltip[]&gt; suggestions);
+</code></pre>
+<p>The <code>StringTooltip</code> class is the CommandAPI's default implementation of <code>IStringTooltip</code>, which has some static methods to construct tooltips easily:</p>
+<pre><code class="language-java">StringTooltip none(String suggestion);
+StringTooltip ofString(String suggestion, String tooltip);
+StringTooltip ofMessage(String suggestion, Message tooltip);
+StringTooltip ofBaseComponents(String suggestion, BaseComponent... tooltip);
+StringTooltip ofAdventureComponent(String suggestion, Component tooltip);
+</code></pre>
+<p>The first method, <code>StringTooltip.none(String)</code> creates a normal suggestion entry with no tooltip. The other methods create a suggestion with the provided tooltip text in either <code>String</code>, Brigadier <code>Message</code>, Spigot <code>BaseComponent[]</code> or Adventure <code>Component</code> format.</p>
+<div class="example">
+<h3 id="example---an-emotes-command-with-string-suggestion-tooltips"><a class="header" href="#example---an-emotes-command-with-string-suggestion-tooltips">Example - An emotes command with string suggestion tooltips</a></h3>
+<p>Say we want to create a simple command to provide in-game emotes between players. For example, if you did <code>/emote wave Bob</code>, you'll &quot;wave&quot; to the player <em>Bob</em>. For this example, we'll use the following command syntax:</p>
+<pre><code class="language-mccmd">/emote &lt;emote&gt; &lt;target&gt;
+</code></pre>
+<p>First, we'll declare our arguments. Here, we'll use the <code>stringsWithTooltips</code> method, along with the <code>StringTooltip.ofString(String, String)</code> method to create emote suggestions and include suitable descriptions:</p>
+<div class="multi-pre">
+<pre><code class="language-java Java">List&lt;Argument&lt;?&gt;&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new StringArgument(&quot;emote&quot;)
+    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -&gt;
+        new IStringTooltip[] {
+            StringTooltip.ofString(&quot;wave&quot;, &quot;Waves at a player&quot;),
+            StringTooltip.ofString(&quot;hug&quot;, &quot;Gives a player a hug&quot;),
+            StringTooltip.ofString(&quot;glare&quot;, &quot;Gives a player the death glare&quot;)
+        }
+    ))
+);
+arguments.add(new PlayerArgument(&quot;target&quot;));
+</code></pre>
+<pre><code class="language-kotlin Kotlin">val arguments = mutableListOf&lt;Argument&lt;*&gt;&gt;()
+arguments.add(StringArgument(&quot;emote&quot;)
+    .replaceSuggestions(ArgumentSuggestions.stringsWithTooltips { info -&gt;
+        arrayOf&lt;IStringTooltip&gt;(
+            StringTooltip.ofString(&quot;wave&quot;, &quot;Waves at a player&quot;),
+            StringTooltip.ofString(&quot;hug&quot;, &quot;Gives a player a hug&quot;),
+            StringTooltip.ofString(&quot;glare&quot;, &quot;Gives a player the death glare&quot;)
+        )
+    })
+)
+arguments.add(PlayerArgument(&quot;target&quot;))
+</code></pre>
+</div>
+<p>Finally, we declare our command as normal:</p>
+<div class="multi-pre">
+<pre><code class="language-java Java">new CommandAPICommand(&quot;emote&quot;)
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        String emote = (String) args[0];
+        Player target = (Player) args[1];
+        
+        switch(emote) {
+        case &quot;wave&quot;:
+            target.sendMessage(player.getName() + &quot; waves at you!&quot;);
+            break;
+        case &quot;hug&quot;:
+            target.sendMessage(player.getName() + &quot; hugs you!&quot;);
+            break;
+        case &quot;glare&quot;:
+            target.sendMessage(player.getName() + &quot; gives you the death glare...&quot;);
+            break;
+        }
+    })
+    .register();
+</code></pre>
+<pre><code class="language-kotlin Kotlin">CommandAPICommand(&quot;emote&quot;)
+    .withArguments(*arguments.toTypedArray())
+    .executesPlayer(PlayerCommandExecutor { player, args -&gt;
+        val emote = args[0] as String
+        val target = args[1] as Player
+
+        when (emote) {
+            &quot;wave&quot; -&gt; target.sendMessage(&quot;${player.name} waves at you!&quot;)
+            &quot;hug&quot; -&gt; target.sendMessage(&quot;${player.name} hugs you!&quot;)
+            &quot;glare&quot; -&gt; target.sendMessage(&quot;${player.name} gives you the death glare...&quot;)
+        }
+    })
+    .register()
+</code></pre>
+</div>
+</div>
+<hr />
+<h2 id="using-istringtooltip-directly"><a class="header" href="#using-istringtooltip-directly">Using <code>IStringTooltip</code> directly</a></h2>
+<p>The <code>IStringTooltip</code> interface can be implemented by any other class to provide tooltips for custom objects. The <code>IStringTooltip</code> interface has the following methods:</p>
+<pre><code class="language-java">public interface IStringTooltip {
+    public String getSuggestion();
+    public Message getTooltip();
+}
+</code></pre>
+<blockquote>
+<p>Note that the <code>Message</code> class is from the Brigadier library, which you will have to add as a dependency to your plugin. Information on how to do that can be found <a href="https://github.com/Mojang/brigadier#installation">here</a>.</p>
+</blockquote>
+<p>This is incredibly useful if you are using suggestions with custom objects, such as a plugin that has custom items.</p>
+<div class="example">
+<h3 id="example---using-istringtooltip-for-custom-items"><a class="header" href="#example---using-istringtooltip-for-custom-items">Example - Using <code>IStringTooltip</code> for custom items</a></h3>
+<p>Let's say we've created a simple plugin which has custom items. For a custom item, we'll have a simple class <code>CustomItem</code> that sets its name, lore and attached itemstack:</p>
+<div class="multi-pre">
+<pre><code class="language-java Java">public @SuppressWarnings(&quot;deprecation&quot;)
+class CustomItem implements IStringTooltip {
+
+    private ItemStack itemstack;
+    private String name;
+    
+    public CustomItem(ItemStack itemstack, String name, String lore) {
+        ItemMeta meta = itemstack.getItemMeta();
+        meta.setDisplayName(name);
+        meta.setLore(Arrays.asList(lore));
+        itemstack.setItemMeta(meta);
+        this.itemstack = itemstack;
+        this.name = name;
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public ItemStack getItem() {
+        return this.itemstack;
+    }
+    
+    @Override
+    public String getSuggestion() {
+        return this.itemstack.getItemMeta().getDisplayName();
+    }
+
+    @Override
+    public Message getTooltip() {
+        return Tooltip.messageFromString(this.itemstack.getItemMeta().getLore().get(0));
+    }
+    
+}
+</code></pre>
+<pre><code class="language-kotlin Kotlin">class CustomItem(val item: ItemStack, val name: String, lore: String): IStringTooltip {
+
+    init {
+        val meta = item.itemMeta
+        meta.setDisplayName(name)
+        meta.setLore(listOf(lore))
+        item.setItemMeta(meta)
+    }
+
+    override fun getSuggestion(): String = this.item.itemMeta.displayName
+
+    override fun getTooltip(): Message = Tooltip.messageFromString(this.item.itemMeta.lore?.get(0) ?: &quot;&quot;)
+
+}
+</code></pre>
+</div>
+<p>We make use of the <code>Tooltip.messageFromString()</code> method to generate a Brigadier <code>Message</code> object from our string tooltip.</p>
+<p>Let's also say that our plugin has registered lots of <code>CustomItem</code>s and has this stored in a <code>CustomItem[]</code> in our plugin. We could then use this as our input for suggestions:</p>
+<div class="multi-pre">
+<pre><code class="language-java Java">CustomItem[] customItems = new CustomItem[] {
+    new CustomItem(new ItemStack(Material.DIAMOND_SWORD), &quot;God sword&quot;, &quot;A sword from the heavens&quot;),
+    new CustomItem(new ItemStack(Material.PUMPKIN_PIE), &quot;Sweet pie&quot;, &quot;Just like grandma used to make&quot;)
+};
+    
+new CommandAPICommand(&quot;giveitem&quot;)
+    .withArguments(new StringArgument(&quot;item&quot;).replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(customItems))) // We use customItems[] as the input for our suggestions with tooltips
+    .executesPlayer((player, args) -&gt; {
+        String itemName = (String) args[0];
+        
+        // Give them the item
+        for (CustomItem item : customItems) {
+            if (item.getName().equals(itemName)) {
+                player.getInventory().addItem(item.getItem());
+                break;
+            }
+        }
+    })
+    .register();
+</code></pre>
+<pre><code class="language-kotlin Kotlin">val customItems = arrayOf&lt;CustomItem&gt;(
+    CustomItem(ItemStack(Material.DIAMOND_SWORD), &quot;God sword&quot;, &quot;A sword from the heavens&quot;),
+    CustomItem(ItemStack(Material.PUMPKIN_PIE), &quot;Sweet pie&quot;, &quot;Just like grandma used to make&quot;)
+)
+
+CommandAPICommand(&quot;giveitem&quot;)
+    .withArguments(StringArgument(&quot;item&quot;).replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(*customItems))) // We use customItems[] as the input for our suggestions with tooltips
+    .executesPlayer(PlayerCommandExecutor { player, args -&gt;
+        val itemName = args[0] as String
+
+        // Give them the item
+        for (item in customItems) {
+            if (item.name == itemName) {
+                player.inventory.addItem(item.item)
+                break
+            }
+        }
+    })
+    .register()
+</code></pre>
+</div>
+</div>
+<hr />
+<h2 id="tooltips-with-safe-suggestions"><a class="header" href="#tooltips-with-safe-suggestions">Tooltips with safe suggestions</a></h2>
+<p>Using tooltips with safe suggestions is almost identical to the method described above for normal suggestions, except for two things. Firstly, you must use <code>tooltips</code> method instead of the <code>stringsWithTooltips</code> method and secondly, instead of using <code>StringTooltip</code>, you must use <code>Tooltip&lt;S&gt;</code>. Let's look at these differences in more detail.</p>
+<p>The <code>tooltips</code> methods are fairly similar to the <code>stringsWithTooltips</code> methods, except instead of using <code>StringTooltip</code>, it simply uses <code>Tooltip&lt;S&gt;</code>:</p>
+<pre><code class="language-java">SafeSuggestions&lt;T&gt; tooltips(Tooltip&lt;T&gt;... suggestions);
+SafeSuggestions&lt;T&gt; tooltips(Function&lt;SuggestionInfo, Tooltip&lt;T&gt;[]&gt; suggestions);
+</code></pre>
+<p>The <code>Tooltip&lt;S&gt;</code> class represents a tooltip for a given object <code>S</code>. For example, a tooltip for a <code>LocationArgument</code> would be a <code>Tooltip&lt;Location&gt;</code> and a tooltip for an <code>EnchantmentArgument</code> would be a <code>Tooltip&lt;Enchantment&gt;</code>.</p>
+<p>Just like the <code>StringTooltip</code> class, the <code>Tooltip&lt;S&gt;</code> class provides the following static methods, which operate exactly the same as the ones in the <code>StringTooltip</code> class:</p>
+<pre><code class="language-java">Tooltip&lt;S&gt; none(S object);
+Tooltip&lt;S&gt; ofString(S object, String tooltip);
+Tooltip&lt;S&gt; ofMessage(S object, Message tooltip);
+Tooltip&lt;S&gt; ofBaseComponents(S object, BaseComponent... tooltip);
+Tooltip&lt;S&gt; ofAdventureComponent(S object, Component tooltip);
+
+Tooltip&lt;S&gt;[] arrayOf(Tooltip&lt;S&gt;... tooltips);
+</code></pre>
+<p>The use of <code>arrayOf</code> is heavily recommended as it provides the necessary type safety for Java code to ensure that the correct types are being passed to the <code>tooltips</code> method.</p>
+<div class="example">
+<h3 id="example---teleportation-command-with-suggestion-descriptions"><a class="header" href="#example---teleportation-command-with-suggestion-descriptions">Example - Teleportation command with suggestion descriptions</a></h3>
+<p>Say we wanted to create a custom teleport command which suggestions a few key locations. In this example, we'll use the following command syntax:</p>
+<pre><code class="language-mccmd">/warp &lt;location&gt;
+</code></pre>
+<p>First, we'll declare our arguments. Here, we use a <code>LocationArgument</code> and use the <code>tooltips</code> method, with a parameter for the command sender, so we can get information about the world. We populate the suggestions with tooltips using <code>Tooltip.ofString(Location, String)</code> and collate them together with <code>Tooltip.arrayOf(Tooltip&lt;Location&gt;...)</code>:</p>
+<div class="multi-pre">
+<pre><code class="language-java Java">List&lt;Argument&lt;?&gt;&gt; arguments = new ArrayList&lt;&gt;();
+arguments.add(new LocationArgument(&quot;location&quot;)
+    .replaceSafeSuggestions(SafeSuggestions.tooltips(info -&gt; {
+        // We know the sender is a player if we use .executesPlayer()
+        Player player = (Player) info.sender();
+        return Tooltip.arrayOf(
+            Tooltip.ofString(player.getWorld().getSpawnLocation(), &quot;World spawn&quot;),
+            Tooltip.ofString(player.getBedSpawnLocation(), &quot;Your bed&quot;),
+            Tooltip.ofString(player.getTargetBlockExact(256).getLocation(), &quot;Target block&quot;)
+        );
+    })));
+</code></pre>
+<pre><code class="language-kotlin Kotlin">val arguments = listOf&lt;Argument&lt;*&gt;&gt;(
+    LocationArgument(&quot;location&quot;)
+        .replaceSafeSuggestions(SafeSuggestions.tooltips( { info -&gt;
+            // We know the sender is a player if we use .executesPlayer()
+            val player = info.sender() as Player
+            Tooltip.arrayOf(
+                Tooltip.ofString(player.world.spawnLocation, &quot;World spawn&quot;),
+                Tooltip.ofString(player.bedSpawnLocation, &quot;Your bed&quot;),
+                Tooltip.ofString(player.getTargetBlockExact(256)?.location, &quot;Target block&quot;)
+            )
+        }))
+)
+</code></pre>
+</div>
+<p>In the arguments declaration, we've casted the command sender to a player. To ensure that the command sender is definitely a player, we'll use the <code>executesPlayer</code> command execution method in our command declaration:</p>
+<div class="multi-pre">
+<pre><code class="language-java Java">new CommandAPICommand(&quot;warp&quot;)
+    .withArguments(arguments)
+    .executesPlayer((player, args) -&gt; {
+        player.teleport((Location) args[0]);
+    })
+    .register();
+</code></pre>
+<pre><code class="language-kotlin Kotlin">CommandAPICommand(&quot;warp&quot;)
+    .withArguments(arguments)
+    .executesPlayer(PlayerCommandExecutor { player, args -&gt;
+        player.teleport(args[0] as Location)
+    })
+    .register()
+</code></pre>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="safeargumentsuggestions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <a rel="next" href="asyncsuggestions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="safeargumentsuggestions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <a rel="next" href="asyncsuggestions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="sidebar.js"></script>
+        <script type="text/javascript" src="mccmd.js"></script>
+        <script type="text/javascript" src="kotlin-dsl.js"></script>
+        <script type="text/javascript" src="jszip.min.js"></script>
+        <script type="text/javascript" src="yaml.min.js"></script>
+        <script type="text/javascript" src="pluginyml.js"></script>
+    </body>
+</html>
