@@ -37,6 +37,10 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 8.7.0 \\(\rightarrow\\) 8.8.0
+
+- Changed the version number from 8.7.0 to 8.8.0. That's it.
+
 ### Documentation changes 8.6.0 \\(\rightarrow\\) 8.7.0
 
 > **Developer's Note:**
