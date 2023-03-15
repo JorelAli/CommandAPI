@@ -86,6 +86,7 @@ import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -169,13 +170,14 @@ import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.19.1
+ * NMS implementation for Minecraft 1.19.3
  */
 @NMSMeta(compatibleWith = { "1.19.3" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
+@RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @Differs(from = "1.19.2", by = "Chat preview removed")
 public class NMS_1_19_3_R2 extends NMS_Common {
 
@@ -195,9 +197,9 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 			COMMAND_BUILD_CONTEXT = null;
 		}
 
-		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", Either.class);
-		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", "entityOrUuidOrId", Either.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -366,7 +368,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "p").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "p", "usesSelector").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -690,7 +692,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "g")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher")
 				.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

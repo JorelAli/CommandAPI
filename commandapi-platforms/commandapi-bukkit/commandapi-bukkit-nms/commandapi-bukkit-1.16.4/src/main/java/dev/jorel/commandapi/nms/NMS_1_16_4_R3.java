@@ -93,6 +93,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -211,12 +212,12 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", IReloadableResourceManager.class);
-		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
-		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", IBlockData.class);
-		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", ItemStack.class);
-		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "g", float.class);
-		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
+		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", "b", IReloadableResourceManager.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", "c", IBlockData.class);
+		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", "c", ItemStack.class);
+		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "g", "g", float.class);
+		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -508,7 +509,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions", "checkPermissions").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -884,7 +885,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		// Update the CustomFunctionManager for the datapackResources which now has the
 		// new commandDispatcher
 		try {
-			CommandAPIHandler.getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
+			CommandAPIHandler.getField(CustomFunctionManager.class, "h", "h").set(datapackResources.a(),
 					getBrigadierDispatcher());
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();

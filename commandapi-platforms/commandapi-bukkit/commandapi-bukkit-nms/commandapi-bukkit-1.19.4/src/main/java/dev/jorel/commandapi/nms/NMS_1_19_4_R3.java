@@ -86,6 +86,7 @@ import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -196,9 +197,9 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 			COMMAND_BUILD_CONTEXT = null;
 		}
 
-		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", Either.class);
-		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", "entityOrUuidOrId", Either.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -357,13 +358,12 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
-		// have to have
-		// level 2 permissions in order to use entity selectors. We're trying to allow
-		// entity selectors
-		// to be used by anyone that registers a command via the CommandAPI.
+		// have to have level 2 permissions in order to use entity selectors. We're
+		// trying to allow entity selectors to be used by anyone that registers a
+		// command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "p").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "p", "usesSelector").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -680,7 +680,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "g")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher")
 				.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

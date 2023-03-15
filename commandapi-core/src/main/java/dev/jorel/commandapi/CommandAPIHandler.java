@@ -899,14 +899,14 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @param name  the name of the field
 	 * @return a Field reference
 	 */
-	public static Field getField(Class<?> clazz, String name) {
-		ClassCache key = new ClassCache(clazz, name);
+	public static Field getField(Class<?> clazz, String name, String mojangMappedName) {
+		ClassCache key = new ClassCache(clazz, name, mojangMappedName);
 		if (FIELDS.containsKey(key)) {
 			return FIELDS.get(key);
 		} else {
 			Field result;
 			try {
-				result = clazz.getDeclaredField(name);
+				result = clazz.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : name);
 			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 				return null;
@@ -927,7 +927,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * This is required because each key is made up of a class and a field or method
 	 * name
 	 */
-	private record ClassCache(Class<?> clazz, String name) {
+	private record ClassCache(Class<?> clazz, String name, String mojangMappedName) {
 	}
 
 	/**

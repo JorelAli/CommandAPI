@@ -95,6 +95,7 @@ import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -219,9 +220,9 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			COMMAND_BUILD_CONTEXT = null;
 		}
 
-		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", Either.class);
-		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", "entityOrUuidOrId", Either.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
 	}
@@ -490,7 +491,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(key, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "o").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -803,7 +804,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher")
 				.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

@@ -68,6 +68,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -176,11 +177,11 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
-		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", IBlockData.class);
-		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", ItemStack.class);
-		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", float.class);
-		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", NBTTagCompound.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", "c", IBlockData.class);
+		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", "c", ItemStack.class);
+		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", "f", float.class);
+		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -529,7 +530,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions", "checkPermissions").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -825,7 +826,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 			case SOUND_SOUND -> {
 				for (CraftSound sound : CraftSound.values()) {
 					try {
-						if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey").get(sound)
+						if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey", "minecraftKey").get(sound)
 								.equals(soundResource.getKey())) {
 							yield Sound.valueOf(sound.name());
 						}

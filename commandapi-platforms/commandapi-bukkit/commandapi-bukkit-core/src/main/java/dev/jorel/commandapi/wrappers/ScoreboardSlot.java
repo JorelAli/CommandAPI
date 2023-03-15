@@ -130,7 +130,7 @@ public enum ScoreboardSlot implements Keyed {
 						yield ScoreboardSlot.valueOf(slot.name());
 					} else {
 						// We're running on a Spigot server. Map the names
-						yield ScoreboardSlot.valueOf("SIDEBAR_TEAM" + slot.name().substring(8));
+						yield ScoreboardSlot.valueOf("SIDEBAR_TEAM_" + slot.name().substring(8));
 					}
 				}
 			};
