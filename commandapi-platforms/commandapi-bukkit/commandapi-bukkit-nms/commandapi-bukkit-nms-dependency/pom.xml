@@ -30,7 +30,6 @@
 		<!-- Common NMS for 1.17+ -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<!-- TODO: We need to make sure we're NOT using the mapped dependency - ENSURE all dependents of this are doing so without compile scope!!!!!!! -->
 			<artifactId>commandapi-bukkit-nms-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>

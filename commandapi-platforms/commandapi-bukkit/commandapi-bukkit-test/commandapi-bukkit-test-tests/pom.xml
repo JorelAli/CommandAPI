@@ -82,11 +82,6 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-shade</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-test-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -186,7 +181,20 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_19_4_Mojang</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
@@ -198,6 +206,7 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.19.4-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
@@ -209,9 +218,6 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_19_2</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>

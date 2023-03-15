@@ -44,12 +44,12 @@
 			<artifactId>commandapi-bukkit-vh</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-nms-dependency</artifactId>
 			<version>${project.version}</version>
 			<type>pom</type>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
@@ -83,14 +83,6 @@
 									</excludes>
 								</filter>
 							</filters>
-							<artifactSet>
-								<excludes>
-									<exclude>dev.jorel:commandapi-bukkit-nms-dependency-mojang-mapped:*:*</exclude>
-								</excludes>
-								<includes>
-									<include>dev.jorel:commandapi-bukkit-nms-dependency:*:*</include>
-								</includes>
-							</artifactSet>
 						</configuration>
 					</execution>
 					<execution>
@@ -112,14 +104,6 @@
 									</excludes>
 								</filter>
 							</filters>
-							<artifactSet>
-								<includes>
-									<include>dev.jorel:commandapi-bukkit-nms-dependency-mojang-mapped:*:mojang-mapped</include>
-								</includes>
-								<excludes>
-									<exclude>dev.jorel:commandapi-bukkit-nms-dependency:*:*</exclude>
-								</excludes>
-							</artifactSet>
 							<shadedArtifactAttached>true</shadedArtifactAttached>
 							<shadedClassifierName>mojang-mapped</shadedClassifierName>
 						</configuration>
