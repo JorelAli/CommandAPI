@@ -24,8 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +37,6 @@ import java.util.function.ToIntFunction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -50,7 +47,6 @@ import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -73,7 +69,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
@@ -84,7 +79,6 @@ import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.datafixers.util.Either;
@@ -94,16 +88,20 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import io.papermc.paper.text.PaperComponents;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
@@ -115,8 +113,6 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.ResourceOrTagArgument;
-import net.minecraft.commands.arguments.ResourceOrTagArgument.Result;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -125,6 +121,7 @@ import net.minecraft.commands.arguments.coordinates.Vec2Argument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.item.FunctionArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.synchronization.ArgumentUtils;
@@ -141,6 +138,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -171,20 +169,20 @@ import net.minecraft.world.phys.Vec3;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.19.4
+ * NMS implementation for Minecraft 1.19.4.
+ * This implementation is effectively identical to 1.19.3, with a different
+ * CraftBukkit package name.
  */
 @NMSMeta(compatibleWith = { "1.19.4" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
+@RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public class NMS_1_19_4_R3 extends NMS_Common {
 
-	private static final MinecraftServer MINECRAFT_SERVER;
-	private static final VarHandle SimpleHelpMap_helpTopics;
-	private static final VarHandle EntityPositionSource_sourceEntity;
-
-	// From net.minecraft.server.commands.LocateCommand
-	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
+	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<EntityPositionSource, Either> entityPositionSource;
+	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -193,27 +191,14 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 	// runtime
 	static {
 		if (Bukkit.getServer() instanceof CraftServer server) {
-			MINECRAFT_SERVER = server.getServer();
-			COMMAND_BUILD_CONTEXT = CommandBuildContext.configurable(MINECRAFT_SERVER.registryAccess(), MINECRAFT_SERVER.getWorldData().getDataConfiguration().enabledFeatures());
+			COMMAND_BUILD_CONTEXT = CommandBuildContext.configurable(server.getServer().registryAccess(), server.getServer().getWorldData().getDataConfiguration().enabledFeatures());
 		} else {
-			MINECRAFT_SERVER = null;
 			COMMAND_BUILD_CONTEXT = null;
 		}
 
-		VarHandle shm_ht = null;
-		VarHandle eps_se = null;
-		try {
-			shm_ht = MethodHandles.privateLookupIn(SimpleHelpMap.class, MethodHandles.lookup())
-				.findVarHandle(SimpleHelpMap.class, "helpTopics", Map.class);
-			eps_se = MethodHandles.privateLookupIn(EntityPositionSource.class, MethodHandles.lookup())
-				.findVarHandle(EntityPositionSource.class, "c", Either.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		SimpleHelpMap_helpTopics = shm_ht;
-		EntityPositionSource_sourceEntity = eps_se;
-		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
-			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", Either.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -230,7 +215,6 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		return BlockStateArgument.block(COMMAND_BUILD_CONTEXT);
 	}
 
-	@Differs(from = "1.19.2", by = "Enchantment argument now uses ResourceArgument")
 	@Override
 	public final ArgumentType<?> _ArgumentEnchantment() {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENCHANTMENT);
@@ -262,29 +246,23 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		return ParticleArgument.particle(COMMAND_BUILD_CONTEXT);
 	}
 
-	@Differs(from = "1.19.2", by = "Now needs command build context")
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
-		return ResourceOrTagArgument.resourceOrTag(COMMAND_BUILD_CONTEXT, Registries.BIOME);
+		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.BIOME);
 	}
 
 	@Override
 	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) SimpleHelpMap_helpTopics.get(Bukkit.getServer().getHelpMap());
+		@SuppressWarnings("unchecked")
+		Map<String, HelpTopic> helpTopics = helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
 		helpTopics.putAll(helpTopicsToAdd);
 	}
 
-	@Differs(from = "1.19.2", by = "Chat preview removed")
-	@Override
-	public final boolean canUseChatPreview() {
-		return false;
-	}
-
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19.3" };
+		return new String[] { "1.19.4" };
 	};
 
 	@Override
@@ -299,7 +277,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private final SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> MINECRAFT_SERVER.getFunctions().execute(commandFunction, css);
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions().execute(commandFunction, css);
 
 		Entry[] cArr = commandFunction.getEntries();
 		String[] result = new String[cArr.length];
@@ -310,7 +288,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 	}
 
 	@Override
-	public final void createDispatcherFile(File file, com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
+	public final void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
 		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
 			.toJson(ArgumentUtils.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
 	}
@@ -320,63 +298,27 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
-	@SuppressWarnings("removal")
 	@Override
 	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return PaperComponents.gsonSerializer().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
+		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
-	@Differs(from = "1.19.2", by = "Now uses ResourceOrTagArgument instead of ResourceOrTagLocationArgument")
 	@Override
 	public final Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		Result<net.minecraft.world.level.biome.Biome> biomeResult = ResourceOrTagArgument.getResourceOrTag(cmdCtx, key, Registries.BIOME);
-		if (biomeResult.unwrap().left().isPresent()) {
-			// It's a resource key. Unwrap the result, get the resource key (left)
-			// and get its location and return its path. Important information if
-			// anyone ever has to maintain this very complicated code, because this
-			// took about an hour to figure out:
-
-			// For reference, unwrapping the object like this returns a ResourceKey:
-			// biomeResult.unwrap().left().get()
-
-			// This has two important functions:
-			// location() and registry().
-
-			// The location() returns a ResourceLocation with a namespace and
-			// path of the biome, for example:
-			// minecraft:badlands.
-
-			// The registry() returns a ResourceLocation with a namespace and
-			// path of the registry where the biome is declared in, for example:
-			// minecraft:worldgen/biome.
-			// This is the same registry that you'll find in registries.json and
-			// in the command_registration.json
-
-			final ResourceLocation resourceLocation = biomeResult.unwrap().left().get().key().location();
-			return switch(subType) {
-				case BIOME_BIOME -> {
-					Biome biome = null;
-					try {
-						biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
-					} catch(IllegalArgumentException biomeNotFound) {
-						biome = null;
-					}
-					yield biome;
+		final ResourceLocation resourceLocation = ResourceArgument.getResource(cmdCtx, key, Registries.BIOME).key().location();
+		return switch(subType) {
+			case BIOME_BIOME -> {
+				Biome biome = null;
+				try {
+					biome = Biome.valueOf(resourceLocation.getPath().toUpperCase());
+				} catch(IllegalArgumentException biomeNotFound) {
+					biome = null;
 				}
-				case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
-				default -> null;
-			};
-		} else {
-			// This isn't a biome, tell the user this.
-
-			// For reference, unwrapping this gives you the tag's namespace in location()
-			// and a (recursive structure of the) path of the registry, for example
-			// [minecraft:root / minecraft:worldgen/biome]
-
-			// ResourceOrTagLocationArgument.ERROR_INVALID_BIOME
-
-			throw ERROR_BIOME_INVALID.create(biomeResult.asPrintable());
-		}
+				yield biome;
+			}
+			case BIOME_NAMESPACEDKEY -> (NamespacedKey) fromResourceLocation(resourceLocation);
+			default -> null;
+		};
 	}
 
 	@Override
@@ -393,25 +335,19 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 	@Override
 	public final com.mojang.brigadier.CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return MINECRAFT_SERVER.vanillaCommandDispatcher.getDispatcher();
+		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
 	}
 
 	@Override
-	public final CommandSourceStack getCLWFromCommandSender(CommandSender sender) {
-		return VanillaCommandWrapper.getListener(sender);
+	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender) {
+		return VanillaCommandWrapper.getListener(sender.getSource());
 	}
 
 	@Override
 	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
 	}
-
-	@Override
-	public final Environment getEnvironment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return DimensionArgument.getDimension(cmdCtx, key).getWorld().getEnvironment();
-	}
 	
-	@Differs(from = "1.19.2", by = "Use of ResourceArgument")
 	@Override
 	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return Enchantment.getByKey(fromResourceLocation(BuiltInRegistries.ENCHANTMENT.getKey(ResourceArgument.getEnchantment(cmdCtx, key).value())));
@@ -427,7 +363,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getInstance().getField(EntitySelector.class, "p").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "p").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -462,7 +398,6 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		};
 	}
 
-	@Differs(from = "1.19.2", by = "Use ResourceArgument")
 	@SuppressWarnings("deprecation")
 	@Override
 	public final EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
@@ -483,7 +418,23 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 	@Override
 	public final org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return CraftItemStack.asBukkitCopy(ItemArgument.getItem(cmdCtx, key).createItemStack(1, false));
+		ItemInput input = ItemArgument.getItem(cmdCtx, key);
+
+		// Create the basic ItemStack with an amount of 1
+		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
+
+		// Try and find the amount from the CompoundTag (if present)
+		final CompoundTag tag = itemInput.get(input);
+		if(tag != null) {
+			// The tag has some extra metadata we need! Get the Count (amount)
+			// and create the ItemStack with the correct metadata
+			int count = (int) tag.getByte("Count");
+			itemWithMaybeTag = input.createItemStack(count == 0 ? 1 : count, false);
+		}
+
+		org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
+		result.setItemMeta(CraftItemStack.getItemMeta(itemWithMaybeTag));
+		return result;
 	}
 
 	@Override
@@ -507,7 +458,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 	@Override
 	public final Location getLocationBlock(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		BlockPos blockPos = BlockPosArgument.getLoadedBlockPos(cmdCtx, key);
+		BlockPos blockPos = BlockPosArgument.getSpawnablePos(cmdCtx, key);
 		return new Location(getWorldForCSS(cmdCtx.getSource()), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 
@@ -520,7 +471,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 	@Override
 	public final org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, key);
-		return new CraftLootTable(fromResourceLocation(resourceLocation), MINECRAFT_SERVER.getLootTables().get(resourceLocation));
+		return new CraftLootTable(fromResourceLocation(resourceLocation), this.<MinecraftServer>getMinecraftServer().getLootTables().get(resourceLocation));
 	}
 
 	@Override
@@ -595,7 +546,8 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 	private Destination getVibrationParticleOptionDestinationAsEntityPositionSource(EntityPositionSource positionSource, Level level) {
 		positionSource.getPosition(level); // Populate Optional sourceEntity
-		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) EntityPositionSource_sourceEntity.get(positionSource);
+		@SuppressWarnings("unchecked")
+		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) entityPositionSource.get(positionSource);
 		if (entity.left().isPresent()) {
 			return new EntityDestination(entity.left().get().getBukkitEntity());
 		}
@@ -609,7 +561,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 				// like Bukkit.getEntity() to do this for us, so we just have to do it
 				// manually
 				Entity foundEntity = null;
-				for (ServerLevel world : MINECRAFT_SERVER.getAllLevels()) {
+				for (ServerLevel world : this.<MinecraftServer>getMinecraftServer().getAllLevels()) {
 					Entity entityById = world.getEntity(id.right().get());
 					if (entityById != null) {
 						foundEntity = entityById;
@@ -621,28 +573,33 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		}
 	}
 
-	@Differs(from = "1.19.2", by = "Use of ResourceArgument")
 	@Override
 	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return PotionEffectType.getByKey(fromResourceLocation(BuiltInRegistries.MOB_EFFECT.getKey(ResourceArgument.getMobEffect(cmdCtx, key).value())));
 	}
 
 	@Override
-	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
+	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
+		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
+	}
+
+	@Override
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
 
 		CommandSender sender = css.getBukkitSender();
 		Vec3 pos = css.getPosition();
 		Vec2 rot = css.getRotation();
 		World world = getWorldForCSS(css);
-		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.x, rot.y);
+		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.y, rot.x);
 
 		Entity proxyEntity = css.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			return new NativeProxyCommandSender(sender, proxy, location, world);
+			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return sender;
+			return wrapCommandSender(sender);
 		}
 	}
 
@@ -651,7 +608,6 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		return ((CraftServer) Bukkit.getServer()).getCommandMap();
 	}
 
-	@Differs(from = "1.19.2", by = "Registry -> BuiltInRegistries")
 	@Override
 	public final Object getSound(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) {
 		final ResourceLocation soundResource = ResourceLocationArgument.getId(cmdCtx, key);
@@ -676,18 +632,18 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {
-				ServerFunctionManager functionData = getMinecraftServer().getFunctions();
+				ServerFunctionManager functionData = this.<MinecraftServer>getMinecraftServer().getFunctions();
 				SharedSuggestionProvider.suggestResource(functionData.getTagNames(), builder, "#");
 				return SharedSuggestionProvider.suggestResource(functionData.getFunctionNames(), builder);
 			};
 			case RECIPES -> net.minecraft.commands.synchronization.SuggestionProviders.ALL_RECIPES;
 			case SOUNDS -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_SOUNDS;
 			case ADVANCEMENTS -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getAdvancements().getAllAdvancements()
+				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getAdvancements().getAllAdvancements()
 					.stream().map(net.minecraft.advancements.Advancement::getId), builder);
 			};
 			case LOOT_TABLES -> (cmdCtx, builder) -> {
-				return SharedSuggestionProvider.suggestResource(getMinecraftServer().getLootTables().getIds(), builder);
+				return SharedSuggestionProvider.suggestResource(this.<MinecraftServer>getMinecraftServer().getLootTables().getIds(), builder);
 			};
 			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
@@ -697,7 +653,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		Collection<CommandFunction> customFunctions = MINECRAFT_SERVER.getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
+		Collection<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
 		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
 	}
 	
@@ -706,21 +662,11 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}
 
-	@Differs(from = "1.19.2", by = "Chat preview was removed")
-	@Override
-	public void hookChatPreview(Plugin plugin, Player player) {
-		// No chat preview in 1.19.4.
-	}
-
 	@Override
 	public final boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
 	}
 
-	@Differs(from = "1.19.2", by = """
-		MINECRAFT_SERVER.getWorldData().getDataPackConfig().getDisabled() -> MINECRAFT_SERVER.getWorldData().getDataConfiguration().dataPacks().getDisabled()
-		Everything about this WorldDataConfiguration thingy: MINECRAFT_SERVER.getWorldData().setDataConfiguration(new WorldDataConfiguration(new DataPackConfig(enabledIDs, disabledIDs), MINECRAFT_SERVER.getWorldData().getDataConfiguration().enabledFeatures()));
-		""")
 	@Override
 	public final void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
@@ -729,25 +675,25 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
 		// Update the commandDispatcher with the current server's commandDispatcher
-		ReloadableResources serverResources = MINECRAFT_SERVER.resources;
-		serverResources.managers().commands = MINECRAFT_SERVER.getCommands();
+		ReloadableResources serverResources = this.<MinecraftServer>getMinecraftServer().resources;
+		serverResources.managers().commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "g")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "g")
 				.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		}
 
-		// From MINECRAFT_SERVER.reloadResources //
+		// From this.<MinecraftServer>getMinecraftServer().reloadResources //
 		// Discover new packs
 		Collection<String> collection;
 		{
-			List<String> packIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getSelectedIds());
-			List<String> disabledPacks = MINECRAFT_SERVER.getWorldData().getDataConfiguration().dataPacks().getDisabled();
+			List<String> packIDs = new ArrayList<>(this.<MinecraftServer>getMinecraftServer().getPackRepository().getSelectedIds());
+			List<String> disabledPacks = this.<MinecraftServer>getMinecraftServer().getWorldData().getDataConfiguration().dataPacks().getDisabled();
 
-			for (String availablePack : MINECRAFT_SERVER.getPackRepository().getAvailableIds()) {
+			for (String availablePack : this.<MinecraftServer>getMinecraftServer().getPackRepository().getAvailableIds()) {
 				// Add every other available pack that is not disabled
 				// and is not already in the list of existing packs
 				if (!disabledPacks.contains(availablePack) && !packIDs.contains(availablePack)) {
@@ -757,12 +703,12 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 			collection = packIDs;
 		}
 
-		Frozen registryAccess = MINECRAFT_SERVER.registryAccess();
+		Frozen registryAccess = this.<MinecraftServer>getMinecraftServer().registryAccess();
 
 		// Step 1: Construct an async supplier of a list of all resource packs to
 		// be loaded in the reload phase
 		CompletableFuture<List<PackResources>> first = CompletableFuture.supplyAsync(() -> {
-			PackRepository serverPackRepository = MINECRAFT_SERVER.getPackRepository();
+			PackRepository serverPackRepository = this.<MinecraftServer>getMinecraftServer().getPackRepository();
 
 			List<PackResources> packResources = new ArrayList<>();
 			for (String packID : collection) {
@@ -782,8 +728,8 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 			// Not using packResources, because we really really want this to work
 			CompletableFuture<?> simpleReloadInstance = SimpleReloadInstance.create(
-				resourceManager, serverResources.managers().listeners(), MINECRAFT_SERVER.executor,
-				MINECRAFT_SERVER, CompletableFuture
+				resourceManager, serverResources.managers().listeners(), this.<MinecraftServer>getMinecraftServer().executor,
+				this.<MinecraftServer>getMinecraftServer(), CompletableFuture
 					.completedFuture(Unit.INSTANCE) /* ReloadableServerResources.DATA_RELOAD_INITIAL_TASK */,
 				LogUtils.getLogger().isDebugEnabled()).done();
 
@@ -792,51 +738,41 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 		// Step 3: Actually load all of the resources
 		CompletableFuture<Void> third = second.thenAcceptAsync(resources -> {
-			MINECRAFT_SERVER.resources.close();
-			MINECRAFT_SERVER.resources = serverResources;
-			MINECRAFT_SERVER.server.syncCommands();
-			MINECRAFT_SERVER.getPackRepository().setSelected(collection);
+			this.<MinecraftServer>getMinecraftServer().resources.close();
+			this.<MinecraftServer>getMinecraftServer().resources = serverResources;
+			this.<MinecraftServer>getMinecraftServer().server.syncCommands();
+			this.<MinecraftServer>getMinecraftServer().getPackRepository().setSelected(collection);
 
-			// MINECRAFT_SERVER.getSelectedPacks
-			Collection<String> selectedIDs = MINECRAFT_SERVER.getPackRepository().getSelectedIds();
+			// this.<MinecraftServer>getMinecraftServer().getSelectedPacks
+			Collection<String> selectedIDs = this.<MinecraftServer>getMinecraftServer().getPackRepository().getSelectedIds();
 			List<String> enabledIDs = ImmutableList.copyOf(selectedIDs);
-			List<String> disabledIDs = new ArrayList<>(MINECRAFT_SERVER.getPackRepository().getAvailableIds());
+			List<String> disabledIDs = new ArrayList<>(this.<MinecraftServer>getMinecraftServer().getPackRepository().getAvailableIds());
 
 			disabledIDs.removeIf(enabledIDs::contains);
 
-			MINECRAFT_SERVER.getWorldData().setDataConfiguration(new WorldDataConfiguration(new DataPackConfig(enabledIDs, disabledIDs), MINECRAFT_SERVER.getWorldData().getDataConfiguration().enabledFeatures()));
-			MINECRAFT_SERVER.resources.managers().updateRegistryTags(registryAccess);
+			this.<MinecraftServer>getMinecraftServer().getWorldData().setDataConfiguration(new WorldDataConfiguration(new DataPackConfig(enabledIDs, disabledIDs), this.<MinecraftServer>getMinecraftServer().getWorldData().getDataConfiguration().enabledFeatures()));
+			this.<MinecraftServer>getMinecraftServer().resources.managers().updateRegistryTags(registryAccess);
 			// May need to be commented out, may not. Comment it out just in case.
 			// For some reason, calling getPlayerList().saveAll() may just hang
 			// the server indefinitely. Not sure why!
-			// MINECRAFT_SERVER.getPlayerList().saveAll();
-			// MINECRAFT_SERVER.getPlayerList().reloadResources();
-			// MINECRAFT_SERVER.getFunctions().replaceLibrary(MINECRAFT_SERVER.resources.managers().getFunctionLibrary());
-			MINECRAFT_SERVER.getStructureManager()
-				.onResourceManagerReload(MINECRAFT_SERVER.resources.resourceManager());
+			// this.<MinecraftServer>getMinecraftServer().getPlayerList().saveAll();
+			// this.<MinecraftServer>getMinecraftServer().getPlayerList().reloadResources();
+			// this.<MinecraftServer>getMinecraftServer().getFunctions().replaceLibrary(this.<MinecraftServer>getMinecraftServer().resources.managers().getFunctionLibrary());
+			this.<MinecraftServer>getMinecraftServer().getStructureManager()
+				.onResourceManagerReload(this.<MinecraftServer>getMinecraftServer().resources.resourceManager());
 		});
 
 		// Step 4: Block the thread until everything's done
-		if (MINECRAFT_SERVER.isSameThread()) {
-			MINECRAFT_SERVER.managedBlock(third::isDone);
+		if (this.<MinecraftServer>getMinecraftServer().isSameThread()) {
+			this.<MinecraftServer>getMinecraftServer().managedBlock(third::isDone);
 		}
 
 		// Run the completableFuture (and bind tags?)
 		try {
-			// Register recipes again because reloading datapacks removes all non-vanilla
-			// recipes
-			Recipe recipe;
-			while (recipes.hasNext()) {
-				recipe = recipes.next();
-				try {
-					Bukkit.addRecipe(recipe);
-					if (recipe instanceof Keyed keyedRecipe) {
-						CommandAPI.logInfo("Re-registering recipe: " + keyedRecipe.getKey());
-					}
-				} catch (Exception e) {
-					continue; // Can't re-register registered recipes. Not an error.
-				}
-			}
+
+			// Register recipes again because reloading datapacks
+			// removes all non-vanilla recipes
+			registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {
@@ -852,13 +788,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 
 	@Override
 	public final void resendPackets(Player player) {
-		MINECRAFT_SERVER.getCommands().sendCommands(((CraftPlayer) player).getHandle());
-	}
-
-	@Differs(from = "1.19.3", by = "Chat preview was removed")
-	@Override
-	public final void unhookChatPreview(Player player) {
-		// No chat preview in 1.19.4.
+		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
 	}
 
 	@Override
@@ -866,9 +796,14 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		return Serializer.fromJson(json);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public final MinecraftServer getMinecraftServer() {
-		return MINECRAFT_SERVER;
+	public <T> T getMinecraftServer() {
+		if (Bukkit.getServer() instanceof CraftServer server) {
+			return (T) server.getServer();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
