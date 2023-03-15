@@ -50,6 +50,12 @@
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
+			<version>${project.version}</version>
+			<type>pom</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -59,6 +65,7 @@
 				<artifactId>maven-shade-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>normal</id>
 						<phase>package</phase>
 						<goals>
 							<goal>shade</goal>
@@ -76,6 +83,45 @@
 									</excludes>
 								</filter>
 							</filters>
+							<artifactSet>
+								<excludes>
+									<exclude>dev.jorel:commandapi-bukkit-nms-dependency-mojang-mapped:*:*</exclude>
+								</excludes>
+								<includes>
+									<include>dev.jorel:commandapi-bukkit-nms-dependency:*:*</include>
+								</includes>
+							</artifactSet>
+						</configuration>
+					</execution>
+					<execution>
+						<id>mojang-mapped</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+							<createSourcesJar>true</createSourcesJar>
+							<!-- Remove commandapi-core's VersionHandler in favor of ours which
+								loads CommandAPIBukkit for the current version -->
+							<filters>
+								<filter>
+									<artifact>dev.jorel:commandapi-core</artifact>
+									<excludes>
+										<exclude>dev/jorel/commandapi/CommandAPIVersionHandler**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<artifactSet>
+								<includes>
+									<include>dev.jorel:commandapi-bukkit-nms-dependency-mojang-mapped:*:mojang-mapped</include>
+								</includes>
+								<excludes>
+									<exclude>dev.jorel:commandapi-bukkit-nms-dependency:*:*</exclude>
+								</excludes>
+							</artifactSet>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>mojang-mapped</shadedClassifierName>
 						</configuration>
 					</execution>
 				</executions>

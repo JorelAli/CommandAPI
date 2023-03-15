@@ -132,9 +132,9 @@
 					<!-- To help with debugging tests, you can specify an include
 					 to limit a build to only run a certain test file. Uncomment
 					 here if you want to do that: -->
-					<!-- <includes>
-						<include>**/ArgumentPrimitiveTests.java</include>
-					</includes> -->
+					<includes>
+						<include>**/ArgumentEntityTypeTests.java</include>
+					</includes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -169,6 +169,29 @@
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
 					<version>${project.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.19.4-R0.1-SNAPSHOT</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.19.2-R0.1-SNAPSHOT</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>Minecraft_1_19_4_Mojang</id>
+			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
+					<version>${project.version}</version>
+					<classifier>mojang-mapped</classifier>
 					<scope>test</scope>
 				</dependency>
 				<dependency>
