@@ -128,7 +128,7 @@
 					 to limit a build to only run a certain test file. Uncomment
 					 here if you want to do that: -->
 					<includes>
-						<include>**/ArgumentEntityTypeTests.java</include>
+						<include>**/ArgumentPrimitiveTests.java</include>
 					</includes>
 				</configuration>
 			</plugin>
@@ -160,6 +160,11 @@
 		<profile>
 			<id>Minecraft_1_19_4</id>
 			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
@@ -221,6 +226,11 @@
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
 					<version>${project.version}</version>
 					<scope>test</scope>
@@ -243,6 +253,11 @@
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -257,6 +272,11 @@
 		<profile>
 			<id>Minecraft_1_17</id>
 			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.17</artifactId>
@@ -279,6 +299,11 @@
 		<profile>
 			<id>Minecraft_1_16_5</id>
 			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.16.5</artifactId>

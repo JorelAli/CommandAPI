@@ -44,15 +44,9 @@
 			<artifactId>commandapi-bukkit-vh</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-nms-dependency</artifactId>
-			<version>${project.version}</version>
-			<type>pom</type>
-		</dependency> -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
+			<artifactId>commandapi-bukkit-nms-dependency</artifactId>
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>
@@ -83,29 +77,6 @@
 									</excludes>
 								</filter>
 							</filters>
-						</configuration>
-					</execution>
-					<execution>
-						<id>mojang-mapped</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
-							<createSourcesJar>true</createSourcesJar>
-							<!-- Remove commandapi-core's VersionHandler in favor of ours which
-								loads CommandAPIBukkit for the current version -->
-							<filters>
-								<filter>
-									<artifact>dev.jorel:commandapi-core</artifact>
-									<excludes>
-										<exclude>dev/jorel/commandapi/CommandAPIVersionHandler**</exclude>
-									</excludes>
-								</filter>
-							</filters>
-							<shadedArtifactAttached>true</shadedArtifactAttached>
-							<shadedClassifierName>mojang-mapped</shadedClassifierName>
 						</configuration>
 					</execution>
 				</executions>
