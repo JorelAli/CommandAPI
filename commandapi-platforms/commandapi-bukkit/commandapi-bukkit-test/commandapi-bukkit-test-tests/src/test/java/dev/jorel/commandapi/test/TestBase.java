@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,13 +19,19 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.impl.DefaultServiceLocator;
+import org.eclipse.aether.internal.impl.DefaultRepositorySystem;
 import org.jetbrains.annotations.NotNull;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.opentest4j.AssertionFailedError;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -54,7 +61,24 @@ public abstract class TestBase {
 
 	public <T extends JavaPlugin> void setUp(Class<T> pluginClass) {
 		// resetAllPotions();
-		server = MockBukkit.mock(new CommandAPIServerMock());
+		
+		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+			// Wrap LibraryLoader's constructor to prevent
+			//  MavenRepositorySystemUtils.newServiceLocator().getService( RepositorySystem.class )
+			// from returning null. For some reason, this only appears to occur
+			// on 1.19.4, so we'll make it specific to 1.19.4.
+			try (MockedStatic<MavenRepositorySystemUtils> mavenRepoSystemUtils = Mockito.mockStatic(MavenRepositorySystemUtils.class)) {
+				DefaultServiceLocator locator = Mockito.mock(DefaultServiceLocator.class);
+				Mockito.when(locator.getService(any())).thenReturn(Mockito.mock(DefaultRepositorySystem.class));
+				mavenRepoSystemUtils.when(MavenRepositorySystemUtils::newServiceLocator).thenReturn(locator);
+				mavenRepoSystemUtils.when(MavenRepositorySystemUtils::newSession).thenReturn(Mockito.mock(DefaultRepositorySystemSession.class));
+
+				server = MockBukkit.mock(new CommandAPIServerMock());
+			}
+		} else {
+			server = MockBukkit.mock(new CommandAPIServerMock());
+		}
+
 		plugin = MockBukkit.load(pluginClass);
 	}
 
