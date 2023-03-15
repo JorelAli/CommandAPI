@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.PotionEffectArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -62,7 +63,11 @@ class ArgumentPotionTests extends TestBase {
 
 		// /test bukkit:speed
 		// Unknown effect, bukkit:speed is not a valid potion effect
-		assertCommandFailsWith(player, "test bukkit:speed", "Unknown effect: bukkit:speed");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+			assertCommandFailsWith(player, "test bukkit:speed", "Can't find element 'bukkit:speed' of type 'minecraft:mob_effect'");
+		} else {
+			assertCommandFailsWith(player, "test bukkit:speed", "Unknown effect: bukkit:speed");
+		}
 
 		assertNoMoreResults(results);
 	}

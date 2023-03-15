@@ -50,9 +50,11 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 
 /**
@@ -119,7 +121,14 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() {
-		return baseNMS._ArgumentEntitySummon();
+		// We can't use BASE_NMS for this, because that requires a
+		// COMMAND_BUILD_CONTEXT. The COMMAND_BUILD_CONTEXT is only defined for
+		// CraftServer instances, otherwise it'll return null.
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.ENTITY_TYPE.asLookup()); // Registry.ENTITY_TYPE
+		return ResourceArgument.resource(buildContextMock, Registries.ENTITY_TYPE);
 	}
 
 	@Override
@@ -167,7 +176,14 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public ArgumentType<?> _ArgumentMobEffect() {
-		return baseNMS._ArgumentMobEffect();
+		// We can't use BASE_NMS for this, because that requires a
+		// COMMAND_BUILD_CONTEXT. The COMMAND_BUILD_CONTEXT is only defined for
+		// CraftServer instances, otherwise it'll return null.
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.MOB_EFFECT.asLookup()); // Registry.MOB_EFFECT
+		return ResourceArgument.resource(buildContextMock, Registries.MOB_EFFECT);
 	}
 
 	@Override

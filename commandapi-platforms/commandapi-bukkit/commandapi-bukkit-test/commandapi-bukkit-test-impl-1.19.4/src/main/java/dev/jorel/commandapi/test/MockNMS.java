@@ -336,7 +336,9 @@ public class MockNMS extends Enums {
 
 	@Override
 	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
-		return potionEffectType.getKey().asString();
+		// NamespacedKey#asString is PAPER ONLY, whereas NamespacedKey#toString
+		// is compatible with both paper and Spigot
+		return potionEffectType.getKey().toString();
 	}
 	
 	@Override
