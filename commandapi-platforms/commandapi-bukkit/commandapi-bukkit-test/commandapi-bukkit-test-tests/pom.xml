@@ -127,9 +127,9 @@
 					<!-- To help with debugging tests, you can specify an include
 					 to limit a build to only run a certain test file. Uncomment
 					 here if you want to do that: -->
-					<includes>
+					<!-- <includes>
 						<include>**/ArgumentPrimitiveTests.java</include>
-					</includes>
+					</includes> -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -180,7 +180,7 @@
 				<dependency>
 					<groupId>io.papermc.paper</groupId>
 					<artifactId>paper-api</artifactId>
-					<version>1.19.2-R0.1-SNAPSHOT</version>
+					<version>1.19.4-R0.1-SNAPSHOT</version>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -217,7 +217,7 @@
 				<dependency>
 					<groupId>io.papermc.paper</groupId>
 					<artifactId>paper-api</artifactId>
-					<version>1.19.2-R0.1-SNAPSHOT</version>
+					<version>1.19.4-R0.1-SNAPSHOT</version>
 				</dependency>
 			</dependencies>
 		</profile>

@@ -111,7 +111,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
-		return baseNMS._ArgumentEnchantment();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.ENCHANTMENT.asLookup()); // Registry.ENCHANTMENT
+		return ResourceArgument.resource(buildContextMock, Registries.ENCHANTMENT);
 	}
 
 	@Override
@@ -243,7 +247,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
-		return baseNMS._ArgumentSyntheticBiome();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.BIOME_SOURCE.asLookup()); // Registry.BIOME
+		return ResourceArgument.resource(buildContextMock, Registries.BIOME);
 	}
 
 	@Override

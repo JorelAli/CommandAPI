@@ -3,6 +3,7 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.loot.LootTable;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.LootTableArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -73,8 +75,18 @@ class ArgumentLootTableTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		assertEquals(Arrays.stream(MockPlatform.getInstance().getLootTables()).map(lt -> lt.getKey().toString())
-			.sorted().toList(), server.getSuggestions(player, "test "));
+		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+			Stream<String> expected = Stream.concat(
+				Arrays.stream(MockPlatform.getInstance().getLootTables())
+					.map(lt -> lt.getKey().toString()),
+				Stream.of("minecraft:entities/camel", "minecraft:entities/sniffer")
+			);
+			assertEquals(expected.sorted().toList(), server.getSuggestions(player, "test "));
+		} else {
+			assertEquals(Arrays.stream(MockPlatform.getInstance().getLootTables())
+				.map(lt -> lt.getKey().toString())
+				.sorted().toList(), server.getSuggestions(player, "test "));
+		}
 	}
 
 }
