@@ -71,6 +71,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
@@ -309,16 +310,19 @@ public class MockNMS extends Enums {
 			Mockito.when(css.getAllTeams()).thenAnswer(invocation -> 
 				Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList()
 			);
-			
+
 			// SoundArgument
 			Mockito.when(css.getAvailableSounds()).thenAnswer(invocation -> BuiltInRegistries.SOUND_EVENT.keySet().stream());
-			
+
 			// RecipeArgument
 			Mockito.when(css.getRecipeNames()).thenAnswer(invocation -> recipeManager.getRecipeIds());
 
 			// ChatArgument, AdventureChatArgument
 			Mockito.when(css.hasPermission(anyInt())).thenAnswer(invocation -> sender.isOp());
 			Mockito.when(css.hasPermission(anyInt(), anyString())).thenAnswer(invocation -> sender.isOp());
+
+			// Suggestions
+			Mockito.when(css.enabledFeatures()).thenAnswer(invocation -> FeatureFlags.DEFAULT_FLAGS);
 		}
 		return css;
 	}

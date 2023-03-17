@@ -505,7 +505,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public SuggestionProvider getSuggestionProvider(SuggestionProviders provider) {
-		return baseNMS.getSuggestionProvider(provider);
+		if(provider == SuggestionProviders.BIOMES) {
+			return _ArgumentSyntheticBiome()::listSuggestions;
+		} else {
+			return baseNMS.getSuggestionProvider(provider);
+		}
 	}
 
 	@Override
