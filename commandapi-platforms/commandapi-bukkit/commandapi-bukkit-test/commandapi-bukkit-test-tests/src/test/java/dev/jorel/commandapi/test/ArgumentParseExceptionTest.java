@@ -43,7 +43,7 @@ public class ArgumentParseExceptionTest extends TestBase {
 					.withMapper(Player::getName)
 					.buildGreedy()
 				.withArgumentParseExceptionHandler(context -> {
-					if(context.exception().getMessage().equals("Item is not allowed in list")) {
+					if(context.exception().getMessage().startsWith("Item is not allowed in list")) {
 						throw CommandAPI.failWithString("No such player!");
 					} else {
 						throw context.exception();
@@ -52,7 +52,8 @@ public class ArgumentParseExceptionTest extends TestBase {
 			)
 			.executes(info -> {
 				players.set(info.args().getUnchecked("players"));
-			});
+			})
+			.register();
 
 		Player a = server.addPlayer("PlayerA");
 		Player b = server.addPlayer("PlayerB");
@@ -63,7 +64,7 @@ public class ArgumentParseExceptionTest extends TestBase {
 		assertStoresResult(a, "test PlayerA PlayerB PlayerC", players, List.of(a, b, c));
 
 		// /test PlayerA PlayerB PlayerB
-		assertCommandFailsWith(a, "test PlayerA PlayerB PlayerB", "Duplicate arguments are not allowed");
+		assertCommandFailsWith(a, "test PlayerA PlayerB PlayerB", "Duplicate arguments are not allowed at position 16: ...A PlayerB <--[HERE]");
 
 		// Make sure our custom exception was applied
 		// /test PlayerA PlayerD PlayerC
