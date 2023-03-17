@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -53,6 +54,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -247,10 +251,33 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
+		// Unpack Biomes.class
+//		Set<ResourceKey<Biome>> biomes = new HashSet<>();
+//		for(Field f : Biomes.class.getDeclaredFields()) {
+//			try {
+//				biomes.add((ResourceKey<Biome>) f.get(null));
+//			} catch (IllegalArgumentException | IllegalAccessException e) {
+//				e.printStackTrace();
+//			}
+//		}
+		
 		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
 		Mockito
 			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
-			.thenReturn(BuiltInRegistries.BIOME_SOURCE.asLookup()); // Registry.BIOME
+			.thenAnswer(invocation -> {
+				HolderLookup hl = Mockito.mock(HolderLookup.class);
+				Mockito.when(hl.get((ResourceKey)any())).thenAnswer(i -> {
+					ResourceKey rk = i.getArgument(0, ResourceKey.class);
+//					if(biomes.contains(rk)) {
+//						return Optional.of(Holder.Reference.createStandAlone(new HolderOwner() { }, rk));
+//					} else {
+//						return Optional.empty();
+//					}
+					// We'll return the thing anyway. Bukkit will handle if the thing exists or not...
+					return Optional.of(Holder.Reference.createStandAlone(new HolderOwner() { }, rk));
+				});
+				return hl;
+			});
 		return ResourceArgument.resource(buildContextMock, Registries.BIOME);
 	}
 
