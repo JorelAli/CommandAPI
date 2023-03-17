@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,6 +14,7 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -29,6 +31,8 @@ class ArgumentNBTCompoundTests extends TestBase {
 
 	@BeforeEach
 	public void setUp() {
+		// TODO: Re-enable when NBT API supports 1.19.4.
+		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_19_2));
 		super.setUp();
 		MinecraftVersion.disableBStats();
 		MinecraftVersion.disablePackageWarning();
