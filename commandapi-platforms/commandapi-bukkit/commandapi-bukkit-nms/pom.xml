@@ -53,6 +53,7 @@
 
 		<!-- The thing you actually include -->
 		<module>commandapi-bukkit-nms-dependency</module>
+		<module>commandapi-bukkit-nms-dependency-mojang-mapped</module>
 	</modules>
 
 	<dependencies>

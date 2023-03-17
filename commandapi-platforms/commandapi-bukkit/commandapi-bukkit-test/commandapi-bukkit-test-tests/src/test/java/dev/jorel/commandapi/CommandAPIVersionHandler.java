@@ -14,7 +14,10 @@ import dev.jorel.commandapi.test.MockNMS;
  */
 public interface CommandAPIVersionHandler {
 	
-	static final String profileId = System.getProperty("profileId");
+	static final String profileId = System.getProperty("profileId").endsWith("_Mojang")
+		? System.getProperty("profileId").substring(0, System.getProperty("profileId").length() - "_Mojang".length())
+		: System.getProperty("profileId");
+	static final boolean isMojangMapped = System.getProperty("profileId").endsWith("_Mojang");
 	
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
 		if(profileId == null) {

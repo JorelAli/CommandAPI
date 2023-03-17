@@ -59,6 +59,7 @@
 				<artifactId>maven-shade-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>normal</id>
 						<phase>package</phase>
 						<goals>
 							<goal>shade</goal>

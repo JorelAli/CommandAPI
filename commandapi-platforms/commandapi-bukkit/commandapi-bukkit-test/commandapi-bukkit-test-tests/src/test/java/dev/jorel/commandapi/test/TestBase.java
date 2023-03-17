@@ -43,6 +43,7 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.PaperImplementations;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 
 public abstract class TestBase {
@@ -52,6 +53,9 @@ public abstract class TestBase {
 	public MCVersion version;
 	
 	public TestBase() {
+		if (CommandAPIVersionHandler.isMojangMapped) {
+			SafeVarHandle.USING_MOJANG_MAPPINGS = true;
+		}
 		this.version = CommandAPIVersionHandler.getVersion();
 	}
 
