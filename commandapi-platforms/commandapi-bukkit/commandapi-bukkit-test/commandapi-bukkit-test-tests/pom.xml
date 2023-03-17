@@ -67,15 +67,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<!-- Needed for 1.19.4 Brigadier logging. This is also present in
-			 commandapi-core, but isn't inherited here automatically, so we add
-			 it here -->
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.19.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>4.6.1</version>
@@ -161,6 +152,15 @@
 			<id>Minecraft_1_19_4</id>
 			<dependencies>
 				<dependency>
+					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
+					 commandapi-core, but isn't inherited here automatically, so we add
+					 it here -->
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+					<version>2.19.0</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-shade</artifactId>
 					<version>${project.version}</version>
@@ -175,7 +175,6 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 					<version>1.19.4-R0.1-SNAPSHOT</version>
-					<scope>provided</scope>
 				</dependency>
 				<dependency>
 					<groupId>io.papermc.paper</groupId>
@@ -190,6 +189,15 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
+				<dependency>
+					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
+					 commandapi-core, but isn't inherited here automatically, so we add
+					 it here -->
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+					<version>2.19.0</version>
+					<scope>provided</scope>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
