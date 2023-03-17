@@ -48,6 +48,13 @@ class ArgumentEntityTypeTests extends TestBase {
 			.filter(e -> e != EntityType.UNKNOWN)
 			.filter(e -> e != EntityType.PLAYER)
 			.filter(e -> e != EntityType.FISHING_HOOK)
+			.filter(e -> { 
+				if ( version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+					return e != EntityType.CAMEL && e != EntityType.SNIFFER;
+				} else {
+					return true;
+				}
+			})
 			.map(e -> e.getKey().toString())
 			.sorted()
 			.toList();
