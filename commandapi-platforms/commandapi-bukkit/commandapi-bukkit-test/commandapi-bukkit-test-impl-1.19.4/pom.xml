@@ -40,6 +40,12 @@
 
 	<repositories>
 		<repository>
+			<!-- NBT API -->
+			<id>codemc-repo-public</id>
+			<url>https://repo.codemc.io/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
 			<id>codemc-repo</id>
 			<url>https://repo.codemc.io/repository/nms/</url>
 			<layout>default</layout>
@@ -75,7 +81,7 @@
 			<!-- This is literally just for testing, we're not actually packaging this -->
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api</artifactId>
-			<version>2.11.1</version>
+			<version>2.11.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

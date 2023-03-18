@@ -46,7 +46,7 @@ public abstract class TestBase {
 	public MCVersion version;
 	
 	public TestBase() {
-		if (CommandAPIVersionHandler.isMojangMapped) {
+		if (CommandAPIVersionHandler.IS_MOJANG_MAPPED) {
 			SafeVarHandle.USING_MOJANG_MAPPINGS = true;
 		}
 		this.version = CommandAPIVersionHandler.getVersion();

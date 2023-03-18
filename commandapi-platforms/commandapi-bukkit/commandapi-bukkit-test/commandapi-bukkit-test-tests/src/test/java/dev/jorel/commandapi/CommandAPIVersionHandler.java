@@ -17,7 +17,7 @@ public interface CommandAPIVersionHandler {
 	static final String profileId = System.getProperty("profileId").endsWith("_Mojang")
 		? System.getProperty("profileId").substring(0, System.getProperty("profileId").length() - "_Mojang".length())
 		: System.getProperty("profileId");
-	static final boolean isMojangMapped = System.getProperty("profileId").endsWith("_Mojang");
+	static final boolean IS_MOJANG_MAPPED = System.getProperty("profileId").endsWith("_Mojang");
 	
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
 		if(profileId == null) {
