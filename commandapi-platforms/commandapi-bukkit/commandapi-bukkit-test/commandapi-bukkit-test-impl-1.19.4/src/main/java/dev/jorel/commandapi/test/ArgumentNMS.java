@@ -201,7 +201,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public ArgumentType<?> _ArgumentParticle() {
-		return baseNMS._ArgumentParticle();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.PARTICLE_TYPE.asLookup()); // Registry.PARTICLE_TYPE
+		return ResourceArgument.resource(buildContextMock, Registries.PARTICLE_TYPE);
 	}
 
 	@Override

@@ -50,7 +50,7 @@ class ArgumentEntityTypeTests extends TestBase {
 			.filter(e -> e != EntityType.FISHING_HOOK)
 			.filter(e -> { 
 				if ( version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
-					return e != EntityType.CAMEL && e != EntityType.SNIFFER;
+					return !e.name().equals("CAMEL") && !e.name().equals("SNIFFER");
 				} else {
 					return true;
 				}

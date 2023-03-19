@@ -24,9 +24,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_19_R3.CraftParticle;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemFactory;
@@ -344,6 +346,12 @@ public class MockNMS extends Enums {
 		// NamespacedKey#asString is PAPER ONLY, whereas NamespacedKey#toString
 		// is compatible with both paper and Spigot
 		return potionEffectType.getKey().toString();
+	}
+	
+	@SuppressWarnings("null")
+	@Override
+	public String getNMSParticleNameFromBukkit(Particle particle) {
+		return BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.toNMS(particle).getType()).toString();
 	}
 	
 	@Override
