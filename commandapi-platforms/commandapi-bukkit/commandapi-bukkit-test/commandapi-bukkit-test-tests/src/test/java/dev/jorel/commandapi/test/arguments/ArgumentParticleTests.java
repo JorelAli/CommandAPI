@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.ParticleArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -48,33 +50,19 @@ class ArgumentParticleTests extends TestBase {
 	public void tearDown() {
 		super.tearDown();
 	}
-	
+
 	// Just checks block coords, doesn't check yaw/pitch or world
 	private void assertBlockLocationCoordsEquals(Location loc1, Location loc2) {
 		assertEquals(loc1.getBlockX(), loc2.getBlockX(), 0.0001);
 		assertEquals(loc1.getBlockY(), loc2.getBlockY(), 0.0001);
 		assertEquals(loc1.getBlockZ(), loc2.getBlockZ(), 0.0001);
 	}
-	
 
-	
-	// List of really stupid particles that may not have proper mappings:
-//	"block" -> BLOCK_CRACK
-//	"block" -> BLOCK_DUST
-//	"block" -> LEGACY_BLOCK_CRACK
-//	"block" -> LEGACY_BLOCK_DUST
-//	"falling_dust" -> FALLING_DUST
-//	"falling_dust" -> LEGACY_FALLING_DUST
-//	"item_snowball" -> SNOW_SHOVEL
-//	"item_snowball" -> SNOWBALL
-//	"underwater" -> SUSPENDED
-//	"underwater" -> SUSPENDED_DEPTH
-	
 	Set<Particle> dodgyParticles = Set.of(
 		Particle.SNOW_SHOVEL, // "item_snowball" -> SNOWBALL
 		Particle.SUSPENDED_DEPTH // "underwater" -> SUSPENDED
 	);
-	
+
 	private float round(float value, int n) {
 		return (float) (Math.round(value * Math.pow(10, n)) / Math.pow(10, n));
 	}
@@ -123,17 +111,17 @@ class ArgumentParticleTests extends TestBase {
 		server.dispatchCommand(player, "test dust 1 0.5 0 4");
 		@SuppressWarnings("unchecked")
 		ParticleData<DustOptions> result = (ParticleData<DustOptions>) results.get();
-		
+
 		// Check the particle type is correct
 		assertEquals(Particle.REDSTONE, result.particle());
-		
+
 		// Check the particle properties
 		assertEquals(4, result.data().getSize());
 		assertEquals(Color.fromRGB(255, 127, 0), result.data().getColor());
 
 		assertNoMoreResults(results);
 	}
-	
+
 	@RepeatedTest(10)
 	void executionTestWithParticleArgumentDustRandom() {
 		Mut<ParticleData<?>> results = Mut.of();
@@ -151,18 +139,18 @@ class ArgumentParticleTests extends TestBase {
 		float red = round(ThreadLocalRandom.current().nextFloat(), 2);
 		float green = round(ThreadLocalRandom.current().nextFloat(), 2);
 		float blue = round(ThreadLocalRandom.current().nextFloat(), 2);
-		
+
 		// I don't know if there's a hard limit, but if this value is greater than 4, it
 		// caps it off at 4.
 		int size = ThreadLocalRandom.current().nextInt(1, 5);
-		
+
 		server.dispatchCommand(player, "test dust %.2f %.2f %.2f %d".formatted(red, green, blue, size));
 		@SuppressWarnings("unchecked")
 		ParticleData<DustOptions> result = (ParticleData<DustOptions>) results.get();
-		
+
 		// Check the particle type is correct
 		assertEquals(Particle.REDSTONE, result.particle());
-		
+
 		// Check the particle properties
 		assertEquals(size, result.data().getSize());
 		assertEquals(Color.fromRGB((int) (red * 255), (int) (green * 255), (int) (blue * 255)), result.data().getColor());
@@ -187,10 +175,10 @@ class ArgumentParticleTests extends TestBase {
 		server.dispatchCommand(player, "test block minecraft:grass_block[snowy=true]");
 		@SuppressWarnings("unchecked")
 		ParticleData<BlockData> result = (ParticleData<BlockData>) results.get();
-		
+
 		// Check the particle type is correct
 		assertEquals(Particle.BLOCK_CRACK, result.particle());
-		
+
 		// Check the particle properties
 		assertEquals(Material.GRASS_BLOCK, result.data().getMaterial());
 		assertTrue(((Snowable) result.data()).isSnowy());
@@ -200,6 +188,7 @@ class ArgumentParticleTests extends TestBase {
 
 	@Test
 	void executionTestWithParticleArgumentShriek() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_18));
 		Mut<ParticleData<?>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -215,10 +204,10 @@ class ArgumentParticleTests extends TestBase {
 		server.dispatchCommand(player, "test shriek 10");
 		@SuppressWarnings("unchecked")
 		ParticleData<Integer> result = (ParticleData<Integer>) results.get();
-		
+
 		// Check the particle type is correct
-		assertEquals(Particle.SHRIEK, result.particle());
-		
+		assertEquals(Particle.valueOf("SHRIEK"), result.particle());
+
 		// Check the particle properties
 		assertEquals(10, result.data());
 
@@ -227,6 +216,7 @@ class ArgumentParticleTests extends TestBase {
 
 	@Test
 	void executionTestWithParticleArgumentSculkCharge() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_18));
 		Mut<ParticleData<?>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -242,10 +232,10 @@ class ArgumentParticleTests extends TestBase {
 		server.dispatchCommand(player, "test sculk_charge 2");
 		@SuppressWarnings("unchecked")
 		ParticleData<Float> result = (ParticleData<Float>) results.get();
-		
+
 		// Check the particle type is correct
-		assertEquals(Particle.SCULK_CHARGE, result.particle());
-		
+		assertEquals(Particle.valueOf("SCULK_CHARGE"), result.particle());
+
 		// Check the particle properties
 		assertEquals(2, result.data());
 
@@ -254,6 +244,7 @@ class ArgumentParticleTests extends TestBase {
 
 	@Test
 	void executionTestWithParticleArgumentVibration() {
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_18));
 		Mut<ParticleData<?>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -269,10 +260,10 @@ class ArgumentParticleTests extends TestBase {
 		server.dispatchCommand(player, "test vibration 5.0 64.0 0.0 200");
 		@SuppressWarnings("unchecked")
 		ParticleData<Vibration> result = (ParticleData<Vibration>) results.get();
-		
+
 		// Check the particle type is correct
 		assertEquals(Particle.VIBRATION, result.particle());
-		
+
 		// Check the particle properties. We only support BlockDestination for commands.
 		assertBlockLocationCoordsEquals(player.getLocation(), result.data().getOrigin());
 		assertBlockLocationCoordsEquals(new Location(player.getWorld(), 5.0, 64.0, 0.0), ((BlockDestination) result.data().getDestination()).getLocation());
@@ -298,10 +289,10 @@ class ArgumentParticleTests extends TestBase {
 		server.dispatchCommand(player, "test item apple");
 		@SuppressWarnings("unchecked")
 		ParticleData<ItemStack> result = (ParticleData<ItemStack>) results.get();
-		
+
 		// Check the particle type is correct
 		assertEquals(Particle.ITEM_CRACK, result.particle());
-		
+
 		// Check the particle properties
 		assertEquals(new ItemStack(Material.APPLE), (ItemStack) result.data());
 
@@ -325,10 +316,10 @@ class ArgumentParticleTests extends TestBase {
 		server.dispatchCommand(player, "test dust_color_transition 1.0 0.0 0.0 3.0 0.0 0.0 1.0");
 		@SuppressWarnings("unchecked")
 		ParticleData<DustTransition> result = (ParticleData<DustTransition>) results.get();
-		
+
 		// Check the particle type is correct
 		assertEquals(Particle.DUST_COLOR_TRANSITION, result.particle());
-		
+
 		// Check the particle properties
 		assertEquals(Color.RED, ((DustTransition) result.data()).getColor());
 		assertEquals(Color.BLUE, ((DustTransition) result.data()).getToColor());
