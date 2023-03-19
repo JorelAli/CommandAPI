@@ -11,10 +11,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Snowable;
+import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -271,10 +273,66 @@ class ArgumentParticleTests extends TestBase {
 		// Check the particle type is correct
 		assertEquals(Particle.VIBRATION, result.particle());
 		
-		// Check the particle properties
+		// Check the particle properties. We only support BlockDestination for commands.
 		assertBlockLocationCoordsEquals(player.getLocation(), result.data().getOrigin());
 		assertBlockLocationCoordsEquals(new Location(player.getWorld(), 5.0, 64.0, 0.0), ((BlockDestination) result.data().getDestination()).getLocation());
 		assertEquals(200, result.data().getArrivalTime());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentItem() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// item item_id
+		server.dispatchCommand(player, "test item apple");
+		@SuppressWarnings("unchecked")
+		ParticleData<ItemStack> result = (ParticleData<ItemStack>) results.get();
+		
+		// Check the particle type is correct
+		assertEquals(Particle.ITEM_CRACK, result.particle());
+		
+		// Check the particle properties
+		assertEquals(new ItemStack(Material.APPLE), (ItemStack) result.data());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentDustTransition() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// dust_color_transition red1 green1 blue1 size red2 green2 blue2
+		server.dispatchCommand(player, "test dust_color_transition 1.0 0.0 0.0 3.0 0.0 0.0 1.0");
+		@SuppressWarnings("unchecked")
+		ParticleData<DustTransition> result = (ParticleData<DustTransition>) results.get();
+		
+		// Check the particle type is correct
+		assertEquals(Particle.DUST_COLOR_TRANSITION, result.particle());
+		
+		// Check the particle properties
+		assertEquals(Color.RED, ((DustTransition) result.data()).getColor());
+		assertEquals(Color.BLUE, ((DustTransition) result.data()).getToColor());
+		assertEquals(3.0f, ((DustTransition) result.data()).getSize());
 
 		assertNoMoreResults(results);
 	}
