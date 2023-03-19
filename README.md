@@ -369,7 +369,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
             <td valign="top"><b>9.0.0</b></td>
             <td valign="top">??? 2023</td>
             <td valign="top">
-                <b>⚠️ This version is incompatible with any plugin that used the CommandAPI version 8.7.x or below! (See documentation for more information)</b><br>
+                <b>⚠️ This version is incompatible with any plugin that used the CommandAPI version 8.X.X or below! (See documentation for more information)</b><br>
                 <b>New features:</b>
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/360, https://github.com/JorelAli/CommandAPI/pull/369 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
@@ -408,6 +408,11 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <b>Bugs found (and fixed) as a result of using SonarCloud:</b>
                     <ul>
                         <li>Fixed the <code>FunctionArgument</code> not correctly retrieving datapack (function) tags in 1.17+</li>
+                    </ul>
+                    <li>Added some code coverage reports to identify how well tested the CommandAPI is, and what code paths need attention to during development</li>
+                    <b>Issues found (and fixed) as a result of using code coverage reports:</b>
+                    <ul>
+                        <li>Removed some redundant vibration particle handling code that would never be run under any circumstances</li>
                     </ul>
                 </ul>
                 <b>Documentation changes:</b>
