@@ -51,6 +51,7 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
@@ -205,7 +206,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
 			.thenReturn(BuiltInRegistries.PARTICLE_TYPE.asLookup()); // Registry.PARTICLE_TYPE
-		return ResourceArgument.resource(buildContextMock, Registries.PARTICLE_TYPE);
+		return ParticleArgument.particle(buildContextMock);
 	}
 
 	@Override

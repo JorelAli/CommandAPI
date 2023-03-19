@@ -22,10 +22,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import org.bukkit.craftbukkit.v1_16_R3.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemFactory;
@@ -341,6 +343,12 @@ public class MockNMS extends Enums {
 	@Override
 	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
+	}
+	
+	@Override
+	public String getNMSParticleNameFromBukkit(Particle particle) {
+		CraftParticle craftParticle = CraftParticle.valueOf(particle.name());
+		return MockPlatform.getFieldAs(CraftParticle.class, "minecraftKey", craftParticle, MinecraftKey.class).toString();
 	}
 	
 	@SuppressWarnings("deprecation")

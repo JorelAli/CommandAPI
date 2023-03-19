@@ -348,10 +348,15 @@ public class MockNMS extends Enums {
 		return potionEffectType.getKey().toString();
 	}
 	
-	@SuppressWarnings("null")
 	@Override
 	public String getNMSParticleNameFromBukkit(Particle particle) {
-		return BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.toNMS(particle).getType()).toString();
+		// Didn't want to do it like this, but it's way easier than going via the
+		// registry to do all sorts of nonsense with lookups. If you ever want to
+		// change your mind, here's how to access it via the registry. This doesn't
+		// scale well for pre 1.19 versions though!
+		//   BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.toNMS(particle).getType()).toString();
+		CraftParticle craftParticle = CraftParticle.valueOf(particle.name());
+		return MockPlatform.getFieldAs(CraftParticle.class, "minecraftKey", craftParticle, ResourceLocation.class).toString();
 	}
 	
 	@Override
