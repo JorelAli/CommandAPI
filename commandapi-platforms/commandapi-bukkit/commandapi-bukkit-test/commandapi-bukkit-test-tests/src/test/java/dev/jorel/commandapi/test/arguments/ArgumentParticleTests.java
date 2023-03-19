@@ -1,13 +1,20 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Vibration;
+import org.bukkit.Vibration.Destination.BlockDestination;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Snowable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -38,6 +45,13 @@ class ArgumentParticleTests extends TestBase {
 	@AfterEach
 	public void tearDown() {
 		super.tearDown();
+	}
+	
+	// Just checks block coords, doesn't check yaw/pitch or world
+	private void assertBlockLocationCoordsEquals(Location loc1, Location loc2) {
+		assertEquals(loc1.getBlockX(), loc2.getBlockX(), 0.0001);
+		assertEquals(loc1.getBlockY(), loc2.getBlockY(), 0.0001);
+		assertEquals(loc1.getBlockZ(), loc2.getBlockZ(), 0.0001);
 	}
 	
 
@@ -119,7 +133,7 @@ class ArgumentParticleTests extends TestBase {
 	}
 	
 	@RepeatedTest(10)
-	void executionTestWithParticleArgumentDust2() {
+	void executionTestWithParticleArgumentDustRandom() {
 		Mut<ParticleData<?>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -150,6 +164,117 @@ class ArgumentParticleTests extends TestBase {
 		// Check the particle properties
 		assertEquals(size, result.data().getSize());
 		assertEquals(Color.fromRGB((int) (red * 255), (int) (green * 255), (int) (blue * 255)), result.data().getColor());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentBlock() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// block block_type[meta]
+		server.dispatchCommand(player, "test block minecraft:grass_block[snowy=true]");
+		@SuppressWarnings("unchecked")
+		ParticleData<BlockData> result = (ParticleData<BlockData>) results.get();
+		
+		// Check the particle type is correct
+		assertEquals(Particle.BLOCK_CRACK, result.particle());
+		
+		// Check the particle properties
+		assertEquals(Material.GRASS_BLOCK, result.data().getMaterial());
+		assertTrue(((Snowable) result.data()).isSnowy());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentShriek() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// shriek delay
+		server.dispatchCommand(player, "test shriek 10");
+		@SuppressWarnings("unchecked")
+		ParticleData<Integer> result = (ParticleData<Integer>) results.get();
+		
+		// Check the particle type is correct
+		assertEquals(Particle.SHRIEK, result.particle());
+		
+		// Check the particle properties
+		assertEquals(10, result.data());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentSculkCharge() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// sculk_charge angle
+		server.dispatchCommand(player, "test sculk_charge 2");
+		@SuppressWarnings("unchecked")
+		ParticleData<Float> result = (ParticleData<Float>) results.get();
+		
+		// Check the particle type is correct
+		assertEquals(Particle.SCULK_CHARGE, result.particle());
+		
+		// Check the particle properties
+		assertEquals(2, result.data());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentVibration() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// vibration x y z ticks
+		server.dispatchCommand(player, "test vibration 5.0 64.0 0.0 200");
+		@SuppressWarnings("unchecked")
+		ParticleData<Vibration> result = (ParticleData<Vibration>) results.get();
+		
+		// Check the particle type is correct
+		assertEquals(Particle.VIBRATION, result.particle());
+		
+		// Check the particle properties
+		assertBlockLocationCoordsEquals(player.getLocation(), result.data().getOrigin());
+		assertBlockLocationCoordsEquals(new Location(player.getWorld(), 5.0, 64.0, 0.0), ((BlockDestination) result.data().getDestination()).getLocation());
+		assertEquals(200, result.data().getArrivalTime());
 
 		assertNoMoreResults(results);
 	}
