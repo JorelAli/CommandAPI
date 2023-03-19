@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -45,7 +44,6 @@ import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -147,7 +145,6 @@ import net.minecraft.server.MinecraftServer.ReloadableResources;
 import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -540,43 +537,11 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 			Vec3 to = positionSource.getPosition(level).get();
 			destination = new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
 		}
-		else if (options.getDestination() instanceof EntityPositionSource positionSource) {
-			destination = getVibrationParticleOptionDestinationAsEntityPositionSource(positionSource, level);
-		}
 		else {
-			CommandAPI.getLogger().warning("Unknown vibration destination " + options.getDestination());
+			CommandAPI.getLogger().warning("Unknown or unsupported vibration destination " + options.getDestination());
 			return new ParticleData<Void>(particle, null);
 		}
 		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
-	}
-
-	private Destination getVibrationParticleOptionDestinationAsEntityPositionSource(EntityPositionSource positionSource, Level level) {
-		positionSource.getPosition(level); // Populate Optional sourceEntity
-		@SuppressWarnings("unchecked")
-		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) entityPositionSource.get(positionSource);
-		if (entity.left().isPresent()) {
-			return new EntityDestination(entity.left().get().getBukkitEntity());
-		}
-		else {
-			Either<UUID, Integer> id = entity.right().get();
-			if (id.left().isPresent()) {
-				return new EntityDestination(Bukkit.getEntity(id.left().get()));
-			}
-			else {
-				// Do an entity lookup by numerical ID. There's no "helper function"
-				// like Bukkit.getEntity() to do this for us, so we just have to do it
-				// manually
-				Entity foundEntity = null;
-				for (ServerLevel world : this.<MinecraftServer>getMinecraftServer().getAllLevels()) {
-					Entity entityById = world.getEntity(id.right().get());
-					if (entityById != null) {
-						foundEntity = entityById;
-						break;
-					}
-				}
-				return new EntityDestination(foundEntity.getBukkitEntity());
-			}
-		}
 	}
 
 	@Differs(from = "1.19.2", by = "Use of ResourceArgument")

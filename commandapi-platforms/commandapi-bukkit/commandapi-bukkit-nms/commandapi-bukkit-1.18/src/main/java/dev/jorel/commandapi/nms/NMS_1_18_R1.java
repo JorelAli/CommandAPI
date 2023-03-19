@@ -44,7 +44,6 @@ import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -507,15 +506,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 			BlockPos to = positionSource.getPosition(level).get();
 			destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
 		}
-		else if (options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
-			positionSource.getPosition(level); // Populate Optional sourceEntity
-			@SuppressWarnings("unchecked")
-			Optional<Entity> entity = entityPositionSource.get(positionSource);
-			destination = new EntityDestination(entity.get().getBukkitEntity());
-		}
 		else {
 			CommandAPI.getLogger()
-				.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
+				.warning("Unknown or unsupported vibration destination " + options.getVibrationPath().getDestination());
 			return new ParticleData<Void>(particle, null);
 		}
 		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
