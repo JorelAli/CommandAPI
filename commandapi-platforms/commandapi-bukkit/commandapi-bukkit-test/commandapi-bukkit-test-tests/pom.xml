@@ -208,6 +208,7 @@
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
 					<version>${project.version}</version>
+					<type>pom</type>
 				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
