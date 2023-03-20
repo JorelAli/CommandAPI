@@ -67,7 +67,7 @@ This can be mitigated by running a [Paper](https://papermc.io/) Minecraft server
 
 For example, to use the CommandAPI with Java 17 and Minecraft 1.13.2:
 
-- Download a Paper server from the [Paper legacy downloads page](https://papermc.io/legacy) for Minecraft 1.13.2
+- Download a Paper server from the [Paper downloads page](https://papermc.io/downloads/all) for Minecraft 1.13.2
 - Run the following command in a terminal to start your Minecraft server:
 
   ```sh
