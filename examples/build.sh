@@ -5,5 +5,7 @@ set -e
 
 # Find all pom.xml files
 for folder in $(find $PWD -name "pom.xml" | xargs dirname); do
-	cd $folder && mvn clean package
+	if [[ ! $folder =~ "maven-shaded-tests" ]]; then
+		cd $folder && mvn clean package
+	fi
 done
