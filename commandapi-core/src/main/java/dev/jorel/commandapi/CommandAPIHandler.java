@@ -899,6 +899,19 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @param name  the name of the field
 	 * @return a Field reference
 	 */
+	public static Field getField(Class<?> clazz, String name) {
+		return getField(clazz, name, name);
+	}
+
+	/**
+	 * Caches a field using reflection if it is not already cached, then return the
+	 * field of a given class. This will also make the field accessible.
+	 * 
+	 * @param clazz the class where the field is declared
+	 * @param name  the name of the field
+	 * @param mojangMappedName the name of a field under Mojang mappings
+	 * @return a Field reference
+	 */
 	public static Field getField(Class<?> clazz, String name, String mojangMappedName) {
 		ClassCache key = new ClassCache(clazz, name, mojangMappedName);
 		if (FIELDS.containsKey(key)) {
