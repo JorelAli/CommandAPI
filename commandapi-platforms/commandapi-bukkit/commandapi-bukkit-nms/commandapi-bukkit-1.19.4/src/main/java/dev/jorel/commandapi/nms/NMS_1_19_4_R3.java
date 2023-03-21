@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +36,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -754,6 +761,29 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 	@Override
 	public final void resendPackets(Player player) {
 		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
+	}
+
+	@Override
+	public void registerCustomArgumentType() {
+		try {
+			// Unfreeze registry
+			Field isFrozen = CommandAPIHandler.getField(MappedRegistry.class, "l");
+
+			isFrozen.set(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, false);
+
+			// Register argument
+			Method registerArgument = ArgumentTypeInfos.class.getDeclaredMethod("a", Registry.class, String.class,
+				Class.class, ArgumentTypeInfo.class);
+			registerArgument.setAccessible(true);
+
+			registerArgument.invoke(null, BuiltInRegistries.COMMAND_ARGUMENT_TYPE, "commandapi:exception_handler",
+				ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentInfo_1_19_4<>());
+
+			// Refreeze registry
+			isFrozen.set(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, true);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

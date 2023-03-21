@@ -10,6 +10,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -569,4 +571,10 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		return baseNMS.getUUID(cmdCtx, key);
 	}
 
+	@Override
+	public void registerCustomArgumentType() {
+		if(!ArgumentTypeInfos.isClassRecognized(ExceptionHandlingArgumentType.class)) {
+			baseNMS.registerCustomArgumentType();
+		}
+	}
 }
