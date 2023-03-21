@@ -14,16 +14,19 @@ public class CommandArguments {
 
 	private final Object[] args;
 	private final Map<String, Object> argsMap;
+	private final String fullInput;
 
 	/**
 	 * Constructs a new CommandArguments instance
 	 *
-	 * @param args    The arguments for this command
-	 * @param argsMap The arguments for this command mapped to the node names. This is an ordered map
+	 * @param args      The arguments for this command
+	 * @param argsMap   The arguments for this command mapped to the node names. This is an ordered map
+	 * @param fullInput The raw command a player has entered
 	 */
-	public CommandArguments(Object[] args, Map<String, Object> argsMap) {
+	public CommandArguments(Object[] args, Map<String, Object> argsMap, String fullInput) {
 		this.args = args;
 		this.argsMap = argsMap;
+		this.fullInput = fullInput;
 	}
 	
 	// Access the inner structure directly
@@ -71,6 +74,15 @@ public class CommandArguments {
 	@Nullable
 	public Object get(String nodeName) {
 		return argsMap.get(nodeName);
+	}
+
+	/**
+	 * This returns the raw command string a player has entered
+	 *
+	 * @return The raw command string a player has entered
+	 */
+	public String getFullInput() {
+		return fullInput;
 	}
 	
 	// Optional accessing methods

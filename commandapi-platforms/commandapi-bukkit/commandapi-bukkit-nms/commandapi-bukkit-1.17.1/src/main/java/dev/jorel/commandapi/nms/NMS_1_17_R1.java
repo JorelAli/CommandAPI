@@ -63,7 +63,7 @@ public class NMS_1_17_R1 extends NMS_1_17_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher")
 				.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

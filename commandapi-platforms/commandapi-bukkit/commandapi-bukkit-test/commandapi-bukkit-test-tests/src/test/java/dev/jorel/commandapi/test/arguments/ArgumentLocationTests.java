@@ -31,7 +31,7 @@ class ArgumentLocationTests extends TestBase {
 	@AfterEach
 	public void tearDown() {
 		super.tearDown();
-	}	
+	}
 	
 	private void assertLocationEquals(Location loc1, Location loc2) {
 		assertEquals(loc1.getWorld(), loc2.getWorld());

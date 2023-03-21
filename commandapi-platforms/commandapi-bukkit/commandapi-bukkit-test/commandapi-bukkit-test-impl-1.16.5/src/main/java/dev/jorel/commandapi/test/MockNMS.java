@@ -1,31 +1,25 @@
 package dev.jorel.commandapi.test;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.CodeSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
+import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
+import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
+import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.CommandDispatcher;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
+import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import org.bukkit.craftbukkit.v1_16_R3.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemFactory;
@@ -38,43 +32,14 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.mockito.Mockito;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Streams;
-import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.CommandDispatcher;
+import java.io.File;
+import java.io.IOException;
+import java.security.CodeSource;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
-import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
-import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import net.minecraft.server.v1_16_R3.Advancement;
-import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
-import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
-import net.minecraft.server.v1_16_R3.ChatComponentText;
-import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
-import net.minecraft.server.v1_16_R3.CraftingManager;
-import net.minecraft.server.v1_16_R3.DispenserRegistry;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
-import net.minecraft.server.v1_16_R3.IRecipe;
-import net.minecraft.server.v1_16_R3.IRegistry;
-import net.minecraft.server.v1_16_R3.LootTableRegistry;
-import net.minecraft.server.v1_16_R3.LootTables;
-import net.minecraft.server.v1_16_R3.MinecraftKey;
-import net.minecraft.server.v1_16_R3.MinecraftServer;
-import net.minecraft.server.v1_16_R3.MobEffectList;
-import net.minecraft.server.v1_16_R3.PlayerList;
-import net.minecraft.server.v1_16_R3.Recipes;
-import net.minecraft.server.v1_16_R3.ResourceKey;
-import net.minecraft.server.v1_16_R3.ScoreboardServer;
-import net.minecraft.server.v1_16_R3.ScoreboardTeam;
-import net.minecraft.server.v1_16_R3.SharedConstants;
-import net.minecraft.server.v1_16_R3.UserCache;
-import net.minecraft.server.v1_16_R3.Vec2F;
-import net.minecraft.server.v1_16_R3.Vec3D;
-import net.minecraft.server.v1_16_R3.WorldServer;
+import static org.mockito.ArgumentMatchers.*;
 
 public class MockNMS extends Enums {
 
@@ -341,6 +306,12 @@ public class MockNMS extends Enums {
 	@Override
 	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
 		return MobEffectList.fromId(potionEffectType.getId()).c().replace("effect.minecraft.", "minecraft:");
+	}
+
+	@Override
+	public String getNMSParticleNameFromBukkit(Particle particle) {
+		CraftParticle craftParticle = CraftParticle.valueOf(particle.name());
+		return MockPlatform.getFieldAs(CraftParticle.class, "minecraftKey", craftParticle, MinecraftKey.class).toString();
 	}
 
 	@SuppressWarnings("deprecation")

@@ -23,9 +23,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_18_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemFactory;
@@ -330,6 +332,12 @@ public class MockNMS extends Enums {
 		return potionEffectType.getKey().asString();
 	}
 
+	@Override
+	public String getNMSParticleNameFromBukkit(Particle particle) {
+		CraftParticle craftParticle = CraftParticle.valueOf(particle.name());
+		return MockPlatform.getFieldAs(CraftParticle.class, "minecraftKey", craftParticle, ResourceLocation.class).toString();
+	}
+	
 	@Override
 	public List<NamespacedKey> getAllRecipes() {
 		return recipeManager.getRecipeIds().map(k -> new NamespacedKey(k.getNamespace(), k.getPath())).toList();

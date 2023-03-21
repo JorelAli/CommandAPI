@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -29,6 +31,9 @@ class ArgumentNBTCompoundTests extends TestBase {
 
 	@BeforeEach
 	public void setUp() {
+		// NBT API can't run via Mojang Mappings
+		assumeTrue(!CommandAPIVersionHandler.IS_MOJANG_MAPPED);
+
 		super.setUp();
 		MinecraftVersion.disableBStats();
 		MinecraftVersion.disablePackageWarning();
@@ -39,6 +44,7 @@ class ArgumentNBTCompoundTests extends TestBase {
 			case V1_17 -> MinecraftVersion.MC1_17_R1;
 			case V1_18 -> MinecraftVersion.MC1_18_R1;
 			case V1_19_2 -> MinecraftVersion.MC1_19_R1;
+			case V1_19_4 -> MinecraftVersion.MC1_19_R3;
 			default -> throw new IllegalArgumentException("Unexpected value: " + version);
 		};
 		MockPlatform.setField(MinecraftVersion.class, "version", null, currentNBTAPIMinecraftVersion);

@@ -49,10 +49,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -424,76 +420,4 @@ public interface NMS<CommandListenerWrapper> {
 
 	Message generateMessageFromJson(String json);
 
-	static class SafeVarHandle<Type, FieldType> {
-
-		private final VarHandle handle;
-
-		private SafeVarHandle(VarHandle handle) {
-			this.handle = handle;
-		}
-
-		static <Type, FieldType> SafeVarHandle<Type, FieldType> of(Class<Type> classType, String fieldName, Class<FieldType> fieldType) throws ReflectiveOperationException {
-			return new SafeVarHandle<>(MethodHandles.privateLookupIn(classType, MethodHandles.lookup()).findVarHandle(classType, fieldName, fieldType));
-		}
-
-		static <Type, FieldType> SafeVarHandle<Type, FieldType> ofOrNull(Class<Type> classType, String fieldName, Class<FieldType> fieldType) {
-			try {
-				return of(classType, fieldName, fieldType);
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		FieldType get(Type instance) {
-			return (FieldType) handle.get(instance);
-		}
-
-		FieldType getUnknownInstanceType(Object instance) {
-			return (FieldType) handle.get(instance);
-		}
-
-		FieldType getStatic() {
-			return (FieldType) handle.get(null);
-		}
-
-		void set(Type instance, FieldType param) {
-			handle.set(instance, param);
-		}
-	}
-
-	static class SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> {
-
-		private final MethodHandle handle;
-
-		private SafeStaticOneParameterMethodHandle(MethodHandle handle) {
-			this.handle = handle;
-		}
-
-		static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> of(Class<?> classType, String fieldName, Class<ReturnType> returnType, Class<ParameterType> parameterType) throws ReflectiveOperationException {
-			return new SafeStaticOneParameterMethodHandle<>(MethodHandles.privateLookupIn(classType, MethodHandles.lookup()).findStatic(classType, fieldName, MethodType.methodType(returnType, parameterType)));
-		}
-
-		static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> ofOrNull(Class<?> classType, String fieldName, Class<ReturnType> returnType, Class<ParameterType> parameterType) {
-			try {
-				return of(classType, fieldName, returnType, parameterType);
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		ReturnType invoke(ParameterType parameter) throws Throwable{
-			return (ReturnType) handle.invoke(parameter);
-		}
-
-		ReturnType invokeOrNull(ParameterType parameter) {
-			try {
-				return invoke(parameter);
-			} catch (Throwable e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-	}
 }

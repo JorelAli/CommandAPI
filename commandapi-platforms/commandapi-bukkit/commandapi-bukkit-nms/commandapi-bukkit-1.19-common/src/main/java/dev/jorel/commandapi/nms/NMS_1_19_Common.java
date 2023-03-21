@@ -35,6 +35,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -83,7 +84,6 @@ import net.minecraft.server.MinecraftServer.ReloadableResources;
 import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -107,7 +107,6 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -192,9 +191,9 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			COMMAND_BUILD_CONTEXT = null;
 		}
 
-		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", Either.class);
-		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", "entityOrUuidOrId", Either.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
 	}
@@ -463,7 +462,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(key, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "o").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -633,41 +632,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			Vec3 to = positionSource.getPosition(level).get();
 			destination = new BlockDestination(new Location(level.getWorld(), to.x(), to.y(), to.z()));
 		}
-		else if (options.getDestination() instanceof EntityPositionSource positionSource) {
-			destination = getVibrationParticleOptionDestinationAsEntityPositionSource(positionSource, level);
-		}
 		else {
-			CommandAPI.getLogger().warning("Unknown vibration destination " + options.getDestination());
+			CommandAPI.getLogger().warning("Unknown or unsupported vibration destination " + options.getDestination());
 			return new ParticleData<Void>(particle, null);
 		}
 		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getArrivalInTicks()));
-	}
-
-	private Destination getVibrationParticleOptionDestinationAsEntityPositionSource(EntityPositionSource positionSource, Level level) {
-		positionSource.getPosition(level); // Populate Optional sourceEntity
-		@SuppressWarnings("unchecked")
-		Either<Entity, Either<UUID, Integer>> entity = (Either<Entity, Either<UUID, Integer>>) entityPositionSource.get(positionSource);
-		if (entity.left().isPresent()) {
-			return new EntityDestination(entity.left().get().getBukkitEntity());
-		}
-		Either<UUID, Integer> id = entity.right().get();
-		if (id.left().isPresent()) {
-			return new EntityDestination(Bukkit.getEntity(id.left().get()));
-		}
-
-		// Do an entity lookup by numerical ID. There's no "helper function"
-		// like Bukkit.getEntity() to do this for us, so we just have to do it
-		// manually
-		Entity foundEntity = null;
-
-		for (ServerLevel world : this.<MinecraftServer>getMinecraftServer().getAllLevels()) {
-			Entity entityById = world.getEntity(id.right().get());
-			if (entityById != null) {
-				foundEntity = entityById;
-				break;
-			}
-		}
-		return new EntityDestination(foundEntity.getBukkitEntity());
 	}
 
 	@Override
@@ -776,7 +745,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher")
 				.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

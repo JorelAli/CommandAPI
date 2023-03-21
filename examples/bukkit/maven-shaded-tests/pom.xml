@@ -150,6 +150,10 @@
 				<version>2.22.0</version>
 				<configuration>
 					<trimStackTrace>false</trimStackTrace>
+					<systemPropertyVariables>
+						<!-- Tell the test framework you're using Minecraft 1.19.2 -->
+						<profileId>Minecraft_1_19_2</profileId>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 		</plugins>

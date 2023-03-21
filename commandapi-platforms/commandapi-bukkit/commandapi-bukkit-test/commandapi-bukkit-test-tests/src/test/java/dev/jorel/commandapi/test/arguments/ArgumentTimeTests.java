@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.TimeArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -77,7 +78,11 @@ class ArgumentTimeTests extends TestBase {
 
 		// /test -2
 		// Fails because -2 is negative (ticks can only be 0 or greater)
-		assertCommandFailsWith(player, "test -2", "Tick count must be non-negative");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+			assertCommandFailsWith(player, "test -2", "Tick count must not be less than 0, found -2");
+		} else {
+			assertCommandFailsWith(player, "test -2", "Tick count must be non-negative");
+		}
 		
 		// /test 2x
 		// Fails because 'x' is not a valid unit

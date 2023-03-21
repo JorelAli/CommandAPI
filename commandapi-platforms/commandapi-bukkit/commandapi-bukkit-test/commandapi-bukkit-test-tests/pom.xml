@@ -32,12 +32,13 @@
 
 	<artifactId>commandapi-bukkit-test-tests</artifactId>
 
-	<properties>
-		<minecraft.mappings>1.19.2-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19.2-R0.1-SNAPSHOT</spigot.version>
-	</properties>
-
 	<repositories>
+		<repository>
+			<!-- NBT API -->
+			<id>codemc-repo-public</id>
+			<url>https://repo.codemc.io/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
 		<repository>
 			<id>codemc-repo</id>
 			<url>https://repo.codemc.io/repository/nms/</url>
@@ -78,11 +79,6 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-shade</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-test-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -91,7 +87,7 @@
 		<dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api</artifactId>
-			<version>2.11.1</version>
+			<version>2.11.2</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -125,6 +121,12 @@
 					<systemPropertyVariables>
 						<profileId>${project.activeProfiles[0].id}</profileId>
 					</systemPropertyVariables>
+					<!-- To help with debugging tests, you can specify an include
+					 to limit a build to only run a certain test file. Uncomment
+					 here if you want to do that: -->
+					<!-- <includes>
+						<include>**/ArgumentParticleTests.java</include>
+					</includes> -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -153,11 +155,95 @@
 
 	<profiles>
 		<profile>
-			<id>Minecraft_1_19_2</id>
+			<id>Minecraft_1_19_4</id>
+			<dependencies>
+				<dependency>
+					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
+					 commandapi-core, but isn't inherited here automatically, so we add
+					 it here -->
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+					<version>2.19.0</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
+					<version>${project.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.19.4-R0.1-SNAPSHOT</version>
+				</dependency>
+				<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.19.4-R0.1-SNAPSHOT</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>Minecraft_1_19_4_Mojang</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<dependencies>
+				<dependency>
+					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
+					 commandapi-core, but isn't inherited here automatically, so we add
+					 it here -->
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+					<version>2.19.0</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
+					<version>${project.version}</version>
+					<type>pom</type>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
+					<version>${project.version}</version>
+					<classifier>mojang-mapped</classifier>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.19.4-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.19.4-R0.1-20230320.085443-20</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>Minecraft_1_19_2</id>
+			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
@@ -182,6 +268,11 @@
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -196,6 +287,11 @@
 		<profile>
 			<id>Minecraft_1_17</id>
 			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.17</artifactId>
@@ -218,6 +314,11 @@
 		<profile>
 			<id>Minecraft_1_16_5</id>
 			<dependencies>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>dev.jorel</groupId>
 					<artifactId>commandapi-bukkit-test-impl-1.16.5</artifactId>

@@ -9,6 +9,7 @@ import com.github.zafarkhaja.semver.Version;
 public enum MCVersion {
 
 	// 1.19
+	V1_19_4(Version.valueOf("1.19.4")),
 	V1_19_3(Version.valueOf("1.19.3")),
 	V1_19_2(Version.valueOf("1.19.2")),
 	V1_19_1(Version.valueOf("1.19.1")),

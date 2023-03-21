@@ -2,6 +2,8 @@ package dev.jorel.commandapi.nms;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
+import dev.jorel.commandapi.SafeStaticOneParameterMethodHandle;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
@@ -17,9 +19,9 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> extends ExceptionHan
 	// All the ? here should actually be ArgumentTypes.Entry, but that is a private inner class. That makes everything really annoying.
 	// TODO: We want to check this reflection, but we can't give ArgumentTypes.Entry to the @RequireField annotation
 	//  Hopefully something works out, but the preprocessor needs to be expanded first
-	private static final NMS.SafeStaticOneParameterMethodHandle<?, ArgumentType> getArgumentTypeInformation;
-	private static final NMS.SafeVarHandle<?, ResourceLocation> serializationKey;
-	private static final NMS.SafeVarHandle<?, ArgumentSerializer> serializer;
+	private static final SafeStaticOneParameterMethodHandle<?, ArgumentType> getArgumentTypeInformation;
+	private static final SafeVarHandle<?, ResourceLocation> serializationKey;
+	private static final SafeVarHandle<?, ArgumentSerializer> serializer;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
@@ -35,9 +37,9 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T> extends ExceptionHan
 			e.printStackTrace();
 		}
 
-		getArgumentTypeInformation = NMS.SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentTypes.class, "b", entryClass, ArgumentType.class);
-		serializationKey = NMS.SafeVarHandle.ofOrNull(entryClass, "b", ResourceLocation.class);
-		serializer = NMS.SafeVarHandle.ofOrNull(entryClass, "a", ArgumentSerializer.class);
+		getArgumentTypeInformation = SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentTypes.class, "b", "get", entryClass, ArgumentType.class);
+		serializationKey = SafeVarHandle.ofOrNull(entryClass, "b", "name", ResourceLocation.class);
+		serializer = SafeVarHandle.ofOrNull(entryClass, "a", "serializer", ArgumentSerializer.class);
 	}
 
 	// Serializer_Common methods

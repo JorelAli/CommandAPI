@@ -35,6 +35,7 @@
 	<modules>
 		<!-- NMS versions -->
 		<module>commandapi-bukkit-nms-common</module>
+		<module>commandapi-bukkit-1.19.4</module>
 		<module>commandapi-bukkit-1.19.3</module>
 		<module>commandapi-bukkit-1.19-common</module>
 		<module>commandapi-bukkit-1.19.1</module>
@@ -52,6 +53,7 @@
 
 		<!-- The thing you actually include -->
 		<module>commandapi-bukkit-nms-dependency</module>
+		<module>commandapi-bukkit-nms-dependency-mojang-mapped</module>
 	</modules>
 
 	<dependencies>

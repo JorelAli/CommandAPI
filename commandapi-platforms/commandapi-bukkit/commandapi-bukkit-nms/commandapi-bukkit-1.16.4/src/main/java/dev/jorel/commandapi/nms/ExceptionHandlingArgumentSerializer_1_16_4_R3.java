@@ -2,6 +2,8 @@ package dev.jorel.commandapi.nms;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
+import dev.jorel.commandapi.SafeStaticOneParameterMethodHandle;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import net.minecraft.server.v1_16_R3.ArgumentRegistry;
 import net.minecraft.server.v1_16_R3.ArgumentSerializer;
@@ -14,9 +16,9 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> extends ExceptionH
 	// All the ? here should actually be ArgumentRegistry.a, but that is a private inner class. That makes everything really annoying.
 	// TODO: We want to check this reflection, but we can't give ArgumentRegistry.a to the @RequireField annotation
 	//  Hopefully something works out, but the preprocessor needs to be expanded first
-	private static final NMS.SafeStaticOneParameterMethodHandle<?, ArgumentType> getArgumentTypeInformation;
-	private static final NMS.SafeVarHandle<?, MinecraftKey> serializationKey;
-	private static final NMS.SafeVarHandle<?, ArgumentSerializer> serializer;
+	private static final SafeStaticOneParameterMethodHandle<?, ArgumentType> getArgumentTypeInformation;
+	private static final SafeVarHandle<?, MinecraftKey> serializationKey;
+	private static final SafeVarHandle<?, ArgumentSerializer> serializer;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
@@ -32,9 +34,9 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T> extends ExceptionH
 			e.printStackTrace();
 		}
 
-		getArgumentTypeInformation = NMS.SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentRegistry.class, "b", entryClass, ArgumentType.class);
-		serializationKey = NMS.SafeVarHandle.ofOrNull(entryClass, "c", MinecraftKey.class);
-		serializer = NMS.SafeVarHandle.ofOrNull(entryClass, "b", ArgumentSerializer.class);
+		getArgumentTypeInformation = SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentRegistry.class, "b", "b", entryClass, ArgumentType.class);
+		serializationKey = SafeVarHandle.ofOrNull(entryClass, "c", "c", MinecraftKey.class);
+		serializer = SafeVarHandle.ofOrNull(entryClass, "b", "b", ArgumentSerializer.class);
 	}
 
 	// Serializer_Common methods

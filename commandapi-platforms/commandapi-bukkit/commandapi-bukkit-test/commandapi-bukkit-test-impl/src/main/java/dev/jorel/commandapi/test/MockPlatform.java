@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -168,6 +169,8 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 * @return a Minecraft namespaced key name for a potion effect
 	 */
 	public abstract String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType);
+	
+	public String getNMSParticleNameFromBukkit(Particle particle) {return null;};
 	
 	static record Pair<A, B>(A first, B second) {}
 	

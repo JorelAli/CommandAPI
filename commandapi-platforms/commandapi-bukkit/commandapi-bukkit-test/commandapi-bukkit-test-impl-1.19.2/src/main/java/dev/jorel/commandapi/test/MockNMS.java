@@ -39,6 +39,7 @@ import net.minecraft.world.scores.PlayerTeam;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_19_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemFactory;
@@ -318,6 +319,12 @@ public class MockNMS extends Enums {
 	@Override
 	public String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType) {
 		return potionEffectType.getKey().asString();
+	}
+
+	@Override
+	public String getNMSParticleNameFromBukkit(Particle particle) {
+		CraftParticle craftParticle = CraftParticle.valueOf(particle.name());
+		return MockPlatform.getFieldAs(CraftParticle.class, "minecraftKey", craftParticle, ResourceLocation.class).toString();
 	}
 
 	@Override

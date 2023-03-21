@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -64,7 +65,11 @@ class ArgumentEnchantmentTests extends TestBase {
 
 		// /test blah
 		// Unknown enchantment, blah is not a valid enchantment
-		assertCommandFailsWith(player, "test blah", "Unknown enchantment: minecraft:blah");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+			assertCommandFailsWith(player, "test blah", "Can't find element 'minecraft:blah' of type 'minecraft:enchantment'");
+		} else {
+			assertCommandFailsWith(player, "test blah", "Unknown enchantment: minecraft:blah");
+		}
 
 		assertNoMoreResults(results);
 	}

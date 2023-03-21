@@ -39,6 +39,12 @@
 
 	<repositories>
 		<repository>
+			<!-- NBT API -->
+			<id>codemc-repo-public</id>
+			<url>https://repo.codemc.io/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
 			<id>codemc-repo</id>
 			<url>https://repo.codemc.io/repository/nms/</url>
 			<layout>default</layout>

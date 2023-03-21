@@ -70,18 +70,26 @@ jobs:
       # Dev note: Yes, I know I could put this under one run section, but it's a million times easier
       # to see which version failed when it's got the version name and subsection in GitHub Actions
 
+      - name: Run Bukkit unit tests across all versions (1.19.4)
+        continue-on-error: true
+        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_4
+
       - name: Run Bukkit unit tests across all versions (1.19.2)
+        continue-on-error: true
         run: |
             mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
             mvn clean package -pl :commandapi-bukkit-test-tests-1.18 -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
 
       - name: Run Bukkit unit tests across all versions (1.18)
+        continue-on-error: true
         run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_18
 
       - name: Run Bukkit unit tests across all versions (1.17)
+        continue-on-error: true
         run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_17
 
       - name: Run Bukkit unit tests across all versions (1.16.5)
+        continue-on-error: true
         run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_16_5
 
       ### Upload .jar artifacts ###

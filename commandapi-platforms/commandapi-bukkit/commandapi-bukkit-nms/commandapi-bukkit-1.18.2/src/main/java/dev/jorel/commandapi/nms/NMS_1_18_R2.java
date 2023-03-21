@@ -34,6 +34,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.logging.LogUtils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -100,7 +101,6 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.Vibration.Destination.EntityDestination;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -154,9 +154,9 @@ public class NMS_1_18_R2 extends NMS_Common {
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "d", Optional.class);
-		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", CompoundTag.class);
+		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "d", "sourceEntity", Optional.class);
+		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -372,7 +372,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "o").set(argument, false);
+			CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -533,15 +533,9 @@ public class NMS_1_18_R2 extends NMS_Common {
 			BlockPos to = positionSource.getPosition(level).get();
 			destination = new BlockDestination(new Location(level.getWorld(), to.getX(), to.getY(), to.getZ()));
 		}
-		else if (options.getVibrationPath().getDestination() instanceof EntityPositionSource positionSource) {
-			positionSource.getPosition(level); // Populate Optional sourceEntity
-			@SuppressWarnings("unchecked")
-			Optional<Entity> entity = entityPositionSource.get(positionSource);
-			destination = new EntityDestination(entity.get().getBukkitEntity());
-		}
 		else {
 			CommandAPI.getLogger()
-				.warning("Unknown vibration destination " + options.getVibrationPath().getDestination());
+				.warning("Unknown or unsupported vibration destination " + options.getVibrationPath().getDestination());
 			return new ParticleData<Void>(particle, null);
 		}
 		return new ParticleData<Vibration>(particle, new Vibration(from, destination, options.getVibrationPath().getArrivalInTicks()));
@@ -659,7 +653,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i")
+			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher")
 					.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

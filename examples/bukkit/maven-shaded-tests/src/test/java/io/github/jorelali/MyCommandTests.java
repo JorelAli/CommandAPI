@@ -1,6 +1,6 @@
 package io.github.jorelali;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;

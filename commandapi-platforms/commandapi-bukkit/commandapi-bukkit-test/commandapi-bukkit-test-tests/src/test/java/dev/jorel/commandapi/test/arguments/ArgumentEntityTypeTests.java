@@ -48,6 +48,13 @@ class ArgumentEntityTypeTests extends TestBase {
 			.filter(e -> e != EntityType.UNKNOWN)
 			.filter(e -> e != EntityType.PLAYER)
 			.filter(e -> e != EntityType.FISHING_HOOK)
+			.filter(e -> { 
+				if ( version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+					return !e.name().equals("CAMEL") && !e.name().equals("SNIFFER");
+				} else {
+					return true;
+				}
+			})
 			.map(e -> e.getKey().toString())
 			.sorted()
 			.toList();
@@ -80,7 +87,11 @@ class ArgumentEntityTypeTests extends TestBase {
 
 		// /test giraffe
 		// Unknown entity, giraffe is not a valid entity type
-		assertCommandFailsWith(player, "test giraffe", "Unknown entity: minecraft:giraffe");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+			assertCommandFailsWith(player, "test giraffe", "Can't find element 'minecraft:giraffe' of type 'minecraft:entity_type'");
+		} else {
+			assertCommandFailsWith(player, "test giraffe", "Unknown entity: minecraft:giraffe");
+		}
 
 		assertNoMoreResults(results);
 	}

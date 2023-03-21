@@ -214,7 +214,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 					@Override
 					public CommandArguments args() {
-						return new CommandArguments(result, new LinkedHashMap<>());
+						return new CommandArguments(result, new LinkedHashMap<>(), "/" + cmdCtx.getInput());
 					}
 				};
 
@@ -268,13 +268,13 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		// Populate array
 		for (Argument argument : args) {
 			if (argument.isListed()) {
-				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap));
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap, "/" + cmdCtx.getInput()));
 				argList.add(parsedArgument);
 				argsMap.put(argument.getNodeName(), parsedArgument);
 			}
 		}
 
-		return new CommandArguments(argList.toArray(), argsMap);
+		return new CommandArguments(argList.toArray(), argsMap, "/" + cmdCtx.getInput());
 	}
 
 	/**
@@ -816,7 +816,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 			Object result;
 			try {
-				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap));
+				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap, "/" + context.getInput()));
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Redirected commands don't parse previous arguments properly. Simplest way to
@@ -833,7 +833,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				argsMap.put(arg.getNodeName(), result);
 			}
 		}
-		return new CommandArguments(previousArguments.toArray(), argsMap);
+		return new CommandArguments(previousArguments.toArray(), argsMap, "/" + context.getInput());
 	}
 
 	SuggestionProvider<Source> toSuggestions(Argument theArgument, Argument[] args,
@@ -901,13 +901,26 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @return a Field reference
 	 */
 	public static Field getField(Class<?> clazz, String name) {
-		ClassCache key = new ClassCache(clazz, name);
+		return getField(clazz, name, name);
+	}
+
+	/**
+	 * Caches a field using reflection if it is not already cached, then return the
+	 * field of a given class. This will also make the field accessible.
+	 * 
+	 * @param clazz the class where the field is declared
+	 * @param name  the name of the field
+	 * @param mojangMappedName the name of a field under Mojang mappings
+	 * @return a Field reference
+	 */
+	public static Field getField(Class<?> clazz, String name, String mojangMappedName) {
+		ClassCache key = new ClassCache(clazz, name, mojangMappedName);
 		if (FIELDS.containsKey(key)) {
 			return FIELDS.get(key);
 		} else {
 			Field result;
 			try {
-				result = clazz.getDeclaredField(name);
+				result = clazz.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : name);
 			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 				return null;
@@ -928,7 +941,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * This is required because each key is made up of a class and a field or method
 	 * name
 	 */
-	private record ClassCache(Class<?> clazz, String name) {
+	private record ClassCache(Class<?> clazz, String name, String mojangMappedName) {
 	}
 
 	/**

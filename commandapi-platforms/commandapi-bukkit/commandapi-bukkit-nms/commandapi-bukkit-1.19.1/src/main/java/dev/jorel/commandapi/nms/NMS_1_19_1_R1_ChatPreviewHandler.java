@@ -27,7 +27,7 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPrevie
 		super(platform, plugin, player);
 
 		try {
-			Field f = CommandAPIHandler.getField(ServerGamePacketListenerImpl.class, "M");
+			Field f = CommandAPIHandler.getField(ServerGamePacketListenerImpl.class, "M", "chatPreviewThrottler");
 			throttler = (ChatPreviewThrottler) f.get(((CraftPlayer) player).getHandle().connection);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,7 +48,7 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPrevie
 			result.thenAcceptAsync(component -> {
 				if(component == null) return;
 				try {
-					Field f = ServerGamePacketListenerImpl.class.getDeclaredField("L");
+					Field f = ServerGamePacketListenerImpl.class.getDeclaredField("L"); // chatPreviewCache TODO: Unoptimized reflection access here. Should use CommandAPIHandler instead
 					f.setAccessible(true);
 					ChatPreviewCache c = (ChatPreviewCache) f.get(((CraftPlayer) player).getHandle().connection);
 					c.set(chatPreview.query().substring(1), component);
