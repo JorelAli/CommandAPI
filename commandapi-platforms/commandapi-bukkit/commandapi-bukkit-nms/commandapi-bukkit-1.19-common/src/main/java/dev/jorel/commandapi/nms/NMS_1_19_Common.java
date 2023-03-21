@@ -861,7 +861,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	public void registerCustomArgumentType() {
 		try {
 			// Unfreeze registry
-			Field isFrozen = CommandAPIHandler.getField(MappedRegistry.class, "ca");
+			Field isFrozen = CommandAPIHandler.getField(MappedRegistry.class, "ca", "frozen");
 			isFrozen.set(Registry.COMMAND_ARGUMENT_TYPE, false);
 
 			// Register argument
