@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.io.File;
 import java.io.IOException;
 import java.security.CodeSource;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,6 +48,7 @@ import org.mockito.Mockito;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
@@ -483,18 +485,23 @@ public class MockNMS extends Enums {
 			ServerFunctionLibrary serverFunctionLibrary = Mockito.mock(ServerFunctionLibrary.class);
 
 			// Functions
-			Mockito.when(serverFunctionLibrary.getFunction(any())).thenAnswer(invocation -> {
-				ResourceLocation resourceLocation = invocation.getArgument(0);
-				System.out.println("Searching " + functions + " for " + resourceLocation);
-				return Optional.ofNullable(functions.get(resourceLocation));
-			});
+			Mockito.when(serverFunctionLibrary.getFunction(any())).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
 			Mockito.when(serverFunctionLibrary.getFunctions()).thenAnswer(invocation -> functions);
 
 			// Tags
 			Mockito.when(serverFunctionLibrary.getTag(any())).thenAnswer(invocation -> tags.getOrDefault(invocation.getArgument(0), List.of()));
 			Mockito.when(serverFunctionLibrary.getAvailableTags()).thenAnswer(invocation -> tags.keySet());
 
-			return new ServerFunctionManager(minecraftServerMock, serverFunctionLibrary);
+			return new ServerFunctionManager(minecraftServerMock, serverFunctionLibrary) {
+				
+				// Make sure we don't use ServerFunctionManager#getDispatcher!
+				// That method accesses MinecraftServer.vanillaCommandDispatcher
+				// directly (boo) and that causes all sorts of nonsense.
+				@Override
+				public CommandDispatcher<CommandSourceStack> getDispatcher() {
+					return Brigadier.getCommandDispatcher();
+				}
+			};
 		});
 		
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
@@ -503,6 +510,7 @@ public class MockNMS extends Enums {
 		return (T) minecraftServerMock;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addFunction(NamespacedKey key, List<String> commands) {
 		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
@@ -511,7 +519,6 @@ public class MockNMS extends Enums {
 		// So for very interesting reasons, Brigadier.getCommandDispatcher()
 		// gives a different result in this method than using getBrigadierDispatcher()
 		this.functions.put(resourceLocation, CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, commands));
-		System.out.println("Added function, result is now: " + functions);
 	}
 
 	@Override
