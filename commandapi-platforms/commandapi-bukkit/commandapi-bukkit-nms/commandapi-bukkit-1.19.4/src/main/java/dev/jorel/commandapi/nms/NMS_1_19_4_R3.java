@@ -772,8 +772,8 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 			isFrozen.set(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, false);
 
 			// Register argument
-			Method registerArgument = ArgumentTypeInfos.class.getDeclaredMethod("a", Registry.class, String.class,
-				Class.class, ArgumentTypeInfo.class);
+			Method registerArgument = ArgumentTypeInfos.class.getDeclaredMethod(SafeVarHandle.USING_MOJANG_MAPPINGS ? "register" : "a",
+				Registry.class, String.class, Class.class, ArgumentTypeInfo.class);
 			registerArgument.setAccessible(true);
 
 			registerArgument.invoke(null, BuiltInRegistries.COMMAND_ARGUMENT_TYPE, "commandapi:exception_handler",
