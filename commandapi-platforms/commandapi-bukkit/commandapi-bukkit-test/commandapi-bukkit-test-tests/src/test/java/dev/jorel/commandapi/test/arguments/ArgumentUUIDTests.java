@@ -40,7 +40,7 @@ class ArgumentUUIDTests extends TestBase {
 	 *********/
 
 	@RepeatedTest(10)
-	public void executionTestWithUUIDArgument() {
+	void executionTestWithUUIDArgument() {
 		Mut<UUID> results = Mut.of();
 
 		new CommandAPICommand("test")

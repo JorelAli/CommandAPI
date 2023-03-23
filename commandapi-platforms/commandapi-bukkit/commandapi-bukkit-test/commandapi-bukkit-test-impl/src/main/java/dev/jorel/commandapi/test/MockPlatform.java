@@ -52,6 +52,10 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 			// wtf why was this called twice?
 		}
 	}
+	
+	public static void unload() {
+		MockPlatform.instance = null;
+	}
 
 	/************************************
 	 * CommandAPIBukkit implementations *
