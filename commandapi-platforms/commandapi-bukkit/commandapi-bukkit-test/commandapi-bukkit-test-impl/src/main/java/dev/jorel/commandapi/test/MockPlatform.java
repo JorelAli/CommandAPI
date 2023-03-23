@@ -160,6 +160,8 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	public abstract ItemFactory getItemFactory();
 
 	public abstract org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key);
+	
+	public void addFunction(NamespacedKey key, List<String> commands) {}; // TODO: Implenent for other NMS
 
 	/**
 	 * Converts 1.16.5 and below potion effect names to NamespacedKey names. For
@@ -170,7 +172,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 */
 	public abstract String getBukkitPotionEffectTypeName(PotionEffectType potionEffectType);
 	
-	public String getNMSParticleNameFromBukkit(Particle particle) {return null;};
+	public abstract String getNMSParticleNameFromBukkit(Particle particle);
 	
 	static record Pair<A, B>(A first, B second) {}
 	
