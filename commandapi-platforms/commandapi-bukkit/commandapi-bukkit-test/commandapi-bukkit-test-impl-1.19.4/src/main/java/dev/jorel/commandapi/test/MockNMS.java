@@ -510,6 +510,10 @@ public class MockNMS extends Enums {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addFunction(NamespacedKey key, List<String> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
 		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
 		CommandSourceStack css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
 
@@ -521,6 +525,10 @@ public class MockNMS extends Enums {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addTag(NamespacedKey key, List<List<String>> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
 		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
 		CommandSourceStack css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
 
