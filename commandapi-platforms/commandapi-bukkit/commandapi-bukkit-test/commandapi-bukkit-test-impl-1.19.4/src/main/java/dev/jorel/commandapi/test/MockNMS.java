@@ -518,6 +518,19 @@ public class MockNMS extends Enums {
 		this.functions.put(resourceLocation, CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, commands));
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addTag(NamespacedKey key, List<List<String>> commands) {
+		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+
+		List<CommandFunction> tagFunctions = new ArrayList<>();
+		for(List<String> functionCommands : commands) {
+			tagFunctions.add(CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
+		}
+		this.tags.put(resourceLocation, tagFunctions);
+	}
+
 	@Override
 	public org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
 		advancementDataWorld.advancements.advancements.put(new ResourceLocation(key.toString()),

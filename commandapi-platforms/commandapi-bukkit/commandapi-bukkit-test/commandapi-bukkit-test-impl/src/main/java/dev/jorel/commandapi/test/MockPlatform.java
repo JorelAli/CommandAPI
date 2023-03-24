@@ -165,7 +165,8 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	public abstract org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key);
 	
-	public void addFunction(NamespacedKey key, List<String> commands) {}; // TODO: Implenent for other NMS
+	public void addFunction(NamespacedKey key, List<String> commands) {}; // TODO: Implement for other NMS
+	public void addTag(NamespacedKey key, List<List<String>> commands) {}; // TODO: Implement for other NMS
 
 	/**
 	 * Converts 1.16.5 and below potion effect names to NamespacedKey names. For

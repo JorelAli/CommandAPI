@@ -84,6 +84,57 @@ class ArgumentFunctionTests extends TestBase {
 		assertNoMoreResults(results);
 		assertNoMoreResults(sayResults);
 	}
+	
+	@Test
+	void executionTestWithFunctionArgumentTag() {
+		Mut<FunctionWrapper[]> results = Mut.of();
+		Mut<String> sayResults = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new FunctionArgument("function"))
+			.executesPlayer((player, args) -> {
+				results.set((FunctionWrapper[]) args.get("function"));
+			})
+			.register();
+
+		new CommandAPICommand("mysay")
+			.withArguments(new GreedyStringArgument("message"))
+			.executesPlayer((player, args) -> {
+				sayResults.set(args.getUnchecked("message"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Declare our functions on the server
+		MockPlatform.getInstance().addTag(new NamespacedKey("ns", "mytag"), List.of(
+			List.of("mysay hi", "mysay bye"),
+			List.of("mysay hello", "mysay world")
+		));
+
+		// Run the /test command
+		server.dispatchCommand(player, "test #ns:mytag");
+
+		// Check that the FunctionArgument has one entry and it hasn't run the /mysay
+		// command
+		FunctionWrapper[] result = results.get();
+		assertEquals(2, result.length);
+		assertNoMoreResults(sayResults);
+
+		// Run the function (which should run the /mysay command)
+		for(FunctionWrapper wrapper : result) {
+			wrapper.run();
+		}
+
+		// Check that /mysay was run successfully...
+		assertEquals("hi", sayResults.get());
+		assertEquals("bye", sayResults.get());
+		assertEquals("hello", sayResults.get());
+		assertEquals("world", sayResults.get());
+
+		assertNoMoreResults(results);
+		assertNoMoreResults(sayResults);
+	}
 
 	/********************
 	 * Suggestion tests *
@@ -110,6 +161,37 @@ class ArgumentFunctionTests extends TestBase {
 		// /test
 		// Should suggest mynamespace:myotherfunc and ns:myfunc
 		assertEquals(List.of("mynamespace:myotherfunc", "ns:myfunc"), server.getSuggestions(player, "test "));
+	}
+
+	@Test
+	void suggestionTestWithFunctionArgumentTag() {
+		new CommandAPICommand("test")
+			.withArguments(new FunctionArgument("function"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		new CommandAPICommand("mysay")
+			.withArguments(new GreedyStringArgument("message"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Declare our functions on the server
+		MockPlatform.getInstance().addFunction(new NamespacedKey("ns", "myfunc"), List.of("mysay hi"));
+		MockPlatform.getInstance().addFunction(new NamespacedKey("mynamespace", "myotherfunc"), List.of("mysay bye"));
+		MockPlatform.getInstance().addTag(new NamespacedKey("ns", "mytag"), List.of(
+			List.of("mysay hi", "mysay bye"),
+			List.of("mysay hello", "mysay world")
+		));
+		MockPlatform.getInstance().addTag(new NamespacedKey("namespace", "myothertag"), List.of(
+			List.of("mysay hi", "mysay bye"),
+			List.of("mysay hello", "mysay world")
+		));
+
+		// /test
+		// Should suggest #namespace:myothertag, #ns:mytag, mynamespace:myotherfunc and ns:myfunc
+		assertEquals(List.of("#namespace:myothertag", "#ns:mytag", "mynamespace:myotherfunc", "ns:myfunc"), server.getSuggestions(player, "test "));
 	}
 
 }
