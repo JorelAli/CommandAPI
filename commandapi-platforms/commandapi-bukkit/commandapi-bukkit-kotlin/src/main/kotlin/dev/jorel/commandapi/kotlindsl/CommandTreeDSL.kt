@@ -2,16 +2,8 @@ package dev.jorel.commandapi.kotlindsl
 
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
-import dev.jorel.commandapi.executors.*
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender
-import org.bukkit.command.BlockCommandSender
 import org.bukkit.command.CommandSender
-import org.bukkit.command.ConsoleCommandSender
-import org.bukkit.command.ProxiedCommandSender
-import org.bukkit.entity.Entity
-import org.bukkit.entity.Player
 import java.util.function.Predicate
-import java.util.regex.Pattern
 
 inline fun commandTree(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
 inline fun commandTree(name: String, predicate: Predicate<CommandSender>, tree: CommandTree.() -> Unit = {}) = CommandTree(name).withRequirement(predicate).apply(tree).register()
@@ -232,93 +224,3 @@ inline fun Argument<*>.functionArgument(nodeName: String, block: Argument<*>.() 
 
 inline fun CommandTree.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): CommandTree = then(base.withRequirement(predicate).apply(block))
 inline fun Argument<*>.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.withRequirement(predicate).apply(block))
-
-// CommandTree execution
-inline fun CommandTree.anyExecutor(crossinline executor: (CommandSender, CommandArguments) -> Unit) = executes(CommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.playerExecutor(crossinline executor: (Player, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesEntity(EntityCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.consoleExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Unit) = executesConsole(ConsoleCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.commandBlockExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Unit) = executesCommandBlock(CommandBlockCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.proxyExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Unit) = executesProxy(ProxyCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.nativeExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Unit) = executesNative(NativeCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-
-inline fun CommandTree.anyResultingExecutor(crossinline executor: (CommandSender, CommandArguments) -> Int) = executes(ResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.playerResultingExecutor(crossinline executor: (Player, CommandArguments) -> Int) = executesPlayer(PlayerResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.entityResultingExecutor(crossinline executor: (Entity, CommandArguments) -> Int) = executesEntity(EntityResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.consoleResultingExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Int) = executesConsole(ConsoleResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.commandBlockResultingExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Int) = executesCommandBlock(CommandBlockResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.proxyResultingExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Int) = executesProxy(ProxyResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun CommandTree.nativeResultingExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Int) = executesNative(NativeResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-
-// ArgumentTree execution
-inline fun Argument<*>.anyExecutor(crossinline executor: (CommandSender, CommandArguments) -> Unit) = executes(CommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.playerExecutor(crossinline executor: (Player, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesEntity(EntityCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.consoleExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Unit) = executesConsole(ConsoleCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.commandBlockExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Unit) = executesCommandBlock(CommandBlockCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.proxyExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Unit) = executesProxy(ProxyCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.nativeExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Unit) = executesNative(NativeCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-
-inline fun Argument<*>.anyResultingExecutor(crossinline executor: (CommandSender, CommandArguments) -> Int) = executes(ResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.playerResultingExecutor(crossinline executor: (Player, CommandArguments) -> Int) = executesPlayer(PlayerResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.entityResultingExecutor(crossinline executor: (Entity, CommandArguments) -> Int) = executesEntity(EntityResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.consoleResultingExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Int) = executesConsole(ConsoleResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.commandBlockResultingExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Int) = executesCommandBlock(CommandBlockResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.proxyResultingExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Int) = executesProxy(ProxyResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
-inline fun Argument<*>.nativeResultingExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Int) = executesNative(NativeResultingCommandExecutor { sender, args ->
-	executor(sender, args)
-})
