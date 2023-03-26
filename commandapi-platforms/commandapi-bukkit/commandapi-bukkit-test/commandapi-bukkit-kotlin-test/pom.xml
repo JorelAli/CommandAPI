@@ -53,9 +53,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<!-- Inherit 1.19.4 implemented MockNMS -->
+			<!-- Inherit 1.19.2 implemented MockNMS -->
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
+			<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

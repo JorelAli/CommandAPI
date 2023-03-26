@@ -95,7 +95,7 @@ jobs:
       # It doesn't matter which version the Kotlin DSL uses. It should be version independent
       - name: Run Bukkit Kotlin DSL unit tests
         continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-kotlin-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_4
+        run: mvn clean package -pl :commandapi-bukkit-kotlin-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
 
       ### Upload .jar artifacts ###
 
