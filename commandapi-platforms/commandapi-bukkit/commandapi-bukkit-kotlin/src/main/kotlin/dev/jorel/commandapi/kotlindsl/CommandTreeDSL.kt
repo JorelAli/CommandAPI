@@ -240,7 +240,7 @@ inline fun CommandTree.anyExecutor(crossinline executor: (CommandSender, Command
 inline fun CommandTree.playerExecutor(crossinline executor: (Player, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
 	executor(sender, args)
 })
-inline fun CommandTree.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
+inline fun CommandTree.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesEntity(EntityCommandExecutor { sender, args ->
 	executor(sender, args)
 })
 inline fun CommandTree.consoleExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Unit) = executesConsole(ConsoleCommandExecutor { sender, args ->
@@ -285,7 +285,7 @@ inline fun Argument<*>.anyExecutor(crossinline executor: (CommandSender, Command
 inline fun Argument<*>.playerExecutor(crossinline executor: (Player, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
 	executor(sender, args)
 })
-inline fun Argument<*>.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
+inline fun Argument<*>.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesEntity(EntityCommandExecutor { sender, args ->
 	executor(sender, args)
 })
 inline fun Argument<*>.consoleExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Unit) = executesConsole(ConsoleCommandExecutor { sender, args ->
