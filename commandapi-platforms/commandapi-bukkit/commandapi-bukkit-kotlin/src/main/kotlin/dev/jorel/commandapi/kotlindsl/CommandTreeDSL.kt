@@ -11,6 +11,7 @@ import org.bukkit.command.ProxiedCommandSender
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.function.Predicate
+import java.util.regex.Pattern
 
 inline fun commandTree(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
 inline fun commandTree(name: String, predicate: Predicate<CommandSender>, tree: CommandTree.() -> Unit = {}) = CommandTree(name).withRequirement(predicate).apply(tree).register()
@@ -233,308 +234,91 @@ inline fun CommandTree.requirement(base: Argument<*>, predicate: Predicate<Comma
 inline fun Argument<*>.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.withRequirement(predicate).apply(block))
 
 // CommandTree execution
-fun CommandTree.anyExecutor(any: (CommandSender, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
-fun CommandTree.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
-fun CommandTree.entityExecutor(entity: (Entity, CommandArguments) -> Unit) = CommandTreeExecution().entity(entity).executes(this)
-fun CommandTree.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
-fun CommandTree.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().block(block).executes(this)
-fun CommandTree.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
-fun CommandTree.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().native(native).executes(this)
+inline fun CommandTree.anyExecutor(crossinline executor: (CommandSender, CommandArguments) -> Unit) = executes(CommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.playerExecutor(crossinline executor: (Player, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.consoleExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Unit) = executesConsole(ConsoleCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.commandBlockExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Unit) = executesCommandBlock(CommandBlockCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.proxyExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Unit) = executesProxy(ProxyCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.nativeExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Unit) = executesNative(NativeCommandExecutor { sender, args ->
+	executor(sender, args)
+})
 
-fun CommandTree.anyResultingExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
-fun CommandTree.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
-fun CommandTree.entityResultingExecutor(entity: (Entity, CommandArguments) -> Int) = CommandTreeResultingExecution().entity(entity).executes(this)
-fun CommandTree.consoleResultingExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
-fun CommandTree.commandBlockResultingExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().block(block).executes(this)
-fun CommandTree.proxyResultingExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().proxy(proxy).executes(this)
-fun CommandTree.nativeResultingExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().native(native).executes(this)
+inline fun CommandTree.anyResultingExecutor(crossinline executor: (CommandSender, CommandArguments) -> Int) = executes(ResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.playerResultingExecutor(crossinline executor: (Player, CommandArguments) -> Int) = executesPlayer(PlayerResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.entityResultingExecutor(crossinline executor: (Entity, CommandArguments) -> Int) = executesEntity(EntityResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.consoleResultingExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Int) = executesConsole(ConsoleResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.commandBlockResultingExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Int) = executesCommandBlock(CommandBlockResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.proxyResultingExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Int) = executesProxy(ProxyResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun CommandTree.nativeResultingExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Int) = executesNative(NativeResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
 
 // ArgumentTree execution
-fun Argument<*>.anyExecutor(any: (CommandSender, CommandArguments) -> Unit) = CommandTreeExecution().any(any).executes(this)
-fun Argument<*>.playerExecutor(player: (Player, CommandArguments) -> Unit) = CommandTreeExecution().player(player).executes(this)
-fun Argument<*>.entityExecutor(entity: (Entity, CommandArguments) -> Unit) = CommandTreeExecution().entity(entity).executes(this)
-fun Argument<*>.consoleExecutor(console: (ConsoleCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().console(console).executes(this)
-fun Argument<*>.commandBlockExecutor(block: (BlockCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().block(block).executes(this)
-fun Argument<*>.proxyExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().proxy(proxy).executes(this)
-fun Argument<*>.nativeExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Unit) = CommandTreeExecution().native(native).executes(this)
+inline fun Argument<*>.anyExecutor(crossinline executor: (CommandSender, CommandArguments) -> Unit) = executes(CommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.playerExecutor(crossinline executor: (Player, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.entityExecutor(crossinline executor: (Entity, CommandArguments) -> Unit) = executesPlayer(PlayerCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.consoleExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Unit) = executesConsole(ConsoleCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.commandBlockExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Unit) = executesCommandBlock(CommandBlockCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.proxyExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Unit) = executesProxy(ProxyCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.nativeExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Unit) = executesNative(NativeCommandExecutor { sender, args ->
+	executor(sender, args)
+})
 
-fun Argument<*>.anyResultingExecutor(any: (CommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().any(any).executes(this)
-fun Argument<*>.playerResultingExecutor(player: (Player, CommandArguments) -> Int) = CommandTreeResultingExecution().player(player).executes(this)
-fun Argument<*>.entityResultingExecutor(entity: (Entity, CommandArguments) -> Int) = CommandTreeResultingExecution().entity(entity).executes(this)
-fun Argument<*>.consoleResultingExecutor(console: (ConsoleCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().console(console).executes(this)
-fun Argument<*>.commandBlockResultingExecutor(block: (BlockCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().block(block).executes(this)
-fun Argument<*>.proxyResultingExecutor(proxy: (ProxiedCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().proxy(proxy).executes(this)
-fun Argument<*>.nativeResultingExecutor(native: (NativeProxyCommandSender, CommandArguments) -> Int) = CommandTreeResultingExecution().native(native).executes(this)
-
-
-class CommandTreeExecution {
-
-	private var any: ((CommandSender, CommandArguments) -> Unit)? = null
-	private var player: ((Player, CommandArguments) -> Unit)? = null
-	private var entity: ((Entity, CommandArguments) -> Unit)? = null
-	private var console: ((ConsoleCommandSender, CommandArguments) -> Unit)? = null
-	private var block: ((BlockCommandSender, CommandArguments) -> Unit)? = null
-	private var proxy: ((ProxiedCommandSender, CommandArguments) -> Unit)? = null
-	private var native: ((NativeProxyCommandSender, CommandArguments) -> Unit)? = null
-
-	fun any(any: (CommandSender, CommandArguments) -> Unit): CommandTreeExecution {
-		this.any = any
-		return this
-	}
-
-	fun player(player: (Player, CommandArguments) -> Unit): CommandTreeExecution {
-		this.player = player
-		return this
-	}
-
-	fun entity(entity: (Entity, CommandArguments) -> Unit): CommandTreeExecution {
-		this.entity = entity
-		return this
-	}
-
-	fun console(console: (ConsoleCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
-		this.console = console
-		return this
-	}
-
-	fun block(block: (BlockCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
-		this.block = block
-		return this
-	}
-
-	fun proxy(proxy: (ProxiedCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
-		this.proxy = proxy
-		return this
-	}
-
-	fun native(native: (NativeProxyCommandSender, CommandArguments) -> Unit): CommandTreeExecution {
-		this.native = native
-		return this
-	}
-
-	fun executes(tree: Argument<*>) {
-		if (any != null) {
-			tree.executes(CommandExecutor { sender, args ->
-				any?.invoke(sender, args)
-			})
-			return
-		}
-		if (player != null) {
-			tree.executesPlayer(PlayerCommandExecutor { player, args ->
-				this.player?.invoke(player, args)
-			})
-			return
-		}
-		if (entity != null) {
-			tree.executesEntity(EntityCommandExecutor { entity, args ->
-				this.entity?.invoke(entity, args)
-			})
-			return
-		}
-		if (console != null) {
-			tree.executesConsole(ConsoleCommandExecutor { console, args ->
-				this.console?.invoke(console, args)
-			})
-			return
-		}
-		if (block != null) {
-			tree.executesCommandBlock(CommandBlockCommandExecutor { block, args ->
-				this.block?.invoke(block, args)
-			})
-			return
-		}
-		if (proxy != null) {
-			tree.executesProxy(ProxyCommandExecutor { proxy, args ->
-				this.proxy?.invoke(proxy, args)
-			})
-			return
-		}
-		if (native != null) {
-			tree.executesNative(NativeCommandExecutor { native, args ->
-				this.native?.invoke(native, args)
-			})
-			return
-		}
-	}
-
-	fun executes(tree: CommandTree) {
-		if (any != null) {
-			tree.executes(CommandExecutor { sender, args ->
-				any?.invoke(sender, args)
-			})
-			return
-		}
-		if (player != null) {
-			tree.executesPlayer(PlayerCommandExecutor { player, args ->
-				this.player?.invoke(player, args)
-			})
-			return
-		}
-		if (entity != null) {
-			tree.executesEntity(EntityCommandExecutor { entity, args ->
-				this.entity?.invoke(entity, args)
-			})
-			return
-		}
-		if (console != null) {
-			tree.executesConsole(ConsoleCommandExecutor { console, args ->
-				this.console?.invoke(console, args)
-			})
-			return
-		}
-		if (block != null) {
-			tree.executesCommandBlock(CommandBlockCommandExecutor { block, args ->
-				this.block?.invoke(block, args)
-			})
-			return
-		}
-		if (proxy != null) {
-			tree.executesProxy(ProxyCommandExecutor { proxy, args ->
-				this.proxy?.invoke(proxy, args)
-			})
-			return
-		}
-		if (native != null) {
-			tree.executesNative(NativeCommandExecutor { native, args ->
-				this.native?.invoke(native, args)
-			})
-			return
-		}
-	}
-}
-
-class CommandTreeResultingExecution {
-
-	private var any: ((CommandSender, CommandArguments) -> Int)? = null
-	private var player: ((Player, CommandArguments) -> Int)? = null
-	private var entity: ((Entity, CommandArguments) -> Int)? = null
-	private var console: ((ConsoleCommandSender, CommandArguments) -> Int)? = null
-	private var block: ((BlockCommandSender, CommandArguments) -> Int)? = null
-	private var proxy: ((ProxiedCommandSender, CommandArguments) -> Int)? = null
-	private var native: ((NativeProxyCommandSender, CommandArguments) -> Int)? = null
-
-	fun any(any: (CommandSender, CommandArguments) -> Int): CommandTreeResultingExecution {
-		this.any = any
-		return this
-	}
-
-	fun player(player: (Player, CommandArguments) -> Int): CommandTreeResultingExecution {
-		this.player = player
-		return this
-	}
-
-	fun entity(entity: (Entity, CommandArguments) -> Int): CommandTreeResultingExecution {
-		this.entity = entity
-		return this
-	}
-
-	fun console(console: (ConsoleCommandSender, CommandArguments) -> Int): CommandTreeResultingExecution {
-		this.console = console
-		return this
-	}
-
-	fun block(block: (BlockCommandSender, CommandArguments) -> Int): CommandTreeResultingExecution {
-		this.block = block
-		return this
-	}
-
-	fun proxy(proxy: (ProxiedCommandSender, CommandArguments) -> Int): CommandTreeResultingExecution {
-		this.proxy = proxy
-		return this
-	}
-
-	fun native(native: (NativeProxyCommandSender, CommandArguments) -> Int): CommandTreeResultingExecution {
-		this.native = native
-		return this
-	}
-
-	fun executes(tree: Argument<*>) {
-		if (any != null) {
-			tree.executes(ResultingCommandExecutor { sender, args ->
-				any!!.invoke(sender, args)
-			})
-			return
-		}
-		if (player != null) {
-			tree.executesPlayer(PlayerResultingCommandExecutor { player, args ->
-				this.player!!.invoke(player, args)
-			})
-			return
-		}
-		if (entity != null) {
-			tree.executesEntity(EntityResultingCommandExecutor { entity, args ->
-				this.entity!!.invoke(entity, args)
-			})
-			return
-		}
-		if (console != null) {
-			tree.executesConsole(ConsoleResultingCommandExecutor { console, args ->
-				this.console!!.invoke(console, args)
-			})
-			return
-		}
-		if (block != null) {
-			tree.executesCommandBlock(CommandBlockResultingCommandExecutor { block, args ->
-				this.block!!.invoke(block, args)
-			})
-			return
-		}
-		if (proxy != null) {
-			tree.executesProxy(ProxyResultingCommandExecutor { proxy, args ->
-				this.proxy!!.invoke(proxy, args)
-			})
-			return
-		}
-		if (native != null) {
-			tree.executesNative(NativeResultingCommandExecutor { native, args ->
-				this.native!!.invoke(native, args)
-			})
-			return
-		}
-	}
-
-	fun executes(tree: CommandTree) {
-		if (any != null) {
-			tree.executes(ResultingCommandExecutor { sender, args ->
-				any!!.invoke(sender, args)
-			})
-			return
-		}
-		if (player != null) {
-			tree.executesPlayer(PlayerResultingCommandExecutor { player, args ->
-				this.player!!.invoke(player, args)
-			})
-			return
-		}
-		if (entity != null) {
-			tree.executesEntity(EntityResultingCommandExecutor { entity, args ->
-				this.entity!!.invoke(entity, args)
-			})
-			return
-		}
-		if (console != null) {
-			tree.executesConsole(ConsoleResultingCommandExecutor { console, args ->
-				this.console!!.invoke(console, args)
-			})
-			return
-		}
-		if (block != null) {
-			tree.executesCommandBlock(CommandBlockResultingCommandExecutor { block, args ->
-				this.block!!.invoke(block, args)
-			})
-			return
-		}
-		if (proxy != null) {
-			tree.executesProxy(ProxyResultingCommandExecutor { proxy, args ->
-				this.proxy!!.invoke(proxy, args)
-			})
-			return
-		}
-		if (native != null) {
-			tree.executesNative(NativeResultingCommandExecutor { native, args ->
-				this.native!!.invoke(native, args)
-			})
-			return
-		}
-	}
-}
+inline fun Argument<*>.anyResultingExecutor(crossinline executor: (CommandSender, CommandArguments) -> Int) = executes(ResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.playerResultingExecutor(crossinline executor: (Player, CommandArguments) -> Int) = executesPlayer(PlayerResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.entityResultingExecutor(crossinline executor: (Entity, CommandArguments) -> Int) = executesEntity(EntityResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.consoleResultingExecutor(crossinline executor: (ConsoleCommandSender, CommandArguments) -> Int) = executesConsole(ConsoleResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.commandBlockResultingExecutor(crossinline executor: (BlockCommandSender, CommandArguments) -> Int) = executesCommandBlock(CommandBlockResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.proxyResultingExecutor(crossinline executor: (ProxiedCommandSender, CommandArguments) -> Int) = executesProxy(ProxyResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
+inline fun Argument<*>.nativeResultingExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Int) = executesNative(NativeResultingCommandExecutor { sender, args ->
+	executor(sender, args)
+})
