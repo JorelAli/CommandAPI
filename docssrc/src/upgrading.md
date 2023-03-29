@@ -246,7 +246,7 @@ new CommandAPICommand("cmd")
 
 #### Using the `args.get(String)` method _(recommended)_
 
-The CommandAPI introduces a new `args.get(String)` method to access arguments using the argument node name. This method is significantly safer than using `args.get(int)` and makes your code much more compatible with optional arguments:
+The CommandAPI introduces a new `args.get(String)` method to access arguments using the argument node name. This method also makes your code much more compatible with optional arguments:
 
 <div class="multi-pre">
 
