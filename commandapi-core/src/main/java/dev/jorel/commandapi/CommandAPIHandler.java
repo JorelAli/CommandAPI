@@ -75,19 +75,12 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
  */
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
-	private static final VarHandle COMMANDCONTEXT_ARGUMENTS;
+	private static final SafeVarHandle<CommandContext, Map> commandContextArguments;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		VarHandle commandContextArguments = null;
-		try {
-			commandContextArguments = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup())
-					.findVarHandle(CommandContext.class, "arguments", Map.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		COMMANDCONTEXT_ARGUMENTS = commandContextArguments;
+		commandContextArguments = SafeVarHandle.ofOrNull(CommandContext.class, "arguments", "arguments", Map.class);
 	}
 
 	/**
@@ -103,7 +96,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 */
 	public static <CommandSource> String getRawArgumentInput(CommandContext<CommandSource> cmdCtx,
 			String key) {
-		final Map<String, ParsedArgument<CommandSource, ?>> commandContextArgs = (Map<String, ParsedArgument<CommandSource, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx);
+		final Map<String, ParsedArgument<CommandSource, ?>> commandContextArgs = commandContextArguments.get(cmdCtx);
 		final ParsedArgument<CommandSource, ?> parsedArgument = commandContextArgs.get(key);
 		
 		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
