@@ -191,9 +191,6 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_19_4_Mojang</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<dependencies>
 				<dependency>
 					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
@@ -320,6 +317,9 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>dev.jorel</groupId>
@@ -344,6 +344,19 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_1_17_Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>
