@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -49,17 +50,22 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import net.minecraft.server.v1_16_R3.Advancement;
 import net.minecraft.server.v1_16_R3.AdvancementDataWorld;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
 import net.minecraft.server.v1_16_R3.ChatComponentText;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.CraftingManager;
+import net.minecraft.server.v1_16_R3.CustomFunction;
+import net.minecraft.server.v1_16_R3.CustomFunctionData;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.v1_16_R3.GameRules;
 import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.LootTableRegistry;
@@ -73,6 +79,7 @@ import net.minecraft.server.v1_16_R3.ResourceKey;
 import net.minecraft.server.v1_16_R3.ScoreboardServer;
 import net.minecraft.server.v1_16_R3.ScoreboardTeam;
 import net.minecraft.server.v1_16_R3.SharedConstants;
+import net.minecraft.server.v1_16_R3.Tag;
 import net.minecraft.server.v1_16_R3.UserCache;
 import net.minecraft.server.v1_16_R3.Vec2F;
 import net.minecraft.server.v1_16_R3.Vec3D;
@@ -92,6 +99,8 @@ public class MockNMS extends Enums {
 	List<EntityPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
 	final CraftingManager recipeManager;
+	Map<MinecraftKey, CustomFunction> functions = new HashMap<>();
+	Map<MinecraftKey, Collection<CustomFunction>> tags = new HashMap<>();
 
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
@@ -121,6 +130,7 @@ public class MockNMS extends Enums {
 		registerDefaultEnchantments();
 
 		this.recipeManager = new CraftingManager();
+		this.functions = new HashMap<>();
 		registerDefaultRecipes();
 	}
 
@@ -323,6 +333,11 @@ public class MockNMS extends Enums {
 			// ChatArgument, AdventureChatArgument
 			Mockito.when(clw.hasPermission(anyInt())).thenAnswer(invocation -> sender.isOp());
 			Mockito.when(clw.hasPermission(anyInt(), anyString())).thenAnswer(invocation -> sender.isOp());
+
+			// FunctionArgument
+			// We don't really need to do anything funky here, we'll just return the same CSS
+			Mockito.when(clw.a()).thenReturn(clw);
+			Mockito.when(clw.b(anyInt())).thenReturn(clw);
 		}
 		return clw;
 	}
@@ -448,7 +463,73 @@ public class MockNMS extends Enums {
 		// RecipeArgument
 		Mockito.when(minecraftServerMock.getCraftingManager()).thenAnswer(i -> this.recipeManager);
 
+		// FunctionArgument
+		// We're using 2 as the function compilation level.
+		// Mockito.when(minecraftServerMock.??()).thenReturn(2);
+		Mockito.when(minecraftServerMock.getFunctionData()).thenAnswer(i -> {
+			CustomFunctionData serverFunctionLibrary = Mockito.mock(CustomFunctionData.class);
+
+			// Functions
+			Mockito.when(serverFunctionLibrary.a(any(MinecraftKey.class))).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
+			Mockito.when(serverFunctionLibrary.f()).thenAnswer(invocation -> functions.keySet());
+
+			// Tags
+			Mockito.when(serverFunctionLibrary.b(any())).thenAnswer(invocation -> {
+				Collection<CustomFunction> tagsFromResourceLocation = tags.getOrDefault(invocation.getArgument(0), List.of());
+				return Tag.b(Set.copyOf(tagsFromResourceLocation));
+			});
+			Mockito.when(serverFunctionLibrary.g()).thenAnswer(invocation -> tags.keySet());
+
+			return serverFunctionLibrary;
+//			return new CustomFunctionManager(minecraftServerMock, serverFunctionLibrary) {
+//				
+//				// Make sure we don't use ServerFunctionManager#getDispatcher!
+//				// That method accesses MinecraftServer.vanillaCommandDispatcher
+//				// directly (boo) and that causes all sorts of nonsense.
+//				@Override
+//				public CommandDispatcher<CommandSourceStack> getDispatcher() {
+//					return Brigadier.getCommandDispatcher();
+//				}
+//			};
+		});
+		
+		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
+//		Mockito.when(minecraftServerMock.getMethodProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
+
+
 		return (T) minecraftServerMock;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addFunction(NamespacedKey key, List<String> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
+		MinecraftKey resourceLocation = new MinecraftKey(key.toString());
+		CommandListenerWrapper css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+
+		// So for very interesting reasons, Brigadier.getCommandDispatcher()
+		// gives a different result in this method than using getBrigadierDispatcher()
+		this.functions.put(resourceLocation, CustomFunction.a(resourceLocation, Brigadier.getCommandDispatcher(), css, commands));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addTag(NamespacedKey key, List<List<String>> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
+		MinecraftKey resourceLocation = new MinecraftKey(key.toString());
+		CommandListenerWrapper css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+
+		List<CustomFunction> tagFunctions = new ArrayList<>();
+		for(List<String> functionCommands : commands) {
+			tagFunctions.add(CustomFunction.a(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
+		}
+		this.tags.put(resourceLocation, tagFunctions);
 	}
 
 	@Override
