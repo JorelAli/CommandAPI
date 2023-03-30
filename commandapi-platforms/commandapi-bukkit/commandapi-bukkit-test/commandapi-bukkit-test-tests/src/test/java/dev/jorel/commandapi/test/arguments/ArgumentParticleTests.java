@@ -188,7 +188,7 @@ class ArgumentParticleTests extends TestBase {
 
 	@Test
 	void executionTestWithParticleArgumentShriek() {
-		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_18));
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19));
 		Mut<ParticleData<?>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -216,7 +216,7 @@ class ArgumentParticleTests extends TestBase {
 
 	@Test
 	void executionTestWithParticleArgumentSculkCharge() {
-		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_18));
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19));
 		Mut<ParticleData<?>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -244,7 +244,7 @@ class ArgumentParticleTests extends TestBase {
 
 	@Test
 	void executionTestWithParticleArgumentVibration() {
-		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_18));
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19));
 		Mut<ParticleData<?>> results = Mut.of();
 
 		new CommandAPICommand("test")
