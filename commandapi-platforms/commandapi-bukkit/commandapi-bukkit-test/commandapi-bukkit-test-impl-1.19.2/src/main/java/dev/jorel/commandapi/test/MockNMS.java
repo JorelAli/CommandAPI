@@ -52,13 +52,16 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import io.papermc.paper.advancement.AdvancementDisplay;
 import net.kyori.adventure.text.Component;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.core.BlockPos;
@@ -68,13 +71,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerAdvancementManager;
+import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
+import net.minecraft.util.profiling.metrics.profiling.InactiveMetricsRecorder;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTables;
@@ -97,6 +104,8 @@ public class MockNMS extends Enums {
 	List<ServerPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
 	final RecipeManager recipeManager;
+	Map<ResourceLocation, CommandFunction> functions = new HashMap<>();
+	Map<ResourceLocation, Collection<CommandFunction>> tags = new HashMap<>();
 
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
@@ -127,6 +136,7 @@ public class MockNMS extends Enums {
 		registerDefaultEnchantments();
 
 		this.recipeManager = new RecipeManager();
+		this.functions = new HashMap<>();
 		registerDefaultRecipes();
 	}
 
@@ -320,6 +330,11 @@ public class MockNMS extends Enums {
 			// ChatArgument, AdventureChatArgument
 			Mockito.when(css.hasPermission(anyInt())).thenAnswer(invocation -> sender.isOp());
 			Mockito.when(css.hasPermission(anyInt(), anyString())).thenAnswer(invocation -> sender.isOp());
+			
+			// FunctionArgument
+			// We don't really need to do anything funky here, we'll just return the same CSS
+			Mockito.when(css.withSuppressedOutput()).thenReturn(css);
+			Mockito.when(css.withMaximumPermission(anyInt())).thenReturn(css);
 		}
 		return css;
 	}
@@ -449,7 +464,68 @@ public class MockNMS extends Enums {
 		// RecipeArgument
 		Mockito.when(minecraftServerMock.getRecipeManager()).thenAnswer(i -> this.recipeManager);
 
+		// FunctionArgument
+		// We're using 2 as the function compilation level.
+		Mockito.when(minecraftServerMock.getFunctionCompilationLevel()).thenReturn(2);
+		Mockito.when(minecraftServerMock.getFunctions()).thenAnswer(i -> {
+			ServerFunctionLibrary serverFunctionLibrary = Mockito.mock(ServerFunctionLibrary.class);
+
+			// Functions
+			Mockito.when(serverFunctionLibrary.getFunction(any())).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
+			Mockito.when(serverFunctionLibrary.getFunctions()).thenAnswer(invocation -> functions);
+
+			// Tags
+			Mockito.when(serverFunctionLibrary.getTag(any())).thenAnswer(invocation -> tags.getOrDefault(invocation.getArgument(0), List.of()));
+			Mockito.when(serverFunctionLibrary.getAvailableTags()).thenAnswer(invocation -> tags.keySet());
+
+			return new ServerFunctionManager(minecraftServerMock, serverFunctionLibrary) {
+				
+				// Make sure we don't use ServerFunctionManager#getDispatcher!
+				// That method accesses MinecraftServer.vanillaCommandDispatcher
+				// directly (boo) and that causes all sorts of nonsense.
+				@Override
+				public CommandDispatcher<CommandSourceStack> getDispatcher() {
+					return Brigadier.getCommandDispatcher();
+				}
+			};
+		});
+		
+		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
+		Mockito.when(minecraftServerMock.getProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
+
 		return (T) minecraftServerMock;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addFunction(NamespacedKey key, List<String> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
+		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+
+		// So for very interesting reasons, Brigadier.getCommandDispatcher()
+		// gives a different result in this method than using getBrigadierDispatcher()
+		this.functions.put(resourceLocation, CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, commands));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addTag(NamespacedKey key, List<List<String>> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
+		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+
+		List<CommandFunction> tagFunctions = new ArrayList<>();
+		for(List<String> functionCommands : commands) {
+			tagFunctions.add(CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
+		}
+		this.tags.put(resourceLocation, tagFunctions);
 	}
 
 	@Override

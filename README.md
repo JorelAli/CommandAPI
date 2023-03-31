@@ -403,6 +403,8 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                         <li>Fixed <code>TeamArgument</code> not working on Minecraft 1.17</li>
                         <li>Fixed <code>AdventureChatArgument</code> not working on Minecraft 1.17</li>
                         <li>Fixed commands with no executors not being caught by the CommandAPI</li>
+                        <li>Fixed <code>ParticleArgument</code> producing "Invalid particle data type" warnings on Minecraft 1.16.5 and below</li>
+                        <li>Fixed <code>FunctionArgument</code> not working on Minecraft 1.17.x and 1.18.x</li>
                     </ul>
                     <li>Integrated the CommandAPI repository with SonarCloud to identify bugs and improve the internal code</li>
                     <b>Bugs found (and fixed) as a result of using SonarCloud:</b>

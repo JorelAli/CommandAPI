@@ -89,9 +89,9 @@ class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
-		if(version.equals(MCVersion.V1_18)) {
+		if(version.lessThan(MCVersion.V1_18)) {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: empty at position 8: test []<--[HERE]");
-		} else if(version.greaterThanOrEqualTo(MCVersion.V1_19)) {
+		} else {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");	
 		}
 		
@@ -122,9 +122,9 @@ class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
-		if(version.equals(MCVersion.V1_18)) {
+		if(version.lessThan(MCVersion.V1_18)) {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: empty at position 8: test []<--[HERE]");
-		} else if(version.greaterThanOrEqualTo(MCVersion.V1_19)) {
+		} else {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");	
 		}
 		

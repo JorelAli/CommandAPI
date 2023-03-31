@@ -29,7 +29,7 @@ import org.bukkit.entity.Entity;
 /**
  * A wrapper class for Minecraft 1.12's functions
  */
-public class FunctionWrapper extends SimpleFunctionWrapper {	
+public class FunctionWrapper extends SimpleFunctionWrapper {
 	
 	private final Object commandListenerWrapper;
 	private final Function<Entity, Object> mapper;
