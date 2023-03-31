@@ -181,6 +181,7 @@ import net.minecraft.server.v1_16_R3.ParticleParam;
 import net.minecraft.server.v1_16_R3.ParticleParamBlock;
 import net.minecraft.server.v1_16_R3.ParticleParamItem;
 import net.minecraft.server.v1_16_R3.ParticleParamRedstone;
+import net.minecraft.server.v1_16_R3.ParticleType;
 import net.minecraft.server.v1_16_R3.ShapeDetectorBlock;
 import net.minecraft.server.v1_16_R3.SoundEffect;
 import net.minecraft.server.v1_16_R3.SystemUtils;
@@ -700,7 +701,10 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, key);
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
-		if (particleOptions instanceof ParticleParamBlock options) {
+		if (particleOptions instanceof ParticleType) {
+			return new ParticleData<Void>(particle, null);
+		}
+		else if (particleOptions instanceof ParticleParamBlock options) {
 			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(particleParamBlockData.get(options)));
 		}
 		else if (particleOptions instanceof ParticleParamRedstone options) {
