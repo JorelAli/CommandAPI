@@ -65,6 +65,7 @@ import net.minecraft.server.v1_16_R3.CustomFunction;
 import net.minecraft.server.v1_16_R3.CustomFunctionData;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.v1_16_R3.GameProfilerDisabled;
 import net.minecraft.server.v1_16_R3.GameRules;
 import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
@@ -467,34 +468,30 @@ public class MockNMS extends Enums {
 		// We're using 2 as the function compilation level.
 		// Mockito.when(minecraftServerMock.??()).thenReturn(2);
 		Mockito.when(minecraftServerMock.getFunctionData()).thenAnswer(i -> {
-			CustomFunctionData serverFunctionLibrary = Mockito.mock(CustomFunctionData.class);
+			CustomFunctionData customFunctionData = Mockito.mock(CustomFunctionData.class);
 
 			// Functions
-			Mockito.when(serverFunctionLibrary.a(any(MinecraftKey.class))).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
-			Mockito.when(serverFunctionLibrary.f()).thenAnswer(invocation -> functions.keySet());
+			Mockito.when(customFunctionData.a(any(MinecraftKey.class))).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
+			Mockito.when(customFunctionData.f()).thenAnswer(invocation -> functions.keySet());
 
 			// Tags
-			Mockito.when(serverFunctionLibrary.b(any())).thenAnswer(invocation -> {
+			Mockito.when(customFunctionData.b(any())).thenAnswer(invocation -> {
 				Collection<CustomFunction> tagsFromResourceLocation = tags.getOrDefault(invocation.getArgument(0), List.of());
 				return Tag.b(Set.copyOf(tagsFromResourceLocation));
 			});
-			Mockito.when(serverFunctionLibrary.g()).thenAnswer(invocation -> tags.keySet());
+			Mockito.when(customFunctionData.g()).thenAnswer(invocation -> tags.keySet());
+			
+			// Command dispatcher
+			Mockito.when(customFunctionData.getCommandDispatcher()).thenAnswer(invocation -> Brigadier.getCommandDispatcher());
+			
+			// Command chain length
+			Mockito.when(customFunctionData.b()).thenReturn(65536);
 
-			return serverFunctionLibrary;
-//			return new CustomFunctionManager(minecraftServerMock, serverFunctionLibrary) {
-//				
-//				// Make sure we don't use ServerFunctionManager#getDispatcher!
-//				// That method accesses MinecraftServer.vanillaCommandDispatcher
-//				// directly (boo) and that causes all sorts of nonsense.
-//				@Override
-//				public CommandDispatcher<CommandSourceStack> getDispatcher() {
-//					return Brigadier.getCommandDispatcher();
-//				}
-//			};
+			return customFunctionData;
 		});
 		
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
-//		Mockito.when(minecraftServerMock.getMethodProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
+		Mockito.when(minecraftServerMock.getMethodProfiler()).thenAnswer(i -> GameProfilerDisabled.a);
 
 
 		return (T) minecraftServerMock;

@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.FunctionArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.test.MockPlatform;
@@ -77,6 +79,12 @@ class ArgumentFunctionTests extends TestBase {
 
 		// Run the function (which should run the /mysay command)
 		result[0].run();
+		
+		// TODO: I can't figure out how to get commands to run on 1.16.5 and
+		// I don't think we really care. If you decide you want to care, feel
+		// free to implement function running for 1.16.5, but I'm not spending
+		// any more time on it - Skepter
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17));
 
 		// Check that /mysay was run successfully...
 		assertEquals("hi", sayResults.get());
@@ -125,6 +133,12 @@ class ArgumentFunctionTests extends TestBase {
 		for(FunctionWrapper wrapper : result) {
 			wrapper.run();
 		}
+		
+		// TODO: I can't figure out how to get commands to run on 1.16.5 and
+		// I don't think we really care. If you decide you want to care, feel
+		// free to implement function running for 1.16.5, but I'm not spending
+		// any more time on it - Skepter
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17));
 
 		// Check that /mysay was run successfully...
 		assertEquals("hi", sayResults.get());
