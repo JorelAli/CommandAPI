@@ -468,16 +468,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node) {
-		CommandAPI.logInfo("Registering command with brigadier");
-		LiteralCommandNode<Source> builtNode = getBrigadierDispatcher().register(node);
-		if(!CommandAPI.canRegister()) {
-			CommandAPI.logInfo("Forcing node into bukkit command map");
-			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
-			Command command = wrapToVanillaCommandWrapper(builtNode);
-			paper.getCommandMap().register("minecraft", command);
-		}
-
-		return builtNode;
+		return getBrigadierDispatcher().register(node);
 	}
 
 	@Override
