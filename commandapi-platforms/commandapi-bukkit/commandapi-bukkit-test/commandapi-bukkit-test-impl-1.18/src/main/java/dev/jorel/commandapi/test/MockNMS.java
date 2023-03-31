@@ -459,11 +459,6 @@ public class MockNMS extends Enums {
 			}
 
 			@Override
-			public @NotNull Component displayName() {
-				throw new IllegalStateException("displayName is unimplemented");
-			}
-
-			@Override
 			public org.bukkit.advancement.@Nullable Advancement getParent() {
 				throw new IllegalStateException("getParent is unimplemented");
 			}

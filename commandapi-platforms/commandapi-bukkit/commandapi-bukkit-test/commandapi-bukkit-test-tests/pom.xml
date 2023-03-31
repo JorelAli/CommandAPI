@@ -261,6 +261,7 @@
 			</dependencies>
 		</profile>
 		<profile>
+			<!-- Yes, this is a very very misleading version of Minecraft. We're actually testing 1.18.1 -->
 			<id>Minecraft_1_18</id>
 			<dependencies>
 				<dependency>
@@ -275,15 +276,15 @@
 				</dependency>
 				<!-- For reasons beyond my knowledge right now, including paper
 					1.18 blows things up and causes every test to fail! -->
-				<!-- <dependency>
+				<dependency>
 					<groupId>io.papermc.paper</groupId>
 					<artifactId>paper-api</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
-				</dependency> -->
+					<version>1.18.1-R0.1-SNAPSHOT</version>
+				</dependency>
 				<dependency>
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
+					<version>1.18.1-R0.1-SNAPSHOT</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
