@@ -396,6 +396,28 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public final SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
+		Optional<CommandFunction> commandFunctionOptional = this.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
+		if(commandFunctionOptional.isPresent()) {
+			return convertFunction(commandFunctionOptional.get());
+		} else {
+			throw new IllegalStateException("Failed to get defined function " + key
+				+ "! This should never happen - please report this to the CommandAPI"
+				+ "developers, we'd love to know how you got this error message!");
+		}
+	}
+
+	@Override
+	public final Set<NamespacedKey> getFunctions() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
+	}
+
+	@Override
 	public org.bukkit.inventory.ItemStack getItemStack(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		ItemInput input = ItemArgument.getItem(cmdCtx, key);
 
@@ -638,28 +660,6 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public final SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
-		Optional<CommandFunction> commandFunctionOptional = this.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
-		if(commandFunctionOptional.isPresent()) {
-			return convertFunction(commandFunctionOptional.get());
-		} else {
-			throw new IllegalStateException("Failed to get defined function " + key
-				+ "! This should never happen - please report this to the CommandAPI"
-				+ "developers, we'd love to know how you got this error message!");
-		}
-	}
-
-	@Override
-	public final Set<NamespacedKey> getFunctions() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
-			result.add(fromResourceLocation(resourceLocation));
-		}
-		return result;
 	}
 
 }

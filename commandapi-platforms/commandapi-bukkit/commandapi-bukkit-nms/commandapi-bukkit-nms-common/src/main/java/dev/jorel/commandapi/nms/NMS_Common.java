@@ -464,7 +464,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
-	// TODO: This has its own implementation for 1.17
+	// TODO: This has its own implementation for 1.17, 1.18 and 1.18.2
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
 		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
 		Optional<CommandFunction> commandFunctionOptional = this.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
@@ -478,7 +478,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	// TODO: This has its own implementation for 1.17
+	// TODO: This has its own implementation for 1.17, 1.18 and 1.18.2
 	public Set<NamespacedKey> getFunctions() {
 		Set<NamespacedKey> result = new HashSet<>();
 		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
