@@ -41,6 +41,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -491,6 +492,11 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	}
 
 	@Override
+	public CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher() {
+		return this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a();
+	}
+
+	@Override
 	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
 	}
@@ -904,6 +910,11 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
+	}
+
+	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommandDispatcher(), node);
 	}
 
 	@Differs(from = "1.16.2", by = "CustomFunctionManager.g -> CustomFunctionManager.h")

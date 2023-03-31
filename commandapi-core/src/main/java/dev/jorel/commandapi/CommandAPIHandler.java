@@ -605,16 +605,18 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		for (int i = 0, size = registeredCommands.size(); i < size && !hasRegisteredCommand; i++) {
 			hasRegisteredCommand |= registeredCommands.get(i).commandName().equals(commandName);
 		}
+
 		if (hasRegisteredCommand && hasCommandConflict(commandName, args, humanReadableCommandArgSyntax)) {
 			return;
-		} else {
-			List<String> argumentsString = new ArrayList<>();
-			for (Argument arg : args) {
-				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
-			}
-			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, shortDescription,
-					fullDescription, usageDescription, aliases, permission));
 		}
+
+		List<String> argumentsString = new ArrayList<>();
+		for (Argument arg : args) {
+			argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
+		}
+		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, shortDescription,
+			fullDescription, usageDescription, aliases, permission);
+		registeredCommands.add(registeredCommandInformation);
 
 		// Handle previewable arguments
 		handlePreviewableArguments(commandName, args, aliases);
@@ -681,7 +683,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// partial) command registration. Generate the dispatcher file!
 		writeDispatcherToFile();
 
-		platform.postCommandRegistration(resultantNode, aliasNodes);
+		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes);
 	}
 	
 	/**

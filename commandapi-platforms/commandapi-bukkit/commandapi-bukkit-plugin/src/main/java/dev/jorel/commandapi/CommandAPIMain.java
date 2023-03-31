@@ -20,20 +20,21 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Main CommandAPI plugin entrypoint
@@ -141,5 +142,49 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable();
+
+		new CommandAPICommand("register")
+			.withArguments(new StringArgument("command"))
+			.withOptionalArguments(
+				new GreedyStringArgument("aliases")
+			)
+			.executes(info -> {
+				String name = info.args().getUnchecked("command");
+				assert name != null;
+
+				String aliasString = info.args().getUnchecked("aliases");
+				String[] aliases;
+				if(aliasString == null)
+					aliases = new String[0];
+				else
+					aliases = aliasString.split(" ");
+
+				new CommandAPICommand(name)
+					.withAliases(aliases)
+					.executes(i -> {
+						i.sender().sendMessage("You ran the " + name + " command!");
+					})
+					.withPermission("dynamic." + name)
+					.withShortDescription("New command!")
+					.withFullDescription("This command was added while the server was running. Do you see it?")
+					.register();
+			})
+			.register();
+
+		new CommandAPICommand("unregister")
+			.withArguments(new StringArgument("command"))
+			.executes(info -> {
+				String name = info.args().getUnchecked("command");
+				assert name != null;
+
+				CommandAPI.unregister(name, true);
+			})
+			.register();
+
+		new CommandAPICommand("updateRequirements")
+			.executesPlayer(info -> {
+				CommandAPI.updateRequirements(info.sender());
+			})
+			.register();
 	}
 }

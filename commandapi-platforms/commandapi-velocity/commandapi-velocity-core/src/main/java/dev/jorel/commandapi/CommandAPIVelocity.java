@@ -210,7 +210,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<CommandSource> resultantNode, List<LiteralCommandNode<CommandSource>> aliasNodes) {
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<CommandSource> resultantNode, List<LiteralCommandNode<CommandSource>> aliasNodes) {
 		// Nothing to do
 	}
 

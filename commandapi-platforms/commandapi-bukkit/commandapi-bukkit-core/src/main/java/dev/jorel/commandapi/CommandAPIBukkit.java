@@ -1,39 +1,5 @@
 package dev.jorel.commandapi;
 
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CRAFTBUKKIT;
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CSS;
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_MINECRAFT_SERVER;
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Keyed;
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -41,20 +7,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-
+import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitEntity;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
+import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -62,6 +20,24 @@ import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Keyed;
+import org.bukkit.command.*;
+import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 
 // CommandAPIBukkit is an CommandAPIPlatform, but also needs all of the methods from
 // NMS, so it implements NMS. Our implementation of CommandAPIBukkit is now derived
@@ -161,7 +137,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		boolean isPaperPresent = false;
-		
+
 		try {
 			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
 			isPaperPresent = true;
@@ -172,9 +148,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				CommandAPI.logWarning("Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
 			}
 		}
-		
+
 		boolean isFoliaPresent = false;
-		
+
 		try {
 			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
 			isFoliaPresent = true;
@@ -183,7 +159,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		} catch (ClassNotFoundException e) {
 			isFoliaPresent = false;
 		}
-		
+
 		paper = new PaperImplementations(isPaperPresent, isFoliaPresent, this);
 	}
 
@@ -202,7 +178,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			} else {
 				reloadDataPacks();
 			}
-			updateHelpForCommands();
+			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
 
 		paper.registerReloadHandler(plugin);
@@ -318,10 +294,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		return usages;
 	}
 
-	void updateHelpForCommands() {
+	void updateHelpForCommands(List<RegisteredCommand> commands) {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 
-		for (RegisteredCommand command : CommandAPIHandler.getInstance().registeredCommands) {
+		for (RegisteredCommand command : commands) {
 			// Generate short description
 			final String shortDescription;
 			final Optional<String> shortDescriptionOptional = command.shortDescription();
@@ -445,13 +421,63 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-		// Nothing to do
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+		if(!CommandAPI.canRegister()) {
+			// Usually, when registering commands during server startup, we can just put our commands into the
+			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher" and leave it. As the server finishes setup,
+			// it and the CommandAPI do some extra stuff to make everything work, and we move on.
+			// So, if we want to register commands while the server is running, we need to do all that extra stuff, and
+			// that is what this code does.
+			// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
+			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
+
+			CommandMap map = paper.getCommandMap();
+			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
+			RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
+
+			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
+			// in `CraftServer#setVanillaCommands`
+			Command command = wrapToVanillaCommandWrapper(resultantNode);
+			map.register("minecraft", command);
+
+			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
+			command.setPermission(permNode);
+
+			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
+			root.addChild(resultantNode);
+
+			// Do the same for the aliases
+			for(LiteralCommandNode<Source> node: aliasNodes) {
+				command = wrapToVanillaCommandWrapper(node);
+				map.register("minecraft", command);
+
+				command.setPermission(permNode);
+
+				root.addChild(node);
+			}
+
+			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
+			updateHelpForCommands(List.of(registeredCommand));
+
+			// Sending command dispatcher packets usually happens when Players join the server
+			for(Player p: Bukkit.getOnlinePlayers()) {
+				resendPackets(p);
+			}
+		}
 	}
 
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node) {
-		return getBrigadierDispatcher().register(node);
+		CommandAPI.logInfo("Registering command with brigadier");
+		LiteralCommandNode<Source> builtNode = getBrigadierDispatcher().register(node);
+		if(!CommandAPI.canRegister()) {
+			CommandAPI.logInfo("Forcing node into bukkit command map");
+			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
+			Command command = wrapToVanillaCommandWrapper(builtNode);
+			paper.getCommandMap().register("minecraft", command);
+		}
+
+		return builtNode;
 	}
 
 	@Override
@@ -476,6 +502,30 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		children.remove(commandName);
 		commandNodeLiterals.get(getBrigadierDispatcher().getRoot()).remove(commandName);
 		commandNodeArguments.get(getBrigadierDispatcher().getRoot()).remove(commandName);
+
+		if(!CommandAPI.canRegister()) {
+			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
+			SimpleCommandMap commandMap = (SimpleCommandMap) paper.getCommandMap();
+			Field knownCommandsField = CommandAPIHandler.getField(SimpleCommandMap.class, "knownCommands");
+			Map<String, Command> knownCommands = null;
+			try {
+				knownCommands = (Map<String, Command>) knownCommandsField.get(commandMap);
+			} catch (IllegalAccessException e) {
+				CommandAPI.logError("Could not access knownCommands map to fully unregister commands!");
+				CommandAPI.logError("The " + commandName + " command may still appear");
+				return;
+			}
+
+			knownCommands.remove(commandName);
+
+			if (force) {
+				for (String key : new HashSet<>(knownCommands.keySet())) {
+					if (key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
+						knownCommands.remove(key);
+					}
+				}
+			}
+		}
 	}
 
 	@Override

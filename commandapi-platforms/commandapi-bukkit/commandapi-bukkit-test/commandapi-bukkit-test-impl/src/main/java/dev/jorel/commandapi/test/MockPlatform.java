@@ -1,5 +1,24 @@
 package dev.jorel.commandapi.test;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,28 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
-
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
-
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
 
 public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
@@ -63,6 +60,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 ************************************/
 
 	private CommandDispatcher<CLW> dispatcher = null;
+	private CommandDispatcher<CLW> resourcesDispatcher = null;
 
 	@Override
 	public final CommandDispatcher<CLW> getBrigadierDispatcher() {
@@ -70,6 +68,14 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 			this.dispatcher = new CommandDispatcher<>();
 		}
 		return this.dispatcher;
+	}
+
+	@Override
+	public CommandDispatcher<CLW> getResourcesDispatcher() {
+		if (this.resourcesDispatcher == null) {
+			this.resourcesDispatcher = new CommandDispatcher<>();
+		}
+		return this.resourcesDispatcher;
 	}
 
 	@Override
@@ -106,11 +112,6 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	@Override
 	public final String convert(Sound sound) {
-		throw new UnimplementedError();
-	}
-
-	@Override
-	public final boolean isVanillaCommandWrapper(Command command) {
 		throw new UnimplementedError();
 	}
 
@@ -152,7 +153,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T> T forceGetArgument(CommandContext cmdCtx, String key) {
 		ParsedArgument result = (ParsedArgument) getFieldAs(CommandContext.class, "arguments", cmdCtx, Map.class).get(key);

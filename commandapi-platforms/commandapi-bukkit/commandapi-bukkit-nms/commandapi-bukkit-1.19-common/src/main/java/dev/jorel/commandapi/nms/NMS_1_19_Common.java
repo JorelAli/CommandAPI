@@ -20,35 +20,89 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.io.Files;
+import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.logging.LogUtils;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
+import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.preprocessor.Unimplemented;
+import dev.jorel.commandapi.wrappers.*;
+import io.netty.channel.Channel;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandFunction;
+import net.minecraft.commands.CommandFunction.Entry;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.*;
+import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
+import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
+import net.minecraft.commands.arguments.coordinates.Vec2Argument;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.arguments.item.FunctionArgument;
+import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.commands.arguments.item.ItemInput;
+import net.minecraft.commands.arguments.item.ItemPredicateArgument;
+import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.synchronization.ArgumentUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistryAccess.Frozen;
+import net.minecraft.core.particles.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.MinecraftServer.ReloadableResources;
+import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.ServerFunctionManager;
+import net.minecraft.server.level.ColumnPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.server.packs.resources.MultiPackResourceManager;
+import net.minecraft.server.packs.resources.SimpleReloadInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Unit;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.DataPackConfig;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.pattern.BlockInWorld;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
+import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
-import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
-import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -79,105 +133,18 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.Message;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.logging.LogUtils;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.preprocessor.Differs;
-import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.preprocessor.Unimplemented;
-import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
-import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import io.netty.channel.Channel;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.CommandFunction;
-import net.minecraft.commands.CommandFunction.Entry;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ColorArgument;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.DimensionArgument;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.EntitySummonArgument;
-import net.minecraft.commands.arguments.ItemEnchantmentArgument;
-import net.minecraft.commands.arguments.MobEffectArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument;
-import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
-import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
-import net.minecraft.commands.arguments.blocks.BlockStateArgument;
-import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
-import net.minecraft.commands.arguments.coordinates.Vec2Argument;
-import net.minecraft.commands.arguments.coordinates.Vec3Argument;
-import net.minecraft.commands.arguments.item.FunctionArgument;
-import net.minecraft.commands.arguments.item.ItemArgument;
-import net.minecraft.commands.arguments.item.ItemInput;
-import net.minecraft.commands.arguments.item.ItemPredicateArgument;
-import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.commands.synchronization.ArgumentUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.RegistryAccess.Frozen;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustColorTransitionOptions;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.SculkChargeParticleOptions;
-import net.minecraft.core.particles.ShriekParticleOption;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.particles.VibrationParticleOption;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component.Serializer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.MinecraftServer.ReloadableResources;
-import net.minecraft.server.ServerFunctionLibrary;
-import net.minecraft.server.ServerFunctionManager;
-import net.minecraft.server.level.ColumnPos;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.PackResources;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackRepository;
-import net.minecraft.server.packs.resources.MultiPackResourceManager;
-import net.minecraft.server.packs.resources.SimpleReloadInstance;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Unit;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.DataPackConfig;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-import net.minecraft.world.level.gameevent.BlockPositionSource;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
 
 // Mojang-Mapped reflection
 /**
@@ -468,8 +435,9 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	public final com.mojang.brigadier.CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+	@Differs(from = "1.18", by = "MinecraftServer#aA -> MinecraftServer#aC")
+	public CommandDispatcher<CommandSourceStack> getResourcesDispatcher() {
+		return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
 	}
 
 	@Override
@@ -765,6 +733,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
+	}
+
+	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommands(), node);
 	}
 
 	@Override

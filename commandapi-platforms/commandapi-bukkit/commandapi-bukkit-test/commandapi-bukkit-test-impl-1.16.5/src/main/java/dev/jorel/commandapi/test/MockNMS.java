@@ -19,12 +19,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
@@ -109,7 +111,7 @@ public class MockNMS extends Enums {
 		super(baseNMS);
 
 		// Stub in our getMinecraftServer implementation
-		CommandAPIBukkit<?> nms = Mockito.spy(super.baseNMS);
+		CommandAPIBukkit<CommandListenerWrapper> nms = Mockito.spy(super.baseNMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		super.baseNMS = nms;
 
@@ -135,6 +137,18 @@ public class MockNMS extends Enums {
 		this.recipeManager = new CraftingManager();
 		this.functions = new HashMap<>();
 		registerDefaultRecipes();
+
+		// Set up playerListMock
+		playerListMock = Mockito.mock(PlayerList.class);
+		Mockito.when(playerListMock.getPlayer(anyString())).thenAnswer(invocation -> {
+			String playerName = invocation.getArgument(0);
+			for (EntityPlayer onlinePlayer : players) {
+				if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+					return onlinePlayer;
+				}
+			}
+			return null;
+		});
 	}
 
 	/*************************
@@ -260,6 +274,16 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
+	public boolean isVanillaCommandWrapper(Command command) {
+		return baseNMS.isVanillaCommandWrapper(command);
+	}
+
+	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
+		return baseNMS.wrapToVanillaCommandWrapper(node);
+	}
+
+	@Override
 	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		CommandSender sender = senderWrapper.getSource();
 		CommandListenerWrapper clw = Mockito.mock(CommandListenerWrapper.class);
@@ -289,19 +313,6 @@ public class MockNMS extends Enums {
 				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
 				Mockito.when(entityPlayerMock.getScoreboardDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
 				players.add(entityPlayerMock);
-			}
-
-			if (playerListMock == null) {
-				playerListMock = Mockito.mock(PlayerList.class);
-				Mockito.when(playerListMock.getPlayer(anyString())).thenAnswer(invocation -> {
-					String playerName = invocation.getArgument(0);
-					for (EntityPlayer onlinePlayer : players) {
-						if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-							return onlinePlayer;
-						}
-					}
-					return null;
-				});
 			}
 
 			// CommandListenerWrapper#levels

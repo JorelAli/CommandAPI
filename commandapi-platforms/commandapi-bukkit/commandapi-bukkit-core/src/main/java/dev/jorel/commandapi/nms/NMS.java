@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -298,13 +299,6 @@ public interface NMS<CommandListenerWrapper> {
 
 	BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
-	/**
-	 * Returns the Brigadier CommandDispatcher from the NMS CommandDispatcher
-	 * 
-	 * @return A Brigadier CommandDispatcher
-	 */
-	CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher();
-
 	BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
@@ -384,6 +378,28 @@ public interface NMS<CommandListenerWrapper> {
 	String getScoreHolderSingle(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 		throws CommandSyntaxException;
 
+	Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+
+	int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+
+	UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+
+	World getWorldForCSS(CommandListenerWrapper clw);
+
+	/**
+	 * Returns the Brigadier CommandDispatcher from the NMS CommandDispatcher
+	 *
+	 * @return A Brigadier CommandDispatcher
+	 */
+	CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher();
+
+	/**
+	 * Returns the Brigadier CommandDispatcher used when commands are sent to Players
+	 *
+	 * @return A Brigadier CommandDispatcher
+	 */
+	CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher();
+
 	/**
 	 * Returns the Server's internal (OBC) CommandMap
 	 * 
@@ -405,14 +421,6 @@ public interface NMS<CommandListenerWrapper> {
 
 	Set<NamespacedKey> getTags();
 
-	Team getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-
-	int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	World getWorldForCSS(CommandListenerWrapper clw);
-
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
 	 * 
@@ -420,6 +428,14 @@ public interface NMS<CommandListenerWrapper> {
 	 * @return true if Command is an instance of VanillaCommandWrapper
 	 */
 	boolean isVanillaCommandWrapper(Command command);
+
+	/**
+	 * Wraps a Brigadier command node as Bukkit's VanillaCommandWrapper
+	 *
+	 * @param node The LiteralCommandNode to wrap
+	 * @return A VanillaCommandWrapper representing the given node
+	 */
+	Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node);
 
 	/**
 	 * Reloads the datapacks by using the updated the commandDispatcher tree

@@ -54,10 +54,10 @@ import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 
-	CommandAPIBukkit<?> baseNMS;
+	CommandAPIBukkit<CommandListenerWrapper> baseNMS;
 
 	protected ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
-		this.baseNMS = baseNMS;
+		this.baseNMS = (CommandAPIBukkit<CommandListenerWrapper>) baseNMS;
 	}
 
 	@Override

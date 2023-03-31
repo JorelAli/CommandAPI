@@ -37,6 +37,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -328,8 +329,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+	@Differs(from = "1.17", by = "MinecraftServer#getCommands -> MinecraftServer#aA")
+	public CommandDispatcher<CommandSourceStack> getResourcesDispatcher() {
+		return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
 	}
 
 	@Override
@@ -654,6 +656,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
+	}
+
+	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommands(), node);
 	}
 
 	@Override
