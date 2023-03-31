@@ -183,7 +183,7 @@ import net.minecraft.server.v1_16_R2.Vec3D;
 public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
-	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
 	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
@@ -394,9 +394,9 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		@SuppressWarnings("unchecked")
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
-		helpTopics.putAll(helpTopicsToAdd);
+		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
+		// because we're updating an existing help topic, not adding a new help topic
+		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
 	}
 
 	@Override

@@ -58,9 +58,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private PaperImplementations paper;
 
 	// Static VarHandles
-	private static final SafeVarHandle<CommandNode, Map> commandNodeChildren;
-	private static final SafeVarHandle<CommandNode, Map> commandNodeLiterals;
-	private static final SafeVarHandle<CommandNode, Map> commandNodeArguments;
+	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeChildren;
+	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeLiterals;
+	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeArguments;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {

@@ -75,7 +75,7 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
  */
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
-	private static final SafeVarHandle<CommandContext, Map> commandContextArguments;
+	private static final SafeVarHandle<CommandContext<?>, Map<String, ParsedArgument<?, ?>>> commandContextArguments;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -94,10 +94,8 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 	 * @param key                  the node name for the argument
 	 * @return the raw input string for this argument
 	 */
-	public static <CommandSource> String getRawArgumentInput(CommandContext<CommandSource> cmdCtx,
-			String key) {
-		final Map<String, ParsedArgument<CommandSource, ?>> commandContextArgs = commandContextArguments.get(cmdCtx);
-		final ParsedArgument<CommandSource, ?> parsedArgument = commandContextArgs.get(key);
+	public static <CommandSource> String getRawArgumentInput(CommandContext<CommandSource> cmdCtx, String key) {
+		final ParsedArgument<?, ?> parsedArgument = commandContextArguments.get(cmdCtx).get(key);
 		
 		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
 		// the arguments for this command context (most likely because it's a redirected command).

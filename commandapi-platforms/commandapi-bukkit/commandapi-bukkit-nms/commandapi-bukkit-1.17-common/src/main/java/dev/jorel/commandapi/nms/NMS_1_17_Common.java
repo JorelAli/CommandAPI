@@ -159,15 +159,13 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public abstract class NMS_1_17_Common extends NMS_Common {
 
-	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
-	private static final SafeVarHandle<EntityPositionSource, Optional> entityPositionSource;
+	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "d", "sourceEntity", Optional.class);
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
@@ -234,9 +232,9 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		@SuppressWarnings("unchecked")
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
-		helpTopics.putAll(helpTopicsToAdd);
+		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
+		// because we're updating an existing help topic, not adding a new help topic
+		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
 	}
 
 	@Override
