@@ -317,7 +317,7 @@ public class MockNMS extends Enums {
 			});
 
 			// RotationArgument
-			Mockito.when(css.getRotation()).thenReturn(new Vec2(loc.getYaw(), loc.getPitch()));
+			Mockito.when(css.getRotation()).thenReturn(new Vec2(loc.getPitch(), loc.getYaw()));
 
 			// CommandSourceStack#getAllTeams
 			Mockito.when(css.getAllTeams()).thenAnswer(invocation -> Bukkit.getScoreboardManager().getMainScoreboard().getTeams().stream().map(Team::getName).toList());

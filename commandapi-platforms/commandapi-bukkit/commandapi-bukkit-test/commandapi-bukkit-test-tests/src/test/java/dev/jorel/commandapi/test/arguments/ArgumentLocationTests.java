@@ -177,7 +177,7 @@ class ArgumentLocationTests extends TestBase {
 			
 			player.setLocation(new Location(player.getWorld(), 2, 2, 2, -180.0f, 0.0f));
 			server.dispatchCommand(player, "test ^ ^ ^5");
-			assertLocationEquals(new Location(null, 1, 2, -3), results.get()); // TODO: Very sus, why does the y coordinate become 1? 
+			assertLocationEquals(new Location(null, 2, 2, -3), results.get()); 
 		}
 	}
 
