@@ -164,8 +164,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 @SuppressWarnings("resource")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
-	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
-	private static final SafeVarHandle<EntityPositionSource, Either> entityPositionSource;
+	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// From net.minecraft.server.commands.LocateCommand
@@ -192,8 +191,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		}
 
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", "entityOrUuidOrId", Either.class);
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
+
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
 	}
@@ -317,11 +316,9 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 
 	@Override
 	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		@SuppressWarnings("unchecked")
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
-		helpTopics.putAll(helpTopicsToAdd);
+		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
 	}
 
 	@Override

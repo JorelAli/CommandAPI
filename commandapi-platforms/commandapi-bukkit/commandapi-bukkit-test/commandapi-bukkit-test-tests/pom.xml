@@ -125,7 +125,7 @@
 					 to limit a build to only run a certain test file. Uncomment
 					 here if you want to do that: -->
 					<!-- <includes>
-						<include>**/ArgumentParticleTests.java</include>
+						<include>**/ArgumentFunctionTests.java</include>
 					</includes> -->
 				</configuration>
 			</plugin>
@@ -264,6 +264,7 @@
 			</dependencies>
 		</profile>
 		<profile>
+			<!-- Yes, this is a very very misleading version of Minecraft. We're actually testing 1.18.1 -->
 			<id>Minecraft_1_18</id>
 			<dependencies>
 				<dependency>
@@ -276,10 +277,17 @@
 					<artifactId>commandapi-bukkit-test-impl-1.18</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<!-- For reasons beyond my knowledge right now, including paper
+					1.18 blows things up and causes every test to fail! -->
+				<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.18.1-R0.1-SNAPSHOT</version>
+				</dependency>
 				<dependency>
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
+					<version>1.18.1-R0.1-SNAPSHOT</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -337,6 +345,19 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_1_17_Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>

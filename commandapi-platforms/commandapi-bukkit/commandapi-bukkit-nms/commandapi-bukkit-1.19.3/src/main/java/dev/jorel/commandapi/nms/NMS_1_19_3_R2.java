@@ -156,8 +156,7 @@ import java.util.function.ToIntFunction;
 @Differs(from = "1.19.2", by = "Chat preview removed")
 public class NMS_1_19_3_R2 extends NMS_Common {
 
-	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
-	private static final SafeVarHandle<EntityPositionSource, Either> entityPositionSource;
+	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Derived from net.minecraft.commands.Commands;
@@ -173,7 +172,6 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		}
 
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "c", "entityOrUuidOrId", Either.class);
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
@@ -231,11 +229,9 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 
 	@Override
 	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		@SuppressWarnings("unchecked")
-		Map<String, HelpTopic> helpTopics = helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
-		helpTopics.putAll(helpTopicsToAdd);
+		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
 	}
 
 	@Override

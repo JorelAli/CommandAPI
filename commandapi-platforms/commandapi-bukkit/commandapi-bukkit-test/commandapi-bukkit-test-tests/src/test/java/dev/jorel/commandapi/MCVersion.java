@@ -62,4 +62,12 @@ public enum MCVersion {
 	public boolean lessThanOrEqualTo(MCVersion version) {
 		return this.version.lessThanOrEqualTo(version.version);
 	}
+	
+	public boolean greaterThan(MCVersion version) {
+		return this.version.greaterThan(version.version);
+	}
+
+	public boolean lessThan(MCVersion version) {
+		return this.version.lessThan(version.version);
+	}
 }

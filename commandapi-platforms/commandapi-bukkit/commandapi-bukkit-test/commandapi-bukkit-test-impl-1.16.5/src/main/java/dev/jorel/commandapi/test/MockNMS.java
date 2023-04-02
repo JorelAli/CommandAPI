@@ -8,10 +8,13 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.server.v1_16_R3.Tag;
 import net.minecraft.server.v1_16_R3.ArgumentAnchor.Anchor;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -55,6 +58,8 @@ public class MockNMS extends Enums {
 	List<EntityPlayer> players = new ArrayList<>();
 	PlayerList playerListMock;
 	final CraftingManager recipeManager;
+	Map<MinecraftKey, CustomFunction> functions = new HashMap<>();
+	Map<MinecraftKey, Collection<CustomFunction>> tags = new HashMap<>();
 
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
@@ -84,6 +89,7 @@ public class MockNMS extends Enums {
 		registerDefaultEnchantments();
 
 		this.recipeManager = new CraftingManager();
+		this.functions = new HashMap<>();
 		registerDefaultRecipes();
 	}
 
@@ -286,6 +292,11 @@ public class MockNMS extends Enums {
 			// ChatArgument, AdventureChatArgument
 			Mockito.when(clw.hasPermission(anyInt())).thenAnswer(invocation -> sender.isOp());
 			Mockito.when(clw.hasPermission(anyInt(), anyString())).thenAnswer(invocation -> sender.isOp());
+
+			// FunctionArgument
+			// We don't really need to do anything funky here, we'll just return the same CSS
+			Mockito.when(clw.a()).thenReturn(clw);
+			Mockito.when(clw.b(anyInt())).thenReturn(clw);
 		}
 		return clw;
 	}
@@ -411,7 +422,69 @@ public class MockNMS extends Enums {
 		// RecipeArgument
 		Mockito.when(minecraftServerMock.getCraftingManager()).thenAnswer(i -> this.recipeManager);
 
+		// FunctionArgument
+		// We're using 2 as the function compilation level.
+		// Mockito.when(minecraftServerMock.??()).thenReturn(2);
+		Mockito.when(minecraftServerMock.getFunctionData()).thenAnswer(i -> {
+			CustomFunctionData customFunctionData = Mockito.mock(CustomFunctionData.class);
+
+			// Functions
+			Mockito.when(customFunctionData.a(any(MinecraftKey.class))).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
+			Mockito.when(customFunctionData.f()).thenAnswer(invocation -> functions.keySet());
+
+			// Tags
+			Mockito.when(customFunctionData.b(any())).thenAnswer(invocation -> {
+				Collection<CustomFunction> tagsFromResourceLocation = tags.getOrDefault(invocation.getArgument(0), List.of());
+				return Tag.b(Set.copyOf(tagsFromResourceLocation));
+			});
+			Mockito.when(customFunctionData.g()).thenAnswer(invocation -> tags.keySet());
+
+			// Command dispatcher
+			Mockito.when(customFunctionData.getCommandDispatcher()).thenAnswer(invocation -> Brigadier.getCommandDispatcher());
+
+			// Command chain length
+			Mockito.when(customFunctionData.b()).thenReturn(65536);
+
+			return customFunctionData;
+		});
+
+		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
+		Mockito.when(minecraftServerMock.getMethodProfiler()).thenAnswer(i -> GameProfilerDisabled.a);
+
+
 		return (T) minecraftServerMock;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addFunction(NamespacedKey key, List<String> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
+		MinecraftKey resourceLocation = new MinecraftKey(key.toString());
+		CommandListenerWrapper css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+
+		// So for very interesting reasons, Brigadier.getCommandDispatcher()
+		// gives a different result in this method than using getBrigadierDispatcher()
+		this.functions.put(resourceLocation, CustomFunction.a(resourceLocation, Brigadier.getCommandDispatcher(), css, commands));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addTag(NamespacedKey key, List<List<String>> commands) {
+		if(Bukkit.getOnlinePlayers().isEmpty()) {
+			throw new IllegalStateException("You need to have at least one player on the server to add a function");
+		}
+
+		MinecraftKey resourceLocation = new MinecraftKey(key.toString());
+		CommandListenerWrapper css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+
+		List<CustomFunction> tagFunctions = new ArrayList<>();
+		for(List<String> functionCommands : commands) {
+			tagFunctions.add(CustomFunction.a(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
+		}
+		this.tags.put(resourceLocation, tagFunctions);
 	}
 
 	@Override
