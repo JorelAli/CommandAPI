@@ -18,9 +18,9 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T> extends ExceptionHan
 	// All the ? here should actually be ArgumentRegistry.a, but that is a private inner class. That makes everything really annoying.
 	// TODO: We want to check this reflection, but we can't give ArgumentRegistry.a to the @RequireField annotation
 	//  Hopefully something works out, but the preprocessor needs to be expanded first
-	private static final SafeStaticOneParameterMethodHandle<?, ArgumentType> getArgumentTypeInformation;
+	private static final SafeStaticOneParameterMethodHandle<?, ArgumentType<?>> getArgumentTypeInformation;
 	private static final SafeVarHandle<?, MinecraftKey> serializationKey;
-	private static final SafeVarHandle<?, ArgumentSerializer> serializer;
+	private static final SafeVarHandle<?, ArgumentSerializer<ArgumentType<?>>> serializer;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {

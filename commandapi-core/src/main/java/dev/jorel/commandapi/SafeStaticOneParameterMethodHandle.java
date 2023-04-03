@@ -12,11 +12,11 @@ public class SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> {
 		this.handle = handle;
 	}
 
-	private static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> of(Class<?> classType, String fieldName, String mojangMappedFieldName, Class<ReturnType> returnType, Class<ParameterType> parameterType) throws ReflectiveOperationException {
+	private static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> of(Class<?> classType, String fieldName, String mojangMappedFieldName, Class<? super ReturnType> returnType, Class<? super ParameterType> parameterType) throws ReflectiveOperationException {
 		return new SafeStaticOneParameterMethodHandle<>(MethodHandles.privateLookupIn(classType, MethodHandles.lookup()).findStatic(classType, SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedFieldName : fieldName, MethodType.methodType(returnType, parameterType)));
 	}
 
-	public static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> ofOrNull(Class<?> classType, String fieldName, String mojangMappedFieldName, Class<ReturnType> returnType, Class<ParameterType> parameterType) {
+	public static <ReturnType, ParameterType> SafeStaticOneParameterMethodHandle<ReturnType, ParameterType> ofOrNull(Class<?> classType, String fieldName, String mojangMappedFieldName, Class<? super ReturnType> returnType, Class<? super ParameterType> parameterType) {
 		try {
 			return of(classType, fieldName, mojangMappedFieldName, returnType, parameterType);
 		} catch (ReflectiveOperationException e) {

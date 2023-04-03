@@ -16,9 +16,9 @@ public class ExceptionHandlingArgumentSerializer_1_17_Common<T> extends Exceptio
 	// All the ? here should actually be ArgumentTypes.Entry, but that is a private inner class. That makes everything really annoying.
 	// TODO: We want to check this reflection, but we can't give ArgumentTypes.Entry to the @RequireField annotation
 	//  Hopefully something works out, but the preprocessor needs to be expanded first
-	private static final SafeStaticOneParameterMethodHandle<?, ArgumentType> getArgumentTypeInformation;
+	private static final SafeStaticOneParameterMethodHandle<?, ArgumentType<?>> getArgumentTypeInformation;
 	private static final SafeVarHandle<?, ResourceLocation> serializationKey;
-	private static final SafeVarHandle<?, ArgumentSerializer> serializer;
+	private static final SafeVarHandle<?, ArgumentSerializer<ArgumentType<?>>> serializer;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
