@@ -32,7 +32,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,12 +56,14 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeChildren;
 	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeLiterals;
 	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeArguments;
+	private static final SafeVarHandle<SimpleCommandMap, Map<String, Command>> commandMapKnownCommands;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		commandNodeChildren = SafeVarHandle.ofOrNull(CommandNode.class, "children", "children", Map.class);
 		commandNodeLiterals = SafeVarHandle.ofOrNull(CommandNode.class, "literals", "literals", Map.class);
 		commandNodeArguments = SafeVarHandle.ofOrNull(CommandNode.class, "arguments", "arguments", Map.class);
+		commandMapKnownCommands = SafeVarHandle.ofOrNull(SimpleCommandMap.class, "knownCommands", "knownCommands", Map.class);
 	}
 
 	protected CommandAPIBukkit() {
@@ -496,16 +497,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 		if(!CommandAPI.canRegister()) {
 			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
-			SimpleCommandMap commandMap = (SimpleCommandMap) paper.getCommandMap();
-			Field knownCommandsField = CommandAPIHandler.getField(SimpleCommandMap.class, "knownCommands");
-			Map<String, Command> knownCommands = null;
-			try {
-				knownCommands = (Map<String, Command>) knownCommandsField.get(commandMap);
-			} catch (IllegalAccessException e) {
-				CommandAPI.logError("Could not access knownCommands map to fully unregister commands!");
-				CommandAPI.logError("The " + commandName + " command may still appear");
-				return;
-			}
+			Map<String, Command> knownCommands = getKnownCommands();
 
 			knownCommands.remove(commandName);
 
@@ -517,6 +509,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 			}
 		}
+	}
+
+	private Map<String, Command> getKnownCommands() {
+		return commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 	}
 
 	@Override
