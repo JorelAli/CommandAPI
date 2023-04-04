@@ -352,7 +352,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 		}
 
-		addToHelpMap(helpTopicsToAdd);
+		// We have to use helpTopics.put (instead of .addTopic) because we're overwriting an existing help topic, not adding a new help topic
+		getHelpMap().putAll(helpTopicsToAdd);
 	}
 
 	@Override
@@ -474,39 +475,55 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public void unregister(String commandName, boolean force) {
-		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			CommandAPI.logInfo("Unregistering command /" + commandName);
-		}
+		CommandAPI.logInfo("Unregistering command /" + commandName);
 
-		// Get the child nodes from the loaded dispatcher class
-		Map<String, CommandNode<?>> children = commandNodeChildren.get(getBrigadierDispatcher().getRoot());
+		// Remove nodes from the Brigadier dispatcher
+		RootCommandNode<Source> brigRoot = getBrigadierDispatcher().getRoot();
+		commandNodeChildren.get(brigRoot).remove(commandName);
+		commandNodeLiterals.get(brigRoot).remove(commandName);
+		// We really only expect commands to be represented as literals, but it is technically possible
+		// to put an ArgumentCommandNode in here, so we'll check
+		commandNodeArguments.get(brigRoot).remove(commandName);
 
-		if (force) {
-			// Remove them by force
-			for (String key : new HashSet<>(children.keySet())) {
-				if (key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
-					children.remove(key);
+		if (!CommandAPI.canRegister() || force) {
+			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
+			// If we're forcing, we'll also go here to make sure commands are really gone
+			Map<String, Command> knownCommands = getKnownCommands();
+			knownCommands.remove(commandName);
+			if (force) removeCommandNamespace(knownCommands, commandName);
+
+			// Remove commands from the resources dispatcher
+			RootCommandNode<Source> resourcesRoot = getResourcesDispatcher().getRoot();
+			Map<String, CommandNode<?>> children = commandNodeChildren.get(resourcesRoot);
+			Map<String, CommandNode<?>> literals = commandNodeLiterals.get(resourcesRoot);
+			Map<String, CommandNode<?>> arguments = commandNodeArguments.get(resourcesRoot);
+
+			children.remove(commandName);
+			literals.remove(commandName);
+			arguments.remove(commandName);
+
+			// Since the commands in here are copied from Bukkit's map, there may be namespaced versions of the command, which we should remove
+			if (force) {
+				removeCommandNamespace(children, commandName);
+				removeCommandNamespace(literals, commandName);
+				removeCommandNamespace(arguments, commandName);
+			}
+
+			if (!CommandAPI.canRegister()) {
+				// If the server actually is running (not just force unregistering), we should also update help and notify players
+				getHelpMap().remove("/" + commandName);
+
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					resendPackets(p);
 				}
 			}
 		}
+	}
 
-		// Otherwise, just remove them normally
-		children.remove(commandName);
-		commandNodeLiterals.get(getBrigadierDispatcher().getRoot()).remove(commandName);
-		commandNodeArguments.get(getBrigadierDispatcher().getRoot()).remove(commandName);
-
-		if(!CommandAPI.canRegister()) {
-			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
-			Map<String, Command> knownCommands = getKnownCommands();
-
-			knownCommands.remove(commandName);
-
-			if (force) {
-				for (String key : new HashSet<>(knownCommands.keySet())) {
-					if (key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
-						knownCommands.remove(key);
-					}
-				}
+	private void removeCommandNamespace(Map<String, ?> map, String commandName) {
+		for(String key : new HashSet<>(map.keySet())) {
+			if(key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
+				map.remove(key);
 			}
 		}
 	}

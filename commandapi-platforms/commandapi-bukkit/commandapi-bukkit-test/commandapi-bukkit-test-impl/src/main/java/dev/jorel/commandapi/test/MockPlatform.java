@@ -8,13 +8,10 @@ import com.mojang.brigadier.context.ParsedArgument;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -31,7 +28,6 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
-
 	/*****************
 	 * Instantiation *
 	 *****************/
@@ -81,18 +77,6 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	@Override
 	public final BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CLW> cmdCtx, boolean forceNative) {
 		return getCommandSenderFromCommandSource(cmdCtx.getSource());
-	}
-
-	@Override
-	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		// We don't want to call the NMS implementation of addToHelpMap because
-		// that uses reflection to access SimpleHelpMap. Luckily for us, the
-		// HelpMapMock's addTopic implementation is exactly what we want! - it
-		// uses Map#put() with no restrictions, whereas SimpleHelpMap#addTopic
-		// only adds the help topic if the topic name doesn't already exist
-		for(HelpTopic topic : helpTopicsToAdd.values()) {
-			Bukkit.getServer().getHelpMap().addTopic(topic);
-		}
 	}
 
 	@Override

@@ -274,7 +274,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "SimpleHelpMap")
-	public abstract void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
+	public abstract Map<String, HelpTopic> getHelpMap();
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)

@@ -444,7 +444,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
-	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
+	Map<String, HelpTopic> getHelpMap();
 
 	Message generateMessageFromJson(String json);
 

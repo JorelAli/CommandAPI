@@ -20,7 +20,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.jorel.commandapi.SafeVarHandle;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -95,6 +97,8 @@ import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType;
 
 public class MockNMS extends Enums {
+	private static final SafeVarHandle<HelpMapMock, Map<String, HelpTopic>> helpMapTopics =
+		SafeVarHandle.ofOrNull(HelpMapMock.class, "topics", "topics", Map.class);
 
 	static {
 		CodeSource src = PotionEffectType.class.getProtectionDomain().getCodeSource();
@@ -796,4 +800,8 @@ public class MockNMS extends Enums {
 		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
+	@Override
+	public Map<String, HelpTopic> getHelpMap() {
+		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
+	}
 }
