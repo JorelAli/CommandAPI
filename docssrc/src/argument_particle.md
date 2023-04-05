@@ -105,3 +105,12 @@ This can be used with commands such as:
 ```
 
 </div>
+
+## Particle data implementation notes
+
+The `vibration` particle will return a particle data of the Bukkit `Vibration` class. In the `Vibration` class, you can access the destination location using the `Vibration.getDestination()` method, which returns a `Vibration.Destination` instance. The CommandAPI will **always** return a `Vibration.Destination.BlockDestination` instance, and will never return a `Vibration.Destination.EntityDestination` instance. An example of accessing the location can be found below:
+
+```java
+ParticleData<Vibration> particleData; // The particle data you get from your argument
+Location destination = ((BlockDestination) particleData.data().getDestination()).getLocation();
+```
