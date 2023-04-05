@@ -181,31 +181,6 @@ class ArgumentLocationTests extends TestBase {
 		}
 	}
 
-//	@Test
-//	public void executionTestWithLocationArgument1() {
-//		Mut<Location> results = Mut.of();
-//
-//		new CommandAPICommand("test")
-//			.withArguments(new LocationArgument("team"))
-//			.executesPlayer((player, args) -> {
-//				results.set((String) args.get("team"));
-//			})
-//			.register();
-//
-//		PlayerMock player = server.addPlayer();
-//
-//		Bukkit.getScoreboardManager().getMainScoreboard().registerNewLocation("myteam");
-//		
-//		server.dispatchCommand(player, "test myteam");
-//		assertEquals("myteam", results.get());
-//
-//		// /test blah
-//		// Fails because 'blah' is not a valid Location
-//		assertCommandFailsWith(player, "test blah", "Unknown team 'blah'");
-//
-//		assertNoMoreResults(results);
-//	}
-
 	/********************
 	 * Suggestion tests *
 	 ********************/
