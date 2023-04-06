@@ -177,34 +177,9 @@ class ArgumentLocationTests extends TestBase {
 			
 			player.setLocation(new Location(player.getWorld(), 2, 2, 2, -180.0f, 0.0f));
 			server.dispatchCommand(player, "test ^ ^ ^5");
-			assertLocationEquals(new Location(null, 1, 2, -3), results.get()); // TODO: Very sus, why does the y coordinate become 1? 
+			assertLocationEquals(new Location(null, 2, 2, -3), results.get()); 
 		}
 	}
-
-//	@Test
-//	public void executionTestWithLocationArgument1() {
-//		Mut<Location> results = Mut.of();
-//
-//		new CommandAPICommand("test")
-//			.withArguments(new LocationArgument("team"))
-//			.executesPlayer((player, args) -> {
-//				results.set((String) args.get("team"));
-//			})
-//			.register();
-//
-//		PlayerMock player = server.addPlayer();
-//
-//		Bukkit.getScoreboardManager().getMainScoreboard().registerNewLocation("myteam");
-//		
-//		server.dispatchCommand(player, "test myteam");
-//		assertEquals("myteam", results.get());
-//
-//		// /test blah
-//		// Fails because 'blah' is not a valid Location
-//		assertCommandFailsWith(player, "test blah", "Unknown team 'blah'");
-//
-//		assertNoMoreResults(results);
-//	}
 
 	/********************
 	 * Suggestion tests *

@@ -27,10 +27,12 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
@@ -178,15 +180,13 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public class NMS_1_18_R2 extends NMS_Common {
 
-	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
-	private static final SafeVarHandle<EntityPositionSource, Optional> entityPositionSource;
+	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
-		entityPositionSource = SafeVarHandle.ofOrNull(EntityPositionSource.class, "d", "sourceEntity", Optional.class);
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
@@ -254,13 +254,9 @@ public class NMS_1_18_R2 extends NMS_Common {
 	
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		@SuppressWarnings("unchecked")
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
 		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
 		// because we're updating an existing help topic, not adding a new help topic
-		for (Map.Entry<String, HelpTopic> entry : helpTopicsToAdd.entrySet()) {
-			helpTopics.put(entry.getKey(), entry.getValue());
-		}
+		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
 	}
 
 	@Override
@@ -454,6 +450,28 @@ public class NMS_1_18_R2 extends NMS_Common {
 					entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())));
 		}
 		return result.toArray(new FunctionWrapper[0]);
+	}
+
+	@Override
+	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
+		Optional<CommandFunction> commandFunctionOptional = this.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
+		if(commandFunctionOptional.isPresent()) {
+			return convertFunction(commandFunctionOptional.get());
+		} else {
+			throw new IllegalStateException("Failed to get defined function " + key
+				+ "! This should never happen - please report this to the CommandAPI"
+				+ "developers, we'd love to know how you got this error message!");
+		}
+	}
+
+	@Override
+	public Set<NamespacedKey> getFunctions() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
 	}
 
 	@Override

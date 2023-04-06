@@ -32,7 +32,7 @@ import dev.jorel.commandapi.CommandAPIBukkit;
 /**
  * A wrapper class for Minecraft 1.12's functions
  */
-public class SimpleFunctionWrapper implements Keyed {	
+public class SimpleFunctionWrapper implements Keyed {
 	
 	final NamespacedKey minecraftKey;
 	final ToIntFunction<Object> functionExecutor; //What the function does

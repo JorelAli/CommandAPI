@@ -21,17 +21,17 @@ The `T data` can be used in Bukkit's `World.spawnParticle(Particle particle, Loc
 
 The particle argument requires additional data for a particle depending on what the particle is. Information about this can be found [on the Argument types page on the MinecraftWiki](https://minecraft.fandom.com/wiki/Argument_types#particle). The following particles have additional data required to display them:
 
-| Bukkit Particle       | Arguments                                                             |
-|-----------------------|-----------------------------------------------------------------------|
-| BLOCK_CRACK           | `block block_id`<br>`block block_id[block_state=value]`               |
-| BLOCK_MARKER          | `block_marker block_id`<br>`block_marker block_id[block_state=value]` |
-| DUST                  | `dust red green blue size`                                            |
-| DUST_COLOR_TRANSITION | `dust_color_transition red1 green1 blue1 size red2 green2 blue2`      |
-| FALLING_DUST          | `falling_dust block_id`<br>`falling_dust block_id[block_state=value]` |
-| ITEM_CRACK            | `item item_id`<br>`item item_id{NBT}`                                 |
-| SCULK_CHARGE          | `sculk_charge angle`                                                  |
-| SHRIEK                | `shriek delay`                                                        |
-| VIBRATION             | `vibration x y z ticks`                                               |
+| Bukkit Particle         | Minecraft particle      | Arguments                                                             |
+|-------------------------|-------------------------|-----------------------------------------------------------------------|
+| `BLOCK_CRACK`           | `block`                 | `block block_id`<br>`block block_id[block_state=value]`               |
+| `BLOCK_MARKER`          | `block_marker`          | `block_marker block_id`<br>`block_marker block_id[block_state=value]` |
+| `REDSTONE`              | `dust`                  | `dust red green blue size`                                            |
+| `DUST_COLOR_TRANSITION` | `dust_color_transition` | `dust_color_transition red1 green1 blue1 size red2 green2 blue2`      |
+| `FALLING_DUST`          | `falling_dust`          | `falling_dust block_id`<br>`falling_dust block_id[block_state=value]` |
+| `ITEM_CRACK`            | `item`                  | `item item_id`<br>`item item_id{NBT}`                                 |
+| `SCULK_CHARGE`          | `sculk_charge`          | `sculk_charge angle`                                                  |
+| `SHRIEK`                | `shriek`                | `shriek delay`                                                        |
+| `VIBRATION`             | `vibration`             | `vibration x y z ticks`                                               |
 
 ## ParticleArgument examples
 
@@ -105,3 +105,12 @@ This can be used with commands such as:
 ```
 
 </div>
+
+## Particle data implementation notes
+
+The `vibration` particle will return a particle data of the Bukkit `Vibration` class. In the `Vibration` class, you can access the destination location using the `Vibration.getDestination()` method, which returns a `Vibration.Destination` instance. The CommandAPI will **always** return a `Vibration.Destination.BlockDestination` instance, and will never return a `Vibration.Destination.EntityDestination` instance. An example of accessing the location can be found below:
+
+```java
+ParticleData<Vibration> particleData; // The particle data you get from your argument
+Location destination = ((BlockDestination) particleData.data().getDestination()).getLocation();
+```

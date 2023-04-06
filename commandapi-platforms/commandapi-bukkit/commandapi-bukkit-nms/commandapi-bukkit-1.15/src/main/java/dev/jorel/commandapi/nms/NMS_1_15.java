@@ -151,6 +151,7 @@ import net.minecraft.server.v1_15_R1.ParticleParam;
 import net.minecraft.server.v1_15_R1.ParticleParamBlock;
 import net.minecraft.server.v1_15_R1.ParticleParamItem;
 import net.minecraft.server.v1_15_R1.ParticleParamRedstone;
+import net.minecraft.server.v1_15_R1.ParticleType;
 import net.minecraft.server.v1_15_R1.ShapeDetectorBlock;
 import net.minecraft.server.v1_15_R1.Vec2F;
 import net.minecraft.server.v1_15_R1.Vec3D;
@@ -168,7 +169,7 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 public class NMS_1_15 extends NMSWrapper_1_15 {
 
-	private static final SafeVarHandle<SimpleHelpMap, Map> helpMapTopics;
+	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
 	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
@@ -376,9 +377,9 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		@SuppressWarnings("unchecked")
-		Map<String, HelpTopic> helpTopics = (Map<String, HelpTopic>) helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap());
-		helpTopics.putAll(helpTopicsToAdd);
+		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
+		// because we're updating an existing help topic, not adding a new help topic
+		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
 	}
 
 	@Override
@@ -725,7 +726,10 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		final ParticleParam particleOptions = ArgumentParticle.a(cmdCtx, key);
 		final Particle particle = CraftParticle.toBukkit(particleOptions);
 
-		if (particleOptions instanceof ParticleParamBlock options) {
+		if (particleOptions instanceof ParticleType) {
+			return new ParticleData<Void>(particle, null);
+		}
+		else if (particleOptions instanceof ParticleParamBlock options) {
 			return new ParticleData<BlockData>(particle, CraftBlockData.fromData(particleParamBlockData.get(options)));
 		}
 		else if (particleOptions instanceof ParticleParamRedstone options) {

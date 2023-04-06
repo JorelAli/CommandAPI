@@ -5,8 +5,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -35,8 +37,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,28 +58,15 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private PaperImplementations paper;
 
 	// Static VarHandles
-	private static final VarHandle COMMANDNODE_CHILDREN;
-	private static final VarHandle COMMANDNODE_LITERALS;
-	private static final VarHandle COMMANDNODE_ARGUMENTS;
+	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeChildren;
+	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeLiterals;
+	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeArguments;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
-		VarHandle commandNodeChildren = null;
-		VarHandle commandNodeLiterals = null;
-		VarHandle commandNodeArguments = null;
-		try {
-			commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup())
-				.findVarHandle(CommandNode.class, "children", Map.class);
-			commandNodeLiterals = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup())
-				.findVarHandle(CommandNode.class, "literals", Map.class);
-			commandNodeArguments = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup())
-				.findVarHandle(CommandNode.class, "arguments", Map.class);
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
-		COMMANDNODE_CHILDREN = commandNodeChildren;
-		COMMANDNODE_LITERALS = commandNodeLiterals;
-		COMMANDNODE_ARGUMENTS = commandNodeArguments;
+		commandNodeChildren = SafeVarHandle.ofOrNull(CommandNode.class, "children", "children", Map.class);
+		commandNodeLiterals = SafeVarHandle.ofOrNull(CommandNode.class, "literals", "literals", Map.class);
+		commandNodeArguments = SafeVarHandle.ofOrNull(CommandNode.class, "arguments", "arguments", Map.class);
 	}
 
 	protected CommandAPIBukkit() {
@@ -423,22 +410,21 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		// Get the child nodes from the loaded dispatcher class
-		Map<String, CommandNode<?>> commandNodeChildren = (Map<String, CommandNode<?>>) COMMANDNODE_CHILDREN
-			.get(getBrigadierDispatcher().getRoot());
+		Map<String, CommandNode<?>> children = commandNodeChildren.get(getBrigadierDispatcher().getRoot());
 
 		if (force) {
 			// Remove them by force
-			for (String key : new HashSet<>(commandNodeChildren.keySet())) {
+			for (String key : new HashSet<>(children.keySet())) {
 				if (key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
-					commandNodeChildren.remove(key);
+					children.remove(key);
 				}
 			}
 		}
 
 		// Otherwise, just remove them normally
-		commandNodeChildren.remove(commandName);
-		((Map<String, CommandNode<?>>) COMMANDNODE_LITERALS.get(getBrigadierDispatcher().getRoot())).remove(commandName);
-		((Map<String, CommandNode<?>>) COMMANDNODE_ARGUMENTS.get(getBrigadierDispatcher().getRoot())).remove(commandName);
+		children.remove(commandName);
+		commandNodeLiterals.get(getBrigadierDispatcher().getRoot()).remove(commandName);
+		commandNodeArguments.get(getBrigadierDispatcher().getRoot()).remove(commandName);
 	}
 
 	@Override

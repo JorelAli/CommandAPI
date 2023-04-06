@@ -71,6 +71,9 @@ public abstract class TestBase {
 			}
 			MockBukkit.unmock();
 		}
+		server = null;
+		plugin = null;
+		MockPlatform.unload();
 	}
 
 	public static final PlayerCommandExecutor P_EXEC = (player, args) -> {};
