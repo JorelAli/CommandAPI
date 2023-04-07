@@ -8,7 +8,9 @@ The current annotations API was a proof-of-concept showcasing how compile-time c
 
 -----
 
-## An example of a simple command
+## An example of a simple command (old annotation system)
+
+Notably, this annotation system suffers from requiring everything to be static!
 
 ```java
 @Command("warp")
@@ -89,15 +91,15 @@ The annotation API could accommodate that using overloading using a different pa
 @Command("warp")
 public class WarpCommand {
     // List of warp names and their locations
-    static Map<String, Location> warps = new HashMap<>();
+    Map<String, Location> warps = new HashMap<>();
 
     @Default
-    public static void warp(Player player, @AStringArgument String warpName) {
+    public void warp(Player player, @AStringArgument String warpName) {
         player.teleport(warps.get(warpName));
     }
 
 +   @Default
-+   public static void warp(ConsoleCommandSender console, @AStringArgument String warpName) {
++   public void warp(ConsoleCommandSender console, @AStringArgument String warpName) {
 +       console.sendMessage("This command can't be run from the console!");
 +   }
 }
@@ -109,10 +111,10 @@ For multiple executors, it may be possible to use the `ExecutorType` like this:
 @Command("warp")
 public class WarpCommand {
     // List of warp names and their locations
-    static Map<String, Location> warps = new HashMap<>();
+    Map<String, Location> warps = new HashMap<>();
 
     @Default
-+   public static void warp(@Senders({ ExecutorType.PLAYER, ExecutorType.ENTITY }) CommandSender sender, @AStringArgument String warpName) {
++   public void warp(@Senders({ ExecutorType.PLAYER, ExecutorType.ENTITY }) CommandSender sender, @AStringArgument String warpName) {
 +       ((Entity) sender).teleport(warps.get(warpName));
     }
 }
