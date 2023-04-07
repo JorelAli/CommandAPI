@@ -4,8 +4,8 @@ plugins {
 
 java {
 	toolchain {
-		// Make the compiler against Java 16
-		languageVersion.set(JavaLanguageVersion.of(16))
+		// Make the compiler against Java 17
+		languageVersion.set(JavaLanguageVersion.of(17))
 	}
 }
 

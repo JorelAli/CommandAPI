@@ -6,7 +6,7 @@ set -e
 echo "Building Maven examples"
 
 # Find all pom.xml files
-for folder in $(find $PWD -name "pom.xml" | xargs dirname); do
+for folder in $(find $PWD -name "pom.xml" -print0 | xargs -0 dirname); do
 	if [[ ! $folder =~ "maven-shaded-tests" ]]; then
 		# The parentheses are required to only change the directory for the command so the second find $PWD does not break
 		(cd "$folder" && mvn clean package)
@@ -16,7 +16,7 @@ done
 echo "Building Gradle examples"
 
 # Find all settings.gradle files
-for folder in $(find $PWD -name "build.gradle*" | xargs dirname); do
+for folder in $(find $PWD -name "build.gradle*" -print0 | xargs -0 dirname); do
 	# Gradle does not output the name of the project that it is currently building
 	echo "$folder"
 	# Add "mavenLocal()" repository just for this step in ci.
