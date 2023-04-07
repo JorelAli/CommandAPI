@@ -173,13 +173,13 @@ Then, you need to configure the Java version to build against:
 
 ```groovy,build.gradle
 kotlin {
-	jvmToolchain(16)
+    jvmToolchain(16)
 }
 ```
 
 ```kotlin,build.gradle.kts
 kotlin {
-	jvmToolchain(16)
+    jvmToolchain(16)
 }
 ```
 
