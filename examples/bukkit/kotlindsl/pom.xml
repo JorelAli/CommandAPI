@@ -6,36 +6,35 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<kotlin.version>1.7.20</kotlin.version>
+		<kotlin.version>1.8.20</kotlin.version>
 	</properties>
 
 	<repositories>
-		<!-- This adds the Paper Maven repository to the build -->
+		<!-- This adds the Spigot Maven repository to the build -->
 		<repository>
-			<id>papermc</id>
-			<url>https://papermc.io/repo/repository/maven-public/</url>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
 
 	<dependencies>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-kotlin</artifactId>
-			<version>9.0.0-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-core</artifactId>
 			<version>9.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!--This adds the Paper API artifact to the build -->
 		<dependency>
-			<groupId>io.papermc.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>1.19.2-R0.1-SNAPSHOT</version>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-kotlin</artifactId>
+			<version>9.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<!--This adds the Spigot API artifact to the build -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.19.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -43,41 +42,11 @@
 			<artifactId>kotlin-stdlib</artifactId>
 			<version>${kotlin.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-test</artifactId>
-			<version>${kotlin.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<sourceDirectory>src/main/kotlin</sourceDirectory>
 		<plugins>
-			<!-- Shade the CommandAPI Kotlin DSL into the jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.3.1-SNAPSHOT</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<relocations>
-								<relocation>
-									<pattern>dev.jorel.commandapi.kotlindsl</pattern>
-									<shadedPattern>io.github.jorelali.commandapi.kotlindsl</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- Usual Kotlin configuration -->
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
@@ -106,7 +75,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.11.0</version>
 				<executions>
 					<!-- Replacing default-compile as it is treated specially by maven -->
 					<execution>
@@ -142,11 +111,4 @@
 			</resource>
 		</resources>
 	</build>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>maven-snapshots</id>
-			<url>https://repository.apache.org/content/repositories/snapshots/</url>
-		</pluginRepository>
-	</pluginRepositories>
 </project>

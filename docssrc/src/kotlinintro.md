@@ -36,38 +36,6 @@ To install the DSL, you need to add the `commandapi-kotlin` dependency into your
 
 </div>
 
-Next, to shade it into your project easily, you need to add the `maven-shade-plugin`:
-
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>3.3.0</version>
-            <executions>
-                <execution>
-                    <id>shade</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>shade</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <relocations>
-                    <relocation>
-                        <pattern>dev.jorel.commandapi.kotlindsl</pattern>
-                        <!-- TODO: Change this to my own package name -->
-                        <shadedPattern>my.custom.package.commandapi.kotlindsl</shadedPattern>
-                    </relocation>
-                </relocations>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-```
-
 Next, you need to add Kotlin to your project. For this, you first need to add the dependency:
 
 ```xml
@@ -75,7 +43,7 @@ Next, you need to add Kotlin to your project. For this, you first need to add th
     <dependency>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-stdlib</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.20</version>
     </dependency>
 </dependencies>
 ```
@@ -88,7 +56,7 @@ Finally, you need to add the `kotlin-maven-plugin`:
         <plugin>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-maven-plugin</artifactId>
-            <version>1.8.0</version>
+            <version>1.8.20</version>
             <executions>
                 <execution>
                     <id>compile</id>
@@ -163,69 +131,19 @@ dependencies {
 
 </div>
 
-Finally, you need to add it to the `shadowJar` configuration task and relocate it to your desired location:
-
-<div class="multi-pre">
-
-```groovy,Bukkit_build.gradle
-shadowJar {
-    dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
-    }
-    
-    // TODO: Change this to my own package name
-    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
-}
-```
-
-```kotlin,Bukkit_build.gradle.kts
-shadowJar {
-    dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-kotlin:9.0.0")
-    }
-    
-    // TODO: Change this to my own package name
-    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
-}
-```
-
-```groovy,Velocity_build.gradle
-shadowJar {
-    dependencies {
-        include dependency("dev.jorel:commandapi-velocity-kotlin:9.0.0")
-    }
-    
-    // TODO: Change this to my own package name
-    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
-}
-```
-
-```kotlin,Velocity_build.gradle.kts
-shadowJar {
-    dependencies {
-        include dependency("dev.jorel:commandapi-velocity-kotlin:9.0.0")
-    }
-    
-    // TODO: Change this to my own package name
-    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
-}
-```
-
-</div>
-
 You also need to add Kotlin to your project. For this, you first need to add the Kotlin plugin:
 
 <div class="multi-pre">
 
 ```groovy,build.gradle
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.8.0"
+    id "org.jetbrains.kotlin.jvm" version "1.8.20"
 }
 ```
 
 ```kotlin,build.gradle.kts
 plugins {
-    kotlin("jvm") version "1.8.0"
+    kotlin("jvm") version "1.8.20"
 }
 ```
 
@@ -249,43 +167,19 @@ dependencies {
 
 </div>
 
-Then, you need to add the `compileKotlin` task:
+Then, you need to configure the Java version to build against:
 
 <div class="multi-pre">
 
 ```groovy,build.gradle
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "16"
-    }
+kotlin {
+    jvmToolchain(16)
 }
 ```
 
 ```kotlin,build.gradle.kts
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "16"
-}
-```
-
-</div>
-
-Finally, you need to add it to the `shadowJar` configuration task:
-
-<div class="multi-pre">
-
-```groovy,build.gradle
-shadowJar {
-    dependencies {
-        include dependency("org.jetbrains.kotlin:kotlin-stdlib")
-    }
-}
-```
-
-```kotlin,build.gradle.kts
-shadowJar {
-    dependencies {
-        include dependency("org.jetbrains.kotlin:kotlin-stdlib")
-    }
+kotlin {
+    jvmToolchain(16)
 }
 ```
 
