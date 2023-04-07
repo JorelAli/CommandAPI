@@ -1,2 +1,2 @@
 // This sets the name of the project. Most likely you want to change it to the name of the directory you are using
-rootProject.name = 'gradle-groovy'
+rootProject.name = "kotlindsl-gradle"
