@@ -7,8 +7,10 @@ bin
 .project
 .settings
 target
+build
 **/logs/*.log
 **/logs/*.log.gz
 .vscode
 .DS_Store
 docssrc/src/.markdownlint-cli2.yaml
+.gradle
