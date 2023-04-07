@@ -41,10 +41,8 @@ inline fun CommandAPICommand.textArgument(nodeName: String, optional: Boolean = 
 inline fun CommandAPICommand.greedyStringArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(GreedyStringArgument(nodeName).setOptional(optional).apply(block))
 
 // Positional arguments
-inline fun CommandAPICommand.locationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LocationArgument(nodeName).setOptional(optional).apply(block))
-inline fun CommandAPICommand.locationArgument(nodeName: String, locationType: LocationType, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LocationArgument(nodeName, locationType).setOptional(optional).apply(block))
-inline fun CommandAPICommand.location2DArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(Location2DArgument(nodeName).setOptional(optional).apply(block))
-inline fun CommandAPICommand.location2DArgument(nodeName: String, locationType: LocationType, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(Location2DArgument(nodeName, locationType).setOptional(optional).apply(block))
+inline fun CommandAPICommand.locationArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LocationArgument(nodeName, locationType).setOptional(optional).apply(block))
+inline fun CommandAPICommand.location2DArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(Location2DArgument(nodeName, locationType).setOptional(optional).apply(block))
 inline fun CommandAPICommand.rotationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(RotationArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandAPICommand.axisArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(AxisArgument(nodeName).setOptional(optional).apply(block))
 

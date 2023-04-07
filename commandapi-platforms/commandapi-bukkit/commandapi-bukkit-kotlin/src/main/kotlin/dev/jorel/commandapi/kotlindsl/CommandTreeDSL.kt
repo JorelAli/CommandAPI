@@ -36,10 +36,8 @@ inline fun CommandTree.textArgument(nodeName: String, block: Argument<*>.() -> U
 inline fun CommandTree.greedyStringArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(GreedyStringArgument(nodeName).apply(block))
 
 // Positional arguments
-inline fun CommandTree.locationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName).apply(block))
-inline fun CommandTree.locationArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName, locationType).apply(block))
-inline fun CommandTree.location2DArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(Location2DArgument(nodeName).apply(block))
-inline fun CommandTree.location2DArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): CommandTree = then(Location2DArgument(nodeName, locationType).apply(block))
+inline fun CommandTree.locationArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, block: Argument<*>.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName, locationType).apply(block))
+inline fun CommandTree.location2DArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, block: Argument<*>.() -> Unit = {}): CommandTree = then(Location2DArgument(nodeName, locationType).apply(block))
 inline fun CommandTree.rotationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(RotationArgument(nodeName).apply(block))
 inline fun CommandTree.axisArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): CommandTree = then(AxisArgument(nodeName).apply(block))
 
@@ -135,10 +133,8 @@ inline fun Argument<*>.textArgument(nodeName: String, block: Argument<*>.() -> U
 inline fun Argument<*>.greedyStringArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(GreedyStringArgument(nodeName).apply(block))
 
 // Positional arguments
-inline fun Argument<*>.locationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LocationArgument(nodeName).apply(block))
-inline fun Argument<*>.locationArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LocationArgument(nodeName, locationType).apply(block))
-inline fun Argument<*>.location2DArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(Location2DArgument(nodeName).apply(block))
-inline fun Argument<*>.location2DArgument(nodeName: String, locationType: LocationType, block: Argument<*>.() -> Unit = {}): Argument<*> = then(Location2DArgument(nodeName, locationType).apply(block))
+inline fun Argument<*>.locationArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LocationArgument(nodeName, locationType).apply(block))
+inline fun Argument<*>.location2DArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, block: Argument<*>.() -> Unit = {}): Argument<*> = then(Location2DArgument(nodeName, locationType).apply(block))
 inline fun Argument<*>.rotationArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(RotationArgument(nodeName).apply(block))
 inline fun Argument<*>.axisArgument(nodeName: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AxisArgument(nodeName).apply(block))
 
