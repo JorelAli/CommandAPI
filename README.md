@@ -380,6 +380,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Made the <code>ObjectiveArgument</code> return a <code>Objective</code> instead of a String</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/391 Made the CommandAPI only complain about commands registered in a <code>plugin.yml</code> if this <code>plugin.yml</code> belongs to the plugin calling the CommandAPI</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/422 Added a way to access the raw command a player typed from the executor</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/431 Added a way to access more info to construct lists for the <code>ListArgumentBuilder</code></li>
                 </ul>
                 <b>Kotlin DSL changes:</b>
                 <ul>

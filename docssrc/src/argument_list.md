@@ -73,10 +73,10 @@ The `ListArgument` requires a list that the list argument can pull suggestions a
   public ListArgumentBuilder withList(Supplier<Collection<T>> list);
   ```
 
-- Providing a list that is determined when suggestions are being displayed to the user and before the command has been executed, that also depends on the `CommandSender` running the command, using the `Function<CommandSender, Collection<T>>` parameter:
+- Providing a list that is determined when suggestions are being displayed to the user and before the command has been executed, that also depends on the `SuggestionInfo` present when running the command, using the `Function<SuggestionInfo<CommandSender>, Collection<T>>` parameter:
 
   ```java
-  public ListArgumentBuilder withList(Function<CommandSender, Collection<T>> list);
+  public ListArgumentBuilder withList(Function<SuggestionInfo<CommandSender>, Collection<T>> list);
   ```
 
 $$\downarrow$$

@@ -385,3 +385,35 @@ new CommandAPICommand("objective")
 ```
 
 </div>
+
+-----
+
+### Changes to the `ListArgumentBuilder`
+
+The `ListArgumentBuilder` no longer has `withList(Function<CommandSender, Collection<T>> list)` and instead uses `SuggestionInfo` to have `withList(Function<SuggestionInfo<CommandSender>, Collection<T>> list)`.
+
+This now allows you to access more information when generating a list dynamically instead of just the command sender. To access the original command sender, you can use the `sender()` method from `SuggestionInfo`:
+
+<div class="multi-pre">
+
+```java,8.7.x
+ListArgument<?> arg = new ListArgumentBuilder<>("values", ", ")
+    .withList(sender -> List.of("cat", "wolf", "axolotl", sender.getName()))
+    .withStringMapper()
+    .buildGreedy();
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.0
+ListArgument<?> arg = new ListArgumentBuilder<>("values", ", ")
+    .withList(info -> List.of("cat", "wolf", "axolotl", info.sender().getName()))
+    .withStringMapper()
+    .buildGreedy();
+```
+
+</div>
