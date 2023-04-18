@@ -1,21 +1,30 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.executors.CommandArguments;
-import org.bukkit.command.CommandSender;
-
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.regex.Pattern;
 
 /**
  * An argument that accepts a list of objects
@@ -26,11 +35,11 @@ import java.util.regex.Pattern;
 public class ListArgumentCommon<T> extends Argument<List> {
 	private final String delimiter;
 	private final boolean allowDuplicates;
-	private final Function<CommandSender, Collection<T>> supplier;
+	private final Function<SuggestionInfo<CommandSender>, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 	private final boolean text;
 
-	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text) {
+	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text) {
 		super(nodeName, text ? StringArgumentType.string() : StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
@@ -53,7 +62,7 @@ public class ListArgumentCommon<T> extends Argument<List> {
 			// This need not be a sorted map because entries in suggestions are
 			// automatically sorted anyway
 			Set<IStringTooltip> values = new HashSet<>();
-			for (T object : supplier.apply(info.sender())) {
+			for (T object : supplier.apply(info)) {
 				values.add(mapper.apply(object));
 			}
 
@@ -112,9 +121,12 @@ public class ListArgumentCommon<T> extends Argument<List> {
 
 	@Override
 	public <CommandSourceStack> List<T> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
+		final CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
+		final SuggestionInfo<CommandSender> currentInfo = new SuggestionInfo<>(sender, previousArgs, cmdCtx.getInput(), cmdCtx.getArgument(key, String.class));
+		
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
-		for (T object : supplier.apply(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource())) {
+		for (T object : supplier.apply(currentInfo)) {
 			values.put(mapper.apply(object), object);
 		}
 

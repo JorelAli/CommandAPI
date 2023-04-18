@@ -146,12 +146,12 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The ListArgument
 	 */
-	LIST,
+	LIST("api:list"),
 
 	/**
 	 * The ListTextArgument
 	 */
-	LIST_TEXT,
+	LIST_TEXT("api:list_text"),
 
 	/**
 	 * The LiteralArgument
@@ -211,7 +211,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The OfflinePlayerArgument
 	 */
-	OFFLINE_PLAYER,
+	OFFLINE_PLAYER("api:offline_player"),
 
 	/**
 	 * The ParticleArgument

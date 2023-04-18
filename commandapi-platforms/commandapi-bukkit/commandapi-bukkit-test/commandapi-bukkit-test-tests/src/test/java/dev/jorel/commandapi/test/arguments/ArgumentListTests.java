@@ -172,7 +172,7 @@ class ArgumentListTests extends TestBase {
 
 		new CommandAPICommand("list")
 			.withArguments(new ListArgumentBuilder<>("values", ", ")
-				.withList(player -> List.of("cat", "wolf", "axolotl", player.getName()))
+				.withList(info -> List.of("cat", "wolf", "axolotl", info.sender().getName()))
 				.withStringMapper()
 				.buildGreedy())
 			.executesPlayer((player, args) -> {
@@ -305,7 +305,7 @@ class ArgumentListTests extends TestBase {
 
 		new CommandAPICommand("list")
 			.withArguments(new ListArgumentBuilder<>("values", ", ")
-				.withList(player -> List.of("cat", "wolf", "axolotl", player.getName()))
+				.withList(info -> List.of("cat", "wolf", "axolotl", info.sender().getName()))
 				.withStringMapper()
 				.buildText())
 			.executesPlayer((player, args) -> {

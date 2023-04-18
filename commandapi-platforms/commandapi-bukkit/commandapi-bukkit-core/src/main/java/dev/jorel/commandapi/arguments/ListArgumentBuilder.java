@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
 
 /**
  * A builder to create a ListArgument
@@ -58,11 +59,11 @@ public class ListArgumentBuilder<T> {
 	/**
 	 * Specifies the list to use to generate suggestions for the list argument
 	 * 
-	 * @param list a function that accepts a CommandSender and returns a collection
+	 * @param list a function that accepts a {@link SuggestionInfo} and returns a collection
 	 *             of elements to suggest for this list argument
 	 * @return this list argument builder
 	 */
-	public ListArgumentBuilderSuggests withList(Function<CommandSender, Collection<T>> list) {
+	public ListArgumentBuilderSuggests withList(Function<SuggestionInfo<CommandSender>, Collection<T>> list) {
 		return new ListArgumentBuilderSuggests(list);
 	}
 
@@ -104,9 +105,9 @@ public class ListArgumentBuilder<T> {
 	 */
 	public class ListArgumentBuilderSuggests {
 
-		private final Function<CommandSender, Collection<T>> supplier;
+		private final Function<SuggestionInfo<CommandSender>, Collection<T>> supplier;
 
-		private ListArgumentBuilderSuggests(Function<CommandSender, Collection<T>> list) {
+		private ListArgumentBuilderSuggests(Function<SuggestionInfo<CommandSender>, Collection<T>> list) {
 			this.supplier = list;
 		}
 

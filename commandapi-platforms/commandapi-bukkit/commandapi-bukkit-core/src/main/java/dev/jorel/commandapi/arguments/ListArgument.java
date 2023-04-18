@@ -20,11 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.IStringTooltip;
-import org.bukkit.command.CommandSender;
-
 import java.util.Collection;
 import java.util.function.Function;
+
+import org.bukkit.command.CommandSender;
+
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfo;
 
 /**
  * An argument that accepts a list of objects
@@ -35,7 +37,7 @@ import java.util.function.Function;
  */
 public class ListArgument<T> extends ListArgumentCommon<T> implements GreedyArgument {
 
-	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
+	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, false);
 	}
 }
