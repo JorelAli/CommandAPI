@@ -95,7 +95,7 @@ class ArgumentRotationTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithRotationArgument() {
+	void suggestionTestWithRotationArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new RotationArgument("rotation"))
 			.executesPlayer(P_EXEC)

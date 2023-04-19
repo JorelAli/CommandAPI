@@ -417,3 +417,27 @@ ListArgument<?> arg = new ListArgumentBuilder<>("values", ", ")
 ```
 
 </div>
+
+-----
+
+### Changes to the `Rotation` wrapper
+
+The `Rotation` class now uses a constructor which has the **yaw first, and the pitch second**, instead of the pitch first and the yaw second.
+
+<div class="multi-pre">
+
+```java,8.7.x
+new Rotation(20, 80); // Yaw = 80, Pitch = 20
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.0
+new Rotation(20, 80); // Yaw = 20, Pitch = 80
+```
+
+</div>
