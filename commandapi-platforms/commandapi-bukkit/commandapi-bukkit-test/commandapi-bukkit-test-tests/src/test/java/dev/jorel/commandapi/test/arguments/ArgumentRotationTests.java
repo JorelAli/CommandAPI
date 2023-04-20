@@ -41,7 +41,7 @@ class ArgumentRotationTests extends TestBase {
 	 *********/
 
 	@Test
-	void executionTestWithRotationArgumentWithNamespaces() {
+	void executionTestWithRotationArgument() {
 		Mut<Rotation> results = Mut.of();
 
 		new CommandAPICommand("test")
