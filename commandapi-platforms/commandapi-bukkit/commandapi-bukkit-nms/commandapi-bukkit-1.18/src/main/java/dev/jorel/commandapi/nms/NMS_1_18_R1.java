@@ -477,6 +477,10 @@ public class NMS_1_18_R1 extends NMS_Common {
 		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, key);
 		return new CraftLootTable(fromResourceLocation(resourceLocation), this.<MinecraftServer>getMinecraftServer().getLootTables().get(resourceLocation));
 	}
+	
+	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+	}
 
 	@Override
 	public ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String key) {
