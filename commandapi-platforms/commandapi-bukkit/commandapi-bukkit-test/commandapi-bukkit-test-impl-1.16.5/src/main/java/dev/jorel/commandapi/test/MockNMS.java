@@ -318,7 +318,7 @@ public class MockNMS extends Enums {
 			});
 
 			// Rotation argument
-			Mockito.when(clw.i()).thenReturn(new Vec2F(loc.getYaw(), loc.getPitch()));
+			Mockito.when(clw.i()).thenReturn(new Vec2F(loc.getPitch(), loc.getYaw()));
 
 			// CommandListenerWrapper#getAllTeams
 			Mockito.when(clw.m()).thenAnswer(invocation -> {
