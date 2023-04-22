@@ -84,17 +84,40 @@ The `ScoreboardSlotArgument` represents where scoreboard information is displaye
 
 ### `ScoreboardSlot` wrapper
 
-The `ScoreboardSlot` wrapper class has 3 methods:
+The `ScoreboardSlot` wrapper class has 3 main methods:
 
 ```java
-class ScoreboardSlot {
+enum ScoreboardSlot {
+
+    PLAYER_LIST,
+    SIDEBAR, // Unused, use the other SIDEBAR_TEAM_### values below
+    BELOW_NAME,
+    SIDEBAR_TEAM_BLACK,
+    SIDEBAR_TEAM_DARK_BLUE,
+    SIDEBAR_TEAM_DARK_GREEN,
+    SIDEBAR_TEAM_DARK_AQUA,
+    SIDEBAR_TEAM_DARK_RED,
+    SIDEBAR_TEAM_DARK_PURPLE,
+    SIDEBAR_TEAM_GOLD,
+    SIDEBAR_TEAM_GRAY,
+    SIDEBAR_TEAM_DARK_GRAY,
+    SIDEBAR_TEAM_BLUE,
+    SIDEBAR_TEAM_GREEN,
+    SIDEBAR_TEAM_AQUA,
+    SIDEBAR_TEAM_RED,
+    SIDEBAR_TEAM_LIGHT_PURPLE,
+    SIDEBAR_TEAM_YELLOW,
+    SIDEBAR_TEAM_WHITE;
+
     public DisplaySlot getDisplaySlot();
     public ChatColor getTeamColor();
     public boolean hasTeamColor();
+
+    public NamespacedKey getKey();
 }
 ```
 
-The `getDisplaySlot()` method returns the display slot that was chosen. If the display slot is `DisplaySlot.SIDEBAR` and `hasTeamColor()` returns true, then it is possible to use `getTeamColor()` to get the team color provided.
+The `getDisplaySlot()` method returns the display slot that was chosen. Sidebar scoreboard colors can be accessed via `ScoreboardSlot.SIDEBAR_TEAM_###`. You can also retrieve the color using the `getTeamColor()` method.
 
 <div class="example">
 

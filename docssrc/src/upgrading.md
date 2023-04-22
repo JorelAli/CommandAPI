@@ -1,10 +1,10 @@
 # Upgrading guide
 
-## From 8.7.x to 9.0.0
+## From 8.8.x to 9.0.0
 
 CommandAPI 9.0.0 is arguably the biggest change in the CommandAPI's project structure and usage. This update was designed to allow the CommandAPI to be generalized for other platforms (e.g. Velocity, Fabric, Sponge), and as a result **this update is incompatible with previous versions of the CommandAPI**.
 
-All deprecated methods from 8.7.x have been removed in this update. Please ensure that you use the relevant replacement methods (these are described in the JavaDocs for the various deprecated methods) before upgrading to 9.0.0.
+All deprecated methods from 8.8.x have been removed in this update. Please ensure that you use the relevant replacement methods (these are described in the JavaDocs for the various deprecated methods) before upgrading to 9.0.0.
 
 -----
 
@@ -170,7 +170,7 @@ and `CommandAPI.onEnable()` method has also changed, and now no longer requires 
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 public void onLoad() {
     CommandAPI.onLoad(new CommandAPIConfig());
 }
@@ -210,7 +210,7 @@ If you're in a rush and just want to upgrade quickly, call the `.get(int)` metho
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 new CommandAPICommand("cmd")
     .withArguments(new StringArgument("mystring"))
     .withArguments(new PotionEffectArgument("mypotion"))
@@ -250,7 +250,7 @@ The CommandAPI introduces a new `args.get(String)` method to access arguments us
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 new CommandAPICommand("cmd")
     .withArguments(new StringArgument("mystring"))
     .withArguments(new PotionEffectArgument("mypotion"))
@@ -292,7 +292,7 @@ The `CommandAPI.failWithBaseComponents(message)` and `CommandAPI.failWithAdventu
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 CommandAPI.failWithBaseComponents(...);
 CommandAPI.failWithAdventureComponent(...);
 ```
@@ -324,7 +324,7 @@ The `TeamArgument` has been updated to no longer use a `String` as its return ty
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 new CommandAPICommand("team")
     .withArguments(new TeamArgument("team"))
     .executes((sender, args) -> {
@@ -359,7 +359,7 @@ The `ObjectiveArgument` has been updated to no longer use a `String` as its retu
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 new CommandAPICommand("objective")
     .withArguments(new ObjectiveArgument("objective"))
     .executes((sender, args) -> {
@@ -396,7 +396,7 @@ This now allows you to access more information when generating a list dynamicall
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 ListArgument<?> arg = new ListArgumentBuilder<>("values", ", ")
     .withList(sender -> List.of("cat", "wolf", "axolotl", sender.getName()))
     .withStringMapper()
@@ -426,7 +426,7 @@ The `Rotation` class now uses a constructor which has the **yaw first, and the p
 
 <div class="multi-pre">
 
-```java,8.7.x
+```java,8.8.x
 new Rotation(20, 80); // Yaw = 80, Pitch = 20
 ```
 
@@ -438,6 +438,37 @@ $$\downarrow$$
 
 ```java,9.0.0
 new Rotation(20, 80); // Yaw = 20, Pitch = 80
+```
+
+</div>
+
+-----
+
+### Changes to the `ScoreboardSlot` wrapper
+
+The `ScoreboardSlot` wrapper is now an enum that has direct support for sidebar team colors, via the `SIDEBAR_TEAM_###` enum values, for example `SIDEBAR_TEAM_RED`;
+
+<div class="multi-pre">
+
+```java,8.8.x
+ScoreboardSlot slot = // Some ScoreboardSlot
+DisplaySlot displaySlot = slot.getDisplaySlot(); // Returns PLAYER_LIST, SIDEBAR or BELOW_NAME
+
+// Extract the color if necessary
+if (slot.hasTeamColor()) {
+    ChatColor color = slot.getTeamColor();
+}
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.0
+ScoreboardSlot slot = // Some ScoreboardSlot
+DisplaySlot displaySlot = slot.getDisplaySlot(); // Returns PLAYER_LIST, BELOW_NAME or SIDEBAR_TEAM_###
 ```
 
 </div>
