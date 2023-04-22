@@ -6,12 +6,14 @@ Key points:
 
 - You do not need to use the `.register()` method
 - You do not need to initialise any arguments.
-- Add the `commandapi-kotlin-bukkit` dependency to your project
-```xml
-<dependency>
-	<groupId>dev.jorel</groupId>
-	<artifactId>commandapi-kotlin-bukkit</artifactId>
-	<version>9.0.0-SNAPSHOT</version>
-</dependency>
-```
+- Add the `commandapi-kotlin-bukkit` dependency to your project:
+
+  ```xml
+  <dependency>
+    <groupId>dev.jorel</groupId>
+    <artifactId>commandapi-kotlin-bukkit</artifactId>
+    <version>9.0.0</version>
+  </dependency>
+  ```
+
 - The Kotlin DSL must not be shaded into your plugin
