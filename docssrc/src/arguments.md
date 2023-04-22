@@ -26,11 +26,15 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentsyntax1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments1}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:arguments1}}
 ```
 
 </div>
@@ -38,11 +42,15 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentsyntax2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:arguments2}}
 ```
 
 </div>
@@ -50,11 +58,15 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:argumentsyntax3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentsyntax3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments3}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:arguments3}}
 ```
 
 </div>
@@ -68,134 +80,80 @@ To access arguments, they have to be casted to the type that the argument repres
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:argumentcasting}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:arguments4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentcasting}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:arguments4}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:arguments4}}
 ```
 
 </div>
 
 The type to cast each argument (declared in the `dev.jorel.commandapi.arguments` package) is listed below:
 
-|                                                                                    Argument class | Data type                                                                                                                                                                                                                                           |
-|--------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|                                                                [`AngleArgument`](./angleargument) | `float`                                                                                                                                                                                                                                             |
-|                                                 [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                                                                                                                                                                                                                |
-|                    [`AdventureChatArgument`](./adventurechatarguments.md#adventure-chat-argument) | `net.kyori.adventure.text.Component`                                                                                                                                                                                                                |
-| [`AdventureChatComponentArgument`](./adventurechatarguments.md#adventure-chat-component-argument) | `net.kyori.adventure.text.Component`                                                                                                                                                                                                                |
-|                                                                    [`AxisArgument`](./axisarg.md) | `java.util.EnumSet<org.bukkit.Axis>`                                                                                                                                                                                                                |
-|                                                             [`BiomeArgument`](./biomeargument.md) | `org.bukkit.block.Biome`                                                                                                                                                                                                                            |
-|                                               [`BiomeArgument.NamespacedKey`](./biomeargument.md) | `org.bukkit.NamespacedKey`                                                                                                                                                                                                                          |
-|                                               [`BlockPredicateArgument`](./blockpredicateargs.md) | `java.util.function.Predicate`<br />&emsp;`<org.bukkit.block.Block>`                                                                                                                                                                                |
-|                                                  [`BlockStateArgument`](./blockstatearguments.md) | `org.bukkit.block.data.BlockData`                                                                                                                                                                                                                   |
-|                                    [`BooleanArgument`](./primitivearguments.md#boolean-arguments) | `boolean`                                                                                                                                                                                                                                           |
-|                                          [`ChatArgument`](./spigotchatarguments.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                                                                                                                                                                                                          |
-|                                     [`ChatColorArgument`](./chatarguments.md#chat-color-argument) | `org.bukkit.ChatColor`                                                                                                                                                                                                                              |
-|                       [`ChatComponentArgument`](./spigotchatarguments.md#chat-component-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                                                                                                                                                                                                          |
-|                                                        [`CommandArgument`](./commandarguments.md) | `dev.jorel.commandapi.wrappers.CommandResult`                                                                                                                                                                                                       |
-|                                                    [`CustomArgument<T, B>`](./customarguments.md) | `T`                                                                                                                                                                                                                                                 |
-|                                   [`DoubleArgument`](./primitivearguments.md#numerical-arguments) | `double`                                                                                                                                                                                                                                            |
-|                                                 [`EnchantmentArgument`](./enchantmentargument.md) | `org.bukkit.enchantments.Enchantment`                                                                                                                                                                                                               |
-|            [`EntitySelectorArgument.ManyEntities`](./entityarguments.md#entity-selector-argument) | `Collection<org.bukkit.entity.Entity>`                                                                                                                                                                                                              |
-|             [`EntitySelectorArgument.ManyPlayers`](./entityarguments.md#entity-selector-argument) | `Collection<org.bukkit.entity.Player>`                                                                                                                                                                                                              |
-|               [`EntitySelectorArgument.OneEntity`](./entityarguments.md#entity-selector-argument) | `org.bukkit.entity.Entity`                                                                                                                                                                                                                          |
-|               [`EntitySelectorArgument.OnePlayer`](./entityarguments.md#entity-selector-argument) | `org.bukkit.entity.Player`                                                                                                                                                                                                                          |
-|                                 [`EntityTypeArgument`](./entityarguments.md#entity-type-argument) | `org.bukkit.entity.EntityType`                                                                                                                                                                                                                      |
-|                                                     [`EnvironmentArgument`](./environmentargs.md) | `org.bukkit.World.Environment`                                                                                                                                                                                                                      |
-|                                    [`FloatArgument`](./primitivearguments.md#numerical-arguments) | `float`                                                                                                                                                                                                                                             |
-|                   [`FloatRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`                                                                                                                                                                                                          |
-|                                                        [`FunctionArgument`](./functionwrapper.md) | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`                                                                                                                                                                                                   |
-|                             [`GreedyStringArgument`](./stringarguments.md#greedy-string-argument) | `String`                                                                                                                                                                                                                                            |
-|                                  [`IntegerArgument`](./primitivearguments.md#numerical-arguments) | `int`                                                                                                                                                                                                                                               |
-|                 [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`                                                                                                                                                                                                        |
-|                                                    [`ItemStackArgument`](./itemstackarguments.md) | `org.bukkit.inventory.ItemStack`                                                                                                                                                                                                                    |
-|                                       [`ItemStackPredicateArgument`](./itemstackpredicateargs.md) | `java.util.function.Predicate`<br />&emsp;`<org.bukkit.inventory.ItemStack>`                                                                                                                                                                        |
-|                                                              [`ListArgument`](./listarguments.md) | `java.util.Collection<T>`                                                                                                                                                                                                                           |
-|                                                        [`LiteralArgument`](./literalarguments.md) | N/A                                                                                                                                                                                                                                                 |
-|                                   [`Location2DArgument`](./locationargument.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`                                                                                                                                                                                                          |
-|                                     [`LocationArgument`](./locationargument.md#location-3d-space) | `org.bukkit.Location`                                                                                                                                                                                                                               |
-|                                     [`LongArgument`](./primitivearguments.md#numerical-arguments) | `long`                                                                                                                                                                                                                                              |
-|                                                     [`LootTableArgument`](./loottableargument.md) | `org.bukkit.loot.LootTable`                                                                                                                                                                                                                         |
-|                                            [`MathOperationArgument`](./mathoperationarguments.md) | `dev.jorel.commandapi.wrappers.MathOperation`                                                                                                                                                                                                       |
-|                                                       [`MultiLiteralArgument`](./multilitargs.md) | `String`                                                                                                                                                                                                                                            |
-|                                                  [`NamespacedKeyArgument`](./namespacedkeyarg.md) | `org.bukkit.NamespacedKey`                                                                                                                                                                                                                          |
-|                                                     [`NBTCompoundArgument<T>`](./nbtarguments.md) | The cast type changes depending on whether you're shading the CommandAPI or using the CommandAPI as a plugin:<br /><ul><li>Shading:<br />`T` (implemented yourself)</li><br /><li>Plugin:<br />`dev.jorel.commandapi.nbtapi.NBTContainer`</li></ul> |
-|                                 [`ObjectiveArgument`](./objectivearguments.md#objective-argument) | `String`                                                                                                                                                                                                                                            |
-|                [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) | `String`                                                                                                                                                                                                                                            |
-|                            [`OfflinePlayerArgument`](./entityarguments.md#offlineplayer-argument) | `org.bukkit.OfflinePlayer`                                                                                                                                                                                                                          |
-|                                                      [`ParticleArgument`](./particlearguments.md) | `dev.jorel.commandapi.wrappers.ParticleData`                                                                                                                                                                                                        |
-|                                          [`PlayerArgument`](./entityarguments.md#player-argument) | `org.bukkit.entity.Player`                                                                                                                                                                                                                          |
-|                                                    [`PotionEffectArgument`](./potionarguments.md) | `org.bukkit.potion.PotionEffectType`                                                                                                                                                                                                                |
-|                                                           [`RecipeArgument`](./recipeargument.md) | The cast type changes depending on your Minecraft version:<br><ul><li>Version 1.14.4 and below:<br />`org.bukkit.inventory.Recipe`</li><br /><li>1.15 and above:<br />`org.bukkit.inventory.ComplexRecipe` </li></ul>                               |
-|                                                           [`RotationArgument`](./rotationargs.md) | `dev.jorel.commandapi.wrappers.Rotation`                                                                                                                                                                                                            |
-|                     [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot`                                                                                                                                                                                                      |
-|                    [`ScoreHolderArgument.Single`](./scoreboardarguments.md#score-holder-argument) | `String`                                                                                                                                                                                                                                            |
-|                  [`ScoreHolderArgument.Multiple`](./scoreboardarguments.md#score-holder-argument) | `Collection<String>`                                                                                                                                                                                                                                |
-|                                                             [`SoundArgument`](./soundargument.md) | `org.bukkit.Sound`                                                                                                                                                                                                                                  |
-|                                               [`SoundArgument.NamespacedKey`](./soundargument.md) | `org.bukkit.NamespacedKey`                                                                                                                                                                                                                          |
-|                                          [`StringArgument`](./stringarguments.md#string-argument) | `String`                                                                                                                                                                                                                                            |
-|                                                              [`TeamArgument`](./teamarguments.md) | `String`                                                                                                                                                                                                                                            |
-|                                              [`TextArgument`](./stringarguments.md#text-argument) | `String`                                                                                                                                                                                                                                            |
-|                                                                   [`TimeArgument`](./timeargs.md) | `int`                                                                                                                                                                                                                                               |
-|                                                                   [`UUIDArgument`](./uuidargs.md) | `java.util.UUID`                                                                                                                                                                                                                                    |
-|                                                            [`WorldArgument`](./worldarguments.md) | `org.bukkit.World`                                                                                                                                                                                                                                  |
-
------
-
-## Optional/Different Arguments
-
-Sometimes, you want to register a command that has a different effect whether arguments are included or not. For example, take the `/kill` command. If you run `/kill` on its own, it will kill the command sender. If however you run `/kill <target>`, it will kill the target. In other words, we have the following command command syntax:
-
-```mccmd
-/kill          - Kills yourself
-/kill <target> - Kills a target player
-```
-
-As shown by the command syntax, we need to register _two commands_.
-
-<div class="example">
-
-### Example - /kill command with two separate arguments
-
-For example, say we're registering a command `/kill`:
-
-```mccmd
-/kill          - Kills yourself
-/kill <target> - Kills a target player
-```
-
-We first register the first `/kill` command as normal:
-
-<div class="multi-pre">
-
-```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:argumentkillcmd}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentkillcmd}}
-```
-
-</div>
-
-Now we declare our command with arguments for our second command. Then, we can register our second command `/kill <target>` as usual:
-
-<div class="multi-pre">
-
-```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:argumentkillcmd2}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:argumentkillcmd2}}
-```
-
-</div>
-
-This gives us the ability to run both `/kill` and `/kill <target>` with the same command name "kill", but have different results based on the arguments used.
-
-In this example, we use the simpler, inline `.withArguments(Argument... arguments)` method to register our argument. There is no difference to using this method as opposed to explicitly declaring a list and using `.withArguments(List<Argument> arguments)`, so feel free to use whichever method you want!
-
-</div>
+|                                                                                     Argument class | Data type                                                                                                                                                                                                                                           |
+|---------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|                                                             [`AngleArgument`](./argument_angle.md) | `float`                                                                                                                                                                                                                                             |
+|                                                  [`AdvancementArgument`](./advancementargument.md) | `org.bukkit.advancement.Advancement`                                                                                                                                                                                                                |
+|                    [`AdventureChatArgument`](./argument_chat_adventure.md#adventure-chat-argument) | `net.kyori.adventure.text.Component`                                                                                                                                                                                                                |
+| [`AdventureChatComponentArgument`](./argument_chat_adventure.md#adventure-chat-component-argument) | `net.kyori.adventure.text.Component`                                                                                                                                                                                                                |
+|                                                               [`AxisArgument`](./argument_axis.md) | `java.util.EnumSet<org.bukkit.Axis>`                                                                                                                                                                                                                |
+|                                                             [`BiomeArgument`](./argument_biome.md) | `org.bukkit.block.Biome`                                                                                                                                                                                                                            |
+|                                               [`BiomeArgument.NamespacedKey`](./argument_biome.md) | `org.bukkit.NamespacedKey`                                                                                                                                                                                                                          |
+|                                           [`BlockPredicateArgument`](./argument_blockpredicate.md) | `java.util.function.Predicate`<br />&emsp;`<org.bukkit.block.Block>`                                                                                                                                                                                |
+|                                                   [`BlockStateArgument`](./argument_blockstate.md) | `org.bukkit.block.data.BlockData`                                                                                                                                                                                                                   |
+|                                    [`BooleanArgument`](./argument_primitives.md#boolean-arguments) | `boolean`                                                                                                                                                                                                                                           |
+|                                          [`ChatArgument`](./argument_chat_spigot.md#chat-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                                                                                                                                                                                                          |
+|                                     [`ChatColorArgument`](./argument_chats.md#chat-color-argument) | `org.bukkit.ChatColor`                                                                                                                                                                                                                              |
+|                       [`ChatComponentArgument`](./argument_chat_spigot.md#chat-component-argument) | `net.md_5.bungee.api.chat.BaseComponent[]`                                                                                                                                                                                                          |
+|                                                         [`CommandArgument`](./argument_command.md) | `dev.jorel.commandapi.wrappers.CommandResult`                                                                                                                                                                                                       |
+|                                                     [`CustomArgument<T, B>`](./argument_custom.md) | `T`                                                                                                                                                                                                                                                 |
+|                                   [`DoubleArgument`](./argument_primitives.md#numerical-arguments) | `double`                                                                                                                                                                                                                                            |
+|                                                 [`EnchantmentArgument`](./argument_enchantment.md) | `org.bukkit.enchantments.Enchantment`                                                                                                                                                                                                               |
+|           [`EntitySelectorArgument.ManyEntities`](./argument_entities.md#entity-selector-argument) | `Collection<org.bukkit.entity.Entity>`                                                                                                                                                                                                              |
+|            [`EntitySelectorArgument.ManyPlayers`](./argument_entities.md#entity-selector-argument) | `Collection<org.bukkit.entity.Player>`                                                                                                                                                                                                              |
+|              [`EntitySelectorArgument.OneEntity`](./argument_entities.md#entity-selector-argument) | `org.bukkit.entity.Entity`                                                                                                                                                                                                                          |
+|              [`EntitySelectorArgument.OnePlayer`](./argument_entities.md#entity-selector-argument) | `org.bukkit.entity.Player`                                                                                                                                                                                                                          |
+|                                [`EntityTypeArgument`](./argument_entities.md#entity-type-argument) | `org.bukkit.entity.EntityType`                                                                                                                                                                                                                      |
+|                                    [`FloatArgument`](./argument_primitives.md#numerical-arguments) | `float`                                                                                                                                                                                                                                             |
+|                     [`FloatRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.FloatRange`                                                                                                                                                                                                          |
+|                                                         [`FunctionArgument`](./functionwrapper.md) | `dev.jorel.commandapi.wrappers.FunctionWrapper[]`                                                                                                                                                                                                   |
+|                             [`GreedyStringArgument`](./argument_strings.md#greedy-string-argument) | `String`                                                                                                                                                                                                                                            |
+|                                  [`IntegerArgument`](./argument_primitives.md#numerical-arguments) | `int`                                                                                                                                                                                                                                               |
+|                   [`IntegerRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) | `dev.jorel.commandapi.wrappers.IntegerRange`                                                                                                                                                                                                        |
+|                                                     [`ItemStackArgument`](./argument_itemstack.md) | `org.bukkit.inventory.ItemStack`                                                                                                                                                                                                                    |
+|                                   [`ItemStackPredicateArgument`](./argument_itemstackpredicate.md) | `java.util.function.Predicate`<br />&emsp;`<org.bukkit.inventory.ItemStack>`                                                                                                                                                                        |
+|                                                               [`ListArgument`](./argument_list.md) | `java.util.Collection<T>`                                                                                                                                                                                                                           |
+|                                                         [`LiteralArgument`](./argument_literal.md) | N/A                                                                                                                                                                                                                                                 |
+|                                  [`Location2DArgument`](./argument_locations.md#location-2d-space) | `dev.jorel.commandapi.wrappers.Location2D`                                                                                                                                                                                                          |
+|                                    [`LocationArgument`](./argument_locations.md#location-3d-space) | `org.bukkit.Location`                                                                                                                                                                                                                               |
+|                                     [`LongArgument`](./argument_primitives.md#numerical-arguments) | `long`                                                                                                                                                                                                                                              |
+|                                                     [`LootTableArgument`](./argument_loottable.md) | `org.bukkit.loot.LootTable`                                                                                                                                                                                                                         |
+ |                                                               [`MapArgument`](./argument_map.md) | `java.util.LinkedhashMap`                                                                                                                                                                                                                            |
+|                                            [`MathOperationArgument`](./argument_mathoperation.md) | `dev.jorel.commandapi.wrappers.MathOperation`                                                                                                                                                                                                       |
+|                                                       [`MultiLiteralArgument`](./argument_multiliteral.md) | `String`                                                                                                                                                                                                                                            |
+|                                                  [`NamespacedKeyArgument`](./argument_namespacedkey.md) | `org.bukkit.NamespacedKey`                                                                                                                                                                                                                          |
+|                                                     [`NBTCompoundArgument<T>`](./argument_nbt.md) | The cast type changes depending on whether you're shading the CommandAPI or using the CommandAPI as a plugin:<br /><ul><li>Shading:<br />`T` (implemented yourself)</li><br /><li>Plugin:<br />`dev.jorel.commandapi.nbtapi.NBTContainer`</li></ul> |
+|                                 [`ObjectiveArgument`](./argument_objectives.md#objective-argument) | `org.bukkit.scoreboard.Objective`                                                                                                                                                                                                                   |
+|                [`ObjectiveCriteriaArgument`](./argument_objectives.md#objective-criteria-argument) | `String`                                                                                                                                                                                                                                            |
+|                           [`OfflinePlayerArgument`](./argument_entities.md#offlineplayer-argument) | `org.bukkit.OfflinePlayer`                                                                                                                                                                                                                          |
+|                                                       [`ParticleArgument`](./argument_particle.md) | `dev.jorel.commandapi.wrappers.ParticleData`                                                                                                                                                                                                        |
+|                                         [`PlayerArgument`](./argument_entities.md#player-argument) | `org.bukkit.entity.Player`                                                                                                                                                                                                                          |
+|                                                     [`PotionEffectArgument`](./argument_potion.md) | `org.bukkit.potion.PotionEffectType`                                                                                                                                                                                                                |
+|                                                           [`RecipeArgument`](./argument_recipe.md) | The cast type changes depending on your Minecraft version:<br><ul><li>Version 1.14.4 and below:<br />`org.bukkit.inventory.Recipe`</li><br /><li>1.15 and above:<br />`org.bukkit.inventory.ComplexRecipe` </li></ul>                               |
+|                                                       [`RotationArgument`](./argument_rotation.md) | `dev.jorel.commandapi.wrappers.Rotation`                                                                                                                                                                                                            |
+|                     [`ScoreboardSlotArgument`](./argument_scoreboards.md#scoreboard-slot-argument) | `dev.jorel.commandapi.wrappers.ScoreboardSlot`                                                                                                                                                                                                      |
+|                    [`ScoreHolderArgument.Single`](./argument_scoreboards.md#score-holder-argument) | `String`                                                                                                                                                                                                                                            |
+|                  [`ScoreHolderArgument.Multiple`](./argument_scoreboards.md#score-holder-argument) | `Collection<String>`                                                                                                                                                                                                                                |
+|                                                             [`SoundArgument`](./argument_sound.md) | `org.bukkit.Sound`                                                                                                                                                                                                                                  |
+|                                               [`SoundArgument.NamespacedKey`](./argument_sound.md) | `org.bukkit.NamespacedKey`                                                                                                                                                                                                                          |
+|                                          [`StringArgument`](./argument_strings.md#string-argument) | `String`                                                                                                                                                                                                                                            |
+|                                                               [`TeamArgument`](./argument_team.md) | `org.bukkit.scoreboard.Team`                                                                                                                                                                                                                        |
+|                                              [`TextArgument`](./argument_strings.md#text-argument) | `String`                                                                                                                                                                                                                                            |
+|                                                               [`TimeArgument`](./argument_time.md) | `int`                                                                                                                                                                                                                                               |
+|                                                               [`UUIDArgument`](./argument_uuid.md) | `java.util.UUID`                                                                                                                                                                                                                                    |
+|                                                             [`WorldArgument`](./argument_world.md) | `org.bukkit.World`                                                                                                                                                                                                                                  |

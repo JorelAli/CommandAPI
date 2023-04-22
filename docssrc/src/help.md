@@ -48,11 +48,15 @@ In this simple example, we implement the above screenshot's help topic. We regis
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:help}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:help1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:help}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:help1}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:help1}}
 ```
 
 </div>
@@ -62,11 +66,15 @@ We could also register this command using the `withHelp` method instead:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:help2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:help2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:help2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:help2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:help2}}
 ```
 
 </div>

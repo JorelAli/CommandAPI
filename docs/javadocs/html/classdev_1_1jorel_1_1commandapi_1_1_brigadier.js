@@ -1,14 +1,13 @@
 var classdev_1_1jorel_1_1commandapi_1_1_brigadier =
 [
-    [ "fromArgument", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#aee61e8e704b8dc3bf99244f8cc42ad98", null ],
-    [ "fromArgument", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a5fb86c990b250550511d14902fc5e83e", null ],
-    [ "fromCommand", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#ae58271fd8274048d3f82b1acec598636", null ],
-    [ "fromLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#ab72ddbae05f10e441453ca2b5803aa8a", null ],
-    [ "fromPredicate", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a2933a6e94c391cfecf4b66bde5a71b2f", null ],
-    [ "getBrigadierSourceFromCommandSender", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a65aedbb4f8a07f180c72f06fb441e79c", null ],
-    [ "getBukkitCommandSenderFromContext", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a1fecb682f1c6baffece662e471ac8227", null ],
+    [ "fromArgument", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#afdaab8da0fbe9801385a89102180dc10", null ],
+    [ "fromArgument", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a52cd1a58de710298e0390e04a4c24a5b", null ],
+    [ "fromLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#abaf3fc823c2d0442c4e4a6299fbb58c0", null ],
+    [ "fromPredicate", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#ac2896944b676e0833e83d505422eef05", null ],
+    [ "getBrigadierSourceFromCommandSender", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#adb8e36deb2efd21ce74939d5df0b019d", null ],
     [ "getCommandDispatcher", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a841d52013abd1e60e3d35bdeac181a5c", null ],
+    [ "getCommandSenderFromContext", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a5ff228ed587ffb04634aaa4895df1b41", null ],
     [ "getRootNode", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#afe49f5c6dced980b6e4a8a519b86e7bb", null ],
-    [ "parseArguments", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a454baca130b5605acb510c966d55af00", null ],
-    [ "toSuggestions", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a1cf66ac75981e33b8b7fa5ca07a9a98f", null ]
+    [ "parseArguments", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#ada2f66de02b7ad2361c386fa827fc568", null ],
+    [ "toSuggestions", "classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#a9734b94fd87b36e1226b8472d214d3ed", null ]
 ];

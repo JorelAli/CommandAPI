@@ -20,26 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-
+import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.executors.ExecutorType;
-import dev.jorel.commandapi.executors.IExecutorNormal;
-import dev.jorel.commandapi.executors.IExecutorResulting;
-import dev.jorel.commandapi.executors.IExecutorTyped;
+import dev.jorel.commandapi.executors.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * CommandAPIExecutor is the main executor implementation for command
@@ -47,12 +37,13 @@ import dev.jorel.commandapi.executors.IExecutorTyped;
  * executors) and switches its execution implementation based on the provided
  * command executor types.
  *
- * @param <T> a command sender
+ * @param <CommandSender> The CommandSender for this executor
+ * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public class CommandAPIExecutor<T extends CommandSender> {
+public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
 
-	private List<IExecutorNormal<T>> normalExecutors;
-	private List<IExecutorResulting<T>> resultingExecutors;
+	private List<NormalExecutor<CommandSender, WrapperType>> normalExecutors;
+	private List<ResultingExecutor<CommandSender, WrapperType>> resultingExecutors;
 
 	public CommandAPIExecutor() {
 		normalExecutors = new ArrayList<>();
@@ -60,22 +51,22 @@ public class CommandAPIExecutor<T extends CommandSender> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <S extends IExecutorNormal<?>> void addNormalExecutor(S executor) {
-		this.normalExecutors.add((IExecutorNormal<T>) executor);
+	public void addNormalExecutor(NormalExecutor<?, ?> executor) {
+		this.normalExecutors.add((NormalExecutor<CommandSender, WrapperType>) executor);
 	}
 
 	@SuppressWarnings("unchecked")
-	public <S extends IExecutorResulting<?>> void addResultingExecutor(S executor) {
-		this.resultingExecutors.add((IExecutorResulting<T>) executor);
+	public void addResultingExecutor(ResultingExecutor<?, ?> executor) {
+		this.resultingExecutors.add((ResultingExecutor<CommandSender, WrapperType>) executor);
 	}
 
-	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
+	public int execute(ExecutionInfo<CommandSender, WrapperType> info) throws CommandSyntaxException {
 
 		// Parse executor type
 		if (!resultingExecutors.isEmpty()) {
 			// Run resulting executor
 			try {
-				return execute(resultingExecutors, sender, arguments);
+				return execute(resultingExecutors, info);
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			} catch (Exception e) {
@@ -85,7 +76,7 @@ public class CommandAPIExecutor<T extends CommandSender> {
 		} else {
 			// Run normal executor
 			try {
-				return execute(normalExecutors, sender, arguments);
+				return execute(normalExecutors, info);
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			} catch (Exception e) {
@@ -95,45 +86,45 @@ public class CommandAPIExecutor<T extends CommandSender> {
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args)
+	private int execute(List<? extends TypedExecutor<CommandSender, WrapperType>> executors, ExecutionInfo<CommandSender, WrapperType> info)
 			throws WrapperCommandSyntaxException {
 		if (isForceNative()) {
-			return execute(executors, sender, args, ExecutorType.NATIVE);
-		} else if (sender instanceof Player && matches(executors, ExecutorType.PLAYER)) {
-			return execute(executors, sender, args, ExecutorType.PLAYER);
-		} else if (sender instanceof Entity && matches(executors, ExecutorType.ENTITY)) {
-			return execute(executors, sender, args, ExecutorType.ENTITY);
-		} else if (sender instanceof ConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
-			return execute(executors, sender, args, ExecutorType.CONSOLE);
-		} else if (sender instanceof BlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
-			return execute(executors, sender, args, ExecutorType.BLOCK);
-		} else if (sender instanceof ProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
-			return execute(executors, sender, args, ExecutorType.PROXY);
+			return execute(executors, info, ExecutorType.NATIVE);
+		} else if (info.senderWrapper() instanceof AbstractPlayer && matches(executors, ExecutorType.PLAYER)) {
+			return execute(executors, info, ExecutorType.PLAYER);
+		} else if (info.senderWrapper() instanceof AbstractEntity && matches(executors, ExecutorType.ENTITY)) {
+			return execute(executors, info, ExecutorType.ENTITY);
+		} else if (info.senderWrapper() instanceof AbstractConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
+			return execute(executors, info, ExecutorType.CONSOLE);
+		} else if (info.senderWrapper() instanceof AbstractBlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
+			return execute(executors, info, ExecutorType.BLOCK);
+		} else if (info.senderWrapper() instanceof AbstractProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
+			return execute(executors, info, ExecutorType.PROXY);
 		} else if (matches(executors, ExecutorType.ALL)) {
-			return execute(executors, sender, args, ExecutorType.ALL);
+			return execute(executors, info, ExecutorType.ALL);
 		} else {
 			throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(
 					new LiteralMessage(CommandAPI.getConfiguration().getMissingImplementationMessage()
-							.replace("%s", sender.getClass().getSimpleName().toLowerCase())
-							.replace("%S", sender.getClass().getSimpleName()))).create());
+							.replace("%s", info.sender().getClass().getSimpleName().toLowerCase())
+							.replace("%S", info.sender().getClass().getSimpleName()))).create());
 		}
 	}
 
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args,
-			ExecutorType type) throws WrapperCommandSyntaxException {
-		for (IExecutorTyped executor : executors) {
+	private int execute(List<? extends TypedExecutor<CommandSender, WrapperType>> executors,
+	                    ExecutionInfo<CommandSender, WrapperType> info, ExecutorType type) throws WrapperCommandSyntaxException {
+		for (TypedExecutor<CommandSender, WrapperType> executor : executors) {
 			if (executor.getType() == type) {
-				return executor.executeWith(sender, args);
+				return executor.executeWith(info);
 			}
 		}
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
 	}
 
-	public List<IExecutorNormal<T>> getNormalExecutors() {
+	public List<NormalExecutor<CommandSender, WrapperType>> getNormalExecutors() {
 		return normalExecutors;
 	}
 
-	public List<IExecutorResulting<T>> getResultingExecutors() {
+	public List<ResultingExecutor<CommandSender, WrapperType>> getResultingExecutors() {
 		return resultingExecutors;
 	}
 
@@ -145,8 +136,8 @@ public class CommandAPIExecutor<T extends CommandSender> {
 		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
 
-	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
-		for (IExecutorTyped executor : executors) {
+	private boolean matches(List<? extends TypedExecutor<?, ?>> executors, ExecutorType type) {
+		for (TypedExecutor<?, ?> executor : executors) {
 			if (executor.getType() == type) {
 				return true;
 			}
@@ -154,8 +145,8 @@ public class CommandAPIExecutor<T extends CommandSender> {
 		return false;
 	}
 
-	CommandAPIExecutor<T> mergeExecutor(CommandAPIExecutor<T> executor) {
-		CommandAPIExecutor<T> result = new CommandAPIExecutor<>();
+	CommandAPIExecutor<CommandSender, WrapperType> mergeExecutor(CommandAPIExecutor<CommandSender, WrapperType> executor) {
+		CommandAPIExecutor<CommandSender, WrapperType> result = new CommandAPIExecutor<>();
 		result.normalExecutors = new ArrayList<>(normalExecutors);
 		result.resultingExecutors = new ArrayList<>(resultingExecutors);
 		result.normalExecutors.addAll(executor.normalExecutors);
@@ -163,11 +154,11 @@ public class CommandAPIExecutor<T extends CommandSender> {
 		return result;
 	}
 
-	public void setNormalExecutors(List<IExecutorNormal<T>> normalExecutors) {
+	public void setNormalExecutors(List<NormalExecutor<CommandSender, WrapperType>> normalExecutors) {
 		this.normalExecutors = normalExecutors;
 	}
 
-	public void setResultingExecutors(List<IExecutorResulting<T>> resultingExecutors) {
+	public void setResultingExecutors(List<ResultingExecutor<CommandSender, WrapperType>> resultingExecutors) {
 		this.resultingExecutors = resultingExecutors;
 	}
 }

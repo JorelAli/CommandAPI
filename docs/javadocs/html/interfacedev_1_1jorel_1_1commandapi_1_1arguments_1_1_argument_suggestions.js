@@ -1,18 +1,18 @@
 var interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions =
 [
-    [ "empty", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aff76067e3260f892f2b6ededbb54f5d7", null ],
-    [ "merge", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a697230ef53d4b69facce42668b729bcd", null ],
-    [ "stringCollection", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#abc136f50f0c3c6028cc48fba6e414eb5", null ],
-    [ "stringCollectionAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#ae9c7c16339e75b00455164a85430cc0e", null ],
-    [ "strings", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a2845202e32b913d41847bfebca695d4b", null ],
-    [ "strings", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#addbab59ac563d578d6ec1fcd312cd8b9", null ],
-    [ "strings", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a9d6f4eab9640c2fc0cc5b5aecc8e8fee", null ],
-    [ "stringsAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a29c566011eae069195956bf2c95d34dc", null ],
-    [ "stringsWithTooltips", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a242786674f81abac4df320d9b25dd464", null ],
-    [ "stringsWithTooltips", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a7487ba38703f899e9291d21e12b1f19e", null ],
-    [ "stringsWithTooltips", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aaa01e31a2977244587cf75962c26196d", null ],
-    [ "stringsWithTooltipsAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#adcb60a12df6237731adaa15b5a52f659", null ],
-    [ "stringsWithTooltipsCollection", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#adafe6b43406638440f4238a571dce398", null ],
-    [ "stringsWithTooltipsCollectionAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a0600dff75e8121afaafe4a55eb823bb9", null ],
-    [ "suggest", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a574b3e5c9f4f198023ea11fde5f35279", null ]
+    [ "empty", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a2f05e5a15dab30c118059d88218b1c84", null ],
+    [ "merge", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#afd817411b6691d3b67caa2d51fc51a31", null ],
+    [ "stringCollection", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a7de90dcd0ed9f977322ed7aeae2d86bc", null ],
+    [ "stringCollectionAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aa72148a436a5b4b35d96a3781f755f63", null ],
+    [ "strings", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a3d96790fdf7e008028f7f62287cf18f9", null ],
+    [ "strings", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a8e88ae71400cdf9be85b22bed37beaaa", null ],
+    [ "strings", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a94b05c8e022ba3c0452210ed52aa73c8", null ],
+    [ "stringsAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a1b1a3933c0aede886f004b3e994aa0aa", null ],
+    [ "stringsWithTooltips", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#af1938a1fbaaa87e08fa47689cf7ccc06", null ],
+    [ "stringsWithTooltips", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a187bc8f3b00d30967d309ab14428d83a", null ],
+    [ "stringsWithTooltips", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a662cb07d31e40737e2840d821ac42a5c", null ],
+    [ "stringsWithTooltipsAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a4f1ebca7a1387e4f1533cb41497ce1e1", null ],
+    [ "stringsWithTooltipsCollection", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#acd9a0cf5740718243c8f9574ce289eaf", null ],
+    [ "stringsWithTooltipsCollectionAsync", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a9730a4e18a8a027dfcb751de5980933f", null ],
+    [ "suggest", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a71825cf1033e4a23db8f8a8a61e19942", null ]
 ];

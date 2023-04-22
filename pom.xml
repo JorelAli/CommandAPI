@@ -25,7 +25,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>8.8.0</version>
+	<version>9.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>commandapi</name>
@@ -58,19 +58,20 @@
 		<!-- Compile time reflection checker -->
 		<module>commandapi-preprocessor</module>
 
-		<!-- NMS versions -->
-		<module>commandapi-nms</module>
-
-		<!-- Main core code + NMS selector -->
+		<!-- Main core code -->
 		<module>commandapi-core</module>
-		<module>commandapi-vh</module>
+
+		<!-- Platform implementations -->
+		<module>commandapi-platforms</module>
 
 		<!-- Outputs -->
-		<module>commandapi-plugin</module>
-		<!-- TODO: MAKE THIS COMPILE <module>commandapi-plugin-test</module> -->
-		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
-		<module>commandapi-kotlin</module>
+
+		<!-- Documentation code -->
+		<module>commandapi-documentation-code</module>
+
+		<!-- Code coverage reports -->
+		<module>commandapi-codecov</module>
 	</modules>
 
 	<properties>
@@ -82,12 +83,17 @@
 		<maven.compiler.source>16</maven.compiler.source>
 		<maven.compiler.target>16</maven.compiler.target>
 		<java.version>16</java.version>
+		<kotlin.version>1.8.20</kotlin.version>
 
 		<!-- Shared libraries. These are declared here so they can be updated easily. 
 			These are present in each module to prevent accidentally "leaking" these 
 			dependencies to dependents of commandapi-core. -->
 		<paper.version>1.19.2-R0.1-SNAPSHOT</paper.version>
 		<auto-service.version>1.0.1</auto-service.version>
+
+		<!-- sonarcloud CI -->
+		<sonar.organization>jorel-ali</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<build>
@@ -132,6 +138,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.4.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.8</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

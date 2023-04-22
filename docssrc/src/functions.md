@@ -1,6 +1,6 @@
 # Functions
 
-The CommandAPI has support to use Minecraft's [functions](https://minecraft.gamepedia.com/Function_(Java_Edtion)) within your plugins. This is handled by using a class provided by the CommandAPI called `FunctionWrapper`, which allows you to execute functions. The CommandAPI also provides support to let you run your own commands within Minecraft function files.
+The CommandAPI has support to use Minecraft's [functions](https://minecraft.gamepedia.com/Function_(Java_Edition)) within your plugins. This is handled by using a class provided by the CommandAPI called `FunctionWrapper`, which allows you to execute functions. The CommandAPI also provides support to let you run your own commands within Minecraft function files.
 
 -----
 
@@ -31,11 +31,11 @@ Say we have a command `/killall` that simply kills all entities in all worlds on
 <div class="multi-pre">
 
 ```java,Java
-public {{#include ../../commandapi-core/src/test/java/Examples.java:functionregistration}}
+public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:functions1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:functionregistration}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:functions1}}
 ```
 
 </div>

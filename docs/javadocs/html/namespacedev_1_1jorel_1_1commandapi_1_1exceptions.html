@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.8.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -95,23 +95,14 @@ $(document).ready(function(){initNavTree('namespacedev_1_1jorel_1_1commandapi_1_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception.html">AngleArgumentException</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception that occurs when trying to use the AngleArgument on Minecraft version &lt; 1.16.2.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_angle_argument_exception.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html">BadLiteralException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when a literal is null or empty.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_biome_argument_exception.html">BiomeArgumentException</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when using the BiomeArgument on Minecraft version &lt; 1.16.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_biome_argument_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception.html">ConflictingPermissionsException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when the same permission is registered to a command.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_conflicting_permissions_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html">EmptyExecutorException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when a command has no executor.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_empty_executor_exception.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html">EnvironmentArgumentException</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when using the EnvironmentArgument on Minecraft version 1.13.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_environment_argument_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html">GreedyArgumentException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when a greedy argument is not declared at the end of a List.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_greedy_argument_exception.html#details">More...</a><br /></td></tr>
@@ -122,8 +113,13 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html">InvalidRangeException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception that occurs when the maximum value of a FloatRange or IntegerRange is less than its minimum value.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_invalid_range_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_missing_command_executor_exception.html">MissingCommandExecutorException</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when a command does not declare any executors.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_missing_command_executor_exception.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html">NBTAPINotFoundException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception that occurs when the NBTAPI is not found, but an argument that uses it is declared.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_n_b_t_a_p_i_not_found_exception.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_optional_argument_exception.html">OptionalArgumentException</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_paper_adventure_not_found_exception.html">PaperAdventureNotFoundException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception that occurs when Paper's Adventure API is not present and has been set to be used.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_paper_adventure_not_found_exception.html#details">More...</a><br /></td></tr>
@@ -131,14 +127,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html">SpigotNotFoundException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception that occurs when Spigot is not present and Spigot is required.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html">TimeArgumentException</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception that occurs when trying to use the TimeArgument on Minecraft version &lt; 1.14.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_time_argument_exception.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unimplemented_argument_exception.html">UnimplementedArgumentException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception caused when using an argument which hasn't been implemented in this Minecraft version.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unimplemented_argument_exception.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html">UUIDArgumentException</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An exception that occurs when trying to use the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html" title="An exception that occurs when trying to use the UUIDArgumentException on Minecraft version &lt; 1....">UUIDArgumentException</a> on Minecraft version &lt; 1.16.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_u_u_i_d_argument_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html">WrapperCommandSyntaxException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A wrapper for the CommandSyntaxException so other developers don't have to import Mojang's brigadier.  <a href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#details">More...</a><br /></td></tr>
@@ -152,7 +142,7 @@ Classes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1exceptions.html">exceptions</a></li>
-    <li class="footer">Generated on Tue Mar 14 2023 21:10:50 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sat Apr 22 2023 21:23:58 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

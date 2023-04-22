@@ -10,52 +10,52 @@ The CommandAPI's arguments are representations of the different arguments that t
 
 | Identifier | CommandAPI argument |
 |-|-|
-| `brigadier:bool` | [`BooleanArgument`](./primitivearguments.md#boolean-arguments) |
-| `brigadier:double` | [`DoubleArgument`](./primitivearguments.md#numerical-arguments) |
-| `brigadier:float` | [`FloatArgument`](./primitivearguments.md#numerical-arguments) |
-| `brigadier:integer` | [`IntegerArgument`](./primitivearguments.md#numerical-arguments) |
-| `brigadier:long` | [`LongArgument`](./primitivearguments.md#numerical-arguments) |
-| `brigadier:string` | [`StringArgument`](./stringarguments.md#string-argument)<br />[`TextArgument`](./stringarguments.md#text-argument)<br />[`GreedyStringArgument`](./stringarguments.md#greedy-string-argument)<br />[`CustomArgument<T>`](./customarguments.md) |
-| `minecraft:angle` | [`AngleArgument`](./angleargument.md) |
-| `minecraft:block_pos` | [`LocationArgument`](./locationargument.md#location-3d-space)<br />(`LocationType.BLOCK_POSITION`) |
-| `minecraft:block_predicate` | [`BlockPredicateArgument`](./blockpredicateargs.md) |
-| `minecraft:block_state` | [`BlockStateArgument`](./blockstatearguments.md) |
-| `minecraft:color` | [`ChatColorArgument`](./chatarguments.md#chat-color-argument) |
-| `minecraft:column_pos` | [`Location2DArgument`](./locationargument.md#location-2d-space) <br />(`LocationType.BLOCK_POSITION`) |
-| `minecraft:component` | [`ChatComponentArgument`](./chatarguments.md#chat-component-argument) |
-| `minecraft:dimension` | [`WorldArgument`](./worldarguments.md) |
-| `minecraft:entity` | [`EntitySelectorArgument`](./entityarguments.md#entity-selector-argument) |
+| `brigadier:bool` | [`BooleanArgument`](./argument_primitives.md#boolean-arguments) |
+| `brigadier:double` | [`DoubleArgument`](./argument_primitives.md#numerical-arguments) |
+| `brigadier:float` | [`FloatArgument`](./argument_primitives.md#numerical-arguments) |
+| `brigadier:integer` | [`IntegerArgument`](./argument_primitives.md#numerical-arguments) |
+| `brigadier:long` | [`LongArgument`](./argument_primitives.md#numerical-arguments) |
+| `brigadier:string` | [`StringArgument`](./argument_strings.md#string-argument)<br />[`TextArgument`](./argument_strings.md#text-argument)<br />[`GreedyStringArgument`](./argument_strings.md#greedy-string-argument)<br />[`CustomArgument<T>`](./argument_custom.md) |
+| `minecraft:angle` | [`AngleArgument`](./argument_angle.md) |
+| `minecraft:block_pos` | [`LocationArgument`](./argument_locations.md#location-3d-space)<br />(`LocationType.BLOCK_POSITION`) |
+| `minecraft:block_predicate` | [`BlockPredicateArgument`](./argument_blockpredicate.md) |
+| `minecraft:block_state` | [`BlockStateArgument`](./argument_blockstate.md) |
+| `minecraft:color` | [`ChatColorArgument`](./argument_chats.md#chat-color-argument) |
+| `minecraft:column_pos` | [`Location2DArgument`](./argument_locations.md#location-2d-space) <br />(`LocationType.BLOCK_POSITION`) |
+| `minecraft:component` | [`ChatComponentArgument`](./argument_chats.md#chat-component-argument) |
+| `minecraft:dimension` | [`WorldArgument`](./argument_world.md) |
+| `minecraft:entity` | [`EntitySelectorArgument`](./argument_entities.md#entity-selector-argument) |
 | `minecraft:entity_anchor` | |
-| `minecraft:entity_summon` | [`EntityTypeArgument`](./entityarguments.md#entity-type-argument) |
-| `minecraft:float_range` | [`FloatRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) |
+| `minecraft:entity_summon` | [`EntityTypeArgument`](./argument_entities.md#entity-type-argument) |
+| `minecraft:float_range` | [`FloatRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) |
 | `minecraft:function` | [`FunctionArgument`](./functionwrapper.md) |
-| `minecraft:game_profile` | [`PlayerArgument`](./entityarguments.md#player-argument) |
-| `minecraft:game_profile` | [`OfflinePlayerArgument`](./entityarguments.md#offlineplayer-argument) |
-| `minecraft:int_range` | [`IntegerRangeArgument`](./rangedarguments.md#the-integerrange--floatrange-class) |
-| `minecraft:item_enchantment` | [`EnchantmentArgument`](./enchantmentargument.md) |
-| `minecraft:item_predicate` | [`ItemStackPredicateArgument`](./itemstackpredicateargs.md) |
+| `minecraft:game_profile` | [`PlayerArgument`](./argument_entities.md#player-argument) |
+| `minecraft:game_profile` | [`OfflinePlayerArgument`](./argument_entities.md#offlineplayer-argument) |
+| `minecraft:int_range` | [`IntegerRangeArgument`](./argument_range.md#the-integerrange--floatrange-class) |
+| `minecraft:item_enchantment` | [`EnchantmentArgument`](./argument_enchantment.md) |
+| `minecraft:item_predicate` | [`ItemStackPredicateArgument`](./argument_itemstackpredicate.md) |
 | `minecraft:item_slot` | |
-| `minecraft:item_stack` | [`ItemStackArgument`](./itemstackarguments.md) |
-| `minecraft:message` | [`ChatArgument`](./chatarguments.md#chat-argument) |
-| `minecraft:mob_effect` | [`PotionEffectArgument`](./potionarguments.md) |
+| `minecraft:item_stack` | [`ItemStackArgument`](./argument_itemstack.md) |
+| `minecraft:message` | [`ChatArgument`](./argument_chats.md#chat-argument) |
+| `minecraft:mob_effect` | [`PotionEffectArgument`](./argument_potion.md) |
 | `minecraft:nbt` | |
-| `minecraft:nbt_compound_tag` | [`NBTCompoundArgument`](./nbtarguments.md) |
+| `minecraft:nbt_compound_tag` | [`NBTCompoundArgument`](./argument_nbt.md) |
 | `minecraft:nbt_path` | |
 | `minecraft:nbt_tag` | |
-| `minecraft:objective` | [`ObjectiveArgument`](./objectivearguments.md#objective-argument) |
-| `minecraft:objective_criteria` | [`ObjectiveCriteriaArgument`](./objectivearguments.md#objective-criteria-argument) |
-| `minecraft:operation` | [`MathOperationArgument`](./mathoperationarguments.md) |
-| `minecraft:particle` | [`ParticleArgument`](./particlearguments.md) |
-| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./biomeargument.md)<br />[`CustomArgument<T>`](./customarguments.md)<br />[`LootTableArgument`](./loottableargument.md)<br />[`NamespacedKeyArgument`](./namespacedkeyarg.md)<br />[`RecipeArgument`](./recipeargument.md)<br />[`SoundArgument`](./soundargument.md) |
-| `minecraft:rotation` | [`RotationArgument`](./rotationargs.md) |
-| `minecraft:score_holder` | [`ScoreHolderArgument`](./scoreboardarguments.md#score-holder-argument) |
-| `minecraft:scoreboard_slot` | [`ScoreboardSlotArgument`](./scoreboardarguments.md#scoreboard-slot-argument) |
-| `minecraft:swizzle` | [`AxisArgument`](./axisarg.md) |
-| `minecraft:team` | [`TeamArgument`](./teamarguments.md) |
-| `minecraft:time` | [`TimeArgument`](./timeargs.md) |
-| `minecraft:uuid` | [`UUIDArgument`](./uuidargs.md) |
-| `minecraft:vec2` | [`Location2DArgument`](./locationargument.md#location-2d-space)<br />(`LocationType.PRECISE_POSITION`) |
-| `minecraft:vec3` | [`LocationArgument`](./locationargument.md#location-3d-space)<br />(`LocationType.PRECISE_POSITION`) |
+| `minecraft:objective` | [`ObjectiveArgument`](./argument_objectives.md#objective-argument) |
+| `minecraft:objective_criteria` | [`ObjectiveCriteriaArgument`](./argument_objectives.md#objective-criteria-argument) |
+| `minecraft:operation` | [`MathOperationArgument`](./argument_mathoperation.md) |
+| `minecraft:particle` | [`ParticleArgument`](./argument_particle.md) |
+| `minecraft:resource_location` | [`AdvancementArgument`](./advancementargument.md)<br />[`BiomeArgument`](./argument_biome.md)<br />[`CustomArgument<T>`](./argument_custom.md)<br />[`LootTableArgument`](./argument_loottable.md)<br />[`NamespacedKeyArgument`](./argument_namespacedkey.md)<br />[`RecipeArgument`](./argument_recipe.md)<br />[`SoundArgument`](./argument_sound.md) |
+| `minecraft:rotation` | [`RotationArgument`](./argument_rotation.md) |
+| `minecraft:score_holder` | [`ScoreHolderArgument`](./argument_scoreboards.md#score-holder-argument) |
+| `minecraft:scoreboard_slot` | [`ScoreboardSlotArgument`](./argument_scoreboards.md#scoreboard-slot-argument) |
+| `minecraft:swizzle` | [`AxisArgument`](./argument_axis.md) |
+| `minecraft:team` | [`TeamArgument`](./argument_team.md) |
+| `minecraft:time` | [`TimeArgument`](./argument_time.md) |
+| `minecraft:uuid` | [`UUIDArgument`](./argument_uuid.md) |
+| `minecraft:vec2` | [`Location2DArgument`](./argument_locations.md#location-2d-space)<br />(`LocationType.PRECISE_POSITION`) |
+| `minecraft:vec3` | [`LocationArgument`](./argument_locations.md#location-3d-space)<br />(`LocationType.PRECISE_POSITION`) |
 
 There are a few arguments that aren't implemented. Here's why:
 

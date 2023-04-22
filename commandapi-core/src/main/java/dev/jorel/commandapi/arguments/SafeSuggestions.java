@@ -1,8 +1,8 @@
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.Tooltip;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
-import dev.jorel.commandapi.Tooltip;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * @param <S> the type of the suggestions
  */
 @FunctionalInterface
-public interface SafeSuggestions<S> {
+public interface SafeSuggestions<S, CommandSender> {
 
 	/**
 	 * Convert this {@link SafeSuggestions} object into an {@link ArgumentSuggestions} by mapping the values with a string
@@ -27,7 +27,7 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return an {@link ArgumentSuggestions} object resulting from this mapping.
 	 */
-	ArgumentSuggestions toSuggestions(Function<S, String> mapper);
+	ArgumentSuggestions<CommandSender> toSuggestions(Function<S, String> mapper);
 
 	/**
 	 * Create an empty SafeSuggestions object.
@@ -36,8 +36,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestions object resulting in empty suggestions
 	 */
-	static <T> SafeSuggestions<T> empty() {
-		return (mapper) -> ArgumentSuggestions.empty();
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> empty() {
+		return mapper -> ArgumentSuggestions.empty();
 	}
 
 	/**
@@ -49,8 +49,8 @@ public interface SafeSuggestions<S> {
 	 * @return a SafeSuggestions object suggesting the hardcoded suggestions
 	 */
 	@SafeVarargs
-	static <T> SafeSuggestions<T> suggest(T... suggestions) {
-		return (mapper) -> ArgumentSuggestions.strings(toStrings(mapper, suggestions));
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> suggest(T... suggestions) {
+		return mapper -> ArgumentSuggestions.strings(toStrings(mapper, suggestions));
 	}
 
 	/**
@@ -61,8 +61,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestions object suggesting the hardcoded suggestions
 	 */
-	static <T> SafeSuggestions<T> suggest(Collection<T> suggestions) {
-		return (mapper) -> ArgumentSuggestions.strings(toStrings(mapper, suggestions));
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> suggest(Collection<T> suggestions) {
+		return mapper -> ArgumentSuggestions.strings(toStrings(mapper, suggestions));
 	}
 
 	/**
@@ -73,8 +73,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> suggest(Function<SuggestionInfo, T[]> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringCollection(info -> toStrings(mapper, suggestions.apply(info)));
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> suggest(Function<SuggestionInfo<CommandSender>, T[]> suggestions) {
+		return mapper -> ArgumentSuggestions.stringCollection(info -> toStrings(mapper, suggestions.apply(info)));
 	}
 
 	/**
@@ -85,8 +85,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> suggestCollection(Function<SuggestionInfo, Collection<T>> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringCollection(info -> toStrings(mapper, suggestions.apply(info)));
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> suggestCollection(Function<SuggestionInfo<CommandSender>, Collection<T>> suggestions) {
+		return mapper -> ArgumentSuggestions.stringCollection(info -> toStrings(mapper, suggestions.apply(info)));
 	}
 
 	/**
@@ -97,8 +97,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggestion the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> suggestAsync(Function<SuggestionInfo, CompletableFuture<T[]>> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringCollectionAsync(info -> suggestions
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> suggestAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<T[]>> suggestions) {
+		return mapper -> ArgumentSuggestions.stringCollectionAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStrings(mapper, items)));
 	}
@@ -111,8 +111,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggestion the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> suggestCollectionAsync(Function<SuggestionInfo, CompletableFuture<Collection<T>>> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringCollectionAsync(info -> suggestions
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> suggestCollectionAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<Collection<T>>> suggestions) {
+		return mapper -> ArgumentSuggestions.stringCollectionAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStrings(mapper, items)));
 	}
@@ -126,8 +126,8 @@ public interface SafeSuggestions<S> {
 	 * @return a SafeSuggestion object suggesting the hardcoded values
 	 */
 	@SafeVarargs
-	static <T> SafeSuggestions<T> tooltips(Tooltip<T>... suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringsWithTooltips(toStringsWithTooltips(mapper, suggestions));
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> tooltips(Tooltip<T>... suggestions) {
+		return mapper -> ArgumentSuggestions.stringsWithTooltips(toStringsWithTooltips(mapper, suggestions));
 	}
 
 	/**
@@ -138,8 +138,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the hardcoded values
 	 */
-	static <T> SafeSuggestions<T> tooltips(Collection<Tooltip<T>> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringsWithTooltips(toStringsWithTooltips(mapper, suggestions));
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> tooltips(Collection<Tooltip<T>> suggestions) {
+		return mapper -> ArgumentSuggestions.stringsWithTooltips(toStringsWithTooltips(mapper, suggestions));
 	}
 
 	/**
@@ -150,8 +150,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> tooltips(Function<SuggestionInfo, Tooltip<T>[]> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollection(info -> toStringsWithTooltips(mapper,
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> tooltips(Function<SuggestionInfo<CommandSender>, Tooltip<T>[]> suggestions) {
+		return mapper -> ArgumentSuggestions.stringsWithTooltipsCollection(info -> toStringsWithTooltips(mapper,
 			suggestions.apply(info)
 		));
 	}
@@ -164,8 +164,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> tooltipCollection(Function<SuggestionInfo, Collection<Tooltip<T>>> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollection(info -> toStringsWithTooltips(mapper,
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> tooltipCollection(Function<SuggestionInfo<CommandSender>, Collection<Tooltip<T>>> suggestions) {
+		return mapper -> ArgumentSuggestions.stringsWithTooltipsCollection(info -> toStringsWithTooltips(mapper,
 			suggestions.apply(info)
 		));
 	}
@@ -178,8 +178,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion suggesting the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> tooltipsAsync(Function<SuggestionInfo, CompletableFuture<Tooltip<T>[]>> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollectionAsync(info -> suggestions
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> tooltipsAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<Tooltip<T>[]>> suggestions) {
+		return mapper -> ArgumentSuggestions.stringsWithTooltipsCollectionAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStringsWithTooltips(mapper, items)));
 	}
@@ -192,8 +192,8 @@ public interface SafeSuggestions<S> {
 	 *
 	 * @return a SafeSuggestion suggesting the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> tooltipCollectionAsync(Function<SuggestionInfo, CompletableFuture<Collection<Tooltip<T>>>> suggestions) {
-		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsCollectionAsync(info -> suggestions
+	static <T, CommandSender> SafeSuggestions<T, CommandSender> tooltipCollectionAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<Collection<Tooltip<T>>>> suggestions) {
+		return mapper -> ArgumentSuggestions.stringsWithTooltipsCollectionAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStringsWithTooltips(mapper, items)));
 	}

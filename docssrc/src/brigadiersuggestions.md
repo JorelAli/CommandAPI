@@ -25,11 +25,11 @@ For this command, we'll use a `GreedyStringArgument` as if we were making a gene
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:BrigadierSuggestions3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadierSuggestions1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:BrigadierSuggestions3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions1}}
 ```
 
 </div>
@@ -44,7 +44,7 @@ In this example, we simply create the `GreedyStringArgument` and use `replaceSug
 
 > **Developer's Note:**
 >
-> This example has been superseded by the [Command argument](./commandarguments.md). This example is still present as it gives an example of much more complicated brigadier suggestions which may be useful for readers!
+> This example has been superseded by the [Command argument](./argument_command.md). This example is still present as it gives an example of much more complicated brigadier suggestions which may be useful for readers!
 
 Courtesy of [469512345](https://github.com/469512345), the following example shows how using Brigadier's suggestions and parser can be combined with the CommandAPI to create an argument which suggests valid Minecraft commands. This could be used for example as a `sudo` command, to run a command as another player.
 
@@ -55,11 +55,11 @@ For this command, we'll use a `GreedyStringArgument` because that allows users t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:BrigadierSuggestions1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadierSuggestions2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:BrigadierSuggestions1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions2}}
 ```
 
 </div>
@@ -85,11 +85,11 @@ We use the command suggestions declared above by using the `replaceSuggestions` 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:BrigadierSuggestions2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadierSuggestions3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:BrigadierSuggestions2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadierSuggestions3}}
 ```
 
 </div>

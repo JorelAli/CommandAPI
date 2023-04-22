@@ -10,7 +10,7 @@ The default `config.yml` is shown below:
   <summary><b>config.yml</b></summary>
 
 ```yaml
-{{#include ../../commandapi-plugin/src/main/resources/config.yml}}
+{{#include ../../commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/src/main/resources/config.yml}}
 ```
 
 </details>
@@ -116,6 +116,28 @@ use-latest-nms-version: false
 
 ```yml
 use-latest-nms-version: true
+```
+
+-----
+
+### `hook-paper-reload`
+
+Controls whether the CommandAPI hooks into the Paper-exclusive `ServerResourcesReloadedEvent` when available.
+
+When the CommandAPI detects it is running on a Paper-based server, its default behavior will be to hook into the `ServerResourcesReloadedEvent`, which triggers when `/minecraft:reload` is run. During this event, the CommandAPI runs a custom datapack reloading sequence that helps commands registered with the CommandAPI work within datapacks. See [Reloading datapacks](./internal.md#reloading-datapacks) for more information on this process.
+
+By default, this value is set to `true` and the CommandAPI will hook into the `ServerResourcesReloadedEvent`. If you want, you can set this to `false`, and the CommandAPI will not hook into this event.
+
+**Default value**
+
+```yml
+hook-paper-reload: true
+```
+
+**Example value**
+
+```yml
+hook-paper-reload: false
 ```
 
 -----

@@ -21,21 +21,8 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.function.Function;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import dev.jorel.commandapi.nms.NMS;
 
 /**
  * Configuration wrapper class. The config.yml file used by the CommandAPI is
@@ -59,105 +46,27 @@ public class InternalConfig {
 	// Create a command_registration.json file
 	private final File dispatcherFile;
 
-	// List of plugins to convert
-	private final Map<JavaPlugin, String[]> pluginsToConvert;
-
 	// List of plugins which should ignore proxied senders
 	private final List<String> skipSenderProxy;
 
-	// List of arbitrary commands to convert
-	private final List<String> commandsToConvert;
-
+	// NBT API configuration
 	private final Class<?> nbtContainerClass;
 	private final Function<Object, ?> nbtContainerConstructor;
-
-	private final NMS<?> customNMS;
-
-	InternalConfig(FileConfiguration fileConfig, Class<?> nbtContainerClass,
-		Function<Object, ?> nbtContainerConstructor, File dispatcherFile) {
-		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
-		this.silentLogs = fileConfig.getBoolean("silent-logs");
-		this.useLatestNMSVersion = fileConfig.getBoolean("use-latest-nms-version");
-		this.message_missingExecutorImplementation = fileConfig.getString("messages.missing-executor-implementation");
-		this.dispatcherFile = fileConfig.getBoolean("create-dispatcher-json") ? dispatcherFile : null;
-		this.pluginsToConvert = new HashMap<>();
-		this.skipSenderProxy = new ArrayList<>();
-		this.commandsToConvert = new ArrayList<>();
-		this.nbtContainerClass = nbtContainerClass;
-		this.nbtContainerConstructor = nbtContainerConstructor;
-		this.customNMS = null;
-
-		if (!fileConfig.getList("plugins-to-convert").isEmpty()
-			&& fileConfig.getMapList("plugins-to-convert").isEmpty()) {
-			CommandAPI.getLogger()
-				.severe("plugins-to-convert has an invalid type. Did you miss a colon (:) after a plugin name?");
-		}
-
-		for (Map<?, ?> map : fileConfig.getMapList("plugins-to-convert")) {
-			String[] pluginCommands;
-			if (map.values() == null || (map.values().size() == 1 && map.values().iterator().next() == null)) {
-				pluginCommands = new String[0];
-			} else {
-				@SuppressWarnings("unchecked")
-				List<String> commands = (List<String>) map.values().iterator().next();
-				pluginCommands = commands.toArray(new String[0]);
-			}
-
-			String pluginName = (String) map.keySet().iterator().next();
-			Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-			if (plugin != null) {
-				if (plugin instanceof JavaPlugin javaPlugin) {
-					pluginsToConvert.put(javaPlugin, pluginCommands);
-				} else {
-					new InvalidPluginException("Plugin " + pluginName + " is not a JavaPlugin!").printStackTrace();
-				}
-			} else {
-				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
-					.printStackTrace();
-			}
-		}
-
-		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
-			if (Bukkit.getPluginManager().getPlugin(pluginName) != null) {
-				this.skipSenderProxy.add(pluginName);
-			} else {
-				new InvalidPluginException("Could not find a plugin " + pluginName + "! Has it been loaded properly?")
-					.printStackTrace();
-			}
-		}
-
-		for (String commandName : fileConfig.getStringList("other-commands-to-convert")) {
-			this.commandsToConvert.add(commandName);
-		}
-	}
-
-	/**
-	 * Creates an {@link InternalConfig}
-	 * 
-	 * @param verbose whether verbose logging should be enabled or not
-	 */
-	@Deprecated(forRemoval = true)
-	public InternalConfig(boolean verbose) {
-		this(new CommandAPIConfig().verboseOutput(verbose));
-	}
 
 	/**
 	 * Creates an {@link InternalConfig} from a {@link CommandAPIConfig}
 	 * 
 	 * @param config The configuration to use to set up this internal configuration
 	 */
-	public InternalConfig(CommandAPIConfig config) {
+	public InternalConfig(CommandAPIConfig<?> config) {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
 		this.message_missingExecutorImplementation = config.missingExecutorImplementationMessage;
 		this.dispatcherFile = config.dispatcherFile;
-		this.pluginsToConvert = new HashMap<>();
-		this.skipSenderProxy = new ArrayList<>();
-		this.commandsToConvert = new ArrayList<>();
+		this.skipSenderProxy = config.skipSenderProxy;
 		this.nbtContainerClass = config.nbtContainerClass;
 		this.nbtContainerConstructor = config.nbtContainerConstructor;
-		this.customNMS = config.customNMS;
 	}
 
 	/**
@@ -198,33 +107,11 @@ public class InternalConfig {
 	}
 
 	/**
-	 * @return A set of plugins and a list of commands to convert
-	 */
-	public Set<Entry<JavaPlugin, String[]>> getPluginsToConvert() {
-		return this.pluginsToConvert.entrySet();
-	}
-
-	/**
-	 * @param plugin A plugin where sender proxying should be skipped
-	 * @return Whether sender proxying should be skipped for a given plugin
-	 */
-	public boolean shouldSkipSenderProxy(Plugin plugin) {
-		return this.skipSenderProxy.contains(plugin.getName());
-	}
-
-	/**
 	 * @param commandName A command where sender proxying should be skipped
 	 * @return Whether sender proxying should be skipped for a given command
 	 */
 	public boolean shouldSkipSenderProxy(String commandName) {
 		return this.skipSenderProxy.contains(commandName);
-	}
-
-	/**
-	 * @return A list of commands to convert to Vanilla-compatible commands
-	 */
-	public List<String> getCommandsToConvert() {
-		return this.commandsToConvert;
 	}
 
 	/**
@@ -240,10 +127,6 @@ public class InternalConfig {
 	 */
 	public Function<Object, ?> getNBTContainerConstructor() {
 		return this.nbtContainerConstructor;
-	}
-
-	public NMS<?> getCustomNMS() {
-		return this.customNMS;
 	}
 
 }

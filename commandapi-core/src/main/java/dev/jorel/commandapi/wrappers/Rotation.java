@@ -20,34 +20,25 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
-import org.bukkit.Location;
+import java.util.Objects;
 
 /**
- * A class to represent the pitch and yaw rotation in degrees
+ * A class to represent the yaw and pitch rotation in degrees
  */
 public class Rotation {
 
-	private final float pitch;
 	private final float yaw;
+	private final float pitch;
 
 	/**
-	 * Constructs a Rotation with a given pitch and yaw
+	 * Constructs a Rotation with a given yaw and pitch
 	 * 
-	 * @param pitch the pitch of this rotation in degrees
 	 * @param yaw   the yaw of this rotation in degrees
+	 * @param pitch the pitch of this rotation in degrees
 	 */
-	public Rotation(float pitch, float yaw) {
-		this.pitch = pitch;
+	public Rotation(float yaw, float pitch) {
 		this.yaw = yaw;
-	}
-
-	/**
-	 * Gets the pitch of this rotation, measured in degrees.
-	 * 
-	 * @return this rotation's pitch
-	 */
-	public float getPitch() {
-		return this.pitch;
+		this.pitch = pitch;
 	}
 
 	/**
@@ -60,12 +51,12 @@ public class Rotation {
 	}
 
 	/**
-	 * Normalizes the given pitch angle to a value between +/-90 degrees.
+	 * Gets the pitch of this rotation, measured in degrees.
 	 * 
-	 * @return the normalized pitch in degrees
+	 * @return this rotation's pitch
 	 */
-	public float getNormalizedPitch() {
-		return Location.normalizePitch(this.pitch);
+	public float getPitch() {
+		return this.pitch;
 	}
 
 	/**
@@ -74,16 +65,48 @@ public class Rotation {
 	 * @return the normalized yaw in degrees
 	 */
 	public float getNormalizedYaw() {
-		return Location.normalizeYaw(this.yaw);
+		float normalizedYaw = yaw % 360.0F;
+		if (normalizedYaw >= 180.0F) {
+			normalizedYaw -= 360.0F;
+		} else if (normalizedYaw < -180.0F) {
+			normalizedYaw += 360.0F;
+		}
+
+		return normalizedYaw;
+	}
+
+	/**
+	 * Normalizes the given pitch angle to a value between +/-90 degrees.
+	 * 
+	 * @return the normalized pitch in degrees
+	 */
+	public float getNormalizedPitch() {
+		return pitch > 90.0F ? 90.0F : Math.max(pitch, -90.0F);
 	}
 	
 	/**
-	 * Returns the Minecraft string value of this Rotation
-	 * @return the Minecraft string value of this Rotation
+	 * @return the Minecraft string value of this {@link Rotation}, in the form "{@code <yaw> <pitch>}"
 	 */
 	@Override
 	public String toString() {
 		return yaw + " " + pitch;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(pitch, yaw);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Rotation other)) {
+			return false;
+		}
+		return Float.floatToIntBits(pitch) == Float.floatToIntBits(other.pitch) &&
+			Float.floatToIntBits(yaw) == Float.floatToIntBits(other.yaw);
 	}
 
 }

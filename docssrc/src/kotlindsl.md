@@ -19,11 +19,11 @@ We can then use the following command registration:
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommand}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl1}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommand2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl2}}
 ```
 
 </div>
@@ -47,6 +47,7 @@ To find out, which DSL executor corresponds to "normal" executors, you can refer
 |--------------------------|--------------------------|
 | `anyExecutor()`          | `executes()`             |
 | `playerExecutor()`       | `executesPlayer()`       |
+| `entityExecutor()`       | `executesEntity()`       |
 | `consoleExecutor()`      | `executesConsole()`      |
 | `commandBlockExecutor()` | `executesCommandBlock()` |
 | `proxyExecutor()`        | `executesProxy()`        |
@@ -95,11 +96,11 @@ Below, the `sendMessageTo` command is adding a broadcast option which should onl
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommandRequirement}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl3}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslSendMessageToCommandRequirement2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl4}}
 ```
 
 </div>
@@ -113,11 +114,11 @@ You can also restrict the use of a whole command by using requirements:
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslCommandRequirements}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl5}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:dslCommandRequirements2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl6}}
 ```
 
 </div>
@@ -139,16 +140,16 @@ We want to create a `/give` command with the following syntax:
 /optionalArgument give <item> <amount>
 ```
 
-As with the Java method of registering commands, with a CommandTree you can declare the command tree to include the additional argument `<amount>`, and with the CommandAPICommand you have to declare the two branching commands separately:
+As with the Java method of registering commands, with a CommandTree you can declare the command tree to include the additional argument `<amount>`, and with the CommandAPICommand you need to set the `optional` value to `true`:
 
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:optionalArgument}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl7}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:optionalArgument2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl8}}
 ```
 
 </div>
@@ -170,11 +171,11 @@ We make use of the `argument()` method to provide an argument implementation and
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:replaceSuggestions}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl9}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-kotlin/src/test/kotlin/Examples.kt:replaceSuggestions2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl10}}
 ```
 
 </div>

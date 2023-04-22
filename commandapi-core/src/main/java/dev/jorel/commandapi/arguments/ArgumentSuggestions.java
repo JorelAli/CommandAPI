@@ -19,7 +19,7 @@ import java.util.function.Function;
 // change the spaces into tabs!
 /* ANCHOR: Declaration */
 @FunctionalInterface
-public interface ArgumentSuggestions {
+public interface ArgumentSuggestions<CommandSender> {
 
     /**
      * Create a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
@@ -29,7 +29,7 @@ public interface ArgumentSuggestions {
      *
      * @throws CommandSyntaxException if there is an error making suggestions
      */
-    CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder)
+    CompletableFuture<Suggestions> suggest(SuggestionInfo<CommandSender> info, SuggestionsBuilder builder)
         throws CommandSyntaxException;
 /* ANCHOR_END: Declaration */
 
@@ -37,7 +37,7 @@ public interface ArgumentSuggestions {
 	 * Suggest nothing
 	 * @return an {@link ArgumentSuggestions} object suggesting nothing.
 	 */
-	static ArgumentSuggestions empty() {
+	static <CommandSender> ArgumentSuggestions<CommandSender> empty() {
 		return (info, builder) -> builder.buildFuture();
 	}
 
@@ -48,7 +48,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting hardcoded strings
 	 */
-	static ArgumentSuggestions strings(String... suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> strings(String... suggestions) {
 		return (info, builder) -> future(suggestionsFromStrings(builder, suggestions));
 	}
 
@@ -59,7 +59,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting hardcoded strings
 	 */
-	static ArgumentSuggestions strings(Collection<String> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> strings(Collection<String> suggestions) {
 		return (info, builder) -> future(suggestionsFromStrings(builder, suggestions));
 	}
 
@@ -70,7 +70,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions strings(Function<SuggestionInfo, String[]> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> strings(Function<SuggestionInfo<CommandSender>, String[]> suggestions) {
 		return (info, builder) -> future(suggestionsFromStrings(builder, suggestions.apply(info)));
 	}
 
@@ -81,7 +81,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions stringCollection(Function<SuggestionInfo, Collection<String>> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringCollection(Function<SuggestionInfo<CommandSender>, Collection<String>> suggestions) {
 		return (info, builder) -> future(suggestionsFromStrings(builder, suggestions.apply(info)));
 	}
 
@@ -92,7 +92,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsAsync(Function<SuggestionInfo, CompletableFuture<String[]>> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringsAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<String[]>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(strings -> suggestionsFromStrings(builder, strings));
@@ -105,7 +105,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringCollectionAsync(Function<SuggestionInfo, CompletableFuture<Collection<String>>> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringCollectionAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<Collection<String>>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(strings -> suggestionsFromStrings(builder, strings));
@@ -118,7 +118,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the hardcoded strings with tooltips
 	 */
-	static ArgumentSuggestions stringsWithTooltips(IStringTooltip... suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringsWithTooltips(IStringTooltip... suggestions) {
 		return (info, builder) -> future(suggestionsFromTooltips(builder, suggestions));
 	}
 
@@ -129,7 +129,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the hardcoded strings with tooltips
 	 */
-	static ArgumentSuggestions stringsWithTooltips(Collection<IStringTooltip> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringsWithTooltips(Collection<IStringTooltip> suggestions) {
 		return (info, builder) -> future(suggestionsFromTooltips(builder, suggestions));
 	}
 
@@ -140,7 +140,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringsWithTooltips(Function<SuggestionInfo<CommandSender>, IStringTooltip[]> suggestions) {
 		return (info, builder) -> future(suggestionsFromTooltips(builder, suggestions.apply(info)));
 	}
 
@@ -151,7 +151,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions stringsWithTooltipsCollection(Function<SuggestionInfo, Collection<IStringTooltip>> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringsWithTooltipsCollection(Function<SuggestionInfo<CommandSender>, Collection<IStringTooltip>> suggestions) {
 		return (info, builder) -> future(suggestionsFromTooltips(builder, suggestions.apply(info)));
 	}
 
@@ -162,7 +162,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringsWithTooltipsAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<IStringTooltip[]>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(stringsWithTooltips -> suggestionsFromTooltips(builder, stringsWithTooltips));
@@ -175,7 +175,7 @@ public interface ArgumentSuggestions {
 	 *
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsWithTooltipsCollectionAsync(Function<SuggestionInfo, CompletableFuture<Collection<IStringTooltip>>> suggestions) {
+	static <CommandSender> ArgumentSuggestions<CommandSender> stringsWithTooltipsCollectionAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<Collection<IStringTooltip>>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(stringsWithTooltips -> suggestionsFromTooltips(builder, stringsWithTooltips));
@@ -186,9 +186,10 @@ public interface ArgumentSuggestions {
 	 * @param suggestions The {@link ArgumentSuggestions} to be merged
 	 * @return an {@link ArgumentSuggestions} object suggesting everything suggested by the input suggestions
 	 */
-	static ArgumentSuggestions merge(ArgumentSuggestions... suggestions) {
+	@SafeVarargs
+	static <CommandSender> ArgumentSuggestions<CommandSender> merge(ArgumentSuggestions<CommandSender>... suggestions) {
 		return (info, builder) -> {
-			for(ArgumentSuggestions suggestion : suggestions) {
+			for(ArgumentSuggestions<CommandSender> suggestion : suggestions) {
 				suggestion.suggest(info, builder);
 			}
 			return builder.buildFuture();

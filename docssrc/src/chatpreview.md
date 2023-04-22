@@ -109,12 +109,20 @@ For execution, we do the same procedure, because the text that the user enters s
 
 <div class="multi-pre">
 
-```java,Spigot
-{{#include ../../commandapi-core/src/test/java/Examples.java:chatpreviewspigot}}
+```java,Spigot_(Java)
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview1}}
 ```
 
-```java,Paper
-{{#include ../../commandapi-core/src/test/java/Examples.java:chatpreviewadventure}}
+```java,Paper_(Java)
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview2}}
+```
+
+```kotlin,Spigot_(Kotlin)
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview1}}
+```
+
+```kotlin,Paper_(Kotlin)
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview2}}
 ```
 
 </div>
@@ -135,12 +143,20 @@ By using `.usePreview(true)`, we don't have to re-translate `&` formatting codes
 
 <div class="multi-pre">
 
-```java,Spigot
-{{#include ../../commandapi-core/src/test/java/Examples.java:chatpreviewspigotusepreview}}
+```java,Spigot_(Java)
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview3}}
 ```
 
-```java,Paper
-{{#include ../../commandapi-core/src/test/java/Examples.java:chatpreviewadventureusepreview}}
+```java,Paper_(Java)
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview4}}
+```
+
+```kotlin,Spigot_(Kotlin)
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview3}}
+```
+
+```kotlin,Paper_(Kotlin)
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview4}}
 ```
 
 </div>

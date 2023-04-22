@@ -146,12 +146,12 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The ListArgument
 	 */
-	LIST,
+	LIST("api:list"),
 
 	/**
 	 * The ListTextArgument
 	 */
-	LIST_TEXT,
+	LIST_TEXT("api:list_text"),
 
 	/**
 	 * The LiteralArgument
@@ -174,6 +174,11 @@ public enum CommandAPIArgumentType {
 	LOOT_TABLE("api:loot_table"),
 
 	/**
+	 * The MapArgument
+	 */
+	MAP("api:map"),
+
+	/**
 	 * The MathOperationArgument
 	 */
 	MATH_OPERATION("minecraft:operation"),
@@ -184,7 +189,7 @@ public enum CommandAPIArgumentType {
 	MULTI_LITERAL,
 
 	/**
-	 * The {@link NamespacedKeyArgument}
+	 * The NamespacedKeyArgument
 	 */
 	NAMESPACED_KEY("minecraft:resource_location"),
 
@@ -206,7 +211,7 @@ public enum CommandAPIArgumentType {
 	/**
 	 * The OfflinePlayerArgument
 	 */
-	OFFLINE_PLAYER,
+	OFFLINE_PLAYER("api:offline_player"),
 
 	/**
 	 * The ParticleArgument

@@ -37,7 +37,7 @@ public class WrapperCommandSyntaxException extends Exception {
 	/**
 	 * The Brigadier CommandSyntaxException that this class wraps
 	 */
-	private CommandSyntaxException exception;
+	private final CommandSyntaxException exception;
 
 	/**
 	 * Creates a WrapperCommandSyntaxException

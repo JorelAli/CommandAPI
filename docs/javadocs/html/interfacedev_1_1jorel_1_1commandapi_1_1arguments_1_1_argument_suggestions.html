@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CommandAPI: dev.jorel.commandapi.arguments.ArgumentSuggestions Interface Reference</title>
+<title>CommandAPI: dev.jorel.commandapi.arguments.ArgumentSuggestions&lt; CommandSender &gt; Interface Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.8.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -86,9 +86,8 @@ $(document).ready(function(){initNavTree('interfacedev_1_1jorel_1_1commandapi_1_
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">dev.jorel.commandapi.arguments.ArgumentSuggestions Interface Reference</div></div>
+  <div class="headertitle"><div class="title">dev.jorel.commandapi.arguments.ArgumentSuggestions&lt; CommandSender &gt; Interface Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -97,80 +96,69 @@ $(document).ready(function(){initNavTree('interfacedev_1_1jorel_1_1commandapi_1_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a574b3e5c9f4f198023ea11fde5f35279"><td class="memItemLeft" align="right" valign="top">CompletableFuture&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a574b3e5c9f4f198023ea11fde5f35279">suggest</a> (SuggestionInfo info, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html">SuggestionsBuilder</a> builder)  throws CommandSyntaxException</td></tr>
-<tr class="memdesc:a574b3e5c9f4f198023ea11fde5f35279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code><a class="el" href="">CompletableFuture</a></code> resolving onto a brigadier <code><a class="el" href="">Suggestions</a></code> object.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a574b3e5c9f4f198023ea11fde5f35279">More...</a><br /></td></tr>
-<tr class="separator:a574b3e5c9f4f198023ea11fde5f35279"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aff76067e3260f892f2b6ededbb54f5d7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aff76067e3260f892f2b6ededbb54f5d7">empty</a> ()</td></tr>
-<tr class="memdesc:aff76067e3260f892f2b6ededbb54f5d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest nothing.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aff76067e3260f892f2b6ededbb54f5d7">More...</a><br /></td></tr>
-<tr class="separator:aff76067e3260f892f2b6ededbb54f5d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d6f4eab9640c2fc0cc5b5aecc8e8fee"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a9d6f4eab9640c2fc0cc5b5aecc8e8fee">strings</a> (String... suggestions)</td></tr>
-<tr class="memdesc:a9d6f4eab9640c2fc0cc5b5aecc8e8fee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a9d6f4eab9640c2fc0cc5b5aecc8e8fee">More...</a><br /></td></tr>
-<tr class="separator:a9d6f4eab9640c2fc0cc5b5aecc8e8fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2845202e32b913d41847bfebca695d4b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a2845202e32b913d41847bfebca695d4b">strings</a> (Collection&lt; String &gt; suggestions)</td></tr>
-<tr class="memdesc:a2845202e32b913d41847bfebca695d4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a2845202e32b913d41847bfebca695d4b">More...</a><br /></td></tr>
-<tr class="separator:a2845202e32b913d41847bfebca695d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addbab59ac563d578d6ec1fcd312cd8b9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#addbab59ac563d578d6ec1fcd312cd8b9">strings</a> (Function&lt; SuggestionInfo, String[]&gt; suggestions)</td></tr>
-<tr class="memdesc:addbab59ac563d578d6ec1fcd312cd8b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#addbab59ac563d578d6ec1fcd312cd8b9">More...</a><br /></td></tr>
-<tr class="separator:addbab59ac563d578d6ec1fcd312cd8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc136f50f0c3c6028cc48fba6e414eb5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#abc136f50f0c3c6028cc48fba6e414eb5">stringCollection</a> (Function&lt; SuggestionInfo, Collection&lt; String &gt; &gt; suggestions)</td></tr>
-<tr class="memdesc:abc136f50f0c3c6028cc48fba6e414eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#abc136f50f0c3c6028cc48fba6e414eb5">More...</a><br /></td></tr>
-<tr class="separator:abc136f50f0c3c6028cc48fba6e414eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29c566011eae069195956bf2c95d34dc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a29c566011eae069195956bf2c95d34dc">stringsAsync</a> (Function&lt; SuggestionInfo, CompletableFuture&lt; String[]&gt; &gt; suggestions)</td></tr>
-<tr class="memdesc:a29c566011eae069195956bf2c95d34dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a29c566011eae069195956bf2c95d34dc">More...</a><br /></td></tr>
-<tr class="separator:a29c566011eae069195956bf2c95d34dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9c7c16339e75b00455164a85430cc0e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#ae9c7c16339e75b00455164a85430cc0e">stringCollectionAsync</a> (Function&lt; SuggestionInfo, CompletableFuture&lt; Collection&lt; String &gt; &gt; &gt; suggestions)</td></tr>
-<tr class="memdesc:ae9c7c16339e75b00455164a85430cc0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#ae9c7c16339e75b00455164a85430cc0e">More...</a><br /></td></tr>
-<tr class="separator:ae9c7c16339e75b00455164a85430cc0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa01e31a2977244587cf75962c26196d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aaa01e31a2977244587cf75962c26196d">stringsWithTooltips</a> (IStringTooltip... suggestions)</td></tr>
-<tr class="memdesc:aaa01e31a2977244587cf75962c26196d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings with tooltips.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aaa01e31a2977244587cf75962c26196d">More...</a><br /></td></tr>
-<tr class="separator:aaa01e31a2977244587cf75962c26196d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a242786674f81abac4df320d9b25dd464"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a242786674f81abac4df320d9b25dd464">stringsWithTooltips</a> (Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; suggestions)</td></tr>
-<tr class="memdesc:a242786674f81abac4df320d9b25dd464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings with tooltips.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a242786674f81abac4df320d9b25dd464">More...</a><br /></td></tr>
-<tr class="separator:a242786674f81abac4df320d9b25dd464"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7487ba38703f899e9291d21e12b1f19e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a7487ba38703f899e9291d21e12b1f19e">stringsWithTooltips</a> (Function&lt; SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; suggestions)</td></tr>
-<tr class="memdesc:a7487ba38703f899e9291d21e12b1f19e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings with tooltips as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a7487ba38703f899e9291d21e12b1f19e">More...</a><br /></td></tr>
-<tr class="separator:a7487ba38703f899e9291d21e12b1f19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adafe6b43406638440f4238a571dce398"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#adafe6b43406638440f4238a571dce398">stringsWithTooltipsCollection</a> (Function&lt; SuggestionInfo, Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt; suggestions)</td></tr>
-<tr class="memdesc:adafe6b43406638440f4238a571dce398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings with tooltips as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#adafe6b43406638440f4238a571dce398">More...</a><br /></td></tr>
-<tr class="separator:adafe6b43406638440f4238a571dce398"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcb60a12df6237731adaa15b5a52f659"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#adcb60a12df6237731adaa15b5a52f659">stringsWithTooltipsAsync</a> (Function&lt; SuggestionInfo, CompletableFuture&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt; suggestions)</td></tr>
-<tr class="memdesc:adcb60a12df6237731adaa15b5a52f659"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings with tooltips asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#adcb60a12df6237731adaa15b5a52f659">More...</a><br /></td></tr>
-<tr class="separator:adcb60a12df6237731adaa15b5a52f659"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0600dff75e8121afaafe4a55eb823bb9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a0600dff75e8121afaafe4a55eb823bb9">stringsWithTooltipsCollectionAsync</a> (Function&lt; SuggestionInfo, CompletableFuture&lt; Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt; &gt; suggestions)</td></tr>
-<tr class="memdesc:a0600dff75e8121afaafe4a55eb823bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings with tooltips asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a0600dff75e8121afaafe4a55eb823bb9">More...</a><br /></td></tr>
-<tr class="separator:a0600dff75e8121afaafe4a55eb823bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a697230ef53d4b69facce42668b729bcd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a697230ef53d4b69facce42668b729bcd">merge</a> (ArgumentSuggestions... suggestions)</td></tr>
-<tr class="memdesc:a697230ef53d4b69facce42668b729bcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge suggestions from multiple <code><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a></code> together.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a697230ef53d4b69facce42668b729bcd">More...</a><br /></td></tr>
-<tr class="separator:a697230ef53d4b69facce42668b729bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71825cf1033e4a23db8f8a8a61e19942"><td class="memItemLeft" align="right" valign="top">CompletableFuture&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a71825cf1033e4a23db8f8a8a61e19942">suggest</a> (SuggestionInfo&lt; CommandSender &gt; info, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html">SuggestionsBuilder</a> builder)  throws CommandSyntaxException</td></tr>
+<tr class="memdesc:a71825cf1033e4a23db8f8a8a61e19942"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code><a class="el" href="">CompletableFuture</a></code> resolving onto a brigadier <code><a class="el" href="">Suggestions</a></code> object.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a71825cf1033e4a23db8f8a8a61e19942">More...</a><br /></td></tr>
+<tr class="separator:a71825cf1033e4a23db8f8a8a61e19942"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f05e5a15dab30c118059d88218b1c84"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a2f05e5a15dab30c118059d88218b1c84">empty</a> ()</td></tr>
+<tr class="memdesc:a2f05e5a15dab30c118059d88218b1c84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest nothing.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a2f05e5a15dab30c118059d88218b1c84">More...</a><br /></td></tr>
+<tr class="separator:a2f05e5a15dab30c118059d88218b1c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94b05c8e022ba3c0452210ed52aa73c8"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a94b05c8e022ba3c0452210ed52aa73c8">strings</a> (String... suggestions)</td></tr>
+<tr class="memdesc:a94b05c8e022ba3c0452210ed52aa73c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a94b05c8e022ba3c0452210ed52aa73c8">More...</a><br /></td></tr>
+<tr class="separator:a94b05c8e022ba3c0452210ed52aa73c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d96790fdf7e008028f7f62287cf18f9"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a3d96790fdf7e008028f7f62287cf18f9">strings</a> (Collection&lt; String &gt; suggestions)</td></tr>
+<tr class="memdesc:a3d96790fdf7e008028f7f62287cf18f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a3d96790fdf7e008028f7f62287cf18f9">More...</a><br /></td></tr>
+<tr class="separator:a3d96790fdf7e008028f7f62287cf18f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e88ae71400cdf9be85b22bed37beaaa"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a8e88ae71400cdf9be85b22bed37beaaa">strings</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, String[]&gt; suggestions)</td></tr>
+<tr class="memdesc:a8e88ae71400cdf9be85b22bed37beaaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a8e88ae71400cdf9be85b22bed37beaaa">More...</a><br /></td></tr>
+<tr class="separator:a8e88ae71400cdf9be85b22bed37beaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7de90dcd0ed9f977322ed7aeae2d86bc"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a7de90dcd0ed9f977322ed7aeae2d86bc">stringCollection</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, Collection&lt; String &gt; &gt; suggestions)</td></tr>
+<tr class="memdesc:a7de90dcd0ed9f977322ed7aeae2d86bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a7de90dcd0ed9f977322ed7aeae2d86bc">More...</a><br /></td></tr>
+<tr class="separator:a7de90dcd0ed9f977322ed7aeae2d86bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b1a3933c0aede886f004b3e994aa0aa"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a1b1a3933c0aede886f004b3e994aa0aa">stringsAsync</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; String[]&gt; &gt; suggestions)</td></tr>
+<tr class="memdesc:a1b1a3933c0aede886f004b3e994aa0aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a1b1a3933c0aede886f004b3e994aa0aa">More...</a><br /></td></tr>
+<tr class="separator:a1b1a3933c0aede886f004b3e994aa0aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa72148a436a5b4b35d96a3781f755f63"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aa72148a436a5b4b35d96a3781f755f63">stringCollectionAsync</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; Collection&lt; String &gt; &gt; &gt; suggestions)</td></tr>
+<tr class="memdesc:aa72148a436a5b4b35d96a3781f755f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#aa72148a436a5b4b35d96a3781f755f63">More...</a><br /></td></tr>
+<tr class="separator:aa72148a436a5b4b35d96a3781f755f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a662cb07d31e40737e2840d821ac42a5c"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a662cb07d31e40737e2840d821ac42a5c">stringsWithTooltips</a> (IStringTooltip... suggestions)</td></tr>
+<tr class="memdesc:a662cb07d31e40737e2840d821ac42a5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings with tooltips.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a662cb07d31e40737e2840d821ac42a5c">More...</a><br /></td></tr>
+<tr class="separator:a662cb07d31e40737e2840d821ac42a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1938a1fbaaa87e08fa47689cf7ccc06"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#af1938a1fbaaa87e08fa47689cf7ccc06">stringsWithTooltips</a> (Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; suggestions)</td></tr>
+<tr class="memdesc:af1938a1fbaaa87e08fa47689cf7ccc06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest hardcoded strings with tooltips.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#af1938a1fbaaa87e08fa47689cf7ccc06">More...</a><br /></td></tr>
+<tr class="separator:af1938a1fbaaa87e08fa47689cf7ccc06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a187bc8f3b00d30967d309ab14428d83a"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a187bc8f3b00d30967d309ab14428d83a">stringsWithTooltips</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; suggestions)</td></tr>
+<tr class="memdesc:a187bc8f3b00d30967d309ab14428d83a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings with tooltips as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a187bc8f3b00d30967d309ab14428d83a">More...</a><br /></td></tr>
+<tr class="separator:a187bc8f3b00d30967d309ab14428d83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd9a0cf5740718243c8f9574ce289eaf"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#acd9a0cf5740718243c8f9574ce289eaf">stringsWithTooltipsCollection</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt; suggestions)</td></tr>
+<tr class="memdesc:acd9a0cf5740718243c8f9574ce289eaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings with tooltips as the result of a function.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#acd9a0cf5740718243c8f9574ce289eaf">More...</a><br /></td></tr>
+<tr class="separator:acd9a0cf5740718243c8f9574ce289eaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f1ebca7a1387e4f1533cb41497ce1e1"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a4f1ebca7a1387e4f1533cb41497ce1e1">stringsWithTooltipsAsync</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt; suggestions)</td></tr>
+<tr class="memdesc:a4f1ebca7a1387e4f1533cb41497ce1e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest an array of strings with tooltips asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a4f1ebca7a1387e4f1533cb41497ce1e1">More...</a><br /></td></tr>
+<tr class="separator:a4f1ebca7a1387e4f1533cb41497ce1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9730a4e18a8a027dfcb751de5980933f"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a9730a4e18a8a027dfcb751de5980933f">stringsWithTooltipsCollectionAsync</a> (Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt; &gt; suggestions)</td></tr>
+<tr class="memdesc:a9730a4e18a8a027dfcb751de5980933f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggest a collection of strings with tooltips asynchronously.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#a9730a4e18a8a027dfcb751de5980933f">More...</a><br /></td></tr>
+<tr class="separator:a9730a4e18a8a027dfcb751de5980933f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd817411b6691d3b67caa2d51fc51a31"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#afd817411b6691d3b67caa2d51fc51a31">merge</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;... suggestions)</td></tr>
+<tr class="memdesc:afd817411b6691d3b67caa2d51fc51a31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge suggestions from multiple <code><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a></code> together.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html#afd817411b6691d3b67caa2d51fc51a31">More...</a><br /></td></tr>
+<tr class="separator:afd817411b6691d3b67caa2d51fc51a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This class represents suggestions for an argument. </p>
 <p ><code><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a></code> objects are best created using the static methods as opposed to functionally. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="aff76067e3260f892f2b6ededbb54f5d7" name="aff76067e3260f892f2b6ededbb54f5d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff76067e3260f892f2b6ededbb54f5d7">&#9670;&nbsp;</a></span>empty()</h2>
+<a id="a2f05e5a15dab30c118059d88218b1c84" name="a2f05e5a15dab30c118059d88218b1c84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f05e5a15dab30c118059d88218b1c84">&#9670;&nbsp;</a></span>empty()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.empty </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.empty </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest nothing. </p>
@@ -178,28 +166,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a697230ef53d4b69facce42668b729bcd" name="a697230ef53d4b69facce42668b729bcd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a697230ef53d4b69facce42668b729bcd">&#9670;&nbsp;</a></span>merge()</h2>
+<a id="afd817411b6691d3b67caa2d51fc51a31" name="afd817411b6691d3b67caa2d51fc51a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd817411b6691d3b67caa2d51fc51a31">&#9670;&nbsp;</a></span>merge()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.merge </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.merge </td>
           <td>(</td>
-          <td class="paramtype">ArgumentSuggestions...&#160;</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt;...&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Merge suggestions from multiple <code><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a></code> together. </p>
@@ -213,28 +193,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abc136f50f0c3c6028cc48fba6e414eb5" name="abc136f50f0c3c6028cc48fba6e414eb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc136f50f0c3c6028cc48fba6e414eb5">&#9670;&nbsp;</a></span>stringCollection()</h2>
+<a id="a7de90dcd0ed9f977322ed7aeae2d86bc" name="a7de90dcd0ed9f977322ed7aeae2d86bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7de90dcd0ed9f977322ed7aeae2d86bc">&#9670;&nbsp;</a></span>stringCollection()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringCollection </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringCollection </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, Collection&lt; String &gt; &gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, Collection&lt; String &gt; &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest a collection of strings as the result of a function. </p>
@@ -248,28 +220,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae9c7c16339e75b00455164a85430cc0e" name="ae9c7c16339e75b00455164a85430cc0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9c7c16339e75b00455164a85430cc0e">&#9670;&nbsp;</a></span>stringCollectionAsync()</h2>
+<a id="aa72148a436a5b4b35d96a3781f755f63" name="aa72148a436a5b4b35d96a3781f755f63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa72148a436a5b4b35d96a3781f755f63">&#9670;&nbsp;</a></span>stringCollectionAsync()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringCollectionAsync </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringCollectionAsync </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, CompletableFuture&lt; Collection&lt; String &gt; &gt; &gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; Collection&lt; String &gt; &gt; &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest a collection of strings asynchronously. </p>
@@ -283,28 +247,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2845202e32b913d41847bfebca695d4b" name="a2845202e32b913d41847bfebca695d4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2845202e32b913d41847bfebca695d4b">&#9670;&nbsp;</a></span>strings() <span class="overload">[1/3]</span></h2>
+<a id="a3d96790fdf7e008028f7f62287cf18f9" name="a3d96790fdf7e008028f7f62287cf18f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d96790fdf7e008028f7f62287cf18f9">&#9670;&nbsp;</a></span>strings() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.strings </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.strings </td>
           <td>(</td>
           <td class="paramtype">Collection&lt; String &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest hardcoded strings. </p>
@@ -318,28 +274,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="addbab59ac563d578d6ec1fcd312cd8b9" name="addbab59ac563d578d6ec1fcd312cd8b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#addbab59ac563d578d6ec1fcd312cd8b9">&#9670;&nbsp;</a></span>strings() <span class="overload">[2/3]</span></h2>
+<a id="a8e88ae71400cdf9be85b22bed37beaaa" name="a8e88ae71400cdf9be85b22bed37beaaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e88ae71400cdf9be85b22bed37beaaa">&#9670;&nbsp;</a></span>strings() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.strings </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.strings </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, String[]&gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, String[]&gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest an array of strings as the result of a function. </p>
@@ -353,28 +301,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9d6f4eab9640c2fc0cc5b5aecc8e8fee" name="a9d6f4eab9640c2fc0cc5b5aecc8e8fee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d6f4eab9640c2fc0cc5b5aecc8e8fee">&#9670;&nbsp;</a></span>strings() <span class="overload">[3/3]</span></h2>
+<a id="a94b05c8e022ba3c0452210ed52aa73c8" name="a94b05c8e022ba3c0452210ed52aa73c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94b05c8e022ba3c0452210ed52aa73c8">&#9670;&nbsp;</a></span>strings() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.strings </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.strings </td>
           <td>(</td>
           <td class="paramtype">String...&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest hardcoded strings. </p>
@@ -388,28 +328,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a29c566011eae069195956bf2c95d34dc" name="a29c566011eae069195956bf2c95d34dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29c566011eae069195956bf2c95d34dc">&#9670;&nbsp;</a></span>stringsAsync()</h2>
+<a id="a1b1a3933c0aede886f004b3e994aa0aa" name="a1b1a3933c0aede886f004b3e994aa0aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b1a3933c0aede886f004b3e994aa0aa">&#9670;&nbsp;</a></span>stringsAsync()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringsAsync </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringsAsync </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, CompletableFuture&lt; String[]&gt; &gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; String[]&gt; &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest an array of strings asynchronously. </p>
@@ -423,28 +355,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a242786674f81abac4df320d9b25dd464" name="a242786674f81abac4df320d9b25dd464"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a242786674f81abac4df320d9b25dd464">&#9670;&nbsp;</a></span>stringsWithTooltips() <span class="overload">[1/3]</span></h2>
+<a id="af1938a1fbaaa87e08fa47689cf7ccc06" name="af1938a1fbaaa87e08fa47689cf7ccc06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1938a1fbaaa87e08fa47689cf7ccc06">&#9670;&nbsp;</a></span>stringsWithTooltips() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringsWithTooltips </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringsWithTooltips </td>
           <td>(</td>
           <td class="paramtype">Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest hardcoded strings with tooltips. </p>
@@ -458,28 +382,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7487ba38703f899e9291d21e12b1f19e" name="a7487ba38703f899e9291d21e12b1f19e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7487ba38703f899e9291d21e12b1f19e">&#9670;&nbsp;</a></span>stringsWithTooltips() <span class="overload">[2/3]</span></h2>
+<a id="a187bc8f3b00d30967d309ab14428d83a" name="a187bc8f3b00d30967d309ab14428d83a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a187bc8f3b00d30967d309ab14428d83a">&#9670;&nbsp;</a></span>stringsWithTooltips() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringsWithTooltips </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringsWithTooltips </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest an array of strings with tooltips as the result of a function. </p>
@@ -493,28 +409,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aaa01e31a2977244587cf75962c26196d" name="aaa01e31a2977244587cf75962c26196d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa01e31a2977244587cf75962c26196d">&#9670;&nbsp;</a></span>stringsWithTooltips() <span class="overload">[3/3]</span></h2>
+<a id="a662cb07d31e40737e2840d821ac42a5c" name="a662cb07d31e40737e2840d821ac42a5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a662cb07d31e40737e2840d821ac42a5c">&#9670;&nbsp;</a></span>stringsWithTooltips() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringsWithTooltips </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringsWithTooltips </td>
           <td>(</td>
           <td class="paramtype">IStringTooltip...&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest hardcoded strings with tooltips. </p>
@@ -528,28 +436,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adcb60a12df6237731adaa15b5a52f659" name="adcb60a12df6237731adaa15b5a52f659"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcb60a12df6237731adaa15b5a52f659">&#9670;&nbsp;</a></span>stringsWithTooltipsAsync()</h2>
+<a id="a4f1ebca7a1387e4f1533cb41497ce1e1" name="a4f1ebca7a1387e4f1533cb41497ce1e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f1ebca7a1387e4f1533cb41497ce1e1">&#9670;&nbsp;</a></span>stringsWithTooltipsAsync()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringsWithTooltipsAsync </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringsWithTooltipsAsync </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, CompletableFuture&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a>[]&gt; &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest an array of strings with tooltips asynchronously. </p>
@@ -563,28 +463,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adafe6b43406638440f4238a571dce398" name="adafe6b43406638440f4238a571dce398"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adafe6b43406638440f4238a571dce398">&#9670;&nbsp;</a></span>stringsWithTooltipsCollection()</h2>
+<a id="acd9a0cf5740718243c8f9574ce289eaf" name="acd9a0cf5740718243c8f9574ce289eaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd9a0cf5740718243c8f9574ce289eaf">&#9670;&nbsp;</a></span>stringsWithTooltipsCollection()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringsWithTooltipsCollection </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringsWithTooltipsCollection </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest a collection of strings with tooltips as the result of a function. </p>
@@ -598,28 +490,20 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0600dff75e8121afaafe4a55eb823bb9" name="a0600dff75e8121afaafe4a55eb823bb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0600dff75e8121afaafe4a55eb823bb9">&#9670;&nbsp;</a></span>stringsWithTooltipsCollectionAsync()</h2>
+<a id="a9730a4e18a8a027dfcb751de5980933f" name="a9730a4e18a8a027dfcb751de5980933f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9730a4e18a8a027dfcb751de5980933f">&#9670;&nbsp;</a></span>stringsWithTooltipsCollectionAsync()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a> dev.jorel.commandapi.arguments.ArgumentSuggestions.stringsWithTooltipsCollectionAsync </td>
+          <td class="memname">static&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a>&lt; CommandSender &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.stringsWithTooltipsCollectionAsync </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; SuggestionInfo, CompletableFuture&lt; Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt; &gt;&#160;</td>
+          <td class="paramtype">Function&lt; SuggestionInfo&lt; CommandSender &gt;, CompletableFuture&lt; Collection&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html">IStringTooltip</a> &gt; &gt; &gt;&#160;</td>
           <td class="paramname"><em>suggestions</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Suggest a collection of strings with tooltips asynchronously. </p>
@@ -633,16 +517,16 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a574b3e5c9f4f198023ea11fde5f35279" name="a574b3e5c9f4f198023ea11fde5f35279"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a574b3e5c9f4f198023ea11fde5f35279">&#9670;&nbsp;</a></span>suggest()</h2>
+<a id="a71825cf1033e4a23db8f8a8a61e19942" name="a71825cf1033e4a23db8f8a8a61e19942"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71825cf1033e4a23db8f8a8a61e19942">&#9670;&nbsp;</a></span>suggest()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">CompletableFuture&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a> &gt; dev.jorel.commandapi.arguments.ArgumentSuggestions.suggest </td>
+          <td class="memname">CompletableFuture&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a> &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">dev.jorel.commandapi.arguments.ArgumentSuggestions</a>&lt; CommandSender &gt;.suggest </td>
           <td>(</td>
-          <td class="paramtype">SuggestionInfo&#160;</td>
+          <td class="paramtype">SuggestionInfo&lt; CommandSender &gt;&#160;</td>
           <td class="paramname"><em>info</em>, </td>
         </tr>
         <tr>
@@ -683,7 +567,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument_suggestions.html">ArgumentSuggestions</a></li>
-    <li class="footer">Generated on Tue Mar 14 2023 21:10:50 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sat Apr 22 2023 21:23:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

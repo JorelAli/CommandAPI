@@ -21,51 +21,51 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
-import dev.jorel.commandapi.nms.NMS;
-
 /**
- * A class to contain information about how to configure the CommandAPI during
- * its loading step.
+ * A class to contain information about how to configure the CommandAPI during its loading step.
+ * You shouldn't use this class directly. Instead, use an appropriate subclass that corresponds to
+ * the platform you are developing for.
  */
-public class CommandAPIConfig {
-
-	// The default configuration. This should mirror the commandapi-plugin
-	// config.yml file.
+public abstract class CommandAPIConfig<Impl extends CommandAPIConfig<Impl>> implements ChainableBuilder<Impl> {
+	// The default configuration. This should mirror the commandapi-plugin config.yml file.
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
 	boolean useLatestNMSVersion = false;
 	String missingExecutorImplementationMessage = "This command has no implementations for %s";
 
+	File dispatcherFile = null;
+
+	List<String> skipSenderProxy = new ArrayList<>();
+
 	// NBT API
 	Class<?> nbtContainerClass = null;
 	Function<Object, ?> nbtContainerConstructor = null;
 
-	File dispatcherFile = null;
-	NMS<?> customNMS;
-
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
-	 * 
+	 *
 	 * @param value whether verbose output should be enabled
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig verboseOutput(boolean value) {
+	public Impl verboseOutput(boolean value) {
 		this.verboseOutput = value;
-		return this;
+		return instance();
 	}
 
 	/**
 	 * Silences all logs (including warnings, but not errors) for the CommandAPI if
 	 * true.
-	 * 
+	 *
 	 * @param value whether logging suppression should be enabled
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig silentLogs(boolean value) {
+	public Impl silentLogs(boolean value) {
 		this.silentLogs = value;
-		return this;
+		return instance();
 	}
 
 	/**
@@ -74,35 +74,60 @@ public class CommandAPIConfig {
 	 * if the latest NMS version is not supported by the CommandAPI. This can be
 	 * used to potentially provide compatibility with future Minecraft versions
 	 * before the CommandAPI pushes a release to support it.
-	 * 
+	 *
 	 * @param value whether the latest version of NMS should be used
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig useLatestNMSVersion(boolean value) {
+	public Impl useLatestNMSVersion(boolean value) {
 		this.useLatestNMSVersion = value;
-		return this;
+		return instance();
 	}
 
 	/**
 	 * Sets the message to display to users when a command has no executor.
 	 * Available formatting parameters are:
-	 * 
+	 *
 	 * <ul>
 	 * <li>%s - the executor class (lowercase)</li>
 	 * <li>%S - the executor class (normal case)</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param value the message to display when a command has no executor
 	 * @return this CommandAPIConfig
 	 */
-	public CommandAPIConfig missingExecutorImplementationMessage(String value) {
+	public Impl missingExecutorImplementationMessage(String value) {
 		this.missingExecutorImplementationMessage = value;
-		return this;
+		return instance();
+	}
+
+	/**
+	 * Specifies the location for the CommandAPI to store the internal
+	 * representation of Brigadier's command tree.
+	 *
+	 * @param file a file pointing to where to store Brigadier's JSON command
+	 *             dispatcher, for example
+	 *             {@code new File(getDataFolder(), "command_registration.json")}.
+	 *             If this argument is {@code null}, this file will not be created.
+	 * @return this CommandAPIConfig
+	 */
+	public Impl dispatcherFile(File file) {
+		this.dispatcherFile = file;
+		return instance();
+	}
+
+	public Impl addSkipSenderProxy(String... names) {
+		this.skipSenderProxy.addAll(List.of(names));
+		return instance();
+	}
+
+	public Impl addSkipSenderProxy(List<String> names) {
+		this.skipSenderProxy.addAll(names);
+		return instance();
 	}
 
 	/**
 	 * Initializes the CommandAPI's implementation of an NBT API.
-	 * 
+	 *
 	 * @param <T>                     the type that the NBT compound container class
 	 *                                is
 	 * @param nbtContainerClass       the NBT compound container class. For example,
@@ -114,36 +139,10 @@ public class CommandAPIConfig {
 	 *                                {@code NBTContainer::new}.
 	 * @return this CommandAPIConfig
 	 */
-	public <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass,
-			Function<Object, T> nbtContainerConstructor) {
+	public <T> Impl initializeNBTAPI(Class<T> nbtContainerClass,
+												 Function<Object, T> nbtContainerConstructor) {
 		this.nbtContainerClass = nbtContainerClass;
 		this.nbtContainerConstructor = nbtContainerConstructor;
-		return this;
+		return instance();
 	}
-
-	/**
-	 * Specifies the location for the CommandAPI to store the internal
-	 * representation of Brigadier's command tree.
-	 * 
-	 * @param file a file pointing to where to store Brigadier's JSON command
-	 *             dispatcher, for example
-	 *             {@code new File(getDataFolder(), "command_registration.json")}.
-	 *             If this argument is {@code null}, this file will not be created.
-	 * @return this CommandAPIConfig
-	 */
-	public CommandAPIConfig dispatcherFile(File file) {
-		this.dispatcherFile = file;
-		return this;
-	}
-	
-	/**
-	 * Internal. Do not use.
-	 * @param customNMS the NMS implementation to use instead of any existing implementations
-	 * @return this CommandAPIConfig
-	 */
-	public CommandAPIConfig setCustomNMS(NMS<?> customNMS) {
-		this.customNMS = customNMS;
-		return this;
-	}
-
 }

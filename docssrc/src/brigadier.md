@@ -69,17 +69,17 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
 
 - We also want this predicate to come _after_ `execute if`:
 
-  \\[
+  \begin{gather}
   \texttt{execute}\\\\
   \downarrow\\\\
   \texttt{if}\\\\
   \downarrow\\\\
   \texttt{randomchance <numerator}\texttt{> <denominator}\texttt{>}
-  \\]
+  \end{gather}
   
 - After entering our predicate, we want to route back to `execute` (because the argument after `execute` is `run`, which is used in our example command above):
 
-  \\[
+  \begin{gather}
   \texttt{execute}\\\\
   \downarrow\\\\
   \texttt{if}\\\\
@@ -87,7 +87,7 @@ In this scenario, if we ran this command, we would expect "Hello!" to appear in 
   \texttt{randomchance <numerator}\texttt{> <denominator}\texttt{>}\\\\
   \downarrow\\\\
   \texttt{execute}
-  \\]
+  \end{gather}
 
 -----
 
@@ -98,11 +98,11 @@ Now that we've established what we want, we can finally begin writing the code! 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:declareliteral}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declareliteral}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier1}}
 ```
 
 </div>
@@ -112,11 +112,11 @@ With that completed, we can now create our "argument" to this predicate. To do t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:declarearguments}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declarearguments}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier2}}
 ```
 
 </div>
@@ -126,11 +126,11 @@ Now we're going to get into the very nitty-gritty part - the predicate declarati
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:declareargumentbuilders}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declareargumentbuilders}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier3}}
 ```
 
 </div>
@@ -140,11 +140,11 @@ Now we'll define our predicate. Since this is sort of a "meta-command" (it direc
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:declarefork}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declarefork}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier4}}
 ```
 
 </div>
@@ -154,11 +154,11 @@ Finally, we can now link everything up. We know that `numerator` comes first, **
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:declarerandomchance}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier5}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:declarerandomchance}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier5}}
 ```
 
 </div>
@@ -168,11 +168,11 @@ Finally, we "register" the command. In this case, we're actually just adding the
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:injectintoroot}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier6}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:injectintoroot}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier6}}
 ```
 
 </div>
@@ -186,11 +186,11 @@ So, hopefully that wasn't too confusing! If you're still lost, here's the whole 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:brigadier}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:brigadier7}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:brigadier}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:brigadier7}}
 ```
 
 </div>

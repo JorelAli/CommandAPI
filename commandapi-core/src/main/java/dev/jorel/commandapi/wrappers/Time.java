@@ -20,19 +20,21 @@
  *******************************************************************************/
 package dev.jorel.commandapi.wrappers;
 
+import java.util.Objects;
+
 /**
  * A class that represents time suggestions for the TimeArgument
  */
 public class Time {
 
-	private String time;
+	private String timeString;
 	
 	/**
 	 * Constructs a Time object from a given String
 	 * @param time the String to use 
 	 */
 	private Time(String time) {
-		this.time = time;
+		this.timeString = time;
 	}
 
 	/**
@@ -63,12 +65,27 @@ public class Time {
 	}
 	
 	/**
-	 * Returns the Minecraft argument representation of this Time object
 	 * @return the Minecraft argument representation of this Time object
 	 */
 	@Override
 	public String toString() {
-		return this.time;
+		return this.timeString;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(timeString);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Time other)) {
+			return false;
+		}
+		return Objects.equals(timeString, other.timeString);
 	}
 	
 }

@@ -30,6 +30,7 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
     [ "LOCATION", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a12e62a2ee9d10f3fd710e0f3217e90ce", null ],
     [ "LOCATION_2D", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a92fef4ec30c3ea8b8ee1906baa071bd1", null ],
     [ "LOOT_TABLE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6c31634e42bd1dec9fa3ded4ec443c9a", null ],
+    [ "MAP", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a7e4800b2fd261e74031354a286e67e82", null ],
     [ "MATH_OPERATION", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a6f23a91cb6cb79ee28311816d8cf50a8", null ],
     [ "MULTI_LITERAL", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a4535ee872eb09f7b4b67d58db32aa2f7", null ],
     [ "NAMESPACED_KEY", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ace655a09bccdf8b082e1f461315dce75", null ],

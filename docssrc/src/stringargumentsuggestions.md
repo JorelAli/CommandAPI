@@ -19,11 +19,11 @@ We then implement our warp teleporting command using `replaceSuggestions()` on t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestions1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentSuggestions1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:stringArgumentSuggestions1}}
 ```
 
 </div>
@@ -53,11 +53,11 @@ Let's say we have a simple class to get the friends of a command sender:
 <div class="multi-pre">
 
 ```java,Java
-public {{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_1}}
+public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentSuggestions2_1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:stringArgumentSuggestions2}}
 ```
 
 </div>
@@ -67,11 +67,11 @@ We can then use this to generate our suggested list of friends:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestions2_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentSuggestions2_2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:stringArgumentSuggestions3}}
 ```
 
 </div>
@@ -102,7 +102,7 @@ However, if we redirect execution via the `/execute` command to have the followi
 
 This won't work, because we make use of a redirect:
 
-\\[\texttt{/execute run} \xrightarrow{redirect} \texttt{mycommand arg1 arg2 arg3}\\]
+\\(\texttt{/execute run} \xrightarrow{redirect} \texttt{mycommand arg1 arg2 arg3}\\)
 
 It is not possible to access the `Object[]` of previously declared arguments. **If a command occurs via a redirect, the `Object[]` of previously declared arguments will be null**.
 
@@ -123,11 +123,11 @@ When run, this command will send a message to a target player within the provide
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:ArgumentSuggestionsPrevious}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:stringArgumentSuggestions4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:ArgumentSuggestionsPrevious}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:stringArgumentSuggestions4}}
 ```
 
 </div>

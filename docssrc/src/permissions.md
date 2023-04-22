@@ -30,11 +30,11 @@ Say we created a command `/god` that sets a player as being invulnerable. Since 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:permissions}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:permissions}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions1}}
 ```
 
 </div>
@@ -44,11 +44,11 @@ As stated above, it is possible to assign a permission using a String instead of
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:permissions2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:permissions2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions2}}
 ```
 
 </div>
@@ -85,11 +85,11 @@ We first declare the command as normal. Nothing fancy is going on here:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:permissions3_1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:permissions3_1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions3}}
 ```
 
 </div>
@@ -99,11 +99,11 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:permissions3_2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:permissions3_2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions4}}
 ```
 
 </div>
@@ -117,3 +117,70 @@ Now we declare our command with arguments. We use a `PlayerArgument` and apply t
 > As you can see, there are multiple ways of applying permissions to commands with arguments. In the `/god` command shown above, the permission was applied to the whole command. In the `/kill` command shown above, the permission was applied to the argument.
 >
 > There's not really much difference between the two methods, but I personally would use _argument permissions_ as it has greater control over arguments.
+
+-----
+
+## Child-based permissions
+
+Child-based permissions allow you to group permissions together.
+We achieve this by laying out our permission groups in the `plugin.yml` file which Bukkit registers as valid permissions.
+When the CommandAPI checks if our player has a permission, Bukkit considers if they have the child of a permission as well.
+This not only keeps permissions easier to manage, it also makes your code cleaner and gives you a nice place to lay out all of your permissions,
+detailing what they do and what other permissions inherit them.
+
+### Example - /economy command with argument permissions
+
+For example, say we're registering a command `/economy`:
+
+```mccmd
+/economy                         - shows your own balance                 | economy.self
+/economy <target>                - shows you another players balance      | economy.other
+/economy give  <target> <amount> - gives the target a set amount of money | economy.admin.give
+/economy reset <target> <amount> - resets the targets balance             | economy.admin.reset
+```
+
+We first declare the command as normal. Nothing fancy is going on here:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:permissions5}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:permissions5}}
+```
+
+</div>
+
+In our **plugin.yml** we can also set up our permissions for example...
+
+```yml
+permissions:
+  economy.*:
+    description: Gives the user full access to the economy commands
+    children:
+      economy.other: true
+      economy.admin.*: true
+
+  economy.self:
+    description: Allows the user to view their own balance
+  economy.other:
+    description: Allows the user to another players balance
+    children:
+      economy.self: true
+
+  economy.admin.*:
+    description: Gives the user access to all of the admin commands
+    children:
+      economy.admin.give: true
+      economy.admin.reset: true
+  economy.admin.give:
+    description: Gives the user access to /economy give <target> <amount>
+  economy.admin.reset:
+    description: Gives the user access to /economy reset <target>
+```
+
+This setup of children allows us to give a player less permissions, but have them access more features.
+Since `economy.*` inherits `economy.admin.*` which inherits `economy.admin.give`, a player with the permission `economy.*` will be able to execute `/economy give <target> <amount>` without them directly having the `economy.admin.give` permission node.
+This also works with `economy.other`, if a player has `economy.other` they will **inherit** `economy`.

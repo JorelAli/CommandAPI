@@ -10,26 +10,15 @@ The CommandAPI's documentation is the place to search for anything! In the top l
 
 -----
 
+## Does the CommandAPI support reloading via `/reload`?
+
+Formally, no. If you are encountering issues with `/reload`, consider not using `/reload`. More information about reloading can be found in [Plugin reloading](./reloading.md).
+
+-----
+
 ## Does the CommandAPI support optional arguments?
 
-Currently, no. Adding optional arguments is actually a surprisingly difficult task because of how Brigadier handles "argument conflicts". For example, if I made a command (where arguments in brackets `()` are optional):
-
-```mccmd
-/mycommand (string) (integer)
-```
-
-We could then run any of the following:
-
-```mccmd
-/mycommand
-/mycommand hello
-/mycommand hello 10
-/mycommand 10
-```
-
-The issue with this example is that `/mycommand 10` would not work as intended, because Brigadier treats the `10` argument as a valid string, so uses it as a string instead of as an integer.
-
-The CommandAPI's optional arguments are a feature that it will support in the future, as stated in the [project roadmap](https://github.com/JorelAli/CommandAPI#future-project-plans--timeline)
+As of 9.0.0, yes! Please view information on optional arguments in [Optional arguments](./optional_arguments.md).
 
 -----
 
@@ -43,7 +32,7 @@ Not yet. The CommandAPI's annotation system was actually originally a little tes
 
 No. This is a Brigadier limitation.
 
-> **Proof that this is a limitation of Brigadier**
+> **Technical reason that this is a limitation of Brigadier**
 >
 > Brigadier's code has two classes for arguments, [`LiteralCommandNode`](https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/tree/LiteralCommandNode.java) and [`ArgumentCommandNode`](https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/tree/ArgumentCommandNode.java). The `ArgumentCommandNode` class contains a field `customSuggestions` of type `SuggestionProvider<S>` which is used to handle suggestions - this field is not present inside `LiteralCommandNode`, meaning that LiteralArguments cannot provide suggestions to users.
 >
@@ -64,7 +53,7 @@ new CommandAPICommand("mycommand")
     .register();
 ```
 
-\\[\downarrow\\]
+$$\downarrow$$
 
 ```java
 new CommandAPICommand("mycommand")

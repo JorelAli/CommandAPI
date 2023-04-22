@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.8.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -87,6 +87,8 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_st
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">dev.jorel.commandapi.StringTooltip Class Reference</div></div>
 </div><!--header-->
@@ -102,7 +104,8 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_st
  <div class="center">
   <img src="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.png" usemap="#dev.jorel.commandapi.StringTooltip_map" alt=""/>
   <map id="dev.jorel.commandapi.StringTooltip_map" name="dev.jorel.commandapi.StringTooltip_map">
-<area href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di..." alt="dev.jorel.commandapi.IStringTooltip" shape="rect" coords="0,0,213,24"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html" title="A string-based tooltip interface that includes a string suggestion and a formatted tooltip text to di..." alt="dev.jorel.commandapi.IStringTooltip" shape="rect" coords="0,0,243,24"/>
+<area href="classdev_1_1jorel_1_1commandapi_1_1_bukkit_string_tooltip.html" alt="dev.jorel.commandapi.BukkitStringTooltip" shape="rect" coords="0,112,243,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -117,21 +120,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1183715f87c70def147d25e33bad16e0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a1183715f87c70def147d25e33bad16e0">of</a> (String suggestion, String tooltip)</td></tr>
-<tr class="memdesc:a1183715f87c70def147d25e33bad16e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a string tooltip.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a1183715f87c70def147d25e33bad16e0">More...</a><br /></td></tr>
-<tr class="separator:a1183715f87c70def147d25e33bad16e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0826cc39d0625e478c2c25934e632dbb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a0826cc39d0625e478c2c25934e632dbb">ofString</a> (String suggestion, String tooltip)</td></tr>
 <tr class="memdesc:a0826cc39d0625e478c2c25934e632dbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a string tooltip.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a0826cc39d0625e478c2c25934e632dbb">More...</a><br /></td></tr>
 <tr class="separator:a0826cc39d0625e478c2c25934e632dbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afde0d93c86a74beb4a7d38ca98d3f9cc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#afde0d93c86a74beb4a7d38ca98d3f9cc">ofMessage</a> (String suggestion, <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a> tooltip)</td></tr>
 <tr class="memdesc:afde0d93c86a74beb4a7d38ca98d3f9cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a formatted tooltip.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#afde0d93c86a74beb4a7d38ca98d3f9cc">More...</a><br /></td></tr>
 <tr class="separator:afde0d93c86a74beb4a7d38ca98d3f9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1c3ebded6e82c9da9c2b282be5a3488"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#af1c3ebded6e82c9da9c2b282be5a3488">ofBaseComponents</a> (String suggestion, BaseComponent... tooltip)</td></tr>
-<tr class="memdesc:af1c3ebded6e82c9da9c2b282be5a3488"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a formatted bungee text component tooltip.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#af1c3ebded6e82c9da9c2b282be5a3488">More...</a><br /></td></tr>
-<tr class="separator:af1c3ebded6e82c9da9c2b282be5a3488"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62d57ae7afed2e9eddeff2b57aeeaeaa"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a62d57ae7afed2e9eddeff2b57aeeaeaa">ofAdventureComponent</a> (String suggestion, Component tooltip)</td></tr>
-<tr class="memdesc:a62d57ae7afed2e9eddeff2b57aeeaeaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a formatted adventure text component tooltip.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a62d57ae7afed2e9eddeff2b57aeeaeaa">More...</a><br /></td></tr>
-<tr class="separator:a62d57ae7afed2e9eddeff2b57aeeaeaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a561e104ee768ac9c672227188aa738c8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a561e104ee768ac9c672227188aa738c8">none</a> (String suggestion)</td></tr>
 <tr class="memdesc:a561e104ee768ac9c672227188aa738c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and no tooltip.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a561e104ee768ac9c672227188aa738c8">More...</a><br /></td></tr>
 <tr class="separator:a561e104ee768ac9c672227188aa738c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,37 +135,43 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a41872811b4f1fc2f78c208606cd77adc"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a41872811b4f1fc2f78c208606cd77adc">none</a> (Collection&lt; String &gt; suggestions)</td></tr>
 <tr class="memdesc:a41872811b4f1fc2f78c208606cd77adc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and no tooltips.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a41872811b4f1fc2f78c208606cd77adc">More...</a><br /></td></tr>
 <tr class="separator:a41872811b4f1fc2f78c208606cd77adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d99ff21604fae45f5764071b0ac5090"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a2d99ff21604fae45f5764071b0ac5090">generateStrings</a> (Function&lt; String, String &gt; tooltipGenerator, String... suggestions)</td></tr>
-<tr class="memdesc:a2d99ff21604fae45f5764071b0ac5090"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from an array of suggestions, and a function which generates a string tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a2d99ff21604fae45f5764071b0ac5090">More...</a><br /></td></tr>
-<tr class="separator:a2d99ff21604fae45f5764071b0ac5090"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a118672345ad675fa860d9c3ef9286f72"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a118672345ad675fa860d9c3ef9286f72">generateStrings</a> (Function&lt; String, String &gt; tooltipGenerator, Collection&lt; String &gt; suggestions)</td></tr>
-<tr class="memdesc:a118672345ad675fa860d9c3ef9286f72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and a function which generates a string tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a118672345ad675fa860d9c3ef9286f72">More...</a><br /></td></tr>
-<tr class="separator:a118672345ad675fa860d9c3ef9286f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab70a1cc719178413b700ca6e558e77a5"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ab70a1cc719178413b700ca6e558e77a5">generateStrings</a> (UnaryOperator&lt; String &gt; tooltipGenerator, String... suggestions)</td></tr>
+<tr class="memdesc:ab70a1cc719178413b700ca6e558e77a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from an array of suggestions, and a function which generates a string tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ab70a1cc719178413b700ca6e558e77a5">More...</a><br /></td></tr>
+<tr class="separator:ab70a1cc719178413b700ca6e558e77a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac691545405cb9cad426d71f06af868dd"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ac691545405cb9cad426d71f06af868dd">generateStrings</a> (UnaryOperator&lt; String &gt; tooltipGenerator, Collection&lt; String &gt; suggestions)</td></tr>
+<tr class="memdesc:ac691545405cb9cad426d71f06af868dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and a function which generates a string tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ac691545405cb9cad426d71f06af868dd">More...</a><br /></td></tr>
+<tr class="separator:ac691545405cb9cad426d71f06af868dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4e298ad1f9f3b3b3429e991a27aff40"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#aa4e298ad1f9f3b3b3429e991a27aff40">generateMessages</a> (Function&lt; String, <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a> &gt; tooltipGenerator, String... suggestions)</td></tr>
 <tr class="memdesc:aa4e298ad1f9f3b3b3429e991a27aff40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from an array of suggestions, and a function which generates a formatted tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#aa4e298ad1f9f3b3b3429e991a27aff40">More...</a><br /></td></tr>
 <tr class="separator:aa4e298ad1f9f3b3b3429e991a27aff40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77c2960aa72b7cfc3cbca57ed937bdb8"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a77c2960aa72b7cfc3cbca57ed937bdb8">generateMessages</a> (Function&lt; String, <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a> &gt; tooltipGenerator, Collection&lt; String &gt; suggestions)</td></tr>
 <tr class="memdesc:a77c2960aa72b7cfc3cbca57ed937bdb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and a function which generates a formatted tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a77c2960aa72b7cfc3cbca57ed937bdb8">More...</a><br /></td></tr>
 <tr class="separator:a77c2960aa72b7cfc3cbca57ed937bdb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c782847e9682747d6344d358cd7b5f7"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a8c782847e9682747d6344d358cd7b5f7">generateBaseComponents</a> (Function&lt; String, BaseComponent[]&gt; tooltipGenerator, String... suggestions)</td></tr>
-<tr class="memdesc:a8c782847e9682747d6344d358cd7b5f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from an array of suggestions, and a function which generates a formatted tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a8c782847e9682747d6344d358cd7b5f7">More...</a><br /></td></tr>
-<tr class="separator:a8c782847e9682747d6344d358cd7b5f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0e24602323ce9aa05bf7ad9967ffa30"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ad0e24602323ce9aa05bf7ad9967ffa30">generateBaseComponents</a> (Function&lt; String, BaseComponent[]&gt; tooltipGenerator, Collection&lt; String &gt; suggestions)</td></tr>
-<tr class="memdesc:ad0e24602323ce9aa05bf7ad9967ffa30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and a function which generates a formatted tooltip for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ad0e24602323ce9aa05bf7ad9967ffa30">More...</a><br /></td></tr>
-<tr class="separator:ad0e24602323ce9aa05bf7ad9967ffa30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba30e8b0247d9002b907e290b5ef272a"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#aba30e8b0247d9002b907e290b5ef272a">generateAdventureComponents</a> (Function&lt; String, Component &gt; tooltipGenerator, String... suggestions)</td></tr>
-<tr class="memdesc:aba30e8b0247d9002b907e290b5ef272a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from an array of suggestions, and a function which generates a tooltip formatted as an adventure <code><a class="el" href="">Component</a></code> for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#aba30e8b0247d9002b907e290b5ef272a">More...</a><br /></td></tr>
-<tr class="separator:aba30e8b0247d9002b907e290b5ef272a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17a19047e3a872c3cc34bd655cb4866a"><td class="memItemLeft" align="right" valign="top">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a17a19047e3a872c3cc34bd655cb4866a">generateAdventureComponents</a> (Function&lt; String, Component &gt; tooltipGenerator, Collection&lt; String &gt; suggestions)</td></tr>
-<tr class="memdesc:a17a19047e3a872c3cc34bd655cb4866a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and a function which generates a tooltip formatted as an adventure <code><a class="el" href="">Component</a></code> for each suggestion.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a17a19047e3a872c3cc34bd655cb4866a">More...</a><br /></td></tr>
-<tr class="separator:a17a19047e3a872c3cc34bd655cb4866a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a9323180f3960ac9b1992d07815bc85b6"><td class="memItemLeft" align="right" valign="top"><a id="a9323180f3960ac9b1992d07815bc85b6" name="a9323180f3960ac9b1992d07815bc85b6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>StringTooltip</b> (String suggestion, <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a> tooltip)</td></tr>
+<tr class="separator:a9323180f3960ac9b1992d07815bc85b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:a2d58a57739a1d94aeacb525f97670278"><td class="memItemLeft" align="right" valign="top">static&lt; T &gt; Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a2d58a57739a1d94aeacb525f97670278">generate</a> (Function&lt; String, T &gt; tooltipGenerator, BiFunction&lt; String, T, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; tooltipWrapper, String... suggestions)</td></tr>
+<tr class="memdesc:a2d58a57739a1d94aeacb525f97670278"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal base method for the other generation types.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a2d58a57739a1d94aeacb525f97670278">More...</a><br /></td></tr>
+<tr class="separator:a2d58a57739a1d94aeacb525f97670278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d04961516c781d8e0a0558a98b0b006"><td class="memItemLeft" align="right" valign="top">static&lt; T &gt; Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a1d04961516c781d8e0a0558a98b0b006">generate</a> (Function&lt; String, T &gt; tooltipGenerator, BiFunction&lt; String, T, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; tooltipWrapper, Collection&lt; String &gt; suggestions)</td></tr>
+<tr class="memdesc:a1d04961516c781d8e0a0558a98b0b006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal base method for the other generation types.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a1d04961516c781d8e0a0558a98b0b006">More...</a><br /></td></tr>
+<tr class="separator:a1d04961516c781d8e0a0558a98b0b006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7f25286ecc3fb3161130957d528e3fc"><td class="memItemLeft" align="right" valign="top">static&lt; T &gt; Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ab7f25286ecc3fb3161130957d528e3fc">generate</a> (Function&lt; String, T &gt; tooltipGenerator, BiFunction&lt; String, T, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; tooltipWrapper, Stream&lt; String &gt; suggestions)</td></tr>
+<tr class="memdesc:ab7f25286ecc3fb3161130957d528e3fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal base method for the other generation types.  <a href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#ab7f25286ecc3fb3161130957d528e3fc">More...</a><br /></td></tr>
+<tr class="separator:ab7f25286ecc3fb3161130957d528e3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Represents a suggestion for an argument with a hover tooltip text for that suggestion. </p>
 <p >This class is to be used with normal suggestion overrides, via the <code>Argument.overrideSuggestionsT</code> method. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a17a19047e3a872c3cc34bd655cb4866a" name="a17a19047e3a872c3cc34bd655cb4866a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17a19047e3a872c3cc34bd655cb4866a">&#9670;&nbsp;</a></span>generateAdventureComponents() <span class="overload">[1/2]</span></h2>
+<a id="a1d04961516c781d8e0a0558a98b0b006" name="a1d04961516c781d8e0a0558a98b0b006"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d04961516c781d8e0a0558a98b0b006">&#9670;&nbsp;</a></span>generate() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -180,10 +180,16 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generateAdventureComponents </td>
+          <td class="memname">static&lt; T &gt; Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generate </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; String, Component &gt;&#160;</td>
+          <td class="paramtype">Function&lt; String, T &gt;&#160;</td>
           <td class="paramname"><em>tooltipGenerator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BiFunction&lt; String, T, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td>
+          <td class="paramname"><em>tooltipWrapper</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -199,25 +205,27 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and a function which generates a tooltip formatted as an adventure <code><a class="el" href="">Component</a></code> for each suggestion. </p>
+<p>Internal base method for the other generation types. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">tooltipGenerator</td><td>function which returns a formatted tooltip for the suggestion, an adventure <code><a class="el" href="">Component</a></code> </td></tr>
-    <tr><td class="paramname">suggestions</td><td>collection of suggestions to provide to the user</td></tr>
+    <tr><td class="paramname">&lt;T&gt;</td><td>the type of the tooltip </td></tr>
+    <tr><td class="paramname">tooltipGenerator</td><td>tooltip generation function </td></tr>
+    <tr><td class="paramname">tooltipWrapper</td><td>function which wraps suggestion and tooltip into a <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> object </td></tr>
+    <tr><td class="paramname">suggestions</td><td>collection of suggestions to provide to the user </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from the provided suggestions, with the generated formatted tooltips </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from the provided suggestion, wrapped using the above functions </dd></dl>
 
 </div>
 </div>
-<a id="aba30e8b0247d9002b907e290b5ef272a" name="aba30e8b0247d9002b907e290b5ef272a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba30e8b0247d9002b907e290b5ef272a">&#9670;&nbsp;</a></span>generateAdventureComponents() <span class="overload">[2/2]</span></h2>
+<a id="ab7f25286ecc3fb3161130957d528e3fc" name="ab7f25286ecc3fb3161130957d528e3fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7f25286ecc3fb3161130957d528e3fc">&#9670;&nbsp;</a></span>generate() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,10 +234,70 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generateAdventureComponents </td>
+          <td class="memname">static&lt; T &gt; Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generate </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; String, Component &gt;&#160;</td>
+          <td class="paramtype">Function&lt; String, T &gt;&#160;</td>
           <td class="paramname"><em>tooltipGenerator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BiFunction&lt; String, T, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td>
+          <td class="paramname"><em>tooltipWrapper</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Stream&lt; String &gt;&#160;</td>
+          <td class="paramname"><em>suggestions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Internal base method for the other generation types. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;T&gt;</td><td>the type of the tooltip </td></tr>
+    <tr><td class="paramname">tooltipGenerator</td><td>tooltip generation function </td></tr>
+    <tr><td class="paramname">tooltipWrapper</td><td>function which wraps suggestion and tooltip into a <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> object </td></tr>
+    <tr><td class="paramname">suggestions</td><td>stream of suggestions to provide to the user </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from the provided suggestion, wrapped using the above functions </dd></dl>
+
+</div>
+</div>
+<a id="a2d58a57739a1d94aeacb525f97670278" name="a2d58a57739a1d94aeacb525f97670278"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d58a57739a1d94aeacb525f97670278">&#9670;&nbsp;</a></span>generate() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static&lt; T &gt; Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generate </td>
+          <td>(</td>
+          <td class="paramtype">Function&lt; String, T &gt;&#160;</td>
+          <td class="paramname"><em>tooltipGenerator</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BiFunction&lt; String, T, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt;&#160;</td>
+          <td class="paramname"><em>tooltipWrapper</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -245,112 +313,22 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from an array of suggestions, and a function which generates a tooltip formatted as an adventure <code><a class="el" href="">Component</a></code> for each suggestion. </p>
+<p>Internal base method for the other generation types. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">tooltipGenerator</td><td>function which returns a formatted tooltip for the suggestion, an adventure <code><a class="el" href="">Component</a></code> </td></tr>
-    <tr><td class="paramname">suggestions</td><td>array of suggestions to provide to the user</td></tr>
+    <tr><td class="paramname">&lt;T&gt;</td><td>the type of the tooltip </td></tr>
+    <tr><td class="paramname">tooltipGenerator</td><td>tooltip generation function </td></tr>
+    <tr><td class="paramname">tooltipWrapper</td><td>function which wraps suggestion and tooltip into a <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> object </td></tr>
+    <tr><td class="paramname">suggestions</td><td>array of suggestions to provide to the user </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from the provided suggestions, with the generated formatted tooltips </dd></dl>
-
-</div>
-</div>
-<a id="ad0e24602323ce9aa05bf7ad9967ffa30" name="ad0e24602323ce9aa05bf7ad9967ffa30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0e24602323ce9aa05bf7ad9967ffa30">&#9670;&nbsp;</a></span>generateBaseComponents() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generateBaseComponents </td>
-          <td>(</td>
-          <td class="paramtype">Function&lt; String, BaseComponent[]&gt;&#160;</td>
-          <td class="paramname"><em>tooltipGenerator</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Collection&lt; String &gt;&#160;</td>
-          <td class="paramname"><em>suggestions</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from a collection of suggestions, and a function which generates a formatted tooltip for each suggestion. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">tooltipGenerator</td><td>function which returns a formatted tooltip for the suggestion, an array of <code><a class="el" href="">BaseComponent</a></code>s </td></tr>
-    <tr><td class="paramname">suggestions</td><td>collection of suggestions to provide to the user</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from the provided suggestions, with the generated formatted tooltips </dd></dl>
-
-</div>
-</div>
-<a id="a8c782847e9682747d6344d358cd7b5f7" name="a8c782847e9682747d6344d358cd7b5f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c782847e9682747d6344d358cd7b5f7">&#9670;&nbsp;</a></span>generateBaseComponents() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generateBaseComponents </td>
-          <td>(</td>
-          <td class="paramtype">Function&lt; String, BaseComponent[]&gt;&#160;</td>
-          <td class="paramname"><em>tooltipGenerator</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">String...&#160;</td>
-          <td class="paramname"><em>suggestions</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructs a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from an array of suggestions, and a function which generates a formatted tooltip for each suggestion. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">tooltipGenerator</td><td>function which returns a formatted tooltip for the suggestion, an array of <code><a class="el" href="">BaseComponent</a></code>s </td></tr>
-    <tr><td class="paramname">suggestions</td><td>array of suggestions to provide to the user</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from the provided suggestions, with the generated formatted tooltips </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a collection of <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></code> objects from the provided suggestion, wrapped using the above functions </dd></dl>
 
 </div>
 </div>
@@ -446,8 +424,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a118672345ad675fa860d9c3ef9286f72" name="a118672345ad675fa860d9c3ef9286f72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a118672345ad675fa860d9c3ef9286f72">&#9670;&nbsp;</a></span>generateStrings() <span class="overload">[1/2]</span></h2>
+<a id="ac691545405cb9cad426d71f06af868dd" name="ac691545405cb9cad426d71f06af868dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac691545405cb9cad426d71f06af868dd">&#9670;&nbsp;</a></span>generateStrings() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -458,7 +436,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generateStrings </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; String, String &gt;&#160;</td>
+          <td class="paramtype">UnaryOperator&lt; String &gt;&#160;</td>
           <td class="paramname"><em>tooltipGenerator</em>, </td>
         </tr>
         <tr>
@@ -492,8 +470,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2d99ff21604fae45f5764071b0ac5090" name="a2d99ff21604fae45f5764071b0ac5090"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d99ff21604fae45f5764071b0ac5090">&#9670;&nbsp;</a></span>generateStrings() <span class="overload">[2/2]</span></h2>
+<a id="ab70a1cc719178413b700ca6e558e77a5" name="ab70a1cc719178413b700ca6e558e77a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab70a1cc719178413b700ca6e558e77a5">&#9670;&nbsp;</a></span>generateStrings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -504,7 +482,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static Collection&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> &gt; dev.jorel.commandapi.StringTooltip.generateStrings </td>
           <td>(</td>
-          <td class="paramtype">Function&lt; String, String &gt;&#160;</td>
+          <td class="paramtype">UnaryOperator&lt; String &gt;&#160;</td>
           <td class="paramname"><em>tooltipGenerator</em>, </td>
         </tr>
         <tr>
@@ -687,145 +665,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1183715f87c70def147d25e33bad16e0" name="a1183715f87c70def147d25e33bad16e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1183715f87c70def147d25e33bad16e0">&#9670;&nbsp;</a></span>of()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> dev.jorel.commandapi.StringTooltip.of </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>suggestion</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>tooltip</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a string tooltip. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">suggestion</td><td>the suggestion to provide to the user </td></tr>
-    <tr><td class="paramname">tooltip</td><td>the string tooltip to show to the user when they hover over the suggestion </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> representing this suggestion and tooltip</dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated:</a></b></dt><dd>please use <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html#a0826cc39d0625e478c2c25934e632dbb">StringTooltip#ofString(String, String)</a></code> instead </dd></dl>
-
-</div>
-</div>
-<a id="a62d57ae7afed2e9eddeff2b57aeeaeaa" name="a62d57ae7afed2e9eddeff2b57aeeaeaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62d57ae7afed2e9eddeff2b57aeeaeaa">&#9670;&nbsp;</a></span>ofAdventureComponent()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> dev.jorel.commandapi.StringTooltip.ofAdventureComponent </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>suggestion</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Component&#160;</td>
-          <td class="paramname"><em>tooltip</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a formatted adventure text component tooltip. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">suggestion</td><td>the suggestion to provide to the user </td></tr>
-    <tr><td class="paramname">tooltip</td><td>the formatted tooltip to show to the user when they hover over the suggestion </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> representing this suggestion and tooltip </dd></dl>
-
-</div>
-</div>
-<a id="af1c3ebded6e82c9da9c2b282be5a3488" name="af1c3ebded6e82c9da9c2b282be5a3488"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1c3ebded6e82c9da9c2b282be5a3488">&#9670;&nbsp;</a></span>ofBaseComponents()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a> dev.jorel.commandapi.StringTooltip.ofBaseComponents </td>
-          <td>(</td>
-          <td class="paramtype">String&#160;</td>
-          <td class="paramname"><em>suggestion</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">BaseComponent...&#160;</td>
-          <td class="paramname"><em>tooltip</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructs a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> with a suggestion and a formatted bungee text component tooltip. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">suggestion</td><td>the suggestion to provide to the user </td></tr>
-    <tr><td class="paramname">tooltip</td><td>the formatted tooltip to show to the user when they hover over the suggestion </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html" title="Represents a suggestion for an argument with a hover tooltip text for that suggestion.">StringTooltip</a> representing this suggestion and tooltip </dd></dl>
-
-</div>
-</div>
 <a id="afde0d93c86a74beb4a7d38ca98d3f9cc" name="afde0d93c86a74beb4a7d38ca98d3f9cc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afde0d93c86a74beb4a7d38ca98d3f9cc">&#9670;&nbsp;</a></span>ofMessage()</h2>
 
@@ -924,7 +763,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html">StringTooltip</a></li>
-    <li class="footer">Generated on Tue Mar 14 2023 21:10:49 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sat Apr 22 2023 21:23:57 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

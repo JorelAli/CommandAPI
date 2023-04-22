@@ -27,11 +27,15 @@ Say we want a command that returns a random number as a result. This can then be
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:resultingcommandexecutor}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingCommandExecutors1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:resultingcommandexecutor}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingCommandExecutors1}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:resultingCommandExecutors1}}
 ```
 
 </div>
@@ -58,11 +62,15 @@ Since we're declaring commands that are to be used in `/execute`, we must ensure
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:resultingcommandexecutor2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingCommandExecutors2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:resultingcommandexecutor2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingCommandExecutors2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:resultingCommandExecutors2}}
 ```
 
 </div>
@@ -72,11 +80,15 @@ Now we write our implementation for `/givereward`. In this example, we use the `
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:resultingcommandexecutor3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:resultingCommandExecutors3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:resultingcommandexecutor3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:resultingCommandExecutors3}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:resultingCommandExecutors3}}
 ```
 
 </div>

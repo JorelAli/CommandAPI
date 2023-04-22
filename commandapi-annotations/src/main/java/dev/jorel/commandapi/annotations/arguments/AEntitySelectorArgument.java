@@ -25,24 +25,41 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import dev.jorel.commandapi.arguments.EntitySelector;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 
-/**
- * Annotation equivalent of the {@link EntitySelectorArgument}
- */
-@Primitive({ "java.util.Collection<org.bukkit.entity.Entity>", // MANY_ENTITIES
-		"java.util.Collection<org.bukkit.entity.Player>", // MANY_PLAYERS
-		"org.bukkit.entity.Entity", // ONE_ENTITY
-		"org.bukkit.entity.Player" // ONE_PLAYER
-})
-@Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AEntitySelectorArgument {
+public interface AEntitySelectorArgument {
+
+	/**
+	 * Annotation equivalent of the {@link EntitySelectorArgument} for one entity
+	 */
+	@Primitive("org.bukkit.entity.Entity")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target(ElementType.PARAMETER)
+	public @interface OneEntity { }
 	
 	/**
-	 * @return the entity selector for this argument
+	 * Annotation equivalent of the {@link EntitySelectorArgument} for one player
 	 */
-	EntitySelector value() default EntitySelector.ONE_ENTITY;
+	@Primitive("org.bukkit.entity.Player")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target(ElementType.PARAMETER)
+	public @interface OnePlayer { }
+	
+	/**
+	 * Annotation equivalent of the {@link EntitySelectorArgument} for many entities
+	 */
+	@Primitive("java.util.Collection<org.bukkit.entity.Entity>")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target(ElementType.PARAMETER)
+	public @interface ManyEntities { }
+	
+	/**
+	 * Annotation equivalent of the {@link EntitySelectorArgument} for many players
+	 */
+	@Primitive("java.util.Collection<org.bukkit.entity.Player>")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target(ElementType.PARAMETER)
+	public @interface ManyPlayers { }
+
 	
 }

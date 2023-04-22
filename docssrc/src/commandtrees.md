@@ -37,7 +37,7 @@ new CommandAPICommand("sayhi")
     .register();
 ```
 
-\\[\downarrow\\]
+$$\downarrow$$
 
 ```java
 new CommandTree("sayhi")
@@ -67,11 +67,11 @@ We can do this by adding a `PlayerArgument` to our command. As described above, 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:CommandTree_sayhi1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandTrees1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:CommandTree_sayhi1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandTrees1}}
 ```
 
 </div>
@@ -102,11 +102,11 @@ Say we wanted to create a plugin to let a user edit signs. We have a single comm
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-core/src/test/java/Examples.java:CommandTree_signedit}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandTrees2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-core/src/test/kotlin/Examples.kt:CommandTree_signedit}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandTrees2}}
 ```
 
 </div>
