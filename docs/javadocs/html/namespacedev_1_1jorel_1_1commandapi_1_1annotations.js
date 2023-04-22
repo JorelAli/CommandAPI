@@ -15,9 +15,13 @@ var namespacedev_1_1jorel_1_1commandapi_1_1annotations =
       [ "AChatComponentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_chat_component_argument.html", null ],
       [ "ADoubleArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_double_argument.html", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_double_argument" ],
       [ "AEnchantmentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_enchantment_argument.html", null ],
-      [ "AEntitySelectorArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument.html", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument" ],
+      [ "AEntitySelectorArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument.html", [
+        [ "ManyEntities", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_many_entities.html", null ],
+        [ "ManyPlayers", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_many_players.html", null ],
+        [ "OneEntity", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_one_entity.html", null ],
+        [ "OnePlayer", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_one_player.html", null ]
+      ] ],
       [ "AEntityTypeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_type_argument.html", null ],
-      [ "AEnvironmentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_environment_argument.html", null ],
       [ "AFloatArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_argument.html", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_argument" ],
       [ "AFloatRangeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_float_range_argument.html", null ],
       [ "AFunctionArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_function_argument.html", null ],
@@ -44,7 +48,10 @@ var namespacedev_1_1jorel_1_1commandapi_1_1annotations =
       [ "ARecipeArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_recipe_argument.html", null ],
       [ "ARotationArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_rotation_argument.html", null ],
       [ "AScoreboardSlotArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_scoreboard_slot_argument.html", null ],
-      [ "AScoreHolderArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument.html", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument" ],
+      [ "AScoreHolderArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument.html", [
+        [ "Multiple", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument_1_1_multiple.html", null ],
+        [ "Single", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument_1_1_single.html", null ]
+      ] ],
       [ "ASoundArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_sound_argument.html", null ],
       [ "AStringArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_string_argument.html", null ],
       [ "ATeamArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_team_argument.html", null ],

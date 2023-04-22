@@ -10,7 +10,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1wrappers =
     [ "PreviewableFunction", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html", null ],
     [ "PreviewLegacy", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_preview_legacy.html", null ],
     [ "Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation" ],
-    [ "ScoreboardSlot", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot" ],
+    [ "ScoreboardSlot", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot" ],
     [ "SimpleFunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_simple_function_wrapper" ],
     [ "Time", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time.html", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time" ],
     [ "CommandResult", "namespacedev_1_1jorel_1_1commandapi_1_1wrappers.html#a3e22f59d9d40595d7733a203f285aa18", null ],
