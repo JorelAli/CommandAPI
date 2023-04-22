@@ -28,6 +28,7 @@
 - <img width="20px" src="https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/discord-512.png"></img> [Discord](https://discord.gg/G4SzSxZ)
 - <img width="20px" src="https://static.spigotmc.org/img/spigot.png"></img> [Spigot page](https://www.spigotmc.org/resources/commandapi.62353/)
 - <img width="20px" src="https://i.imgur.com/o104U27.png"></img> [Modrinth page](https://modrinth.com/plugin/commandapi)
+- <img width="20px" src="https://i.imgur.com/QJnHi37.png"></img> [Hangar page](https://hangar.papermc.io/Skepter/CommandAPI)
 
 **Downloads & Documentation:**
 
