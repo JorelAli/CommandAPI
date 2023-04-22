@@ -367,7 +367,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
     <tbody>
         <tr>
             <td valign="top"><b>9.0.0</b></td>
-            <td valign="top">??? 2023</td>
+            <td valign="top">April 2023</td>
             <td valign="top">
                 <b>⚠️ This version is incompatible with any plugin that used the CommandAPI version 8.X.X or below! (See documentation for more information)</b><br>
                 <b>New features:</b>
@@ -381,6 +381,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>https://github.com/JorelAli/CommandAPI/pull/391 Made the CommandAPI only complain about commands registered in a <code>plugin.yml</code> if this <code>plugin.yml</code> belongs to the plugin calling the CommandAPI</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/422 Added a way to access the raw command a player typed from the executor</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/431 Added a way to access more info to construct lists for the <code>ListArgumentBuilder</code></li>
+                    <li>Added support for sidebar team colors using an enum for <code>ScoreboardSlot</code></li>
                 </ul>
                 <b>Kotlin DSL changes:</b>
                 <ul>
