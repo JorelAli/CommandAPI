@@ -140,7 +140,7 @@ We want to create a `/give` command with the following syntax:
 /optionalArgument give <item> <amount>
 ```
 
-For both DSL variants you need to set the `optional` value to `true`:
+To declare an argument as optional you need to set the `optional` value to `true`:
 
 <div class="multi-pre">
 
