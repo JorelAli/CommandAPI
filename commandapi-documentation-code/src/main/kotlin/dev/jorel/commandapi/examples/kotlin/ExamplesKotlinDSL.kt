@@ -998,14 +998,13 @@ commandAPICommand("commandRequirement", {sender: CommandSender -> sender.isOp}) 
 commandTree("optionalArgument") {
     literalArgument("give") {
         itemStackArgument("item") {
-            playerExecutor { player, args -> // This will let you execute "/optionalArgument give minecraft:stick"
-                val itemStack: ItemStack = args[0] as ItemStack
-                player.inventory.addItem(itemStack)
-            }
-            integerArgument("amount") {
-                playerExecutor { player, args -> // This will let you execute "/optionalArgument give minecraft:stick 5"
+            integerArgument("amount", optional = true) {
+                playerExecutor { player, args ->
+                    // This command will let you execute:
+                    // "/optionalArgument give minecraft:stick"
+                    // "/optionalArgument give minecraft:stick 5"
                     val itemStack: ItemStack = args[0] as ItemStack
-                    val amount: Int = args[1] as Int
+                    val amount: Int = args.getOrDefault("amount", 1) as Int
                     itemStack.amount = amount
                     player.inventory.addItem(itemStack)
                 }
@@ -1019,7 +1018,7 @@ commandTree("optionalArgument") {
 commandAPICommand("optionalArgument") {
     literalArgument("give")
     itemStackArgument("item")
-    integerArgument("amount", optional = true) // This sets the argument as optional, technically, the "optional =" is not necessary
+    integerArgument("amount", optional = true) // This sets the argument as optional
     playerExecutor { player, args ->
         // This command will let you execute:
         // "/optionalArgument give minecraft:stick"
