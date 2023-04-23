@@ -6,3 +6,6 @@ indent_size = 4
 
 [docssrc/**]
 indent_style = space
+
+[commandapi-documentation-code/**{.java,.kt}]
+indent_style = space
