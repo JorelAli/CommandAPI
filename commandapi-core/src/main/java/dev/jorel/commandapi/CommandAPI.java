@@ -61,6 +61,7 @@ public final class CommandAPI {
 	static InternalConfig config;
 	static Logger logger;
 	private static boolean loaded;
+	private static boolean isFoliaServer;
 
 	/**
 	 * Returns whether the CommandAPI is currently loaded. This should be true when
@@ -106,6 +107,7 @@ public final class CommandAPI {
 		CommandAPI.config = null;
 		CommandAPI.logger = null;
 		CommandAPI.loaded = false;
+		CommandAPI.isFoliaServer = false;
 
 		CommandAPIHandler.onDisable();
 	}
@@ -192,14 +194,15 @@ public final class CommandAPI {
 	 */
 	public static void onEnable(Plugin plugin) {
 		// Prevent command registration after server has loaded
-		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+		SchedulerUtils.executeDelayed(() -> {
 			canRegister = false;
 
 			// Sort out permissions after the server has finished registering them all
 			CommandAPIHandler.getInstance().fixPermissions();
+			// Datapacks dont work in Folia by the looks of it
 			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
 			CommandAPIHandler.getInstance().updateHelpForCommands();
-		}, 0L);
+		}, plugin, 0L);
 
 		// (Re)send command graph packet to players when they join
 		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
@@ -367,5 +370,14 @@ public final class CommandAPI {
 	 */
 	public static List<RegisteredCommand> getRegisteredCommands() {
 		return Collections.unmodifiableList(CommandAPIHandler.getInstance().registeredCommands);
+	}
+
+	public static boolean isFoliaServer() {
+		try {
+			Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler");
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
 	}
 }
