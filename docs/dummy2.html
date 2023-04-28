@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My Single Page App</title>
+</head>
+
+<body>
+    <iframe src="10.0.0/html/intro.html" width="100%" height="600px" frameborder="0"></iframe>
+
+    <script>
+        // Listen for the iframe's "load" event
+        var iframe = document.querySelector('iframe[src="10.0.0/html/intro.html"]');
+        iframe.addEventListener('load', function() {
+        // Send a message to the iframe
+        iframe.contentWindow.postMessage('updateExternalLinks', '*');
+        });
+        
+        // Listen for messages from the iframe
+        window.addEventListener('message', function(event) {
+        if (event.data === 'externalLinksUpdated') {
+            // External links in the iframe have been updated
+            console.log('External links in the iframe have been updated');
+        }
+        });
+    </script>
+
+</body>
+
+</html>

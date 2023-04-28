@@ -85,6 +85,24 @@
             html.classList.add('js');
         </script>
 
+        <!-- iframe message external links should open in a new tab. Courtesy of ChatGPT -->
+        <script>
+            // Listen for messages from the parent window
+            window.addEventListener('message', function(event) {
+                if (event.data === 'updateExternalLinks') {
+                // Update external links
+                var links = document.querySelectorAll('a');
+                for (var i = 0; i < links.length; i++) {
+                    if (links[i].hostname !== window.location.hostname) {
+                    links[i].setAttribute('target', '_blank');
+                    }
+                }
+                // Send a message to the parent window
+                window.parent.postMessage('externalLinksUpdated', '*');
+                }
+            });
+        </script>
+
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
             var html = document.querySelector('html');

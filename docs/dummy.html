@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My Single Page App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Fontawesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global styles */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            background-color: #333;
+        }
+
+        a {
+            color: #fff;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            box-shadow: none;
+        }
+
+        .navbar-brand {
+            color: #fff;
+        }
+
+        .nav-link {
+            color: #fff;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            border-bottom-color: #fff;
+        }
+
+        /* Page styles */
+        .page {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page h1 {
+            font-size: 3rem;
+        }
+
+        .page p {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">My App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="page1">Page 1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="page2">Page 2</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            External Pages
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="https://www.google.com" target="_blank">
+                                    <i class="bi bi-google"></i> Google
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="https://www.github.com" target="_blank">
+                                    <i class="bi bi-github"></i> GitHub
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="page1" class="page active">
+            <h1>Welcome to Page 1</h1>
+            <p>This is the content for Page 1.</p>
+        </div>
+
+        <div id="page2" class="page">
+            <h1>Welcome to Page 2</h1>
+            <p>This is the content for Page 2.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+// Get all navbar links
+const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+// Get all pages
+const pages = document.querySelectorAll(".page");
+
+// Function to hide all pages
+function hidePages() {
+  pages.forEach(page => {
+    page.classList.remove("active");
+  });
+}
+
+// Function to show a page
+function showPage(pageId) {
+  hidePages();
+  const page = document.querySelector(`#${pageId}`);
+  page.classList.add("active");
+}
+
+// Add click event listener to navbar links
+navLinks.forEach(link => {
+  link.addEventListener("click", function(e) {
+    e.preventDefault(); // prevent default link behavior
+    const pageId = link.dataset.page; // get page ID from data attribute
+    showPage(pageId); // show page
+  });
+});
+
+// Add click event listener to dropdown toggle button
+const dropdownToggle = document.querySelector(".dropdown-toggle");
+dropdownToggle.addEventListener("click", function(e) {
+  e.preventDefault(); // prevent default link behavior
+  const dropdownMenu = document.querySelector(".dropdown-menu");
+  dropdownMenu.classList.toggle("show");
+});
+
+// Add click event listener to dropdown links
+const dropdownLinks = document.querySelectorAll(".dropdown-menu .dropdown-item");
+dropdownLinks.forEach(link => {
+  link.addEventListener("click", function(e) {
+    e.stopPropagation(); // stop event from bubbling up
+  });
+});
+
+
+// Add click event listener to document to hide dropdown menu when clicked outside
+document.addEventListener("click", function(e) {
+  const dropdownMenu = document.querySelector(".dropdown-menu");
+  if (e.target !== dropdownToggle && !dropdownToggle.contains(e.target) && e.target !== dropdownMenu && !dropdownMenu.contains(e.target)) {
+    dropdownMenu.classList.remove("show");
+  }
+});
+    </script>
+</body>
+
+</html>
