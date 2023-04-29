@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.commandsenders;
 import org.bukkit.command.ProxiedCommandSender;
 
-public class BukkitProxiedCommandSender implements AbstractPlayer<ProxiedCommandSender>, BukkitCommandSender<ProxiedCommandSender> {
+public class BukkitProxiedCommandSender implements AbstractProxiedCommandSender<ProxiedCommandSender>, BukkitCommandSender<ProxiedCommandSender> {
 
 	private final ProxiedCommandSender proxySender;
 	
