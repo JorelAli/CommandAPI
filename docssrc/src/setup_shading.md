@@ -107,7 +107,7 @@ By default, the CommandAPI is written in the `dev.jorel.commandapi` package. It 
 
 ## Shading with Maven
 
-To shade the CommandAPI into a maven project, you'll need to use the `commandapi-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. **You do not need to use `commandapi-core` if you are shading**:
+To shade the CommandAPI into a maven project, you'll need to use the `commandapi-bukkit-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. **You do not need to use `commandapi-bukkit-core` if you are shading**:
 
 Add the CommandAPI shade dependency:
 
@@ -115,7 +115,7 @@ Add the CommandAPI shade dependency:
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-shade</artifactId>
+        <artifactId>commandapi-bukkit-shade</artifactId>
         <version>9.0.0</version>
     </dependency>
 </dependencies>
@@ -210,13 +210,13 @@ Next, we declare our dependencies:
 
 ```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-shade:9.0.0"
+    implementation "dev.jorel:commandapi-bukkit-shade:9.0.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-shade:9.0.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.0.0")
 }
 ```
 
@@ -229,7 +229,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```groovy,build.gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:9.0.0")
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.0.0")
     }
 
     // TODO: Change this to my own package name
@@ -240,7 +240,7 @@ shadowJar {
 ```kotlin,build.gradle.kts
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-shade:9.0.0")
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.0.0")
     }
 
     // TODO: Change this to my own package name
