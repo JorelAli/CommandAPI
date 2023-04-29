@@ -1115,7 +1115,7 @@ depend: [CommandAPI]
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
-        &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
+        &lt;artifactId&gt;commandapi-bukkit-core&lt;/artifactId&gt;
         &lt;version&gt;9.0.0&lt;/version&gt;
         &lt;scope&gt;provided&lt;/scope&gt;
     &lt;/dependency&gt;
@@ -1136,7 +1136,7 @@ depend: [CommandAPI]
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-core:9.0.0&quot;
+    compileOnly &quot;dev.jorel:commandapi-bukkit-core:9.0.0&quot;
 }
 </code></pre>
 </li>
@@ -1282,12 +1282,12 @@ CommandAPI.onEnable();
 \end{align}</p>
 <hr />
 <h2 id="shading-with-maven"><a class="header" href="#shading-with-maven">Shading with Maven</a></h2>
-<p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>. <strong>You do not need to use <code>commandapi-core</code> if you are shading</strong>:</p>
+<p>To shade the CommandAPI into a maven project, you'll need to use the <code>commandapi-bukkit-shade</code> dependency, which is optimized for shading and doesn't include plugin-specific files <em>(such as <code>plugin.yml</code>)</em>. <strong>You do not need to use <code>commandapi-bukkit-core</code> if you are shading</strong>:</p>
 <p>Add the CommandAPI shade dependency:</p>
 <pre><code class="language-xml">&lt;dependencies&gt;
     &lt;dependency&gt;
         &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
-        &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
+        &lt;artifactId&gt;commandapi-bukkit-shade&lt;/artifactId&gt;
         &lt;version&gt;9.0.0&lt;/version&gt;
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
@@ -1358,11 +1358,11 @@ CommandAPI.onEnable();
 <p>Next, we declare our dependencies:</p>
 <div class="multi-pre">
 <pre><code class="language-groovy build.gradle">dependencies {
-    implementation &quot;dev.jorel:commandapi-shade:9.0.0&quot;
+    implementation &quot;dev.jorel:commandapi-bukkit-shade:9.0.0&quot;
 }
 </code></pre>
 <pre><code class="language-kotlin build.gradle.kts">dependencies {
-    implementation(&quot;dev.jorel:commandapi-shade:9.0.0&quot;)
+    implementation(&quot;dev.jorel:commandapi-bukkit-shade:9.0.0&quot;)
 }
 </code></pre>
 </div>
@@ -1370,7 +1370,7 @@ CommandAPI.onEnable();
 <div class="multi-pre">
 <pre><code class="language-groovy build.gradle">shadowJar {
     dependencies {
-        include dependency(&quot;dev.jorel:commandapi-shade:9.0.0&quot;)
+        include dependency(&quot;dev.jorel:commandapi-bukkit-shade:9.0.0&quot;)
     }
 
     // TODO: Change this to my own package name
@@ -1379,7 +1379,7 @@ CommandAPI.onEnable();
 </code></pre>
 <pre><code class="language-kotlin build.gradle.kts">shadowJar {
     dependencies {
-        include dependency(&quot;dev.jorel:commandapi-shade:9.0.0&quot;)
+        include dependency(&quot;dev.jorel:commandapi-bukkit-shade:9.0.0&quot;)
     }
 
     // TODO: Change this to my own package name
