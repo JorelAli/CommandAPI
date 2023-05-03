@@ -5,16 +5,16 @@ echo "New version: "
 read -r newVer
 
 # Maven
-sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/shading.md
-sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/quickstart.md
-sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/annotationsetup.md
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/setup_shading.md
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/setup_dev.md
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/setup_annotations.md
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/kotlinintro.md
 
 # Gradle
-sed -i "s/dev\.jorel:commandapi-shade:$oldVer/dev\.jorel:commandapi-shade:$newVer/" docssrc/src/shading.md
-sed -i "s/dev\.jorel:commandapi-core:$oldVer/dev\.jorel:commandapi-core:$newVer/" docssrc/src/quickstart.md
-sed -i "s/dev\.jorel:commandapi-annotations:$oldVer/dev\.jorel:commandapi-annotations:$newVer/" docssrc/src/annotationsetup.md
-sed -i "s/dev\.jorel:commandapi-kotlin:$oldVer/dev\.jorel:commandapi-kotlin:$newVer/" docssrc/src/kotlinintro.md
+sed -i "s/dev\.jorel:commandapi-bukkit-shade:$oldVer/dev\.jorel:commandapi-shade:$newVer/" docssrc/src/setup_shading.md
+sed -i "s/dev\.jorel:commandapi-bukkit-core:$oldVer/dev\.jorel:commandapi-core:$newVer/" docssrc/src/setup_dev.md
+sed -i "s/dev\.jorel:commandapi-annotations:$oldVer/dev\.jorel:commandapi-annotations:$newVer/" docssrc/src/setup_annotations.md
+sed -i "s/dev\.jorel:commandapi-bukkit-kotlin:$oldVer/dev\.jorel:commandapi-bukkit-kotlin:$newVer/" docssrc/src/kotlinintro.md
 
 # Doxygen
 sed -i "s/PROJECT_NUMBER         = $oldVer/PROJECT_NUMBER         = $newVer/" Doxyfile
@@ -40,3 +40,6 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/buk
 # Set version in pom.xml using Maven
 mvn versions:set -DnewVersion=$newVer
 mvn versions:commit
+
+mvn versions:set -DnewVersion=$newVer -P Platform.Bukkit
+mvn versions:commit -P Platform.Bukkit
