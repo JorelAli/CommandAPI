@@ -374,6 +374,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                 <ul>
                     <li>Fixed <code>MapArgument</code> not allowing player names as keys</li>
                     <li>Fixed <code>/execute as ...</code> not working due to casting to a player instead of a proxied sender</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/441 Adds <code>CommandArguments#count()</code> utility method</li>
                 </ul>
             </td>
         </tr>
