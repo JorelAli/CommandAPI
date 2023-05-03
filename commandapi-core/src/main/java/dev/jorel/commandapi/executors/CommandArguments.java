@@ -92,14 +92,72 @@ public class CommandArguments {
 	public String getFullInput() {
 		return fullInput;
 	}
-	
-	// Optional accessing methods
 
 	/**
 	 * Returns an argument by its index
 	 *
 	 * @param index The position of this argument
+	 * @param defaultValue The Object returned if the argument is not existent
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(int)
 	 * @return An argument which is placed at the given index, or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public Object getOrDefault(int index, Object defaultValue) {
+		if (args.length <= index) {
+			return defaultValue;
+		} else {
+			return args[index];
+		}
+	}
+
+	/**
+	 * Returns an argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @param defaultValue The Object returned if the argument was not found.
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(String)
+	 * @return The argument with the specified node name or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public Object getOrDefault(String nodeName, Object defaultValue) {
+		return argsMap.getOrDefault(nodeName, defaultValue);
+	}
+
+	/**
+	 * Returns an argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @param defaultValue The Object returned if the argument is not existent
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(int)
+	 * @return An argument which is placed at the given index, or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public Object getOrDefault(int index, Supplier<?> defaultValue) {
+		if (args.length <= index) {
+			return defaultValue.get();
+		} else {
+			return args[index];
+		}
+	}
+
+	/**
+	 * Returns an argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @param defaultValue The Object returned if the argument was not found.
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(String)
+	 * @return The argument with the specified node name or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public Object getOrDefault(String nodeName, Supplier<?> defaultValue) {
+		return argsMap.getOrDefault(nodeName, defaultValue.get());
+	}
+
+	/**
+	 * Returns an <code>Optional</code> holding the argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @return An optional holding the argument which is placed at the given index, or an empty optional if index is invalid
 	 */
 	public Optional<Object> getOptional(int index) {
 		if (args.length <= index) {
@@ -113,7 +171,7 @@ public class CommandArguments {
 	 * Returns an argument by its node name
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
-	 * @return The argument with the specified node name or the provided default value
+	 * @return An optional holding the argument with the specified node name or an empty optional if the node name was not found
 	 */
 	public Optional<Object> getOptional(String nodeName) {
 		if (!argsMap.containsKey(nodeName)) {
@@ -167,10 +225,62 @@ public class CommandArguments {
 	}
 
 	/**
+	 * Returns an argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @param defaultValue The Object returned if the argument is not existent
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(int)
+	 * @return An argument which is placed at the given index, or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public <T> T getOrDefaultUnchecked(int index, T defaultValue) {
+		return (T) getOrDefault(index, defaultValue);
+	}
+
+	/**
+	 * Returns an argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @param defaultValue The Object returned if the argument was not found.
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(String)
+	 * @return The argument with the specified node name or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public <T> T getOrDefaultUnchecked(String nodeName, T defaultValue) {
+		return (T) getOrDefault(nodeName, defaultValue);
+	}
+
+	/**
+	 * Returns an argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @param defaultValue The Object returned if the argument is not existent
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(int)
+	 * @return An argument which is placed at the given index, or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public <T> T getOrDefaultUnchecked(int index, Supplier<T> defaultValue) {
+		return (T) getOrDefault(index, defaultValue);
+	}
+
+	/**
+	 * Returns an argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @param defaultValue The Object returned if the argument was not found.
+	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(String)
+	 * @return The argument with the specified node name or the provided default value
+	 */
+	@Deprecated(since = "9.0.1", forRemoval = true)
+	public <T> T getOrDefaultUnchecked(String nodeName, Supplier<T> defaultValue) {
+		return (T) getOrDefault(nodeName, defaultValue);
+	}
+
+	/**
 	 * Returns an <code>Optional</code> holding the argument at its index
 	 *
 	 * @param index The position of this argument
-	 * @return An optional which holds the argument at its index
+	 * @return An optional holding the argument at its index, or an empty optional if the index was invalid
 	 */
 	public <T> Optional<T> getOptionalUnchecked(int index) {
 		return (Optional<T>) getOptional(index);
@@ -180,9 +290,10 @@ public class CommandArguments {
 	 * Returns an <code>Optional</code> holding the argument by its node name
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
-	 * @return The argument with the specified node name
+	 * @return An optional holding the argument with the specified node name, or an empty optional if the index was invalid
 	 */
 	public <T> Optional<T> getOptionalUnchecked(String nodeName) {
 		return (Optional<T>) getOptional(nodeName);
 	}
+
 }
