@@ -1081,7 +1081,7 @@ commandAPICommand("sayhi") {
 commandAPICommand("sayhi") {
     playerArgument("target", optional = true)
     playerExecutor { player, args ->
-        val target: Player = args.getOrDefault("target", player) as Player
+        val target: Player = args.getOptional("target").orElse(player) as Player
         target.sendMessage("Hi!")
     }
 }

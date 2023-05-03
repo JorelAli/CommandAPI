@@ -1524,7 +1524,7 @@ CommandAPICommand("sayhi")
 CommandAPICommand("sayhi")
     .withOptionalArguments(PlayerArgument("target"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target: Player = args.getOrDefault("target", player) as Player
+        val target: Player = args.getOptional("target").orElse(player) as Player
         target.sendMessage("Hi!")
     })
     .register()

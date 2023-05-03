@@ -1612,7 +1612,7 @@ new CommandAPICommand("sayhi")
 new CommandAPICommand("sayhi")
     .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
-        Player target = (Player) args.getOrDefault("target", player);
+        Player target = (Player) args.getOptional("target").orElse(player);
         target.sendMessage("Hi!");
     })
     .register();
