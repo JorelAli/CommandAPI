@@ -12,16 +12,19 @@ import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 public class PaperImplementations {
 
 	private final boolean isPaperPresent;
+	private final boolean isFoliaPresent;
 	private final NMS<?> nmsInstance;
 
 	/**
 	 * Constructs a PaperImplementations object
 	 * 
 	 * @param isPaperPresent Whether this is a Paper server or not
+	 * @param isFoliaPresent Whether this is a Folia server or not
 	 * @param nmsInstance    The instance of NMS
 	 */
-	public PaperImplementations(boolean isPaperPresent, NMS<?> nmsInstance) {
+	public PaperImplementations(boolean isPaperPresent, boolean isFoliaPresent, NMS<?> nmsInstance) {
 		this.isPaperPresent = isPaperPresent;
+		this.isFoliaPresent = isFoliaPresent;
 		this.nmsInstance = nmsInstance;
 	}
 
@@ -63,8 +66,15 @@ public class PaperImplementations {
 	/**
 	 * @return whether we're using paper or not
 	 */
-	public boolean isPresent() {
+	public boolean isPaperPresent() {
 		return this.isPaperPresent;
+	}
+	
+	/**
+	 * @return whether we're using folia or not
+	 */
+	public boolean isFoliaPresent() {
+		return this.isFoliaPresent;
 	}
 
 }
