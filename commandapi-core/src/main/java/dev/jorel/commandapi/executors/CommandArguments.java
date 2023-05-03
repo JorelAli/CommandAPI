@@ -32,6 +32,13 @@ public class CommandArguments {
 	// Access the inner structure directly
 
 	/**
+	 * @return The number of arguments in this object
+	 */
+	public int count() {
+		return args.length;
+	}
+
+	/**
 	 * @return The complete argument array of this command
 	 */
 	public Object[] args() {
