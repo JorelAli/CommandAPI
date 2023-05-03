@@ -33,7 +33,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	private final boolean keyListEmpty;
 	private final boolean valueListEmpty;
 
-	private final Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\\.]+)");
+	private final Pattern keyPattern = Pattern.compile("([a-zA-Z0-9_\\.]+)");
 
 	/**
 	 * Constructs a {@link MapArgument}
@@ -385,7 +385,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		String context = visitedCharacters.toString();
 		StringReader reader = new StringReader(context);
 		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers and periods");
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers, underscores and periods");
 	}
 
 	private CommandSyntaxException throwValueEarlyStart(StringBuilder visitedCharacters, String delimiter) {
