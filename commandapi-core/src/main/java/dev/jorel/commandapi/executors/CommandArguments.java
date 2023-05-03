@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -32,13 +33,6 @@ public class CommandArguments {
 	// Access the inner structure directly
 
 	/**
-	 * @return The number of arguments in this object
-	 */
-	public int count() {
-		return args.length;
-	}
-
-	/**
 	 * @return The complete argument array of this command
 	 */
 	public Object[] args() {
@@ -50,6 +44,13 @@ public class CommandArguments {
 	 */
 	public Map<String, Object> argsMap() {
 		return Collections.unmodifiableMap(argsMap);
+	}
+
+	/**
+	 * @return The number of arguments in this object
+	 */
+	public int count() {
+		return args.length;
 	}
 	
 	// Main accessing methods. In Kotlin, methods named get() allows it to
@@ -98,14 +99,13 @@ public class CommandArguments {
 	 * Returns an argument by its index
 	 *
 	 * @param index The position of this argument
-	 * @param defaultValue The Object returned if the argument is not existent
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
-	public Object getOrDefault(int index, Object defaultValue) {
+	public Optional<Object> getOptional(int index) {
 		if (args.length <= index) {
-			return defaultValue;
+			return Optional.empty();
 		} else {
-			return args[index];
+			return Optional.of(args[index]);
 		}
 	}
 
@@ -113,37 +113,13 @@ public class CommandArguments {
 	 * Returns an argument by its node name
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
-	 * @param defaultValue The Object returned if the argument was not found.
 	 * @return The argument with the specified node name or the provided default value
 	 */
-	public Object getOrDefault(String nodeName, Object defaultValue) {
-		return argsMap.getOrDefault(nodeName, defaultValue);
-	}
-
-	/**
-	 * Returns an argument by its index
-	 *
-	 * @param index The position of this argument
-	 * @param defaultValue The Object returned if the argument is not existent
-	 * @return An argument which is placed at the given index, or the provided default value
-	 */
-	public Object getOrDefault(int index, Supplier<?> defaultValue) {
-		if (args.length <= index) {
-			return defaultValue.get();
-		} else {
-			return args[index];
+	public Optional<Object> getOptional(String nodeName) {
+		if (!argsMap.containsKey(nodeName)) {
+			return Optional.empty();
 		}
-	}
-
-	/**
-	 * Returns an argument by its node name
-	 *
-	 * @param nodeName     The node name of this argument. This was set when initializing an argument
-	 * @param defaultValue The Object returned if the argument was not found.
-	 * @return The argument with the specified node name or the provided default value
-	 */
-	public Object getOrDefault(String nodeName, Supplier<?> defaultValue) {
-		return argsMap.getOrDefault(nodeName, defaultValue.get());
+		return Optional.of(argsMap.get(nodeName));
 	}
 	
 	/** Unchecked methods. These are the same as the methods above, but use
@@ -191,46 +167,22 @@ public class CommandArguments {
 	}
 
 	/**
-	 * Returns an argument by its index
+	 * Returns an <code>Optional</code> holding the argument at its index
 	 *
 	 * @param index The position of this argument
-	 * @param defaultValue The Object returned if the argument is not existent
-	 * @return An argument which is placed at the given index, or the provided default value
+	 * @return An optional which holds the argument at its index
 	 */
-	public <T> T getOrDefaultUnchecked(int index, T defaultValue) {
-		return (T) getOrDefault(index, defaultValue);
+	public <T> Optional<T> getOptionalUnchecked(int index) {
+		return (Optional<T>) getOptional(index);
 	}
 
 	/**
-	 * Returns an argument by its node name
+	 * Returns an <code>Optional</code> holding the argument by its node name
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
-	 * @param defaultValue The Object returned if the argument was not found.
-	 * @return The argument with the specified node name or the provided default value
+	 * @return The argument with the specified node name
 	 */
-	public <T> T getOrDefaultUnchecked(String nodeName, T defaultValue) {
-		return (T) getOrDefault(nodeName, defaultValue);
-	}
-
-	/**
-	 * Returns an argument by its index
-	 *
-	 * @param index The position of this argument
-	 * @param defaultValue The Object returned if the argument is not existent
-	 * @return An argument which is placed at the given index, or the provided default value
-	 */
-	public <T> T getOrDefaultUnchecked(int index, Supplier<T> defaultValue) {
-		return (T) getOrDefault(index, defaultValue);
-	}
-
-	/**
-	 * Returns an argument by its node name
-	 *
-	 * @param nodeName     The node name of this argument. This was set when initializing an argument
-	 * @param defaultValue The Object returned if the argument was not found.
-	 * @return The argument with the specified node name or the provided default value
-	 */
-	public <T> T getOrDefaultUnchecked(String nodeName, Supplier<T> defaultValue) {
-		return (T) getOrDefault(nodeName, defaultValue);
+	public <T> Optional<T> getOptionalUnchecked(String nodeName) {
+		return (Optional<T>) getOptional(nodeName);
 	}
 }

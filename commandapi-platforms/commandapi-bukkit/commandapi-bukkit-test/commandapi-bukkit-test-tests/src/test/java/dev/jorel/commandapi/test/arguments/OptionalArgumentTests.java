@@ -144,27 +144,7 @@ class OptionalArgumentTests extends TestBase {
 		new CommandAPICommand("test")
 			.withOptionalArguments(new StringArgument("string"))
 			.executesPlayer((player, args) -> {
-				type.set((String) args.getOrDefault("string", "hello"));
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer();
-
-		server.dispatchCommand(player, "test");
-		server.dispatchCommand(player, "test world");
-
-		assertEquals("hello", type.get());
-		assertEquals("world", type.get());
-	}
-
-	@Test
-	void testOptionalArgumentDefaultWithSupplier() {
-		Mut<String> type = Mut.of();
-
-		new CommandAPICommand("test")
-			.withOptionalArguments(new StringArgument("string"))
-			.executesPlayer((player, args) -> {
-				type.set((String) args.getOrDefault("string", () -> "hello"));
+				type.set((String) args.getOptional("string").orElse("hello"));
 			})
 			.register();
 
@@ -203,7 +183,7 @@ class OptionalArgumentTests extends TestBase {
 		new CommandAPICommand("test")
 			.withOptionalArguments(new StringArgument("string"))
 			.executesPlayer((player, args) -> {
-				type.set((String) args.getOrDefault(0, "hello"));
+				type.set((String) args.getOptional(0).orElse("hello"));
 			})
 			.register();
 
@@ -222,7 +202,7 @@ class OptionalArgumentTests extends TestBase {
 		new CommandAPICommand("test")
 			.withOptionalArguments(new StringArgument("string"))
 			.executesPlayer((player, args) -> {
-				type.set((String) args.getOrDefault(0, () -> "hello"));
+				type.set((String) args.getOptional(0).orElse("hello"));
 			})
 			.register();
 
