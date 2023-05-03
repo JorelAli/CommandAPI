@@ -1,6 +1,6 @@
 # Optional Arguments
 
-Sometimes, you want to implement a command that has arguments that do not need to be entered. Take a `/sayhi` command for example. You may want to say "Hi", or to another player. For that, we want this command syntax:
+Sometimes, you want to implement a command that has arguments that do not need to be entered. Take a `/sayhi` command for example. You may want to say "Hi" to yourself, or to another player. For that, we want this command syntax:
 
 ```mccmd
 /sayhi          - Says "Hi!" to yourself
