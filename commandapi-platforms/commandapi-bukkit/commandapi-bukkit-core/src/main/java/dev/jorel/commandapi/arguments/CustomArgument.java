@@ -21,12 +21,15 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import dev.jorel.commandapi.BukkitTooltip;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.executors.CommandArguments;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
 import java.io.Serializable;
@@ -214,6 +217,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 	@SuppressWarnings("serial")
 	public static class CustomArgumentException extends Exception {
 
+		private final Component errorComponent;
 		private final String errorMessage;
 		private final MessageBuilder errorMessageBuilder;
 
@@ -223,7 +227,20 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
 		 */
+		public CustomArgumentException(Component errorMessage) {
+			this.errorComponent = errorMessage;
+			this.errorMessage = null;
+			this.errorMessageBuilder = null;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 */
 		public CustomArgumentException(String errorMessage) {
+			this.errorComponent = null;
 			this.errorMessage = errorMessage;
 			this.errorMessageBuilder = null;
 		}
@@ -235,6 +252,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 *                     exception is thrown
 		 */
 		public CustomArgumentException(MessageBuilder errorMessage) {
+			this.errorComponent = null;
 			this.errorMessage = null;
 			this.errorMessageBuilder = errorMessage;
 		}
@@ -248,15 +266,25 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @return a Brigadier CommandSyntaxException
 		 */
 		public CommandSyntaxException toCommandSyntax(String result, CommandContext<?> cmdCtx) {
-			if (errorMessage == null) {
+			if (errorComponent != null) {
+				// Deal with Adventure Component
+				Message brigadierMessage = BukkitTooltip.messageFromAdventureComponent(errorComponent);
+				return new SimpleCommandExceptionType(brigadierMessage).create();
+			}
+
+			if (errorMessageBuilder != null) {
 				// Deal with MessageBuilder
 				String errorMsg = errorMessageBuilder.toString().replace(INPUT, result).replace(FULL_INPUT,
 					cmdCtx.getInput());
 				return new SimpleCommandExceptionType(() -> errorMsg).create();
-			} else {
+			}
+
+			if (errorMessage != null) {
 				// Deal with String
 				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
 			}
+
+			throw new IllegalStateException("No error component, error message creator or error message specified");
 		}
 
 	}
