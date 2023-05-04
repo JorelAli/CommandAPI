@@ -39,6 +39,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 9.0.0 \\(\rightarrow\\) 9.0.1
 
+- Updates [Optional arguments](./optional_arguments.md) page to update the method list for avoiding `null` values
 - Updates [Normal command executors](./normalexecutors.md) page to now mention the existence of the `ExecutionInfo`
 
 ### Documentation changes 8.8.0 \\(\rightarrow\\) 9.0.0

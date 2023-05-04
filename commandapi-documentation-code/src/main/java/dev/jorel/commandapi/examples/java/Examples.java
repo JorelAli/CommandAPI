@@ -1612,7 +1612,7 @@ new CommandAPICommand("sayhi")
 new CommandAPICommand("sayhi")
     .withOptionalArguments(new PlayerArgument("target"))
     .executesPlayer((player, args) -> {
-        Player target = (Player) args.getOrDefault("target", player);
+        Player target = (Player) args.getOptional("target").orElse(player);
         target.sendMessage("Hi!");
     })
     .register();
@@ -1637,7 +1637,7 @@ new CommandAPICommand("rate")
         int rating = (int) args.get("rating");
 
         // The target player is optional, so give it a default here
-        CommandSender target = (CommandSender) args.getOrDefault("target", sender);
+        CommandSender target = (CommandSender) args.getOptional("target").orElse(sender);
 
         target.sendMessage("Your " + topic + " was rated: " + rating + "/10");
     })

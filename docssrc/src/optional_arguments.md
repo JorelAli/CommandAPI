@@ -78,27 +78,36 @@ However, calling `withOptionalArguments` is safer because it makes sure that the
 
 ## Avoiding null values
 
-Previously, we've looked at how to handle null values. To make all of this easier, the CommandAPI implements multiple `getOrDefault()` methods for `CommandArguments`:
+Previously, we've looked at how to handle null values. To make all of this easier, the CommandAPI implements multiple `getOptional()` methods for `CommandArguments`:
+
+<div class="warning">
+
+> **Developer's Note:**
+> 
+> For 9.0.1, all `CommandArguments#getOrDefault()` methods have been deprecated and new methods have been added!
+> The existing methods will be removed in an upcoming version!
+>
+> View them below:
+
+</div>
 
 ```java
-Object getOrDefault(int index, Object defaultValue)
-Object getOrDefault(String nodeName, Object defaultValue)
-Object getOrDefault(int index, Supplier<?> defaultValue)
-Object getOrDefault(String nodeName, Supplier<?> defaultValue)
+Optional<Object> getOptional(int index)
+Optional<Object> getOptional(String nodeName)
 ```
 
 <div class="example">
 
-### Example - /sayhi command while using the getOrDefault method
+### Example - /sayhi command while using the getOptional method
 
-Let's register the `/sayhi` command from above a second time - this time using a `getOrDefault` method. We are using the exact same command syntax:
+Let's register the `/sayhi` command from above a second time - this time using a `getOptional` method. We are using the exact same command syntax:
 
 ```mccmd
 /sayhi          - Says "Hi!" to yourself
 /sayhi <target> - Says "Hi!" to a target player
 ```
 
-This is how the `getOrDefault` method is being implemented:
+This is how the `getOptional` method is being implemented:
 
 <div class="multi-pre">
 

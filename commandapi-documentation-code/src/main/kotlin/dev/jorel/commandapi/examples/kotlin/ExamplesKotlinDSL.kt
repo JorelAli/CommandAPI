@@ -1081,7 +1081,7 @@ commandAPICommand("sayhi") {
 commandAPICommand("sayhi") {
     playerArgument("target", optional = true)
     playerExecutor { player, args ->
-        val target: Player = args.getOrDefault("target", player) as Player
+        val target: Player = args.getOptional("target").orElse(player) as Player
         target.sendMessage("Hi!")
     }
 }
@@ -1106,7 +1106,7 @@ commandAPICommand("rate") {
         val rating = args["rating"] as Int
 
         // The target player is optional, so give it a default here
-        val target: CommandSender = args.getOrDefault("target", sender) as CommandSender
+        val target: CommandSender = args.getOptional("target").orElse(sender) as CommandSender
 
         target.sendMessage("Your $topic was rated: $rating/10")
     }
