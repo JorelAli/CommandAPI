@@ -1106,7 +1106,7 @@ commandAPICommand("rate") {
         val rating = args["rating"] as Int
 
         // The target player is optional, so give it a default here
-        val target: CommandSender = args.getOptional("target").orElse(sender) as CommandSender
+        val target: CommandSender = args.getOrDefault("target", sender) as CommandSender
 
         target.sendMessage("Your $topic was rated: $rating/10")
     }

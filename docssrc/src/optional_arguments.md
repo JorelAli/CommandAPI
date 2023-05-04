@@ -98,16 +98,16 @@ Optional<Object> getOptional(String nodeName)
 
 <div class="example">
 
-### Example - /sayhi command while using the getOptional method
+### Example - /sayhi command while using the getOrDefault method
 
-Let's register the `/sayhi` command from above a second time - this time using a `getOptional` method. We are using the exact same command syntax:
+Let's register the `/sayhi` command from above a second time - this time using a `getOrDefault` method. We are using the exact same command syntax:
 
 ```mccmd
 /sayhi          - Says "Hi!" to yourself
 /sayhi <target> - Says "Hi!" to a target player
 ```
 
-This is how the `getOptional` method is being implemented:
+This is how the `getOrDefault` method is being implemented:
 
 <div class="multi-pre">
 
