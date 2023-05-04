@@ -119,13 +119,13 @@ dependencies {
 
 ```groovy,Velocity_build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-velocity-kotlin:9.0.0"
+    implementation "dev.jorel:commandapi-velocity-kotlin:9.0.1"
 }
 ```
 
 ```kotlin,Velocity_build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-velocity-kotlin:9.0.0")
+    implementation("dev.jorel:commandapi-velocity-kotlin:9.0.1")
 }
 ```
 
