@@ -37,6 +37,10 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 9.0.0 \\(\rightarrow\\) 9.0.1
+
+- Updates [Normal command executors](./normalexecutors.md) page to now mention the existence of the `ExecutionInfo`
+
 ### Documentation changes 8.8.0 \\(\rightarrow\\) 9.0.0
 
 > **Developer's Note:**
