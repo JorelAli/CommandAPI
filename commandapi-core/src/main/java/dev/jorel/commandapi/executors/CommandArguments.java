@@ -98,7 +98,7 @@ public class CommandArguments {
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(int)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
@@ -115,7 +115,7 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(String)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
@@ -128,7 +128,7 @@ public class CommandArguments {
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(int)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
@@ -145,7 +145,7 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptional(String)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
@@ -229,7 +229,7 @@ public class CommandArguments {
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(int)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
@@ -242,7 +242,7 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(String)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
@@ -255,7 +255,7 @@ public class CommandArguments {
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(int)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
@@ -268,7 +268,7 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use CommandArguments#getOptionalUnchecked(String)
+	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
 	@Deprecated(since = "9.0.1", forRemoval = true)
