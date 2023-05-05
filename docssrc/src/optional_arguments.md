@@ -87,7 +87,7 @@ Previously, we've looked at how to handle null values. To make all of this easie
 > For 9.0.1, all `CommandArguments#getOrDefault()` methods have been deprecated and new methods have been added!
 > The existing methods will be removed in an upcoming version!
 >
-> View them below:
+> View the new methods below:
 
 </div>
 
