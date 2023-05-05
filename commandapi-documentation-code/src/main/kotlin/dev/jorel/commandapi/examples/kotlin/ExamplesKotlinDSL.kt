@@ -1004,7 +1004,7 @@ commandTree("optionalArgument") {
                     // "/optionalArgument give minecraft:stick"
                     // "/optionalArgument give minecraft:stick 5"
                     val itemStack: ItemStack = args[0] as ItemStack
-                    val amount: Int = args.getOrDefault("amount", 1) as Int
+                    val amount: Int = args.getOptional("amount").orElse(1) as Int
                     itemStack.amount = amount
                     player.inventory.addItem(itemStack)
                 }
@@ -1024,7 +1024,7 @@ commandAPICommand("optionalArgument") {
         // "/optionalArgument give minecraft:stick"
         // "/optionalArgument give minecraft:stick 5"
         val itemStack: ItemStack = args[0] as ItemStack
-        val amount: Int = args.getOrDefault("amount", 1) as Int
+        val amount: Int = args.getOOptional("amount").orElse(1) as Int
         itemStack.amount = amount
         player.inventory.addItem(itemStack)
     }
