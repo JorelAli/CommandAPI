@@ -580,17 +580,24 @@ const onCommandInput = async function (): Promise<void> {
 		if (showUsageText || commandValid) {
 			let newText: string = command ?? "";
 			let parsedArgumentIndex: number = 0;
-			for (const [_key, value] of parsedCommand.getContext().getArguments()) {
-				if (parsedArgumentIndex > Object.keys(ArgumentColors).length) {
-					parsedArgumentIndex = 0;
+			for (const parsedCommandNode of parsedCommand.getContext().getNodes().slice(1)) { // Slice 1 - don't include the first node (which is the command name)
+				if (parsedCommandNode.getNode().getNodeType() === "literal") {
+					// skip and continue
+					newText += " ";
+					newText += rawTextNoSlash.slice(parsedCommandNode.getRange().getStart(), parsedCommandNode.getRange().getEnd());
+				} else {
+					if (parsedArgumentIndex > Object.keys(ArgumentColors).length) {
+						parsedArgumentIndex = 0;
+					}
+	
+					newText += " ";
+					newText += ArgumentColors[parsedArgumentIndex];
+					newText += rawTextNoSlash.slice(parsedCommandNode.getRange().getStart(), parsedCommandNode.getRange().getEnd());
+	
+					parsedArgumentIndex++;
 				}
-
-				newText += " ";
-				newText += ArgumentColors[parsedArgumentIndex];
-				newText += rawTextNoSlash.slice(value.getRange().getStart(), value.getRange().getEnd());
-
-				parsedArgumentIndex++;
 			}
+
 			newText += "".padEnd(rawTextNoSlash.length - rawTextNoSlash.trimEnd().length);
 			setText(newText);
 		}
@@ -834,7 +841,8 @@ test_a
 test_b
 test_c
 test_d
-test_e`;
+test_e
+cmd (literal)`;
 
 onRegisterCommandsButtonClicked();
 console.log("Dispatcher", dispatcher.getRoot())
