@@ -220,22 +220,26 @@ public class CustomArgument<T, B> extends Argument<T> {
 	@SuppressWarnings("serial")
 	public static class CustomArgumentException extends Exception {
 
-		private final BaseComponent[] errorBaseComponent;
-		private final Component errorComponent;
-		private final String errorMessage;
-		private final MessageBuilder errorMessageBuilder;
+		private BaseComponent[] errorBaseComponent = null;
+		private Component errorComponent = null;
+		private String errorMessage = null;
+		private MessageBuilder errorMessageBuilder = null;
+		
+		/* Prevent instantiation from any other sources */
+		private CustomArgumentException() {
+			
+		}
 
 		/**
 		 * Constructs a CustomArgumentException with a given error message
 		 * 
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
+		 * @deprecated Use {@link CustomArgumentException#of(BaseComponent...)} instead
 		 */
-		public CustomArgumentException(BaseComponent... errorMessage) {
+		@Deprecated(since = "9.0.1", forRemoval = true)
+		public CustomArgumentException(BaseComponent[] errorMessage) {
 			this.errorBaseComponent = errorMessage;
-			this.errorComponent = null;
-			this.errorMessage = null;
-			this.errorMessageBuilder = null;
 		}
 
 		/**
@@ -243,25 +247,23 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * 
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
+		 * @deprecated Use {@link CustomArgumentException#of(String)} instead
 		 */
-		public CustomArgumentException(Component errorMessage) {
-			this.errorBaseComponent = null;
-			this.errorComponent = errorMessage;
-			this.errorMessage = null;
-			this.errorMessageBuilder = null;
-		}
-
-		/**
-		 * Constructs a CustomArgumentException with a given error message
-		 * 
-		 * @param errorMessage the error message to display to the user when this
-		 *                     exception is thrown
-		 */
+		@Deprecated(since = "9.0.1", forRemoval = true)
 		public CustomArgumentException(String errorMessage) {
-			this.errorBaseComponent = null;
-			this.errorComponent = null;
 			this.errorMessage = errorMessage;
-			this.errorMessageBuilder = null;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 * @deprecated Use {@link CustomArgumentException#of(MessageBuilder)} instead
+		 */
+		@Deprecated(since = "9.0.1", forRemoval = true)
+		public CustomArgumentException(MessageBuilder errorMessage) {
+			this.errorMessageBuilder = errorMessage;
 		}
 
 		/**
@@ -270,11 +272,46 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
 		 */
-		public CustomArgumentException(MessageBuilder errorMessage) {
-			this.errorBaseComponent = null;
-			this.errorComponent = null;
-			this.errorMessage = null;
-			this.errorMessageBuilder = errorMessage;
+		public static CustomArgumentException of(BaseComponent[] errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorBaseComponent = errorMessage;
+			return exception;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 */
+		public static CustomArgumentException of(String errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorMessage = errorMessage;
+			return exception;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 */
+		public static CustomArgumentException of(Component errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorComponent = errorMessage;
+			return exception;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 */
+		public static CustomArgumentException of(MessageBuilder errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorMessageBuilder = errorMessage;
+			return exception;
 		}
 
 		/**
