@@ -376,6 +376,7 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                     <li>Fixed <code>/execute as ...</code> not working due to casting to a player instead of a proxied sender</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/441 Adds <code>CommandArguments#count()</code> utility method</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/440 Adds several <code>CommandArguments#getOptional()</code> methods</li>
+                    <li>Fixed bug where <code>IntegerArgument</code> would fail to compile due to a missing Brigadier dependency</li>
                 </ul>
             </td>
         </tr>
