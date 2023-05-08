@@ -52,7 +52,7 @@ new CommandAPICommand("mycommand")
 
 </div>
 
-----
+-----
 
 ## From 8.8.x to 9.0.0
 

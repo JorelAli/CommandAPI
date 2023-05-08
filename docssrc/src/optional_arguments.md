@@ -83,7 +83,7 @@ Previously, we've looked at how to handle null values. To make all of this easie
 <div class="warning">
 
 > **Developer's Note:**
-> 
+>
 > For 9.0.1, all `CommandArguments#getOrDefault()` methods have been deprecated and new methods have been added!
 > The existing methods will be removed in an upcoming version!
 >

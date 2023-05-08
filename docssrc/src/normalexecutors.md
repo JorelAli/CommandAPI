@@ -178,7 +178,7 @@ You also have the option to implement a command executor which uses an `Executio
 ```java
 new CommandAPICommand("...")
     .executes(info -> {
-		
+        // Use info here
     })
     .register();
 ```
