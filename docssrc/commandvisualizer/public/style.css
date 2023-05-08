@@ -124,7 +124,7 @@ span {
 
 #register-commands-button:hover {
 	background: #b2b6ff url('./bgbtnhov.png');
-	text-shadow: 2px 2px #202013CC;
+	text-shadow: 3px 3px #202013CC;
 	color: #FFFFA0;
 }
 #register-commands-button:active {

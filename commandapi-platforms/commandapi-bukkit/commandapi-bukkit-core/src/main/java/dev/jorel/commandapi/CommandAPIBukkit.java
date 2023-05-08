@@ -172,12 +172,16 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		JavaPlugin plugin = config.getPlugin();
 
 		// Prevent command registration after server has loaded
-		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
 			CommandAPI.stopCommandRegistration();
 
 			// Sort out permissions after the server has finished registering them all
 			fixPermissions();
-			reloadDataPacks();
+			if (paper.isFoliaPresent()) {
+				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
+			} else {
+				reloadDataPacks();
+			}
 			updateHelpForCommands();
 		}, 0L);
 

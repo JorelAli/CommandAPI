@@ -10,7 +10,7 @@ public class Schedulers {
 		this.paperImplementations = paperImplementations;
 	}
 
-	public int scheduleSyncRepeatingTask(Plugin plugin, long delay, long period, Runnable runnable) {
+	public int scheduleSyncRepeatingTask(Plugin plugin, Runnable runnable, long delay, long period) {
 		if (paperImplementations.isFoliaPresent()) {
 			plugin.getServer().getGlobalRegionScheduler().runAtFixedRate(plugin, task -> runnable.run(), delay, period);
 			return 1;
@@ -27,7 +27,7 @@ public class Schedulers {
 		}
 	}
 
-	public void scheduleSync(Runnable runnable, Plugin plugin) {
+	public void scheduleSync(Plugin plugin, Runnable runnable) {
 		if (paperImplementations.isFoliaPresent()) {
 			plugin.getServer().getGlobalRegionScheduler().execute(plugin, runnable);
 		} else {
@@ -35,7 +35,7 @@ public class Schedulers {
 		}
 	}
 
-	public void scheduleSyncDelayed(Runnable runnable, Plugin plugin, long delay) {
+	public void scheduleSyncDelayed(Plugin plugin, Runnable runnable, long delay) {
 		if (paperImplementations.isFoliaPresent()) {
 			plugin.getServer().getGlobalRegionScheduler().execute(plugin, runnable);
 		} else {
@@ -43,7 +43,7 @@ public class Schedulers {
 		}
 	}
 
-	public void scheduleAsync(Runnable runnable, Plugin plugin) {
+	public void scheduleAsync(Plugin plugin, Runnable runnable) {
 		if (paperImplementations.isFoliaPresent()) {
 			plugin.getServer().getGlobalRegionScheduler().execute(plugin, runnable);
 		} else {
