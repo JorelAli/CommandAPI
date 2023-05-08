@@ -289,9 +289,9 @@ The CommandAPI is built using the Maven build tool - if you don't have it, you c
   git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-- Run `mvn`
+- Run `mvn clean install -P Platform.Bukkit`
 
-The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPI-X.X.X_DATE.jar`
+The resulting plugin `.jar` is found in `commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/CommandAPI-X.X.X_DATE.jar`
 
 ## Building the CommandAPI's documentation
 
