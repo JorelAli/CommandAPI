@@ -235,7 +235,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * 
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
-		 * @deprecated Use {@link CustomArgumentException#of(BaseComponent...)} instead
+		 * @deprecated Use {@link CustomArgumentException#fromBaseComponents(BaseComponent...)} instead
 		 */
 		@Deprecated(since = "9.0.1", forRemoval = true)
 		public CustomArgumentException(BaseComponent[] errorMessage) {
@@ -247,7 +247,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * 
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
-		 * @deprecated Use {@link CustomArgumentException#of(String)} instead
+		 * @deprecated Use {@link CustomArgumentException#fromString(String)} instead
 		 */
 		@Deprecated(since = "9.0.1", forRemoval = true)
 		public CustomArgumentException(String errorMessage) {
@@ -259,7 +259,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * 
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
-		 * @deprecated Use {@link CustomArgumentException#of(MessageBuilder)} instead
+		 * @deprecated Use {@link CustomArgumentException#fromMessageBuilder(MessageBuilder)} instead
 		 */
 		@Deprecated(since = "9.0.1", forRemoval = true)
 		public CustomArgumentException(MessageBuilder errorMessage) {
@@ -272,7 +272,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
 		 */
-		public static CustomArgumentException of(BaseComponent[] errorMessage) {
+		public static CustomArgumentException fromBaseComponents(BaseComponent[] errorMessage) {
 			CustomArgumentException exception = new CustomArgumentException();
 			exception.errorBaseComponent = errorMessage;
 			return exception;
@@ -284,7 +284,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
 		 */
-		public static CustomArgumentException of(String errorMessage) {
+		public static CustomArgumentException fromString(String errorMessage) {
 			CustomArgumentException exception = new CustomArgumentException();
 			exception.errorMessage = errorMessage;
 			return exception;
@@ -296,7 +296,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
 		 */
-		public static CustomArgumentException of(Component errorMessage) {
+		public static CustomArgumentException fromAdventureComponent(Component errorMessage) {
 			CustomArgumentException exception = new CustomArgumentException();
 			exception.errorComponent = errorMessage;
 			return exception;
@@ -308,7 +308,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
 		 */
-		public static CustomArgumentException of(MessageBuilder errorMessage) {
+		public static CustomArgumentException fromMessageBuilder(MessageBuilder errorMessage) {
 			CustomArgumentException exception = new CustomArgumentException();
 			exception.errorMessageBuilder = errorMessage;
 			return exception;
