@@ -304,8 +304,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				}
 				keyValueSeparatorBuffer.append(currentChar);
 
+				final boolean isInvalidKey = (!keyList.contains(keyValueSeparatorBuffer.toString()) && !keyListEmpty);
 				if (currentIndex == rawValuesChars.length - 1) {
-					throw missingDelimiter(visitedCharacters);
+					if (isInvalidKey) {
+						throw throwInvalidKey(visitedCharacters, keyValueSeparatorBuffer.toString(), false);
+					} else {
+						throw missingDelimiter(visitedCharacters);
+					}
 				}
 			}
 			if (isAValueBeingBuilt) {

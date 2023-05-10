@@ -203,7 +203,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test wrong delimiter
 		// /test map="test1"
-		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers, underscores and periods at position 4: map=<--[HERE]");
+		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: You must separate a key/value pair with a ':' at position 5: map=\"<--[HERE]");
 
 		// Test no delimiter
 		// /test map"test1"
@@ -291,7 +291,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test 3,5:"Hello world!"
-		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers, underscores and periods at position 2: 3,<--[HERE]");
+		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: Invalid key (3,5): cannot be converted to a key at position 3: 3,5<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
@@ -462,7 +462,7 @@ public class ArgumentMapTests extends TestBase {
 		// Key-value pair completed, check if value removal works
 
 		// /test beautiful:"weird"
-		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\""));
+		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\" "));
 
 		// /test beautiful:"weird" bold:"
 		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet"), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
@@ -486,10 +486,37 @@ public class ArgumentMapTests extends TestBase {
 		// Check if value removal works
 
 		// /test beautiful:"weird"
-		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\""));
+		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\" "));
 
 		// /test beautiful:"weird" bold:"
 		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
+	}
+
+	@Test
+	public void suggestionTestWithMapArgumentAndSeparatorSuggestion() {
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map", ':', ", ")
+				.withKeyMapper(s -> s)
+				.withValueMapper(s -> s)
+				.withKeyList(List.of("beautiful", "bold", "crazy", "mighty", "wonderful"))
+				.withValueList(List.of("chaotic", "majestic", "sunny", "sweet", "weird"))
+				.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Previously, the default separator consisting of one space has been used by default and therefore was tested. Now another possibility is tested
+
+		// /test beautiful:"weird"
+		assertEquals(List.of(", "), server.getSuggestions(player, "test beautiful:\"weird\""));
+
+		// /test beautiful:"weird",
+		assertEquals(List.of(", "), server.getSuggestions(player, "test beautiful:\"weird\","));
+
+		// /test beautiful:"weird",
+		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\", "));
 	}
 
 }
