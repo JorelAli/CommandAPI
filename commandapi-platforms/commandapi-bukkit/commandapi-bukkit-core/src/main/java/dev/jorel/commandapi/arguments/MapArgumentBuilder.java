@@ -111,7 +111,7 @@ public class MapArgumentBuilder<K, V> {
 					} else {
 						for (String key : keyList) {
 							if (!keyPattern.matcher(key).matches()) {
-								throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9_\\.]+)'! It may only contain letters from a-z and A-Z, numbers and periods.");
+								throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9_\\.]+)'! It may only contain letters from a-z and A-Z, numbers, periods and underscores.");
 							}
 						}
 						this.keyList = keyList;
