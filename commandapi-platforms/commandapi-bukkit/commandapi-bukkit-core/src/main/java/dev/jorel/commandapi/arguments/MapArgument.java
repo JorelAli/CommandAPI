@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 public class MapArgument<K, V> extends Argument<LinkedHashMap> implements GreedyArgument {
 
 	private final char delimiter;
+	private final String separator;
 	private final Function<String, K> keyMapper;
 	private final Function<String, V> valueMapper;
 
@@ -33,18 +34,17 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	private final boolean keyListEmpty;
 	private final boolean valueListEmpty;
 
-	private final Pattern keyPattern = Pattern.compile("([a-zA-Z0-9_\\.]+)");
-
 	/**
 	 * Constructs a {@link MapArgument}
 	 *
 	 * @param nodeName  the name to assign to this argument node
 	 * @param delimiter This is used to separate key-value pairs
 	 */
-	MapArgument(String nodeName, char delimiter, Function<String, K> keyMapper, Function<String, V> valueMapper, List<String> keyList, List<String> valueList, boolean allowValueDuplicates) {
+	MapArgument(String nodeName, char delimiter, String separator, Function<String, K> keyMapper, Function<String, V> valueMapper, List<String> keyList, List<String> valueList, boolean allowValueDuplicates) {
 		super(nodeName, StringArgumentType.greedyString());
 
 		this.delimiter = delimiter;
+		this.separator = separator;
 		this.keyMapper = keyMapper;
 		this.valueMapper = valueMapper;
 
@@ -92,6 +92,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 						}
 					}
 				}
+				case SEPARATOR_SUGGESTION -> {
+					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentSeparator().length());
+					builder.suggest(separator);
+				}
 			}
 
 			return builder.buildFuture();
@@ -112,8 +116,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	private MapArgumentSuggestionInfo getSuggestionCode(String currentArgument, List<String> keys, List<String> values) throws CommandSyntaxException {
 		String currentKey = "";
 		String currentValue = "";
+		String currentSeparator = "";
 
-		MapArgumentSuggestionInfo suggestionInfo = new MapArgumentSuggestionInfo(currentKey, currentValue, SuggestionCode.KEY_SUGGESTION);
+		MapArgumentSuggestionInfo suggestionInfo = new MapArgumentSuggestionInfo(currentKey, currentValue, currentSeparator, SuggestionCode.KEY_SUGGESTION);
 
 		if (currentArgument.equals("")) {
 			suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
@@ -125,6 +130,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 		StringBuilder keyBuilder = new StringBuilder();
 		StringBuilder valueBuilder = new StringBuilder();
+		StringBuilder separatorBuilder = new StringBuilder();
 		StringBuilder visitedCharacters = new StringBuilder();
 
 		char[] rawValuesChars = currentArgument.toCharArray();
@@ -147,7 +153,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				keyBuilder.append(currentChar);
 				currentKey = keyBuilder.toString();
 				suggestionInfo.setCurrentKey(currentKey);
-				validateKey(visitedCharacters, keyPattern, keyBuilder.toString());
 				for (String key : keys) {
 					if (key.equals(keyBuilder.toString())) {
 						suggestionInfo.setSuggestionCode(SuggestionCode.DELIMITER_SUGGESTION);
@@ -189,8 +194,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 						}
 						continue;
 					}
-					currentKey = "";
-					suggestionInfo.setCurrentKey(currentKey);
+					currentSeparator = "";
+					suggestionInfo.setCurrentSeparator(currentSeparator);
 					isFirstValueCharacter = true;
 
 					keys.remove(keyBuilder.toString());
@@ -202,7 +207,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					valueBuilder.setLength(0);
 
 					isAValueBeingBuilt = false;
-					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
+					suggestionInfo.setSuggestionCode(SuggestionCode.SEPARATOR_SUGGESTION);
 					continue;
 				}
 				valueBuilder.append(currentChar);
@@ -217,12 +222,20 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				}
 			}
 			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
-				if (currentChar != ' ') {
+				// The separator is completed
+				if (separatorBuilder.toString().equals(separator)) {
+					// currentChar is the start of a new key
+					separatorBuilder.setLength(0);
 					isAKeyBeingBuilt = true;
 					keyBuilder.append(currentChar);
 					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
 					suggestionInfo.setCurrentKey(keyBuilder.toString());
+					continue;
 				}
+				// Appends every character after the closing quotation mark to build the separator
+				separatorBuilder.append(currentChar);
+				suggestionInfo.setSuggestionCode(SuggestionCode.SEPARATOR_SUGGESTION);
+				suggestionInfo.setCurrentSeparator(separatorBuilder.toString());
 			}
 		}
 		return suggestionInfo;
@@ -251,7 +264,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		boolean isAValueBeingBuilt = false;
 		boolean isFirstValueCharacter = true;
 		
-		StringBuilder keyValueBuffer = new StringBuilder();
+		StringBuilder keyValueSeparatorBuffer = new StringBuilder();
 		StringBuilder visitedCharacters = new StringBuilder();
 
 		char[] rawValuesChars = rawValues.toCharArray();
@@ -261,8 +274,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			visitedCharacters.append(currentChar);
 			if (isAKeyBeingBuilt) {
 				if (currentChar == delimiter) {
-					if (!keyList.contains(keyValueBuffer.toString()) && !keyListEmpty) {
-						throw throwInvalidKey(visitedCharacters, keyValueBuffer.toString(), true);
+					if (!keyList.contains(keyValueSeparatorBuffer.toString()) && !keyListEmpty) {
+						throw throwInvalidKey(visitedCharacters, keyValueSeparatorBuffer.toString(), true);
 					}
 
 					if (currentIndex == rawValuesChars.length - 1) {
@@ -270,9 +283,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					}
 
 					try {
-						mapKey = keyMapper.apply(keyValueBuffer.toString());
+						mapKey = keyMapper.apply(keyValueSeparatorBuffer.toString());
 					} catch (Exception e) {
-						throw cannotParseKey(visitedCharacters, keyValueBuffer);
+						throw cannotParseKey(visitedCharacters, keyValueSeparatorBuffer);
 					}
 
 					if (results.containsKey(mapKey)) {
@@ -281,7 +294,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 					// No need to check the key here because we already know it only consists of letters
 
-					keyValueBuffer.setLength(0);
+					keyValueSeparatorBuffer.setLength(0);
 					isAKeyBeingBuilt = false;
 					isAValueBeingBuilt = true;
 					continue;
@@ -289,16 +302,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				if (currentChar == '"') {
 					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
 				}
-				keyValueBuffer.append(currentChar);
+				keyValueSeparatorBuffer.append(currentChar);
 
-				final String keyValueBufferString = keyValueBuffer.toString();
-				final boolean isInvalidKey = validateKey(visitedCharacters, keyPattern, keyValueBufferString);
 				if (currentIndex == rawValuesChars.length - 1) {
-					if (isInvalidKey) {
-						throw throwInvalidKey(visitedCharacters, keyValueBufferString, false);
-					} else {
-						throw missingDelimiter(visitedCharacters);
-					}
+					throw missingDelimiter(visitedCharacters);
 				}
 			}
 			if (isAValueBeingBuilt) {
@@ -312,31 +319,31 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				}
 				if (currentChar == '\\') {
 					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						keyValueBuffer.append('\\');
+						keyValueSeparatorBuffer.append('\\');
 						continue;
 					}
 					continue;
 				}
 				if (currentChar == '"') {
 					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						keyValueBuffer.append('"');
+						keyValueSeparatorBuffer.append('"');
 						continue;
 					}
-					if (!valueList.contains(keyValueBuffer.toString()) && !valueListEmpty) {
-						throw throwInvalidValue(visitedCharacters, keyValueBuffer.toString());
+					if (!valueList.contains(keyValueSeparatorBuffer.toString()) && !valueListEmpty) {
+						throw throwInvalidValue(visitedCharacters, keyValueSeparatorBuffer.toString());
 					}
 
 					try {
-						mapValue = valueMapper.apply(keyValueBuffer.toString());
+						mapValue = valueMapper.apply(keyValueSeparatorBuffer.toString());
 					} catch (Exception e) {
-						throw cannotParseValue(visitedCharacters, keyValueBuffer);
+						throw cannotParseValue(visitedCharacters, keyValueSeparatorBuffer);
 					}
 
 					if (results.containsValue(mapValue) && !allowValueDuplicates) {
 						throw duplicateValue(visitedCharacters);
 					}
 
-					keyValueBuffer.setLength(0);
+					keyValueSeparatorBuffer.setLength(0);
 					isFirstValueCharacter = true;
 					results.put(mapKey, mapValue);
 					mapKey = null;
@@ -344,24 +351,25 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					isAValueBeingBuilt = false;
 					continue;
 				}
-				keyValueBuffer.append(currentChar);
+				keyValueSeparatorBuffer.append(currentChar);
 			}
 			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
-				if (currentChar != ' ') {
+				// The separator has been completed, building happens under the if statement
+				if (keyValueSeparatorBuffer.toString().equals(separator)) {
+					// currentChar is the start of a new value
+					keyValueSeparatorBuffer.setLength(0);
 					isAKeyBeingBuilt = true;
-					keyValueBuffer.append(currentChar);
+					keyValueSeparatorBuffer.append(currentChar);
+					continue;
+				}
+				keyValueSeparatorBuffer.append(currentChar);
+				if (!separator.startsWith(keyValueSeparatorBuffer.toString())) {
+					throw invalidSeparator(visitedCharacters, keyValueSeparatorBuffer.toString());
 				}
 			}
 		}
-		validateValueInput(keyValueBuffer, visitedCharacters);
+		validateValueInput(keyValueSeparatorBuffer, visitedCharacters);
 		return results;
-	}
-
-	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, String keyValueBufferString) throws CommandSyntaxException {
-		if (!keyPattern.matcher(keyValueBufferString).matches()) {
-			throw throwInvalidKeyCharacter(visitedCharacters);
-		}
-		return !keyList.contains(keyValueBufferString) && !keyListEmpty;
 	}
 
 	private void validateValueStart(char currentChar, StringBuilder visitedCharacters) throws CommandSyntaxException {
@@ -379,13 +387,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			reader.setCursor(visitedCharacters.toString().length());
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must end with a quotation mark");
 		}
-	}
-
-	private CommandSyntaxException throwInvalidKeyCharacter(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers, underscores and periods");
 	}
 
 	private CommandSyntaxException throwValueEarlyStart(StringBuilder visitedCharacters, String delimiter) {
@@ -407,6 +408,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
 		reader.setCursor(context.length());
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value: " + value);
+	}
+
+	private CommandSyntaxException invalidSeparator(StringBuilder visitedCharacters, String separator) {
+		String context = visitedCharacters.toString();
+		StringReader reader = new StringReader(context);
+		reader.setCursor(context.length());
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid separator: " + separator);
 	}
 
 	private CommandSyntaxException duplicateKey(StringBuilder visitedCharacters) {
@@ -462,11 +470,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 		private String currentKey;
 		private String currentValue;
+		private String currentSeparator;
 		private SuggestionCode suggestionCode;
 
-		MapArgumentSuggestionInfo(String currentKey, String currentValue, SuggestionCode suggestionCode) {
+		MapArgumentSuggestionInfo(String currentKey, String currentValue, String currentSeparator, SuggestionCode suggestionCode) {
 			this.currentKey = currentKey;
 			this.currentValue = currentValue;
+			this.currentSeparator = currentSeparator;
 			this.suggestionCode = suggestionCode;
 		}
 
@@ -486,6 +496,14 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			this.currentValue = currentValue;
 		}
 
+		public String getCurrentSeparator() {
+			return currentSeparator;
+		}
+
+		public void setCurrentSeparator(String currentSeparator) {
+			this.currentSeparator = currentSeparator;
+		}
+
 		public SuggestionCode getSuggestionCode() {
 			return suggestionCode;
 		}
@@ -499,7 +517,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		KEY_SUGGESTION,
 		DELIMITER_SUGGESTION,
 		QUOTATION_MARK_SUGGESTION,
-		VALUE_SUGGESTION
+		VALUE_SUGGESTION,
+		SEPARATOR_SUGGESTION
 	}
 
 }

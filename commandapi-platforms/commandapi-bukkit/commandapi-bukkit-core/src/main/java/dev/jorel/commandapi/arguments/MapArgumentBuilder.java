@@ -14,10 +14,14 @@ public class MapArgumentBuilder<K, V> {
 
 	private final String nodeName;
 	private final char delimiter;
+	private final String separator;
 
 	/**
-	 * Creates a new MapArgumentBuilder with a specified node name. Defaults the
-	 * delimiter for each key/value pair to a colon
+	 * Creates a new MapArgumentBuilder with a specified node name.
+	 * <br>
+	 * Defaults the delimiter between keys and values to a colon
+	 * <br>
+	 * Defaults the separator for each key/value pair to a space
 	 *
 	 * @param nodeName the name of the node for this argument
 	 */
@@ -27,13 +31,27 @@ public class MapArgumentBuilder<K, V> {
 
 	/**
 	 * Creates a new MapArgumentBuilder with a specified node name
+	 * <br>
+	 * Defaults the separator for each key/value pair to a space
 	 *
 	 * @param nodeName  the name of the node for this argument
-	 * @param delimiter the separator for each key/value pair
+	 * @param delimiter the delimiter between keys and values
 	 */
 	public MapArgumentBuilder(String nodeName, char delimiter) {
+		this(nodeName, delimiter, " ");
+	}
+
+	/**
+	 * Creates a new MapArgumentBuilder with a specified node name
+	 *
+	 * @param nodeName the name of the node for this argument
+	 * @param delimiter the delimiter between keys and values
+	 * @param separator the separator between each key/value pair
+	 */
+	public MapArgumentBuilder(String nodeName, char delimiter, String separator) {
 		this.nodeName = nodeName;
 		this.delimiter = delimiter;
+		this.separator = separator;
 	}
 
 	/**
@@ -105,17 +123,7 @@ public class MapArgumentBuilder<K, V> {
 				private final List<String> keyList;
 
 				public MapArgumentBuilderSuggestsValue(List<String> keyList) {
-					Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\\.]+)");
-					if (keyList == null) {
-						this.keyList = null;
-					} else {
-						for (String key : keyList) {
-							if (!keyPattern.matcher(key).matches()) {
-								throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9\\.]+)'! It may only contain letters from a-z and A-Z, numbers and periods.");
-							}
-						}
-						this.keyList = keyList;
-					}
+					this.keyList = keyList;
 				}
 
 				/**
@@ -169,7 +177,7 @@ public class MapArgumentBuilder<K, V> {
 					 * @return a new {@link MapArgument}
 					 */
 					public MapArgument<K, V> build() {
-						return new MapArgument<>(nodeName, delimiter, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
+						return new MapArgument<>(nodeName, delimiter, separator, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
 					}
 
 				}
