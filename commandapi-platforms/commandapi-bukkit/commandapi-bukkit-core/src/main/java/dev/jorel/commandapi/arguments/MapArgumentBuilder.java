@@ -105,13 +105,13 @@ public class MapArgumentBuilder<K, V> {
 				private final List<String> keyList;
 
 				public MapArgumentBuilderSuggestsValue(List<String> keyList) {
-					Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\\.]+)");
+					Pattern keyPattern = Pattern.compile("([a-zA-Z0-9_\\.]+)");
 					if (keyList == null) {
 						this.keyList = null;
 					} else {
 						for (String key : keyList) {
 							if (!keyPattern.matcher(key).matches()) {
-								throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9\\.]+)'! It may only contain letters from a-z and A-Z, numbers and periods.");
+								throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9_\\.]+)'! It may only contain letters from a-z and A-Z, numbers and periods.");
 							}
 						}
 						this.keyList = keyList;
