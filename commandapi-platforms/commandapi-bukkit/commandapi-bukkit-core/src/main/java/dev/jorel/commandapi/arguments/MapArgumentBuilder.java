@@ -103,7 +103,13 @@ public class MapArgumentBuilder<K, V> {
 			 * @return this map argument builder
 			 */
 			public MapArgumentBuilderSuggestsValue withKeyList(List<String> keyList) {
-				return new MapArgumentBuilderSuggestsValue(keyList);
+				if (keyList == null) {
+					return new MapArgumentBuilderSuggestsValue(null, false);
+				}
+				if (keyList.contains(String.valueOf(delimiter))) {
+					return new MapArgumentBuilderSuggestsValue(keyList, true);
+				}
+				return new MapArgumentBuilderSuggestsValue(keyList, false);
 			}
 
 			/**
@@ -121,9 +127,11 @@ public class MapArgumentBuilder<K, V> {
 			public class MapArgumentBuilderSuggestsValue {
 
 				private final List<String> keyList;
+				private final boolean forceQuoteKeys;
 
-				public MapArgumentBuilderSuggestsValue(List<String> keyList) {
+				public MapArgumentBuilderSuggestsValue(List<String> keyList, boolean forceQuoteKeys) {
 					this.keyList = keyList;
+					this.forceQuoteKeys = forceQuoteKeys;
 				}
 
 				/**
@@ -177,7 +185,7 @@ public class MapArgumentBuilder<K, V> {
 					 * @return a new {@link MapArgument}
 					 */
 					public MapArgument<K, V> build() {
-						return new MapArgument<>(nodeName, delimiter, separator, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
+						return new MapArgument<>(nodeName, delimiter, separator, keyMapper, valueMapper, keyList, valueList, forceQuoteKeys, allowValueDuplicates);
 					}
 
 				}
