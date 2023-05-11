@@ -45,7 +45,7 @@ new CommandAPICommand("mycommand")
 new CommandAPICommand("mycommand")
     .withOptionalArguments(new StringArgument("string"))
     .executes((sender, args) -> {
-        String string = args.getOrDefaultUnchecked("string", "Default Value);
+        String string = args.getOrDefaultUnchecked("string", "Default Value");
     })
     .register();
 ```
@@ -69,7 +69,7 @@ new CommandAPICommand("mycommand")
 new CommandAPICommand("mycommand")
     .withOptionalArguments(new StringArgument("string"))
     .executes((sender, args) -> {
-        String string = args.getOptionalUnchecked("string").orElse("Default Value);
+        String string = args.getOptionalUnchecked("string").orElse("Default Value");
     })
     .register();
 ```
