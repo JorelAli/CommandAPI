@@ -1,5 +1,83 @@
 # Upgrading guide
 
+## From 9.0.0 to 9.0.1
+
+### CustomArgumentException changes
+
+For 9.0.1, the `CustomArgumentException` constructors have been deprecated and should no longer be used. Instead, use the `CustomArgumentException` static factory methods:
+
+<div class="multi-pre">
+
+```java,9.0.0
+throw new CustomArgumentException(new MessageBuilder(...));
+throw new CustomArgumentException("Error message");
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.1
+throw CustomArgumentException.fromMessageBuilder(new MessageBuilder(...));
+throw CustomArgumentException.fromString("Error message");
+```
+
+</div>
+
+### CommandArguments changes
+
+For 9.0.1 the various `CommandArguments#getOrDefault()` and `CommandArguments#getOrDefaultUnchecked()` have been deprecated and should no longer be used. Instead, use the `CommandArguments#getOptional()` and `CommandArguments#getOptionalUnchecked()` methods:
+
+<div class="multi-pre">
+
+```java,9.0.0_(Not_using_unchecked)
+new CommandAPICommand("mycommand")
+    .withOptionalArguments(new StringArgument("string"))
+    .executes((sender, args) -> {
+        String string = (String) args.getOrDefault("string", "Default Value");
+    })
+    .register();
+```
+
+```java,9.0.0_(Using_unchecked)
+new CommandAPICommand("mycommand")
+    .withOptionalArguments(new StringArgument("string"))
+    .executes((sender, args) -> {
+        String string = args.getOrDefaultUnchecked("string", "Default Value");
+    })
+    .register();
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.1_(Not_using_unchecked)
+new CommandAPICommand("mycommand")
+    .withOptionalArguments(new StringArgument("string"))
+    .executes((sender, args) -> {
+        String string = (String) args.getOptional("string").orElse("Default Value");
+    })
+    .register();
+```
+
+```java,9.0.1_(Using_unchecked)
+new CommandAPICommand("mycommand")
+    .withOptionalArguments(new StringArgument("string"))
+    .executes((sender, args) -> {
+        String string = args.getOptionalUnchecked("string").orElse("Default Value");
+    })
+    .register();
+```
+
+</div>
+
+-----
+
 ## From 8.8.x to 9.0.0
 
 CommandAPI 9.0.0 is arguably the biggest change in the CommandAPI's project structure and usage. This update was designed to allow the CommandAPI to be generalized for other platforms (e.g. Velocity, Fabric, Sponge), and as a result **this update is incompatible with previous versions of the CommandAPI**.

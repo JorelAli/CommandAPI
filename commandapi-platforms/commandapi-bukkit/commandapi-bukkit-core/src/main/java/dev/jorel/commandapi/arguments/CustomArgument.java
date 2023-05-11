@@ -20,16 +20,22 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.io.Serializable;
+
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+
+import dev.jorel.commandapi.BukkitTooltip;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.executors.CommandArguments;
-import org.bukkit.command.CommandSender;
-
-import java.io.Serializable;
+import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
  * An argument that represents any custom object
@@ -214,18 +220,50 @@ public class CustomArgument<T, B> extends Argument<T> {
 	@SuppressWarnings("serial")
 	public static class CustomArgumentException extends Exception {
 
-		private final String errorMessage;
-		private final MessageBuilder errorMessageBuilder;
+		private BaseComponent[] errorBaseComponent = null;
+		private Component errorComponent = null;
+		private String errorMessage = null;
+		private MessageBuilder errorMessageBuilder = null;
+		
+		/* Prevent instantiation from any other sources */
+		private CustomArgumentException() {
+			
+		}
 
 		/**
 		 * Constructs a CustomArgumentException with a given error message
 		 * 
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
+		 * @deprecated Use {@link CustomArgumentException#fromBaseComponents(BaseComponent...)} instead
 		 */
+		@Deprecated(since = "9.0.1", forRemoval = true)
+		public CustomArgumentException(BaseComponent[] errorMessage) {
+			this.errorBaseComponent = errorMessage;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 * @deprecated Use {@link CustomArgumentException#fromString(String)} instead
+		 */
+		@Deprecated(since = "9.0.1", forRemoval = true)
 		public CustomArgumentException(String errorMessage) {
 			this.errorMessage = errorMessage;
-			this.errorMessageBuilder = null;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 * @deprecated Use {@link CustomArgumentException#fromMessageBuilder(MessageBuilder)} instead
+		 */
+		@Deprecated(since = "9.0.1", forRemoval = true)
+		public CustomArgumentException(MessageBuilder errorMessage) {
+			this.errorMessageBuilder = errorMessage;
 		}
 
 		/**
@@ -234,9 +272,46 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
 		 */
-		public CustomArgumentException(MessageBuilder errorMessage) {
-			this.errorMessage = null;
-			this.errorMessageBuilder = errorMessage;
+		public static CustomArgumentException fromBaseComponents(BaseComponent[] errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorBaseComponent = errorMessage;
+			return exception;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 */
+		public static CustomArgumentException fromString(String errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorMessage = errorMessage;
+			return exception;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 */
+		public static CustomArgumentException fromAdventureComponent(Component errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorComponent = errorMessage;
+			return exception;
+		}
+
+		/**
+		 * Constructs a CustomArgumentException with a given error message
+		 * 
+		 * @param errorMessage the error message to display to the user when this
+		 *                     exception is thrown
+		 */
+		public static CustomArgumentException fromMessageBuilder(MessageBuilder errorMessage) {
+			CustomArgumentException exception = new CustomArgumentException();
+			exception.errorMessageBuilder = errorMessage;
+			return exception;
 		}
 
 		/**
@@ -248,15 +323,31 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * @return a Brigadier CommandSyntaxException
 		 */
 		public CommandSyntaxException toCommandSyntax(String result, CommandContext<?> cmdCtx) {
-			if (errorMessage == null) {
+			if (errorBaseComponent != null) {
+				// Deal with BaseComponent[]
+				Message brigadierMessage = BukkitTooltip.messageFromBaseComponents(errorBaseComponent);
+				return new SimpleCommandExceptionType(brigadierMessage).create();
+			}
+
+			if (errorComponent != null) {
+				// Deal with Adventure Component
+				Message brigadierMessage = BukkitTooltip.messageFromAdventureComponent(errorComponent);
+				return new SimpleCommandExceptionType(brigadierMessage).create();
+			}
+
+			if (errorMessageBuilder != null) {
 				// Deal with MessageBuilder
 				String errorMsg = errorMessageBuilder.toString().replace(INPUT, result).replace(FULL_INPUT,
 					cmdCtx.getInput());
-				return new SimpleCommandExceptionType(() -> errorMsg).create();
-			} else {
+				return new SimpleCommandExceptionType(new LiteralMessage(errorMsg)).create();
+			}
+
+			if (errorMessage != null) {
 				// Deal with String
 				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
 			}
+
+			throw new IllegalStateException("No error component, error message creator or error message specified");
 		}
 
 	}

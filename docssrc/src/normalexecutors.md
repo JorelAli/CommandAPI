@@ -1,6 +1,6 @@
 # Normal command executors
 
-Command executors are of the following format, where `sender` is a [`CommandSender`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html), and `args` is an `Object[]`, which represents arguments which are parsed by the CommandAPI.
+Command executors are of the following format, where `sender` is a [`CommandSender`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html), and `args` is a `CommandArguments` object, which represents arguments which are parsed by the CommandAPI.
 
 ```java
 new CommandAPICommand("...")
@@ -168,3 +168,31 @@ Expanding on the suicide example above, we can restrict the command to only play
 </div>
 
 </div>
+
+-----
+
+## Using the ExecutionInfo
+
+You also have the option to implement a command executor which uses an `ExecutionInfo` object:
+
+```java
+new CommandAPICommand("...")
+    .executes(info -> {
+        // Use info here
+    })
+    .register();
+```
+
+The `ExecutionInfo` provides two user-facing methods which both let you access the [`CommandSender`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html) and the arguments:
+
+```java
+CommandSender sender();
+```
+
+This method automatically detects which CommandSender type has been used, similar to the `.executesXXX()` method (see [here](./normalexecutors.md#restricting-who-can-run-your-command))! Therefore, casting is not necessary!
+
+The second method lets you access the command's arguments:
+
+```java
+CommandArguments args();
+```

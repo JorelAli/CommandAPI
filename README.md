@@ -48,21 +48,21 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.0.0 | 9.0.0                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.0.0 | 9.0.0                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.0.0 | 9.0.0                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.0.0 | 9.0.0                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.0.0 | 9.0.0                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.0.0 | 9.0.0                        | 16                                                        |
-| **1.17**           | 6.0.x - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.19**           | 8.3.0 - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.19.2**         | 8.5.1 - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.19.3**         | 8.7.0 - 9.0.0               | 9.0.0                        | 16                                                        |
-| **1.19.4**         | 8.8.0 - 9.0.0               | 9.0.0                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.0.1 | 9.0.1                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.0.1 | 9.0.1                        | 16                                                        |
+| **1.17**           | 6.0.x - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.19**           | 8.3.0 - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.19.3**         | 8.7.0 - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.19.4**         | 8.8.0 - 9.0.1               | 9.0.1                        | 16                                                        |
 
 -----
 
@@ -289,9 +289,9 @@ The CommandAPI is built using the Maven build tool - if you don't have it, you c
   git clone https://github.com/JorelAli/CommandAPI.git
   ```
 
-- Run `mvn`
+- Run `mvn clean install -P Platform.Bukkit`
 
-The resulting plugin `.jar` is found in `commandapi-plugin/target/CommandAPI-X.X.X_DATE.jar`
+The resulting plugin `.jar` is found in `commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/target/CommandAPI-X.X.X_DATE.jar`
 
 ## Building the CommandAPI's documentation
 
@@ -332,19 +332,19 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 
 ## CommandAPI Project Timeline
 
-This is the current roadmap for the CommandAPI (as of 2nd November 2022):
+This is the current roadmap for the CommandAPI (as of 11th May 2023):
 
-- **9.0.0:**
-
-  Project refactor in preparation for supporting Velocity, Sponge, Fabric etc.
-
-- **After 9.0.0:**
+- **10.0.0:**
 
   **Annotation improvements**
 
-  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.
+  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation. More information about annotations can be found in the [Annotation specification document ](./annotations_spec_doc.md).
 
 - **Future:**
+
+  **Velocity support**
+
+  Velocity support has been greatly anticipated by a large number of developers and we're hoping to bring Velocity support to you at some point in the future!
 
   **Argument conflict detection**
 
@@ -367,6 +367,21 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>9.0.1</b></td>
+            <td valign="top">May 2023</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixed <code>MapArgument</code> not always allowing player names as keys</li>
+                    <li>Fixed <code>/execute as ...</code> not working due to casting to a player instead of a proxied sender</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/441 Added <code>CommandArguments#count()</code> utility method</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/440 Added several <code>CommandArguments#getOptional()</code> methods</li>
+                    <li>Fixed bug where <code>IntegerArgument</code> would fail to compile due to a missing Brigadier dependency</li>
+                    <li>Added basic support for Folia</li>
+                    <li>Added support for the <code>CustomArgumentException</code> to accept Adventure and Spigot text components</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>9.0.0</b></td>
             <td valign="top">April 2023</td>

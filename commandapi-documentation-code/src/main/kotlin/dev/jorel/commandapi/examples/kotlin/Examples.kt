@@ -337,7 +337,7 @@ fun worldArgument(nodeName: String): Argument<World> {
         val world = Bukkit.getWorld(info.input())
 
         if (world == null) {
-            throw CustomArgumentException(MessageBuilder("Unknown world: ").appendArgInput())
+            throw CustomArgumentException.fromMessageBuilder(MessageBuilder("Unknown world: ").appendArgInput())
         } else {
             world
         }
@@ -1524,7 +1524,7 @@ CommandAPICommand("sayhi")
 CommandAPICommand("sayhi")
     .withOptionalArguments(PlayerArgument("target"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target: Player = args.getOrDefault("target", player) as Player
+        val target: Player = args.getOptional("target").orElse(player) as Player
         target.sendMessage("Hi!")
     })
     .register()
@@ -1549,7 +1549,7 @@ CommandAPICommand("rate")
         val rating = args["rating"] as Int
 
         // The target player is optional, so give it a default here
-        val target: CommandSender = args.getOrDefault("target", sender) as CommandSender
+        val target: CommandSender = args.getOptional("target").orElse(sender) as CommandSender
 
         target.sendMessage("Your $topic was rated: $rating/10")
     })

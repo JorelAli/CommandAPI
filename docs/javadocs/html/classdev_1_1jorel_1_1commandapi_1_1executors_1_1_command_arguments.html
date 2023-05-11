@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -103,6 +103,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3462187aaa7a94ef473adcca67cc2eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a429f0c71077085cdcf4949be1ba2ea9a"><td class="memItemLeft" align="right" valign="top">Map&lt; String, Object &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#a429f0c71077085cdcf4949be1ba2ea9a">argsMap</a> ()</td></tr>
 <tr class="separator:a429f0c71077085cdcf4949be1ba2ea9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac244b8e403fe56f2ac090c7504f5412f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#ac244b8e403fe56f2ac090c7504f5412f">count</a> ()</td></tr>
+<tr class="separator:ac244b8e403fe56f2ac090c7504f5412f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fe228e2e6fd0dc8c110c7b79c5e703d"><td class="memItemLeft" align="right" valign="top">Object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#a6fe228e2e6fd0dc8c110c7b79c5e703d">get</a> (int index)</td></tr>
 <tr class="memdesc:a6fe228e2e6fd0dc8c110c7b79c5e703d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an argument by its position.  <a href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#a6fe228e2e6fd0dc8c110c7b79c5e703d">More...</a><br /></td></tr>
 <tr class="separator:a6fe228e2e6fd0dc8c110c7b79c5e703d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,6 +126,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af78b063fb78cb4f878d8dfe810372b75"><td class="memItemLeft" align="right" valign="top">Object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#af78b063fb78cb4f878d8dfe810372b75">getOrDefault</a> (String nodeName, Supplier&lt;?&gt; defaultValue)</td></tr>
 <tr class="memdesc:af78b063fb78cb4f878d8dfe810372b75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an argument by its node name.  <a href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#af78b063fb78cb4f878d8dfe810372b75">More...</a><br /></td></tr>
 <tr class="separator:af78b063fb78cb4f878d8dfe810372b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e782e8c22aa79e9e1dac4c66bb4b625"><td class="memItemLeft" align="right" valign="top">Optional&lt; Object &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#a0e782e8c22aa79e9e1dac4c66bb4b625">getOptional</a> (int index)</td></tr>
+<tr class="memdesc:a0e782e8c22aa79e9e1dac4c66bb4b625"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an <code>Optional</code> holding the argument by its index.  <a href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#a0e782e8c22aa79e9e1dac4c66bb4b625">More...</a><br /></td></tr>
+<tr class="separator:a0e782e8c22aa79e9e1dac4c66bb4b625"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa64f0e70d01433a950f74716ffc2f0ed"><td class="memItemLeft" align="right" valign="top">Optional&lt; Object &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#aa64f0e70d01433a950f74716ffc2f0ed">getOptional</a> (String nodeName)</td></tr>
+<tr class="memdesc:aa64f0e70d01433a950f74716ffc2f0ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an argument by its node name.  <a href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#aa64f0e70d01433a950f74716ffc2f0ed">More...</a><br /></td></tr>
+<tr class="separator:aa64f0e70d01433a950f74716ffc2f0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This class stores the arguments for this command. </p>
@@ -209,6 +217,24 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ac244b8e403fe56f2ac090c7504f5412f" name="ac244b8e403fe56f2ac090c7504f5412f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac244b8e403fe56f2ac090c7504f5412f">&#9670;&nbsp;</a></span>count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int dev.jorel.commandapi.executors.CommandArguments.count </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The number of arguments in this object </dd></dl>
+
+</div>
+</div>
 <a id="a6fe228e2e6fd0dc8c110c7b79c5e703d" name="a6fe228e2e6fd0dc8c110c7b79c5e703d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6fe228e2e6fd0dc8c110c7b79c5e703d">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
 
@@ -283,6 +309,60 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a0e782e8c22aa79e9e1dac4c66bb4b625" name="a0e782e8c22aa79e9e1dac4c66bb4b625"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e782e8c22aa79e9e1dac4c66bb4b625">&#9670;&nbsp;</a></span>getOptional() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Optional&lt; Object &gt; dev.jorel.commandapi.executors.CommandArguments.getOptional </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns an <code>Optional</code> holding the argument by its index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the argument which is placed at the given index, or an empty optional if index is invalid </dd></dl>
+
+</div>
+</div>
+<a id="aa64f0e70d01433a950f74716ffc2f0ed" name="aa64f0e70d01433a950f74716ffc2f0ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa64f0e70d01433a950f74716ffc2f0ed">&#9670;&nbsp;</a></span>getOptional() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Optional&lt; Object &gt; dev.jorel.commandapi.executors.CommandArguments.getOptional </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>nodeName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns an argument by its node name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the argument with the specified node name or an empty optional if the node name was not found </dd></dl>
+
+</div>
+</div>
 <a id="a07c81a19463ba5b328e7aa09177d14e6" name="a07c81a19463ba5b328e7aa09177d14e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a07c81a19463ba5b328e7aa09177d14e6">&#9670;&nbsp;</a></span>getOrDefault() <span class="overload">[1/4]</span></h2>
 
@@ -317,6 +397,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>This method has been deprecated! Please use <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#a0e782e8c22aa79e9e1dac4c66bb4b625">CommandArguments#getOptional(int)</a></code> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or the provided default value </dd></dl>
 
 </div>
@@ -355,6 +436,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd>This method has been deprecated! Please use <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#a0e782e8c22aa79e9e1dac4c66bb4b625">CommandArguments#getOptional(int)</a></code> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or the provided default value </dd></dl>
 
 </div>
@@ -393,6 +475,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>This method has been deprecated! Please use <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#aa64f0e70d01433a950f74716ffc2f0ed">CommandArguments#getOptional(String)</a></code> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The argument with the specified node name or the provided default value </dd></dl>
 
 </div>
@@ -431,6 +514,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000004">Deprecated:</a></b></dt><dd>This method has been deprecated! Please use <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#aa64f0e70d01433a950f74716ffc2f0ed">CommandArguments#getOptional(String)</a></code> </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The argument with the specified node name or the provided default value </dd></dl>
 
 </div>
@@ -441,7 +525,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html">executors</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html">CommandArguments</a></li>
-    <li class="footer">Generated on Sat Apr 22 2023 21:23:58 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Thu May 11 2023 10:51:30 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

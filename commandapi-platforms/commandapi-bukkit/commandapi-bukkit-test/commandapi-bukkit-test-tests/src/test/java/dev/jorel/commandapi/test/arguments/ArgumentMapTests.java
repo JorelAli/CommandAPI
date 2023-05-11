@@ -1,5 +1,17 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
+
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.MapArgument;
@@ -8,16 +20,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import io.netty.util.internal.ThreadLocalRandom;
 
 /**
  * Tests for the {@link MapArgument}
@@ -125,6 +128,46 @@ public class ArgumentMapTests extends TestBase {
 		testMap.clear();
 		testMap.put("map", "\\hello\\");
 		assertEquals(testMap, results.get());
+		
+		assertNoMoreResults(results);
+	}
+
+	@RepeatedTest(10)
+	public void executionTestWithMapArgumentAndPlayerNameKeys() {
+		Mut<LinkedHashMap<String, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
+				.withKeyMapper(s -> s)
+				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
+				.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set((LinkedHashMap<String, String>) args.get("map"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+		
+		// A username is 3 - 16 characters long, has no spaces and only consist
+		// of a-z, A-Z, 0-9 and underscore (_)
+		
+		String possibleChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+		StringBuilder playerNameBuilder = new StringBuilder();
+		for(int i = 0; i < ThreadLocalRandom.current().nextInt(3, 17); i++) {
+			playerNameBuilder.append(possibleChars.charAt(ThreadLocalRandom.current().nextInt(0, possibleChars.length())));
+		}
+		final String playerName = playerNameBuilder.toString();
+
+		// /test <random player name, derived above>:"value"
+		server.dispatchCommand(player, "test " + playerName + ":\"value\"");
+		Map<String, String> testMap = new LinkedHashMap<>();
+		testMap.put(playerName, "value");
+		assertEquals(testMap, results.get());
+
+		assertNoMoreResults(results);
 	}
 
 	@Test
@@ -160,7 +203,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test wrong delimiter
 		// /test map="test1"
-		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods at position 4: map=<--[HERE]");
+		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers, underscores and periods at position 4: map=<--[HERE]");
 
 		// Test no delimiter
 		// /test map"test1"
@@ -248,7 +291,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test 3,5:"Hello world!"
-		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers and periods at position 2: 3,<--[HERE]");
+		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers, underscores and periods at position 2: 3,<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
@@ -351,6 +394,10 @@ public class ArgumentMapTests extends TestBase {
 
 		assertNoMoreResults(results);
 	}
+
+	/********************
+	 * Suggestion tests *
+	 ********************/
 
 	@Test
 	public void suggestionTestWithMapArgumentAndNoValueDuplicates() {

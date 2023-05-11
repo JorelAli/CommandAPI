@@ -116,7 +116,7 @@ span {
 	font-family: CustomFont;
 	color: #DDD;
 	font-size: 20pt;
-	text-shadow: 2px 2px #000A;
+	text-shadow: 3px 3px #000A;
 	box-shadow: inset -2px -4px #0006, inset 2px 2px #FFF7;
 	image-rendering: pixelated;
 	border: 2px solid #000;
@@ -124,7 +124,7 @@ span {
 
 #register-commands-button:hover {
 	background: #b2b6ff url('./bgbtnhov.png');
-	text-shadow: 2px 2px #202013CC;
+	text-shadow: 3px 3px #202013CC;
 	color: #FFFFA0;
 }
 #register-commands-button:active {

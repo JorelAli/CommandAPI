@@ -1,7 +1,8 @@
 var classdev_1_1jorel_1_1commandapi_1_1_paper_implementations =
 [
-    [ "PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a0ae58cd62b55fb627be20384b94232f8", null ],
+    [ "PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a2f032cf6b53d414bd5f6bd6700cf674e", null ],
     [ "getCommandMap", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a8ec2d9da8ab719d39e9d8f58223e4def", null ],
-    [ "isPresent", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a98915be1ef7ff1e0c4f3af0a9a250fb4", null ],
+    [ "isFoliaPresent", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a117d3e91a256f5330d48b92f2c1390a9", null ],
+    [ "isPaperPresent", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a3bce5d96f687098af0d5d14a55443f3d", null ],
     [ "registerReloadHandler", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#aa5482b88bafb52890f739f21f49ae7d0", null ]
 ];

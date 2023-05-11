@@ -39,7 +39,7 @@ class OptionalArgumentTests: TestBase() {
 		commandAPICommand("test") {
 			optionalArgument(StringArgument("value"))
 			playerExecutor { player, args ->
-				results.set(args.getOrDefault("value", "DefaultValue") as String)
+				results.set(args.getOptional("value").orElse("DefaultValue") as String)
 			}
 		}
 
@@ -80,9 +80,9 @@ class OptionalArgumentTests: TestBase() {
 		// because everything can be achieved by using the normal CommandTree DSL syntax and
 		// the argument() method
 		commandTree("test") {
-			optionalArgument(StringArgument("value")) {
+			stringArgument("value", optional = true) {
 				playerExecutor { player, args ->
-					results.set(args.getOrDefault("value", "DefaultValue") as String)
+					results.set(args.getOptional("value").orElse("DefaultValue") as String)
 				}
 			}
 		}
@@ -107,7 +107,7 @@ class OptionalArgumentTests: TestBase() {
 		commandAPICommand("test") {
 			stringArgument("value", optional = true)
 			playerExecutor { player, args ->
-				results.set(args.getOrDefault("value", "DefaultValue") as String)
+				results.set(args.getOptional("value").orElse("DefaultValue") as String)
 			}
 		}
 

@@ -109,7 +109,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 		if (component != null) {
 			if (component instanceof BaseComponent[] baseComponent) {
 				jsonToSend = ComponentSerializer.toString(baseComponent);
-			} else if (platform.getPaper().isPresent()) {
+			} else if (platform.getPaper().isPaperPresent()) {
 				if (component instanceof Component adventureComponent) {
 					jsonToSend = GsonComponentSerializer.gson().serialize(adventureComponent);
 				} else {

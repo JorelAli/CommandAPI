@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.0.0</version>
+		<version>9.0.1</version>
 	</parent>
 	<artifactId>commandapi-bukkit-core</artifactId>
 	<repositories>
@@ -44,6 +44,12 @@
 			<artifactId>adventure-platform-bukkit</artifactId>
 			<version>4.2.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>dev.folia</groupId>
+			<artifactId>folia-api</artifactId>
+			<version>1.19.4-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.papermc.paper</groupId>
