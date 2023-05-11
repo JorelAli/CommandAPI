@@ -96,11 +96,13 @@ Say we want to create an argument to represents the list of available worlds on 
 
 </div>
 
-In our error handling step, we check if the world is equal to null (since the `Bukkit.getWorld(String)` is `@Nullable`). To handle this case, we throw a `CustomArgumentException` with an error from a `MessageBuilder`. The `CustomArgumentException` has two constructors, so a message builder isn't required each time:
+In our error handling step, we check if the world is equal to null (since the `Bukkit.getWorld(String)` is `@Nullable`). To handle this case, we throw a `CustomArgumentException` with an error from a `MessageBuilder`. The `CustomArgumentException` has various static factory methods tailored to your desired printing method, so a message builder isn't required each time:
 
 ```java
-new CustomArgumentException(String message);
-new CustomArgumentException(MessageBuilder message);
+CustomArgumentException fromBaseComponents(BaseComponent[] errorMessage);
+CustomArgumentException fromString(String errorMessage);
+CustomArgumentException fromAdventureComponent(Component errorMessage);
+CustomArgumentException fromMessageBuilder(MessageBuilder errorMessage);
 ```
 
 -----

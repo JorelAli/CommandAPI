@@ -2,13 +2,37 @@
 
 ## From 9.0.0 to 9.0.1
 
+### CustomArgumentException changes
+
+For 9.0.1, the `CustomArgumentException` constructors have been deprecated and should no longer be used. Instead, use the `CustomArgumentException` static factory methods:
+
+<div class="multi-pre">
+
+```java,9.0.0
+throw new CustomArgumentException(new MessageBuilder(...));
+throw new CustomArgumentException("Error message");
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.1
+throw CustomArgumentException.fromMessageBuilder(new MessageBuilder(...));
+throw CustomArgumentException.fromString("Error message");
+```
+
+</div>
+
 ### CommandArguments changes
 
 For 9.0.1 the various `CommandArguments#getOrDefault()` and `CommandArguments#getOrDefaultUnchecked()` have been deprecated and should no longer be used. Instead, use the `CommandArguments#getOptional()` and `CommandArguments#getOptionalUnchecked()` methods:
 
 <div class="multi-pre">
 
-```java,9.0.0_(Not using unchecked)
+```java,9.0.0_(Not_using_unchecked)
 new CommandAPICommand("mycommand")
     .withOptionalArguments(new StringArgument("string"))
     .executes((sender, args) -> {
@@ -17,7 +41,7 @@ new CommandAPICommand("mycommand")
     .register();
 ```
 
-```java,9.0.0_(Using unchecked)
+```java,9.0.0_(Using_unchecked)
 new CommandAPICommand("mycommand")
     .withOptionalArguments(new StringArgument("string"))
     .executes((sender, args) -> {
@@ -32,7 +56,7 @@ $$\downarrow$$
 
 <div class="multi-pre">
 
-```java,9.0.1_(Not using unchecked)
+```java,9.0.1_(Not_using_unchecked)
 new CommandAPICommand("mycommand")
     .withOptionalArguments(new StringArgument("string"))
     .executes((sender, args) -> {
@@ -41,7 +65,7 @@ new CommandAPICommand("mycommand")
     .register();
 ```
 
-```java,9.0.1_(Using unchecked)
+```java,9.0.1_(Using_unchecked)
 new CommandAPICommand("mycommand")
     .withOptionalArguments(new StringArgument("string"))
     .executes((sender, args) -> {

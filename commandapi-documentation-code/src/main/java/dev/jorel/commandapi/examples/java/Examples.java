@@ -392,7 +392,7 @@ public Argument<World> customWorldArgument(String nodeName) {
         World world = Bukkit.getWorld(info.input());
 
         if (world == null) {
-            throw new CustomArgumentException(new MessageBuilder("Unknown world: ").appendArgInput());
+            throw CustomArgumentException.fromMessageBuilder(new MessageBuilder("Unknown world: ").appendArgInput());
         } else {
             return world;
         }
