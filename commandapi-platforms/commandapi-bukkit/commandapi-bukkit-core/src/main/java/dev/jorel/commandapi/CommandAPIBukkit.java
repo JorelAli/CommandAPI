@@ -468,6 +468,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			setParent(Bukkit.getServer().getLogger());
 			setLevel(Level.ALL);
 		}
+
+		@Override
+		public void severe(String message, Throwable exception) {
+			super.log(Level.SEVERE, message, exception);
+		}
 	}
 
 	@Override
