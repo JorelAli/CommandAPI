@@ -20,7 +20,7 @@ Say we have the following command:
 /mycommand <player> <value> <message>
 ```
 
-Let's also say that in our implementation of this command, we don't actually perform any processing for `<value>`. Hence, listing it in the `CommandArguments args[]` is unnecessary.
+Let's also say that in our implementation of this command, we don't actually perform any processing for `<value>`. Hence, listing it in the `CommandArguments args` is unnecessary.
 
 <div class="multi-pre">
 
@@ -34,6 +34,6 @@ Let's also say that in our implementation of this command, we don't actually per
 
 </div>
 
-In this scenario, the argument `<value>` is not present in the `CommandArguments args[]` for the executor.
+In this scenario, the argument `<value>` is not present in the `CommandArguments args` for the executor.
 
 </div>

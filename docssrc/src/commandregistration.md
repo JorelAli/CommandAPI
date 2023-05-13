@@ -140,7 +140,7 @@ Executes a command regardless of what the command sender is, using the `NativePr
 > new CommandAPICommand("spawnpigs")
 >      .executesPlayer((player, args) -> {
 >            for(int i = 0; i < 10; i++) {
->                player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+>                player.getWorld().spawnEntity(player.getLocation(), (EntityType) args.get(0));
 >            }
 >      })
 >      .register();
@@ -158,7 +158,7 @@ Executes a command regardless of what the command sender is, using the `NativePr
 > new CommandAPICommand("spawnpigs")
 >      .executesPlayer((Player player, CommandArguments args) -> {
 >            for(int i = 0; i < 10; i++) {
->                player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
+>                player.getWorld().spawnEntity(player.getLocation(), (EntityType) args.get(0));
 >            }
 >      })
 >      .register();
