@@ -111,7 +111,7 @@ jobs:
 
       ### Examples ###
 
-      - name: Build CommandAPI example Bukkit plugins in examples/ folder
+      - name: Build CommandAPI example plugins in examples/ folder
         run: cd ./examples; ./build.sh;
 
       ### Documentation ###
