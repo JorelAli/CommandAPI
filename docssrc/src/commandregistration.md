@@ -156,7 +156,7 @@ Executes a command regardless of what the command sender is, using the `NativePr
 >
 > ```java
 > new CommandAPICommand("spawnpigs")
->      .executesPlayer((Player player, Object[] args) -> {
+>      .executesPlayer((Player player, CommandArguments args) -> {
 >            for(int i = 0; i < 10; i++) {
 >                player.getWorld().spawnEntity(player.getLocation(), (EntityType) args[0]);
 >            }
