@@ -286,17 +286,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
 
 		while (reader.canRead()) {
-			K mapKey = parseKey(reader);
-			if (results.containsKey(mapKey)) {
-				// Delimiter has already been processed, create new StringReader with one position less
-				StringReader duplicateKey = new StringReader(reader);
-				duplicateKey.setCursor(reader.getCursor() - 1);
-				throw duplicateKey(duplicateKey);
-			}
-			if (!reader.canRead()) {
-				throw missingQuotationMark(reader);
-			}
-			V mapValue = parseValue(reader);
+			K mapKey = parseKey(reader, results);
+			V mapValue = parseValue(reader, results);
 			if (results.containsValue(mapValue) && !allowValueDuplicates) {
 				throw duplicateValue(reader);
 			}
@@ -310,48 +301,47 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return results;
 	}
 
-	private K parseKey(StringReader reader) throws CommandSyntaxException {
+	private K parseKey(StringReader reader, LinkedHashMap<K, V> results) throws CommandSyntaxException {
 		StringBuilder builder = new StringBuilder();
-		while (reader.canRead()) {
-			if (reader.peek() == '"') {
-				// Don't skip it, the quote is required for parsing the value
-				// The current key is not quoted, the previous character has to be the delimiter
-				StringReader delimiterRequired = new StringReader(reader);
-				delimiterRequired.setCursor(reader.getCursor() - 1);
-				if (delimiterRequired.peek() != delimiter) {
-					throw throwValueEarlyStart(delimiterRequired, String.valueOf(delimiter));
-				}
-				// Previous character is the delimiter, try parsing the key
-				if (!keyList.contains(builder.toString()) && !keyListEmpty) {
-					throw throwInvalidKey(delimiterRequired, builder.toString());
-				}
-				return tryParseKey(delimiterRequired, builder.toString());
-			} else if (reader.peek() == delimiter) {
+		// TODO: Handle optional key quoting
+		K mapKey = null;
+		while (reader.canRead()) { // looks at the character returned by reader.peek()
+			if (reader.peek() == delimiter) {
 				if (!reader.canRead(2)) {
 					reader.skip();
 					throw missingQuotationMark(reader);
 				}
 				reader.skip();
+				return mapKey;
+			} else if (reader.peek() == '"') {
+				reader.skip();
+				throw throwValueEarlyStart(reader, String.valueOf(delimiter));
 			} else {
-				builder.append(reader.peek());
-				if (keyList.contains(builder.toString()) && !reader.canRead(2)) {
+				builder.append(reader.read());
+				if (!reader.canRead()) {
+					if (keyList.contains(builder.toString())) {
+						throw missingDelimiter(reader);
+					}
+					if (!keyListEmpty) {
+						throw throwInvalidKey(reader, builder.toString());
+					}
 					throw missingDelimiter(reader);
 				}
-				if (keyList.contains(builder.toString()) && reader.peek(1) == '"') {
-					StringReader delimiterRequired = new StringReader(reader);
-					delimiterRequired.skip();
-					throw throwValueEarlyStart(delimiterRequired, String.valueOf(delimiter));
-				}
-				if ((!keyList.contains(builder.toString()) && !keyListEmpty) && !reader.canRead(2)) {
+				if ((!keyList.contains(builder.toString()) && !keyListEmpty) && reader.peek() == delimiter) {
 					throw throwInvalidKey(reader, builder.toString());
 				}
-				reader.skip();
+				if (reader.peek() == delimiter) {
+					mapKey = tryParseKey(reader, builder.toString());
+					if (results.containsKey(mapKey)) {
+						throw duplicateKey(reader);
+					}
+				}
 			}
 		}
 		return null;
 	}
 
-	private V parseValue(StringReader reader) throws CommandSyntaxException {
+	private V parseValue(StringReader reader, LinkedHashMap<K, V> results) throws CommandSyntaxException {
 		StringBuilder builder = new StringBuilder();
 		validateValueStart(reader);
 		if (!reader.canRead()) {
@@ -365,7 +355,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					builder.append(reader.read());
 				}
 			} else if (reader.peek() == '"') {
-				if (!valueList.contains(reader.toString()) && !valueListEmpty) {
+				if (!valueList.contains(builder.toString()) && !valueListEmpty) {
 					throw throwInvalidValue(reader, builder.toString());
 				}
 				return tryParseValue(reader, builder.toString());
@@ -374,11 +364,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				if (valueList.contains(builder.toString()) && !reader.canRead()) {
 					validateValueInput(reader, builder.toString());
 				}
-				if ((!valueList.contains(builder.toString()) && !valueListEmpty) && !reader.canRead()) {
+				if ((!valueList.contains(builder.toString()) && !valueListEmpty) && reader.peek() == '"') {
 					throw throwInvalidValue(reader, builder.toString());
 				}
 			}
 		}
+		validateValueInput(reader, builder.toString());
 		return null;
 	}
 
@@ -428,133 +419,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		}
 		return mapValue;
 	}
-
-	/*
-	@SuppressWarnings("unchecked")
-	public <Source> LinkedHashMap<K, V> parseArgumentt(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		String rawValues = cmdCtx.getArgument(key, String.class);
-		LinkedHashMap<K, V> results = new LinkedHashMap<>();
-
-		K mapKey = null;
-		V mapValue = null;
-
-		boolean isAKeyBeingBuilt = true;
-		boolean isAValueBeingBuilt = false;
-		boolean isFirstValueCharacter = true;
-
-		StringBuilder keyValueSeparatorBuffer = new StringBuilder();
-		StringBuilder visitedCharacters = new StringBuilder();
-
-		char[] rawValuesChars = rawValues.toCharArray();
-		int currentIndex = -1;
-		for (char currentChar : rawValuesChars) {
-			currentIndex++;
-			visitedCharacters.append(currentChar);
-			if (isAKeyBeingBuilt) {
-				if (currentChar == delimiter) {
-					if (!keyList.contains(keyValueSeparatorBuffer.toString()) && !keyListEmpty) {
-						throw throwInvalidKey(visitedCharacters, keyValueSeparatorBuffer.toString(), true);
-					}
-
-					if (currentIndex == rawValuesChars.length - 1) {
-						throw missingQuotationMark(visitedCharacters);
-					}
-
-					try {
-						mapKey = keyMapper.apply(keyValueSeparatorBuffer.toString());
-					} catch (Exception e) {
-						throw cannotParseKey(visitedCharacters, keyValueSeparatorBuffer);
-					}
-
-					if (results.containsKey(mapKey)) {
-						throw duplicateKey(visitedCharacters);
-					}
-
-					// No need to check the key here because we already know it only consists of letters
-
-					keyValueSeparatorBuffer.setLength(0);
-					isAKeyBeingBuilt = false;
-					isAValueBeingBuilt = true;
-					continue;
-				}
-				if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
-				}
-				keyValueSeparatorBuffer.append(currentChar);
-
-				final boolean isInvalidKey = (!keyList.contains(keyValueSeparatorBuffer.toString()) && !keyListEmpty);
-				if (currentIndex == rawValuesChars.length - 1) {
-					if (isInvalidKey) {
-						throw throwInvalidKey(visitedCharacters, keyValueSeparatorBuffer.toString(), false);
-					} else {
-						throw missingDelimiter(visitedCharacters);
-					}
-				}
-			}
-			if (isAValueBeingBuilt) {
-				if (isFirstValueCharacter) {
-					validateValueStart(currentChar, visitedCharacters);
-					if (currentIndex == rawValuesChars.length - 1) {
-						throw missingValue(visitedCharacters);
-					}
-					isFirstValueCharacter = false;
-					continue;
-				}
-				if (currentChar == '\\') {
-					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						keyValueSeparatorBuffer.append('\\');
-						continue;
-					}
-					continue;
-				}
-				if (currentChar == '"') {
-					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						keyValueSeparatorBuffer.append('"');
-						continue;
-					}
-					if (!valueList.contains(keyValueSeparatorBuffer.toString()) && !valueListEmpty) {
-						throw throwInvalidValue(visitedCharacters, keyValueSeparatorBuffer.toString());
-					}
-
-					try {
-						mapValue = valueMapper.apply(keyValueSeparatorBuffer.toString());
-					} catch (Exception e) {
-						throw cannotParseValue(visitedCharacters, keyValueSeparatorBuffer);
-					}
-
-					if (results.containsValue(mapValue) && !allowValueDuplicates) {
-						throw duplicateValue(visitedCharacters);
-					}
-
-					keyValueSeparatorBuffer.setLength(0);
-					isFirstValueCharacter = true;
-					results.put(mapKey, mapValue);
-					mapKey = null;
-
-					isAValueBeingBuilt = false;
-					continue;
-				}
-				keyValueSeparatorBuffer.append(currentChar);
-			}
-			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
-				// The separator has been completed, building happens under the if statement
-				if (keyValueSeparatorBuffer.toString().equals(separator)) {
-					// currentChar is the start of a new value
-					keyValueSeparatorBuffer.setLength(0);
-					isAKeyBeingBuilt = true;
-					keyValueSeparatorBuffer.append(currentChar);
-					continue;
-				}
-				keyValueSeparatorBuffer.append(currentChar);
-				if (!separator.startsWith(keyValueSeparatorBuffer.toString())) {
-					throw invalidSeparator(visitedCharacters, keyValueSeparatorBuffer.toString());
-				}
-			}
-		}
-		validateValueInput(keyValueSeparatorBuffer, visitedCharacters);
-		return results;
-	}
-	 */
 
 	private boolean isKeyQuoted(StringReader reader, boolean forceQuoteKeys) throws CommandSyntaxException {
 		if (forceQuoteKeys) {
