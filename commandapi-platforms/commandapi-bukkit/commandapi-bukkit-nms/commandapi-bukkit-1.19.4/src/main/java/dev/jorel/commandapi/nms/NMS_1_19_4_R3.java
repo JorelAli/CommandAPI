@@ -550,6 +550,12 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		CommandSourceStack css = cmdCtx.getSource();
 
 		CommandSender sender = css.getBukkitSender();
+		if (sender == null) {
+			// Sender CANNOT be null. This can occur when using a remote console
+			// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
+			// however this may also be null, so delegate to the next most-meaningful sender.
+			sender = Bukkit.getConsoleSender();
+		}
 		Vec3 pos = css.getPosition();
 		Vec2 rot = css.getRotation();
 		World world = getWorldForCSS(css);
@@ -558,6 +564,10 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		Entity proxyEntity = css.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
+			if (proxy == null) {
+				proxy = sender;
+			}
+			
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
 			return wrapCommandSender(sender);

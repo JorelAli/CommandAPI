@@ -44,7 +44,7 @@ The `CustomArgumentInfo` record is very similar to the `SuggestionInfo` record f
 ```java
 public record CustomArgumentInfo<B> {
     CommandSender sender();
-    Object[] previousArgs(); 
+    CommandArguments previousArgs(); 
     String input();
     B currentInput();
 }
@@ -59,10 +59,10 @@ These fields are as follows:
   `sender()` represents the command sender that is typing the command. This is normally a `Player`, but can also be a console command sender if using a Paper server.
 
 - ```java
-  Object[] previousArgs();
+  CommandArguments previousArgs();
   ```
 
-  `previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command.
+  `previousArgs()` represents the previously declared arguments, which are parsed and interpreted as if they were being used to execute the command.
 
 - ```java
   String input();
@@ -96,11 +96,13 @@ Say we want to create an argument to represents the list of available worlds on 
 
 </div>
 
-In our error handling step, we check if the world is equal to null (since the `Bukkit.getWorld(String)` is `@Nullable`). To handle this case, we throw a `CustomArgumentException` with an error from a `MessageBuilder`. The `CustomArgumentException` has two constructors, so a message builder isn't required each time:
+In our error handling step, we check if the world is equal to null (since the `Bukkit.getWorld(String)` is `@Nullable`). To handle this case, we throw a `CustomArgumentException` with an error from a `MessageBuilder`. The `CustomArgumentException` has various static factory methods tailored to your desired printing method, so a message builder isn't required each time:
 
 ```java
-new CustomArgumentException(String message);
-new CustomArgumentException(MessageBuilder message);
+CustomArgumentException fromBaseComponents(BaseComponent[] errorMessage);
+CustomArgumentException fromString(String errorMessage);
+CustomArgumentException fromAdventureComponent(Component errorMessage);
+CustomArgumentException fromMessageBuilder(MessageBuilder errorMessage);
 ```
 
 -----

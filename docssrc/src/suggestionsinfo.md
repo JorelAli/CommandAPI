@@ -5,7 +5,7 @@ Argument suggestion methods can accept a function which takes in a `SuggestionsI
 ```java
 public record SuggestionInfo {
     CommandSender sender();
-    Object[] previousArgs();
+    CommandArguments previousArgs();
     String currentInput();
     String currentArg();
 }
@@ -22,10 +22,10 @@ CommandSender sender();
 -----
 
 ```java
-Object[] previousArgs();
+CommandArguments previousArgs();
 ```
 
-`previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command. See [this example on the string argument suggestions page](./stringargumentsuggestions.md#suggestions-depending-on-previous-arguments) for an idea of how to utilize this field.
+`previousArgs()` represents the previously declared arguments, which are parsed and interpreted as if they were being used to execute the command. See [this example on the string argument suggestions page](./stringargumentsuggestions.md#suggestions-depending-on-previous-arguments) for an idea of how to utilize this field.
 
 -----
 

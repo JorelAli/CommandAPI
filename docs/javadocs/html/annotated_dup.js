@@ -326,6 +326,7 @@ var annotated_dup =
           [ "PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations" ],
           [ "PlatformExecutable< Impl extends PlatformExecutable", "interfacedev_1_1jorel_1_1commandapi_1_1_platform_executable_3_01_impl_01extends_01_platform_executable.html", null ],
           [ "SafeVarHandle", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
+          [ "Schedulers", "classdev_1_1jorel_1_1commandapi_1_1_schedulers.html", null ],
           [ "StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip" ],
           [ "Tooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_tooltip" ]
         ] ]

@@ -25,7 +25,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.0.1</version>
+		<version>9.0.2</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>

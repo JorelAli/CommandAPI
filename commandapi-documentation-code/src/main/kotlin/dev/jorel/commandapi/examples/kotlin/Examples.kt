@@ -337,7 +337,7 @@ fun worldArgument(nodeName: String): Argument<World> {
         val world = Bukkit.getWorld(info.input())
 
         if (world == null) {
-            throw CustomArgumentException(MessageBuilder("Unknown world: ").appendArgInput())
+            throw CustomArgumentException.fromMessageBuilder(MessageBuilder("Unknown world: ").appendArgInput())
         } else {
             world
         }

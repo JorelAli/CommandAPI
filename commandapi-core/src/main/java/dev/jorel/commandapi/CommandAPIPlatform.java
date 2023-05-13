@@ -154,6 +154,12 @@ public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argu
 			public void severe(String message) {
 				System.out.println(RED + PREFIX + message + RESET);
 			}
+
+			@Override
+			public void severe(String message, Throwable throwable) {
+				System.out.println(RED + PREFIX + message + RESET);
+				throwable.printStackTrace(System.out);
+			}
 		};
 	}
 

@@ -25,6 +25,7 @@
 var NAVTREE =
 [
   [ "CommandAPI", "index.html", [
+    [ "Deprecated List", "deprecated.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ],
       [ "Package Functions", "namespacemembers.html", [
@@ -52,13 +53,13 @@ var NAVTREEINDEX =
 "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#a6626519f81e6aabb0746a701fea245c5",
 "classdev_1_1jorel_1_1commandapi_1_1_bukkit_string_tooltip.html#a0826cc39d0625e478c2c25934e632dbb",
 "classdev_1_1jorel_1_1commandapi_1_1_converter.html#a406b5bc2f72f6ed14bbb6cd2a7ffad5a",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html#ab936d1b0b78f7d8fcee0630e48424a70",
-"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_criteria_argument.html",
-"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html#aa53d3eba91f83d314ebf2fe2c17834ee",
-"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac779834aaa36e23794202e1790bd4753",
-"interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html#a80ab73503a4ffdc503abbde7e2c33ec8",
-"interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_block_command_sender.html",
-"interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_execution_info.html"
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html#ae7e445062b53569dc246d02b30657669",
+"classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_n_b_t_compound_argument.html#a7d5276ec17bf56941e95365f86ab59c8",
+"classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_float_range.html#a4fd3e88762a5ccbe9b3f5faae0688014",
+"enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a92fef4ec30c3ea8b8ee1906baa071bd1",
+"interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic4_command_exception_type_1_1_function.html",
+"interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_suggestions.html#a4e73e6e0dc3bb397fb43368db153e180",
+"interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html#ac3bf96e07994a51ef557ac7bfda9d98d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

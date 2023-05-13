@@ -332,19 +332,19 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 
 ## CommandAPI Project Timeline
 
-This is the current roadmap for the CommandAPI (as of 2nd November 2022):
+This is the current roadmap for the CommandAPI (as of 11th May 2023):
 
-- **9.0.0:**
-
-  Project refactor in preparation for supporting Velocity, Sponge, Fabric etc.
-
-- **After 9.0.0:**
+- **10.0.0:**
 
   **Annotation improvements**
 
-  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation.
+  The CommandAPI's annotation system has always been a bit limited and was primarily introduced as a proof-of-concept. In this update, the CommandAPI's annotation system will be improved to be (ideally) as powerful as the non-annotation system and have slightly better type safety, support for non-static methods and better checks to prevent invalid command generation. More information about annotations can be found in the [Annotation specification document ](./annotations_spec_doc.md).
 
 - **Future:**
+
+  **Velocity support**
+
+  Velocity support has been greatly anticipated by a large number of developers and we're hoping to bring Velocity support to you at some point in the future!
 
   **Argument conflict detection**
 
@@ -374,9 +374,11 @@ This is the current roadmap for the CommandAPI (as of 2nd November 2022):
                 <ul>
                     <li>Fixed <code>MapArgument</code> not always allowing player names as keys</li>
                     <li>Fixed <code>/execute as ...</code> not working due to casting to a player instead of a proxied sender</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/441 Adds <code>CommandArguments#count()</code> utility method</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/440 Adds several <code>CommandArguments#getOptional()</code> methods</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/441 Added <code>CommandArguments#count()</code> utility method</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/440 Added several <code>CommandArguments#getOptional()</code> methods</li>
                     <li>Fixed bug where <code>IntegerArgument</code> would fail to compile due to a missing Brigadier dependency</li>
+                    <li>Added basic support for Folia</li>
+                    <li>Added support for the <code>CustomArgumentException</code> to accept Adventure and Spigot text components</li>
                 </ul>
             </td>
         </tr>

@@ -37,13 +37,13 @@ var hierarchy =
     [ "dev.jorel.commandapi.commandsenders.AbstractEntity< Entity >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_entity.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitEntity", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_entity.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.commandsenders.AbstractPlayer< NativeProxyCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_player.html", [
+    [ "dev.jorel.commandapi.commandsenders.AbstractNativeProxyCommandSender< NativeProxyCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_native_proxy_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_native_proxy_command_sender.html", null ]
     ] ],
     [ "dev.jorel.commandapi.commandsenders.AbstractPlayer< Player >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_player.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitPlayer", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_player.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.commandsenders.AbstractPlayer< ProxiedCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_player.html", [
+    [ "dev.jorel.commandapi.commandsenders.AbstractProxiedCommandSender< ProxiedCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_proxied_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_proxied_command_sender.html", null ]
     ] ],
     [ "dev.jorel.commandapi.annotations.arguments.AChatArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_chat_argument.html", null ],
@@ -485,6 +485,7 @@ var hierarchy =
     [ "dev.jorel.commandapi.arguments.SafeSuggestions< S, CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_suggestions.html", null ],
     [ "dev.jorel.commandapi.SafeVarHandle< Type, FieldType >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
     [ "dev.jorel.commandapi.SafeVarHandle< com.mojang.brigadier.tree.CommandNode<?>, Map< String, com.mojang.brigadier.tree.CommandNode<?> > >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
+    [ "dev.jorel.commandapi.Schedulers", "classdev_1_1jorel_1_1commandapi_1_1_schedulers.html", null ],
     [ "dev.jorel.commandapi.arguments.ScoreHolderArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument.Single", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument_1_1_single.html", null ],
     [ "com.mojang.brigadier.SingleRedirectModifier< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html", null ],

@@ -13,7 +13,7 @@ There are four `EntitySelectorArgument` subclasses that determine what type of d
 - `EntitySelectorArgument.OnePlayer` - A single player, which returns a `Player` object.
 - `EntitySelectorArgument.ManyPlayers` - A collection of players, which returns a `Collection<Player>` object.
 
-The return type is the type to be cast when retrieved from the `Object[] args` in the command declaration.
+The return type is the type to be cast when retrieved from the `CommandArguments args` in the command declaration.
 
 <div class="example">
 
@@ -115,6 +115,6 @@ Since we're trying to specify an entity type, we will use the `EntityTypeArgumen
 
 </div>
 
-Note how in this example above, we have to explicitly state `Player player, Object[] args`. This is due to a limitation of Java's type inference system which is discussed [here](./commandregistration.md#setting-the-commands-executor).
+Note how in this example above, we have to explicitly state `Player player, CommandArguments args`. This is due to a limitation of Java's type inference system which is discussed [here](./commandregistration.md#setting-the-commands-executor).
 
 </div>
