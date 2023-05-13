@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
 /**
  * An argument that represents a key-value pair.
@@ -128,7 +127,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 		boolean isAKeyBeingBuilt = true;
 		boolean isAValueBeingBuilt = false;
+
+		boolean isFirstKeyCharacter = true;
 		boolean isFirstValueCharacter = true;
+
+		boolean isCurrentKeyQuoted = forceQuoteKeys;
 
 		StringBuilder keyBuilder = new StringBuilder();
 		StringBuilder valueBuilder = new StringBuilder();
@@ -143,14 +146,43 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			if (isAKeyBeingBuilt) {
 				currentValue = "";
 				suggestionInfo.setCurrentValue(currentValue);
+				if (isFirstKeyCharacter) {
+					isFirstKeyCharacter = false;
+					isCurrentKeyQuoted = forceQuoteKeys || currentChar == '"';
+					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
+					continue;
+				}
 				if (currentChar == delimiter) {
 					isAKeyBeingBuilt = false;
 					isAValueBeingBuilt = true;
 					suggestionInfo.setSuggestionCode(SuggestionCode.QUOTATION_MARK_SUGGESTION);
 					continue;
 				}
+				if (currentChar == '\\') {
+					if (rawValuesChars[currentIndex - 1] == '\\') {
+						keyBuilder.append("\\");
+						for (String key : keys) {
+							if (key.equals(keyBuilder.toString())) {
+								suggestionInfo.setSuggestionCode((isCurrentKeyQuoted) ? SuggestionCode.QUOTATION_MARK_SUGGESTION : SuggestionCode.DELIMITER_SUGGESTION);
+								break;
+							}
+							suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
+						}
+					}
+					continue;
+				}
 				if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
+					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
+						keyBuilder.append('"');
+						for (String key : keys) {
+							if (key.equals(keyBuilder.toString())) {
+								suggestionInfo.setSuggestionCode((isCurrentKeyQuoted) ? SuggestionCode.QUOTATION_MARK_SUGGESTION : SuggestionCode.DELIMITER_SUGGESTION);
+								break;
+							}
+							suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
+						}
+					}
+					continue;
 				}
 				keyBuilder.append(currentChar);
 				currentKey = keyBuilder.toString();
@@ -165,7 +197,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			}
 			if (isAValueBeingBuilt) {
 				if (isFirstValueCharacter) {
-					validateValueStart(currentChar, visitedCharacters); // currentChar should be a quotation mark
 					suggestionInfo.setSuggestionCode(SuggestionCode.VALUE_SUGGESTION);
 					isFirstValueCharacter = false;
 					continue;
@@ -231,7 +262,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				if (separatorBuilder.toString().equals(separator)) {
 					separatorBuilder.setLength(0);
 					isAKeyBeingBuilt = true;
-					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
+					suggestionInfo.setSuggestionCode((forceQuoteKeys) ? SuggestionCode.QUOTATION_MARK_SUGGESTION : SuggestionCode.KEY_SUGGESTION);
 					suggestionInfo.setCurrentKey(keyBuilder.toString());
 				}
 			}
@@ -249,9 +280,158 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandAPIArgumentType.MAP;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
+		StringReader reader = new StringReader(cmdCtx.getArgument(key, String.class));
+		LinkedHashMap<K, V> results = new LinkedHashMap<>();
+
+		while (reader.canRead()) {
+			K mapKey = parseKey(reader);
+			if (results.containsKey(mapKey)) {
+				// Delimiter has already been processed, create new StringReader with one position less
+				StringReader duplicateKey = new StringReader(reader);
+				duplicateKey.setCursor(reader.getCursor() - 1);
+				throw duplicateKey(duplicateKey);
+			}
+			if (!reader.canRead()) {
+				throw missingQuotationMark(reader);
+			}
+			V mapValue = parseValue(reader);
+			if (results.containsValue(mapValue) && !allowValueDuplicates) {
+				throw duplicateValue(reader);
+			}
+			reader.skip();
+			if (reader.canRead()) {
+				checkSeparator(reader);
+			}
+			results.put(mapKey, mapValue);
+		}
+
+		return results;
+	}
+
+	private K parseKey(StringReader reader) throws CommandSyntaxException {
+		StringBuilder builder = new StringBuilder();
+		while (reader.canRead()) {
+			if (reader.peek() == '"') {
+				// Don't skip it, the quote is required for parsing the value
+				// The current key is not quoted, the previous character has to be the delimiter
+				StringReader delimiterRequired = new StringReader(reader);
+				delimiterRequired.setCursor(reader.getCursor() - 1);
+				if (delimiterRequired.peek() != delimiter) {
+					throw throwValueEarlyStart(delimiterRequired, String.valueOf(delimiter));
+				}
+				// Previous character is the delimiter, try parsing the key
+				if (!keyList.contains(builder.toString()) && !keyListEmpty) {
+					throw throwInvalidKey(delimiterRequired, builder.toString());
+				}
+				return tryParseKey(delimiterRequired, builder.toString());
+			} else if (reader.peek() == delimiter) {
+				if (!reader.canRead(2)) {
+					reader.skip();
+					throw missingQuotationMark(reader);
+				}
+				reader.skip();
+			} else {
+				builder.append(reader.peek());
+				if (keyList.contains(builder.toString()) && !reader.canRead(2)) {
+					throw missingDelimiter(reader);
+				}
+				if (keyList.contains(builder.toString()) && reader.peek(1) == '"') {
+					StringReader delimiterRequired = new StringReader(reader);
+					delimiterRequired.skip();
+					throw throwValueEarlyStart(delimiterRequired, String.valueOf(delimiter));
+				}
+				if ((!keyList.contains(builder.toString()) && !keyListEmpty) && !reader.canRead(2)) {
+					throw throwInvalidKey(reader, builder.toString());
+				}
+				reader.skip();
+			}
+		}
+		return null;
+	}
+
+	private V parseValue(StringReader reader) throws CommandSyntaxException {
+		StringBuilder builder = new StringBuilder();
+		validateValueStart(reader);
+		if (!reader.canRead()) {
+			throw missingValue(reader);
+		}
+		while (reader.canRead()) {
+			if (reader.peek() == '\\') {
+				// Reached an escape character, skip it and add the next one to the builder
+				reader.skip();
+				if (reader.peek() == '\\' || reader.peek() == '"') {
+					builder.append(reader.read());
+				}
+			} else if (reader.peek() == '"') {
+				if (!valueList.contains(reader.toString()) && !valueListEmpty) {
+					throw throwInvalidValue(reader, builder.toString());
+				}
+				return tryParseValue(reader, builder.toString());
+			} else {
+				builder.append(reader.read());
+				if (valueList.contains(builder.toString()) && !reader.canRead()) {
+					validateValueInput(reader, builder.toString());
+				}
+				if ((!valueList.contains(builder.toString()) && !valueListEmpty) && !reader.canRead()) {
+					throw throwInvalidValue(reader, builder.toString());
+				}
+			}
+		}
+		return null;
+	}
+
+	private void checkSeparator(StringReader reader) throws CommandSyntaxException {
+		StringBuilder builder = new StringBuilder();
+		while (reader.canRead()) {
+			// If the built separator is longer than it should be, error!
+			if (builder.length() > separator.length()) {
+				throw invalidSeparator(reader, builder.toString());
+			}
+
+			// If the built separator doesn't match the required separator, error!
+			if (!separator.startsWith(builder.toString())) {
+				throw invalidSeparator(reader, builder.toString());
+			}
+
+			builder.append(reader.read());
+			if (!reader.canRead()) {
+				throw missingKey(reader);
+			}
+			if (separator.equals(builder.toString())) {
+				break;
+			}
+		}
+	}
+
+	private String handleQuotedKey(StringReader reader) throws CommandSyntaxException {
+		return "";
+	}
+
+	private K tryParseKey(StringReader reader, String key) throws CommandSyntaxException {
+		K mapKey;
+		try {
+			mapKey = keyMapper.apply(key);
+		} catch (Exception e) {
+			throw cannotParseKey(reader, key);
+		}
+		return mapKey;
+	}
+
+	private V tryParseValue(StringReader reader, String value) throws CommandSyntaxException {
+		V mapValue;
+		try {
+			mapValue = valueMapper.apply(value);
+		} catch (Exception e) {
+			throw cannotParseValue(reader, value);
+		}
+		return mapValue;
+	}
+
+	/*
+	@SuppressWarnings("unchecked")
+	public <Source> LinkedHashMap<K, V> parseArgumentt(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		String rawValues = cmdCtx.getArgument(key, String.class);
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
 
@@ -374,99 +554,85 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		validateValueInput(keyValueSeparatorBuffer, visitedCharacters);
 		return results;
 	}
+	 */
 
-	private void validateValueStart(char currentChar, StringBuilder visitedCharacters) throws CommandSyntaxException {
-		if (currentChar != '"') {
-			String context = visitedCharacters.toString();
-			StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-			reader.setCursor(context.substring(0, context.length() - 1).length());
+	private boolean isKeyQuoted(StringReader reader, boolean forceQuoteKeys) throws CommandSyntaxException {
+		if (forceQuoteKeys) {
+			try {
+				reader.expect('"');
+				return true;
+			} catch (CommandSyntaxException e) {
+				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "The current key must start with a quotation mark");
+			}
+		}
+		if (reader.peek() == '"') {
+			reader.skip();
+			return true;
+		} else  {
+			return false;
+		}
+	}
+
+	private void validateValueStart(StringReader reader) throws CommandSyntaxException {
+		try {
+			reader.expect('"');
+		} catch (CommandSyntaxException e) {
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must start with a quotation mark");
 		}
 	}
 
-	private void validateValueInput(StringBuilder valueBuilder, StringBuilder visitedCharacters) throws CommandSyntaxException {
-		if (valueBuilder.length() != 0) {
-			StringReader reader = new StringReader(visitedCharacters.toString());
-			reader.setCursor(visitedCharacters.toString().length());
+	private void validateValueInput(StringReader reader, String value) throws CommandSyntaxException {
+		if (value.length() != 0) {
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must end with a quotation mark");
 		}
 	}
 
-	private CommandSyntaxException throwValueEarlyStart(StringBuilder visitedCharacters, String delimiter) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
+	private CommandSyntaxException throwValueEarlyStart(StringReader reader, String delimiter) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
 	}
 
-	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key, boolean cutLastCharacter) {
-		String context = visitedCharacters.toString();
-		StringReader reader = (cutLastCharacter) ? new StringReader(context.substring(0, context.length() - 1)) : new StringReader(context);
-		reader.setCursor(context.length());
+	private CommandSyntaxException throwInvalidKey(StringReader reader, String key) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
 	}
 
-	private CommandSyntaxException throwInvalidValue(StringBuilder visitedCharacters, String value) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length());
+	private CommandSyntaxException throwInvalidValue(StringReader reader, String value) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value: " + value);
 	}
 
-	private CommandSyntaxException invalidSeparator(StringBuilder visitedCharacters, String separator) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
+	private CommandSyntaxException invalidSeparator(StringReader reader, String separator) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid separator: " + separator);
 	}
 
-	private CommandSyntaxException duplicateKey(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length());
+	private CommandSyntaxException duplicateKey(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate keys are not allowed");
 	}
 
-	private CommandSyntaxException duplicateValue(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length());
+	private CommandSyntaxException duplicateValue(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate values are not allowed here");
 	}
 
-	private CommandSyntaxException missingDelimiter(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
+	private CommandSyntaxException missingKey(StringReader reader) {
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Key required after writing the separator");
+	}
+
+	private CommandSyntaxException missingDelimiter(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Delimiter required after writing a key");
 	}
 
-	private CommandSyntaxException missingQuotationMark(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
+	private CommandSyntaxException missingQuotationMark(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Quotation mark required after writing the delimiter");
 	}
 
-	private CommandSyntaxException missingValue(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
+	private CommandSyntaxException missingValue(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Value required after opening quotation mark");
 	}
 
-	private CommandSyntaxException cannotParseKey(StringBuilder visitedCharacters, StringBuilder keyValueBuffer) throws CommandSyntaxException {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length() - 1);
-		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key (" + keyValueBuffer + "): cannot be converted to a key");
+	private CommandSyntaxException cannotParseKey(StringReader reader, String key) throws CommandSyntaxException {
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key (" + key + "): cannot be converted to a key");
 	}
 
-	private CommandSyntaxException cannotParseValue(StringBuilder visitedCharacters, StringBuilder keyValueBuffer) throws CommandSyntaxException {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value (" + keyValueBuffer + "): cannot be converted to a value");
+	private CommandSyntaxException cannotParseValue(StringReader reader, String value) throws CommandSyntaxException {
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value (" + value + "): cannot be converted to a value");
 	}
 
 	private static class MapArgumentSuggestionInfo {

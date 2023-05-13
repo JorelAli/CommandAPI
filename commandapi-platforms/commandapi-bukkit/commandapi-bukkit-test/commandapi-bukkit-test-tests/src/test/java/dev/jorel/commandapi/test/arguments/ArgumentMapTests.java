@@ -203,7 +203,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test wrong delimiter
 		// /test map="test1"
-		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: You must separate a key/value pair with a ':' at position 5: map=\"<--[HERE]");
+		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: You must separate a key/value pair with a ':' at position 4: map=<--[HERE]");
 
 		// Test no delimiter
 		// /test map"test1"
@@ -254,7 +254,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test map:"598" age:"eighteen"
-		assertCommandFailsWith(player, "test map:\"598\" age:\"eighteen\"", "Could not parse command: Invalid value (eighteen): cannot be converted to a value at position 24: ...\"eighteen\"<--[HERE]");
+		assertCommandFailsWith(player, "test map:\"598\" age:\"eighteen\"", "Could not parse command: Invalid value (eighteen): cannot be converted to a value at position 23: ...\"eighteen<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
@@ -353,7 +353,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test invalid completed key
 		// /test optionOne:"solutionTwo" optionFour:"solutionOne"
-		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 35: ...optionFour<--[HERE]");
+		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 34: ...optionFour<--[HERE]");
 
 		// Test invalid not completed key
 		// /test option
