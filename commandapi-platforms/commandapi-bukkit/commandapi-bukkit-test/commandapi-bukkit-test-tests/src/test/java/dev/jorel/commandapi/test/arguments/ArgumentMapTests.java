@@ -95,6 +95,9 @@ public class ArgumentMapTests extends TestBase {
 		// /test map:"this" otherMap:"this"
 		assertCommandFailsWith(player, "test map:\"this\" otherMap:\"this\"", "Could not parse command: Duplicate values are not allowed here at position 25: ...rMap:\"this<--[HERE]");
 
+		// /test map:"this"
+		assertCommandFailsWith(player, "test map:\"this\" ", "Could not parse command: Key required after writing the separator at position 11: ...ap:\"this\" <--[HERE]");
+
 		assertNoMoreResults(results);
 	}
 
@@ -200,12 +203,6 @@ public class ArgumentMapTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-
-		// Test wrong delimiter
-		// /test map="test1"
-		// Removing this test because previously this complained about wrong characters that didn't match the RegEx
-		// Now, this is essentially the same as just not providing the delimiter and is technically the same as the test below
-		// assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: You must separate a key/value pair with a ':' at position 4: map=<--[HERE]");
 
 		// Test no delimiter
 		// /test map"test1"
@@ -395,6 +392,74 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionWithOptionalKeyQuoting() {
+		Mut<LinkedHashMap<String, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map", ':', ", ")
+				.withKeyMapper(s -> s)
+				.withValueMapper(s -> s)
+				.withoutKeyList()
+				.withoutValueList()
+				.build()
+			)
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("map"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test "key":"value"
+		server.dispatchCommand(player, "test \"key\":\"value\"");
+		LinkedHashMap<String, String> test = new LinkedHashMap<>();
+		test.put("key", "value");
+		assertEquals(test, results.get());
+
+		// /test "key":"value", key2:"value2"
+		server.dispatchCommand(player, "test \"key\":\"value\", key2:\"value2\"");
+		test.put("key2", "value2");
+		assertEquals(test, results.get());
+
+		// /test "key":
+		assertCommandFailsWith(player, "test \"key\":", "Could not parse command: Quotation mark required after writing the delimiter at position 6: \"key\":<--[HERE]");
+
+		// /test "key"
+		assertCommandFailsWith(player, "test \"key\"", "Could not parse command: Delimiter required after writing a key at position 5: \"key\"<--[HERE]");
+
+		// /test "key
+		assertCommandFailsWith(player, "test \"key", "Could not parse command: The current key must end with a quotation mark at position 4: \"key<--[HERE]");
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithForcedKeyQuoting() {
+		Mut<LinkedHashMap<String, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MapArgumentBuilder<String, String>("map", ':', ", ")
+				.withKeyMapper(s -> s)
+				.withValueMapper(s -> s)
+				.withKeyList(List.of("hello:world", "my:bad"))
+				.withoutValueList()
+				.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Everything else works, only check if a quotation mark is required to start the key
+
+		// /test hello:world"
+		assertCommandFailsWith(player, "test hello:world\"", "Could not parse command: The current key must start with a quotation mark at position 0: <--[HERE]");
+
+		// /test "hello:world":"value1" my:bad":"value2"
+		assertCommandFailsWith(player, "test \"hello:world\":\"value1\", my:bad\":\"value2\"", "Could not parse command: The current key must start with a quotation mark at position 24: ...\"value1\", <--[HERE]");
 	}
 
 	/********************

@@ -288,9 +288,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		while (reader.canRead()) {
 			K mapKey = parseKey(reader, results);
 			V mapValue = parseValue(reader, results);
-			if (results.containsValue(mapValue) && !allowValueDuplicates) {
-				throw duplicateValue(reader);
-			}
 			reader.skip();
 			if (reader.canRead()) {
 				checkSeparator(reader);
@@ -303,13 +300,16 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 	private K parseKey(StringReader reader, LinkedHashMap<K, V> results) throws CommandSyntaxException {
 		StringBuilder builder = new StringBuilder();
-		// TODO: Handle optional key quoting
+		boolean isCurrentKeyQuoted = isKeyQuoted(reader, forceQuoteKeys);
+		if (isCurrentKeyQuoted) {
+			return handleQuotedKey(reader, results);
+		}
 		K mapKey = null;
 		while (reader.canRead()) { // looks at the character returned by reader.peek()
 			if (reader.peek() == delimiter) {
 				if (!reader.canRead(2)) {
 					reader.skip();
-					throw missingQuotationMark(reader);
+					throw missingQuotationMarkAfterDelimiter(reader);
 				}
 				reader.skip();
 				return mapKey;
@@ -358,7 +358,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				if (!valueList.contains(builder.toString()) && !valueListEmpty) {
 					throw throwInvalidValue(reader, builder.toString());
 				}
-				return tryParseValue(reader, builder.toString());
+				V mapValue = tryParseValue(reader, builder.toString());
+				if (results.containsValue(mapValue) && !allowValueDuplicates) {
+					throw duplicateValue(reader);
+				}
+				return mapValue;
 			} else {
 				builder.append(reader.read());
 				if (valueList.contains(builder.toString()) && !reader.canRead()) {
@@ -388,7 +392,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 			builder.append(reader.read());
 			if (!reader.canRead()) {
-				throw missingKey(reader);
+				throw (forceQuoteKeys)
+					? missingQuotationMarkAfterSeparator(reader)
+					: missingKeyAfterSeparator(reader);
 			}
 			if (separator.equals(builder.toString())) {
 				break;
@@ -396,8 +402,66 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		}
 	}
 
-	private String handleQuotedKey(StringReader reader) throws CommandSyntaxException {
-		return "";
+	private K handleQuotedKey(StringReader reader, LinkedHashMap<K, V> results) throws CommandSyntaxException {
+		if (!reader.canRead()) {
+			throw missingKeyAfterQuotationMark(reader);
+		}
+		StringBuilder builder = new StringBuilder();
+		K mapKey = null;
+		while (reader.canRead()) {
+			if (reader.peek() == '\\') {
+				// Reached an escape character, skip it and add the next one to the builder
+				reader.skip();
+				if (reader.peek() == '\\' || reader.peek() == '"') {
+					builder.append(reader.read());
+				}
+			} else if (reader.peek() == '"') {
+				// Reached non-escaped quotation mark, key ends here
+				if (!keyList.contains(builder.toString()) && !keyListEmpty) {
+					throw throwInvalidValue(reader, builder.toString());
+				}
+				if (!reader.canRead(2)) {
+					if (keyList.contains(builder.toString())) {
+						reader.skip(); // Skip to set the position behind the closing quotation mark
+						throw missingDelimiter(reader);
+					}
+					if (!keyListEmpty) {
+						throw throwInvalidKey(reader, builder.toString());
+					}
+					reader.skip();
+					throw missingDelimiter(reader);
+				}
+				if (reader.peek(1) == '"') {
+					reader.skip();
+					throw throwValueEarlyStart(reader, String.valueOf(delimiter));
+				}
+				mapKey = tryParseKey(reader, builder.toString());
+				if (results.containsKey(mapKey)) {
+					throw duplicateKey(reader);
+				}
+				reader.skip();
+				if (reader.peek() == delimiter) {
+					if (!reader.canRead(2)) {
+						reader.skip();
+						throw missingQuotationMarkAfterDelimiter(reader);
+					}
+					reader.skip();
+					return mapKey;
+				}
+			} else {
+				builder.append(reader.read());
+				if (!reader.canRead()) {
+					if (keyList.contains(builder.toString())) {
+						validateKeyInput(reader, builder.toString());
+					}
+					if (!keyList.contains(builder.toString()) && !keyListEmpty) {
+						throw throwInvalidKey(reader, builder.toString());
+					}
+				}
+			}
+		}
+		validateKeyInput(reader, builder.toString());
+		return null;
 	}
 
 	private K tryParseKey(StringReader reader, String key) throws CommandSyntaxException {
@@ -432,7 +496,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		if (reader.peek() == '"') {
 			reader.skip();
 			return true;
-		} else  {
+		} else {
 			return false;
 		}
 	}
@@ -442,6 +506,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			reader.expect('"');
 		} catch (CommandSyntaxException e) {
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must start with a quotation mark");
+		}
+	}
+
+	private void validateKeyInput(StringReader reader, String key) throws CommandSyntaxException {
+		if (key.length() != 0) {
+			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "The current key must end with a quotation mark");
 		}
 	}
 
@@ -475,16 +545,24 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate values are not allowed here");
 	}
 
-	private CommandSyntaxException missingKey(StringReader reader) {
+	private CommandSyntaxException missingKeyAfterSeparator(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Key required after writing the separator");
+	}
+
+	private CommandSyntaxException missingKeyAfterQuotationMark(StringReader reader) {
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Key required after writing the opening quotation mark");
 	}
 
 	private CommandSyntaxException missingDelimiter(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Delimiter required after writing a key");
 	}
 
-	private CommandSyntaxException missingQuotationMark(StringReader reader) {
+	private CommandSyntaxException missingQuotationMarkAfterDelimiter(StringReader reader) {
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Quotation mark required after writing the delimiter");
+	}
+
+	private CommandSyntaxException missingQuotationMarkAfterSeparator(StringReader reader) {
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Quotation mark required after writing the separator");
 	}
 
 	private CommandSyntaxException missingValue(StringReader reader) {

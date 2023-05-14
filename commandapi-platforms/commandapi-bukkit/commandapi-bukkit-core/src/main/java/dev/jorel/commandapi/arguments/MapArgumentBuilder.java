@@ -106,8 +106,10 @@ public class MapArgumentBuilder<K, V> {
 				if (keyList == null) {
 					return new MapArgumentBuilderSuggestsValue(null, false);
 				}
-				if (keyList.contains(String.valueOf(delimiter))) {
-					return new MapArgumentBuilderSuggestsValue(keyList, true);
+				for (String s : keyList) {
+					if (s.contains(String.valueOf(delimiter))) {
+						return new MapArgumentBuilderSuggestsValue(keyList, true);
+					}
 				}
 				return new MapArgumentBuilderSuggestsValue(keyList, false);
 			}
