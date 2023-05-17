@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.AdvancementArgument;
  */
 @Primitive("org.bukkit.advancement.Advancement")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AAdvancementArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AAdvancementArgument {		
 }

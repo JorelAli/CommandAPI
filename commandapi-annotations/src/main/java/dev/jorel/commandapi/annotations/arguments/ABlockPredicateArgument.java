@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.BlockPredicateArgument;
  */
 @Primitive("java.util.function.Predicate<org.bukkit.block.Block>")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface ABlockPredicateArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface ABlockPredicateArgument {		
 }

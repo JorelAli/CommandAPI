@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
  */
 @Primitive("dev.jorel.commandapi.wrappers.ScoreboardSlot")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AScoreboardSlotArgument {
 }

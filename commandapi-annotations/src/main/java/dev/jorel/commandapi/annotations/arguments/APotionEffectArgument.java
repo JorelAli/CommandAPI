@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.PotionEffectArgument;
  */
 @Primitive("org.bukkit.potion.PotionEffectType")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface APotionEffectArgument {
 }

@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.FloatRangeArgument;
  */
 @Primitive("dev.jorel.commandapi.wrappers.FloatRange")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AFloatRangeArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AFloatRangeArgument {		
 }

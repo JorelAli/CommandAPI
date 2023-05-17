@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.BlockStateArgument;
  */
 @Primitive("org.bukkit.block.data.BlockData")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface ABlockStateArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface ABlockStateArgument {		
 }

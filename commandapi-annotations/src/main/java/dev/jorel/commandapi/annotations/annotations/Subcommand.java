@@ -18,7 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.annotations;
+package dev.jorel.commandapi.annotations.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -26,10 +26,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The annotation to apply to indicate that a command or subcommand requires
- * being OP to use.
+ * The annotation to indicate that this method is a subcommand
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target( { ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.SOURCE)
-public @interface NeedsOp {
+public @interface Subcommand {
+
+	/**
+	 * The names (and thus, aliases) of this subcommand
+	 * @return the names that this subcommand produces
+	 */
+	public String[] value() default {};
+	
 }

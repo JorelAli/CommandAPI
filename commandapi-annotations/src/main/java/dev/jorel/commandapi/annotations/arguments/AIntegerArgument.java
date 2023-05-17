@@ -31,7 +31,7 @@ import dev.jorel.commandapi.arguments.IntegerArgument;
  * Annotation equivalent of the {@link IntegerArgument}
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Primitive("int")
 public @interface AIntegerArgument {
 

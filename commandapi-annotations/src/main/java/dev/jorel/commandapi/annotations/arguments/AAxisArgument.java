@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.AxisArgument;
  */
 @Primitive("java.util.EnumSet<org.bukkit.Axis>")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AAxisArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AAxisArgument {		
 }

@@ -31,7 +31,7 @@ import dev.jorel.commandapi.arguments.LongArgument;
  * Annotation equivalent of the {@link LongArgument}
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Primitive("long")
 public @interface ALongArgument {
 

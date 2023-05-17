@@ -30,8 +30,8 @@ import dev.jorel.commandapi.arguments.StringArgument;
 /**
  * Annotation equivalent of the {@link StringArgument}
  */
-@Primitive("String")
+@Primitive("java.lang.String")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AStringArgument {
 }

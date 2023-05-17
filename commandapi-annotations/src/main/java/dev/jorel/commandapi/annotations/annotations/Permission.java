@@ -18,7 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.annotations;
+package dev.jorel.commandapi.annotations.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -26,11 +26,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The annotation to indicate that this method is the default command executor
- * when no subcommands are used.
+ * The annotation to apply a permission to a command or subcommand
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
-public @interface Default {
-	
+public @interface Permission {
+
+	/**
+	 * The permission literal that this argument represents
+	 * @return the permission literal that this argument represents
+	 */
+	public String value();
 }

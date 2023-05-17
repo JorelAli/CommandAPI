@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
  */
 @Primitive("org.bukkit.OfflinePlayer")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AOfflinePlayerArgument {
 }

@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.PlayerArgument;
  */
 @Primitive("org.bukkit.entity.Player")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface APlayerArgument {
 }

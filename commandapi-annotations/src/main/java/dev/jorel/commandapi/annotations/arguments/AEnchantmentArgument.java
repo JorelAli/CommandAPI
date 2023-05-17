@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.EnchantmentArgument;
  */
 @Primitive("org.bukkit.enchantments.Enchantment")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AEnchantmentArgument {		
 }

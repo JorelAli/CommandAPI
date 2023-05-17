@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.ChatComponentArgument;
  */
 @Primitive("net.md_5.bungee.api.chat.BaseComponent[]")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AChatComponentArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AChatComponentArgument {		
 }

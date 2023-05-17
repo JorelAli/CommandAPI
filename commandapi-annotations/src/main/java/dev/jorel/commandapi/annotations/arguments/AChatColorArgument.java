@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.ChatColorArgument;
  */
 @Primitive("org.bukkit.ChatColor")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AChatColorArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AChatColorArgument {		
 }

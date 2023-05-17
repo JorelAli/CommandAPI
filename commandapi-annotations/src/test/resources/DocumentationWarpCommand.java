@@ -28,10 +28,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.annotations.Command;
-import dev.jorel.commandapi.annotations.Default;
-import dev.jorel.commandapi.annotations.Permission;
-import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.annotations.Command;
+import dev.jorel.commandapi.annotations.annotations.Permission;
+import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
@@ -39,13 +38,13 @@ import dev.jorel.commandapi.arguments.StringArgument;
 /* ANCHOR: warps */
 /* ANCHOR: warps_command */
 @Command("warp")    
-public class WarpCommand {
+public class DocumentationWarpCommand {
 /* ANCHOR_END: warps_command */
     
     // List of warp names and their locations
     static Map<String, Location> warps = new HashMap<>();
     
-    @Default
+    @Subcommand
     public static void warp(CommandSender sender) {
         sender.sendMessage("--- Warp help ---");
         sender.sendMessage("/warp - Show this help");
@@ -53,7 +52,7 @@ public class WarpCommand {
         sender.sendMessage("/warp create <warpname> - Creates a warp at your current location");
     }
     
-    @Default
+    @Subcommand
     public static void warp(Player player, @AStringArgument String warpName) {
         player.teleport(warps.get(warpName));
     }
@@ -70,14 +69,14 @@ public class WarpCommand {
 class  A {
     { 
 /* ANCHOR: warps_register */
-CommandAPI.registerCommand(WarpCommand.class);
+CommandAPI.registerCommand(DocumentationWarpCommand.class);
 /* ANCHOR_END: warps_register */
     }
     
     static Map<String, Location> warps = new HashMap<>();
     
 /* ANCHOR: warps_help */
-@Default
+@Subcommand
 public static void warp(CommandSender sender) {
     sender.sendMessage("--- Warp help ---");
     sender.sendMessage("/warp - Show this help");
@@ -87,7 +86,7 @@ public static void warp(CommandSender sender) {
 /* ANCHOR_END: warps_help */
     
 /* ANCHOR: warps_warp */
-@Default
+@Subcommand
 public static void warp(Player player, @AStringArgument String warpName) {
     player.teleport(warps.get(warpName));
 }
@@ -124,7 +123,7 @@ new CommandAPICommand("warp")
         warps.keySet().toArray(new String[0])
     )))
     .executesPlayer((player, args) -> {
-        player.teleport(warps.get((String) args.get(0)));
+        player.teleport(warps.get((String) args[0]));
     })
     .register();
 
@@ -135,7 +134,7 @@ new CommandAPICommand("warp")
             .withPermission("warps.create")
             .withArguments(new StringArgument("warpname"))
             .executesPlayer((player, args) -> {
-                warps.put((String) args.get(0), player.getLocation());
+                warps.put((String) args[0], player.getLocation());
             })
     )
     .register();
@@ -147,7 +146,7 @@ class MyPlugin extends JavaPlugin {
     
     @Override
     public void onLoad() {
-        CommandAPI.registerCommand(WarpCommand.class);
+        CommandAPI.registerCommand(DocumentationWarpCommand.class);
     }
     
 }

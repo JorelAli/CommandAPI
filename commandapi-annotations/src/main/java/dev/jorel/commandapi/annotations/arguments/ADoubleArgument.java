@@ -32,7 +32,7 @@ import dev.jorel.commandapi.arguments.DoubleArgument;
  */
 @Primitive("double")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ADoubleArgument {
 
 	/**

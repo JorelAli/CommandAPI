@@ -18,30 +18,16 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.annotations;
+package dev.jorel.commandapi.annotations.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * The annotation which includes information about the help for a command
- */
-@Target(ElementType.TYPE)
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
-public @interface Help {
+public @interface WithoutPermission {
 
-	/**
-	 * The full description for this command's help
-	 * @return the full description for this command's help
-	 */
 	public String value();
-	
-	/**
-	 * The short description for this command's help
-	 * @return the short description for this command's help
-	 */
-	public String shortDescription() default "";
-	
 }

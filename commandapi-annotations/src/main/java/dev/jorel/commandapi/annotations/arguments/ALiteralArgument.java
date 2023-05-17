@@ -30,9 +30,10 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
 /**
  * Annotation equivalent of the {@link LiteralArgument}
  */
-@Primitive("String")
+@Primitive("java.lang.String")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+@Deprecated(forRemoval = false, since = "8.0.0")
 public @interface ALiteralArgument {
 
 	/**

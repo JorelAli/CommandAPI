@@ -24,25 +24,32 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import dev.jorel.commandapi.annotations.Command;
-import dev.jorel.commandapi.annotations.Default;
-import dev.jorel.commandapi.annotations.Help;
-import dev.jorel.commandapi.annotations.Permission;
-import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.annotations.Command;
+import dev.jorel.commandapi.annotations.annotations.Executors;
+import dev.jorel.commandapi.annotations.annotations.Help;
+import dev.jorel.commandapi.annotations.annotations.Permission;
+import dev.jorel.commandapi.annotations.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.arguments.APlayerArgument;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
+import dev.jorel.commandapi.executors.ExecutorType;
 
 @Command("warp")	
 @Help(value = "Manages all warps on the server", shortDescription = "Manages warps")
-public class TestCommand {
+public class ValidCommand {
 	
 	// List of warp names and their locations
-	static Map<String, Location> warps = new HashMap<>();
+	final Map<String, Location> warps;
 	
-	@Default
-	public static void warp(CommandSender sender) {
+	public ValidCommand() {
+		warps = new HashMap<>();
+	}
+	
+	// /warp
+	@Subcommand
+	public void warp(CommandSender sender) {
 		sender.sendMessage("--- Warp help ---");
 		sender.sendMessage("/warp - Show this help");
 		sender.sendMessage("/warp <warp> - Teleport to <warp>");
@@ -50,24 +57,44 @@ public class TestCommand {
 		sender.sendMessage("/warp tp <player> <warpname> - Teleports a player to a warp");
 	}
 	
-	@Default
-	public static void warp(Player player, @AStringArgument String warpName) {
+	// /warp <warpname> 
+	@Subcommand
+	public void warp(Player player, @AStringArgument String warpName) {
 		player.teleport(warps.get(warpName));
 	}
 	
 	@Subcommand("create")
-	@Permission("warps.create")
-	public static void createWarp(Player player, @AStringArgument String warpName) {
-		warps.put(warpName, player.getLocation());
-	}
-	
-	@Subcommand("create")
-	@Permission("warps.create")
-	public static void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
-		if(target.isOnline() && target instanceof Player onlineTarget) {
-			onlineTarget.teleport(warps.get(warpName));			
+	class WarpCreate {
+
+		// /warp create <warpName>
+		@Subcommand
+		@Permission("warps.create")
+		@Executors({ExecutorType.ENTITY, ExecutorType.PLAYER})
+		public void createWarp(CommandSender sender, @AStringArgument String warpName) {
+			warps.put(warpName, ((LivingEntity) sender).getLocation());
 		}
+
 	}
 	
+	@Subcommand("tp")
+	class WarpTp {
+		
+		// /warp tp <warpName>
+		@Subcommand
+		@Permission("warps.tp")
+		public void tpWarp(Player player, @AStringArgument String warpName) {
+			player.teleport(warps.get(warpName));
+		}
+
+		// /warp tp <player> <warpName>
+		@Subcommand
+		@Permission("warps.tp.other")
+		public void tpWarp(CommandSender sender, @APlayerArgument OfflinePlayer target, @AStringArgument String warpName) {
+			if(target.isOnline() && target instanceof Player onlineTarget) {
+				onlineTarget.teleport(warps.get(warpName));
+			}
+		}
+
+	}
 	
 }

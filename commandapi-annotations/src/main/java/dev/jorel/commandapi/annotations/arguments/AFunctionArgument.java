@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.FunctionArgument;
  */
 @Primitive("dev.jorel.commandapi.wrappers.FunctionWrapper[]")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AFunctionArgument {
 }

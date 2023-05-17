@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.RotationArgument;
  */
 @Primitive("dev.jorel.commandapi.wrappers.Rotation")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ARotationArgument {
 }

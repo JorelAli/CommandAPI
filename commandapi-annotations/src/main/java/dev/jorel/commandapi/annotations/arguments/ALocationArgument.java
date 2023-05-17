@@ -33,7 +33,7 @@ import dev.jorel.commandapi.arguments.LocationType;
  */
 @Primitive("org.bukkit.Location")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ALocationArgument {
 	
 	/**

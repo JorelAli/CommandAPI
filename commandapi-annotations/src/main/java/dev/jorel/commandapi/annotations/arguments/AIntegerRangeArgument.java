@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.IntegerRangeArgument;
  */
 @Primitive("dev.jorel.commandapi.wrappers.IntegerRange")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AIntegerRangeArgument {
 }

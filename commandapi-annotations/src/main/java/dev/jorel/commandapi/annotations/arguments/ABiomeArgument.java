@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.BiomeArgument;
  */
 @Primitive("org.bukkit.block.Biome")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface ABiomeArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface ABiomeArgument {		
 }

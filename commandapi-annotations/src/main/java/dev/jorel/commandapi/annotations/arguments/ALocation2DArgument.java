@@ -33,7 +33,7 @@ import dev.jorel.commandapi.arguments.LocationType;
  */
 @Primitive("dev.jorel.commandapi.wrappers.Location2D")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ALocation2DArgument {
 
 	/**

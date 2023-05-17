@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.ParticleArgument;
  */
 @Primitive("org.bukkit.Particle")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AParticleArgument {
 }

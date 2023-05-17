@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.LootTableArgument;
  */
 @Primitive("org.bukkit.loot.LootTable")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ALootTableArgument {
 }

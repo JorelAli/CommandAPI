@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.BooleanArgument;
  */
 @Primitive("boolean")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface ABooleanArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface ABooleanArgument {		
 }

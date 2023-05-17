@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.AdventureChatArgument;
  */
 @Primitive("net.kyori.adventure.text.Component")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AAdventureChatArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AAdventureChatArgument {		
 }

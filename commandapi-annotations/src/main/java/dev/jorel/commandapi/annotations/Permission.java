@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 /**
  * The annotation to apply a permission to a command or subcommand
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Permission {
 
@@ -37,5 +37,4 @@ public @interface Permission {
 	 * @return the permission literal that this argument represents
 	 */
 	public String value();
-	
 }

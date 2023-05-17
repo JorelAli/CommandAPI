@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.AngleArgument;
  */
 @Primitive("float")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
-public @interface AAngleArgument {
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AAngleArgument {		
 }

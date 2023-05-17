@@ -30,8 +30,8 @@ import dev.jorel.commandapi.arguments.ObjectiveArgument;
 /**
  * Annotation equivalent of the {@link ObjectiveArgument}
  */
-@Primitive("String")
+@Primitive("java.lang.String")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface AObjectiveArgument {
 }

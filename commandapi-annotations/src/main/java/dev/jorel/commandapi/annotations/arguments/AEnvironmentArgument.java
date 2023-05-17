@@ -18,24 +18,20 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.annotations;
+package dev.jorel.commandapi.annotations.arguments;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * The annotation to indicate that this method is a subcommand
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.SOURCE)
-public @interface Subcommand {
+import dev.jorel.commandapi.arguments.EnvironmentArgument;
 
-	/**
-	 * The names (and thus, aliases) of this subcommand
-	 * @return the names that this subcommand produces
-	 */
-	public String[] value();
-	
+/**
+ * Annotation equivalent of the {@link EnvironmentArgument}
+ */
+@Primitive("org.bukkit.World.Environment")
+@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
+public @interface AEnvironmentArgument {		
 }

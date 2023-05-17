@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.EntityTypeArgument;
  */
 @Primitive("org.bukkit.entity.EntityType")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ ElementType.PARAMETER, ElementType.FIELD })
 public @interface AEntityTypeArgument {
 }

@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.RecipeArgument;
  */
 @Primitive("org.bukkit.inventory.Recipe")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ARecipeArgument {
 }

@@ -32,6 +32,6 @@ import dev.jorel.commandapi.arguments.TimeArgument;
  */
 @Primitive("int")
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ATimeArgument {
 }
