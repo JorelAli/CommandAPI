@@ -25,6 +25,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import java.util.List;
+
 /**
  * An argument that represents multiple LiteralArguments
  * 
@@ -39,7 +41,7 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	 * @param literals the literals that this argument represents
 	 */
 	@Deprecated(since = "9.0.2", forRemoval = true)
-	public MultiLiteralArgument(final String... literals) {
+	public MultiLiteralArgument(final List<String> literals) {
 		this(null, literals);
 	}
 
@@ -49,15 +51,15 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	 * @param nodeName the node name for this argument
 	 * @param literals the literals that this argument represents
 	 */
-	public MultiLiteralArgument(String nodeName, final String... literals) {
+	public MultiLiteralArgument(String nodeName, final List<String> literals) {
 		super(nodeName, null);
 		if(literals == null) {
 			throw new BadLiteralException(true);
 		}
-		if(literals.length == 0) {
+		if(literals.size() == 0) {
 			throw new BadLiteralException(false);
 		}
-		this.literals = literals;
+		this.literals = literals.toArray(String[]::new);
 	}
 
 	@Override

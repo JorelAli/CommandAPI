@@ -5,7 +5,6 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 import org.bukkit.Material;
@@ -46,7 +45,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument("literals", new String[]{"literal", "literal1", "literal2"}))
+			.withArguments(new MultiLiteralArgument("literals", List.of("literal", "literal1", "literal2")))
 			.executesPlayer((player, args) -> {
 				results.set((String) args.get(0));
 			})
@@ -73,7 +72,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument("literals", new String[]{"literal", "literal1", "literal2"}))
+			.withArguments(new MultiLiteralArgument("literals",List.of("literal", "literal1", "literal2")))
 			.executesPlayer((player, args) -> {
 				results.set((String) args.get("literals"));
 			})
@@ -88,6 +87,44 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		// /test literal1
 		server.dispatchCommand(player, "test literal1");
 		assertEquals("literal1", results.get());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithMultipleMultiLiteralArguments() {
+		Mut<String> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MultiLiteralArgument("literals1", List.of("lit1", "lit2")))
+			.withArguments(new MultiLiteralArgument("literals2", List.of("lit1", "lit3")))
+			.executes((player, args) -> {
+				results.set(args.getUnchecked("literals1"));
+				results.set(args.getUnchecked("literals2"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test lit1 lit1
+		server.dispatchCommand(player, "test lit1 lit1");
+		assertEquals("lit1", results.get());
+		assertEquals("lit1", results.get());
+
+		// /test lit1 lit3
+		server.dispatchCommand(player, "test lit1 lit3");
+		assertEquals("lit1", results.get());
+		assertEquals("lit3", results.get());
+
+		// /test lit2 lit1
+		server.dispatchCommand(player, "test lit2 lit1");
+		assertEquals("lit2", results.get());
+		assertEquals("lit1", results.get());
+
+		// /test lit2 lit3
+		server.dispatchCommand(player, "test lit2 lit3");
+		assertEquals("lit2", results.get());
+		assertEquals("lit3", results.get());
 
 		assertNoMoreResults(results);
 	}
@@ -131,7 +168,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	@Test
 	public void suggestionTestWithMultiLiteralArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument("literals", new String[]{"literal", "literal1", "literal2"}))
+			.withArguments(new MultiLiteralArgument("literals", List.of("literal", "literal1", "literal2")))
 			.executesPlayer(P_EXEC)
 			.register();
 

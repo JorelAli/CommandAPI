@@ -216,7 +216,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
 
 		// Create a MultiLiteralArgument using the subcommand information
-		Argument literal = (Argument) CommandAPIHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
+		Argument literal = (Argument) CommandAPIHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(subcommand.meta.commandName, literals);
 
 		literal.withPermission(subcommand.meta.permission)
 			.withRequirement((Predicate) subcommand.meta.requirements)
