@@ -29,6 +29,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * A pseudo-argument representing a single literal string
  */
 public class LiteralArgument extends Argument<String> implements Literal<Argument<String>> {
+
+	private final String nodeName;
 	private final String literal;
 
 	/**
@@ -37,6 +39,15 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	 * @param literal the string literal that this argument will represent
 	 */
 	public LiteralArgument(final String literal) {
+		this(literal, literal);
+	}
+
+	/**
+	 * A literal argument. Only takes one string value which cannot be modified
+	 *
+	 * @param literal the string literal that this argument will represent
+	 */
+	public LiteralArgument(String nodeName, final String literal) {
 		/*
 		 * The literal argument builder is NOT technically an argument.
 		 * Therefore, it doesn't have an ArgumentType.
@@ -44,6 +55,7 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
 		 */
 		super(literal, null);
+		this.nodeName = nodeName;
 
 		if (literal == null) {
 			throw new BadLiteralException(true);
@@ -82,6 +94,10 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	@Override
 	public Class<String> getPrimitiveType() {
 		return String.class;
+	}
+
+	public String getNodeName() {
+		return nodeName;
 	}
 
 	/**

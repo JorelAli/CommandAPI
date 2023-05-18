@@ -368,6 +368,15 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.0.2</b></td>
+            <td valign="top">??? 2023</td>
+            <td valign="top">
+                <ul>
+                    <li>Add the ability to retrieve `LiteralArgument`s and `MultiLiteralArgument`s by their node names</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.0.1</b></td>
             <td valign="top">May 2023</td>
             <td valign="top">

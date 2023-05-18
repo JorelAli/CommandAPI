@@ -398,7 +398,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 
 				// Add all of its entries
 				for (String literal: superArg.getLiterals()) {
-					Argument litArg = platform.newConcreteLiteralArgument(literal);
+					Argument litArg = platform.newConcreteLiteralArgument(superArg.instance().getNodeName(), literal);
 
 					litArg.setListed(superArg.instance().isListed())
 						.withPermission(superArg.instance().getArgumentPermission())

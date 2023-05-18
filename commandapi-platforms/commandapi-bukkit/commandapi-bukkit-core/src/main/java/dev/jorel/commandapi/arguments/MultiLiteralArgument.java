@@ -31,14 +31,26 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * @since 4.1
  */
 public class MultiLiteralArgument extends Argument<String> implements MultiLiteral<Argument<String>> {
+
 	private final String[] literals;
 
 	/**
 	 * A multiliteral argument. Takes in string literals which cannot be modified
 	 * @param literals the literals that this argument represents
 	 */
+	@Deprecated(since = "9.0.2", forRemoval = true)
 	public MultiLiteralArgument(final String... literals) {
-		super(null, null);
+		this(null, literals);
+	}
+
+	/**
+	 * A multiliteral argument. Takes in string literals which cannot be modified
+	 *
+	 * @param nodeName the node name for this argument
+	 * @param literals the literals that this argument represents
+	 */
+	public MultiLiteralArgument(String nodeName, final String... literals) {
+		super(nodeName, null);
 		if(literals == null) {
 			throw new BadLiteralException(true);
 		}

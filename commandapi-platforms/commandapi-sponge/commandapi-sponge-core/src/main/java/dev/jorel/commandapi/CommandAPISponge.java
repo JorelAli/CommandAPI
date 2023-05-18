@@ -161,8 +161,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public Argument<String> newConcreteLiteralArgument(String literal) {
-		return new LiteralArgument(literal);
+	public Argument<String> newConcreteLiteralArgument(String nodeName, String literal) {
+		return new LiteralArgument(nodeName, literal);
 	}
-
 }

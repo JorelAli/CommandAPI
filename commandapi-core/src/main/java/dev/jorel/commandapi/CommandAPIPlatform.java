@@ -180,5 +180,5 @@ public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argu
 
 	public abstract Argument newConcreteMultiLiteralArgument(String[] literals);
 
-	public abstract Argument newConcreteLiteralArgument(String literal);
+	public abstract Argument newConcreteLiteralArgument(String nodeName, String literal);
 }
