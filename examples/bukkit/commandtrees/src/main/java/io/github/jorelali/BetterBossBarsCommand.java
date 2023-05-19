@@ -66,7 +66,7 @@ public class BetterBossBarsCommand {
 						)
 					)
 					.then(new LiteralArgument("style")
-						.then(new MultiLiteralArgument("notched_6", "notched_10", "notched_12", "notched_20", "progress")
+						.then(new MultiLiteralArgument("styles", List.of("notched_6", "notched_10", "notched_12", "notched_20", "progress"))
 							.executes(this::setStyle)
 						)
 					)
