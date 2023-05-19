@@ -39,8 +39,8 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	 * @param literals the literals that this argument represents
 	 */
 	@Deprecated(since = "9.0.2", forRemoval = true)
-	public MultiLiteralArgument(final List<String> literals) {
-		this(null, literals);
+	public MultiLiteralArgument(final String[] literals) {
+		this(null, List.of(literals));
 	}
 
 	/**

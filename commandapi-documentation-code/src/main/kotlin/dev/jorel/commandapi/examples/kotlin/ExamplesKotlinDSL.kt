@@ -3,8 +3,6 @@ package dev.jorel.commandapi.examples.kotlin
 import de.tr7zw.changeme.nbtapi.NBTContainer
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
-import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
 import dev.jorel.commandapi.arguments.LiteralArgument.of
 import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.kotlindsl.*

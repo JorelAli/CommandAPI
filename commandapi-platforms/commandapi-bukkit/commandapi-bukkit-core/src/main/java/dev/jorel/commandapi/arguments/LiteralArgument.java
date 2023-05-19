@@ -32,7 +32,6 @@ import dev.jorel.commandapi.executors.CommandArguments;
  */
 public class LiteralArgument extends Argument<String> implements Literal<Argument<String>> {
 
-	private final String nodeName;
 	private final String literal;
 
 	/**
@@ -57,8 +56,7 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 		 *
 		 * This is a wrapper for the object "LiteralArgumentBuilder<>"
 		 */
-		super(literal, null);
-		this.nodeName = nodeName;
+		super(nodeName, null);
 
 		if (literal == null) {
 			throw new BadLiteralException(true);
@@ -100,8 +98,28 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 		return new LiteralArgument(literal);
 	}
 
-	public String getNodeName() {
-		return nodeName;
+	/**
+	 * A utility method to create a literal argument. Works as an alternative to {@link dev.jorel.commandapi.arguments.LiteralArgument#literal(String, String)}
+	 * <p>
+	 * To provide easier use of this method you can statically import this: {@code import static dev.jorel.commandapi.arguments.LiteralArgument.of;}
+	 *
+	 * @param literal the string literal that this argument will represent
+	 * @return the literal argument created by this method
+	 */
+	public static LiteralArgument of(String nodeName, final String literal) {
+		return new LiteralArgument(nodeName, literal);
+	}
+
+	/**
+	 * A utility method to create a literal argument. Works as an alternative to {@link dev.jorel.commandapi.arguments.LiteralArgument#of(String, String)}
+	 * <p>
+	 * To provide easier use of this method you can statically import this: {@code import static dev.jorel.commandapi.arguments.LiteralArgument.literal;}
+	 *
+	 * @param literal the string literal that this argument will represent
+	 * @return the literal argument created by this method
+	 */
+	public static LiteralArgument literal(String nodeName, final String literal) {
+		return new LiteralArgument(nodeName, literal);
 	}
 
 	/**

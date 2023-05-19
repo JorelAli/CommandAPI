@@ -90,7 +90,7 @@ public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl,
 	 *
 	 * @return the name of this argument's node
 	 */
-	public String getNodeName() {
+	public final String getNodeName() {
 		return this.nodeName;
 	}
 
