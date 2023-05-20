@@ -675,7 +675,7 @@ new CommandAPICommand("changelevel")
 void argument_multiLiteral() {
 /* ANCHOR: argumentMultiLiteral1 */
 new CommandAPICommand("gamemode")
-    .withArguments(new MultiLiteralArgument("adventure", "creative", "spectator", "survival"))
+    .withArguments(new MultiLiteralArgument("gamemodes", List.of("adventure", "creative", "spectator", "survival")))
     .executesPlayer((player, args) -> {
         // The literal string that the player enters IS available in the args[]
         switch((String) args.get(0)) {
@@ -1341,7 +1341,7 @@ CommandAPI.unregister("gamemode", true);
 
 // Register our new /gamemode, with survival, creative, adventure and spectator
 new CommandAPICommand("gamemode")
-    .withArguments(new MultiLiteralArgument("survival", "creative", "adventure", "spectator"))
+    .withArguments(new MultiLiteralArgument("gamemodes", List.of("survival", "creative", "adventure", "spectator")))
     .executes((sender, args) -> {
         // Implementation of our /gamemode command
     })
@@ -1442,13 +1442,13 @@ Converter.convert(essentials, "speed", new PlayerArgument("target"));
 
 // /speed <walk/fly> <speed>
 Converter.convert(essentials, "speed", 
-    new MultiLiteralArgument("walk", "fly"), 
+    new MultiLiteralArgument("modes", List.of("walk", "fly")),
     new IntegerArgument("speed", 0, 10)
 );
 
 // /speed <walk/fly> <speed> <target>
 Converter.convert(essentials, "speed", 
-    new MultiLiteralArgument("walk", "fly"), 
+    new MultiLiteralArgument("modes", List.of("walk", "fly")),
     new IntegerArgument("speed", 0, 10), 
     new PlayerArgument("target")
 );

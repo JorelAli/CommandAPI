@@ -81,6 +81,27 @@ class ArgumentLiteralTests extends TestBase {
 		
 		assertNoMoreResults(results);
 	}
+
+	@Test
+	public void executionTestWithLiteralArgumentListedAndNodeName() {
+		Mut<String> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new LiteralArgument("literal").setListed(true))
+			.executesPlayer((player, args) -> {
+				assertEquals(1, args.args().length);
+				results.set((String) args.get("literal"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test literal
+		server.dispatchCommand(player, "test literal");
+		assertEquals("literal", results.get());
+
+		assertNoMoreResults(results);
+	}
 	
 	/********************
 	 * Dispatcher tests *

@@ -26,25 +26,39 @@ import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import java.util.List;
+
 /**
  * An argument that represents multiple LiteralArguments
  */
 public class MultiLiteralArgument extends Argument<String> implements MultiLiteral<Argument<String>> {
+
 	private final String[] literals;
 
 	/**
 	 * A multiliteral argument. Takes in string literals which cannot be modified
 	 * @param literals the literals that this argument represents
 	 */
-	public MultiLiteralArgument(final String... literals) {
-		super(null, null);
+	@Deprecated(since = "9.0.2", forRemoval = true)
+	public MultiLiteralArgument(final List<String> literals) {
+		this(null, literals);
+	}
+
+	/**
+	 * A multiliteral argument. Takes in string literals which cannot be modified
+	 *
+	 * @param nodeName the node name for this argument
+	 * @param literals the literals that this argument represents
+	 */
+	public MultiLiteralArgument(String nodeName, final List<String> literals) {
+		super(nodeName, null);
 		if(literals == null) {
 			throw new BadLiteralException(true);
 		}
-		if(literals.length == 0) {
+		if(literals.size() == 0) {
 			throw new BadLiteralException(false);
 		}
-		this.literals = literals;
+		this.literals = literals.toArray(String[]::new);
 	}
 
 	@Override

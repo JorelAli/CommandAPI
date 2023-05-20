@@ -23,12 +23,7 @@ package dev.jorel.commandapi.annotations;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -179,6 +174,7 @@ public class Annotations extends AbstractProcessor {
 		for (Element methodElement : classElement.getEnclosedElements()) {
 			if (methodElement.getAnnotation(Subcommand.class) != null) {
 				imports.add(MultiLiteralArgument.class.getCanonicalName());
+				imports.add(List.class.getCanonicalName());
 			}
 			if (methodElement.getAnnotation(NeedsOp.class) != null) {
 				imports.add(CommandPermission.class.getCanonicalName());
@@ -200,6 +196,9 @@ public class Annotations extends AbstractProcessor {
 						
 						if(argument instanceof ALocationArgument || argument instanceof ALocation2DArgument) {
 							imports.add(LocationType.class.getCanonicalName());
+						}
+						if (argument instanceof AMultiLiteralArgument) {
+							imports.add(List.class.getCanonicalName());
 						}
 					}
 					
@@ -253,15 +252,15 @@ public class Annotations extends AbstractProcessor {
 		if (methodElement.getAnnotation(Subcommand.class) != null) {
 			out.println(indent(indent) + ".withArguments(");
 			indent++;
-			out.print(indent(indent) + "new MultiLiteralArgument(");
+			out.print(indent(indent) + "new MultiLiteralArgument(\"subcommand\", ");
 			
 			if(methodElement.getAnnotation(Subcommand.class).value().length == 0) {
 				processingEnv.getMessager().printMessage(Kind.ERROR, "Invalid @Subcommand on " + methodElement.getSimpleName() + " - no subcommand name was found");
 			}
 			
 			// @Subcommand (name)
-			out.print(Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
-				.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
+			out.print("List.of(" + Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
+				.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")) + ")");
 			
 			out.println(")");
 			indent++;
@@ -490,14 +489,9 @@ public class Annotations extends AbstractProcessor {
 		}
 		
 		// Node name
-		if(argumentAnnotation instanceof AMultiLiteralArgument || argumentAnnotation instanceof ALiteralArgument) {
-			// Ignore node name for MultiLiteralArgument and LiteralArgument
-			out.print("(");
-		} else {
-			out.print("(\"");
-			out.print(parameter.getSimpleName());
-			out.print("\"");
-		}
+		out.print("(\"");
+		out.print(parameter.getSimpleName());
+		out.print("\"");
 		
 		// Handle parameters
 		// Number arguments
@@ -517,9 +511,9 @@ public class Annotations extends AbstractProcessor {
 		} else if(argumentAnnotation instanceof ALocationArgument argument) {
 			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
 		} else if(argumentAnnotation instanceof AMultiLiteralArgument argument) {
-			out.print(Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
+			out.print(", List.of(" + Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")) + ")");
 		} else if(argumentAnnotation instanceof ALiteralArgument argument) {
-			out.print("\"");
+			out.print(", \"");
 			out.print(argument.value());
 			out.print("\"");
 		}

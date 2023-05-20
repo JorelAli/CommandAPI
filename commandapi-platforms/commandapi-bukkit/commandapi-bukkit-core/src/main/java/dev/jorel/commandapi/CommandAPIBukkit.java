@@ -485,13 +485,13 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public Argument<String> newConcreteMultiLiteralArgument(String[] literals) {
-		return new MultiLiteralArgument(literals);
+	public Argument<String> newConcreteMultiLiteralArgument(String nodeName, String[] literals) {
+		return new MultiLiteralArgument(nodeName, List.of(literals));
 	}
 
 	@Override
-	public Argument<String> newConcreteLiteralArgument(String literal) {
-		return new LiteralArgument(literal);
+	public Argument<String> newConcreteLiteralArgument(String nodeName, String literal) {
+		return new LiteralArgument(nodeName, literal);
 	}
 
 	@Override

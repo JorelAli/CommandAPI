@@ -178,7 +178,7 @@ public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argu
 	// Create the concrete instances of objects implemented by the platform
 	public abstract AbstractCommandAPICommand<?, Argument, CommandSender> newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta);
 
-	public abstract Argument newConcreteMultiLiteralArgument(String[] literals);
+	public abstract Argument newConcreteMultiLiteralArgument(String nodeName, String[] literals);
 
-	public abstract Argument newConcreteLiteralArgument(String literal);
+	public abstract Argument newConcreteLiteralArgument(String nodeName, String literal);
 }
