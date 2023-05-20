@@ -37,6 +37,10 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 9.0.1 \\(\rightarrow\\) 9.0.2
+
+- Updates [Multi literal arguments](./argument_multiliteral.md) page to add the node name information
+
 ### Documentation changes 9.0.0 \\(\rightarrow\\) 9.0.1
 
 - Updates [Optional arguments](./optional_arguments.md) page to update the method list for avoiding `null` values
