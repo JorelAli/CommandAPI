@@ -545,7 +545,7 @@ new CommandAPICommand("mycommand")
 
 /* ANCHOR: argumentLiteral2 */
 new CommandAPICommand("mycommand")
-    .withArguments(LiteralArgument.of("literal", "hello"))
+    .withArguments(LiteralArgument.of("hello"))
     .withArguments(new TextArgument("text"))
     .executes((sender, args) -> {
         // This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
@@ -554,7 +554,7 @@ new CommandAPICommand("mycommand")
     .register();
 
 new CommandAPICommand("mycommand")
-    .withArguments(LiteralArgument.literal("literal", "hello"))
+    .withArguments(LiteralArgument.literal("hello"))
     .withArguments(new TextArgument("text"))
     .executes((sender, args) -> {
         // This gives the variable "text" the contents of the TextArgument, and not the literal "hello"
