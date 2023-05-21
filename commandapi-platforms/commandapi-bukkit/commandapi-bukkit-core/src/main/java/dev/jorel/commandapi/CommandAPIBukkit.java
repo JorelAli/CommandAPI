@@ -180,7 +180,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			if (paper.isFoliaPresent()) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
-				reloadDataPacks();
+				// reloadDataPacks();
 			}
 			updateHelpForCommands();
 		}, 0L);
@@ -258,6 +258,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
 		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
+		// TODO: Figure out if default usage generation should be updated
+		//  Remove test command in CommandAPIMain later
+		//  Implement withUsage method
 
 		// Generate usages
 		List<String> usages = new ArrayList<>();
@@ -299,7 +302,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			} else if (fullDescriptionOptional.isPresent()) {
 				shortDescription = fullDescriptionOptional.get();
 			} else {
-				shortDescription = "A Mojang provided command.";
+				shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
 			}
 
 			// Generate full description
