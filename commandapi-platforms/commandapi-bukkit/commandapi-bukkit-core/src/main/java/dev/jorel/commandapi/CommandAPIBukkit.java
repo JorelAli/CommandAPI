@@ -260,20 +260,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
 		// TODO: Figure out if default usage generation should be updated
 		//  Remove test command in CommandAPIMain later
-		//  Implement withUsage method
 
 		// Generate usages
-		List<String> usages = new ArrayList<>();
-		for (RegisteredCommand rCommand : CommandAPIHandler.getInstance().registeredCommands) {
-			if (rCommand.commandName().equals(command.commandName())) {
-				StringBuilder usageString = new StringBuilder();
-				usageString.append("/").append(command.commandName()).append(" ");
-				for (String arg : rCommand.argsAsStr()) {
-					usageString.append("<").append(arg.split(":")[0]).append("> ");
-				}
-				usages.add(usageString.toString().trim());
-			}
-		}
+		List<String> usages = getUsageList(command);
 
 		// If 1 usage, put it on the same line, otherwise format like a list
 		if (usages.isEmpty()) {
@@ -287,6 +276,34 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				sb.append("\n- ").append(usage);
 			}
 		}
+	}
+
+	private List<String> getUsageList(RegisteredCommand currentCommand) {
+		List<RegisteredCommand> commandsWithIdenticalNames = new ArrayList<>();
+		List<String> usages;
+
+		// Collect every command with the same name
+		for (RegisteredCommand registeredCommand : CommandAPIHandler.getInstance().registeredCommands) {
+			if (registeredCommand.commandName().equals(currentCommand.commandName())) {
+				commandsWithIdenticalNames.add(registeredCommand);
+			}
+		}
+
+		// Generate command usage or fill it with a user provided one
+		if (currentCommand.usageDescription().isPresent()) {
+			usages = new ArrayList<>(List.of(currentCommand.usageDescription().get()));
+		} else {
+			usages = new ArrayList<>();
+			for (RegisteredCommand command : commandsWithIdenticalNames) {
+				StringBuilder usageString = new StringBuilder();
+				usageString.append("/").append(command.commandName()).append(" ");
+				for (String arg : command.argsAsStr()) {
+					usageString.append("<").append(arg.split(":")[0]).append("> ");
+				}
+				usages.add(usageString.toString().trim());
+			}
+		}
+		return usages;
 	}
 
 	void updateHelpForCommands() {
@@ -313,6 +330,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 			generateHelpUsage(sb, command);
 			sb.append("\n");
+			System.out.println(sb);
 
 			// Generate aliases. We make a copy of the StringBuilder because we
 			// want to change the output when we register aliases

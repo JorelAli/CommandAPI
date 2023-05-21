@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -180,6 +181,11 @@ abstract class ExecutableCommand<Impl extends ExecutableCommand<Impl, CommandSen
 	 */
 	public Impl withFullDescription(String description) {
 		this.meta.fullDescription = Optional.ofNullable(description);
+		return instance();
+	}
+
+	public Impl withUsage(String... usage) {
+		this.meta.usageDescription = Optional.ofNullable(usage);
 		return instance();
 	}
 

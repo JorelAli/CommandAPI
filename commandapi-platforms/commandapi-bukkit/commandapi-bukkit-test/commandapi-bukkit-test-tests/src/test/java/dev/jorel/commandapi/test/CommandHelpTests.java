@@ -129,7 +129,7 @@ class CommandHelpTests extends TestBase {
 		
 		// Check the full description
 		assertEquals(ChatColor.translateAlternateColorCodes('&', """
-			A Mojang provided command.
+			A command by the CommandAPITest plugin.
 			&6Usage: &f/test"""), server.getHelpMap().getHelpTopic("/test").getFullText(player));
 	}
 

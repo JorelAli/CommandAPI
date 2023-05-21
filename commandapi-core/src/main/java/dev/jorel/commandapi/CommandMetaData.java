@@ -43,6 +43,11 @@ final class CommandMetaData<CommandSender> {
 	Optional<String> fullDescription = Optional.empty();
 
 	/**
+	 * An optional usage description for the command
+	 */
+	Optional<String[]> usageDescription = Optional.empty();
+
+	/**
 	 * Create command metadata
 	 * @param commandName The command's name
 	 *
