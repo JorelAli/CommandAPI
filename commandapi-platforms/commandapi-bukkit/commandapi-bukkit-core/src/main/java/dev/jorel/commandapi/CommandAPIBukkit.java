@@ -259,7 +259,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
 		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
 		// TODO: Figure out if default usage generation should be updated
-		//  Remove test command in CommandAPIMain later
 
 		// Generate usages
 		List<String> usages = getUsageList(command);
@@ -330,7 +329,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 			generateHelpUsage(sb, command);
 			sb.append("\n");
-			System.out.println(sb);
 
 			// Generate aliases. We make a copy of the StringBuilder because we
 			// want to change the output when we register aliases

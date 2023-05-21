@@ -68,6 +68,7 @@ final class CommandMetaData<CommandSender> {
 		this.requirements = original.requirements;
 		this.shortDescription = original.shortDescription.isPresent() ? Optional.of(original.shortDescription.get()) : Optional.empty();
 		this.fullDescription = original.fullDescription.isPresent() ? Optional.of(original.fullDescription.get()) : Optional.empty();
+		this.usageDescription = original.usageDescription.isPresent() ? Optional.of(original.usageDescription.get()) : Optional.empty();
 	}
 
 }

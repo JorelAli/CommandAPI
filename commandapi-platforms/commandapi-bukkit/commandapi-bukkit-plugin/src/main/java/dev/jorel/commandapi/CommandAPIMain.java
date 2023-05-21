@@ -26,10 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
@@ -87,81 +83,6 @@ public class CommandAPIMain extends JavaPlugin {
 		}
 
 		convertCommands(fileConfig);
-
-		PlayerCommandExecutor P_EXEC = (player, args) -> {};
-
-		new CommandTree("configcommands")
-			.withHelp("A command for interacting with the ConfigCommands system",
-				"Different systems are accessed using their keywords. For help with a specific section, use /configcommands help <section>")
-			.then(new LiteralArgument("help")
-				.executesPlayer(P_EXEC)
-				.then(new LiteralArgument("functions")
-					.executesPlayer(P_EXEC)
-				)
-				.then(new LiteralArgument("build")
-					.executesPlayer(P_EXEC)
-				)
-				.then(LiteralArgument.of("reload")
-					.executesPlayer(P_EXEC)
-				)
-				.then(LiteralArgument.of("debug")
-					.executesPlayer(P_EXEC)
-				)
-			)
-			.then(LiteralArgument.of("functions")
-				.executesPlayer(P_EXEC)
-				.then(LiteralArgument.of("addOn")
-					.then(LiteralArgument.of("internalArgument")
-						.then(LiteralArgument.of("static")
-							.then(LiteralArgument.of("function")
-								.executesPlayer(P_EXEC)
-							)
-						)
-						.then(LiteralArgument.of("nonStatic")
-							.then(LiteralArgument.of("function")
-								.executesPlayer(P_EXEC)
-							)
-						)
-					)
-				)
-			)
-			.then(LiteralArgument.of("build")
-				.executesPlayer(P_EXEC)
-			)
-			.then(LiteralArgument.of("reload")
-				.then(LiteralArgument.of("greet")
-					.executesPlayer(P_EXEC)
-					.then(new GreedyStringArgument("message")
-						.executesPlayer(P_EXEC)
-					)
-				)
-				.then(LiteralArgument.of("echo")
-					.then(new StringArgument("string")
-						.executesPlayer(P_EXEC)
-					)
-				)
-			)
-			.then(LiteralArgument.of("debug")
-				.executesPlayer(P_EXEC)
-				.then(LiteralArgument.of("enable")
-					.executesPlayer(P_EXEC)
-				)
-				.then(LiteralArgument.of("disable")
-					.executesPlayer(P_EXEC)
-				)
-				.then(LiteralArgument.of("local")
-					.then(new StringArgument("command")
-						.executesPlayer(P_EXEC)
-						.then(LiteralArgument.of("enable")
-							.executesPlayer(P_EXEC)
-						)
-						.then(LiteralArgument.of("disable")
-							.executesPlayer(P_EXEC)
-						)
-					)
-				)
-			)
-			.register();
 	}
 	
 	private void convertCommands(FileConfiguration fileConfig) {
