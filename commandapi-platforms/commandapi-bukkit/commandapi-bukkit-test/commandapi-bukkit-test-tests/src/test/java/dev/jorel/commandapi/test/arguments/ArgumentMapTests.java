@@ -81,19 +81,19 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test map:"cool map" map:"bar"
-		assertCommandFailsWith(player, "test map:\"cool map\" map:\"bar\"", "Could not parse command: Duplicate keys are not allowed at position 19: ...l map\" map<--[HERE]");
+		assertCommandFailsWith(player, "test map:\"cool map\" map:\"bar\"", "Could not parse command: Duplicate keys are not allowed! at position 15: ...cool map\" <--[HERE]");
 
 		// /test map:
-		assertCommandFailsWith(player, "test map:", "Could not parse command: Quotation mark required after writing the delimiter at position 4: map:<--[HERE]");
+		assertCommandFailsWith(player, "test map:", "Could not parse command: Expected a value after the key at position 4: map:<--[HERE]");
 
 		// /test map
-		assertCommandFailsWith(player, "test map", "Could not parse command: Delimiter required after writing a key at position 3: map<--[HERE]");
+		assertCommandFailsWith(player, "test map", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
 
 		// /test map:"
-		assertCommandFailsWith(player, "test map:\"", "Could not parse command: Value required after opening quotation mark at position 5: map:\"<--[HERE]");
+		assertCommandFailsWith(player, "test map:\"", "Could not parse command: A quoted value must end with a quotation mark at position 5: map:\"<--[HERE]");
 
 		// /test map:"this" otherMap:"this"
-		assertCommandFailsWith(player, "test map:\"this\" otherMap:\"this\"", "Could not parse command: Duplicate values are not allowed here at position 26: ...rMap:\"this<--[HERE]");
+		assertCommandFailsWith(player, "test map:\"this\" otherMap:\"this\"", "Could not parse command: Duplicate values are not allowed! at position 20: ... otherMap:<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
@@ -203,19 +203,15 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test wrong delimiter
 		// /test map="test1"
-		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers, underscores and periods at position 4: map=<--[HERE]");
+		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
 
 		// Test no delimiter
 		// /test map"test1"
-		assertCommandFailsWith(player, "test map\"test1\"", "Could not parse command: You must separate a key/value pair with a ':' at position 4: map\"<--[HERE]");
+		assertCommandFailsWith(player, "test map\"test1\"", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
 
 		// Test without closing quotation mark
 		// /test map:"test1
-		assertCommandFailsWith(player, "test map:\"test1", "Could not parse command: A value must end with a quotation mark at position 10: map:\"test1<--[HERE]");
-
-		// Test without any quotation marks
-		// /test map:5
-		assertCommandFailsWith(player, "test map:5", "Could not parse command: A value must start with a quotation mark at position 4: map:<--[HERE]");
+		assertCommandFailsWith(player, "test map:\"test1", "Could not parse command: A quoted value must end with a quotation mark at position 5: map:\"<--[HERE]");
 	}
 
 	@Test
@@ -254,7 +250,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test map:"598" age:"eighteen"
-		assertCommandFailsWith(player, "test map:\"598\" age:\"eighteen\"", "Could not parse command: Invalid value (eighteen): cannot be converted to a value at position 24: ...\"eighteen\"<--[HERE]");
+		assertCommandFailsWith(player, "test map:\"598\" age:\"eighteen\"", "Could not parse command: Invalid value (eighteen): cannot be converted to a value at position 14: ...\"598\" age:<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
@@ -291,7 +287,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test 3,5:"Hello world!"
-		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: A key must only contain letters from a-z and A-Z, numbers, underscores and periods at position 2: 3,<--[HERE]");
+		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: Invalid key (3,5): cannot be converted to a key at position 0: <--[HERE]");
 
 		assertNoMoreResults(results);
 	}
@@ -328,7 +324,7 @@ public class ArgumentMapTests extends TestBase {
 		assertEquals(testMap, results.get());
 
 		// /test 3.5:"Hello world!"
-		assertCommandFailsWith(player, "test 3.5:\"Hello world!\"", "Could not parse command: Invalid key (3.5): cannot be converted to a key at position 3: 3.5<--[HERE]");
+		assertCommandFailsWith(player, "test 3.5:\"Hello world!\"", "Could not parse command: Invalid key (3.5): cannot be converted to a key at position 0: <--[HERE]");
 
 		assertNoMoreResults(results);
 	}
@@ -353,15 +349,15 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test invalid completed key
 		// /test optionOne:"solutionTwo" optionFour:"solutionOne"
-		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 35: ...optionFour<--[HERE]");
+		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 24: ...utionTwo\" <--[HERE]");
 
 		// Test invalid not completed key
 		// /test option
-		assertCommandFailsWith(player, "test option", "Could not parse command: Invalid key: option at position 6: option<--[HERE]");
+		assertCommandFailsWith(player, "test option", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
 
 		// Test invalid value
 		// /test optionOne:"solutionOne" optionTwo:"solutionFour"
-		assertCommandFailsWith(player, "test optionOne:\"solutionOne\" optionTwo:\"solutionFour\"", "Could not parse command: Invalid value: solutionFour at position 48: ...lutionFour<--[HERE]");
+		assertCommandFailsWith(player, "test optionOne:\"solutionOne\" optionTwo:\"solutionFour\"", "Could not parse command: Invalid value: solutionFour at position 34: ...optionTwo:<--[HERE]");
  	}
 
 	@Test
@@ -434,38 +430,38 @@ public class ArgumentMapTests extends TestBase {
 		// Use "beautiful" for all following tests as the first key
 
 		// /test beautiful
-		assertEquals(List.of(":"), server.getSuggestions(player, "test beautiful"));
+		assertEquals(List.of("beautiful:"), server.getSuggestions(player, "test beautiful"));
 
 		// /test beautiful:
-		assertEquals(List.of("\""), server.getSuggestions(player, "test beautiful:"));
+		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), server.getSuggestions(player, "test beautiful:"));
 
 		// /test beautiful:"
-		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), server.getSuggestions(player, "test beautiful:\""));
+		assertEquals(List.of("\"chaotic\"", "\"majestic\"", "\"sunny\"", "\"sweet\"", "\"weird\""), server.getSuggestions(player, "test beautiful:\""));
 
 		// /test beautiful:"s
-		assertEquals(List.of("sunny", "sweet"), server.getSuggestions(player, "test beautiful:\"s"));
+		assertEquals(List.of("\"sunny\"", "\"sweet\""), server.getSuggestions(player, "test beautiful:\"s"));
 
 		// /test beautiful:"c
-		assertEquals(List.of("chaotic"), server.getSuggestions(player, "test beautiful:\"c"));
+		assertEquals(List.of("\"chaotic\""), server.getSuggestions(player, "test beautiful:\"c"));
 
 		// /test beautiful:"m
-		assertEquals(List.of("majestic"), server.getSuggestions(player, "test beautiful:\"m"));
+		assertEquals(List.of("\"majestic\""), server.getSuggestions(player, "test beautiful:\"m"));
 
 		// /test beautiful:"w
-		assertEquals(List.of("weird"), server.getSuggestions(player, "test beautiful:\"w"));
+		assertEquals(List.of("\"weird\""), server.getSuggestions(player, "test beautiful:\"w"));
 
 		// Use "weird" for all following tests as the first value
 
 		// /test beautiful:"weird
-		assertEquals(List.of("\""), server.getSuggestions(player, "test beautiful:\"weird"));
+		assertEquals(List.of("\"weird\" "), server.getSuggestions(player, "test beautiful:\"weird"));
 
 		// Key-value pair completed, check if value removal works
 
 		// /test beautiful:"weird"
-		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\""));
+		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\" "));
 
 		// /test beautiful:"weird" bold:"
-		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet"), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
+		assertEquals(List.of("\"chaotic\"", "\"majestic\"", "\"sunny\"", "\"sweet\""), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
 	}
 
 	@Test
@@ -486,10 +482,10 @@ public class ArgumentMapTests extends TestBase {
 		// Check if value removal works
 
 		// /test beautiful:"weird"
-		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\""));
+		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\" "));
 
 		// /test beautiful:"weird" bold:"
-		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
+		assertEquals(List.of("\"chaotic\"", "\"majestic\"", "\"sunny\"", "\"sweet\"", "\"weird\""), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
 	}
 
 }
