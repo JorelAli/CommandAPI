@@ -1,8 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.regex.Pattern;
 
 /**
  * A builder to create a {@link MapArgument}
@@ -13,7 +11,8 @@ import java.util.regex.Pattern;
 public class MapArgumentBuilder<K, V> {
 
 	private final String nodeName;
-	private final char delimiter;
+	private final String delimiter;
+	private final String separator;
 
 	/**
 	 * Creates a new MapArgumentBuilder with a specified node name. Defaults the
@@ -22,7 +21,19 @@ public class MapArgumentBuilder<K, V> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public MapArgumentBuilder(String nodeName) {
-		this(nodeName, ':');
+		this(nodeName, ":");
+	}
+
+	/**
+	 * Creates a new MapArgumentBuilder with a specified node name
+	 *
+	 * @param nodeName  the name of the node for this argument
+	 * @param delimiter the separator for each key/value pair
+	 * @deprecated use {@link MapArgumentBuilder#MapArgumentBuilder(String, String)} instead
+	 */
+	@Deprecated(since = "9.0.2")
+	public MapArgumentBuilder(String nodeName, char delimiter) {
+		this(nodeName, String.valueOf(delimiter));
 	}
 
 	/**
@@ -31,9 +42,21 @@ public class MapArgumentBuilder<K, V> {
 	 * @param nodeName  the name of the node for this argument
 	 * @param delimiter the separator for each key/value pair
 	 */
-	public MapArgumentBuilder(String nodeName, char delimiter) {
+	public MapArgumentBuilder(String nodeName, String delimiter) {
+		this(nodeName, delimiter, " ");
+	}
+
+	/**
+	 * Creates a new MapArgumentBuilder with a specified node name
+	 *
+	 * @param nodeName  the name of the node for this argument
+	 * @param delimiter the separator for each key/value pair
+	 * @param separator the separator between a key and a value
+	 */
+	public MapArgumentBuilder(String nodeName, String delimiter, String separator) {
 		this.nodeName = nodeName;
 		this.delimiter = delimiter;
+		this.separator = separator;
 	}
 
 	/**
@@ -41,7 +64,7 @@ public class MapArgumentBuilder<K, V> {
 	 *
 	 * @return this map argument builder
 	 */
-	public MapArgumentBuilderValueMapper withKeyMapper(Function<String, K> keyMapper) {
+	public MapArgumentBuilderValueMapper withKeyMapper(StringParser<K> keyMapper) {
 		return new MapArgumentBuilderValueMapper(keyMapper);
 	}
 
@@ -50,9 +73,9 @@ public class MapArgumentBuilder<K, V> {
 	 */
 	public class MapArgumentBuilderValueMapper {
 
-		private final Function<String, K> keyMapper;
+		private final StringParser<K> keyMapper;
 
-		public MapArgumentBuilderValueMapper(Function<String, K> keyMapper) {
+		public MapArgumentBuilderValueMapper(StringParser<K> keyMapper) {
 			this.keyMapper = keyMapper;
 		}
 
@@ -63,7 +86,7 @@ public class MapArgumentBuilder<K, V> {
 		 * @param valueMapper the mapping function that creates an instance of <code>V</code>
 		 * @return this map argument builder
 		 */
-		public MapArgumentBuilderSuggestsKey withValueMapper(Function<String, V> valueMapper) {
+		public MapArgumentBuilderSuggestsKey withValueMapper(StringParser<V> valueMapper) {
 			return new MapArgumentBuilderSuggestsKey(valueMapper);
 		}
 
@@ -72,9 +95,9 @@ public class MapArgumentBuilder<K, V> {
 		 */
 		public class MapArgumentBuilderSuggestsKey {
 
-			private final Function<String, V> valueMapper;
+			private final StringParser<V> valueMapper;
 
-			public MapArgumentBuilderSuggestsKey(Function<String, V> valueMapper) {
+			public MapArgumentBuilderSuggestsKey(StringParser<V> valueMapper) {
 				this.valueMapper = valueMapper;
 			}
 
@@ -105,17 +128,7 @@ public class MapArgumentBuilder<K, V> {
 				private final List<String> keyList;
 
 				public MapArgumentBuilderSuggestsValue(List<String> keyList) {
-					Pattern keyPattern = Pattern.compile("([a-zA-Z0-9_\\.]+)");
-					if (keyList == null) {
-						this.keyList = null;
-					} else {
-						for (String key : keyList) {
-							if (!keyPattern.matcher(key).matches()) {
-								throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9_\\.]+)'! It may only contain letters from a-z and A-Z, numbers, periods and underscores.");
-							}
-						}
-						this.keyList = keyList;
-					}
+					this.keyList = keyList;
 				}
 
 				/**
@@ -142,12 +155,24 @@ public class MapArgumentBuilder<K, V> {
 				}
 
 				/**
-				 * When using this method, no value suggestions are displayed!
+				 * When using this method, no value suggestions are displayed! Using this method will also not allow writing values more than once!
+				 * <p>
+				 * If you want to allow that, please use the {@link #withValueList(List, boolean)} method!
 				 *
 				 * @return this map argument builder
 				 */
 				public MapArgumentBuilderFinished withoutValueList() {
 					return withValueList(null);
+				}
+
+				/**
+				 * When using this method, no value suggestions are displayed!
+				 *
+				 * @param allowDuplicates Decides if a value can be written more than once
+				 * @return this map argument builder
+				 */
+				public MapArgumentBuilderFinished withoutValueList(boolean allowDuplicates) {
+					return withValueList(null, allowDuplicates);
 				}
 
 				/**
@@ -169,16 +194,10 @@ public class MapArgumentBuilder<K, V> {
 					 * @return a new {@link MapArgument}
 					 */
 					public MapArgument<K, V> build() {
-						return new MapArgument<>(nodeName, delimiter, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
+						return new MapArgument<>(nodeName, delimiter, separator, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
 					}
-
 				}
-
 			}
-
 		}
-
 	}
-
-
 }
