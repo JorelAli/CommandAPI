@@ -91,18 +91,6 @@ public class CommandAPIMain extends JavaPlugin {
 		PlayerCommandExecutor P_EXEC = (player, args) -> {};
 
 		new CommandTree("configcommands")
-			.withUsage(
-				"configcommands help",
-				"configcommands help <section>",
-				"configcommands <functions>",
-				"configcommands <functions> <addOn> <internalArgument> <(non)static> <function>",
-				"configcommands <build>",
-				"configcommands <reload> <commandName> <arguments>",
-				"configcommands <debug>",
-				"configcommands <debug> <enable/disable>",
-				"configcommands <debug> <local> <command>",
-				"configcommands <debug> <local> <command> <enable/disable>"
-			)
 			.withHelp("A command for interacting with the ConfigCommands system",
 				"Different systems are accessed using their keywords. For help with a specific section, use /configcommands help <section>")
 			.then(new LiteralArgument("help")

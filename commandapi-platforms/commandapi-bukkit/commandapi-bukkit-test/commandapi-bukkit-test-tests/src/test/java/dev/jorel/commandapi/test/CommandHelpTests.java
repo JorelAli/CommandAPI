@@ -125,7 +125,7 @@ class CommandHelpTests extends TestBase {
 		assertNotNull(server.getHelpMap().getHelpTopic("/test"));
 
 		// Check the short description
-		assertEquals("A Mojang provided command.", server.getHelpMap().getHelpTopic("/test").getShortText());
+		assertEquals("A command by the CommandAPITest plugin.", server.getHelpMap().getHelpTopic("/test").getShortText());
 		
 		// Check the full description
 		assertEquals(ChatColor.translateAlternateColorCodes('&', """
