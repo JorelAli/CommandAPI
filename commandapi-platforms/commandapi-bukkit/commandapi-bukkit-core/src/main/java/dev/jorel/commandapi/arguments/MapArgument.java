@@ -226,10 +226,21 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				result = isQuoted ? readQuoted(reader, isKey) : readUnquoted(reader, isKey);
 			} catch (CommandSyntaxException e) {
 				// Usually, this error is correct
-				//  However, if this is an unquoted value (not quoted and not key),
-				//  it does make sense for the argument to end without the separator
 				if (!isQuoted && !isKey) {
+					//  However, if this is an unquoted value (not quoted and not key),
+					//  it does make sense for the argument to end without the separator
 					result = readEscapedUntilEnd(reader);
+				} else if (!isQuoted /* implicit `&& isKey` check */) {
+					// If this is a unquoted key that ended because the delimiter was not present,
+					//  we actually want to validate the key first before using to the missing delimiter message
+					//  https://github.com/JorelAli/CommandAPI/commit/a613894975a23824d05b09b38c603d64fe5c243c#r114318082
+					result = readEscapedUntilEnd(reader);
+					if (!keyListEmpty) {
+						if (!keyList.contains(result)) throw invalidResult(result, reader, true, false);
+					} else {
+						if (!givenKeys.add(result)) throw invalidResult(result, reader, true, false);
+					}
+					throw e;
 				} else {
 					throw e;
 				}

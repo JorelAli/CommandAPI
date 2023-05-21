@@ -353,7 +353,7 @@ public class ArgumentMapTests extends TestBase {
 
 		// Test invalid not completed key
 		// /test option
-		assertCommandFailsWith(player, "test option", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
+		assertCommandFailsWith(player, "test option", "Could not parse command: Invalid key: option at position 0: <--[HERE]");
 
 		// Test invalid value
 		// /test optionOne:"solutionOne" optionTwo:"solutionFour"
