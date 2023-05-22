@@ -56,13 +56,13 @@ jobs:
               # Credit to https://www.ackama.com/what-we-think/values-github-actions/ for helping me figure these two steps out :P
             - name: Set SonarCloud branch
               run: |
-                  branchName = ${{ github.event.workflow_run.head_branch }}
+                  branchName=${{ github.event.workflow_run.head_branch }}
                   echo "Branch is named $branchName"
                   echo "sonar.branch.name=$branchName" >> $GITHUB_ENV
             - name: Set SonarCloud target
               if: github.event.workflow_run.event == 'pull_request'
               run: |
-                  branchTarget = ${{ fromJson(steps.get_pr_data.outputs.data).base.ref }}
+                  branchTarget=${{ fromJson(steps.get_pr_data.outputs.data).base.ref }}
                   echo "PR targets $branchTarget"
                   echo "sonar.branch.target=$branchTarget" >> $GITHUB_ENV
 
