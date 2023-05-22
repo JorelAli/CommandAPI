@@ -180,7 +180,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			if (paper.isFoliaPresent()) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
-				// reloadDataPacks();
+				reloadDataPacks();
 			}
 			updateHelpForCommands();
 		}, 0L);
