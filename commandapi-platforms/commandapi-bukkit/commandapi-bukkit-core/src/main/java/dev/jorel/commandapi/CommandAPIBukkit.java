@@ -257,33 +257,53 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
-		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
-
 		// Generate usages
-		List<String> usages = new ArrayList<>();
-		for (RegisteredCommand rCommand : CommandAPIHandler.getInstance().registeredCommands) {
-			if (rCommand.commandName().equals(command.commandName())) {
-				StringBuilder usageString = new StringBuilder();
-				usageString.append("/").append(command.commandName()).append(" ");
-				for (String arg : rCommand.argsAsStr()) {
-					usageString.append("<").append(arg.split(":")[0]).append("> ");
-				}
-				usages.add(usageString.toString().trim());
-			}
+		List<String> usages = getUsageList(command);
+
+		if (usages.isEmpty()) {
+			// Might happen if the developer calls `.withUsage()` with no parameters
+			// They didn't give any usage, so we won't put any there
+			return;
 		}
 
+		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
 		// If 1 usage, put it on the same line, otherwise format like a list
-		if (usages.isEmpty()) {
-			throw new IllegalStateException("Empty usage list when generating help! " + 
-				"This should never happen - if you're seeing this message, please" +
-				"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
-		} else if (usages.size() == 1) {
+		if (usages.size() == 1) {
 			sb.append(usages.get(0));
 		} else {
 			for (String usage : usages) {
 				sb.append("\n- ").append(usage);
 			}
 		}
+	}
+
+	private List<String> getUsageList(RegisteredCommand currentCommand) {
+		List<RegisteredCommand> commandsWithIdenticalNames = new ArrayList<>();
+		List<String> usages;
+
+		// Collect every command with the same name
+		for (RegisteredCommand registeredCommand : CommandAPIHandler.getInstance().registeredCommands) {
+			if (registeredCommand.commandName().equals(currentCommand.commandName())) {
+				commandsWithIdenticalNames.add(registeredCommand);
+			}
+		}
+
+		// Generate command usage or fill it with a user provided one
+		if (currentCommand.usageDescription().isPresent()) {
+			usages = new ArrayList<>(List.of(currentCommand.usageDescription().get()));
+		} else {
+			// TODO: Figure out if default usage generation should be updated
+			usages = new ArrayList<>();
+			for (RegisteredCommand command : commandsWithIdenticalNames) {
+				StringBuilder usageString = new StringBuilder();
+				usageString.append("/").append(command.commandName()).append(" ");
+				for (String arg : command.argsAsStr()) {
+					usageString.append("<").append(arg.split(":")[0]).append("> ");
+				}
+				usages.add(usageString.toString().trim());
+			}
+		}
+		return usages;
 	}
 
 	void updateHelpForCommands() {
@@ -299,7 +319,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			} else if (fullDescriptionOptional.isPresent()) {
 				shortDescription = fullDescriptionOptional.get();
 			} else {
-				shortDescription = "A Mojang provided command.";
+				shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
 			}
 
 			// Generate full description

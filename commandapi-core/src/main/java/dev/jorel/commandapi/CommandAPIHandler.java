@@ -573,6 +573,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		Predicate<CommandSender> requirements = meta.requirements;
 		Optional<String> shortDescription = meta.shortDescription;
 		Optional<String> fullDescription = meta.fullDescription;
+		Optional<String[]> usageDescription = meta.usageDescription;
 
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
@@ -587,7 +588,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, shortDescription,
-					fullDescription, aliases, permission));
+					fullDescription, usageDescription, aliases, permission));
 		}
 
 		// Handle previewable arguments

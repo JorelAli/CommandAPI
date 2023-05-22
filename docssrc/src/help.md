@@ -1,6 +1,6 @@
 # Help
 
-Help topics can be added to your command using the `withHelp()`, `withShortDescription()` or `withFullDescription()` methods when registering a command. Help allows users to understand what your command does and provides them with a list of usage forms to aid in writing a command.
+Help topics can be added to your command using the `withHelp()`, `withShortDescription()`, `withFullDescription()` or `withUsage()` methods when registering a command. Help allows users to understand what your command does and provides them with a list of usage forms to aid in writing a command.
 
 ## Parts of a help
 
@@ -78,5 +78,57 @@ We could also register this command using the `withHelp` method instead:
 ```
 
 </div>
+
+</div>
+
+## Help usage
+
+When registering a command, there also is a command usage generated. The CommandAPI provides a way to customise this usage by providing the `withUsage()` method:
+
+```java
+CommandAPICommand withUsage(String... usage)
+```
+
+<div class="example">
+
+### Example - Providing a command usage
+
+In this example, we want to showcase how usage generation displays the usage vs. how a custom usage displays the usage:
+
+```mccmd
+/command <help> <admin|user|moderator|vip>
+/command <reload> <commandsystem|config|server>
+```
+
+This is how it would get displayed:
+
+```yaml
+Usage:
+- /command <help> <admin>
+- /command <help> <user>
+- /command <help> <moderator>
+- /command <help> <vip>
+- /command <reload> <commandsystem>
+- /command <reload> <config>
+- /command <reload> <server>
+```
+
+Now, we are implementing the `withUsage()` method:
+
+```java
+CommandAPICommand("...")
+    withUsage(
+        "/command <help> <section>",
+        "/command <reload> <system>"
+    )
+```
+
+By using `withUsage()` like that, the CommandAPI will produce this usage:
+
+```yaml
+Usage:
+- /command <help> <section>
+- /command <reload> <system>
+```
 
 </div>

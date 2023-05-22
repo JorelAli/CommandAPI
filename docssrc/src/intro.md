@@ -40,6 +40,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 9.0.1 \\(\rightarrow\\) 9.0.2
 
 - Updates [Multi literal arguments](./argument_multiliteral.md) page to add the node name information
+- Updates [Help](./help.md) page so it contains `withUsage()` information
 
 ### Documentation changes 9.0.0 \\(\rightarrow\\) 9.0.1
 

@@ -373,6 +373,8 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top">
                 <ul>
                     <li>Add the ability to retrieve <code>LiteralArgument</code>s and <code>MultiLiteralArgument</code>s by their node names</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/363 Adds <code>withUsage()</code> method to customise command usage info</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/371 Updates default short description to now mention the plugin creating the command</li>
                 </ul>
             </td>
         </tr>
