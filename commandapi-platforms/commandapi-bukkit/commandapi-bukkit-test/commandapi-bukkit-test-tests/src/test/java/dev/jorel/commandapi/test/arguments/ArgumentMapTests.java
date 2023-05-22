@@ -84,7 +84,7 @@ public class ArgumentMapTests extends TestBase {
 		assertCommandFailsWith(player, "test map:\"cool map\" map:\"bar\"", "Could not parse command: Duplicate keys are not allowed! at position 15: ...cool map\" <--[HERE]");
 
 		// /test map:
-		assertCommandFailsWith(player, "test map:", "Could not parse command: Expected a value after the key at position 4: map:<--[HERE]");
+		assertCommandFailsWith(player, "test map:", "Could not parse command: Expected a value after the delimiter at position 4: map:<--[HERE]");
 
 		// /test map
 		assertCommandFailsWith(player, "test map", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");

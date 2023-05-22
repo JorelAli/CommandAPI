@@ -200,6 +200,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		StringReader reader = new StringReader(cmdCtx.getArgument(key, String.class));
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
+		if(reader.getRemainingLength() == 0) return results;
+
 		K builtKey = null;
 
 		// Read through the keys and values
@@ -211,13 +213,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		boolean isKey = true;
 		while (true) {
 			if (reader.getRemainingLength() == 0) {
-				// Nothing left to read
-				if (isKey)
-					// If looking for another key-value pair, we're done!
-					return results;
-
-				// If looking for a value, that is missing
-				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Expected a value after the key");
+				// We expect a key/value
+				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader,
+					"Expected a " + (isKey ? "key after the separator" : "value after the delimiter"));
 			}
 
 			boolean isQuoted = reader.peek() == '"';
