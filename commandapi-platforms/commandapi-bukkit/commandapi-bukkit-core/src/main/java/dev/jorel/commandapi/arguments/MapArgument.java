@@ -67,13 +67,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			// Read through the keys and values
 			Set<String> givenKeys = new HashSet<>();
 			Set<String> givenValues = new HashSet<>();
-			List<String> keyList = new ArrayList<>(this.keyList.results);
-			List<String> valueList = new ArrayList<>(this.valueList.results);
+			List<String> unusedKeys = new ArrayList<>(keyList.results);
+			List<String> unusedValues = new ArrayList<>(valueList.results);
 
 			boolean isKey = true;
 			while (true) {
 				if (reader.getRemainingLength() == 0)
-					return startSuggestions(builder, isKey ? keyList : valueList, isKey);
+					return startSuggestions(builder, isKey ? unusedKeys : unusedValues, isKey);
 
 				boolean isQuoted = reader.peek() == '"';
 				String result;
@@ -85,20 +85,20 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					builder = builder.createOffset(builder.getStart() + reader.getCursor() - (isQuoted ? 1 : 0));
 					String ending = readEscapedUntilEnd(reader);
 					if (!(isKey ? keyListEmpty : valueListEmpty))
-						return doResultSuggestions(ending, builder, isKey ? keyList : valueList, isKey, isQuoted);
+						return doResultSuggestions(ending, builder, isKey ? unusedKeys : unusedValues, isKey, isQuoted);
 					return doEmptySuggestions(ending, builder, isKey, isQuoted);
 				}
 
 				if (!(isKey ? keyListEmpty : valueListEmpty)) {
 					// Enforce the lists if they are not empty
-					List<String> relaventList = isKey ? keyList : valueList;
+					List<String> relaventList = isKey ? unusedKeys : unusedValues;
 
 					if (!relaventList.contains(result)) throw invalidResult(result, reader, isKey, isQuoted);
 
 					if (isKey || !allowValueDuplicates) relaventList.remove(result);
-				} else if(isKey || !allowValueDuplicates) {
-					// If no lists given, we still may enforce duplicates
-					if(!(isKey ? givenKeys : givenValues).add(result)) throw invalidResult(result, reader, isKey, isQuoted);
+				} else if ((isKey || !allowValueDuplicates) && !(isKey ? givenKeys : givenValues).add(result)) {
+					// If no lists given, we still enforce duplicates using the 'given' sets
+					throw invalidResult(result, reader, isKey, isQuoted);
 				}
 
 				// Make sure result is valid according to the parsers
@@ -144,10 +144,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		for (String result : unusedResults) {
 			// We either prefer quoted or unquoted, so this should only suggest 1 per result
 			String unquotedSuggestion = relevantList.preferredUnquoted.get(result);
-			if(unquotedSuggestion != null) builder.suggest(unquotedSuggestion);
+			if (unquotedSuggestion != null) builder.suggest(unquotedSuggestion);
 
 			String quotedSuggestion = relevantList.preferredQuoted.get(result);
-			if(quotedSuggestion != null) builder.suggest('"' + quotedSuggestion + '"');
+			if (quotedSuggestion != null) builder.suggest('"' + quotedSuggestion + '"');
 		}
 		return builder.buildFuture();
 	}
@@ -205,8 +205,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		// Read through the keys and values
 		Set<String> givenKeys = new HashSet<>();
 		Set<String> givenValues = new HashSet<>();
-		List<String> keyList = new ArrayList<>(this.keyList.results);
-		List<String> valueList = new ArrayList<>(this.valueList.results);
+		List<String> unusedKeys = new ArrayList<>(keyList.results);
+		List<String> unusedValues = new ArrayList<>(valueList.results);
 
 		boolean isKey = true;
 		while (true) {
@@ -231,15 +231,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					//  it does make sense for the argument to end without the separator
 					result = readEscapedUntilEnd(reader);
 				} else if (!isQuoted /* implicit `&& isKey` check */) {
-					// If this is a unquoted key that ended because the delimiter was not present,
-					//  we actually want to validate the key first before using to the missing delimiter message
+					// If this is an unquoted key that ended because the delimiter was not present,
+					//  we actually want to validate the key first before using the missing delimiter message
 					//  https://github.com/JorelAli/CommandAPI/commit/a613894975a23824d05b09b38c603d64fe5c243c#r114318082
 					result = readEscapedUntilEnd(reader);
-					if (!keyListEmpty) {
-						if (!keyList.contains(result)) throw invalidResult(result, reader, true, false);
-					} else {
-						if (!givenKeys.add(result)) throw invalidResult(result, reader, true, false);
-					}
+					if (!(keyListEmpty ? givenKeys.add(result) : unusedKeys.contains(result)))
+						throw invalidResult(result, reader, true, false);
 					throw e;
 				} else {
 					throw e;
@@ -248,14 +245,14 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 			if (!(isKey ? keyListEmpty : valueListEmpty)) {
 				// Enforce the lists if they are not empty
-				List<String> relaventList = isKey ? keyList : valueList;
+				List<String> relaventList = isKey ? unusedKeys : unusedValues;
 
 				if (!relaventList.contains(result)) throw invalidResult(result, reader, isKey, isQuoted);
 
 				if (isKey || !allowValueDuplicates) relaventList.remove(result);
-			} else if(isKey || !allowValueDuplicates) {
-				// If no lists given, we still may enforce duplicates
-				if(!(isKey ? givenKeys : givenValues).add(result)) throw invalidResult(result, reader, isKey, isQuoted);
+			} else if ((isKey || !allowValueDuplicates) && !(isKey ? givenKeys : givenValues).add(result)) {
+				// If no lists given, we still enforce duplicates using the 'given' sets
+				throw invalidResult(result, reader, isKey, isQuoted);
 			}
 
 			// Make sure result is valid according to the parsers
@@ -325,33 +322,31 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 		StringBuilder result = new StringBuilder();
 		boolean escaped = false;
-		readLoop:
 		while (reader.canRead()) {
 			char c = reader.read();
 			if (escaped) {
-				result.append(c);
 				escaped = false;
 			} else if (c == '\\') {
 				escaped = true;
-			} else if (c == firstTerminatorChar) {
-				// Check if this is really the start of the terminator
-				if (!reader.canRead(terminator.length() - 1)) continue; // Not long enough to fit terminator
-
-				int i = 1;
-				while (i < terminator.length()) {
+				continue; // Don't include this character
+			} else if (c == firstTerminatorChar && reader.canRead(terminator.length() - 1)) {
+				// If it looks like the terminator is starting, and the terminator can fit in the reader
+				// Check if this is actually the terminator
+				boolean isTerminator = true;
+				for (int i = 1; i < terminator.length(); i++) {
 					if (reader.peek(i - 1) != terminator.charAt(i)) {
-						// wasn't actually the terminator, continue searching
-						result.append(c);
-						continue readLoop;
+						// Characters did not match, not the terminator
+						isTerminator = false;
+						break;
 					}
-					i++;
 				}
-				// Move reader back 1 char so that caller method can start reading the terminator itself
-				reader.setCursor(reader.getCursor() - 1);
-				return result.toString();
-			} else {
-				result.append(c);
+				if (isTerminator) {
+					// Move reader back 1 char so that caller method can start reading the terminator itself
+					reader.setCursor(reader.getCursor() - 1);
+					return result.toString();
+				}
 			}
+			result.append(c);
 		}
 
 		// Reset the cursor, so it underlines the entire invalid key/value
@@ -380,7 +375,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		List<String> relaventList = (isKey ? keyList : valueList).results;
 
 		String message;
-		if ((isKey? keyListEmpty : valueListEmpty) || relaventList.contains(result)) {
+		if ((isKey ? keyListEmpty : valueListEmpty) || relaventList.contains(result)) {
 			// Either:
 			//  The lists are empty, so this method call came because the given sets found a duplicate
 			//  Or it used to be in the list and was removed from the local copy
@@ -423,8 +418,6 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			// Format results and sort for suggestions
 			if (results == null) return EMPTY;
 
-			char firstTerminatorChar = terminator.charAt(0);
-
 			Map<String, String> unquoted = new HashMap<>();
 			Map<String, String> quoted = new HashMap<>();
 			Map<String, String> preferredUnquoted = new HashMap<>();
@@ -434,49 +427,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				// Figure out escape sequences that would produce result if quoted or unquoted
 				StringBuilder unquotedResult = new StringBuilder();
 				StringBuilder quotedResult = new StringBuilder();
-				boolean preferUnquoted = true; // Prefer the simplest by default, which is unquoted
-
-				StringReader reader = new StringReader(result);
-				while (reader.canRead()) {
-					char c = reader.read();
-					boolean escapeUnquoted = false;
-					boolean escapeQuoted = false;
-
-					// Determine where escape is needed
-					if (c == '\\') {
-						// \ is always escaped
-						escapeUnquoted = true;
-						escapeQuoted = true;
-					} else if (c == '"') {
-						// " is only escaped when in a quote
-						escapeQuoted = true;
-					} else checkTerminator:if (c == firstTerminatorChar) {
-						// Check if this is really the start of the terminator
-						if (!reader.canRead(terminator.length() - 1))
-							break checkTerminator; // Not long enough to fit terminator
-
-						int i = 1;
-						while (i < terminator.length()) {
-							if (reader.peek(i - 1) != terminator.charAt(i)) {
-								// wasn't actually the terminator, no escape necessary
-								break checkTerminator;
-							}
-							i++;
-						}
-
-						// Yes, this was the terminator. We need to escape it when unquoted
-						escapeUnquoted = true;
-						// If the result dose contain the separator, we would prefer it be quoted
-						preferUnquoted = false;
-					}
-
-					// Add the character, escaping if deemed necessary
-					if (escapeUnquoted) unquotedResult.append('\\');
-					unquotedResult.append(c);
-
-					if (escapeQuoted) quotedResult.append('\\');
-					quotedResult.append(c);
-				}
+				boolean preferUnquoted = unescapeString(result, terminator, unquotedResult, quotedResult);
 
 				// Update lists
 				unquoted.put(result, unquotedResult.toString());
@@ -489,6 +440,57 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			}
 
 			return new ResultList(results, unquoted, quoted, preferredUnquoted, preferredQuoted);
+		}
+
+		// Determines the sequence needed to represent a result, adding escape characters when necessary to make it work
+		private static boolean unescapeString(String result, String terminator, StringBuilder unquotedResult, StringBuilder quotedResult) {
+			char firstTerminatorChar = terminator.charAt(0);
+			StringReader reader = new StringReader(result);
+
+			// Prefer the simplest by default, which is unquoted
+			boolean preferUnquoted = true;
+
+			while (reader.canRead()) {
+				char c = reader.read();
+				boolean escapeUnquoted = false;
+				boolean escapeQuoted = false;
+
+				// Determine where escape is needed
+				if (c == '\\') {
+					// \ is always escaped
+					escapeUnquoted = true;
+					escapeQuoted = true;
+				} else if (c == '"') {
+					// " is only escaped when in a quote
+					escapeQuoted = true;
+				} else if (c == firstTerminatorChar && reader.canRead(terminator.length() - 1)) {
+					// If it looks like the terminator is starting, and the terminator can fit in the reader
+					// Check if this is actually the terminator
+					boolean isTerminator = true;
+					for (int i = 1; i < terminator.length(); i++) {
+						if (reader.peek(i - 1) != terminator.charAt(i)) {
+							// Characters did not match, not the terminator
+							isTerminator = false;
+							break;
+						}
+					}
+					if (isTerminator) {
+						// Yes, this was the terminator. We need to escape it when unquoted
+						escapeUnquoted = true;
+						// If the result dose contain the separator, we would prefer it be quoted
+						preferUnquoted = false;
+					}
+				}
+
+				// Add the character, escaping if deemed necessary
+				if (escapeUnquoted) unquotedResult.append('\\');
+				unquotedResult.append(c);
+
+				if (escapeQuoted) quotedResult.append('\\');
+				quotedResult.append(c);
+			}
+
+			return preferUnquoted;
 		}
 	}
 }
