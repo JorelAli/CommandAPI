@@ -257,18 +257,18 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
-		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
-		// TODO: Figure out if default usage generation should be updated
-
 		// Generate usages
 		List<String> usages = getUsageList(command);
 
-		// If 1 usage, put it on the same line, otherwise format like a list
 		if (usages.isEmpty()) {
-			throw new IllegalStateException("Empty usage list when generating help! " + 
-				"This should never happen - if you're seeing this message, please" +
-				"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
-		} else if (usages.size() == 1) {
+			// Might happen if the developer calls `.withUsage()` with no parameters
+			// They didn't give any usage, so we won't put any there
+			return;
+		}
+
+		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
+		// If 1 usage, put it on the same line, otherwise format like a list
+		if (usages.size() == 1) {
 			sb.append(usages.get(0));
 		} else {
 			for (String usage : usages) {
@@ -292,6 +292,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		if (currentCommand.usageDescription().isPresent()) {
 			usages = new ArrayList<>(List.of(currentCommand.usageDescription().get()));
 		} else {
+			// TODO: Figure out if default usage generation should be updated
 			usages = new ArrayList<>();
 			for (RegisteredCommand command : commandsWithIdenticalNames) {
 				StringBuilder usageString = new StringBuilder();
