@@ -816,6 +816,11 @@ h6 {
     font-size: 3rem
 }
 
+img {
+    position: relative;
+    top: -1.5px;
+}
+
 .navbar {
     padding: 1.2rem 1rem
 }
