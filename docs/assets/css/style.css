@@ -2,6 +2,8 @@
 
 :root {
     --link-text-color: #eaeaea;
+    --card-bg-color: #5c008a;
+    --card-bg-hover: #8800cc;
 }
 
 .index .section {
@@ -82,6 +84,26 @@
 
 .bg-dark {
     background-color: #1D1C1D !important
+}
+
+.list-group-item {
+    background-color: var(--card-bg-color);
+}
+
+.list-group-item:first-child,
+.list-group-item:last-child {
+    border-radius: 0;
+}
+
+.list-group-item.disabled {
+    opacity: 0.8;
+    background: repeating-linear-gradient( -45deg, #424242, #424242 5px, #393939 5px, #393939 20px );
+}
+
+.list-group-item:hover,
+.list-group-item:active,
+.list-group-item:focus {
+    background-color: var(--card-bg-hover);
 }
 
 .btn,
@@ -752,6 +774,10 @@ h6 {
     text-align: center;
 }
 
+h5 {
+    font-weight: normal;
+}
+
 .display-1,
 .display-2,
 .display-3,
@@ -1021,7 +1047,7 @@ img {
     border: none;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.1);
     transition: transform 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
-    background-color: #5c008a;
+    background-color: var(--card-bg-color);
 }
 
 .card .card-header,
@@ -1046,7 +1072,7 @@ img {
 }
 
 .card:hover {
-    background-color: #8800cc;
+    background-color: var(--card-bg-hover);
 }
 
 @media (max-width: 991px) {
