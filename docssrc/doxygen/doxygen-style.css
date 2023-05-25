@@ -4,65 +4,68 @@
 
 :root {
     /* Content */
-    --bgcolor: #ffffff;
-    --bgfont: #303030;
-    --bgfont2: #f3c60a;
-    --bgfont-hover: #f3c60a;
+    --bgcolor: #22272e;
+    --bgfont: #cdd9e5;
+    --bgfont2: #38224e;
+    --bgfont-hover: #009ab5;
     --bgfont-hover-text-decoration: none;
-    --bgborder: #7d7d7d;
+    --bgborder: #444c56;
     --bgborder2: #f6f6f6;
     /* Main Header */
-    --bg1color: #303030;
+    --bg1color: #cdd9e5;
     --bg1font: #ffffff;
-    --bg1font2: #f3c60a;
+    --bg1font2: #38224e;
     /* Second header */
-    --bg2color: #E2E2E2;
-    --bg2font: #7D7D7D;
-    --bg2-hover-bg: #ffffff;
-    --bg2-hover-font: #303030;
-    --bg2-hover-topborder: #f3c60a;
+    --bg2color: #1c2128;
+    --bg2font: #cdd9e5;
+    --bg2-hover-bg: #2d333b;
+    --bg2-hover-font: #cdd9e5;
+    --bg2-hover-topborder: #38224e;
     /* Third header */
-    --bg3color: #f6f6f6;
-    --bg3font: #303030;
-    --bg3font2: #7D7D7D;
+    --bg3color: #2d333b;
+    --bg3font: #cdd9e5;
+    --bg3font2: #768390;
+    /* Links */
+    --linkfont: #009ab5;
+    --linkfont-hover: #00caed;
     /* Code */
-    --code-bg: #f6f6f6;
+    --code-bg: #430064;
     --code-comment: #7D7D7D;
     --code-keyword: #d73a49;
     --code-preprocessor: #d73a49;
     --code-keywordtype: #d73a49;
-    --code-text: #303030;
+    --code-text: #cdd9e5;
     --code-code: #6f42c1;
     --code-line: #7D7D7D;
     --code-line-bg: #D8D8D8;
     /* Namespace List, Class List icon */
-    --icon-bg: #303030;
-    --icon-font: #f3c60a;
+    --icon-bg: #1c2128;
+    --icon-font: #009ab5;
     /* Class Index */
-    --qindex-menu-bg: #303030;
+    --qindex-menu-bg: #1c2128;
     --qindex-menu-font: #ffffff;
-    --qindex-menu-font-hover: #f3c60a;
-    --qindex-icon-bg: #f3c60a;
-    --qindex-icon-font: #303030;
+    --qindex-menu-font-hover: #38224e;
+    --qindex-icon-bg: #38224e;
+    --qindex-icon-font: #cdd9e5;
     /* Member table */
-    --mem-title-bg: #303030;
+    --mem-title-bg: #430064;
     --mem-title-font: #ffffff;
-    --mem-subtitle-bg: #f3c60a;
-    --mem-subtitle-font: #303030;
-    --mem-subtitle-font-hover: #303030;
-    --mem-content-bg: #ffffff;
-    --mem-content-font: #303030;
-    --mem-content-border: #f6f6f6;
+    --mem-subtitle-bg: #5c008a;
+    --mem-subtitle-font: #cdd9e5;
+    --mem-subtitle-font-hover: #cdd9e5;
+    --mem-content-bg: #2d333b;
+    --mem-content-font: #cdd9e5;
+    --mem-content-border: #2d333b;
     /* Nav Tree */
-    --nav-tree-bg: #E2E2E2;
-    --nav-tree-bg-hover: #ffffff;
+    --nav-tree-bg: #2d333b;
+    --nav-tree-bg-hover: #5c008a;
     --nav-tree-font: #7D7D7D;
-    --nav-tree-font-hover: #303030;
-    --nav-tree-bg-selected: #f3c60a;
-    --nav-tree-font-selected: #303030;
+    --nav-tree-font-hover: #ffffff;
+    --nav-tree-bg-selected: #38224e;
+    --nav-tree-font-selected: #cdd9e5;
 }
 
-body, table, div, p, dl {
+body, div {
     color: var(--bgfont);
     background-color: var(--bgcolor);
     line-height: 150%;
@@ -90,6 +93,7 @@ div.contents ul {
 }
 
 #titlearea {
+    padding-left: 20px;
     color: var(--bg1font);
     background: linear-gradient(138deg, rgb(172 0 151) 0%, rgb(157 44 243) 35%, rgb(0 150 180) 100%);
 }
@@ -246,12 +250,12 @@ div.summary {
 /***********************************/
 
 a, a:visited, a:active, .contents a:visited, body.SRPage a, body.SRPage a:visited, body.SRPage a:active {
-    color: var(--bgfont);
+    color: var(--linkfont);
     text-decoration: none;
 }
 
 a:hover, .contents a:hover, body.SRPage a:hover {
-    color: var(--bgfont-hover);
+    color: var(--linkfont-hover);
     text-decoration: var(--bgfont-hover-text-decoration);
 }
 
@@ -362,7 +366,7 @@ a.anchor {
 /***********************************/
 
 h2.groupheader {
-    color: #303030;
+    color: #cdd9e5;
     font-size: 200%;
     font-weight: bold;
     border-bottom: none;
@@ -398,14 +402,15 @@ span.keywordtype {
 }
 
 span.mlabel {
-    background-color: var(--code-text);
-    color: var(--code-bg);
+    background-color: var(--code-bg);
+    color: var(--code-text);
     border-top: none;
     border-left: none;
     border-right: none;
     border-bottom: none;
     padding: 10px;
     border-radius: 0px;
+    font-size: 9pt;
 }
 
 a.code {
@@ -513,6 +518,20 @@ table.classindex a.el {
 
 /***********************************/
 
+/*********** class index ***********/
+
+/***********************************/
+
+.classindex dl.odd {
+    background-color: var(--qindex-menu-bg);
+}
+
+.alphachar a {
+    color: var(--bg1font);
+}
+
+/***********************************/
+
 /************** footer *************/
 
 /***********************************/
@@ -551,6 +570,7 @@ hr.footer {
 }
 
 .mdescRight {
+    color: var(--bg3font2);
     padding: 0px 30px 10px 30px;
 }
 
@@ -564,6 +584,14 @@ hr.footer {
 
 .memTemplParams {
     color: var(--bgfont);
+}
+
+.paramname {
+    color: var(--bg3font2);
+}
+
+.overload {
+    font-family: monospace;
 }
 
 /***********************************/
@@ -625,14 +653,21 @@ hr.footer {
 
 #nav-sync>img {
     content: url(off_sync.png);
+    filter: invert(1);
 }
 
 #nav-sync.sync>img {
     content: url(on_sync.png);
+    filter: invert(1);
 }
 
 #nav-tree .label {
     font-size: 14px;
+}
+
+.navpath li.navelem a {
+    text-shadow: none;
+    font-weight: 800;
 }
 
 /***********************************/
