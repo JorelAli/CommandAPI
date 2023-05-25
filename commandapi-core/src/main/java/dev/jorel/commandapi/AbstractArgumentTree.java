@@ -11,8 +11,15 @@ import java.util.List;
  * @param <Impl>The class extending this class, used as the return type for chain calls
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public abstract class AbstractArgumentTree<Impl extends AbstractArgumentTree<Impl, Argument, CommandSender>,
-	Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends Executable<Impl, CommandSender> {
+public abstract class AbstractArgumentTree<Impl
+/// @cond DOX
+extends AbstractArgumentTree<Impl, Argument, CommandSender>
+/// @endcond
+, Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender> extends Executable<Impl, CommandSender> {
 
 	final List<AbstractArgumentTree<?, Argument, CommandSender>> arguments = new ArrayList<>();
 	final Argument argument;

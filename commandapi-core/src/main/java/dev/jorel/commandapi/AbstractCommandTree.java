@@ -11,8 +11,15 @@ import java.util.List;
  * @param <Argument> The implementation of AbstractArgument being used by this class
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public abstract class AbstractCommandTree<Impl extends AbstractCommandTree<Impl, Argument, CommandSender>,
-	Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
+public abstract class AbstractCommandTree<Impl
+/// @cond DOX
+extends AbstractCommandTree<Impl, Argument, CommandSender>
+/// @endcond
+, Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
 	private final List<AbstractArgumentTree<?, Argument, CommandSender>> arguments = new ArrayList<>();
 

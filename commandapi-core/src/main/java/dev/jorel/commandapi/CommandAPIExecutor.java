@@ -50,7 +50,11 @@ import dev.jorel.commandapi.executors.TypedExecutor;
  * @param <CommandSender> The CommandSender for this executor
  * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
+public class CommandAPIExecutor<CommandSender, WrapperType
+/// @cond DOX
+extends AbstractCommandSender<? extends CommandSender>
+/// @endcond
+> {
 
 	private List<NormalExecutor<CommandSender, WrapperType>> normalExecutors;
 	private List<ResultingExecutor<CommandSender, WrapperType>> resultingExecutors;

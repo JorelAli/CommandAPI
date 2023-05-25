@@ -9,7 +9,11 @@ import java.util.List;
 /**
  * A list of arguments which results in an execution. This is used for building branches in a {@link AbstractCommandTree}
  */
-public class Execution<CommandSender, Argument extends AbstractArgument<?, ?, Argument, CommandSender>> {
+public class Execution<CommandSender, Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+> {
 
 	private final List<Argument> arguments;
 	private final CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor;

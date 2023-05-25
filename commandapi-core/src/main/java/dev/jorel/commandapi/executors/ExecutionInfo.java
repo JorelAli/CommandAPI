@@ -7,7 +7,11 @@ import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
  *
  * @param <Sender> The type of the sender of a command this ExecutionInfo belongs to
  */
-public interface ExecutionInfo<Sender, WrapperType extends AbstractCommandSender<? extends Sender>> {
+public interface ExecutionInfo<Sender, WrapperType
+/// @cond DOX
+extends AbstractCommandSender<? extends Sender>
+/// @endcond
+> {
 
 	/**
 	 * @return The sender of this command

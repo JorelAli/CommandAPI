@@ -74,7 +74,11 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
  * @param <Source> The class for running Brigadier commands
  */
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
+public class CommandAPIHandler<Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender, Source> {
 	private static final SafeVarHandle<CommandContext<?>, Map<String, ParsedArgument<?, ?>>> commandContextArguments;
 
 	// Compute all var handles all in one go so we don't do this during main server

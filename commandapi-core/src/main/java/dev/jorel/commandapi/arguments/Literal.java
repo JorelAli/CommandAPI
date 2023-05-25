@@ -2,7 +2,11 @@ package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.ChainableBuilder;
 
-public interface Literal<Impl extends AbstractArgument<String, ?, ?, ?>> extends ChainableBuilder<Impl> {
+public interface Literal<Impl
+/// @cond DOX
+extends AbstractArgument<String, ?, ?, ?>
+/// @endcond
+> extends ChainableBuilder<Impl> {
 	// Literal specific information
 
 	/**

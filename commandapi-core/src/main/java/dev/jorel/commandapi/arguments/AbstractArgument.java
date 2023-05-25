@@ -41,7 +41,15 @@ import java.util.function.Predicate;
  * @param <Argument> The implementation of Argument used by the class extending this class
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public abstract class AbstractArgument<T, Impl extends AbstractArgument<T, Impl, Argument, CommandSender>, Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends AbstractArgumentTree<Impl, Argument, CommandSender> {
+public abstract class AbstractArgument<T, Impl
+/// @cond DOX
+extends AbstractArgument<T, Impl, Argument, CommandSender>
+/// @endcond
+, Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender> extends AbstractArgumentTree<Impl, Argument, CommandSender> {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a

@@ -19,7 +19,11 @@ import java.util.List;
  * @param <CommandSender> The class for running platforms commands
  * @param <Source> The class for running Brigadier commands
  */
-public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
+public interface CommandAPIPlatform<Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender, Source> {
 	// Platform-specific loading, enabling, and disabling tasks
 
 	/**
