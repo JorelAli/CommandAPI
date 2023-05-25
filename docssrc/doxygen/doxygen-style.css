@@ -90,10 +90,6 @@ div.contents ul {
     border-bottom: none;
     padding-bottom: 20px;
     padding-top: 20px;
-}
-
-#titlearea {
-    padding-left: 20px;
     color: var(--bg1font);
     background: linear-gradient(138deg, rgb(172 0 151) 0%, rgb(157 44 243) 35%, rgb(0 150 180) 100%);
 }
@@ -113,6 +109,10 @@ div.contents ul {
 
 #projectalign {
     padding: 0px !important;
+}
+
+#projectlogo > img {
+    padding-left: 20px;
 }
 
 /***********************************/
@@ -594,6 +594,14 @@ hr.footer {
     font-family: monospace;
 }
 
+div.center {
+    /* We're assuming this div is always used for inheritance diagrams */
+    background-color: white;
+    padding: 10px;
+    width: fit-content;
+    margin: auto;
+}
+
 /***********************************/
 
 /*********** nav-tree ***********/
@@ -616,7 +624,7 @@ hr.footer {
     text-shadow: none;
     font-size: 14px;
     font-weight: 700;
-    padding: 10px;
+    padding: 3px;
     color: var(--nav-tree-font);
 }
 
