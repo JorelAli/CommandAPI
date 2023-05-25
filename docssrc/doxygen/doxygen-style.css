@@ -370,8 +370,6 @@ h2.groupheader {
     font-size: 200%;
     font-weight: bold;
     border-bottom: none;
-    padding-top: 20px;
-    padding-bottom: 20px;
 }
 
 div.fragment, pre.fragment {
@@ -565,7 +563,7 @@ hr.footer {
 /***********************************/
 
 .memItemLeft, .memItemRight {
-    padding: 15px 30px;
+    padding: 8px 30px;
     background-color: inherit;
 }
 
