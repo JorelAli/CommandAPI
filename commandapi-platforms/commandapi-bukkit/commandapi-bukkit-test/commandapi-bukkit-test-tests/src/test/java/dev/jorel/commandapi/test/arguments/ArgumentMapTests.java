@@ -1,12 +1,11 @@
 package dev.jorel.commandapi.test.arguments;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.arguments.StringParser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -21,6 +20,8 @@ import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 import io.netty.util.internal.ThreadLocalRandom;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the {@link MapArgument}
@@ -45,107 +46,279 @@ public class ArgumentMapTests extends TestBase {
 	 * Tests *
 	 *********/
 
+	// All ways of constructing the MapArgument:
+	//  Default separators | define delimiter | define separator
+	//  Key mapper | map to non-string | map and throw errors
+	//  Value mapper | map to non-string | map and throw errors
+	//  Without key list | with key list | keys containing delimiter
+	//  Without value list | with value list | values containing delimiter
+	//  No duplicates | allow duplicate values
+
+	@Test
+	public void exceptionTestWithMapArgument() {
+		// A MapArgument is a GreedyArgument. It is only allowed at the end of the arguments list.
+		// A GreedyArgumentException should be thrown when it is not the last argument.
+		CommandAPICommand command =
+			new CommandAPICommand("test")
+				.withArguments(
+					// 'Default' MapArgument
+					new MapArgumentBuilder<String, String>("map")
+						.withKeyMapper(s -> s)
+						.withValueMapper(s -> s)
+						.withoutKeyList()
+						.withoutValueList()
+						.build()
+				)
+				.executesPlayer(P_EXEC);
+		assertDoesNotThrow(command::register);
+
+		command.withArguments(new StringArgument("string"));
+		assertThrows(GreedyArgumentException.class, command::register);
+	}
+
 	@Test
 	public void executionTestWithMapArgument() {
-		Mut<LinkedHashMap<String, String>> results = Mut.of();
+		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withoutKeyList()
-				.withoutValueList()
-				.build()
+			.withArguments(
+				// 'Default' MapArgument
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((LinkedHashMap<String, String>) args.get("map"));
+				results.set(args.getUnchecked("map"));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		// /test map:"cool map"
-		server.dispatchCommand(player, "test map:\"cool map\"");
-		Map<String, String> testMap = new LinkedHashMap<>();
-		testMap.put("map", "cool map");
-		assertEquals(testMap, results.get());
 
-		// /test map:"cool map" foo:"bar"
-		server.dispatchCommand(player, "test map:\"cool map\" foo:\"bar\"");
-		testMap.put("foo", "bar");
-		assertEquals(testMap, results.get());
+		Map<String, String> expectedMap = new LinkedHashMap<>();
 
-		// /test map:"cool map" foo:"bar" test:"Test value"
-		server.dispatchCommand(player, "test map:\"cool map\" foo:\"bar\" test:\"Test value\"");
-		testMap.put("test", "Test value");
-		assertEquals(testMap, results.get());
+		expectedMap.put("key1", "value1");
+		// /test key1:value1
+		// Input map with 1 unquoted key-value pair
+		assertStoresResult(player, "test key1:value1", results, expectedMap);
+		// /test "key1":"value1"
+		// Input map with 1 quoted key-value pair
+		assertStoresResult(player, "test \"key1\":\"value1\"", results, expectedMap);
 
-		// /test map:"cool map" map:"bar"
-		assertCommandFailsWith(player, "test map:\"cool map\" map:\"bar\"", "Could not parse command: Duplicate keys are not allowed! at position 15: ...cool map\" <--[HERE]");
+		expectedMap.put("key2", "value2");
+		// /test key1:value1 key2:value2
+		// Input map with 2 unquoted key-value pairs
+		assertStoresResult(player, "test key1:value1 key2:value2", results, expectedMap);
+		// /test "key1":"value1" "key2":"value2"
+		// Input map with 2 quoted key-value pairs
+		assertStoresResult(player, "test \"key1\":\"value1\" \"key2\":\"value2\"", results, expectedMap);
 
-		// /test map:
-		assertCommandFailsWith(player, "test map:", "Could not parse command: Expected a value after the delimiter at position 4: map:<--[HERE]");
+		expectedMap.put("key3", "value3");
+		// /test key1:value1 key2:value2 key3:value3
+		// Input map with 3 unquoted key-value pairs
+		assertStoresResult(player, "test key1:value1 key2:value2 key3:value3", results, expectedMap);
+		// /test "key1":"value1" "key2":"value2" "key3":"value3"
+		// Input map with 3 quoted key-value pairs
+		assertStoresResult(player, "test \"key1\":\"value1\" \"key2\":\"value2\" \"key3\":\"value3\"", results, expectedMap);
 
-		// /test map
-		assertCommandFailsWith(player, "test map", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
 
-		// /test map:"
-		assertCommandFailsWith(player, "test map:\"", "Could not parse command: A quoted value must end with a quotation mark at position 5: map:\"<--[HERE]");
+		// /test key1:value1 key1:value2
+		// Error for having duplicate unquoted key1
+		assertCommandFailsWith(player, "test key1:value1 key1:value2", "Could not parse command: Duplicate keys are not allowed! at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:value1 "key1":value2
+		// Error for having duplicate quoted key1
+		assertCommandFailsWith(player, "test key1:value1 \"key1\":value2", "Could not parse command: Duplicate keys are not allowed! at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:value1 key1
+		// Error for having duplicate unquoted key1 without delimiter
+		assertCommandFailsWith(player, "test key1:value1 key1", "Could not parse command: Duplicate keys are not allowed! at position 12: ...y1:value1 <--[HERE]");
 
-		// /test map:"this" otherMap:"this"
-		assertCommandFailsWith(player, "test map:\"this\" otherMap:\"this\"", "Could not parse command: Duplicate values are not allowed! at position 20: ... otherMap:<--[HERE]");
+		// /test key1:value1 key2:value1
+		// Error for having duplicate unquoted value1
+		assertCommandFailsWith(player, "test key1:value1 key2:value1", "Could not parse command: Duplicate values are not allowed! at position 17: ...lue1 key2:<--[HERE]");
+		// /test key1:value1 key2:"value1"
+		// Error for having duplicate quoted value1
+		assertCommandFailsWith(player, "test key1:value1 key2:\"value1\"", "Could not parse command: Duplicate values are not allowed! at position 17: ...lue1 key2:<--[HERE]");
+
+
+		// /test key1:value1 key2:
+		// Error for missing value after unquoted key
+		assertCommandFailsWith(player, "test key1:value1 key2:", "Could not parse command: Expected a value after the delimiter at position 17: ...lue1 key2:<--[HERE]");
+		// /test key1:value1 "key2":
+		// Error for missing value after quoted key
+		assertCommandFailsWith(player, "test key1:value1 \"key2\":", "Could not parse command: Expected a value after the delimiter at position 19: ...e1 \"key2\":<--[HERE]");
+
+		// /test key1:value1
+		// Error for missing key after unquoted value
+		assertCommandFailsWith(player, "test key1:value1 ", "Could not parse command: Expected a key after the separator at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:"value1"
+		// Error for missing key after quoted value
+		assertCommandFailsWith(player, "test key1:\"value1\" ", "Could not parse command: Expected a key after the separator at position 14: ...:\"value1\" <--[HERE]");
+
+
+		// /test key1:value1 key2
+		// Error for missing delimiter after unquoted key
+		assertCommandFailsWith(player, "test key1:value1 key2", "Could not parse command: Delimiter \":\" required after writing a key at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:value1 "key2"
+		// Error for missing delimiter after quoted key
+		assertCommandFailsWith(player, "test key1:value1 \"key2\"", "Could not parse command: Delimiter \":\" required after writing a key at position 18: ...ue1 \"key2\"<--[HERE]");
+
+
+		// /test key1:value1 "key2"=value2
+		// Error for incorrect delimiter
+		assertCommandFailsWith(player, "test key1:value1 \"key2\"=value2", "Could not parse command: Delimiter \":\" required after writing a key at position 18: ...ue1 \"key2\"<--[HERE]");
+		// /test key1:"value1",key2=value2
+		// Error for incorrect separator
+		assertCommandFailsWith(player, "test key1:\"value1\",key2=value2", "Could not parse command: Separator \" \" required after writing a value at position 13: ...1:\"value1\"<--[HERE]");
+
+
+		// /test key1:value1 "key2
+		// Error for quoted key not closing
+		assertCommandFailsWith(player, "test key1:value1 \"key2", "Could not parse command: A quoted key must end with a quotation mark at position 13: ...1:value1 \"<--[HERE]");
+		// /test key1:value1 key2:"value2
+		// Error for quoted value not closing
+		assertCommandFailsWith(player, "test key1:value1 key2:\"value2", "Could not parse command: A quoted value must end with a quotation mark at position 18: ...ue1 key2:\"<--[HERE]");
+
 
 		assertNoMoreResults(results);
 	}
 
 	@Test
-	public void executionTestWithMapArgumentAndSpecialValues() {
-		Mut<LinkedHashMap<String, String>> results = Mut.of();
+	public void executionTestWithSpecialCharacters() {
+		// Special characters are \ " and the separator and delimiter
+		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withoutKeyList()
-				.withoutValueList()
-				.build()
+			.withArguments(
+				// 'Default' MapArgument
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((LinkedHashMap<String, String>) args.get("map"));
+				results.set(args.getUnchecked("map"));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		// /test map:"\"hello\""
-		server.dispatchCommand(player, "test map:\"\\\"hello\\\"\"");
-		Map<String, String> testMap = new LinkedHashMap<>();
-		testMap.put("map", "\"hello\"");
-		assertEquals(testMap, results.get());
 
-		// /test map:"\\hello\\"
-		server.dispatchCommand(player, "test map:\"\\\\hello\\\\\"");
-		testMap.clear();
-		testMap.put("map", "\\hello\\");
-		assertEquals(testMap, results.get());
-		
+		// /test \"HelloWorld":value
+		// Input quotes into unquoted key
+		assertStoresResult(player, "test \\\"HelloWorld\":value", results, Map.of("\"HelloWorld\"", "value"));
+		// /test "\"HelloWorld\"":value
+		// Input quotes into quoted key
+		assertStoresResult(player, "test \"\\\"HelloWorld\\\"\":value", results, Map.of("\"HelloWorld\"", "value"));
+
+		// /test key:\"HelloWorld"
+		// Input quotes into unquoted value
+		assertStoresResult(player, "test key:\\\"HelloWorld\"", results, Map.of("key", "\"HelloWorld\""));
+		// /test key:"\"HelloWorld\""
+		// Input quotes into quoted value
+		assertStoresResult(player, "test key:\"\\\"HelloWorld\\\"\"", results, Map.of("key", "\"HelloWorld\""));
+
+		// /test "key1\":value1 "key2":value2
+		// Error from escaping instead of closing quoted key
+		assertCommandFailsWith(player, "test \"key1\\\":value1 \"key2\":value2", "Could not parse command: Delimiter \":\" required after writing a key at position 16: ...\":value1 \"<--[HERE]");
+		// /test key1:"value\" key2:"value2"
+		// Error from escaping instead of closing quoted value
+		assertCommandFailsWith(player, "test key1:\"value1\\\" key2:\"value2\"", "Could not parse command: Separator \" \" required after writing a value at position 21: ...1\\\" key2:\"<--[HERE]");
+
+
+		// /test ke\\y:value
+		// Input backslash into unquoted key
+		assertStoresResult(player, "test ke\\\\y:value", results, Map.of("ke\\y", "value"));
+		// /test "ke\\y":value
+		// Input backslash into quoted key
+		assertStoresResult(player, "test \"ke\\\\y\":value", results, Map.of("ke\\y", "value"));
+
+		// /test key:val\\ue
+		// Input backslash into unquoted value
+		assertStoresResult(player, "test key:val\\\\ue", results, Map.of("key", "val\\ue"));
+		// /test key:"val\\ue"
+		// Input backslash into quoted value
+		assertStoresResult(player, "test key:val\\\\ue", results, Map.of("key", "val\\ue"));
+
+
+		// /test ke\:y1:value1 key2:value2
+		// Input delimiter into unquoted key
+		assertStoresResult(player, "test ke\\:y1:value1 key2:value2", results, Map.of("ke:y1", "value1", "key2", "value2"));
+		// /test "ke:y1":value1 key2:value2
+		// Input delimiter into quoted key
+		assertStoresResult(player, "test \"ke:y1\":value1 key2:value2", results, Map.of("ke:y1", "value1", "key2", "value2"));
+
+		// /test key1:val\ ue1 key2:value2
+		// Input separator into unquoted value
+		assertStoresResult(player, "test key1:val\\ ue1 key2:value2", results, Map.of("key1", "val ue1", "key2", "value2"));
+		// /test key1:"val ue1" key2:value2
+		// Input separator into quoted value
+		assertStoresResult(player, "test key1:\"val ue1\" key2:value2", results, Map.of("key1", "val ue1", "key2", "value2"));
+
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithNonSpecialCharacters() {
+		// I believe the characters that may appear in chat messages are defined by the
+		//  net.minecraft.server.SharedConstants#isAllowedChatCharacter method
+		// We'll only bother testing ASCII characters that fit that method
+		// https://bukkit.org/threads/printing-special-characters-%E2%99%A0-%E2%99%A3-%E2%99%A5-%E2%99%A6-in-chat.72293/
+		//  - Thanks for helping me find that
+		Mut<Map<String, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(
+				// 'Default' MapArgument
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set(args.getUnchecked("map"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		for (char c = 32; c < 127; c++) {
+			if(c == '\"' || c == '\\' || c == ':'|| c == ' ') continue; // Skip special characters
+
+			// Use c as the key and value, unquoted
+			assertStoresResult(player, "test " + c + ":" + c, results, Map.of(String.valueOf(c), String.valueOf(c)));
+
+			// Use c as the key and value, quoted
+			assertStoresResult(player, "test \"" + c + "\":\"" + c + "\"", results, Map.of(String.valueOf(c), String.valueOf(c)));
+		}
+
+
 		assertNoMoreResults(results);
 	}
 
 	@RepeatedTest(10)
-	public void executionTestWithMapArgumentAndPlayerNameKeys() {
-		Mut<LinkedHashMap<String, String>> results = Mut.of();
+	public void executionTestWithPlayerNameKeys() {
+		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withoutKeyList()
-				.withoutValueList()
-				.build()
+			.withArguments(
+				// 'Default' MapArgument
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((LinkedHashMap<String, String>) args.get("map"));
+				results.set(args.getUnchecked("map"));
 			})
 			.register();
 
@@ -161,98 +334,191 @@ public class ArgumentMapTests extends TestBase {
 		}
 		final String playerName = playerNameBuilder.toString();
 
-		// /test <random player name, derived above>:"value"
-		server.dispatchCommand(player, "test " + playerName + ":\"value\"");
-		Map<String, String> testMap = new LinkedHashMap<>();
-		testMap.put(playerName, "value");
-		assertEquals(testMap, results.get());
+		// /test <random player name, derived above>:value
+		assertStoresResult(player, "test " + playerName + ":\"value\"", results, Map.of(playerName, "value"));
+		// /test "<random player name, derived above>":"value"
+		assertStoresResult(player, "test \"" + playerName + "\":\"value\"", results, Map.of(playerName, "value"));
+
 
 		assertNoMoreResults(results);
 	}
 
 	@Test
-	public void exceptionTestWithMapArgument() {
-		// A MapArgument is a GreedyArgument. It is only allowed at the end of the arguments list.
-		// A GreedyArgumentException should be thrown when it is not the last argument.
-		assertThrows(GreedyArgumentException.class, () -> {
-			new CommandAPICommand("test")
-				.withArguments(new MapArgumentBuilder<String, Integer>("map", '=')
+	public void executionTestWithLongTerminators() {
+		Mut<Map<String, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(
+				// Taking advantage of String terminators
+				new MapArgumentBuilder<String, String>("map", "-->", ",  ")
 					.withKeyMapper(s -> s)
-					.withValueMapper(Integer::valueOf)
+					.withValueMapper(s -> s)
 					.withoutKeyList()
 					.withoutValueList()
 					.build()
-				)
-				.withArguments(new StringArgument("string"))
-				.executesPlayer(P_EXEC)
-				.register();
-		});
-
-		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map", ':')
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withoutKeyList()
-				.withoutValueList()
-				.build()
-			)
-			.executesPlayer(P_EXEC)
-			.register();
-
-		PlayerMock player = server.addPlayer();
-
-		// Test wrong delimiter
-		// /test map="test1"
-		assertCommandFailsWith(player, "test map=\"test1\"", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
-
-		// Test no delimiter
-		// /test map"test1"
-		assertCommandFailsWith(player, "test map\"test1\"", "Could not parse command: Delimiter \":\" required after writing a key at position 0: <--[HERE]");
-
-		// Test without closing quotation mark
-		// /test map:"test1
-		assertCommandFailsWith(player, "test map:\"test1", "Could not parse command: A quoted value must end with a quotation mark at position 5: map:\"<--[HERE]");
-	}
-
-	@Test
-	public void executionTestWithOtherKeyValuePairs() {
-		Mut<LinkedHashMap<String, Integer>> results = Mut.of();
-
-		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, Integer>("map")
-				.withKeyMapper(s -> s)
-				.withValueMapper(Integer::valueOf)
-				.withoutKeyList()
-				.withoutValueList()
-				.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((LinkedHashMap<String, Integer>) args.get("map"));
+				results.set(args.getUnchecked("map"));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		// /test map:"598"
-		server.dispatchCommand(player, "test map:\"598\"");
-		Map<String, Integer> testMap = new LinkedHashMap<>();
-		testMap.put("map", 598);
-		assertEquals(testMap, results.get());
 
-		// /test map:"598" age:"18"
-		server.dispatchCommand(player, "test map:\"598\" age:\"18\"");
-		testMap.put("age", 18);
-		assertEquals(testMap, results.get());
+		Map<String, String> expectedMap = new LinkedHashMap<>();
 
-		// /test map:"598" age:"18" someThirdValue:"19999"
-		server.dispatchCommand(player, "test map:\"598\" age:\"18\" someThirdValue:\"19999\"");
-		testMap.put("someThirdValue", 19999);
-		assertEquals(testMap, results.get());
+		expectedMap.put("key1", "value1");
+		// /test key1-->value1
+		// Input map with 1 unquoted key-value pair
+		assertStoresResult(player, "test key1-->value1", results, expectedMap);
+		// /test "key1"-->"value1"
+		// Input map with 1 quoted key-value pair
+		assertStoresResult(player, "test \"key1\"-->\"value1\"", results, expectedMap);
 
-		// /test map:"598" age:"eighteen"
-		assertCommandFailsWith(player, "test map:\"598\" age:\"eighteen\"", "Could not parse command: Invalid value (eighteen): cannot be converted to a value at position 14: ...\"598\" age:<--[HERE]");
+		expectedMap.put("key2", "value2");
+		// /test key1-->value1,  key2-->value2
+		// Input map with 2 unquoted key-value pairs
+		assertStoresResult(player, "test key1-->value1,  key2-->value2", results, expectedMap);
+		// /test "key1"-->"value1",  "key2"-->"value2"
+		// Input map with 2 quoted key-value pairs
+		assertStoresResult(player, "test \"key1\"-->\"value1\",  \"key2\"-->\"value2\"", results, expectedMap);
+
+		expectedMap.put("key3", "value3");
+		// /test key1-->value1,  key2-->value2,  key3-->value3
+		// Input map with 3 unquoted key-value pairs
+		assertStoresResult(player, "test key1-->value1,  key2-->value2,  key3-->value3", results, expectedMap);
+		// /test "key1"-->"value1",  "key2"-->"value2",  "key3"-->"value3"
+		// Input map with 3 quoted key-value pairs
+		assertStoresResult(player, "test \"key1\"-->\"value1\",  \"key2\"-->\"value2\",  \"key3\"-->\"value3\"", results, expectedMap);
+
+
+		// /test key1-->value1,  key2
+		// Error for missing delimiter after unquoted key
+		assertCommandFailsWith(player, "test key1-->value1,  key2", "Could not parse command: Delimiter \"-->\" required after writing a key at position 16: ...>value1,  <--[HERE]");
+		// /test key1-->value1,  "key2"
+		// Error for missing delimiter after quoted key
+		assertCommandFailsWith(player, "test key1-->value1,  \"key2\"", "Could not parse command: Delimiter \"-->\" required after writing a key at position 22: ...1,  \"key2\"<--[HERE]");
+
+
+		// /test key1-->value1,  "key2"=value2
+		// Error for incorrect delimiter
+		assertCommandFailsWith(player, "test key1-->value1,  \"key2\"=value2", "Could not parse command: Delimiter \"-->\" required after writing a key at position 22: ...1,  \"key2\"<--[HERE]");
+		// /test key1-->"value1",key2-->value2
+		// Error for incorrect separator
+		assertCommandFailsWith(player, "test key1-->\"value1\",key2-->value2", "Could not parse command: Separator \",  \" required after writing a value at position 15: ...->\"value1\"<--[HERE]");
+
+
+		// /test a-b-c-->a, b, and c,  key2-->value2
+		// Input key/values that initially look like terminators
+		assertStoresResult(player, "test a-b-c-->a, b, and c,  key2-->value2", results, Map.of("a-b-c", "a, b, and c", "key2", "value2"));
+
+
+		// /test key1-->value1,  key2--
+		// Error for incomplete delimiter after unquoted key
+		assertCommandFailsWith(player, "test key1-->value1,  key2--", "Could not parse command: Delimiter \"-->\" required after writing a key at position 16: ...>value1,  <--[HERE]");
+		// /test key1-->value1,  "key2"--
+		// Error for incomplete delimiter after quoted key
+		assertCommandFailsWith(player, "test key1-->value1,  \"key2\"--", "Could not parse command: Delimiter \"-->\" required after writing a key at position 22: ...1,  \"key2\"<--[HERE]");
+
+		// /test key1-->value",
+		// Input incomplete delimiter after unquoted value
+		// Since we're not using a value list, "value1," is a valid value
+		assertStoresResult(player, "test key1-->value1,", results, Map.of("key1", "value1,"));
+		// /test key1-->"value1",
+		// Error for incomplete delimiter after quoted value
+		assertCommandFailsWith(player, "test key1-->\"value1\",", "Could not parse command: Separator \",  \" required after writing a value at position 15: ...->\"value1\"<--[HERE]");
+
 
 		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithCustomMappers() {
+		Mut<Map<Integer, Integer>> results = Mut.of();
+
+		StringParser<Integer> customMapper = (s) -> {
+			int i = Integer.parseInt(s);
+			if(i < 0 || i > 255) throw CommandAPI.failWithString("Must be between 0 and 255");
+			return i;
+		};
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new MapArgumentBuilder<Integer, Integer>("map")
+					// Using a custom Integer key and value mapper
+					.withKeyMapper(customMapper)
+					.withValueMapper(customMapper)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set(args.getUnchecked("map"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+
+		Map<Integer, Integer> expectedMap = new LinkedHashMap<>();
+
+		expectedMap.put(0, 10);
+		// /test 0:10
+		// Input map with 1 unquoted key-value pair
+		assertStoresResult(player, "test 0:10", results, expectedMap);
+		// /test "0":"10"
+		// Input map with 1 quoted key-value pair
+		assertStoresResult(player, "test \"0\":\"10\"", results, expectedMap);
+
+		expectedMap.put(20, 100);
+		// /test 0:10 20:100
+		// Input map with 2 unquoted key-value pairs
+		assertStoresResult(player, "test 0:10 20:100", results, expectedMap);
+		// /test "0":"10" "20":"100"
+		// Input map with 2 quoted key-value pairs
+		assertStoresResult(player, "test \"0\":\"10\" \"20\":\"100\"", results, expectedMap);
+
+
+		// /test key:100
+		// Error from unquoted key string not converting to int
+		assertCommandFailsWith(player, "test key:100", "Could not parse command: Invalid key (key): cannot be converted to a key at position 0: <--[HERE]");
+		// /test "key":100
+		// Error from quoted key string not converting to int
+		assertCommandFailsWith(player, "test \"key\":100", "Could not parse command: Invalid key (key): cannot be converted to a key at position 0: <--[HERE]");
+
+		// /test 100:value
+		// Error from unquoted value string not converting to int
+		assertCommandFailsWith(player, "test 100:value", "Could not parse command: Invalid value (value): cannot be converted to a value at position 4: 100:<--[HERE]");
+		// /test 100:"value"
+		// Error from quoted key value not converting to int
+		assertCommandFailsWith(player, "test 100:\"value\"", "Could not parse command: Invalid value (value): cannot be converted to a value at position 4: 100:<--[HERE]");
+
+
+		// /test 1000:0
+		// Error from unquoted key being too large
+		assertCommandFailsWith(player, "test 1000:0", "Could not parse command: Must be between 0 and 255 at position 0: <--[HERE]");
+		// /test -10:0
+		// Error from unquoted key being too small
+		assertCommandFailsWith(player, "test -10:0", "Could not parse command: Must be between 0 and 255 at position 0: <--[HERE]");
+		// /test "1000":0
+		// Error from quoted key being too large
+		assertCommandFailsWith(player, "test \"1000\":0", "Could not parse command: Must be between 0 and 255 at position 0: <--[HERE]");
+		// /test "-10":0
+		// Error from quoted key being too small
+		assertCommandFailsWith(player, "test \"-10\":0", "Could not parse command: Must be between 0 and 255 at position 0: <--[HERE]");
+
+		// /test 0:1000
+		// Error from unquoted value being too large
+		assertCommandFailsWith(player, "test 0:1000", "Could not parse command: Must be between 0 and 255 at position 2: 0:<--[HERE]");
+		// /test 0:-10
+		// Error from unquoted value being too small
+		assertCommandFailsWith(player, "test 0:-10", "Could not parse command: Must be between 0 and 255 at position 2: 0:<--[HERE]");
+		// /test 0:"1000"
+		// Error from quoted value being too large
+		assertCommandFailsWith(player, "test 0:\"1000\"", "Could not parse command: Must be between 0 and 255 at position 2: 0:<--[HERE]");
+		// /test 0:"-10"
+		// Error from quoted value being too small
+		assertCommandFailsWith(player, "test 0:\"-10\"", "Could not parse command: Must be between 0 and 255 at position 2: 0:<--[HERE]");
 	}
 
 	@Test
@@ -268,7 +534,7 @@ public class ArgumentMapTests extends TestBase {
 				.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((LinkedHashMap<Float, String>) args.get(0));
+				results.set(args.getUnchecked(0));
 			})
 			.register();
 
@@ -289,104 +555,133 @@ public class ArgumentMapTests extends TestBase {
 		// /test 3,5:"Hello world!"
 		assertCommandFailsWith(player, "test 3,5:\"Hello world!\"", "Could not parse command: Invalid key (3,5): cannot be converted to a key at position 0: <--[HERE]");
 
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void executionTestWithIntegerKey() {
-		Mut<LinkedHashMap<Integer, String>> results = Mut.of();
-
-		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<Integer, String>("map")
-				.withKeyMapper(Integer::valueOf)
-				.withValueMapper(s -> s)
-				.withoutKeyList()
-				.withoutValueList()
-				.build()
-			)
-			.executesPlayer((player, args) -> {
-				results.set((LinkedHashMap<Integer, String>) args.get(0));
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer();
-
-		// /test 3:"Hello World" 12:"This is a test!"
-		server.dispatchCommand(player, "test 3:\"Hello World\" 12:\"This is a test!\"");
-		LinkedHashMap<Integer, String> testMap = new LinkedHashMap<>();
-		testMap.put(3, "Hello World");
-		testMap.put(12, "This is a test!");
-		assertEquals(testMap, results.get());
-
-		// /test 3:"Hello World" 12:"This is a test!" 6:"And this is a third value!"
-		server.dispatchCommand(player, "test 3:\"Hello World\" 12:\"This is a test!\" 6:\"And this is a third value!\"");
-		testMap.put(6, "And this is a third value!");
-		assertEquals(testMap, results.get());
-
-		// /test 3.5:"Hello world!"
-		assertCommandFailsWith(player, "test 3.5:\"Hello world!\"", "Could not parse command: Invalid key (3.5): cannot be converted to a key at position 0: <--[HERE]");
 
 		assertNoMoreResults(results);
 	}
 
 	@Test
-	public void executionTestWithSuggestionsWithContents() {
-
+	public void executionTestWithLists() {
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map")
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withKeyList(List.of("optionOne", "optionTwo", "optionThree"))
-				.withValueList(List.of("solutionOne", "solutionTwo", "solutionThree"))
-				.build()
+			.withArguments(
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					// Give key and value list
+					.withKeyList(List.of("key1", "key2", "key3"))
+					.withValueList(List.of("value1", "value2", "value3"))
+					.build()
 			)
 			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		// From previous test we know everything works so here only exceptions will be tested
+		// From previous test we know everything works so here only relevant exceptions will be tested
 
-		// Test invalid completed key
-		// /test optionOne:"solutionTwo" optionFour:"solutionOne"
-		assertCommandFailsWith(player, "test optionOne:\"solutionTwo\" optionFour:\"solutionOne\"", "Could not parse command: Invalid key: optionFour at position 24: ...utionTwo\" <--[HERE]");
+		// /test key1:value1 key1:value2
+		// Error for having duplicate unquoted key1
+		assertCommandFailsWith(player, "test key1:value1 key1:value2", "Could not parse command: Duplicate keys are not allowed! at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:value1 "key1":value2
+		// Error for having duplicate quoted key1
+		assertCommandFailsWith(player, "test key1:value1 \"key1\":value2", "Could not parse command: Duplicate keys are not allowed! at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:value1 key1
+		// Error for having duplicate unquoted key1 without delimiter
+		assertCommandFailsWith(player, "test key1:value1 key1", "Could not parse command: Duplicate keys are not allowed! at position 12: ...y1:value1 <--[HERE]");
 
-		// Test invalid not completed key
-		// /test option
-		assertCommandFailsWith(player, "test option", "Could not parse command: Invalid key: option at position 0: <--[HERE]");
+		// /test key1:value1 key2:value1
+		// Error for having duplicate value1
+		assertCommandFailsWith(player, "test key1:value1 key2:value1", "Could not parse command: Duplicate values are not allowed! at position 17: ...lue1 key2:<--[HERE]");
+		// /test key1:value1 key2:"value1"
+		// Error for having duplicate quoted value1
+		assertCommandFailsWith(player, "test key1:value1 key2:\"value1\"", "Could not parse command: Duplicate values are not allowed! at position 17: ...lue1 key2:<--[HERE]");
 
-		// Test invalid value
-		// /test optionOne:"solutionOne" optionTwo:"solutionFour"
-		assertCommandFailsWith(player, "test optionOne:\"solutionOne\" optionTwo:\"solutionFour\"", "Could not parse command: Invalid value: solutionFour at position 34: ...optionTwo:<--[HERE]");
- 	}
+
+		// /test key1:value1 key4:value2
+		// Error for having invalid unquoted key4
+		assertCommandFailsWith(player, "test key1:value1 key4:value2", "Could not parse command: Invalid key: key4 at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:value1 "key4":value2
+		// Error for having invalid quoted key1
+		assertCommandFailsWith(player, "test key1:value1 \"key4\":value2", "Could not parse command: Invalid key: key4 at position 12: ...y1:value1 <--[HERE]");
+		// /test key1:value1 key4
+		// Error for having invalid unquoted key4 without delimiter
+		assertCommandFailsWith(player, "test key1:value1 key4", "Could not parse command: Invalid key: key4 at position 12: ...y1:value1 <--[HERE]");
+
+		// /test key1:value1 key2:value4
+		// Error for having invalid value4
+		assertCommandFailsWith(player, "test key1:value1 key2:value4", "Could not parse command: Invalid value: value4 at position 17: ...lue1 key2:<--[HERE]");
+		// /test key1:value1 key2:"value4"
+		// Error for having invalid quoted value4
+		assertCommandFailsWith(player, "test key1:value1 key2:\"value4\"", "Could not parse command: Invalid value: value4 at position 17: ...lue1 key2:<--[HERE]");
+
+
+		// /test key1:value1 key2
+		// Check this still gives missing delimiter message in special case b/c key is valid
+		assertCommandFailsWith(player, "test key1:value1 key2", "Could not parse command: Delimiter \":\" required after writing a key at position 12: ...y1:value1 <--[HERE]");
+	}
 
 	@Test
-	public void executionTestWithoutSuggestions() {
-		Mut<LinkedHashMap<String, String>> results = Mut.of();
+	public void executionTestWithDuplicateValues() {
+		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map")
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withoutKeyList()
-				.withoutValueList()
-				.build()
+			.withArguments(
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					// Allowing duplicate values
+					.withoutValueList(true)
+					.build()
 			)
 			.executesPlayer((player, args) -> {
-				results.set((LinkedHashMap<String, String>) args.get("map"));
+				results.set(args.getUnchecked("map"));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		// Theoretically with this command, every key/value pair should be possible
-		LinkedHashMap<String, String> testMap = new LinkedHashMap<>();
-		testMap.put("key1", "value1");
-		testMap.put("key2", "value2");
+		// Allowing duplicate values doesn't do much else beyond that, so there is not much extra to test
 
-		// /test key1:"value1" key2:"value2"
-		server.dispatchCommand(player, "test key1:\"value1\" key2:\"value2\"");
-		assertEquals(testMap, results.get());
+		// /test key1:value key2:value
+		// Input a duplicate value
+		assertStoresResult(player, "test key1:value key2:value", results, Map.of("key1", "value", "key2", "value"));
+
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	public void executionTestWithDuplicateValuesAndList() {
+		Mut<Map<String, String>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					// Giving list and allowing duplicate values
+					.withValueList(List.of("value1", "value2", "value3"), true)
+					.build()
+			)
+			.executesPlayer((player, args) -> {
+				results.set(args.getUnchecked("map"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Allowing duplicate values doesn't do much else beyond that, so there is not much extra to test
+
+		// /test key1:value1 key2:value1
+		// Input a duplicate value
+		assertStoresResult(player, "test key1:value1 key2:value1", results, Map.of("key1", "value1", "key2", "value1"));
+
+
+		// /test key1:value1 key2:value4
+		// Error for having invalid value4
+		assertCommandFailsWith(player, "test key1:value1 key2:value4", "Could not parse command: Invalid value: value4 at position 17: ...lue1 key2:<--[HERE]");
+
 
 		assertNoMoreResults(results);
 	}
@@ -394,7 +689,7 @@ public class ArgumentMapTests extends TestBase {
 	/********************
 	 * Suggestion tests *
 	 ********************/
-
+	// TODO: Update suggestions tests to include new MapArgument features
 	@Test
 	public void suggestionTestWithMapArgumentAndNoValueDuplicates() {
 		new CommandAPICommand("test")
