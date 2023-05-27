@@ -321,30 +321,28 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		StringBuilder result = new StringBuilder();
 		boolean escaped = false;
 		while (reader.canRead()) {
-			char c = reader.read();
+			char c = reader.peek();
 			if (escaped) {
 				escaped = false;
 			} else if (c == '\\') {
 				escaped = true;
+				reader.skip();
 				continue; // Don't include this character
-			} else if (c == firstTerminatorChar && reader.canRead(terminator.length() - 1)) {
+			} else if (c == firstTerminatorChar && reader.canRead(terminator.length())) {
 				// If it looks like the terminator is starting, and the terminator can fit in the reader
 				// Check if this is actually the terminator
 				boolean isTerminator = true;
 				for (int i = 1; i < terminator.length(); i++) {
-					if (reader.peek(i - 1) != terminator.charAt(i)) {
+					if (reader.peek(i) != terminator.charAt(i)) {
 						// Characters did not match, not the terminator
 						isTerminator = false;
 						break;
 					}
 				}
-				if (isTerminator) {
-					// Move reader back 1 char so that caller method can start reading the terminator itself
-					reader.setCursor(reader.getCursor() - 1);
-					return result.toString();
-				}
+				if (isTerminator) return result.toString();
 			}
 			result.append(c);
+			reader.skip();
 		}
 
 		// Reset the cursor, so it underlines the entire invalid key/value
@@ -449,7 +447,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			boolean preferUnquoted = true;
 
 			while (reader.canRead()) {
-				char c = reader.read();
+				char c = reader.peek();
 				boolean escapeUnquoted = false;
 				boolean escapeQuoted = false;
 
@@ -461,12 +459,14 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				} else if (c == '"') {
 					// " is only escaped when in a quote
 					escapeQuoted = true;
-				} else if (c == firstTerminatorChar && reader.canRead(terminator.length() - 1)) {
+					// or at the start of an unquoted string
+					if(reader.getCursor() == 0) escapeUnquoted = true;
+				} else if (c == firstTerminatorChar && reader.canRead(terminator.length())) {
 					// If it looks like the terminator is starting, and the terminator can fit in the reader
 					// Check if this is actually the terminator
 					boolean isTerminator = true;
 					for (int i = 1; i < terminator.length(); i++) {
-						if (reader.peek(i - 1) != terminator.charAt(i)) {
+						if (reader.peek(i) != terminator.charAt(i)) {
 							// Characters did not match, not the terminator
 							isTerminator = false;
 							break;
@@ -486,6 +486,8 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 				if (escapeQuoted) quotedResult.append('\\');
 				quotedResult.append(c);
+
+				reader.skip();
 			}
 
 			return preferUnquoted;
