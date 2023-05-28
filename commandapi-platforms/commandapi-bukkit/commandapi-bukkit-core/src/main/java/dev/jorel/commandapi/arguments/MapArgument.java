@@ -331,15 +331,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			} else if (c == firstTerminatorChar && reader.canRead(terminator.length())) {
 				// If it looks like the terminator is starting, and the terminator can fit in the reader
 				// Check if this is actually the terminator
-				boolean isTerminator = true;
-				for (int i = 1; i < terminator.length(); i++) {
-					if (reader.peek(i) != terminator.charAt(i)) {
-						// Characters did not match, not the terminator
-						isTerminator = false;
-						break;
-					}
-				}
-				if (isTerminator) return result.toString();
+				if (doseTerminatorContinue(reader, terminator)) return result.toString();
 			}
 			result.append(c);
 			reader.skip();
@@ -464,15 +456,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				} else if (c == firstTerminatorChar && reader.canRead(terminator.length())) {
 					// If it looks like the terminator is starting, and the terminator can fit in the reader
 					// Check if this is actually the terminator
-					boolean isTerminator = true;
-					for (int i = 1; i < terminator.length(); i++) {
-						if (reader.peek(i) != terminator.charAt(i)) {
-							// Characters did not match, not the terminator
-							isTerminator = false;
-							break;
-						}
-					}
-					if (isTerminator) {
+					if (doseTerminatorContinue(reader, terminator)) {
 						// Yes, this was the terminator. We need to escape it when unquoted
 						escapeUnquoted = true;
 						// If the result dose contain the separator, we would prefer it be quoted
@@ -492,5 +476,15 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 			return preferUnquoted;
 		}
+	}
+
+	private static boolean doseTerminatorContinue(StringReader reader, String terminator) {
+		for (int i = 1; i < terminator.length(); i++) {
+			if (reader.peek(i) != terminator.charAt(i)) {
+				// Characters did not match, not the terminator
+				return false;
+			}
+		}
+		return true;
 	}
 }
