@@ -328,10 +328,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				escaped = true;
 				reader.skip();
 				continue; // Don't include this character
-			} else if (c == firstTerminatorChar && reader.canRead(terminator.length())) {
-				// If it looks like the terminator is starting, and the terminator can fit in the reader
-				// Check if this is actually the terminator
-				if (doseTerminatorContinue(reader, terminator)) return result.toString();
+			} else if (c == firstTerminatorChar && doseTerminatorContinue(reader, terminator)) {
+				// If the char says the terminator is starting, make sure it continues
+				// If this is the terminator, then we're done
+				return result.toString();
 			}
 			result.append(c);
 			reader.skip();
@@ -453,15 +453,12 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					escapeQuoted = true;
 					// or at the start of an unquoted string
 					if(reader.getCursor() == 0) escapeUnquoted = true;
-				} else if (c == firstTerminatorChar && reader.canRead(terminator.length())) {
-					// If it looks like the terminator is starting, and the terminator can fit in the reader
-					// Check if this is actually the terminator
-					if (doseTerminatorContinue(reader, terminator)) {
-						// Yes, this was the terminator. We need to escape it when unquoted
-						escapeUnquoted = true;
-						// If the result dose contain the separator, we would prefer it be quoted
-						preferUnquoted = false;
-					}
+				} else if (c == firstTerminatorChar && doseTerminatorContinue(reader, terminator)) {
+					// If the char says the terminator is starting, make sure it continues
+					// Yes, this was the terminator. We need to escape it when unquoted
+					escapeUnquoted = true;
+					// If the result dose contain the separator, we would prefer it be quoted
+					preferUnquoted = false;
 				}
 
 				// Add the character, escaping if deemed necessary
@@ -479,6 +476,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	}
 
 	private static boolean doseTerminatorContinue(StringReader reader, String terminator) {
+		if(!reader.canRead(terminator.length())) return false;
 		for (int i = 1; i < terminator.length(); i++) {
 			if (reader.peek(i) != terminator.charAt(i)) {
 				// Characters did not match, not the terminator
