@@ -55,7 +55,7 @@ public class ArgumentMapTests extends TestBase {
 	//  No duplicates | allow duplicate values
 
 	@Test
-	public void exceptionTestWithMapArgument() {
+	void exceptionTestWithMapArgument() {
 		// A MapArgument is a GreedyArgument. It is only allowed at the end of the arguments list.
 		// A GreedyArgumentException should be thrown when it is not the last argument.
 		CommandAPICommand command =
@@ -77,7 +77,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithMapArgument() {
+	void executionTestWithMapArgument() {
 		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -186,7 +186,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithSpecialCharacters() {
+	void executionTestWithSpecialCharacters() {
 		// Special characters are \ " and the separator and delimiter
 		Mut<Map<String, String>> results = Mut.of();
 
@@ -264,7 +264,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithNonSpecialCharacters() {
+	void executionTestWithNonSpecialCharacters() {
 		// I believe the characters that may appear in chat messages are defined by the
 		//  net.minecraft.server.SharedConstants#isAllowedChatCharacter method
 		// We'll only bother testing ASCII characters that fit that method
@@ -304,7 +304,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@RepeatedTest(10)
-	public void executionTestWithPlayerNameKeys() {
+	void executionTestWithPlayerNameKeys() {
 		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -344,7 +344,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithLongTerminators() {
+	void executionTestWithLongTerminators() {
 		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -433,7 +433,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithCustomMappers() {
+	void executionTestWithCustomMappers() {
 		Mut<Map<Integer, Integer>> results = Mut.of();
 
 		StringParser<Integer> customMapper = (s) -> {
@@ -522,7 +522,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithFloatKey() {
+	void executionTestWithFloatKey() {
 		Mut<LinkedHashMap<Float, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -560,7 +560,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithLists() {
+	void executionTestWithLists() {
 		new CommandAPICommand("test")
 			.withArguments(
 				new MapArgumentBuilder<String, String>("map")
@@ -620,7 +620,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithDuplicateValues() {
+	void executionTestWithDuplicateValues() {
 		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -651,7 +651,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithDuplicateValuesAndList() {
+	void executionTestWithDuplicateValuesAndList() {
 		Mut<Map<String, String>> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -691,7 +691,7 @@ public class ArgumentMapTests extends TestBase {
 	 ********************/
 	// TODO: Update suggestions tests to include new MapArgument features
 	@Test
-	public void suggestionTestWithMapArgumentAndNoValueDuplicates() {
+	void suggestionTestWithMapArgumentAndNoValueDuplicates() {
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map")
 				.withKeyMapper(s -> s)
@@ -760,7 +760,7 @@ public class ArgumentMapTests extends TestBase {
 	}
 
 	@Test
-	public void suggestionTestWithMapArgumentAndValueDuplicates() {
+	void suggestionTestWithMapArgumentAndValueDuplicates() {
 		new CommandAPICommand("test")
 			.withArguments(new MapArgumentBuilder<String, String>("map")
 				.withKeyMapper(s -> s)
