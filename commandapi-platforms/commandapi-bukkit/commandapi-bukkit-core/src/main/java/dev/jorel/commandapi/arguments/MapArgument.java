@@ -83,10 +83,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					// Exception is thrown when the key/value never terminates
 					//  That means this key/value ends the argument, so we should do the suggestions now
 					builder = builder.createOffset(builder.getStart() + reader.getCursor() - (isQuoted ? 1 : 0));
-					String ending = readEscapedUntilEnd(reader);
 					if (!(isKey ? keyListEmpty : valueListEmpty))
-						return doResultSuggestions(ending, builder, isKey ? unusedKeys : unusedValues, isKey, isQuoted);
-					return doEmptySuggestions(ending, builder, isKey, isQuoted);
+						return doResultSuggestions(readEscapedUntilEnd(reader), builder, isKey ? unusedKeys : unusedValues, isKey, isQuoted);
+					return doEmptySuggestions(reader.getRemaining(), builder, isKey, isQuoted);
 				}
 
 				if (!(isKey ? keyListEmpty : valueListEmpty)) {
@@ -180,9 +179,28 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 	private CompletableFuture<Suggestions> doEmptySuggestions(String ending, SuggestionsBuilder builder, boolean isKey, boolean isQuoted) {
 		// If the result isn't from a set list, always suggest completing it with the terminator at the end
-		builder = builder.createOffset(builder.getStart());
-		String quotedInsert = (isQuoted ? "\"" : "");
-		builder.suggest(quotedInsert + ending + quotedInsert + (isKey ? delimiter : separator));
+		String suggestion = ending;
+
+		int length = suggestion.length();
+		if(length != 0 && suggestion.charAt(length - 1) == '\\') {
+			boolean escaped = false;
+			int i = length - 2;
+			while (i >= 0) {
+				if (suggestion.charAt(i) != '\\') break;
+				i--;
+				escaped = !escaped;
+			}
+			// If there is an unescaped \ at the end, suggest another backslash to eat up its effect
+			if(!escaped) suggestion += '\\';
+		}
+
+		// Add quotes around suggestion
+		if(isQuoted) suggestion = "\"" + suggestion + "\"";
+
+		// Add terminator
+		suggestion = suggestion + (isKey ? delimiter : separator);
+
+		builder.suggest(suggestion);
 		return builder.buildFuture();
 	}
 
