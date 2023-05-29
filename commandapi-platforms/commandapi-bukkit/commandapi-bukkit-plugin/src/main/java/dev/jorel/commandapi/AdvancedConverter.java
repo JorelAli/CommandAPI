@@ -288,8 +288,7 @@ class AdvancedConverter {
 		Matcher argumentMatcher = ARGUMENT_PATTERN.matcher(argument);
 		if (literalMatcher.matches()) {
 			// Parse literals
-			String literals = literalMatcher.group(1);
-			return new MultiLiteralArgument(literals.split("\\|"));
+			return new MultiLiteralArgument(literalMatcher.group().substring(1, literalMatcher.group().length() - 1).split("\\|"));
 		} else if (argumentMatcher.matches()) {
 			// Parse arguments
 			String nodeName = argumentMatcher.group(1);
