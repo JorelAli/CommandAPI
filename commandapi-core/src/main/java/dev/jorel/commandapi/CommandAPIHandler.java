@@ -400,9 +400,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			if (args[index] instanceof MultiLiteral) {
 				MultiLiteral<? extends Argument> superArg = (MultiLiteral<? extends Argument>) args[index];
 
+				String nodeName = superArg.instance().getNodeName();
+
 				// Add all of its entries
 				for (String literal: superArg.getLiterals()) {
-					Argument litArg = platform.newConcreteLiteralArgument(superArg.instance().getNodeName(), literal);
+					// TODO: We only expect nodeName to be null here because the constructor for a MultiLiteralArgument
+					//  without a nodeName is currently deprecated but not removed. Once that constructor is removed,
+					//  this `nodeName == null` statement can probably be removed as well
+					Argument litArg = platform.newConcreteLiteralArgument(nodeName == null ? literal : nodeName, literal);
 
 					litArg.setListed(superArg.instance().isListed())
 						.withPermission(superArg.instance().getArgumentPermission())
