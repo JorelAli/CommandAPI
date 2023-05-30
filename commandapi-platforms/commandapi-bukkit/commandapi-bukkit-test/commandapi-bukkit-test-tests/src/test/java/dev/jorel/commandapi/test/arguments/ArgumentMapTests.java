@@ -490,7 +490,7 @@ public class ArgumentMapTests extends TestBase {
 		// Error from unquoted value string not converting to int
 		assertCommandFailsWith(player, "test 100:value", "Could not parse command: Invalid value (value): cannot be converted to a value at position 4: 100:<--[HERE]");
 		// /test 100:"value"
-		// Error from quoted key value not converting to int
+		// Error from quoted value not converting to int
 		assertCommandFailsWith(player, "test 100:\"value\"", "Could not parse command: Invalid value (value): cannot be converted to a value at position 4: 100:<--[HERE]");
 
 
@@ -689,98 +689,1095 @@ public class ArgumentMapTests extends TestBase {
 	/********************
 	 * Suggestion tests *
 	 ********************/
-	// TODO: Update suggestions tests to include new MapArgument features
+
 	@Test
-	void suggestionTestWithMapArgumentAndNoValueDuplicates() {
+	void suggestionTestWithMapArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map")
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withKeyList(List.of("beautiful", "bold", "crazy", "mighty", "wonderful"))
-				.withValueList(List.of("chaotic", "majestic", "sunny", "sweet", "weird"))
-				.build()
+			.withArguments(
+				// 'Default' MapArgument
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
 			)
 			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		// Key tests
+
+		////////////////
+		// FIRST PAIR //
+		////////////////
+
 
 		// /test
-		assertEquals(List.of("beautiful", "bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test "));
+		// No key list given, so we expect no suggestions
+		assertNoSuggestions(player, "test ");
 
-		// /test b
-		assertEquals(List.of("beautiful", "bold"), server.getSuggestions(player, "test b"));
+		// /test "
+		// Start of quoted key, suggest ending those quotes
+		assertCommandSuggests(player, "test \"", "\"\":");
 
-		// /test c
-		assertEquals(List.of("crazy"), server.getSuggestions(player, "test c"));
 
-		// /test m
-		assertEquals(List.of("mighty"), server.getSuggestions(player, "test m"));
+		// Start of unquoted key, suggest closing
+		// /test a
+		assertCommandSuggests(player, "test a", "a:");
+		// /test ab
+		assertCommandSuggests(player, "test ab", "ab:");
+		// /test abc
+		assertCommandSuggests(player, "test abc", "abc:");
 
-		// /test w
-		assertEquals(List.of("wonderful"), server.getSuggestions(player, "test w"));
+		// Start of quoted key, suggest closing
+		// /test "a
+		assertCommandSuggests(player, "test \"a", "\"a\":");
+		// /test "ab
+		assertCommandSuggests(player, "test \"ab", "\"ab\":");
+		// /test "abc
+		assertCommandSuggests(player, "test \"abc", "\"abc\":");
 
-		// Use "beautiful" for all following tests as the first key
 
-		// /test beautiful
-		assertEquals(List.of("beautiful:"), server.getSuggestions(player, "test beautiful"));
+		// /test "abc"
+		// Quoted key closed, suggest delimiter
+		assertCommandSuggests(player, "test \"abc\"", ":");
 
-		// /test beautiful:
-		assertEquals(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), server.getSuggestions(player, "test beautiful:"));
+		// /test "abc"=
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test \"abc\"=");
 
-		// /test beautiful:"
-		assertEquals(List.of("\"chaotic\"", "\"majestic\"", "\"sunny\"", "\"sweet\"", "\"weird\""), server.getSuggestions(player, "test beautiful:\""));
 
-		// /test beautiful:"s
-		assertEquals(List.of("\"sunny\"", "\"sweet\""), server.getSuggestions(player, "test beautiful:\"s"));
+		// /test abc:
+		// No value list given, so we expect no suggestions
+		assertNoSuggestions(player, "test abc:");
 
-		// /test beautiful:"c
-		assertEquals(List.of("\"chaotic\""), server.getSuggestions(player, "test beautiful:\"c"));
+		// /test abc:"
+		// Start of quoted value, suggest ending those quotes
+		assertCommandSuggests(player, "test abc:\"", "\"\" ");
 
-		// /test beautiful:"m
-		assertEquals(List.of("\"majestic\""), server.getSuggestions(player, "test beautiful:\"m"));
 
-		// /test beautiful:"w
-		assertEquals(List.of("\"weird\""), server.getSuggestions(player, "test beautiful:\"w"));
+		// Start of unquoted value, suggest closing
+		// /test abc:a
+		assertCommandSuggests(player, "test abc:a", "a ");
+		// /test abc:ab
+		assertCommandSuggests(player, "test abc:ab", "ab ");
+		// /test abc:abc
+		assertCommandSuggests(player, "test abc:abc", "abc ");
 
-		// Use "weird" for all following tests as the first value
+		// Start of quoted value, suggest closing
+		// /test abc:"a
+		assertCommandSuggests(player, "test abc:\"a", "\"a\" ");
+		// /test abc:"ab
+		assertCommandSuggests(player, "test abc:\"ab", "\"ab\" ");
+		// /test abc:"abc
+		assertCommandSuggests(player, "test abc:\"abc", "\"abc\" ");
 
-		// /test beautiful:"weird
-		assertEquals(List.of("\"weird\" "), server.getSuggestions(player, "test beautiful:\"weird"));
 
-		// Key-value pair completed, check if value removal works
+		// /test abc:"abc"
+		// Quoted value closed, suggest separator
+		assertCommandSuggests(player, "test abc:\"abc\"", " ");
 
-		// /test beautiful:"weird"
-		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\" "));
+		// /test abc:"abc",
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test abc:\"abc\",");
 
-		// /test beautiful:"weird" bold:"
-		assertEquals(List.of("\"chaotic\"", "\"majestic\"", "\"sunny\"", "\"sweet\""), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
+
+		/////////////////
+		// SECOND PAIR //
+		/////////////////
+
+
+		// /test k1:v1
+		// No key list given, so we expect no suggestions
+		assertNoSuggestions(player, "test k1:v1 ");
+
+		// /test k1:v1 "
+		// Start of quoted key, suggest ending those quotes
+		assertCommandSuggests(player, "test k1:v1 \"", "\"\":");
+
+
+		// Start of unquoted key, suggest closing
+		// /test k1:v1 a
+		assertCommandSuggests(player, "test k1:v1 a", "a:");
+		// /test k1:v1 ab
+		assertCommandSuggests(player, "test k1:v1 ab", "ab:");
+		// /test k1:v1 abc
+		assertCommandSuggests(player, "test k1:v1 abc", "abc:");
+
+		// Start of quoted key, suggest closing
+		// /test k1:v1 "a
+		assertCommandSuggests(player, "test k1:v1 \"a", "\"a\":");
+		// /test k1:v1 "ab
+		assertCommandSuggests(player, "test k1:v1 \"ab", "\"ab\":");
+		// /test k1:v1 "abc
+		assertCommandSuggests(player, "test k1:v1 \"abc", "\"abc\":");
+
+
+		// /test k1:v1 "abc"
+		// Quoted key closed, suggest delimiter
+		assertCommandSuggests(player, "test k1:v1 \"abc\"", ":");
+
+		// /test k1:v1 "abc"=
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test k1:v1 \"abc\"=");
+
+
+		// /test k1:v1 abc:
+		// No value list given, so we expect no suggestions
+		assertNoSuggestions(player, "test k1:v1 abc:");
+
+		// /test k1:v1 abc:"
+		// Start of quoted value, suggest ending those quotes
+		assertCommandSuggests(player, "test k1:v1 abc:\"", "\"\" ");
+
+
+		// Start of unquoted value, suggest closing
+		// /test k1:v1 abc:a
+		assertCommandSuggests(player, "test k1:v1 abc:a", "a ");
+		// /test k1:v1 abc:ab
+		assertCommandSuggests(player, "test k1:v1 abc:ab", "ab ");
+		// /test k1:v1 abc:abc
+		assertCommandSuggests(player, "test k1:v1 abc:abc", "abc ");
+
+		// Start of quoted value, suggest closing
+		// /test k1:v1 abc:"a
+		assertCommandSuggests(player, "test k1:v1 abc:\"a", "\"a\" ");
+		// /test k1:v1 abc:"ab
+		assertCommandSuggests(player, "test k1:v1 abc:\"ab", "\"ab\" ");
+		// /test k1:v1 abc:"abc
+		assertCommandSuggests(player, "test k1:v1 abc:\"abc", "\"abc\" ");
+
+
+		// /test k1:v1 abc:"abc"
+		// Quoted value closed, suggest separator
+		assertCommandSuggests(player, "test k1:v1 abc:\"abc\"", " ");
+
+		// /test k1:v1 abc:"abc",
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test k1:v1 abc:\"abc\",");
+
+
+		/////////////////
+		// THIRD PAIR //
+		/////////////////
+
+
+		// /test k1:v1 k2:v2
+		// No key list given, so we expect no suggestions
+		assertNoSuggestions(player, "test k1:v1 k2:v2 ");
+
+		// /test k1:v1 k2:v2 "
+		// Start of quoted key, suggest ending those quotes
+		assertCommandSuggests(player, "test k1:v1 k2:v2 \"", "\"\":");
+
+
+		// Start of unquoted key, suggest closing
+		// /test k1:v1 k2:v2 a
+		assertCommandSuggests(player, "test k1:v1 k2:v2 a", "a:");
+		// /test k1:v1 k2:v2 ab
+		assertCommandSuggests(player, "test k1:v1 k2:v2 ab", "ab:");
+		// /test k1:v1 k2:v2 abc
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc", "abc:");
+
+		// Start of quoted key, suggest closing
+		// /test k1:v1 k2:v2 "a
+		assertCommandSuggests(player, "test k1:v1 k2:v2 \"a", "\"a\":");
+		// /test k1:v1 k2:v2 "ab
+		assertCommandSuggests(player, "test k1:v1 k2:v2 \"ab", "\"ab\":");
+		// /test k1:v1 k2:v2 "abc
+		assertCommandSuggests(player, "test k1:v1 k2:v2 \"abc", "\"abc\":");
+
+
+		// /test k1:v1 k2:v2 "abc"
+		// Quoted key closed, suggest delimiter
+		assertCommandSuggests(player, "test k1:v1 k2:v2 \"abc\"", ":");
+
+		// /test k1:v1 k2:v2 "abc"=
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test k1:v1 k2:v2 \"abc\"=");
+
+
+		// /test k1:v1 k2:v2 abc:
+		// No value list given, so we expect no suggestions
+		assertNoSuggestions(player, "test k1:v1 k2:v2 abc:");
+
+		// /test k1:v1 k2:v2 abc:"
+		// Start of quoted value, suggest ending those quotes
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:\"", "\"\" ");
+
+
+		// Start of unquoted value, suggest closing
+		// /test k1:v1 k2:v2 abc:a
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:a", "a ");
+		// /test k1:v1 k2:v2 abc:ab
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:ab", "ab ");
+		// /test k1:v1 k2:v2 abc:abc
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:abc", "abc ");
+
+		// Start of quoted value, suggest closing
+		// /test k1:v1 k2:v2 abc:"a
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:\"a", "\"a\" ");
+		// /test k1:v1 k2:v2 abc:"ab
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:\"ab", "\"ab\" ");
+		// /test k1:v1 k2:v2 abc:"abc
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:\"abc", "\"abc\" ");
+
+
+		// /test k1:v1 k2:v2 abc:"abc"
+		// Quoted value closed, suggest separator
+		assertCommandSuggests(player, "test k1:v1 k2:v2 abc:\"abc\"", " ");
+
+		// /test k1:v1 k2:v2 abc:"abc",
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test k1:v1 k2:v2 abc:\"abc\",");
+
+
+		//////////////////
+		// END OF PAIRS //
+		//////////////////
+
+
+		// /test key1:value1 key1:value2
+		// Error for having duplicate unquoted key1, no suggestions
+		assertNoSuggestions(player, "test key1:value1 key1:value2");
+		// /test key1:value1 "key1":value2
+		// Error for having duplicate quoted key1, no suggestions
+		assertNoSuggestions(player, "test key1:value1 \"key1\":value2");
+
+		// /test key1:value1 key2:value1 a
+		// Error for having duplicate unquoted value1, no suggestions
+		assertNoSuggestions(player, "test key1:value1 key2:value1 a");
+		// /test key1:value1 key2:"value1" a
+		// Error for having duplicate quoted value1, no suggestions
+		assertNoSuggestions(player, "test key1:value1 key2:\"value1\" a");
 	}
 
 	@Test
-	void suggestionTestWithMapArgumentAndValueDuplicates() {
+	void suggestionTestWithSpecialCharacters() {
+		// Special characters are \ " and the separator and delimiter
 		new CommandAPICommand("test")
-			.withArguments(new MapArgumentBuilder<String, String>("map")
-				.withKeyMapper(s -> s)
-				.withValueMapper(s -> s)
-				.withKeyList(List.of("beautiful", "bold", "crazy", "mighty", "wonderful"))
-				.withValueList(List.of("chaotic", "majestic", "sunny", "sweet", "weird"), true)
-				.build()
+			.withArguments(
+				// 'Default' MapArgument
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
 			)
 			.executesPlayer(P_EXEC)
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		// Check if value removal works
 
-		// /test beautiful:"weird"
-		assertEquals(List.of("bold", "crazy", "mighty", "wonderful"), server.getSuggestions(player, "test beautiful:\"weird\" "));
+		// /test \"a"b
+		// Complete unquoted key containing quotes
+		assertCommandSuggests(player, "test \\\"a\"b", "\\\"a\"b:");
+		// /test "\"a\"b
+		// Complete quoted key containing quotes
+		assertCommandSuggests(player, "test \"\\\"a\\\"b", "\"\\\"a\\\"b\":");
+		// /test "\"a\"b"
+		// Suggest delimiter after closed quoted key containing quotes
+		assertCommandSuggests(player, "test \"\\\"a\\\"b\"", ":");
 
-		// /test beautiful:"weird" bold:"
-		assertEquals(List.of("\"chaotic\"", "\"majestic\"", "\"sunny\"", "\"sweet\"", "\"weird\""), server.getSuggestions(player, "test beautiful:\"weird\" bold:\""));
+		// /test abc:\"a"b
+		// Complete unquoted value containing quotes
+		assertCommandSuggests(player, "test abc:\\\"a\"b", "\\\"a\"b ");
+		// /test abc:"\"a\"b
+		// Complete quoted value containing quotes
+		assertCommandSuggests(player, "test abc:\"\\\"a\\\"b", "\"\\\"a\\\"b\" ");
+		// /test abc:"\"a\"b"
+		// Suggest separator after closed quoted value containing quotes
+		assertCommandSuggests(player, "test abc:\"\\\"a\\\"b\"", " ");
+
+		// /test "key1\":value1 "key2":value2
+		// Error from escaping instead of closing quoted key, no suggestions
+		assertNoSuggestions(player, "test \"key1\\\":value1 \"key2\":value2");
+		// /test key1:"value\" key2:"value2"
+		// Error from escaping instead of closing quoted value, no suggestions
+		assertNoSuggestions(player, "test key1:\"value1\\\" key2:\"value2\"");
+
+
+		// /test \\a\\b
+		// Complete unquoted key containing backslashes
+		assertCommandSuggests(player, "test \\\\a\\\\b", "\\\\a\\\\b:");
+		// /test "\\a\\b
+		// Complete unquoted key containing backslashes
+		assertCommandSuggests(player, "test \"\\\\a\\\\b", "\"\\\\a\\\\b\":");
+		// /test "\\a\\b"
+		// Suggest delimiter after closed quoted key containing backslashes
+		assertCommandSuggests(player, "test \"\\\\a\\\\b\"", ":");
+
+		// /test abc:\\a\\b
+		// Complete unquoted value containing backslashes
+		assertCommandSuggests(player, "test abc:\\\\a\\\\b", "\\\\a\\\\b ");
+		// /test abc:"\\a\\b
+		// Complete quoted value containing backslashes
+		assertCommandSuggests(player, "test abc:\"\\\\a\\\\b", "\"\\\\a\\\\b\" ");
+		// /test abc:"\\a\\b"
+		// Suggest separator after closed quoted value containing backslashes
+		assertCommandSuggests(player, "test abc:\"\\\\a\\\\b\"", " ");
+
+		// Suggest extra backlash if unquoted key ends with unescaped backslash
+		// /test \
+		assertCommandSuggests(player, "test \\", "\\\\:");
+		// /test \\
+		assertCommandSuggests(player, "test \\\\", "\\\\:");
+		// /test \\\
+		assertCommandSuggests(player, "test \\\\\\", "\\\\\\\\:");
+		// /test \\\\
+		assertCommandSuggests(player, "test \\\\\\\\", "\\\\\\\\:");
+		// /test a\
+		assertCommandSuggests(player, "test a\\", "a\\\\:");
+		// /test a\\
+		assertCommandSuggests(player, "test a\\\\", "a\\\\:");
+		// /test a\\\
+		assertCommandSuggests(player, "test a\\\\\\", "a\\\\\\\\:");
+		// /test a\\\\
+		assertCommandSuggests(player, "test a\\\\\\\\", "a\\\\\\\\:");
+		// /test \\a\
+		assertCommandSuggests(player, "test \\\\a\\", "\\\\a\\\\:");
+		// /test \\a\\
+		assertCommandSuggests(player, "test \\\\a\\\\", "\\\\a\\\\:");
+		// /test \\a\\\
+		assertCommandSuggests(player, "test \\\\a\\\\\\", "\\\\a\\\\\\\\:");
+		// /test \\a\\\\
+		assertCommandSuggests(player, "test \\\\a\\\\\\\\", "\\\\a\\\\\\\\:");
+		// /test \"a\
+		assertCommandSuggests(player, "test \\\"a\\", "\\\"a\\\\:");
+		// /test \"a\\
+		assertCommandSuggests(player, "test \\\"a\\\\", "\\\"a\\\\:");
+		// /test \"a\\\
+		assertCommandSuggests(player, "test \\\"a\\\\\\", "\\\"a\\\\\\\\:");
+		// /test \"a\\\\
+		assertCommandSuggests(player, "test \\\"a\\\\\\\\", "\\\"a\\\\\\\\:");
+
+		// Suggest extra backlash if quoted key ends with unescaped backslash
+		// /test "\
+		assertCommandSuggests(player, "test \"\\", "\"\\\\\":");
+		// /test "\\
+		assertCommandSuggests(player, "test \"\\\\", "\"\\\\\":");
+		// /test "\\\
+		assertCommandSuggests(player, "test \"\\\\\\", "\"\\\\\\\\\":");
+		// /test "\\\\
+		assertCommandSuggests(player, "test \"\\\\\\\\", "\"\\\\\\\\\":");
+		// /test "a\
+		assertCommandSuggests(player, "test \"a\\", "\"a\\\\\":");
+		// /test "a\\
+		assertCommandSuggests(player, "test \"a\\\\", "\"a\\\\\":");
+		// /test "a\\\
+		assertCommandSuggests(player, "test \"a\\\\\\", "\"a\\\\\\\\\":");
+		// /test "a\\\\
+		assertCommandSuggests(player, "test \"a\\\\\\\\", "\"a\\\\\\\\\":");
+		// /test "\\a\
+		assertCommandSuggests(player, "test \"\\\\a\\", "\"\\\\a\\\\\":");
+		// /test "\\a\\
+		assertCommandSuggests(player, "test \"\\\\a\\\\", "\"\\\\a\\\\\":");
+		// /test "\\a\\\
+		assertCommandSuggests(player, "test \"\\\\a\\\\\\", "\"\\\\a\\\\\\\\\":");
+		// /test "\\a\\\\
+		assertCommandSuggests(player, "test \"\\\\a\\\\\\\\", "\"\\\\a\\\\\\\\\":");
+		// /test "\"a\
+		assertCommandSuggests(player, "test \"\\\"a\\", "\"\\\"a\\\\\":");
+		// /test "\"a\\
+		assertCommandSuggests(player, "test \"\\\"a\\\\", "\"\\\"a\\\\\":");
+		// /test "\"a\\\
+		assertCommandSuggests(player, "test \"\\\"a\\\\\\", "\"\\\"a\\\\\\\\\":");
+		// /test "\"a\\\\
+		assertCommandSuggests(player, "test \"\\\"a\\\\\\\\", "\"\\\"a\\\\\\\\\":");
+
+		// Suggest extra backlash if unquoted value ends with unescaped backslash
+		// /test key:\
+		assertCommandSuggests(player, "test key:\\", "\\\\ ");
+		// /test key:\\
+		assertCommandSuggests(player, "test key:\\\\", "\\\\ ");
+		// /test key:\\\
+		assertCommandSuggests(player, "test key:\\\\\\", "\\\\\\\\ ");
+		// /test key:\\\\
+		assertCommandSuggests(player, "test key:\\\\\\\\", "\\\\\\\\ ");
+		// /test key:a\
+		assertCommandSuggests(player, "test key:a\\", "a\\\\ ");
+		// /test key:a\\
+		assertCommandSuggests(player, "test key:a\\\\", "a\\\\ ");
+		// /test key:a\\\
+		assertCommandSuggests(player, "test key:a\\\\\\", "a\\\\\\\\ ");
+		// /test key:a\\\\
+		assertCommandSuggests(player, "test key:a\\\\\\\\", "a\\\\\\\\ ");
+		// /test key:\\a\
+		assertCommandSuggests(player, "test key:\\\\a\\", "\\\\a\\\\ ");
+		// /test key:\\a\\
+		assertCommandSuggests(player, "test key:\\\\a\\\\", "\\\\a\\\\ ");
+		// /test key:\\a\\\
+		assertCommandSuggests(player, "test key:\\\\a\\\\\\", "\\\\a\\\\\\\\ ");
+		// /test key:\\a\\\\
+		assertCommandSuggests(player, "test key:\\\\a\\\\\\\\", "\\\\a\\\\\\\\ ");
+		// /test key:\"a\
+		assertCommandSuggests(player, "test key:\\\"a\\", "\\\"a\\\\ ");
+		// /test key:\"a\\
+		assertCommandSuggests(player, "test key:\\\"a\\\\", "\\\"a\\\\ ");
+		// /test key:\"a\\\
+		assertCommandSuggests(player, "test key:\\\"a\\\\\\", "\\\"a\\\\\\\\ ");
+		// /test key:\"a\\\\
+		assertCommandSuggests(player, "test key:\\\"a\\\\\\\\", "\\\"a\\\\\\\\ ");
+
+		// Suggest extra backlash if quoted value ends with unescaped backslash
+		// /test key:"\
+		assertCommandSuggests(player, "test key:\"\\", "\"\\\\\" ");
+		// /test key:"\\
+		assertCommandSuggests(player, "test key:\"\\\\", "\"\\\\\" ");
+		// /test key:"\\\
+		assertCommandSuggests(player, "test key:\"\\\\\\", "\"\\\\\\\\\" ");
+		// /test key:"\\\\
+		assertCommandSuggests(player, "test key:\"\\\\\\\\", "\"\\\\\\\\\" ");
+		// /test key:"a\
+		assertCommandSuggests(player, "test key:\"a\\", "\"a\\\\\" ");
+		// /test key:"a\\
+		assertCommandSuggests(player, "test key:\"a\\\\", "\"a\\\\\" ");
+		// /test key:"a\\\
+		assertCommandSuggests(player, "test key:\"a\\\\\\", "\"a\\\\\\\\\" ");
+		// /test key:"a\\\\
+		assertCommandSuggests(player, "test key:\"a\\\\\\\\", "\"a\\\\\\\\\" ");
+		// /test key:"\\a\
+		assertCommandSuggests(player, "test key:\"\\\\a\\", "\"\\\\a\\\\\" ");
+		// /test key:"\\a\\
+		assertCommandSuggests(player, "test key:\"\\\\a\\\\", "\"\\\\a\\\\\" ");
+		// /test key:"\\a\\\
+		assertCommandSuggests(player, "test key:\"\\\\a\\\\\\", "\"\\\\a\\\\\\\\\" ");
+		// /test key:"\\a\\\\
+		assertCommandSuggests(player, "test key:\"\\\\a\\\\\\\\", "\"\\\\a\\\\\\\\\" ");
+		// /test key:"\"a\
+		assertCommandSuggests(player, "test key:\"\\\"a\\", "\"\\\"a\\\\\" ");
+		// /test key:"\"a\\
+		assertCommandSuggests(player, "test key:\"\\\"a\\\\", "\"\\\"a\\\\\" ");
+		// /test key:"\"a\\\
+		assertCommandSuggests(player, "test key:\"\\\"a\\\\\\", "\"\\\"a\\\\\\\\\" ");
+		// /test key:"\"a\\\\
+		assertCommandSuggests(player, "test key:\"\\\"a\\\\\\\\", "\"\\\"a\\\\\\\\\" ");
+
+
+		// /test ke\:y
+		// Complete unquoted value containing delimiter
+		assertCommandSuggests(player, "test ke\\:y", "ke\\:y:");
+		// /test "ke:y
+		// Complete quoted value containing delimiter
+		assertCommandSuggests(player, "test \"ke:y", "\"ke:y\":");
+		// /test "ke:y"
+		// Suggest delimiter after closed quoted key containing delimiter
+		assertCommandSuggests(player, "test \"ke:y\"", ":");
+
+		// /test key:val\ ue
+		// Complete unquoted value containing separator
+		assertCommandSuggests(player, "test key:val\\ ue", "val\\ ue ");
+		// /test key:"val ue
+		// Complete quoted value containing separator
+		assertCommandSuggests(player, "test key:\"val ue", "\"val ue\" ");
+		// /test key:"val ue"
+		// Suggest separator after closed quoted key containing separator
+		assertCommandSuggests(player, "test key:\"val ue\"", " ");
 	}
 
+	@Test
+	void suggestionTestWithNonSpecialCharacters() {
+		// We'll only bother testing part of the ASCII characters, see executionTestWithNonSpecialCharacters for why
+		new CommandAPICommand("test")
+			.withArguments(
+				// 'Default' MapArgument
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		for (char c = 32; c < 127; c++) {
+			if(c == '\"' || c == '\\' || c == ':'|| c == ' ') continue; // Skip special characters
+
+			// Complete suggestion containing unquoted character
+			assertCommandSuggests(player, "test " + c, c + ":");
+			assertCommandSuggests(player, "test key:" + c, c + " ");
+
+			// Complete suggestion containing quoted character
+			assertCommandSuggests(player, "test \"" + c, "\"" + c + "\":");
+			assertCommandSuggests(player, "test key:\"" + c, "\"" + c + "\" ");
+		}
+	}
+
+	@Test
+	void suggestionTestWithLongTerminators() {
+		new CommandAPICommand("test")
+			.withArguments(
+				// Taking advantage of String terminators
+				new MapArgumentBuilder<String, String>("map", "-->", ",  ")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+
+		////////////////
+		// FIRST PAIR //
+		////////////////
+
+
+		// /test
+		// No key list given, so we expect no suggestions
+		assertNoSuggestions(player, "test ");
+
+		// /test "
+		// Start of quoted key, suggest ending those quotes
+		assertCommandSuggests(player, "test \"", "\"\"-->");
+
+
+		// /test abc
+		// Start of unquoted key, suggest closing
+		assertCommandSuggests(player, "test abc", "abc-->");
+		// /test "abc
+		// Start of quoted key, suggest closing
+		assertCommandSuggests(player, "test \"abc", "\"abc\"-->");
+
+
+		// /test "abc"
+		// Quoted key closed, suggest delimiter
+		assertCommandSuggests(player, "test \"abc\"", "-->");
+
+		// Mistyped delimiter? suggest the right one
+		// /test "abc"=
+		assertCommandSuggests(player, "test \"abc\"=", "-->");
+		// /test "abc"==
+		assertCommandSuggests(player, "test \"abc\"==", "-->");
+
+		// /test "abc"===
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test \"abc\"===");
+
+
+		// /test abc-->
+		// No value list given, so we expect no suggestions
+		assertNoSuggestions(player, "test abc-->");
+
+		// /test abc-->"
+		// Start of quoted value, suggest ending those quotes
+		assertCommandSuggests(player, "test abc-->\"", "\"\",  ");
+
+
+		// /test abc-->abc
+		// Start of unquoted value, suggest closing
+		assertCommandSuggests(player, "test abc-->abc", "abc,  ");
+		// /test abc-->"abc
+		// Start of quoted value, suggest closing
+		assertCommandSuggests(player, "test abc-->\"abc", "\"abc\",  ");
+
+
+		// /test abc-->"abc"
+		// Quoted value closed, suggest separator
+		assertCommandSuggests(player, "test abc-->\"abc\"", ",  ");
+
+		// Mistyped separator? suggest the right one
+		// /test abc-->"abc"=
+		assertCommandSuggests(player, "test abc-->\"abc\"=", ",  ");
+		// /test abc-->"abc"==
+		assertCommandSuggests(player, "test abc-->\"abc\"==", ",  ");
+
+		// /test abc-->"abc"===
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test abc-->\"abc\"===");
+
+
+		/////////////////
+		// SECOND PAIR //
+		/////////////////
+
+
+		// /test k1-->v1,
+		// No key list given, so we expect no suggestions
+		assertNoSuggestions(player, "test k1-->v1,  ");
+
+		// /test k1-->v1,  "
+		// Start of quoted key, suggest ending those quotes
+		assertCommandSuggests(player, "test k1-->v1,  \"", "\"\"-->");
+
+
+		// /test k1-->v1,  abc
+		// Start of unquoted key, suggest closing
+		assertCommandSuggests(player, "test k1-->v1,  abc", "abc-->");
+		// /test k1-->v1,  "abc
+		// Start of quoted key, suggest closing
+		assertCommandSuggests(player, "test k1-->v1,  \"abc", "\"abc\"-->");
+
+
+		// /test k1-->v1,  "abc"
+		// Quoted key closed, suggest delimiter
+		assertCommandSuggests(player, "test k1-->v1,  \"abc\"", "-->");
+
+		// Mistyped delimiter? suggest the right one
+		// /test k1-->v1,  "abc"=
+		assertCommandSuggests(player, "test k1-->v1,  \"abc\"=", "-->");
+		// /test k1-->v1,  "abc"==
+		assertCommandSuggests(player, "test k1-->v1,  \"abc\"==", "-->");
+
+		// /test k1-->v1,  "abc"===
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test k1-->v1,  \"abc\"===");
+
+
+		// /test k1-->v1,  abc-->
+		// No value list given, so we expect no suggestions
+		assertNoSuggestions(player, "test k1-->v1,  abc-->");
+
+		// /test k1-->v1,  abc-->"
+		// Start of quoted value, suggest ending those quotes
+		assertCommandSuggests(player, "test k1-->v1,  abc-->\"", "\"\",  ");
+
+
+		// /test k1-->v1,  abc-->abc
+		// Start of unquoted value, suggest closing
+		assertCommandSuggests(player, "test k1-->v1,  abc-->abc", "abc,  ");
+		// /test k1-->v1,  abc-->"abc
+		// Start of quoted value, suggest closing
+		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc", "\"abc\",  ");
+
+
+		// /test k1-->v1,  abc-->"abc"
+		// Quoted value closed, suggest separator
+		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc\"", ",  ");
+
+		// Mistyped separator? suggest the right one
+		// /test k1-->v1,  abc-->"abc"=
+		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc\"=", ",  ");
+		// /test k1-->v1,  abc-->"abc"==
+		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc\"==", ",  ");
+
+		// /test k1-->v1,  abc-->"abc"===
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test k1-->v1,  abc-->\"abc\"===");
+
+
+		//////////////////
+		// END OF PAIRS //
+		//////////////////
+
+
+		// /test key1-->value1,  key1-->value2
+		// Error for having duplicate unquoted key1, no suggestions
+		assertNoSuggestions(player, "test key1-->value1,  key1-->value2");
+		// /test key1-->value1,  "key1"-->value2
+		// Error for having duplicate quoted key1, no suggestions
+		assertNoSuggestions(player, "test key1-->value1,  \"key1\"-->value2");
+
+		// /test key1-->value1,  key2-->value1 a
+		// Error for having duplicate unquoted value1, no suggestions
+		assertNoSuggestions(player, "test key1-->value1,  key2-->value1,  a");
+		// /test key1-->value1,  key2-->"value1"
+		// Error for having duplicate quoted value1, no suggestions
+		assertNoSuggestions(player, "test key1-->value1,  key2-->\"value1\",  a");
+	}
+
+	@Test
+	void suggestionTestWithCustomMappers() {
+		StringParser<Integer> customMapper = (s) -> {
+			int i = Integer.parseInt(s);
+			if(i < 0 || i > 255) throw CommandAPI.failWithString("Must be between 0 and 255");
+			return i;
+		};
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new MapArgumentBuilder<Integer, Integer>("map")
+					// Using a custom Integer key and value mapper
+					.withKeyMapper(customMapper)
+					.withValueMapper(customMapper)
+					.withoutKeyList()
+					.withoutValueList()
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Generating suggestions works the same as strings, but we should check suggestions stop when key/value is invalid
+
+		// /test 0:10 "
+		// Valid unquoted results, suggestions continue
+		assertCommandSuggests(player, "test 0:10 \"", "\"\":");
+		assertCommandSuggests(player, "test 0:10 20:100 \"", "\"\":");
+		// /test "0":"10" "
+		// Valid quoted results, suggestions continue
+		assertCommandSuggests(player, "test \"0\":\"10\" \"", "\"\":");
+		assertCommandSuggests(player, "test \"0\":\"10\" \"20\":\"100\" \"", "\"\":");
+
+
+		// /test key:100
+		// Error from unquoted key string not converting to int, no suggestions
+		assertNoSuggestions(player, "test key:100");
+		// /test "key":100
+		// Error from quoted key string not converting to int, no suggestions
+		assertNoSuggestions(player, "test \"key\":100");
+
+		// /test 100:value
+		// Error from unquoted value string not converting to int, no suggestions
+		assertNoSuggestions(player, "test 100:value 1");
+		// /test 100:"value"
+		// Error from quoted value not converting to int
+		assertNoSuggestions(player, "test 100:\"value\" 1");
+
+
+		// /test 1000:0
+		// Error from unquoted key being too large, no suggestions
+		assertNoSuggestions(player, "test 1000:0");
+		// /test -10:0
+		// Error from unquoted key being too small, no suggestions
+		assertNoSuggestions(player, "test -10:0");
+		// /test "1000":0
+		// Error from quoted key being too large, no suggestions
+		assertNoSuggestions(player, "test \"1000\":0");
+		// /test "-10":0
+		// Error from quoted key being too small, no suggestions
+		assertNoSuggestions(player, "test \"-10\":0");
+
+		// /test 0:1000
+		// Error from unquoted value being too large, no suggestions
+		assertNoSuggestions(player, "test 0:1000 1");
+		// /test 0:-10
+		// Error from unquoted value being too small, no suggestions
+		assertNoSuggestions(player, "test 0:-10 1");
+		// /test 0:"1000"
+		// Error from quoted value being too large, no suggestions
+		assertNoSuggestions(player, "test 0:\"1000\" 1");
+		// /test 0:"-10"
+		// Error from quoted value being too small, no suggestions
+		assertNoSuggestions(player, "test 0:\"-10\" 1");
+	}
+
+	@Test
+	void suggestionTestWithLists() {
+		new CommandAPICommand("test")
+			.withArguments(
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					// Give key and value list
+					.withKeyList(List.of("alpha", "alphabet", "bear", "bearing", "charlie"))
+					.withValueList(List.of("alpha", "alphabet", "bear", "bearing", "candy"))
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+
+		////////////////
+		// FIRST PAIR //
+		////////////////
+
+
+		// /test
+		// Start of suggestions, give the list
+		assertCommandSuggests(player, "test ", "alpha", "alphabet", "bear", "bearing", "charlie");
+
+		// /test "
+		// Start of quoted key, give the list in quotes
+		assertCommandSuggests(player, "test \"", "\"alpha\"", "\"alphabet\"", "\"bear\"", "\"bearing\"", "\"charlie\"");
+
+
+		// Start of unquoted key, match based on the input
+		// /test a
+		assertCommandSuggests(player, "test a", "alpha", "alphabet");
+		// /test b
+		assertCommandSuggests(player, "test b", "bear", "bearing");
+		// /test c
+		assertCommandSuggests(player, "test c", "charlie");
+
+		// Start of quoted key, match based on the input
+		// /test "a
+		assertCommandSuggests(player, "test \"a", "\"alpha\"", "\"alphabet\"");
+		// /test "b
+		assertCommandSuggests(player, "test \"b", "\"bear\"", "\"bearing\"");
+		// /test "c
+		assertCommandSuggests(player, "test \"c", "\"charlie\"");
+
+
+		// Match for unquoted key, suggest ending or continue possibilities
+		// /test alpha
+		assertCommandSuggests(player, "test alpha", "alpha:", "alphabet");
+		// /test bear
+		assertCommandSuggests(player, "test bear", "bear:", "bearing");
+		// /test charlie
+		assertCommandSuggests(player, "test charlie", "charlie:");
+		// Match for quoted key, suggest ending or continue possibilities
+		// /test "alpha
+		assertCommandSuggests(player, "test \"alpha", "\"alpha\":", "\"alphabet\"");
+		// /test "bear
+		assertCommandSuggests(player, "test \"bear", "\"bear\":", "\"bearing\"");
+		// /test "charlie
+		assertCommandSuggests(player, "test \"charlie", "\"charlie\":");
+
+		// /test "alpha"
+		// Quoted key closed, suggest delimiter
+		assertCommandSuggests(player, "test \"alpha\"", ":");
+
+		// /test "alpha"=a
+		// Incorrect delimiter, error means no suggestions
+		assertNoSuggestions(player, "test \"alpha\"=");
+
+
+		// /test alpha:
+		// Start of suggestions, give the list
+		assertCommandSuggests(player, "test alpha:", "alpha", "alphabet", "bear", "bearing", "candy");
+
+		// /test alpha:"
+		// Start of quoted key, give the list in quotes
+		assertCommandSuggests(player, "test alpha:\"", "\"alpha\"", "\"alphabet\"", "\"bear\"", "\"bearing\"", "\"candy\"");
+
+
+		// Start of unquoted value, match based on the input
+		// /test alpha:a
+		assertCommandSuggests(player, "test alpha:a", "alpha", "alphabet");
+		// /test alpha:b
+		assertCommandSuggests(player, "test alpha:b", "bear", "bearing");
+		// /test alpha:c
+		assertCommandSuggests(player, "test alpha:c", "candy");
+
+		// Start of quoted value, match based on the input
+		// /test alpha:"a
+		assertCommandSuggests(player, "test alpha:\"a", "\"alpha\"", "\"alphabet\"");
+		// /test alpha:"b
+		assertCommandSuggests(player, "test alpha:\"b", "\"bear\"", "\"bearing\"");
+		// /test alpha:"c
+		assertCommandSuggests(player, "test alpha:\"c", "\"candy\"");
+
+
+		// Match for unquoted value, suggest ending or continue possibilities
+		// /test alpha:alpha
+		assertCommandSuggests(player, "test alpha:alpha", "alpha ", "alphabet");
+		// /test alpha:bear
+		assertCommandSuggests(player, "test alpha:bear", "bear ", "bearing");
+		// /test alpha:candy
+		assertCommandSuggests(player, "test alpha:candy", "candy ");
+		// Match for quoted value, suggest ending or continue possibilities
+		// /test alpha:"alpha
+		assertCommandSuggests(player, "test alpha:\"alpha", "\"alpha\" ", "\"alphabet\"");
+		// /test alpha:"bear
+		assertCommandSuggests(player, "test alpha:\"bear", "\"bear\" ", "\"bearing\"");
+		// /test alpha:"candy
+		assertCommandSuggests(player, "test alpha:\"candy", "\"candy\" ");
+
+		// /test alpha:"alpha"
+		// Quoted value closed, suggest separator
+		assertCommandSuggests(player, "test alpha:\"alpha\"", " ");
+
+		// /test alpha:"alpha"=a
+		// Incorrect separator, error means no suggestions
+		assertNoSuggestions(player, "test alpha:\"alpha\"=");
+
+
+		/////////////////
+		// SECOND PAIR //
+		/////////////////
+
+
+		// Make sure duplicate key/values are not suggested
+		// /test alpha:alpha
+		assertCommandSuggests(player, "test alpha:alpha ", "alphabet", "bear", "bearing", "charlie");
+		// /test alpha:alpha "
+		assertCommandSuggests(player, "test alpha:alpha \"", "\"alphabet\"", "\"bear\"", "\"bearing\"", "\"charlie\"");
+		// /test alpha:alpha alpha:
+		assertCommandSuggests(player, "test alpha:alpha bear:", "alphabet", "bear", "bearing", "candy");
+		// /test alpha:alpha alpha:"
+		assertCommandSuggests(player, "test alpha:alpha bear:\"", "\"alphabet\"", "\"bear\"", "\"bearing\"", "\"candy\"");
+
+		// /test alphabet:alphabet
+		assertCommandSuggests(player, "test alphabet:alphabet ", "alpha", "bear", "bearing", "charlie");
+		// /test alphabet:alphabet "
+		assertCommandSuggests(player, "test alphabet:alphabet \"", "\"alpha\"", "\"bear\"", "\"bearing\"", "\"charlie\"");
+		// /test alphabet:alphabet alpha:
+		assertCommandSuggests(player, "test alphabet:alphabet alpha:", "alpha", "bear", "bearing", "candy");
+		// /test alphabet:alphabet alpha:"
+		assertCommandSuggests(player, "test alphabet:alphabet alpha:\"", "\"alpha\"", "\"bear\"", "\"bearing\"", "\"candy\"");
+
+
+		////////////////
+		// THIRD PAIR //
+		////////////////
+
+
+		// Make sure duplicate key/values are not suggested
+		// /test alpha:alpha alphabet:alphabet
+		assertCommandSuggests(player, "test alpha:alpha alphabet:alphabet ", "bear", "bearing", "charlie");
+		// /test alpha:alpha alphabet:alphabet "
+		assertCommandSuggests(player, "test alpha:alpha alphabet:alphabet \"", "\"bear\"", "\"bearing\"", "\"charlie\"");
+		// /test alpha:alpha alphabet:alphabet bear:
+		assertCommandSuggests(player, "test alpha:alpha alphabet:alphabet bear:", "bear", "bearing", "candy");
+		// /test alpha:alpha alphabet:alphabet bear:"
+		assertCommandSuggests(player, "test alpha:alpha alphabet:alphabet bear:\"", "\"bear\"", "\"bearing\"", "\"candy\"");
+
+
+		//////////////////
+		// END OF PAIRS //
+		//////////////////
+
+
+		// /test alpha:alpha alpha:alphabet
+		// Error for having duplicate unquoted key alpha, no suggestions
+		assertNoSuggestions(player, "test alpha:alpha alpha:alphabet");
+		// /test alpha:alpha "alpha":alphabet
+		// Error for having duplicate quoted alpha, no suggestions
+		assertNoSuggestions(player, "test alpha:alpha \"alpha\":alphabet");
+
+		// /test alpha:alpha alphabet:alpha b
+		// Error for having duplicate unquoted value alpha, no suggestions
+		assertNoSuggestions(player, "test alpha:alpha alphabet:alpha b");
+		// /test alpha:alpha alphabet:"alpha" b
+		// Error for having duplicate quoted value alpha, no suggestions
+		assertNoSuggestions(player, "test alpha:alpha alphabet:\"alpha\" b");
+
+
+		// /test key:
+		// Error for having invalid unquoted key, no suggestions
+		assertNoSuggestions(player, "test key:");
+		// /test "key":
+		// Error for having duplicate quoted key, no suggestions
+		assertNoSuggestions(player, "test \"key\":");
+
+		// /test alpha:value b
+		// Error for having invalid unquoted value, no suggestions
+		assertNoSuggestions(player, "test alpha:value b");
+		// /test alpha:"value" b
+		// Error for having invalid quoted value, no suggestions
+		assertNoSuggestions(player, "test alpha:\"value\" b");
+	}
+
+	@Test
+	void suggestionTestWithDuplicateValues() {
+		new CommandAPICommand("test")
+			.withArguments(
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					// Allowing duplicate values
+					.withoutValueList(true)
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Allowing duplicate values doesn't do much else beyond that, so there is not much extra to test
+
+		// /test key1:value key2:value
+		// Keep suggesting after duplicate value
+		assertCommandSuggests(player, "test key1:value key2:value a", "a:");
+	}
+
+	@Test
+	void suggestionTestWithDuplicateValuesAndList() {
+		new CommandAPICommand("test")
+			.withArguments(
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					.withoutKeyList()
+					// Giving list and allowing duplicate values
+					.withValueList(List.of("value1", "value2", "value3"), true)
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Allowing duplicate values doesn't do much else beyond that, so there is not much extra to test
+
+		// /test key1:value1 key2:value1
+		// Keep suggesting after duplicate value
+		assertCommandSuggests(player, "test k1:value1 k2:value2 k3:value3 k4:", "value1", "value2", "value3");
+	}
+
+	@Test
+	void suggestionTestWithSpecialCharactersAndList() {
+		// Escape sequences need to be suggested in their unescaped form
+		new CommandAPICommand("test")
+			.withArguments(
+				new MapArgumentBuilder<String, String>("map")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					// Give lists containing results with special values
+					.withKeyList(List.of("a:b", "a b", "a\\b", "a\"b", "\"ab"))
+					.withValueList(List.of("a:b", "a b", "a\\b", "a\"b", "\"ab"))
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// We prefer results containing their own terminator to be quoted
+		// /test
+		assertCommandSuggests(player, "test ", "\"a:b\"", "\\\"ab", "a b", "a\"b", "a\\\\b");
+		// /test a b:
+		assertCommandSuggests(player, "test a b:", "\"a b\"", "\\\"ab", "a\"b", "a:b", "a\\\\b");
+
+		// Give correct suggestions when unquoted
+		// /test a
+		assertCommandSuggests(player, "test a", "a b", "a\"b", "a\\:b", "a\\\\b");
+		// /test a b:a
+		assertCommandSuggests(player, "test a b:a", "a\"b", "a:b", "a\\ b", "a\\\\b");
+
+		// Give correct suggestions when quoted
+		// /test "a
+		assertCommandSuggests(player, "test \"a", "\"a b\"", "\"a:b\"", "\"a\\\"b\"", "\"a\\\\b\"");
+		// /test a b:"a
+		assertCommandSuggests(player, "test a b:\"a", "\"a b\"", "\"a:b\"", "\"a\\\"b\"", "\"a\\\\b\"");
+	}
+
+	@Test
+	void suggestionTestWithLongTerminatorsAndLists() {
+		// There are a few edge cases to clean up here
+		new CommandAPICommand("test")
+			.withArguments(
+				// Take advantage of String terminators
+				new MapArgumentBuilder<String, String>("map", "-->", ",  ")
+					.withKeyMapper(s -> s)
+					.withValueMapper(s -> s)
+					// Give key and value list
+					.withKeyList(List.of("alpha", "alphabet", "bear", "bearing", "charlie", "a-b-c"))
+					.withValueList(List.of("alpha", "alphabet", "bear", "bearing", "candy", "a, b, c"))
+					.build()
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		PlayerMock player = server.addPlayer();
+		
+		// /test alphab
+		// Either mistyped terminator or is continuing a key
+		assertCommandSuggests(player, "test alphab", "alpha-->", "alphabet");
+		// /test alpha-->alphab
+		// Either mistyped separator or is continuing a value
+		assertCommandSuggests(player, "test alpha-->alphab", "alpha,  ", "alphabet");
+
+
+		// /test a
+		// `a-b-c` initially looks to start the delimiter, but doesn't and so shouldn't be escaped
+		assertCommandSuggests(player, "test a", "a-b-c", "alpha", "alphabet");
+		// /test alpha-->a
+		// `a, b, c` initially looks to start the separator, but doesn't and so shouldn't be escaped
+		assertCommandSuggests(player, "test alpha-->a", "a, b, c", "alpha", "alphabet");
+	}
 }

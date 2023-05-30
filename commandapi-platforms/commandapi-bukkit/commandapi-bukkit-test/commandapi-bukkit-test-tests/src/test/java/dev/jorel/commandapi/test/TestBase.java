@@ -173,15 +173,35 @@ public abstract class TestBase {
 			&& suggestion1.getTooltip().getString().equals(suggestion2.getTooltip().getString());
 	}
 	
-	public void assertSuggestionListEquals(List<Suggestion> list1, List<Suggestion> list2) {
-		if (list1.size() != list2.size()) {
-			throw new AssertionFailedError("List " + list1 + " and " + list2 + " have differing lengths");
+	public void assertSuggestionListEquals(List<Suggestion> expected, List<Suggestion> actual) {
+		if (expected.size() != actual.size()) {
+			throw new AssertionFailedError("List " + expected + " and " + actual + " have differing lengths");
 		}
-		for (int i = 0; i < list1.size(); i++) {
-			if(!suggestionEquals(list1.get(i), list2.get(i))) {
-				throw new AssertionFailedError("Expected: <" + list1 + "> but was: <" + list2 + ">");
+		for (int i = 0; i < expected.size(); i++) {
+			if(!suggestionEquals(expected.get(i), actual.get(i))) {
+				throw new AssertionFailedError("Expected: <" + expected + "> but was: <" + actual + ">");
 			}
 		}
 	}
 
+	public void assertNoSuggestions(CommandSender sender, String command) {
+		List<Suggestion> suggestions = server.getSuggestionsWithTooltips(sender, command);
+		if(suggestions.size() != 0) throw new AssertionFailedError("Expected no suggestions, but found <" + suggestions + ">");
+	}
+
+	public void assertCommandSuggests(CommandSender sender, String command, String... expected) {
+		assertCommandSuggests(sender, command, List.of(expected));
+	}
+
+	public void assertCommandSuggests(CommandSender sender, String command, List<String> expected) {
+		assertEquals(expected, server.getSuggestions(sender, command));
+	}
+
+	public void assertCommandSuggestsTooltips(CommandSender sender, String command, Suggestion... expected) {
+		assertCommandSuggestsTooltips(sender, command, List.of(expected));
+	}
+
+	public void assertCommandSuggestsTooltips(CommandSender sender, String command, List<Suggestion> expected) {
+		assertSuggestionListEquals(expected, server.getSuggestionsWithTooltips(sender, command));
+	}
 }
