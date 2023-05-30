@@ -53,7 +53,6 @@ public class ArgumentMapTests extends TestBase {
 	//  Without key list | with key list | keys containing delimiter
 	//  Without value list | with value list | values containing delimiter
 	//  No duplicates | allow duplicate values
-
 	@Test
 	void exceptionTestWithMapArgument() {
 		// A MapArgument is a GreedyArgument. It is only allowed at the end of the arguments list.
@@ -290,7 +289,7 @@ public class ArgumentMapTests extends TestBase {
 		PlayerMock player = server.addPlayer();
 
 		for (char c = 32; c < 127; c++) {
-			if(c == '\"' || c == '\\' || c == ':'|| c == ' ') continue; // Skip special characters
+			if (c == '\"' || c == '\\' || c == ':' || c == ' ') continue; // Skip special characters
 
 			// Use c as the key and value, unquoted
 			assertStoresResult(player, "test " + c + ":" + c, results, Map.of(String.valueOf(c), String.valueOf(c)));
@@ -323,13 +322,13 @@ public class ArgumentMapTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		
+
 		// A username is 3 - 16 characters long, has no spaces and only consist
 		// of a-z, A-Z, 0-9 and underscore (_)
-		
+
 		String possibleChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 		StringBuilder playerNameBuilder = new StringBuilder();
-		for(int i = 0; i < ThreadLocalRandom.current().nextInt(3, 17); i++) {
+		for (int i = 0; i < ThreadLocalRandom.current().nextInt(3, 17); i++) {
 			playerNameBuilder.append(possibleChars.charAt(ThreadLocalRandom.current().nextInt(0, possibleChars.length())));
 		}
 		final String playerName = playerNameBuilder.toString();
@@ -438,7 +437,7 @@ public class ArgumentMapTests extends TestBase {
 
 		StringParser<Integer> customMapper = (s) -> {
 			int i = Integer.parseInt(s);
-			if(i < 0 || i > 255) throw CommandAPI.failWithString("Must be between 0 and 255");
+			if (i < 0 || i > 255) throw CommandAPI.failWithString("Must be between 0 and 255");
 			return i;
 		};
 
@@ -1197,7 +1196,7 @@ public class ArgumentMapTests extends TestBase {
 		PlayerMock player = server.addPlayer();
 
 		for (char c = 32; c < 127; c++) {
-			if(c == '\"' || c == '\\' || c == ':'|| c == ' ') continue; // Skip special characters
+			if (c == '\"' || c == '\\' || c == ':' || c == ' ') continue; // Skip special characters
 
 			// Complete suggestion containing unquoted character
 			assertCommandSuggests(player, "test " + c, c + ":");
@@ -1389,7 +1388,7 @@ public class ArgumentMapTests extends TestBase {
 	void suggestionTestWithCustomMappers() {
 		StringParser<Integer> customMapper = (s) -> {
 			int i = Integer.parseInt(s);
-			if(i < 0 || i > 255) throw CommandAPI.failWithString("Must be between 0 and 255");
+			if (i < 0 || i > 255) throw CommandAPI.failWithString("Must be between 0 and 255");
 			return i;
 		};
 
@@ -1764,7 +1763,7 @@ public class ArgumentMapTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
-		
+
 		// /test alphab
 		// Either mistyped terminator or is continuing a key
 		assertCommandSuggests(player, "test alphab", "alpha-->", "alphabet");

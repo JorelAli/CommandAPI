@@ -182,7 +182,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		String suggestion = ending;
 
 		int length = suggestion.length();
-		if(length != 0 && suggestion.charAt(length - 1) == '\\') {
+		if (length != 0 && suggestion.charAt(length - 1) == '\\') {
 			boolean escaped = false;
 			int i = length - 2;
 			while (i >= 0) {
@@ -191,11 +191,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				escaped = !escaped;
 			}
 			// If there is an unescaped \ at the end, suggest another backslash to eat up its effect
-			if(!escaped) suggestion += '\\';
+			if (!escaped) suggestion += '\\';
 		}
 
 		// Add quotes around suggestion
-		if(isQuoted) suggestion = "\"" + suggestion + "\"";
+		if (isQuoted) suggestion = "\"" + suggestion + "\"";
 
 		// Add terminator
 		suggestion = suggestion + (isKey ? delimiter : separator);
@@ -218,7 +218,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		StringReader reader = new StringReader(cmdCtx.getArgument(key, String.class));
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
-		if(reader.getRemainingLength() == 0) return results;
+		if (reader.getRemainingLength() == 0) return results;
 
 		K builtKey = null;
 
@@ -470,7 +470,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					// " is only escaped when in a quote
 					escapeQuoted = true;
 					// or at the start of an unquoted string
-					if(reader.getCursor() == 0) escapeUnquoted = true;
+					if (reader.getCursor() == 0) escapeUnquoted = true;
 				} else if (c == firstTerminatorChar && doseTerminatorContinue(reader, terminator)) {
 					// If the char says the terminator is starting, make sure it continues
 					// Yes, this was the terminator. We need to escape it when unquoted
@@ -494,7 +494,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	}
 
 	private static boolean doseTerminatorContinue(StringReader reader, String terminator) {
-		if(!reader.canRead(terminator.length())) return false;
+		if (!reader.canRead(terminator.length())) return false;
 		for (int i = 1; i < terminator.length(); i++) {
 			if (reader.peek(i) != terminator.charAt(i)) {
 				// Characters did not match, not the terminator
