@@ -37,7 +37,7 @@ public MapArgumentBuilder<K, V>(String nodeName, String delimiter, String separa
 
 - `nodeName`: This parameter determines the node name of the `MapArgument`
 - `delimiter`: This parameter determines the delimiter. This separates a key from a value (`key:value`). When not provided, it defaults to a colon (`:`)
-- `separator`: This parameter determines the separator. This separates one key-value pair from another (`key:value key:value`). When not provided, it defaults to a space <!-- markdownlint-disable-line MD038 -->(` `) 
+- `separator`: This parameter determines the separator. This separates one key-value pair from another (`key:value key:value`). When not provided, it defaults to a space <!-- markdownlint-disable-line MD038 -->(` `)
 
 $$\downarrow$$
 
