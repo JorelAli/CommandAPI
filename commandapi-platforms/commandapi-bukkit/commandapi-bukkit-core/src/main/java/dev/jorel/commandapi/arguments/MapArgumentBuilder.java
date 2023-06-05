@@ -21,7 +21,7 @@ public class MapArgumentBuilder<K, V> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public MapArgumentBuilder(String nodeName) {
-		this(nodeName, ":");
+		this(nodeName, ':');
 	}
 
 	/**
@@ -29,20 +29,8 @@ public class MapArgumentBuilder<K, V> {
 	 *
 	 * @param nodeName  the name of the node for this argument
 	 * @param delimiter the separator for each key/value pair
-	 * @deprecated use {@link MapArgumentBuilder#MapArgumentBuilder(String, String)} instead
 	 */
-	@Deprecated(since = "9.0.2")
 	public MapArgumentBuilder(String nodeName, char delimiter) {
-		this(nodeName, String.valueOf(delimiter));
-	}
-
-	/**
-	 * Creates a new MapArgumentBuilder with a specified node name
-	 *
-	 * @param nodeName  the name of the node for this argument
-	 * @param delimiter the separator for each key/value pair
-	 */
-	public MapArgumentBuilder(String nodeName, String delimiter) {
 		this(nodeName, delimiter, " ");
 	}
 
@@ -53,11 +41,10 @@ public class MapArgumentBuilder<K, V> {
 	 * @param delimiter the separator for each key/value pair
 	 * @param separator the separator between a key and a value
 	 */
-	public MapArgumentBuilder(String nodeName, String delimiter, String separator) {
-		if(delimiter.length() == 0) throw new IllegalArgumentException("The delimiter cannot be an empty String!");
+	public MapArgumentBuilder(String nodeName, char delimiter, String separator) {
 		if(separator.length() == 0) throw new IllegalArgumentException("The separator cannot be an empty String!");
 		this.nodeName = nodeName;
-		this.delimiter = delimiter;
+		this.delimiter = String.valueOf(delimiter);
 		this.separator = separator;
 	}
 
