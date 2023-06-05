@@ -35,6 +35,28 @@ public LiteralArgument(String literal) // Recommended if the literal is not list
 public LiteralArgument(String nodeName, String literal)
 ```
 
+### MapArgument update
+
+This update added the ability to use `String` as the delimiter of a `MapArgument`, instead of just a `char`. The constructor for the `char` delimiter has been deprecated, and the `String` constructor should be used instead.
+
+<div class="multi-pre">
+
+```java,9.0.1
+new MapArgumentBuilder("map", '=')
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.1
+new MapArgumentBuilder("map", "=")
+```
+
+</div>
+
 ## From 9.0.0 to 9.0.1
 
 ### CustomArgumentException changes
