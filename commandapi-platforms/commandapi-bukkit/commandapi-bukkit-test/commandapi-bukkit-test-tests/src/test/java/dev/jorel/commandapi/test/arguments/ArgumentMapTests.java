@@ -74,10 +74,9 @@ public class ArgumentMapTests extends TestBase {
 		command.withArguments(new StringArgument("string"));
 		assertThrows(GreedyArgumentException.class, command::register);
 
-		// Separator and delimiter cannot be empty strings
-		assertThrows(IllegalArgumentException.class, () -> new MapArgumentBuilder<>("map", ""));
-		assertThrows(IllegalArgumentException.class, () -> new MapArgumentBuilder<>("map", ":", ""));
-		assertDoesNotThrow(() -> new MapArgumentBuilder<>("map", ":", " "));
+		// Separator cannot be an empty string
+		assertThrows(IllegalArgumentException.class, () -> new MapArgumentBuilder<>("map", ':', ""));
+		assertDoesNotThrow(() -> new MapArgumentBuilder<>("map", ':', " "));
 	}
 
 	@Test
@@ -354,7 +353,7 @@ public class ArgumentMapTests extends TestBase {
 		new CommandAPICommand("test")
 			.withArguments(
 				// Taking advantage of String terminators
-				new MapArgumentBuilder<String, String>("map", "-->", ",  ")
+				new MapArgumentBuilder<String, String>("map", ':', ",  ")
 					.withKeyMapper(s -> s)
 					.withValueMapper(s -> s)
 					.withoutKeyList()
@@ -372,65 +371,65 @@ public class ArgumentMapTests extends TestBase {
 		Map<String, String> expectedMap = new LinkedHashMap<>();
 
 		expectedMap.put("key1", "value1");
-		// /test key1-->value1
+		// /test key1:value1
 		// Input map with 1 unquoted key-value pair
-		assertStoresResult(player, "test key1-->value1", results, expectedMap);
-		// /test "key1"-->"value1"
+		assertStoresResult(player, "test key1:value1", results, expectedMap);
+		// /test "key1":"value1"
 		// Input map with 1 quoted key-value pair
-		assertStoresResult(player, "test \"key1\"-->\"value1\"", results, expectedMap);
+		assertStoresResult(player, "test \"key1\":\"value1\"", results, expectedMap);
 
 		expectedMap.put("key2", "value2");
-		// /test key1-->value1,  key2-->value2
+		// /test key1:value1,  key2:value2
 		// Input map with 2 unquoted key-value pairs
-		assertStoresResult(player, "test key1-->value1,  key2-->value2", results, expectedMap);
-		// /test "key1"-->"value1",  "key2"-->"value2"
+		assertStoresResult(player, "test key1:value1,  key2:value2", results, expectedMap);
+		// /test "key1":"value1",  "key2":"value2"
 		// Input map with 2 quoted key-value pairs
-		assertStoresResult(player, "test \"key1\"-->\"value1\",  \"key2\"-->\"value2\"", results, expectedMap);
+		assertStoresResult(player, "test \"key1\":\"value1\",  \"key2\":\"value2\"", results, expectedMap);
 
 		expectedMap.put("key3", "value3");
-		// /test key1-->value1,  key2-->value2,  key3-->value3
+		// /test key1:value1,  key2:value2,  key3:value3
 		// Input map with 3 unquoted key-value pairs
-		assertStoresResult(player, "test key1-->value1,  key2-->value2,  key3-->value3", results, expectedMap);
-		// /test "key1"-->"value1",  "key2"-->"value2",  "key3"-->"value3"
+		assertStoresResult(player, "test key1:value1,  key2:value2,  key3:value3", results, expectedMap);
+		// /test "key1":"value1",  "key2":"value2",  "key3":"value3"
 		// Input map with 3 quoted key-value pairs
-		assertStoresResult(player, "test \"key1\"-->\"value1\",  \"key2\"-->\"value2\",  \"key3\"-->\"value3\"", results, expectedMap);
+		assertStoresResult(player, "test \"key1\":\"value1\",  \"key2\":\"value2\",  \"key3\":\"value3\"", results, expectedMap);
 
 
-		// /test key1-->value1,  key2
+		// /test key1:value1,  key2
 		// Error for missing delimiter after unquoted key
-		assertCommandFailsWith(player, "test key1-->value1,  key2", "Could not parse command: Delimiter \"-->\" required after writing a key at position 16: ...>value1,  <--[HERE]");
-		// /test key1-->value1,  "key2"
+		assertCommandFailsWith(player, "test key1:value1,  key2", "Could not parse command: Delimiter \":\" required after writing a key at position 14: ...:value1,  <--[HERE]");
+		// /test key1:value1,  "key2"
 		// Error for missing delimiter after quoted key
-		assertCommandFailsWith(player, "test key1-->value1,  \"key2\"", "Could not parse command: Delimiter \"-->\" required after writing a key at position 22: ...1,  \"key2\"<--[HERE]");
+		assertCommandFailsWith(player, "test key1:value1,  \"key2\"", "Could not parse command: Delimiter \":\" required after writing a key at position 20: ...1,  \"key2\"<--[HERE]");
 
 
-		// /test key1-->value1,  "key2"=value2
+		// /test key1:value1,  "key2"=value2
 		// Error for incorrect delimiter
-		assertCommandFailsWith(player, "test key1-->value1,  \"key2\"=value2", "Could not parse command: Delimiter \"-->\" required after writing a key at position 22: ...1,  \"key2\"<--[HERE]");
-		// /test key1-->"value1",key2-->value2
+		assertCommandFailsWith(player, "test key1:value1,  \"key2\"=value2", "Could not parse command: Delimiter \":\" required after writing a key at position 20: ...1,  \"key2\"<--[HERE]");
+		// /test key1:"value1",key2:value2
 		// Error for incorrect separator
-		assertCommandFailsWith(player, "test key1-->\"value1\",key2-->value2", "Could not parse command: Separator \",  \" required after writing a value at position 15: ...->\"value1\"<--[HERE]");
+		assertCommandFailsWith(player, "test key1:\"value1\",key2:value2", "Could not parse command: Separator \",  \" required after writing a value at position 13: ...1:\"value1\"<--[HERE]");
 
 
-		// /test a-b-c-->a, b, and c,  key2-->value2
-		// Input key/values that initially look like terminators
-		assertStoresResult(player, "test a-b-c-->a, b, and c,  key2-->value2", results, Map.of("a-b-c", "a, b, and c", "key2", "value2"));
+		// /test a-b-c:a, b, and c,  key2:value2
+		// Input values that initially look like separator
+		assertStoresResult(player, "test a-b-c:a, b, and c,  key2:value2", results, Map.of("a-b-c", "a, b, and c", "key2", "value2"));
 
 
-		// /test key1-->value1,  key2--
+		// /test key1:value1,  key2--
 		// Error for incomplete delimiter after unquoted key
-		assertCommandFailsWith(player, "test key1-->value1,  key2--", "Could not parse command: Delimiter \"-->\" required after writing a key at position 16: ...>value1,  <--[HERE]");
-		// /test key1-->value1,  "key2"--
+		assertCommandFailsWith(player, "test key1:value1,  key2--", "Could not parse command: Delimiter \":\" required after writing a key at position 14: ...:value1,  <--[HERE]");
+		// /test key1:value1,  "key2"--
 		// Error for incomplete delimiter after quoted key
-		assertCommandFailsWith(player, "test key1-->value1,  \"key2\"--", "Could not parse command: Delimiter \"-->\" required after writing a key at position 22: ...1,  \"key2\"<--[HERE]");
+		assertCommandFailsWith(player, "test key1:value1,  \"key2\"--", "Could not parse command: Delimiter \":\" required after writing a key at position 20: ...1,  \"key2\"<--[HERE]");
 
-		// /test key1-->value",
+		// /test key1:value",
 		// Input incomplete delimiter after unquoted value
 		// Since we're not using a value list, "value1," is a valid value
-		assertStoresResult(player, "test key1-->value1,", results, Map.of("key1", "value1,"));
-		// /test key1-->"value1",
+		assertStoresResult(player, "test key1:value1,", results, Map.of("key1", "value1,"));
+		// /test key1:"value1",
 		// Error for incomplete delimiter after quoted value
-		assertCommandFailsWith(player, "test key1-->\"value1\",", "Could not parse command: Separator \",  \" required after writing a value at position 15: ...->\"value1\"<--[HERE]");
+		assertCommandFailsWith(player, "test key1:\"value1\",", "Could not parse command: Separator \",  \" required after writing a value at position 13: ...1:\"value1\"<--[HERE]");
 
 
 		assertNoMoreResults(results);
@@ -1218,7 +1217,7 @@ public class ArgumentMapTests extends TestBase {
 		new CommandAPICommand("test")
 			.withArguments(
 				// Taking advantage of String terminators
-				new MapArgumentBuilder<String, String>("map", "-->", ",  ")
+				new MapArgumentBuilder<String, String>("map", ':', ",  ")
 					.withKeyMapper(s -> s)
 					.withValueMapper(s -> s)
 					.withoutKeyList()
@@ -1242,62 +1241,56 @@ public class ArgumentMapTests extends TestBase {
 
 		// /test "
 		// Start of quoted key, suggest ending those quotes
-		assertCommandSuggests(player, "test \"", "\"\"-->");
+		assertCommandSuggests(player, "test \"", "\"\":");
 
 
 		// /test abc
 		// Start of unquoted key, suggest closing
-		assertCommandSuggests(player, "test abc", "abc-->");
+		assertCommandSuggests(player, "test abc", "abc:");
 		// /test "abc
 		// Start of quoted key, suggest closing
-		assertCommandSuggests(player, "test \"abc", "\"abc\"-->");
+		assertCommandSuggests(player, "test \"abc", "\"abc\":");
 
 
 		// /test "abc"
 		// Quoted key closed, suggest delimiter
-		assertCommandSuggests(player, "test \"abc\"", "-->");
-
-		// Mistyped delimiter? suggest the right one
-		// /test "abc"=
-		assertCommandSuggests(player, "test \"abc\"=", "-->");
-		// /test "abc"==
-		assertCommandSuggests(player, "test \"abc\"==", "-->");
+		assertCommandSuggests(player, "test \"abc\"", ":");
 
 		// /test "abc"===
 		// Incorrect delimiter, error means no suggestions
 		assertNoSuggestions(player, "test \"abc\"===");
 
 
-		// /test abc-->
+		// /test abc:
 		// No value list given, so we expect no suggestions
-		assertNoSuggestions(player, "test abc-->");
+		assertNoSuggestions(player, "test abc:");
 
-		// /test abc-->"
+		// /test abc:"
 		// Start of quoted value, suggest ending those quotes
-		assertCommandSuggests(player, "test abc-->\"", "\"\",  ");
+		assertCommandSuggests(player, "test abc:\"", "\"\",  ");
 
 
-		// /test abc-->abc
+		// /test abc:abc
 		// Start of unquoted value, suggest closing
-		assertCommandSuggests(player, "test abc-->abc", "abc,  ");
-		// /test abc-->"abc
+		assertCommandSuggests(player, "test abc:abc", "abc,  ");
+		// /test abc:"abc
 		// Start of quoted value, suggest closing
-		assertCommandSuggests(player, "test abc-->\"abc", "\"abc\",  ");
+		assertCommandSuggests(player, "test abc:\"abc", "\"abc\",  ");
 
 
-		// /test abc-->"abc"
+		// /test abc:"abc"
 		// Quoted value closed, suggest separator
-		assertCommandSuggests(player, "test abc-->\"abc\"", ",  ");
+		assertCommandSuggests(player, "test abc:\"abc\"", ",  ");
 
 		// Mistyped separator? suggest the right one
-		// /test abc-->"abc"=
-		assertCommandSuggests(player, "test abc-->\"abc\"=", ",  ");
-		// /test abc-->"abc"==
-		assertCommandSuggests(player, "test abc-->\"abc\"==", ",  ");
+		// /test abc:"abc"=
+		assertCommandSuggests(player, "test abc:\"abc\"=", ",  ");
+		// /test abc:"abc"==
+		assertCommandSuggests(player, "test abc:\"abc\"==", ",  ");
 
-		// /test abc-->"abc"===
+		// /test abc:"abc"===
 		// Incorrect delimiter, error means no suggestions
-		assertNoSuggestions(player, "test abc-->\"abc\"===");
+		assertNoSuggestions(player, "test abc:\"abc\"===");
 
 
 		/////////////////
@@ -1305,68 +1298,62 @@ public class ArgumentMapTests extends TestBase {
 		/////////////////
 
 
-		// /test k1-->v1,
+		// /test k1:v1,
 		// No key list given, so we expect no suggestions
-		assertNoSuggestions(player, "test k1-->v1,  ");
+		assertNoSuggestions(player, "test k1:v1,  ");
 
-		// /test k1-->v1,  "
+		// /test k1:v1,  "
 		// Start of quoted key, suggest ending those quotes
-		assertCommandSuggests(player, "test k1-->v1,  \"", "\"\"-->");
+		assertCommandSuggests(player, "test k1:v1,  \"", "\"\":");
 
 
-		// /test k1-->v1,  abc
+		// /test k1:v1,  abc
 		// Start of unquoted key, suggest closing
-		assertCommandSuggests(player, "test k1-->v1,  abc", "abc-->");
-		// /test k1-->v1,  "abc
+		assertCommandSuggests(player, "test k1:v1,  abc", "abc:");
+		// /test k1:v1,  "abc
 		// Start of quoted key, suggest closing
-		assertCommandSuggests(player, "test k1-->v1,  \"abc", "\"abc\"-->");
+		assertCommandSuggests(player, "test k1:v1,  \"abc", "\"abc\":");
 
 
-		// /test k1-->v1,  "abc"
+		// /test k1:v1,  "abc"
 		// Quoted key closed, suggest delimiter
-		assertCommandSuggests(player, "test k1-->v1,  \"abc\"", "-->");
+		assertCommandSuggests(player, "test k1:v1,  \"abc\"", ":");
 
-		// Mistyped delimiter? suggest the right one
-		// /test k1-->v1,  "abc"=
-		assertCommandSuggests(player, "test k1-->v1,  \"abc\"=", "-->");
-		// /test k1-->v1,  "abc"==
-		assertCommandSuggests(player, "test k1-->v1,  \"abc\"==", "-->");
-
-		// /test k1-->v1,  "abc"===
+		// /test k1:v1,  "abc"===
 		// Incorrect delimiter, error means no suggestions
-		assertNoSuggestions(player, "test k1-->v1,  \"abc\"===");
+		assertNoSuggestions(player, "test k1:v1,  \"abc\"===");
 
 
-		// /test k1-->v1,  abc-->
+		// /test k1:v1,  abc:
 		// No value list given, so we expect no suggestions
-		assertNoSuggestions(player, "test k1-->v1,  abc-->");
+		assertNoSuggestions(player, "test k1:v1,  abc:");
 
-		// /test k1-->v1,  abc-->"
+		// /test k1:v1,  abc:"
 		// Start of quoted value, suggest ending those quotes
-		assertCommandSuggests(player, "test k1-->v1,  abc-->\"", "\"\",  ");
+		assertCommandSuggests(player, "test k1:v1,  abc:\"", "\"\",  ");
 
 
-		// /test k1-->v1,  abc-->abc
+		// /test k1:v1,  abc:abc
 		// Start of unquoted value, suggest closing
-		assertCommandSuggests(player, "test k1-->v1,  abc-->abc", "abc,  ");
-		// /test k1-->v1,  abc-->"abc
+		assertCommandSuggests(player, "test k1:v1,  abc:abc", "abc,  ");
+		// /test k1:v1,  abc:"abc
 		// Start of quoted value, suggest closing
-		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc", "\"abc\",  ");
+		assertCommandSuggests(player, "test k1:v1,  abc:\"abc", "\"abc\",  ");
 
 
-		// /test k1-->v1,  abc-->"abc"
+		// /test k1:v1,  abc:"abc"
 		// Quoted value closed, suggest separator
-		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc\"", ",  ");
+		assertCommandSuggests(player, "test k1:v1,  abc:\"abc\"", ",  ");
 
 		// Mistyped separator? suggest the right one
-		// /test k1-->v1,  abc-->"abc"=
-		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc\"=", ",  ");
-		// /test k1-->v1,  abc-->"abc"==
-		assertCommandSuggests(player, "test k1-->v1,  abc-->\"abc\"==", ",  ");
+		// /test k1:v1,  abc:"abc"=
+		assertCommandSuggests(player, "test k1:v1,  abc:\"abc\"=", ",  ");
+		// /test k1:v1,  abc:"abc"==
+		assertCommandSuggests(player, "test k1:v1,  abc:\"abc\"==", ",  ");
 
-		// /test k1-->v1,  abc-->"abc"===
+		// /test k1:v1,  abc:"abc"===
 		// Incorrect delimiter, error means no suggestions
-		assertNoSuggestions(player, "test k1-->v1,  abc-->\"abc\"===");
+		assertNoSuggestions(player, "test k1:v1,  abc:\"abc\"===");
 
 
 		//////////////////
@@ -1374,19 +1361,19 @@ public class ArgumentMapTests extends TestBase {
 		//////////////////
 
 
-		// /test key1-->value1,  key1-->value2
+		// /test key1:value1,  key1:value2
 		// Error for having duplicate unquoted key1, no suggestions
-		assertNoSuggestions(player, "test key1-->value1,  key1-->value2");
-		// /test key1-->value1,  "key1"-->value2
+		assertNoSuggestions(player, "test key1:value1,  key1:value2");
+		// /test key1:value1,  "key1":value2
 		// Error for having duplicate quoted key1, no suggestions
-		assertNoSuggestions(player, "test key1-->value1,  \"key1\"-->value2");
+		assertNoSuggestions(player, "test key1:value1,  \"key1\":value2");
 
-		// /test key1-->value1,  key2-->value1 a
+		// /test key1:value1,  key2:value1 a
 		// Error for having duplicate unquoted value1, no suggestions
-		assertNoSuggestions(player, "test key1-->value1,  key2-->value1,  a");
-		// /test key1-->value1,  key2-->"value1"
+		assertNoSuggestions(player, "test key1:value1,  key2:value1,  a");
+		// /test key1:value1,  key2:"value1"
 		// Error for having duplicate quoted value1, no suggestions
-		assertNoSuggestions(player, "test key1-->value1,  key2-->\"value1\",  a");
+		assertNoSuggestions(player, "test key1:value1,  key2:\"value1\",  a");
 	}
 
 	@Test
@@ -1756,7 +1743,7 @@ public class ArgumentMapTests extends TestBase {
 		new CommandAPICommand("test")
 			.withArguments(
 				// Take advantage of String terminators
-				new MapArgumentBuilder<String, String>("map", "-->", ",  ")
+				new MapArgumentBuilder<String, String>("map", ':', ",  ")
 					.withKeyMapper(s -> s)
 					.withValueMapper(s -> s)
 					// Give key and value list
@@ -1771,17 +1758,17 @@ public class ArgumentMapTests extends TestBase {
 
 		// /test alphab
 		// Either mistyped terminator or is continuing a key
-		assertCommandSuggests(player, "test alphab", "alpha-->", "alphabet");
-		// /test alpha-->alphab
+		assertCommandSuggests(player, "test alphab", "alpha:", "alphabet");
+		// /test alpha:alphab
 		// Either mistyped separator or is continuing a value
-		assertCommandSuggests(player, "test alpha-->alphab", "alpha,  ", "alphabet");
+		assertCommandSuggests(player, "test alpha:alphab", "alpha,  ", "alphabet");
 
 
 		// /test a
 		// `a-b-c` initially looks to start the delimiter, but doesn't and so shouldn't be escaped
 		assertCommandSuggests(player, "test a", "a-b-c", "alpha", "alphabet");
-		// /test alpha-->a
+		// /test alpha:a
 		// `a, b, c` initially looks to start the separator, but doesn't and so shouldn't be escaped
-		assertCommandSuggests(player, "test alpha-->a", "a, b, c", "alpha", "alphabet");
+		assertCommandSuggests(player, "test alpha:a", "a, b, c", "alpha", "alphabet");
 	}
 }
