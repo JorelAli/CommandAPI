@@ -31,8 +31,8 @@ The `MapArgumentBuilder` has three possible constructors:
 
 ```java
 public MapArgumentBuilder<K, V>(String nodeName);
-public MapArgumentBuilder<K, V>(String nodeName, String delimiter);
-public MapArgumentBuilder<K, V>(String nodeName, String delimiter, String separator)
+public MapArgumentBuilder<K, V>(String nodeName, char delimiter);
+public MapArgumentBuilder<K, V>(String nodeName, char delimiter, String separator)
 ```
 
 - `nodeName`: This parameter determines the node name of the `MapArgument`
