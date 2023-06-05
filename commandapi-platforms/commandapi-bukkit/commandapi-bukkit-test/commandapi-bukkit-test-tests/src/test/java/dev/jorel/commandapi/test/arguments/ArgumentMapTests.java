@@ -73,6 +73,11 @@ public class ArgumentMapTests extends TestBase {
 
 		command.withArguments(new StringArgument("string"));
 		assertThrows(GreedyArgumentException.class, command::register);
+
+		// Separator and delimiter cannot be empty strings
+		assertThrows(IllegalArgumentException.class, () -> new MapArgumentBuilder<>("map", ""));
+		assertThrows(IllegalArgumentException.class, () -> new MapArgumentBuilder<>("map", ":", ""));
+		assertDoesNotThrow(() -> new MapArgumentBuilder<>("map", ":", " "));
 	}
 
 	@Test
