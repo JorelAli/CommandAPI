@@ -10,7 +10,7 @@ It returns a `LinkedHashMap` object.
 Similar to the `ListArgument`, this argument also uses a builder class to construct it.
 
 \begin{align}
-&\quad\texttt{Create a MapArgumentBuilder and possibly provide the delimiter or sepatator} \\\\
+&\quad\texttt{Create a MapArgumentBuilder and possibly provide the delimiter or separator} \\\\
 \rightarrow&\quad\texttt{Provide the mapper from a string to an object of the provided key type} \\\\
 \rightarrow&\quad\texttt{Provide the mapper from a string to an object of the provided value type} \\\\
 \rightarrow&\quad\texttt{Provide the list with keys to pull suggestions from} \\\\
