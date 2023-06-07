@@ -1141,7 +1141,7 @@ depend: [CommandAPI]
 <li>
 <p>Add the dependency to your list of dependencies in your <code>build.gradle</code> file:</p>
 <pre><code class="language-gradle">dependencies {
-    compileOnly &quot;dev.jorel:commandapi-core:9.0.1&quot;
+    compileOnly &quot;dev.jorel:commandapi-bukkit-core:9.0.1&quot;
 }
 </code></pre>
 </li>
@@ -1363,11 +1363,11 @@ CommandAPI.onEnable();
 <p>Next, we declare our dependencies:</p>
 <div class="multi-pre">
 <pre><code class="language-groovy build.gradle">dependencies {
-    implementation &quot;dev.jorel:commandapi-shade:9.0.1&quot;
+    implementation &quot;dev.jorel:commandapi-bukkit-shade:9.0.1&quot;
 }
 </code></pre>
 <pre><code class="language-kotlin build.gradle.kts">dependencies {
-    implementation(&quot;dev.jorel:commandapi-shade:9.0.1&quot;)
+    implementation(&quot;dev.jorel:commandapi-bukkit-shade:9.0.1&quot;)
 }
 </code></pre>
 </div>
@@ -1375,7 +1375,7 @@ CommandAPI.onEnable();
 <div class="multi-pre">
 <pre><code class="language-groovy build.gradle">shadowJar {
     dependencies {
-        include dependency(&quot;dev.jorel:commandapi-shade:9.0.1&quot;)
+        include dependency(&quot;dev.jorel:commandapi-bukkit-shade:9.0.1&quot;)
     }
 
     // TODO: Change this to my own package name
@@ -1384,7 +1384,7 @@ CommandAPI.onEnable();
 </code></pre>
 <pre><code class="language-kotlin build.gradle.kts">shadowJar {
     dependencies {
-        include dependency(&quot;dev.jorel:commandapi-shade:9.0.1&quot;)
+        include dependency(&quot;dev.jorel:commandapi-bukkit-shade:9.0.1&quot;)
     }
 
     // TODO: Change this to my own package name
