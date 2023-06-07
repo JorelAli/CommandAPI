@@ -7,6 +7,9 @@ import com.github.zafarkhaja.semver.Version;
  * 1.19) are represented with a patch number of 0 for semantic versioning
  */
 public enum MCVersion {
+	
+	// 1.20
+	V1_20(Version.valueOf("1.20.0")),
 
 	// 1.19
 	V1_19_4(Version.valueOf("1.19.4")),
