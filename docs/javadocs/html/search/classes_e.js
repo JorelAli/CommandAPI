@@ -6,8 +6,14 @@ var searchData=
   ['resultconsumer_3',['ResultConsumer',['../interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html',1,'com::mojang::brigadier']]],
   ['resultingcommandexecutioninfo_4',['ResultingCommandExecutionInfo',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_execution_info.html',1,'dev::jorel::commandapi::executors']]],
   ['resultingcommandexecutor_5',['ResultingCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html',1,'dev::jorel::commandapi::executors']]],
-  ['resultingexecutor_3c_20commandsender_2c_20wrappertype_20extends_20abstractcommandsender_6',['ResultingExecutor&lt; CommandSender, WrapperType extends AbstractCommandSender',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor_3_01_command_sender_00_07c2c973b982f777ff7ea30b22430bc3d.html',1,'dev::jorel::commandapi::executors']]],
-  ['rootcommandnode_7',['RootCommandNode',['../classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html',1,'com::mojang::brigadier::tree']]],
-  ['rotation_8',['Rotation',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html',1,'dev::jorel::commandapi::wrappers']]],
-  ['rotationargument_9',['RotationArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html',1,'dev::jorel::commandapi::arguments']]]
+  ['resultingexecutor_6',['ResultingExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['resultingexecutor_3c_20blockcommandsender_2c_20bukkitblockcommandsender_20_3e_7',['ResultingExecutor&lt; BlockCommandSender, BukkitBlockCommandSender &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['resultingexecutor_3c_20commandsender_2c_20bukkitcommandsender_3c_3f_20extends_20commandsender_20_3e_20_3e_8',['ResultingExecutor&lt; CommandSender, BukkitCommandSender&lt;? extends CommandSender &gt; &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['resultingexecutor_3c_20consolecommandsender_2c_20bukkitconsolecommandsender_20_3e_9',['ResultingExecutor&lt; ConsoleCommandSender, BukkitConsoleCommandSender &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['resultingexecutor_3c_20entity_2c_20bukkitentity_20_3e_10',['ResultingExecutor&lt; Entity, BukkitEntity &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['resultingexecutor_3c_20nativeproxycommandsender_2c_20bukkitnativeproxycommandsender_20_3e_11',['ResultingExecutor&lt; NativeProxyCommandSender, BukkitNativeProxyCommandSender &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['resultingexecutor_3c_20player_2c_20bukkitplayer_20_3e_12',['ResultingExecutor&lt; Player, BukkitPlayer &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
+  ['rootcommandnode_13',['RootCommandNode',['../classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html',1,'com::mojang::brigadier::tree']]],
+  ['rotation_14',['Rotation',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['rotationargument_15',['RotationArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html',1,'dev::jorel::commandapi::arguments']]]
 ];

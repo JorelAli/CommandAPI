@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -101,7 +102,8 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
  <div class="center">
   <img src="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.png" usemap="#dev.jorel.commandapi.CommandAPIBukkit_3C_20Source_20_3E_map" alt=""/>
   <map id="dev.jorel.commandapi.CommandAPIBukkit_3C_20Source_20_3E_map" name="dev.jorel.commandapi.CommandAPIBukkit_3C_20Source_20_3E_map">
-<area href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html" alt="dev.jorel.commandapi.nms.NMS&lt; CommandListenerWrapper &gt;" shape="rect" coords="397,0,784,24"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html" alt="dev.jorel.commandapi.CommandAPIPlatform&lt; Argument&lt;?&gt;, CommandSender, Source &gt;" shape="rect" coords="0,0,515,24"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html" alt="dev.jorel.commandapi.nms.NMS&lt; CommandListenerWrapper &gt;" shape="rect" coords="525,0,1040,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -111,7 +113,7 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPaper</b> ()</td></tr>
 <tr class="separator:a2a9efec1d1d168b06a2c091d5a28224f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a262d5d9e49584de913c22705dc341342"><td class="memItemLeft" align="right" valign="top"><a id="a262d5d9e49584de913c22705dc341342" name="a262d5d9e49584de913c22705dc341342"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onLoad</b> (CommandAPIConfig&lt;?&gt; config)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>onLoad</b> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a>&lt;?&gt; config)</td></tr>
 <tr class="separator:a262d5d9e49584de913c22705dc341342"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e6289969646e547f6bb4dabd6d55b52"><td class="memItemLeft" align="right" valign="top"><a id="a2e6289969646e547f6bb4dabd6d55b52" name="a2e6289969646e547f6bb4dabd6d55b52"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>onEnable</b> ()</td></tr>
@@ -167,12 +169,12 @@ abstract&lt; T &gt; T&#160;</td><td class="memItemRight" valign="bottom"><b>getM
 <tr class="memitem:ad976c60a3f6be4d0e02eb2f9b13d08d1"><td class="memItemLeft" align="right" valign="top"><a id="ad976c60a3f6be4d0e02eb2f9b13d08d1" name="ad976c60a3f6be4d0e02eb2f9b13d08d1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>updateRequirements</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_player.html">AbstractPlayer</a>&lt;?&gt; player)</td></tr>
 <tr class="separator:ad976c60a3f6be4d0e02eb2f9b13d08d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af706871013eaa820ce44b1e7b363f58d"><td class="memItemLeft" align="right" valign="top"><a id="af706871013eaa820ce44b1e7b363f58d" name="af706871013eaa820ce44b1e7b363f58d"></a>
-<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>newConcreteMultiLiteralArgument</b> (String[] literals)</td></tr>
-<tr class="separator:af706871013eaa820ce44b1e7b363f58d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63090a13b6142436051238a0b7259f45"><td class="memItemLeft" align="right" valign="top"><a id="a63090a13b6142436051238a0b7259f45" name="a63090a13b6142436051238a0b7259f45"></a>
-<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>newConcreteLiteralArgument</b> (String literal)</td></tr>
-<tr class="separator:a63090a13b6142436051238a0b7259f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9870e62ca1b17f8d4583ee373596f138"><td class="memItemLeft" align="right" valign="top"><a id="a9870e62ca1b17f8d4583ee373596f138" name="a9870e62ca1b17f8d4583ee373596f138"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>newConcreteMultiLiteralArgument</b> (String nodeName, String[] literals)</td></tr>
+<tr class="separator:a9870e62ca1b17f8d4583ee373596f138"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487a3c6a22ea18fea9b755cbc88eda03"><td class="memItemLeft" align="right" valign="top"><a id="a487a3c6a22ea18fea9b755cbc88eda03" name="a487a3c6a22ea18fea9b755cbc88eda03"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>newConcreteLiteralArgument</b> (String nodeName, String literal)</td></tr>
+<tr class="separator:a487a3c6a22ea18fea9b755cbc88eda03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f088a95425fc3e7645bb7c5a651b911"><td class="memItemLeft" align="right" valign="top"><a id="a2f088a95425fc3e7645bb7c5a651b911" name="a2f088a95425fc3e7645bb7c5a651b911"></a>
 <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><b>newConcreteCommandAPICommand</b> (CommandMetaData&lt; CommandSender &gt; meta)</td></tr>
 <tr class="separator:a2f088a95425fc3e7645bb7c5a651b911"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1640,11 +1642,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>registerBukkitRecipes
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html">CommandAPIBukkit</a></li>
-    <li class="footer">Generated on Thu May 11 2023 10:51:29 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html">CommandAPIBukkit</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:14 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

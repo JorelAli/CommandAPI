@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -96,6 +97,9 @@ $(document).ready(function(){initNavTree('classcom_1_1mojang_1_1brigadier_1_1sug
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a9cd204b0f19dd86cc90fa7c4f6c1bcf5"><td class="memItemLeft" align="right" valign="top"><a id="a9cd204b0f19dd86cc90fa7c4f6c1bcf5" name="a9cd204b0f19dd86cc90fa7c4f6c1bcf5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SuggestionsBuilder</b> (final String input, final String inputLowerCase, final int start)</td></tr>
+<tr class="separator:a9cd204b0f19dd86cc90fa7c4f6c1bcf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a541fa4f4f29eef925a247fa3299153bc"><td class="memItemLeft" align="right" valign="top"><a id="a541fa4f4f29eef925a247fa3299153bc" name="a541fa4f4f29eef925a247fa3299153bc"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SuggestionsBuilder</b> (final String input, final int start)</td></tr>
 <tr class="separator:a541fa4f4f29eef925a247fa3299153bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -108,6 +112,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed645546bcd4980ca3dd457da89374ee"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#aed645546bcd4980ca3dd457da89374ee">getRemaining</a> ()</td></tr>
 <tr class="memdesc:aed645546bcd4980ca3dd457da89374ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the text that remains untouched by the suggestions.  <a href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#aed645546bcd4980ca3dd457da89374ee">More...</a><br /></td></tr>
 <tr class="separator:aed645546bcd4980ca3dd457da89374ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba6513a3b4bf278e5289e8c25ee086c9"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#aba6513a3b4bf278e5289e8c25ee086c9">getRemainingLowerCase</a> ()</td></tr>
+<tr class="memdesc:aba6513a3b4bf278e5289e8c25ee086c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the text that remains untouched by the suggestions in lowercase.  <a href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#aba6513a3b4bf278e5289e8c25ee086c9">More...</a><br /></td></tr>
+<tr class="separator:aba6513a3b4bf278e5289e8c25ee086c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c158ee32828d29688174233b6f6d9ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#a6c158ee32828d29688174233b6f6d9ee">build</a> ()</td></tr>
 <tr class="memdesc:a6c158ee32828d29688174233b6f6d9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html">Suggestions</a></code> instance based on this builder.  <a href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#a6c158ee32828d29688174233b6f6d9ee">More...</a><br /></td></tr>
 <tr class="separator:a6c158ee32828d29688174233b6f6d9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -270,6 +277,26 @@ Public Member Functions</h2></td></tr>
 
 <p>Returns the text that remains untouched by the suggestions. </p>
 <dl class="section return"><dt>Returns</dt><dd>the text that remains untouched by the suggestions </dd></dl>
+
+</div>
+</div>
+<a id="aba6513a3b4bf278e5289e8c25ee086c9" name="aba6513a3b4bf278e5289e8c25ee086c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba6513a3b4bf278e5289e8c25ee086c9">&#9670;&nbsp;</a></span>getRemainingLowerCase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">String com.mojang.brigadier.suggestion.SuggestionsBuilder.getRemainingLowerCase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the text that remains untouched by the suggestions in lowercase. </p>
+<dl class="section return"><dt>Returns</dt><dd>the text that remains untouched by the suggestions in lowercase </dd></dl>
 
 </div>
 </div>
@@ -448,11 +475,15 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><b>suggestion</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html">SuggestionsBuilder</a></li>
-    <li class="footer">Generated on Thu May 11 2023 10:51:29 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><b>suggestion</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html">SuggestionsBuilder</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:14 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

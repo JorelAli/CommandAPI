@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CommandAPI: dev.jorel.commandapi.CommandAPIHandler&lt; CommandSourceStack &gt; Class Template Reference</title>
+<title>CommandAPI: dev.jorel.commandapi.CommandAPIHandler&lt; Argument, CommandSender, Source &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.8.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -88,55 +89,79 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">dev.jorel.commandapi.CommandAPIHandler&lt; CommandSourceStack &gt; Class Template Reference</div></div>
+  <div class="headertitle"><div class="title">dev.jorel.commandapi.CommandAPIHandler&lt; Argument, CommandSender, Source &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Handles the main backend of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>.  
+<p>The "brains" behind the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>.  
  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1ee97fea2d67b13a8b064c2ec7e90771"><td class="memItemLeft" align="right" valign="top">NMS&lt; CommandSourceStack &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a1ee97fea2d67b13a8b064c2ec7e90771">getNMS</a> ()</td></tr>
-<tr class="memdesc:a1ee97fea2d67b13a8b064c2ec7e90771"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an instance of NMS.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a1ee97fea2d67b13a8b064c2ec7e90771">More...</a><br /></td></tr>
-<tr class="separator:a1ee97fea2d67b13a8b064c2ec7e90771"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00af2df58a46a1c2c82d3d4fd84e786e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a00af2df58a46a1c2c82d3d4fd84e786e">getPaper</a> ()</td></tr>
-<tr class="memdesc:a00af2df58a46a1c2c82d3d4fd84e786e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an instance of <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a00af2df58a46a1c2c82d3d4fd84e786e">More...</a><br /></td></tr>
-<tr class="separator:a00af2df58a46a1c2c82d3d4fd84e786e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a595779a791286827ddb623a632b2b65a"><td class="memItemLeft" align="right" valign="top">Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt;?&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a595779a791286827ddb623a632b2b65a">lookupPreviewable</a> (List&lt; String &gt; path)</td></tr>
-<tr class="memdesc:a595779a791286827ddb623a632b2b65a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Looks up the function to generate a chat preview for a path of nodes in the command tree.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a595779a791286827ddb623a632b2b65a">More...</a><br /></td></tr>
-<tr class="separator:a595779a791286827ddb623a632b2b65a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81c2e5146d954269245848f8c07c35d3"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a81c2e5146d954269245848f8c07c35d3">lookupPreviewableLegacyStatus</a> (List&lt; String &gt; path)</td></tr>
-<tr class="separator:a81c2e5146d954269245848f8c07c35d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a538af0270e651fec5d4b6c768f4ed9e4"><td class="memItemLeft" align="right" valign="top">Field&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a538af0270e651fec5d4b6c768f4ed9e4">getField</a> (Class&lt;?&gt; clazz, String name)</td></tr>
-<tr class="memdesc:a538af0270e651fec5d4b6c768f4ed9e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a field using reflection if it is not already cached, then return the field of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a538af0270e651fec5d4b6c768f4ed9e4">More...</a><br /></td></tr>
-<tr class="separator:a538af0270e651fec5d4b6c768f4ed9e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f8ca964ecc7808693b2589e392986da"><td class="memItemLeft" align="right" valign="top"><a id="a8f8ca964ecc7808693b2589e392986da" name="a8f8ca964ecc7808693b2589e392986da"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>onLoad</b> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a>&lt;?&gt; config)</td></tr>
+<tr class="separator:a8f8ca964ecc7808693b2589e392986da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f34a9948463aa6ace43a908f47a0ea4"><td class="memItemLeft" align="right" valign="top"><a id="a3f34a9948463aa6ace43a908f47a0ea4" name="a3f34a9948463aa6ace43a908f47a0ea4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>onEnable</b> ()</td></tr>
+<tr class="separator:a3f34a9948463aa6ace43a908f47a0ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69ed6b681d32e904ed58d1a815c21720"><td class="memItemLeft" align="right" valign="top"><a id="a69ed6b681d32e904ed58d1a815c21720" name="a69ed6b681d32e904ed58d1a815c21720"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> ()</td></tr>
+<tr class="separator:a69ed6b681d32e904ed58d1a815c21720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a214f69b197a8ff80fe4d83604178db56"><td class="memItemLeft" align="right" valign="top"><a id="a214f69b197a8ff80fe4d83604178db56" name="a214f69b197a8ff80fe4d83604178db56"></a>
+<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html">CommandAPIPlatform</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPlatform</b> ()</td></tr>
+<tr class="separator:a214f69b197a8ff80fe4d83604178db56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f8255f97a2719d4ba110e23cad2a336"><td class="memItemLeft" align="right" valign="top">Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt;?&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a6f8255f97a2719d4ba110e23cad2a336">lookupPreviewable</a> (List&lt; String &gt; path)</td></tr>
+<tr class="memdesc:a6f8255f97a2719d4ba110e23cad2a336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Looks up the function to generate a chat preview for a path of nodes in the command tree.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a6f8255f97a2719d4ba110e23cad2a336">More...</a><br /></td></tr>
+<tr class="separator:a6f8255f97a2719d4ba110e23cad2a336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81bf522ae8e0125ae769013148d666bc"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a81bf522ae8e0125ae769013148d666bc">lookupPreviewableLegacyStatus</a> (List&lt; String &gt; path)</td></tr>
+<tr class="separator:a81bf522ae8e0125ae769013148d666bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad77462bd866a4ad3f27f8d9d27b57d1b"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSourceStack &gt; String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#ad77462bd866a4ad3f27f8d9d27b57d1b">getRawArgumentInput</a> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandSourceStack &gt; cmdCtx, String key)</td></tr>
-<tr class="memdesc:ad77462bd866a4ad3f27f8d9d27b57d1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the raw input for an argument for a given command context and its key.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#ad77462bd866a4ad3f27f8d9d27b57d1b">More...</a><br /></td></tr>
-<tr class="separator:ad77462bd866a4ad3f27f8d9d27b57d1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38c22a8cd332c338cdb28a0380645a97"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a>&lt;?&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a38c22a8cd332c338cdb28a0380645a97">getInstance</a> ()</td></tr>
-<tr class="memdesc:a38c22a8cd332c338cdb28a0380645a97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Singleton instance of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s internal handler.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a38c22a8cd332c338cdb28a0380645a97">More...</a><br /></td></tr>
-<tr class="separator:a38c22a8cd332c338cdb28a0380645a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a420d00e29a0841be9cde38d5ca56b64f"><td class="memItemLeft" align="right" valign="top"><a id="a420d00e29a0841be9cde38d5ca56b64f" name="a420d00e29a0841be9cde38d5ca56b64f"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> ()</td></tr>
-<tr class="separator:a420d00e29a0841be9cde38d5ca56b64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada9b2c8cf5176eb0bd26957208787c18"><td class="memItemLeft" align="right" valign="top">static&lt; CommandSource &gt; String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#ada9b2c8cf5176eb0bd26957208787c18">getRawArgumentInput</a> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandSource &gt; cmdCtx, String key)</td></tr>
+<tr class="memdesc:ada9b2c8cf5176eb0bd26957208787c18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the raw input for an argument for a given command context and its key.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#ada9b2c8cf5176eb0bd26957208787c18">More...</a><br /></td></tr>
+<tr class="separator:ada9b2c8cf5176eb0bd26957208787c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf1f20cf3f8f05979f8a68401dc30afb"><td class="memItemLeft" align="right" valign="top"><a id="abf1f20cf3f8f05979f8a68401dc30afb" name="abf1f20cf3f8f05979f8a68401dc30afb"></a>
+static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a>&lt;?, ?, ?&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getInstance</b> ()</td></tr>
+<tr class="separator:abf1f20cf3f8f05979f8a68401dc30afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09a409d73dbcbe15529b026412b084e8"><td class="memItemLeft" align="right" valign="top">static Field&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a09a409d73dbcbe15529b026412b084e8">getField</a> (Class&lt;?&gt; clazz, String name)</td></tr>
+<tr class="memdesc:a09a409d73dbcbe15529b026412b084e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a field using reflection if it is not already cached, then return the field of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a09a409d73dbcbe15529b026412b084e8">More...</a><br /></td></tr>
+<tr class="separator:a09a409d73dbcbe15529b026412b084e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d39e8bfdc9c86919225c7e440ff9387"><td class="memItemLeft" align="right" valign="top">static Field&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8d39e8bfdc9c86919225c7e440ff9387">getField</a> (Class&lt;?&gt; clazz, String name, String mojangMappedName)</td></tr>
+<tr class="memdesc:a8d39e8bfdc9c86919225c7e440ff9387"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches a field using reflection if it is not already cached, then return the field of a given class.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a8d39e8bfdc9c86919225c7e440ff9387">More...</a><br /></td></tr>
+<tr class="separator:a8d39e8bfdc9c86919225c7e440ff9387"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a7fa70a2d0727ca63049440dda72f828d"><td class="memItemLeft" align="right" valign="top"><a id="a7fa70a2d0727ca63049440dda72f828d" name="a7fa70a2d0727ca63049440dda72f828d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CommandAPIHandler</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html">CommandAPIPlatform</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt; platform)</td></tr>
+<tr class="separator:a7fa70a2d0727ca63049440dda72f828d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >Handles the main backend of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
-<p >This constructs brigadier Command objects, applies and generates arguments and handles suggestions. This also handles permission registration for Bukkit, interactions for NMS and the registration and unregistration of commands. </p>
+<div class="textblock"><p >The "brains" behind the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
+<p >Handles command registration</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">&lt;Argument&gt;</td><td>The implementation of AbstractArgument being used </td></tr>
+    <tr><td class="paramname">&lt;CommandSender&gt;</td><td>The class for running platform commands </td></tr>
+    <tr><td class="paramname">&lt;Source&gt;</td><td>The class for running <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> commands </td></tr>
+  </table>
+  </dd>
+</dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a538af0270e651fec5d4b6c768f4ed9e4" name="a538af0270e651fec5d4b6c768f4ed9e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a538af0270e651fec5d4b6c768f4ed9e4">&#9670;&nbsp;</a></span>getField()</h2>
+<a id="a09a409d73dbcbe15529b026412b084e8" name="a09a409d73dbcbe15529b026412b084e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09a409d73dbcbe15529b026412b084e8">&#9670;&nbsp;</a></span>getField() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Field <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.getField </td>
+          <td class="memname">static Field <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;.getField </td>
           <td>(</td>
           <td class="paramtype">Class&lt;?&gt;&#160;</td>
           <td class="paramname"><em>clazz</em>, </td>
@@ -153,6 +178,11 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Caches a field using reflection if it is not already cached, then return the field of a given class. </p>
@@ -168,8 +198,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
 
 </div>
 </div>
-<a id="a38c22a8cd332c338cdb28a0380645a97" name="a38c22a8cd332c338cdb28a0380645a97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38c22a8cd332c338cdb28a0380645a97">&#9670;&nbsp;</a></span>getInstance()</h2>
+<a id="a8d39e8bfdc9c86919225c7e440ff9387" name="a8d39e8bfdc9c86919225c7e440ff9387"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d39e8bfdc9c86919225c7e440ff9387">&#9670;&nbsp;</a></span>getField() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -178,10 +208,27 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a>&lt;?&gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.getInstance </td>
+          <td class="memname">static Field <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;.getField </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">Class&lt;?&gt;&#160;</td>
+          <td class="paramname"><em>clazz</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>mojangMappedName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -191,53 +238,22 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
 </table>
 </div><div class="memdoc">
 
-<p>Returns the Singleton instance of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s internal handler. </p>
-<dl class="section return"><dt>Returns</dt><dd>the Singleton instance of the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>'s internal handler </dd></dl>
+<p>Caches a field using reflection if it is not already cached, then return the field of a given class. </p>
+<p >This will also make the field accessible.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clazz</td><td>the class where the field is declared </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the field </td></tr>
+    <tr><td class="paramname">mojangMappedName</td><td>the name of a field under Mojang mappings </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a Field reference </dd></dl>
 
 </div>
 </div>
-<a id="a1ee97fea2d67b13a8b064c2ec7e90771" name="a1ee97fea2d67b13a8b064c2ec7e90771"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ee97fea2d67b13a8b064c2ec7e90771">&#9670;&nbsp;</a></span>getNMS()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">NMS&lt; CommandSourceStack &gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.getNMS </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns an instance of NMS. </p>
-<dl class="section return"><dt>Returns</dt><dd>an instance of NMS </dd></dl>
-
-</div>
-</div>
-<a id="a00af2df58a46a1c2c82d3d4fd84e786e" name="a00af2df58a46a1c2c82d3d4fd84e786e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a00af2df58a46a1c2c82d3d4fd84e786e">&#9670;&nbsp;</a></span>getPaper()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a> <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.getPaper </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns an instance of <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>an instance of <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a> </dd></dl>
-
-</div>
-</div>
-<a id="ad77462bd866a4ad3f27f8d9d27b57d1b" name="ad77462bd866a4ad3f27f8d9d27b57d1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad77462bd866a4ad3f27f8d9d27b57d1b">&#9670;&nbsp;</a></span>getRawArgumentInput()</h2>
+<a id="ada9b2c8cf5176eb0bd26957208787c18" name="ada9b2c8cf5176eb0bd26957208787c18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada9b2c8cf5176eb0bd26957208787c18">&#9670;&nbsp;</a></span>getRawArgumentInput()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,9 +262,9 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static&lt; CommandSourceStack &gt; String <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.getRawArgumentInput </td>
+          <td class="memname">static&lt; CommandSource &gt; String <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;.getRawArgumentInput </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandSourceStack &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html">CommandContext</a>&lt; CommandSource &gt;&#160;</td>
           <td class="paramname"><em>cmdCtx</em>, </td>
         </tr>
         <tr>
@@ -274,7 +290,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
 <p >This effectively returns the string value that is currently typed for this argument</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">&lt;CommandSourceStack&gt;</td><td>the command source type </td></tr>
+    <tr><td class="paramname">&lt;CommandSource&gt;</td><td>the command source type </td></tr>
     <tr><td class="paramname">cmdCtx</td><td>the command context which is used to run this command </td></tr>
     <tr><td class="paramname">key</td><td>the node name for the argument </td></tr>
   </table>
@@ -284,14 +300,14 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
 
 </div>
 </div>
-<a id="a595779a791286827ddb623a632b2b65a" name="a595779a791286827ddb623a632b2b65a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a595779a791286827ddb623a632b2b65a">&#9670;&nbsp;</a></span>lookupPreviewable()</h2>
+<a id="a6f8255f97a2719d4ba110e23cad2a336" name="a6f8255f97a2719d4ba110e23cad2a336"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f8255f97a2719d4ba110e23cad2a336">&#9670;&nbsp;</a></span>lookupPreviewable()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt;?&gt; &gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.lookupPreviewable </td>
+          <td class="memname">Optional&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html">PreviewableFunction</a>&lt;?&gt; &gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;.lookupPreviewable </td>
           <td>(</td>
           <td class="paramtype">List&lt; String &gt;&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -312,14 +328,14 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
 
 </div>
 </div>
-<a id="a81c2e5146d954269245848f8c07c35d3" name="a81c2e5146d954269245848f8c07c35d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81c2e5146d954269245848f8c07c35d3">&#9670;&nbsp;</a></span>lookupPreviewableLegacyStatus()</h2>
+<a id="a81bf522ae8e0125ae769013148d666bc" name="a81bf522ae8e0125ae769013148d666bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81bf522ae8e0125ae769013148d666bc">&#9670;&nbsp;</a></span>lookupPreviewableLegacyStatus()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boolean <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; CommandSourceStack &gt;.lookupPreviewableLegacyStatus </td>
+          <td class="memname">boolean <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;.lookupPreviewableLegacyStatus </td>
           <td>(</td>
           <td class="paramtype">List&lt; String &gt;&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -340,11 +356,15 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> 
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li>
-    <li class="footer">Generated on Tue Mar 14 2023 21:10:49 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:14 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

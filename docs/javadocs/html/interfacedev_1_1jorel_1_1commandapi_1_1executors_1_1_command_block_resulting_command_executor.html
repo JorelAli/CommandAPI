@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -99,24 +100,74 @@ $(document).ready(function(){initNavTree('interfacedev_1_1jorel_1_1commandapi_1_
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
  <div class="center">
-  <img src="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.png" alt=""/>
- </div></div>
+  <img src="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.png" usemap="#dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor_map" alt=""/>
+  <map id="dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor_map" name="dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor_map">
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html" alt="dev.jorel.commandapi.executors.ResultingExecutor&lt; BlockCommandSender, BukkitBlockCommandSender &gt;" shape="rect" coords="0,0,620,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abc0416720be3817d20833bb9989e3aaf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#abc0416720be3817d20833bb9989e3aaf">run</a> (BlockCommandSender sender, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html">CommandArguments</a> args)  throws WrapperCommandSyntaxException</td></tr>
 <tr class="memdesc:abc0416720be3817d20833bb9989e3aaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The code to run when this command is performed.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#abc0416720be3817d20833bb9989e3aaf">More...</a><br /></td></tr>
 <tr class="separator:abc0416720be3817d20833bb9989e3aaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d15d2f0267d4094a8a441171893d0a7"><td class="memItemLeft" align="right" valign="top">default int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#a0d15d2f0267d4094a8a441171893d0a7">run</a> (ExecutionInfo&lt; BlockCommandSender, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_block_command_sender.html">BukkitBlockCommandSender</a> &gt; info)  throws WrapperCommandSyntaxException </td></tr>
+<tr class="memitem:a0d15d2f0267d4094a8a441171893d0a7"><td class="memItemLeft" align="right" valign="top">default int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#a0d15d2f0267d4094a8a441171893d0a7">run</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; BlockCommandSender, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_block_command_sender.html">BukkitBlockCommandSender</a> &gt; info)  throws WrapperCommandSyntaxException </td></tr>
 <tr class="memdesc:a0d15d2f0267d4094a8a441171893d0a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The code to run when this command is performed.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#a0d15d2f0267d4094a8a441171893d0a7">More...</a><br /></td></tr>
 <tr class="separator:a0d15d2f0267d4094a8a441171893d0a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac26cbc1f37981aa121112c4325f9e560"><td class="memItemLeft" align="right" valign="top">default <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html">ExecutorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#ac26cbc1f37981aa121112c4325f9e560">getType</a> ()</td></tr>
 <tr class="memdesc:ac26cbc1f37981aa121112c4325f9e560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the sender of the current executor.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html#ac26cbc1f37981aa121112c4325f9e560">More...</a><br /></td></tr>
 <tr class="separator:ac26cbc1f37981aa121112c4325f9e560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb85a14ad2115467b9dae9dee4ed5c42"><td class="memItemLeft" align="right" valign="top">default int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html#acb85a14ad2115467b9dae9dee4ed5c42">executeWith</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; CommandSender, WrapperType &gt; info)  throws WrapperCommandSyntaxException </td></tr>
+<tr class="memdesc:acb85a14ad2115467b9dae9dee4ed5c42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the command executor with the provided command sender and the provided arguments.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html#acb85a14ad2115467b9dae9dee4ed5c42">More...</a><br /></td></tr>
+<tr class="separator:acb85a14ad2115467b9dae9dee4ed5c42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63f04a2a35a2db1e0f5caf541b2c2e4d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html#a63f04a2a35a2db1e0f5caf541b2c2e4d">run</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; CommandSender, WrapperType &gt; info)  throws WrapperCommandSyntaxException</td></tr>
+<tr class="memdesc:a63f04a2a35a2db1e0f5caf541b2c2e4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the command.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html#a63f04a2a35a2db1e0f5caf541b2c2e4d">More...</a><br /></td></tr>
+<tr class="separator:a63f04a2a35a2db1e0f5caf541b2c2e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >A resulting command executor for a BlockCommandSender. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="acb85a14ad2115467b9dae9dee4ed5c42" name="acb85a14ad2115467b9dae9dee4ed5c42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb85a14ad2115467b9dae9dee4ed5c42">&#9670;&nbsp;</a></span>executeWith()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default int <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html">dev.jorel.commandapi.executors.ResultingExecutor</a>&lt; CommandSender, WrapperType &gt;.executeWith </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; CommandSender, WrapperType &gt;&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td> throws <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html">WrapperCommandSyntaxException</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Executes the command executor with the provided command sender and the provided arguments. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>The <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html" title="This interface represents an ExecutionInfo for a command.">ExecutionInfo</a> for this command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the value returned by this command if the command succeeds, 0 if the command fails </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">WrapperCommandSyntaxException</td><td>if an error occurs during the execution of this command </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ac26cbc1f37981aa121112c4325f9e560" name="ac26cbc1f37981aa121112c4325f9e560"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac26cbc1f37981aa121112c4325f9e560">&#9670;&nbsp;</a></span>getType()</h2>
 
@@ -138,7 +189,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="abc0416720be3817d20833bb9989e3aaf" name="abc0416720be3817d20833bb9989e3aaf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc0416720be3817d20833bb9989e3aaf">&#9670;&nbsp;</a></span>run() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abc0416720be3817d20833bb9989e3aaf">&#9670;&nbsp;</a></span>run() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,7 +227,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a0d15d2f0267d4094a8a441171893d0a7" name="a0d15d2f0267d4094a8a441171893d0a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d15d2f0267d4094a8a441171893d0a7">&#9670;&nbsp;</a></span>run() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d15d2f0267d4094a8a441171893d0a7">&#9670;&nbsp;</a></span>run() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -184,7 +235,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">default int dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor.run </td>
           <td>(</td>
-          <td class="paramtype">ExecutionInfo&lt; BlockCommandSender, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_block_command_sender.html">BukkitBlockCommandSender</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; BlockCommandSender, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_block_command_sender.html">BukkitBlockCommandSender</a> &gt;&#160;</td>
           <td class="paramname"><em>info</em></td><td>)</td>
           <td> throws <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html">WrapperCommandSyntaxException</a></td>
         </tr>
@@ -194,7 +245,7 @@ Public Member Functions</h2></td></tr>
 <p>The code to run when this command is performed. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">info</td><td>The ExecutionInfo for this command</td></tr>
+    <tr><td class="paramname">info</td><td>The <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html" title="This interface represents an ExecutionInfo for a command.">ExecutionInfo</a> for this command</td></tr>
   </table>
   </dd>
 </dl>
@@ -202,14 +253,59 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a63f04a2a35a2db1e0f5caf541b2c2e4d" name="a63f04a2a35a2db1e0f5caf541b2c2e4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63f04a2a35a2db1e0f5caf541b2c2e4d">&#9670;&nbsp;</a></span>run() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html">dev.jorel.commandapi.executors.ResultingExecutor</a>&lt; CommandSender, WrapperType &gt;.run </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; CommandSender, WrapperType &gt;&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td> throws <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html">WrapperCommandSyntaxException</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Executes the command. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>The <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html" title="This interface represents an ExecutionInfo for a command.">ExecutionInfo</a> for this command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the value returned by this command </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">WrapperCommandSyntaxException</td><td>if an error occurs during the execution of this command </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html">executors</a></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html">CommandBlockResultingCommandExecutor</a></li>
-    <li class="footer">Generated on Thu May 11 2023 10:51:30 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html">executors</a></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html">CommandBlockResultingCommandExecutor</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:15 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

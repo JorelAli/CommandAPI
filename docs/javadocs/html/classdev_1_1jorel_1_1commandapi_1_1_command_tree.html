@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -96,8 +97,12 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
  <div class="center">
-  <img src="classdev_1_1jorel_1_1commandapi_1_1_command_tree.png" alt=""/>
- </div></div>
+  <img src="classdev_1_1jorel_1_1commandapi_1_1_command_tree.png" usemap="#dev.jorel.commandapi.CommandTree_map" alt=""/>
+  <map id="dev.jorel.commandapi.CommandTree_map" name="dev.jorel.commandapi.CommandTree_map">
+<area href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html" alt="dev.jorel.commandapi.AbstractCommandTree&lt; CommandTree, Argument&lt;?&gt;, CommandSender &gt;" shape="rect" coords="0,0,562,24"/>
+<area href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html" alt="dev.jorel.commandapi.BukkitExecutable&lt; CommandTree &gt;" shape="rect" coords="572,0,1134,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -107,6 +112,97 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a21c4e45370dd6c0603fe2bc0243dc848"><td class="memItemLeft" align="right" valign="top"><a id="a21c4e45370dd6c0603fe2bc0243dc848" name="a21c4e45370dd6c0603fe2bc0243dc848"></a>
 <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html">CommandTree</a>&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
 <tr class="separator:a21c4e45370dd6c0603fe2bc0243dc848"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b18f25a41e52e8a2c2e8583da231972"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972">then</a> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt; tree)</td></tr>
+<tr class="memdesc:a2b18f25a41e52e8a2c2e8583da231972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a child branch on the tree.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972">More...</a><br /></td></tr>
+<tr class="separator:a2b18f25a41e52e8a2c2e8583da231972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="memItemLeft" align="right" valign="top"><a id="a08c8aea02a7dcf4011bcccbd6096f96b" name="a08c8aea02a7dcf4011bcccbd6096f96b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>register</b> ()</td></tr>
+<tr class="memdesc:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the command. <br /></td></tr>
+<tr class="separator:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d1762584d31697c20378449f26213f7"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a8d1762584d31697c20378449f26213f7">executes</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html">CommandExecutor</a> executor, ExecutorType... types)</td></tr>
+<tr class="memdesc:a8d1762584d31697c20378449f26213f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a8d1762584d31697c20378449f26213f7">More...</a><br /></td></tr>
+<tr class="separator:a8d1762584d31697c20378449f26213f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73231a1d04545f444f8b38293c561812"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a73231a1d04545f444f8b38293c561812">executes</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_execution_info.html">CommandExecutionInfo</a> executor, ExecutorType... types)</td></tr>
+<tr class="memdesc:a73231a1d04545f444f8b38293c561812"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a73231a1d04545f444f8b38293c561812">More...</a><br /></td></tr>
+<tr class="separator:a73231a1d04545f444f8b38293c561812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7895ea5dd006e0225dce5cb1e3d8b44f"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a7895ea5dd006e0225dce5cb1e3d8b44f">executes</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html">ResultingCommandExecutor</a> executor, ExecutorType... types)</td></tr>
+<tr class="memdesc:a7895ea5dd006e0225dce5cb1e3d8b44f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a7895ea5dd006e0225dce5cb1e3d8b44f">More...</a><br /></td></tr>
+<tr class="separator:a7895ea5dd006e0225dce5cb1e3d8b44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaccd66e439abf95673a87f6530889dac"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#aaccd66e439abf95673a87f6530889dac">executes</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_execution_info.html">ResultingCommandExecutionInfo</a> executor, ExecutorType... types)</td></tr>
+<tr class="memdesc:aaccd66e439abf95673a87f6530889dac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#aaccd66e439abf95673a87f6530889dac">More...</a><br /></td></tr>
+<tr class="separator:aaccd66e439abf95673a87f6530889dac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af450331bdf93e3491cf1bd66389f8f00"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#af450331bdf93e3491cf1bd66389f8f00">executesPlayer</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html">PlayerCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:af450331bdf93e3491cf1bd66389f8f00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#af450331bdf93e3491cf1bd66389f8f00">More...</a><br /></td></tr>
+<tr class="separator:af450331bdf93e3491cf1bd66389f8f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7074833a1a9bc2c59fa700e69f9cb77f"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a7074833a1a9bc2c59fa700e69f9cb77f">executesPlayer</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_execution_info.html">PlayerExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:a7074833a1a9bc2c59fa700e69f9cb77f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a7074833a1a9bc2c59fa700e69f9cb77f">More...</a><br /></td></tr>
+<tr class="separator:a7074833a1a9bc2c59fa700e69f9cb77f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a352f92e031131041c289eb1c84098114"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a352f92e031131041c289eb1c84098114">executesPlayer</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html">PlayerResultingCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:a352f92e031131041c289eb1c84098114"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a352f92e031131041c289eb1c84098114">More...</a><br /></td></tr>
+<tr class="separator:a352f92e031131041c289eb1c84098114"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d880ebc87b8dcfb5c091d04c52a2230"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a2d880ebc87b8dcfb5c091d04c52a2230">executesPlayer</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_execution_info.html">PlayerResultingExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:a2d880ebc87b8dcfb5c091d04c52a2230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a2d880ebc87b8dcfb5c091d04c52a2230">More...</a><br /></td></tr>
+<tr class="separator:a2d880ebc87b8dcfb5c091d04c52a2230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a441a936e66c8b00338f64294ddc0fc43"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a441a936e66c8b00338f64294ddc0fc43">executesEntity</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_command_executor.html">EntityCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:a441a936e66c8b00338f64294ddc0fc43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a441a936e66c8b00338f64294ddc0fc43">More...</a><br /></td></tr>
+<tr class="separator:a441a936e66c8b00338f64294ddc0fc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f2544607d00536f1e953c5ac31983fb"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0f2544607d00536f1e953c5ac31983fb">executesEntity</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_execution_info.html">EntityExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:a0f2544607d00536f1e953c5ac31983fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0f2544607d00536f1e953c5ac31983fb">More...</a><br /></td></tr>
+<tr class="separator:a0f2544607d00536f1e953c5ac31983fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfeba7f0fa5abf61d81a2c1dd233673b"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#adfeba7f0fa5abf61d81a2c1dd233673b">executesEntity</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_command_executor.html">EntityResultingCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:adfeba7f0fa5abf61d81a2c1dd233673b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#adfeba7f0fa5abf61d81a2c1dd233673b">More...</a><br /></td></tr>
+<tr class="separator:adfeba7f0fa5abf61d81a2c1dd233673b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa2a0f38f81c96e7ed413f1ddae9e917"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#afa2a0f38f81c96e7ed413f1ddae9e917">executesEntity</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_execution_info.html">EntityResultingExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:afa2a0f38f81c96e7ed413f1ddae9e917"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#afa2a0f38f81c96e7ed413f1ddae9e917">More...</a><br /></td></tr>
+<tr class="separator:afa2a0f38f81c96e7ed413f1ddae9e917"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bfc016e3b58741ef9fe975021e45f21"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a7bfc016e3b58741ef9fe975021e45f21">executesProxy</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html">ProxyCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:a7bfc016e3b58741ef9fe975021e45f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a7bfc016e3b58741ef9fe975021e45f21">More...</a><br /></td></tr>
+<tr class="separator:a7bfc016e3b58741ef9fe975021e45f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad70b6ec3cc3f173ebb5f3cba8e6a5bf7"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ad70b6ec3cc3f173ebb5f3cba8e6a5bf7">executesProxy</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_execution_info.html">ProxyExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:ad70b6ec3cc3f173ebb5f3cba8e6a5bf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ad70b6ec3cc3f173ebb5f3cba8e6a5bf7">More...</a><br /></td></tr>
+<tr class="separator:ad70b6ec3cc3f173ebb5f3cba8e6a5bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabedb5e11a69a746d02b791dbe255eec"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#aabedb5e11a69a746d02b791dbe255eec">executesProxy</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html">ProxyResultingCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:aabedb5e11a69a746d02b791dbe255eec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#aabedb5e11a69a746d02b791dbe255eec">More...</a><br /></td></tr>
+<tr class="separator:aabedb5e11a69a746d02b791dbe255eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16f2b03b0b4cb63c0464e54c89687ca"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ac16f2b03b0b4cb63c0464e54c89687ca">executesProxy</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_execution_info.html">ProxyResultingExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:ac16f2b03b0b4cb63c0464e54c89687ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ac16f2b03b0b4cb63c0464e54c89687ca">More...</a><br /></td></tr>
+<tr class="separator:ac16f2b03b0b4cb63c0464e54c89687ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab17bfc527a2ea0c68c81ac0d517d1ce3"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ab17bfc527a2ea0c68c81ac0d517d1ce3">executesCommandBlock</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html">CommandBlockCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:ab17bfc527a2ea0c68c81ac0d517d1ce3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ab17bfc527a2ea0c68c81ac0d517d1ce3">More...</a><br /></td></tr>
+<tr class="separator:ab17bfc527a2ea0c68c81ac0d517d1ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf943886aad69c2e53d1d60e04dd92c7"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#acf943886aad69c2e53d1d60e04dd92c7">executesCommandBlock</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info.html">CommandBlockExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:acf943886aad69c2e53d1d60e04dd92c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#acf943886aad69c2e53d1d60e04dd92c7">More...</a><br /></td></tr>
+<tr class="separator:acf943886aad69c2e53d1d60e04dd92c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b4677a9af2c3d3f3f534fcad2808be7"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0b4677a9af2c3d3f3f534fcad2808be7">executesCommandBlock</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html">CommandBlockResultingCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:a0b4677a9af2c3d3f3f534fcad2808be7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0b4677a9af2c3d3f3f534fcad2808be7">More...</a><br /></td></tr>
+<tr class="separator:a0b4677a9af2c3d3f3f534fcad2808be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37e6bc244e32a6d5e42c6ae83aacdd0d"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a37e6bc244e32a6d5e42c6ae83aacdd0d">executesCommandBlock</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_execution_info.html">CommandBlockResultingExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:a37e6bc244e32a6d5e42c6ae83aacdd0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a37e6bc244e32a6d5e42c6ae83aacdd0d">More...</a><br /></td></tr>
+<tr class="separator:a37e6bc244e32a6d5e42c6ae83aacdd0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac19ca596e296e9a2fd2cf7dde69b40e2"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ac19ca596e296e9a2fd2cf7dde69b40e2">executesConsole</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_command_executor.html">ConsoleCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:ac19ca596e296e9a2fd2cf7dde69b40e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ac19ca596e296e9a2fd2cf7dde69b40e2">More...</a><br /></td></tr>
+<tr class="separator:ac19ca596e296e9a2fd2cf7dde69b40e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2daa4295a545792048e59a3134676866"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a2daa4295a545792048e59a3134676866">executesConsole</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_execution_info.html">ConsoleExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:a2daa4295a545792048e59a3134676866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a2daa4295a545792048e59a3134676866">More...</a><br /></td></tr>
+<tr class="separator:a2daa4295a545792048e59a3134676866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b69cc35adaac816e629bfd62788ac0"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a22b69cc35adaac816e629bfd62788ac0">executesConsole</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_command_executor.html">ConsoleResultingCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:a22b69cc35adaac816e629bfd62788ac0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a22b69cc35adaac816e629bfd62788ac0">More...</a><br /></td></tr>
+<tr class="separator:a22b69cc35adaac816e629bfd62788ac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f02a388b2f812b570a1e46ba814a89d"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0f02a388b2f812b570a1e46ba814a89d">executesConsole</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_execution_info.html">ConsoleResultingExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:a0f02a388b2f812b570a1e46ba814a89d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0f02a388b2f812b570a1e46ba814a89d">More...</a><br /></td></tr>
+<tr class="separator:a0f02a388b2f812b570a1e46ba814a89d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a735e7a224495c808898b533c31ce292f"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a735e7a224495c808898b533c31ce292f">executesNative</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html">NativeCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:a735e7a224495c808898b533c31ce292f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a735e7a224495c808898b533c31ce292f">More...</a><br /></td></tr>
+<tr class="separator:a735e7a224495c808898b533c31ce292f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b54a6156daa5f05e794c08cfbcc2619"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0b54a6156daa5f05e794c08cfbcc2619">executesNative</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_execution_info.html">NativeExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:a0b54a6156daa5f05e794c08cfbcc2619"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a0b54a6156daa5f05e794c08cfbcc2619">More...</a><br /></td></tr>
+<tr class="separator:a0b54a6156daa5f05e794c08cfbcc2619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8dc01025f92809f80b587d8ed3f7e07"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#af8dc01025f92809f80b587d8ed3f7e07">executesNative</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html">NativeResultingCommandExecutor</a> executor)</td></tr>
+<tr class="memdesc:af8dc01025f92809f80b587d8ed3f7e07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#af8dc01025f92809f80b587d8ed3f7e07">More...</a><br /></td></tr>
+<tr class="separator:af8dc01025f92809f80b587d8ed3f7e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4aefceb56c91e57b54ffa2dd75b1434"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#aa4aefceb56c91e57b54ffa2dd75b1434">executesNative</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_execution_info.html">NativeResultingExecutionInfo</a> info)</td></tr>
+<tr class="memdesc:aa4aefceb56c91e57b54ffa2dd75b1434"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#aa4aefceb56c91e57b54ffa2dd75b1434">More...</a><br /></td></tr>
+<tr class="separator:aa4aefceb56c91e57b54ffa2dd75b1434"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a41e532f7c5c796ad12750b881d39c99e" name="a41e532f7c5c796ad12750b881d39c99e"></a>
@@ -135,14 +231,1078 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a73231a1d04545f444f8b38293c561812" name="a73231a1d04545f444f8b38293c561812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73231a1d04545f444f8b38293c561812">&#9670;&nbsp;</a></span>executes() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_execution_info.html">CommandExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>executor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ExecutorType...&#160;</td>
+          <td class="paramname"><em>types</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(BukkitCommandExecutionInfo) -&gt; ()</code> that will be executed when the command is run </td></tr>
+    <tr><td class="paramname">types</td><td>A list of executor types to use this executes method for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a8d1762584d31697c20378449f26213f7" name="a8d1762584d31697c20378449f26213f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1762584d31697c20378449f26213f7">&#9670;&nbsp;</a></span>executes() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html">CommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ExecutorType...&#160;</td>
+          <td class="paramname"><em>types</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(CommandSender, Object[]) -&gt; ()</code> that will be executed when the command is run </td></tr>
+    <tr><td class="paramname">types</td><td>A list of executor types to use this executes method for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="aaccd66e439abf95673a87f6530889dac" name="aaccd66e439abf95673a87f6530889dac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaccd66e439abf95673a87f6530889dac">&#9670;&nbsp;</a></span>executes() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_execution_info.html">ResultingCommandExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>executor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ExecutorType...&#160;</td>
+          <td class="paramname"><em>types</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(BukkitCommandExecutionInfo) -&gt; int</code> that will be executed when the command is run </td></tr>
+    <tr><td class="paramname">types</td><td>A list of executor types to use this executes method for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a7895ea5dd006e0225dce5cb1e3d8b44f" name="a7895ea5dd006e0225dce5cb1e3d8b44f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7895ea5dd006e0225dce5cb1e3d8b44f">&#9670;&nbsp;</a></span>executes() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html">ResultingCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ExecutorType...&#160;</td>
+          <td class="paramname"><em>types</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(CommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run </td></tr>
+    <tr><td class="paramname">types</td><td>A list of executor types to use this executes method for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="ab17bfc527a2ea0c68c81ac0d517d1ce3" name="ab17bfc527a2ea0c68c81ac0d517d1ce3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab17bfc527a2ea0c68c81ac0d517d1ce3">&#9670;&nbsp;</a></span>executesCommandBlock() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesCommandBlock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html">CommandBlockCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(BlockCommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="acf943886aad69c2e53d1d60e04dd92c7" name="acf943886aad69c2e53d1d60e04dd92c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf943886aad69c2e53d1d60e04dd92c7">&#9670;&nbsp;</a></span>executesCommandBlock() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesCommandBlock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info.html">CommandBlockExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a0b4677a9af2c3d3f3f534fcad2808be7" name="a0b4677a9af2c3d3f3f534fcad2808be7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b4677a9af2c3d3f3f534fcad2808be7">&#9670;&nbsp;</a></span>executesCommandBlock() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesCommandBlock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html">CommandBlockResultingCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(BlockCommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a37e6bc244e32a6d5e42c6ae83aacdd0d" name="a37e6bc244e32a6d5e42c6ae83aacdd0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37e6bc244e32a6d5e42c6ae83aacdd0d">&#9670;&nbsp;</a></span>executesCommandBlock() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesCommandBlock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_execution_info.html">CommandBlockResultingExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="ac19ca596e296e9a2fd2cf7dde69b40e2" name="ac19ca596e296e9a2fd2cf7dde69b40e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac19ca596e296e9a2fd2cf7dde69b40e2">&#9670;&nbsp;</a></span>executesConsole() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesConsole </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_command_executor.html">ConsoleCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(ConsoleCommandSender, CommandArguments) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a2daa4295a545792048e59a3134676866" name="a2daa4295a545792048e59a3134676866"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2daa4295a545792048e59a3134676866">&#9670;&nbsp;</a></span>executesConsole() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesConsole </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_execution_info.html">ConsoleExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a22b69cc35adaac816e629bfd62788ac0" name="a22b69cc35adaac816e629bfd62788ac0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b69cc35adaac816e629bfd62788ac0">&#9670;&nbsp;</a></span>executesConsole() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesConsole </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_command_executor.html">ConsoleResultingCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(ConsoleCommandSender, CommandArguments) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a0f02a388b2f812b570a1e46ba814a89d" name="a0f02a388b2f812b570a1e46ba814a89d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f02a388b2f812b570a1e46ba814a89d">&#9670;&nbsp;</a></span>executesConsole() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesConsole </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_execution_info.html">ConsoleResultingExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a441a936e66c8b00338f64294ddc0fc43" name="a441a936e66c8b00338f64294ddc0fc43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a441a936e66c8b00338f64294ddc0fc43">&#9670;&nbsp;</a></span>executesEntity() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesEntity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_command_executor.html">EntityCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(Entity, CommandArguments) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a0f2544607d00536f1e953c5ac31983fb" name="a0f2544607d00536f1e953c5ac31983fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f2544607d00536f1e953c5ac31983fb">&#9670;&nbsp;</a></span>executesEntity() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesEntity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_execution_info.html">EntityExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="adfeba7f0fa5abf61d81a2c1dd233673b" name="adfeba7f0fa5abf61d81a2c1dd233673b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfeba7f0fa5abf61d81a2c1dd233673b">&#9670;&nbsp;</a></span>executesEntity() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesEntity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_command_executor.html">EntityResultingCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(Entity, CommandArguments) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="afa2a0f38f81c96e7ed413f1ddae9e917" name="afa2a0f38f81c96e7ed413f1ddae9e917"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa2a0f38f81c96e7ed413f1ddae9e917">&#9670;&nbsp;</a></span>executesEntity() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesEntity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_execution_info.html">EntityResultingExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a735e7a224495c808898b533c31ce292f" name="a735e7a224495c808898b533c31ce292f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a735e7a224495c808898b533c31ce292f">&#9670;&nbsp;</a></span>executesNative() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesNative </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html">NativeCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(NativeCommandExecutor, CommandArguments) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a0b54a6156daa5f05e794c08cfbcc2619" name="a0b54a6156daa5f05e794c08cfbcc2619"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b54a6156daa5f05e794c08cfbcc2619">&#9670;&nbsp;</a></span>executesNative() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesNative </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_execution_info.html">NativeExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="af8dc01025f92809f80b587d8ed3f7e07" name="af8dc01025f92809f80b587d8ed3f7e07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8dc01025f92809f80b587d8ed3f7e07">&#9670;&nbsp;</a></span>executesNative() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesNative </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html">NativeResultingCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(NativeCommandExecutor, CommandArguments) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="aa4aefceb56c91e57b54ffa2dd75b1434" name="aa4aefceb56c91e57b54ffa2dd75b1434"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4aefceb56c91e57b54ffa2dd75b1434">&#9670;&nbsp;</a></span>executesNative() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesNative </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_execution_info.html">NativeResultingExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="af450331bdf93e3491cf1bd66389f8f00" name="af450331bdf93e3491cf1bd66389f8f00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af450331bdf93e3491cf1bd66389f8f00">&#9670;&nbsp;</a></span>executesPlayer() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesPlayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html">PlayerCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(Player, CommandArguments) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a7074833a1a9bc2c59fa700e69f9cb77f" name="a7074833a1a9bc2c59fa700e69f9cb77f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7074833a1a9bc2c59fa700e69f9cb77f">&#9670;&nbsp;</a></span>executesPlayer() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesPlayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_execution_info.html">PlayerExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a352f92e031131041c289eb1c84098114" name="a352f92e031131041c289eb1c84098114"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a352f92e031131041c289eb1c84098114">&#9670;&nbsp;</a></span>executesPlayer() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesPlayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html">PlayerResultingCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(Player, CommandArguments) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a2d880ebc87b8dcfb5c091d04c52a2230" name="a2d880ebc87b8dcfb5c091d04c52a2230"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d880ebc87b8dcfb5c091d04c52a2230">&#9670;&nbsp;</a></span>executesPlayer() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesPlayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_execution_info.html">PlayerResultingExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a7bfc016e3b58741ef9fe975021e45f21" name="a7bfc016e3b58741ef9fe975021e45f21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bfc016e3b58741ef9fe975021e45f21">&#9670;&nbsp;</a></span>executesProxy() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesProxy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html">ProxyCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(Entity, CommandArguments) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="ad70b6ec3cc3f173ebb5f3cba8e6a5bf7" name="ad70b6ec3cc3f173ebb5f3cba8e6a5bf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad70b6ec3cc3f173ebb5f3cba8e6a5bf7">&#9670;&nbsp;</a></span>executesProxy() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesProxy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_execution_info.html">ProxyExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="aabedb5e11a69a746d02b791dbe255eec" name="aabedb5e11a69a746d02b791dbe255eec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabedb5e11a69a746d02b791dbe255eec">&#9670;&nbsp;</a></span>executesProxy() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesProxy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html">ProxyResultingCommandExecutor</a>&#160;</td>
+          <td class="paramname"><em>executor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>A lambda of type <code>(Entity, CommandArguments) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="ac16f2b03b0b4cb63c0464e54c89687ca" name="ac16f2b03b0b4cb63c0464e54c89687ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac16f2b03b0b4cb63c0464e54c89687ca">&#9670;&nbsp;</a></span>executesProxy() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">default Impl <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html">dev.jorel.commandapi.BukkitExecutable</a>&lt; Impl &gt;.executesProxy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_execution_info.html">ProxyResultingExecutionInfo</a>&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds an executor to the current command builder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a2b18f25a41e52e8a2c2e8583da231972" name="a2b18f25a41e52e8a2c2e8583da231972"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b18f25a41e52e8a2c2e8583da231972">&#9670;&nbsp;</a></span>then()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html">dev.jorel.commandapi.AbstractCommandTree</a>&lt; Impl, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt;.then </td>
+          <td>(</td>
+          <td class="paramtype">final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt;&#160;</td>
+          <td class="paramname"><em>tree</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a child branch on the tree. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tree</td><td>the child node </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this root node </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html">CommandTree</a></li>
-    <li class="footer">Generated on Thu May 11 2023 10:51:29 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html">CommandTree</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:14 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>
