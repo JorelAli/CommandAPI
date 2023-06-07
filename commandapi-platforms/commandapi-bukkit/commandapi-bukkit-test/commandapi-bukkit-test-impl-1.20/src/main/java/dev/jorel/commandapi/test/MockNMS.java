@@ -86,6 +86,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -388,34 +389,37 @@ public class MockNMS extends Enums {
 		minecraftServerMock = Mockito.mock(MinecraftServer.class);
 
 		// LootTableArgument
-//		Mockito.when(minecraftServerMock.getLootData().getKeys(LootDataType.TABLE)).thenAnswer(invocation -> {
-//			LootTables lootTables = Mockito.mock(LootTables.class);
-//			Mockito.when(lootTables.get(any(ResourceLocation.class))).thenAnswer(i -> {
-//				if (BuiltInLootTables.all().contains(i.getArgument(0))) {
-//					return net.minecraft.world.level.storage.loot.LootTable.EMPTY;
-//				} else {
-//					return null;
-//				}
-//			});
-//			Mockito.when(lootTables.getIds()).thenAnswer(i -> {
-//				return Streams
-//					.concat(
-//						Arrays.stream(getEntityTypes())
-//							.filter(e -> !e.equals(EntityType.UNKNOWN))
-//							// TODO? These entity types don't have corresponding
-//							// loot table entries! Did Spigot miss them out?
-//							.filter(e -> !e.equals(EntityType.ALLAY))
-//							.filter(e -> !e.equals(EntityType.FROG))
-//							.filter(e -> !e.equals(EntityType.TADPOLE))
-//							.filter(e -> !e.equals(EntityType.WARDEN))
-//							.filter(e -> e.isAlive())
-//							.map(EntityType::getKey)
-//							.map(k -> new ResourceLocation("minecraft", "entities/" + k.getKey())),
-//						BuiltInLootTables.all().stream())
-//					.collect(Collectors.toSet());
-//			});
-//			return lootTables;
-//		});
+		Mockito.when(minecraftServerMock.getLootData()).thenAnswer(invocation -> {
+			//.getKeys(LootDataType.TABLE)
+			LootDataManager lootDataManager = Mockito.mock(LootDataManager.class);
+			
+			Mockito.when(lootDataManager.getLootTable(any(ResourceLocation.class))).thenAnswer(i -> {
+				if (BuiltInLootTables.all().contains(i.getArgument(0))) {
+					return net.minecraft.world.level.storage.loot.LootTable.EMPTY;
+				} else {
+					return null;
+				}
+			});
+			
+			Mockito.when(lootDataManager.getKeys(any())).thenAnswer(i -> {
+				return Streams
+					.concat(
+						Arrays.stream(getEntityTypes())
+							.filter(e -> !e.equals(EntityType.UNKNOWN))
+							// TODO? These entity types don't have corresponding
+							// loot table entries! Did Spigot miss them out?
+							.filter(e -> !e.equals(EntityType.ALLAY))
+							.filter(e -> !e.equals(EntityType.FROG))
+							.filter(e -> !e.equals(EntityType.TADPOLE))
+							.filter(e -> !e.equals(EntityType.WARDEN))
+							.filter(e -> e.isAlive())
+							.map(EntityType::getKey)
+							.map(k -> new ResourceLocation("minecraft", "entities/" + k.getKey())),
+						BuiltInLootTables.all().stream())
+					.collect(Collectors.toSet());
+			});
+			return lootDataManager;
+		});
 
 		// AdvancementArgument
 		Mockito.when(minecraftServerMock.getAdvancements()).thenAnswer(i -> advancementDataWorld);

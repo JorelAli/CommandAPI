@@ -134,6 +134,18 @@
 
 	<profiles>
 		<profile>
+			<id>Spigot_1_20_R1</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.20-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<id>Spigot_1_19_3_R2</id>
 			<dependencies>
 				<dependency>
