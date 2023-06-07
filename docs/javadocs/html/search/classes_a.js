@@ -13,7 +13,8 @@ var searchData=
   ['message_10',['Message',['../interfacecom_1_1mojang_1_1brigadier_1_1_message.html',1,'com::mojang::brigadier']]],
   ['messagebuilder_11',['MessageBuilder',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_message_builder.html',1,'dev::jorel::commandapi::arguments::CustomArgument']]],
   ['missingcommandexecutorexception_12',['MissingCommandExecutorException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_missing_command_executor_exception.html',1,'dev::jorel::commandapi::exceptions']]],
-  ['multiliteral_3c_20impl_20extends_20abstractargument_13',['MultiLiteral&lt; Impl extends AbstractArgument',['../interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_3_01_impl_01extends_01_abstract_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['multiliteralargument_14',['MultiLiteralArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html',1,'dev::jorel::commandapi::arguments']]],
-  ['multiple_15',['Multiple',['../interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument_1_1_multiple.html',1,'dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument.Multiple'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_multiple.html',1,'dev.jorel.commandapi.arguments.ScoreHolderArgument.Multiple']]]
+  ['multiliteral_13',['MultiLiteral',['../interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal.html',1,'dev::jorel::commandapi::arguments']]],
+  ['multiliteral_3c_20argument_3c_20string_20_3e_20_3e_14',['MultiLiteral&lt; Argument&lt; String &gt; &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal.html',1,'dev::jorel::commandapi::arguments']]],
+  ['multiliteralargument_15',['MultiLiteralArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html',1,'dev::jorel::commandapi::arguments']]],
+  ['multiple_16',['Multiple',['../interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument_1_1_multiple.html',1,'dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument.Multiple'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_multiple.html',1,'dev.jorel.commandapi.arguments.ScoreHolderArgument.Multiple']]]
 ];

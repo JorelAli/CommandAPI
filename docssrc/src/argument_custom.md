@@ -44,7 +44,7 @@ The `CustomArgumentInfo` record is very similar to the `SuggestionInfo` record f
 ```java
 public record CustomArgumentInfo<B> {
     CommandSender sender();
-    Object[] previousArgs(); 
+    CommandArguments previousArgs(); 
     String input();
     B currentInput();
 }
@@ -59,10 +59,10 @@ These fields are as follows:
   `sender()` represents the command sender that is typing the command. This is normally a `Player`, but can also be a console command sender if using a Paper server.
 
 - ```java
-  Object[] previousArgs();
+  CommandArguments previousArgs();
   ```
 
-  `previousArgs()` represents a list of previously declared arguments, which are parsed and interpreted as if they were being used to execute the command.
+  `previousArgs()` represents the previously declared arguments, which are parsed and interpreted as if they were being used to execute the command.
 
 - ```java
   String input();

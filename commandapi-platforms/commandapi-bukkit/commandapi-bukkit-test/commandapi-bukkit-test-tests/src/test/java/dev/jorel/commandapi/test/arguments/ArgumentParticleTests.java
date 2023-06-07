@@ -3,6 +3,7 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -131,7 +132,7 @@ class ArgumentParticleTests extends TestBase {
 		// caps it off at 4.
 		int size = ThreadLocalRandom.current().nextInt(1, 5);
 
-		server.dispatchCommand(player, "test dust %.2f %.2f %.2f %d".formatted(red, green, blue, size));
+		server.dispatchCommand(player, "test dust %s %s %s %d".formatted(red, green, blue, size));
 		@SuppressWarnings("unchecked")
 		ParticleData<DustOptions> result = (ParticleData<DustOptions>) results.get();
 

@@ -19,7 +19,11 @@ import java.util.List;
  * @param <CommandSender> The class for running platforms commands
  * @param <Source> The class for running Brigadier commands
  */
-public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
+public interface CommandAPIPlatform<Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender, Source> {
 	// Platform-specific loading, enabling, and disabling tasks
 
 	/**
@@ -154,6 +158,12 @@ public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argu
 			public void severe(String message) {
 				System.out.println(RED + PREFIX + message + RESET);
 			}
+
+			@Override
+			public void severe(String message, Throwable throwable) {
+				System.out.println(RED + PREFIX + message + RESET);
+				throwable.printStackTrace(System.out);
+			}
 		};
 	}
 
@@ -172,7 +182,7 @@ public interface CommandAPIPlatform<Argument extends AbstractArgument<?, ?, Argu
 	// Create the concrete instances of objects implemented by the platform
 	public abstract AbstractCommandAPICommand<?, Argument, CommandSender> newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta);
 
-	public abstract Argument newConcreteMultiLiteralArgument(String[] literals);
+	public abstract Argument newConcreteMultiLiteralArgument(String nodeName, String[] literals);
 
-	public abstract Argument newConcreteLiteralArgument(String literal);
+	public abstract Argument newConcreteLiteralArgument(String nodeName, String literal);
 }

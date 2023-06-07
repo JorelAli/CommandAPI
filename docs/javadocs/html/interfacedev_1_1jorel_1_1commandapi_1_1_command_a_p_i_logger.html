@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -103,6 +104,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>warning</b> (String m
 <tr class="memitem:a673caf4c356137a798f4b882f4ba6735"><td class="memItemLeft" align="right" valign="top"><a id="a673caf4c356137a798f4b882f4ba6735" name="a673caf4c356137a798f4b882f4ba6735"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>severe</b> (String message)</td></tr>
 <tr class="separator:a673caf4c356137a798f4b882f4ba6735"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80cf1cc953d497213c921a9deb6934cf"><td class="memItemLeft" align="right" valign="top"><a id="a80cf1cc953d497213c921a9deb6934cf" name="a80cf1cc953d497213c921a9deb6934cf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>severe</b> (String message, Throwable exception)</td></tr>
+<tr class="separator:a80cf1cc953d497213c921a9deb6934cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -115,18 +119,22 @@ static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i
 <tr class="memitem:a0101baf78203d513998a89742af0338b"><td class="memItemLeft" align="right" valign="top"><a id="a0101baf78203d513998a89742af0338b" name="a0101baf78203d513998a89742af0338b"></a>
 static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_logger.html">CommandAPILogger</a>&#160;</td><td class="memItemRight" valign="bottom"><b>fromSlf4jLogger</b> (org.slf4j.Logger logger)</td></tr>
 <tr class="separator:a0101baf78203d513998a89742af0338b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ce3a311884d3bba55eab83083f7908a"><td class="memItemLeft" align="right" valign="top"><a id="a7ce3a311884d3bba55eab83083f7908a" name="a7ce3a311884d3bba55eab83083f7908a"></a>
-static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_logger.html">CommandAPILogger</a>&#160;</td><td class="memItemRight" valign="bottom"><b>bindToMethods</b> (Consumer&lt; String &gt; info, Consumer&lt; String &gt; warning, Consumer&lt; String &gt; severe)</td></tr>
-<tr class="separator:a7ce3a311884d3bba55eab83083f7908a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7aa86076cc8289f7ebfcaead7e372ab"><td class="memItemLeft" align="right" valign="top"><a id="ae7aa86076cc8289f7ebfcaead7e372ab" name="ae7aa86076cc8289f7ebfcaead7e372ab"></a>
+static <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_logger.html">CommandAPILogger</a>&#160;</td><td class="memItemRight" valign="bottom"><b>bindToMethods</b> (Consumer&lt; String &gt; info, Consumer&lt; String &gt; warning, Consumer&lt; String &gt; severe, BiConsumer&lt; String, Throwable &gt; severeException)</td></tr>
+<tr class="separator:ae7aa86076cc8289f7ebfcaead7e372ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_logger.html">CommandAPILogger</a></li>
-    <li class="footer">Generated on Thu May 11 2023 10:51:29 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_logger.html">CommandAPILogger</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:14 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

@@ -38,7 +38,7 @@ PROJECT_NAME           = CommandAPI
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 9.0.1
+PROJECT_NUMBER         = 9.0.2
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -51,7 +51,7 @@ PROJECT_BRIEF          = "An API for the command UI introduced in Minecraft 1.13
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = images/logo.png
+PROJECT_LOGO           = images/logo-small-512.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -876,7 +876,7 @@ WARN_LOGFILE           =
 
 INPUT                  = README.md \
                          commandapi-core\src\main\java \
-                         ..\I-Al-Istannen\brigadier\src\main\java \
+                         ..\brigadier-with-javadocs\src\main\java \
                          commandapi-annotations\src\main\java \
                          commandapi-platforms\commandapi-bukkit\commandapi-bukkit-core\src\main\java
 
@@ -1281,7 +1281,7 @@ HTML_HEADER            =
 # that doxygen normally uses.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_FOOTER            =
+HTML_FOOTER            = docssrc/doxygen/html_footer.html
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading style
 # sheet that is used by each HTML page. It can be used to fine-tune the look of
@@ -1306,7 +1306,7 @@ HTML_STYLESHEET        =
 # list). For an example see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  =
+HTML_EXTRA_STYLESHEET  = docssrc/doxygen/doxygen-style.css
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1316,7 +1316,11 @@ HTML_EXTRA_STYLESHEET  =
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       =
+HTML_EXTRA_FILES       = docssrc/doxygen/img/closed-folder.png \
+                         docssrc/doxygen/img/document.png \
+                         docssrc/doxygen/img/off_sync.png \
+                         docssrc/doxygen/img/on_sync.png \
+                         docssrc/doxygen/img/opened-folder.png
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the style sheet and background images according to

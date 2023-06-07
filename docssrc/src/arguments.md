@@ -75,7 +75,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 
 ## Argument Casting
 
-To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `args[]` is the same as the order in which the arguments were declared.
+To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `CommandArguments args` is the same as the order in which the arguments were declared.
 
 <div class="multi-pre">
 

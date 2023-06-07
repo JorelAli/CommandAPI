@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -90,6 +91,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>PaperAdventureNotFoundException()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_paper_adventure_not_found_exception.html#a331ecccc2faecee20b7aa83b88c5afc8">dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException</a></li>
 <li>PaperImplementations()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a2f032cf6b53d414bd5f6bd6700cf674e">dev.jorel.commandapi.PaperImplementations</a></li>
 <li>parse()&#160;:&#160;<a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1arguments_1_1_argument_type.html#aa5365da23591073cc9203c0db42cb5bf">com.mojang.brigadier.arguments.ArgumentType&lt; T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#a1ccf3491babb5f3658ad71dd75bd57bd">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html#a7e698c584bcf28bd80f25a350eda1737">com.mojang.brigadier.tree.ArgumentCommandNode&lt; S, T &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html#a56a9832082abca83e51b87cdc4f64e04">com.mojang.brigadier.tree.CommandNode&lt; S &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#a558533d7daf126da959fad70570bbeff">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html#a2f928d4935b753d22ed3e9abc7425e73">com.mojang.brigadier.tree.RootCommandNode&lt; S &gt;</a></li>
+<li>parseArgument()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#a8b5b390d0343513041759ae260f2b5f5">dev.jorel.commandapi.arguments.AbstractArgument&lt; T, Impl, Argument, CommandSender &gt;</a></li>
 <li>parseArguments()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html#ada2f66de02b7ad2361c386fa827fc568">dev.jorel.commandapi.Brigadier</a></li>
 <li>ParsedArgument()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_argument.html#adbc5c44ffb6a6b89981ef02067c853f2">com.mojang.brigadier.context.ParsedArgument&lt; S, T &gt;</a></li>
 <li>ParsedCommandNode()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_command_node.html#aa7284233b1fee633f2750524bfeb4f12">com.mojang.brigadier.context.ParsedCommandNode&lt; S &gt;</a></li>
@@ -98,9 +100,11 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>peek()&#160;:&#160;<a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_immutable_string_reader.html#aead5972aafb2db462584a0e7993578e1">com.mojang.brigadier.ImmutableStringReader</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a4864e36b974a667dd43faa8d49f72d52">com.mojang.brigadier.StringReader</a></li>
 <li>PLAYER&#160;:&#160;<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac5739032037514f0aa89935f8d9dd2cc">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a>, <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a52ebde1677f2c3a109bc1aa2407ca1b3">dev.jorel.commandapi.executors.ExecutorType</a></li>
 <li>PlayerArgument()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_player_argument.html#a55687f881210e59fbaf42a7745f8f512">dev.jorel.commandapi.arguments.PlayerArgument</a></li>
+<li>postCommandRegistration()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a02f129e0a6727b3378b5e98e670c65cf">dev.jorel.commandapi.CommandAPIPlatform&lt; Argument, CommandSender, Source &gt;</a></li>
 <li>POTION_EFFECT&#160;:&#160;<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac83b55db69689cdc2bf9d527394e46be">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a></li>
 <li>PotionEffectArgument()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument.html#a97cd43f0957b2d888f19878658c7d89d">dev.jorel.commandapi.arguments.PotionEffectArgument</a></li>
 <li>PRECISE_POSITION&#160;:&#160;<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e">dev.jorel.commandapi.arguments.LocationType</a></li>
+<li>preCommandRegistration()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#aa7326e92cf6d46b17947ef15492bac23">dev.jorel.commandapi.CommandAPIPlatform&lt; Argument, CommandSender, Source &gt;</a></li>
 <li>PRIMITIVE_BOOLEAN&#160;:&#160;<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#acd575913daf86a42a8aa1645fecf729f">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a></li>
 <li>PRIMITIVE_DOUBLE&#160;:&#160;<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac567363a95c9d16c2697b69f56669445">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a></li>
 <li>PRIMITIVE_FLOAT&#160;:&#160;<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a676b3ce7500622cc97b35e8ad66de527">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a></li>
@@ -114,10 +118,14 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="footer">Generated on Thu May 11 2023 10:51:30 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:15 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

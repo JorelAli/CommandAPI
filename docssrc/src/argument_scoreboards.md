@@ -61,7 +61,7 @@ Note how we use `..9` to represent 9 or less deaths (since ranges are inclusive)
 > In the example above, we have our user use the `@e[type=player]` entity selector to restrict the `Collection<String>` so it only returns player names, which allows us to use `Bukkit.getPlayer(playerName)`. In practice, we cannot guarantee that such a selector will be used, so we could update the code to accept both entities and players. For example, we can differentiate between players and entities by using the `UUID.fromString(String)` method:
 >
 > ```java
-> Collection<String> entitiesAndPlayers = (Collection<String>) args[0];
+> Collection<String> entitiesAndPlayers = (Collection<String>) args.get(0);
 > for(String str : entitiesAndPlayers) {
 >     try {
 >         UUID uuid = UUID.fromString(str);

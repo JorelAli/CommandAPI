@@ -39,8 +39,15 @@ import dev.jorel.commandapi.exceptions.OptionalArgumentException;
  * @param <Argument>      The implementation of AbstractArgument used by the class extending this class
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>,
-	Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
+public abstract class AbstractCommandAPICommand<Impl
+/// @cond DOX
+extends AbstractCommandAPICommand<Impl, Argument, CommandSender>
+/// @endcond
+, Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
 	protected List<Argument> arguments = new ArrayList<>();
 	protected List<Impl> subcommands = new ArrayList<>();
@@ -216,7 +223,7 @@ public abstract class AbstractCommandAPICommand<Impl extends AbstractCommandAPIC
 		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
 
 		// Create a MultiLiteralArgument using the subcommand information
-		Argument literal = (Argument) CommandAPIHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(literals);
+		Argument literal = (Argument) CommandAPIHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(subcommand.meta.commandName, literals);
 
 		literal.withPermission(subcommand.meta.permission)
 			.withRequirement((Predicate) subcommand.meta.requirements)

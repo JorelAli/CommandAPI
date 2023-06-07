@@ -5,7 +5,11 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.*;
 import org.bukkit.command.CommandSender;
 
-public interface BukkitExecutable<Impl extends BukkitExecutable<Impl>> extends PlatformExecutable<Impl, CommandSender> {
+public interface BukkitExecutable<Impl
+/// @cond DOX
+extends BukkitExecutable<Impl>
+/// @endcond
+> extends PlatformExecutable<Impl, CommandSender> {
 
 	// Regular command executor
 

@@ -11,6 +11,7 @@ var classcom_1_1mojang_1_1brigadier_1_1_string_reader =
     [ "getTotalLength", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#aab40f03590327882b9a384d8f7fa6262", null ],
     [ "isAllowedInUnquotedString", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a9351123ecafc184b58dae32f0470a874", null ],
     [ "isAllowedNumber", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a23b44be650bf01183487e45779c57f0e", null ],
+    [ "isQuotedStringStart", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a550d951fa2f8fbd3c70399105d23535f", null ],
     [ "peek", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a4864e36b974a667dd43faa8d49f72d52", null ],
     [ "peek", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a4e23ed1b8cb7666861914919b5b1afe4", null ],
     [ "read", "classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#af973434733bd6ece67425ccae9e7cfb6", null ],

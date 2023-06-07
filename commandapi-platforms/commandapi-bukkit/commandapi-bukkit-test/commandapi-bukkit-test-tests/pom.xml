@@ -25,7 +25,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit-test</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.0.1</version>
+		<version>9.0.2</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -154,6 +154,41 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<id>Minecraft_1_20</id>
+			<dependencies>
+				<dependency>
+					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
+					 commandapi-core, but isn't inherited here automatically, so we add
+					 it here -->
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+					<version>2.19.0</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-impl-1.20</artifactId>
+					<version>${project.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.20-R0.1-SNAPSHOT</version>
+				</dependency>
+				<dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.19.4-R0.1-SNAPSHOT</version>
+				</dependency>
+			</dependencies>
+		</profile>
 		<profile>
 			<id>Minecraft_1_19_4</id>
 			<dependencies>

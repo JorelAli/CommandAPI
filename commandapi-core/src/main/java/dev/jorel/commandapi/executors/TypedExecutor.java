@@ -29,7 +29,11 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * sender and arguments
  * @param <WrapperType> The AbstractCommandSenderClass for this executor
  */
-public interface TypedExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
+public interface TypedExecutor<CommandSender, WrapperType
+/// @cond DOX
+extends AbstractCommandSender<? extends CommandSender>
+/// @endcond
+> {
 	
 	/**
 	 * Returns the type of the sender of the current executor.

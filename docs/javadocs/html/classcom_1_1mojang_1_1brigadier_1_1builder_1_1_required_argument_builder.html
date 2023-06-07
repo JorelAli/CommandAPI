@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -124,48 +125,48 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab9883b9c8147b5d4fbc1c99226080341"><td class="memItemLeft" align="right" valign="top"><a id="ab9883b9c8147b5d4fbc1c99226080341" name="ab9883b9c8147b5d4fbc1c99226080341"></a>
 <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_argument_command_node.html">ArgumentCommandNode</a>&lt; S, T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>build</b> ()</td></tr>
 <tr class="separator:ab9883b9c8147b5d4fbc1c99226080341"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab10910d499a34cb58887ece892b1e8b2"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ab10910d499a34cb58887ece892b1e8b2">then</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">ArgumentBuilder</a>&lt; S, ?&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html#af53916f4b067ca87755269c5444b96c8">argument</a>)</td></tr>
-<tr class="memdesc:ab10910d499a34cb58887ece892b1e8b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds the given ArgumentBuilder and adds the result as new child node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ab10910d499a34cb58887ece892b1e8b2">More...</a><br /></td></tr>
-<tr class="separator:ab10910d499a34cb58887ece892b1e8b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ababa8d518839f3baa726ae08dda1cc4a"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ababa8d518839f3baa726ae08dda1cc4a">then</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html#af53916f4b067ca87755269c5444b96c8">argument</a>)</td></tr>
-<tr class="memdesc:ababa8d518839f3baa726ae08dda1cc4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the given command node as a child.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ababa8d518839f3baa726ae08dda1cc4a">More...</a><br /></td></tr>
-<tr class="separator:ababa8d518839f3baa726ae08dda1cc4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba9697a347007a4ac393c3dd80c08840"><td class="memItemLeft" align="right" valign="top">Collection&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aba9697a347007a4ac393c3dd80c08840">getArguments</a> ()</td></tr>
-<tr class="memdesc:aba9697a347007a4ac393c3dd80c08840"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all registered child command nodes.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aba9697a347007a4ac393c3dd80c08840">More...</a><br /></td></tr>
-<tr class="separator:aba9697a347007a4ac393c3dd80c08840"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7150fe8dddba54047a20556cab712c1"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ab7150fe8dddba54047a20556cab712c1">executes</a> (final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt; command)</td></tr>
-<tr class="memdesc:ab7150fe8dddba54047a20556cab712c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the command that will be executed by the built command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ab7150fe8dddba54047a20556cab712c1">More...</a><br /></td></tr>
-<tr class="separator:ab7150fe8dddba54047a20556cab712c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c56a6dccadf93919ab388ea7b8b2f21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a5c56a6dccadf93919ab388ea7b8b2f21">getCommand</a> ()</td></tr>
-<tr class="memdesc:a5c56a6dccadf93919ab388ea7b8b2f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <code><a class="el" href="">Command</a></code> the built command node will execute.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a5c56a6dccadf93919ab388ea7b8b2f21">More...</a><br /></td></tr>
-<tr class="separator:a5c56a6dccadf93919ab388ea7b8b2f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a972afbbcbfb2ab9391f983810e50271d"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a972afbbcbfb2ab9391f983810e50271d">requires</a> (final Predicate&lt; S &gt; requirement)</td></tr>
-<tr class="memdesc:a972afbbcbfb2ab9391f983810e50271d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the predicate that must be true for a command source in order to be able to use the built command node or its children.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a972afbbcbfb2ab9391f983810e50271d">More...</a><br /></td></tr>
-<tr class="separator:a972afbbcbfb2ab9391f983810e50271d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb05227c1aca88ec2df5258dec735a52"><td class="memItemLeft" align="right" valign="top">Predicate&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abb05227c1aca88ec2df5258dec735a52">getRequirement</a> ()</td></tr>
-<tr class="memdesc:abb05227c1aca88ec2df5258dec735a52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the requirement each command source must meet in order to be able to use this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abb05227c1aca88ec2df5258dec735a52">More...</a><br /></td></tr>
-<tr class="separator:abb05227c1aca88ec2df5258dec735a52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1e075b6d97f6f53c58cedf27184495a"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ae1e075b6d97f6f53c58cedf27184495a">redirect</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target)</td></tr>
-<tr class="memdesc:ae1e075b6d97f6f53c58cedf27184495a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redirects this command node to the target <code><a class="el" href="">CommandNode</a></code>.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ae1e075b6d97f6f53c58cedf27184495a">More...</a><br /></td></tr>
-<tr class="separator:ae1e075b6d97f6f53c58cedf27184495a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46f82d564e7379a1108b43e2dbd43fdb"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a46f82d564e7379a1108b43e2dbd43fdb">redirect</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target, final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html">SingleRedirectModifier</a>&lt; S &gt; modifier)</td></tr>
-<tr class="memdesc:a46f82d564e7379a1108b43e2dbd43fdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redirects this command node to the target <code><a class="el" href="">CommandNode</a></code>.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a46f82d564e7379a1108b43e2dbd43fdb">More...</a><br /></td></tr>
-<tr class="separator:a46f82d564e7379a1108b43e2dbd43fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a099e43c2d5b29941c87dd0d66de0204a"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a099e43c2d5b29941c87dd0d66de0204a">fork</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target, final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt; modifier)</td></tr>
-<tr class="memdesc:a099e43c2d5b29941c87dd0d66de0204a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forks this command node, i.e.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a099e43c2d5b29941c87dd0d66de0204a">More...</a><br /></td></tr>
-<tr class="separator:a099e43c2d5b29941c87dd0d66de0204a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d052c8c63a91f08a27ea37a87d1a471"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0d052c8c63a91f08a27ea37a87d1a471">forward</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target, final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt; modifier, final boolean <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a099e43c2d5b29941c87dd0d66de0204a">fork</a>)</td></tr>
-<tr class="memdesc:a0d052c8c63a91f08a27ea37a87d1a471"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forwards this command in some way to a given target command.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0d052c8c63a91f08a27ea37a87d1a471">More...</a><br /></td></tr>
-<tr class="separator:a0d052c8c63a91f08a27ea37a87d1a471"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a714747ec7dd415bae96e83b2d8a8dd4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a714747ec7dd415bae96e83b2d8a8dd4e">getRedirect</a> ()</td></tr>
-<tr class="memdesc:a714747ec7dd415bae96e83b2d8a8dd4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the command node that the built command node redirects to.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a714747ec7dd415bae96e83b2d8a8dd4e">More...</a><br /></td></tr>
-<tr class="separator:a714747ec7dd415bae96e83b2d8a8dd4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af932650c391c13118980e84a6b5fb5c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#af932650c391c13118980e84a6b5fb5c1">getRedirectModifier</a> ()</td></tr>
-<tr class="memdesc:af932650c391c13118980e84a6b5fb5c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the redirect modifier for the built command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#af932650c391c13118980e84a6b5fb5c1">More...</a><br /></td></tr>
-<tr class="separator:af932650c391c13118980e84a6b5fb5c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ad747d91016f3b777b89c13c1d2045b"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0ad747d91016f3b777b89c13c1d2045b">isFork</a> ()</td></tr>
-<tr class="memdesc:a0ad747d91016f3b777b89c13c1d2045b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the built command node forks.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0ad747d91016f3b777b89c13c1d2045b">More...</a><br /></td></tr>
-<tr class="separator:a0ad747d91016f3b777b89c13c1d2045b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ebf08f6e9012d4571566e57a3b16eb4"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0ebf08f6e9012d4571566e57a3b16eb4">then</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">ArgumentBuilder</a>&lt; S, ?&gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html#af53916f4b067ca87755269c5444b96c8">argument</a>)</td></tr>
+<tr class="memdesc:a0ebf08f6e9012d4571566e57a3b16eb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds the given ArgumentBuilder and adds the result as new child node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0ebf08f6e9012d4571566e57a3b16eb4">More...</a><br /></td></tr>
+<tr class="separator:a0ebf08f6e9012d4571566e57a3b16eb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eed684a3f2962ec3fde93f45bc02589"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0eed684a3f2962ec3fde93f45bc02589">then</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html#af53916f4b067ca87755269c5444b96c8">argument</a>)</td></tr>
+<tr class="memdesc:a0eed684a3f2962ec3fde93f45bc02589"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the given command node as a child.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0eed684a3f2962ec3fde93f45bc02589">More...</a><br /></td></tr>
+<tr class="separator:a0eed684a3f2962ec3fde93f45bc02589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7057e8d2797888711bb5579114ed0fd9"><td class="memItemLeft" align="right" valign="top">Collection&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a7057e8d2797888711bb5579114ed0fd9">getArguments</a> ()</td></tr>
+<tr class="memdesc:a7057e8d2797888711bb5579114ed0fd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all registered child command nodes.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a7057e8d2797888711bb5579114ed0fd9">More...</a><br /></td></tr>
+<tr class="separator:a7057e8d2797888711bb5579114ed0fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59531d51046c67151b4fcb6b3e466c40"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a59531d51046c67151b4fcb6b3e466c40">executes</a> (final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt; command)</td></tr>
+<tr class="memdesc:a59531d51046c67151b4fcb6b3e466c40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the command that will be executed by the built command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a59531d51046c67151b4fcb6b3e466c40">More...</a><br /></td></tr>
+<tr class="separator:a59531d51046c67151b4fcb6b3e466c40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade5b96822cb099ffb62fa2662d0183d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ade5b96822cb099ffb62fa2662d0183d2">getCommand</a> ()</td></tr>
+<tr class="memdesc:ade5b96822cb099ffb62fa2662d0183d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <code><a class="el" href="">Command</a></code> the built command node will execute.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ade5b96822cb099ffb62fa2662d0183d2">More...</a><br /></td></tr>
+<tr class="separator:ade5b96822cb099ffb62fa2662d0183d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86177ff5d63495d60811d4ab6bdcf5d1"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a86177ff5d63495d60811d4ab6bdcf5d1">requires</a> (final Predicate&lt; S &gt; requirement)</td></tr>
+<tr class="memdesc:a86177ff5d63495d60811d4ab6bdcf5d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the predicate that must be true for a command source in order to be able to use the built command node or its children.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a86177ff5d63495d60811d4ab6bdcf5d1">More...</a><br /></td></tr>
+<tr class="separator:a86177ff5d63495d60811d4ab6bdcf5d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d874085290178752a015558c9fd3e6e"><td class="memItemLeft" align="right" valign="top">Predicate&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a8d874085290178752a015558c9fd3e6e">getRequirement</a> ()</td></tr>
+<tr class="memdesc:a8d874085290178752a015558c9fd3e6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the requirement each command source must meet in order to be able to use this command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a8d874085290178752a015558c9fd3e6e">More...</a><br /></td></tr>
+<tr class="separator:a8d874085290178752a015558c9fd3e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ba040b58a07afbc8a7f465caf5ce4c2"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a7ba040b58a07afbc8a7f465caf5ce4c2">redirect</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target)</td></tr>
+<tr class="memdesc:a7ba040b58a07afbc8a7f465caf5ce4c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redirects this command node to the target <code><a class="el" href="">CommandNode</a></code>.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a7ba040b58a07afbc8a7f465caf5ce4c2">More...</a><br /></td></tr>
+<tr class="separator:a7ba040b58a07afbc8a7f465caf5ce4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad667d53ad32c4005baf2242cd61603b"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aad667d53ad32c4005baf2242cd61603b">redirect</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target, final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html">SingleRedirectModifier</a>&lt; S &gt; modifier)</td></tr>
+<tr class="memdesc:aad667d53ad32c4005baf2242cd61603b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redirects this command node to the target <code><a class="el" href="">CommandNode</a></code>.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aad667d53ad32c4005baf2242cd61603b">More...</a><br /></td></tr>
+<tr class="separator:aad667d53ad32c4005baf2242cd61603b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfb17d351932ed121da25c5469dd4abf"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abfb17d351932ed121da25c5469dd4abf">fork</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target, final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt; modifier)</td></tr>
+<tr class="memdesc:abfb17d351932ed121da25c5469dd4abf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forks this command node, i.e.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abfb17d351932ed121da25c5469dd4abf">More...</a><br /></td></tr>
+<tr class="separator:abfb17d351932ed121da25c5469dd4abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97638c8028dd11359f8a8d4b426857fd"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a97638c8028dd11359f8a8d4b426857fd">forward</a> (final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; target, final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt; modifier, final boolean <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abfb17d351932ed121da25c5469dd4abf">fork</a>)</td></tr>
+<tr class="memdesc:a97638c8028dd11359f8a8d4b426857fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forwards this command in some way to a given target command.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a97638c8028dd11359f8a8d4b426857fd">More...</a><br /></td></tr>
+<tr class="separator:a97638c8028dd11359f8a8d4b426857fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe440038a1544ee56e89f895b409cfd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abe440038a1544ee56e89f895b409cfd8">getRedirect</a> ()</td></tr>
+<tr class="memdesc:abe440038a1544ee56e89f895b409cfd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the command node that the built command node redirects to.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abe440038a1544ee56e89f895b409cfd8">More...</a><br /></td></tr>
+<tr class="separator:abe440038a1544ee56e89f895b409cfd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a777a92cd00cc76cad1e0cc3628347cfe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a777a92cd00cc76cad1e0cc3628347cfe">getRedirectModifier</a> ()</td></tr>
+<tr class="memdesc:a777a92cd00cc76cad1e0cc3628347cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the redirect modifier for the built command node.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a777a92cd00cc76cad1e0cc3628347cfe">More...</a><br /></td></tr>
+<tr class="separator:a777a92cd00cc76cad1e0cc3628347cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac2f89eb2bc194a8b0478e21040de678"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aac2f89eb2bc194a8b0478e21040de678">isFork</a> ()</td></tr>
+<tr class="memdesc:aac2f89eb2bc194a8b0478e21040de678"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the built command node forks.  <a href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aac2f89eb2bc194a8b0478e21040de678">More...</a><br /></td></tr>
+<tr class="separator:aac2f89eb2bc194a8b0478e21040de678"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -242,8 +243,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="ab7150fe8dddba54047a20556cab712c1" name="ab7150fe8dddba54047a20556cab712c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7150fe8dddba54047a20556cab712c1">&#9670;&nbsp;</a></span>executes()</h2>
+<a id="a59531d51046c67151b4fcb6b3e466c40" name="a59531d51046c67151b4fcb6b3e466c40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59531d51046c67151b4fcb6b3e466c40">&#9670;&nbsp;</a></span>executes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -252,7 +253,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.executes </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.executes </td>
           <td>(</td>
           <td class="paramtype">final <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt;&#160;</td>
           <td class="paramname"><em>command</em></td><td>)</td>
@@ -277,8 +278,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="a099e43c2d5b29941c87dd0d66de0204a" name="a099e43c2d5b29941c87dd0d66de0204a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a099e43c2d5b29941c87dd0d66de0204a">&#9670;&nbsp;</a></span>fork()</h2>
+<a id="abfb17d351932ed121da25c5469dd4abf" name="abfb17d351932ed121da25c5469dd4abf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfb17d351932ed121da25c5469dd4abf">&#9670;&nbsp;</a></span>fork()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -287,7 +288,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.fork </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.fork </td>
           <td>(</td>
           <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
           <td class="paramname"><em>target</em>, </td>
@@ -322,12 +323,12 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>this object </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0d052c8c63a91f08a27ea37a87d1a471" title="Forwards this command in some way to a given target command.">forward</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a97638c8028dd11359f8a8d4b426857fd" title="Forwards this command in some way to a given target command.">forward</a> </dd></dl>
 
 </div>
 </div>
-<a id="a0d052c8c63a91f08a27ea37a87d1a471" name="a0d052c8c63a91f08a27ea37a87d1a471"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d052c8c63a91f08a27ea37a87d1a471">&#9670;&nbsp;</a></span>forward()</h2>
+<a id="a97638c8028dd11359f8a8d4b426857fd" name="a97638c8028dd11359f8a8d4b426857fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97638c8028dd11359f8a8d4b426857fd">&#9670;&nbsp;</a></span>forward()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -336,7 +337,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.forward </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.forward </td>
           <td>(</td>
           <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
           <td class="paramname"><em>target</em>, </td>
@@ -381,8 +382,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="aba9697a347007a4ac393c3dd80c08840" name="aba9697a347007a4ac393c3dd80c08840"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba9697a347007a4ac393c3dd80c08840">&#9670;&nbsp;</a></span>getArguments()</h2>
+<a id="a7057e8d2797888711bb5579114ed0fd9" name="a7057e8d2797888711bb5579114ed0fd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7057e8d2797888711bb5579114ed0fd9">&#9670;&nbsp;</a></span>getArguments()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -391,7 +392,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Collection&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt; com.mojang.brigadier.builder.ArgumentBuilder.getArguments </td>
+          <td class="memname">Collection&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.getArguments </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -409,8 +410,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="a5c56a6dccadf93919ab388ea7b8b2f21" name="a5c56a6dccadf93919ab388ea7b8b2f21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c56a6dccadf93919ab388ea7b8b2f21">&#9670;&nbsp;</a></span>getCommand()</h2>
+<a id="ade5b96822cb099ffb62fa2662d0183d2" name="ade5b96822cb099ffb62fa2662d0183d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade5b96822cb099ffb62fa2662d0183d2">&#9670;&nbsp;</a></span>getCommand()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -419,7 +420,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt; com.mojang.brigadier.builder.ArgumentBuilder.getCommand </td>
+          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; S &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.getCommand </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -458,8 +459,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="a714747ec7dd415bae96e83b2d8a8dd4e" name="a714747ec7dd415bae96e83b2d8a8dd4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a714747ec7dd415bae96e83b2d8a8dd4e">&#9670;&nbsp;</a></span>getRedirect()</h2>
+<a id="abe440038a1544ee56e89f895b409cfd8" name="abe440038a1544ee56e89f895b409cfd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe440038a1544ee56e89f895b409cfd8">&#9670;&nbsp;</a></span>getRedirect()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -468,7 +469,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; com.mojang.brigadier.builder.ArgumentBuilder.getRedirect </td>
+          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.getRedirect </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -486,8 +487,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="af932650c391c13118980e84a6b5fb5c1" name="af932650c391c13118980e84a6b5fb5c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af932650c391c13118980e84a6b5fb5c1">&#9670;&nbsp;</a></span>getRedirectModifier()</h2>
+<a id="a777a92cd00cc76cad1e0cc3628347cfe" name="a777a92cd00cc76cad1e0cc3628347cfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a777a92cd00cc76cad1e0cc3628347cfe">&#9670;&nbsp;</a></span>getRedirectModifier()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -496,7 +497,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt; com.mojang.brigadier.builder.ArgumentBuilder.getRedirectModifier </td>
+          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a>&lt; S &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.getRedirectModifier </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -514,8 +515,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="abb05227c1aca88ec2df5258dec735a52" name="abb05227c1aca88ec2df5258dec735a52"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb05227c1aca88ec2df5258dec735a52">&#9670;&nbsp;</a></span>getRequirement()</h2>
+<a id="a8d874085290178752a015558c9fd3e6e" name="a8d874085290178752a015558c9fd3e6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d874085290178752a015558c9fd3e6e">&#9670;&nbsp;</a></span>getRequirement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -524,7 +525,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Predicate&lt; S &gt; com.mojang.brigadier.builder.ArgumentBuilder.getRequirement </td>
+          <td class="memname">Predicate&lt; S &gt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.getRequirement </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -582,8 +583,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="a0ad747d91016f3b777b89c13c1d2045b" name="a0ad747d91016f3b777b89c13c1d2045b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ad747d91016f3b777b89c13c1d2045b">&#9670;&nbsp;</a></span>isFork()</h2>
+<a id="aac2f89eb2bc194a8b0478e21040de678" name="aac2f89eb2bc194a8b0478e21040de678"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac2f89eb2bc194a8b0478e21040de678">&#9670;&nbsp;</a></span>isFork()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -592,7 +593,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">boolean com.mojang.brigadier.builder.ArgumentBuilder.isFork </td>
+          <td class="memname">boolean <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.isFork </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -610,8 +611,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="ae1e075b6d97f6f53c58cedf27184495a" name="ae1e075b6d97f6f53c58cedf27184495a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1e075b6d97f6f53c58cedf27184495a">&#9670;&nbsp;</a></span>redirect() <span class="overload">[1/2]</span></h2>
+<a id="a7ba040b58a07afbc8a7f465caf5ce4c2" name="a7ba040b58a07afbc8a7f465caf5ce4c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ba040b58a07afbc8a7f465caf5ce4c2">&#9670;&nbsp;</a></span>redirect() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -620,7 +621,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.redirect </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.redirect </td>
           <td>(</td>
           <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
           <td class="paramname"><em>target</em></td><td>)</td>
@@ -636,7 +637,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 <p>Redirects this command node to the target <code><a class="el" href="">CommandNode</a></code>. </p>
 <p >A redirected node will appear in usage listings, but will otherwise behave just like an alias to the command node it points to. </p>
-<p >This method sets <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0ad747d91016f3b777b89c13c1d2045b">isFork()</a></code> to false and applies no <code><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a></code>.</p>
+<p >This method sets <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aac2f89eb2bc194a8b0478e21040de678">isFork()</a></code> to false and applies no <code><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html">RedirectModifier</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">target</td><td>the command node that will be invoked when the built command node is executed </td></tr>
@@ -644,12 +645,12 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>this object </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0d052c8c63a91f08a27ea37a87d1a471" title="Forwards this command in some way to a given target command.">forward</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a97638c8028dd11359f8a8d4b426857fd" title="Forwards this command in some way to a given target command.">forward</a> </dd></dl>
 
 </div>
 </div>
-<a id="a46f82d564e7379a1108b43e2dbd43fdb" name="a46f82d564e7379a1108b43e2dbd43fdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46f82d564e7379a1108b43e2dbd43fdb">&#9670;&nbsp;</a></span>redirect() <span class="overload">[2/2]</span></h2>
+<a id="aad667d53ad32c4005baf2242cd61603b" name="aad667d53ad32c4005baf2242cd61603b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad667d53ad32c4005baf2242cd61603b">&#9670;&nbsp;</a></span>redirect() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -658,7 +659,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.redirect </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.redirect </td>
           <td>(</td>
           <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
           <td class="paramname"><em>target</em>, </td>
@@ -684,7 +685,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 <p>Redirects this command node to the target <code><a class="el" href="">CommandNode</a></code>. </p>
 <p >A redirected node will appear in usage listings, but will otherwise behave just like an alias to the command node it points to. </p>
-<p >This method sets <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0ad747d91016f3b777b89c13c1d2045b">isFork()</a></code> to false and applies the given <code><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html">SingleRedirectModifier</a></code>.</p>
+<p >This method sets <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#aac2f89eb2bc194a8b0478e21040de678">isFork()</a></code> to false and applies the given <code><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_single_redirect_modifier.html">SingleRedirectModifier</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">target</td><td>the command node that will be invoked when the built command node is executed </td></tr>
@@ -693,12 +694,12 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>this object </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a0d052c8c63a91f08a27ea37a87d1a471" title="Forwards this command in some way to a given target command.">forward</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a97638c8028dd11359f8a8d4b426857fd" title="Forwards this command in some way to a given target command.">forward</a> </dd></dl>
 
 </div>
 </div>
-<a id="a972afbbcbfb2ab9391f983810e50271d" name="a972afbbcbfb2ab9391f983810e50271d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a972afbbcbfb2ab9391f983810e50271d">&#9670;&nbsp;</a></span>requires()</h2>
+<a id="a86177ff5d63495d60811d4ab6bdcf5d1" name="a86177ff5d63495d60811d4ab6bdcf5d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86177ff5d63495d60811d4ab6bdcf5d1">&#9670;&nbsp;</a></span>requires()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -707,7 +708,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.requires </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.requires </td>
           <td>(</td>
           <td class="paramtype">final Predicate&lt; S &gt;&#160;</td>
           <td class="paramname"><em>requirement</em></td><td>)</td>
@@ -760,8 +761,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="ab10910d499a34cb58887ece892b1e8b2" name="ab10910d499a34cb58887ece892b1e8b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab10910d499a34cb58887ece892b1e8b2">&#9670;&nbsp;</a></span>then() <span class="overload">[1/2]</span></h2>
+<a id="a0ebf08f6e9012d4571566e57a3b16eb4" name="a0ebf08f6e9012d4571566e57a3b16eb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ebf08f6e9012d4571566e57a3b16eb4">&#9670;&nbsp;</a></span>then() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -770,7 +771,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.then </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.then </td>
           <td>(</td>
           <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">ArgumentBuilder</a>&lt; S, ?&gt;&#160;</td>
           <td class="paramname"><em>argument</em></td><td>)</td>
@@ -794,7 +795,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 <dl class="section return"><dt>Returns</dt><dd>this object </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">IllegalStateException</td><td>if <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a714747ec7dd415bae96e83b2d8a8dd4e">getRedirect()</a></code> is set (i.e. not null) </td></tr>
+    <tr><td class="paramname">IllegalStateException</td><td>if <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abe440038a1544ee56e89f895b409cfd8">getRedirect()</a></code> is set (i.e. not null) </td></tr>
   </table>
   </dd>
 </dl>
@@ -802,8 +803,8 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 
 </div>
 </div>
-<a id="ababa8d518839f3baa726ae08dda1cc4a" name="ababa8d518839f3baa726ae08dda1cc4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ababa8d518839f3baa726ae08dda1cc4a">&#9670;&nbsp;</a></span>then() <span class="overload">[2/2]</span></h2>
+<a id="a0eed684a3f2962ec3fde93f45bc02589" name="a0eed684a3f2962ec3fde93f45bc02589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0eed684a3f2962ec3fde93f45bc02589">&#9670;&nbsp;</a></span>then() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -812,7 +813,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T com.mojang.brigadier.builder.ArgumentBuilder.then </td>
+          <td class="memname">T <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html">com.mojang.brigadier.builder.ArgumentBuilder</a>&lt; S, T &gt;.then </td>
           <td>(</td>
           <td class="paramtype">final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; S &gt;&#160;</td>
           <td class="paramname"><em>argument</em></td><td>)</td>
@@ -836,7 +837,7 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 <dl class="section return"><dt>Returns</dt><dd>this object </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">IllegalStateException</td><td>if <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a714747ec7dd415bae96e83b2d8a8dd4e">getRedirect()</a></code> is set (i.e. not null) </td></tr>
+    <tr><td class="paramname">IllegalStateException</td><td>if <code><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#abe440038a1544ee56e89f895b409cfd8">getRedirect()</a></code> is set (i.e. not null) </td></tr>
   </table>
   </dd>
 </dl>
@@ -846,11 +847,15 @@ A subcommand for a delete command, taking the number of messages to delete. The 
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><b>builder</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html">RequiredArgumentBuilder</a></li>
-    <li class="footer">Generated on Thu May 11 2023 10:51:29 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>com</b></li><li class="navelem"><b>mojang</b></li><li class="navelem"><b>brigadier</b></li><li class="navelem"><b>builder</b></li><li class="navelem"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_required_argument_builder.html">RequiredArgumentBuilder</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:14 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

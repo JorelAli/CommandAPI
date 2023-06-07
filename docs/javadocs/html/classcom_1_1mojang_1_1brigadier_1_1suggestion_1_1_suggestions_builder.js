@@ -6,6 +6,7 @@ var classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder =
     [ "createOffset", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#a50281ae316e3c01e918877ec21de1323", null ],
     [ "getInput", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#a1ba9fc5ed17e6079cf4bd84edf3b91a0", null ],
     [ "getRemaining", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#aed645546bcd4980ca3dd457da89374ee", null ],
+    [ "getRemainingLowerCase", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#aba6513a3b4bf278e5289e8c25ee086c9", null ],
     [ "getStart", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#a7d3bff5e1525a9c31e14cc111bb88ecd", null ],
     [ "restart", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#a6f32248cd41f9566bad6dbcf50e7bddc", null ],
     [ "suggest", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions_builder.html#a8d01d687baf2ff05232372958153e48a", null ],

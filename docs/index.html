@@ -13,16 +13,20 @@
 
     <link rel="stylesheet" href="./assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="index bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <img src="assets/img/logo.png" height="18px"> <a class="navbar-brand" href="./index.html">&nbsp;CommandAPI</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-7" aria-controls="navbarNavDropdown-7" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+            <img src="assets/img/logo.png" height="18px"> <a class="navbar-brand"
+                href="./index.html">&nbsp;CommandAPI</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-7"
+                aria-controls="navbarNavDropdown-7" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown-7">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item mr-2">
@@ -33,19 +37,26 @@
                     </li>
                     <li class="nav-item mr-2">
                         <a class="btn btn-light" href="https://discord.gg/G4SzSxZ" target="_blank">
-                            <i class="fab fa-discord"></i> Discord server
+                            <i class="fab fa-discord"></i> Discord
                         </a>
                     </li>
                     <li class="nav-item mr-2">
-                        <a class="btn btn-light" href="https://www.spigotmc.org/resources/1-13-commandapi.62353/" target="_blank">
+                        <a class="btn btn-light" href="https://www.spigotmc.org/resources/1-13-commandapi.62353/"
+                            target="_blank">
                             <img src="./assets/img/spigot.png" width="16px" height="16px"></img>
-                            Spigot Page
+                            Spigot
                         </a>
                     </li>
                     <li class="nav-item mr-2">
                         <a class="btn btn-light" href="https://modrinth.com/plugin/commandapi" target="_blank">
                             <img src="./assets/img/modrinth.svg" width="16px" height="16px"></img>
-                            Modrinth Page
+                            Modrinth
+                        </a>
+                    </li>
+                    <li class="nav-item mr-2">
+                        <a class="btn btn-light" href="https://hangar.papermc.io/Skepter/CommandAPI" target="_blank">
+                            <img src="./assets/img/hangar.svg" width="16px" height="16px"></img>
+                            Hangar
                         </a>
                     </li>
                     <li class="nav-item mr-2">
@@ -74,10 +85,12 @@
                 <div class="row">
                     <div class="col-sm">
                         <div class="card no-hover color">
-                            <a href="https://github.com/JorelAli/CommandAPI/releases/download/9.0.1/CommandAPI-9.0.1.jar">
+                            <a
+                                href="https://github.com/JorelAli/CommandAPI/releases/download/9.0.2/CommandAPI-9.0.2.jar">
                                 <div class="card-body d-flex flex-column align-items-center">
-                                    <div class="swatch">9.0.1</div>
-                                    <div class="title"><i class="fa fa-download"></i> Latest Download (direct)</div>
+                                    <div class="swatch">9.0.2</div>
+                                    <div class="title"><i class="fa fa-download" style="margin-right: 0.5em"></i>Latest
+                                        Download (direct)</div>
                                 </div>
                             </a>
                         </div>
@@ -86,8 +99,9 @@
                         <div class="card no-hover color">
                             <a href="./latest.html">
                                 <div class="card-body d-flex flex-column align-items-center">
-                                    <div class="swatch">9.0.1</div>
-                                    <div class="title"><i class="fa fa-book"></i> Latest Documentation</div>
+                                    <div class="swatch">9.0.2</div>
+                                    <div class="title"><i class="fa fa-book" style="margin-right: 0.5em"></i>Latest
+                                        Documentation</div>
                                 </div>
                             </a>
                         </div>
@@ -96,497 +110,389 @@
                         <div class="card no-hover color">
                             <a href="./javadocs/html/annotated.html">
                                 <div class="card-body d-flex flex-column align-items-center">
-                                    <div class="swatch">9.0.1</div>
-                                    <div class="title"><i class="fab fa-java" style="margin-right: 0.25rem"></i>Latest JavaDocs</div>
+                                    <div class="swatch">9.0.2</div>
+                                    <div class="title"><i class="fab fa-java" style="margin-right: 0.5em"></i>Latest
+                                        JavaDocs</div>
                                 </div>
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-8 offset-md-2">
+                    <div class="col-12 col-sm-6 col-lg-6" style="margin: 1.5rem 0rem;">
                         <h3>Older Documentation</h2>
+                            <div class="list-group">
+                                <a href="./9.0.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>9.0.1
+                                            Documentation</h5>
+                                        <small>May 2023</small>
+                                    </div>
+                                </a>
+                                <a href="./9.0.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>9.0.0
+                                            Documentation</h5>
+                                        <small>April 2023</small>
+                                    </div>
+                                </a>
+                                <a href="./8.8.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.8.0
+                                            Documentation</h5>
+                                        <small>March 2023</small>
+                                    </div>
+                                </a>
+                                <a href="./8.7.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.7.0
+                                            Documentation</h5>
+                                        <small>December 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.6.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.6.0
+                                            Documentation</h5>
+                                        <small>December 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.5.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.5.1
+                                            Documentation</h5>
+                                        <small>August 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.4.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.4.0
+                                            Documentation</h5>
+                                        <small>June 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.3.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.3.0
+                                            Documentation</h5>
+                                        <small>June 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.2.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.2.1
+                                            Documentation</h5>
+                                        <small>June 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.2.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.2.0
+                                            Documentation</h5>
+                                        <small>May 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.1.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.1.0
+                                            Documentation</h5>
+                                        <small>May 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./8.0.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>8.0.0
+                                            Documentation</h5>
+                                        <small>April 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./7.0.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>7.0.0
+                                            Documentation</h5>
+                                        <small>April 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./6.5.4/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>6.5.4
+                                            Documentation</h5>
+                                        <small>March 2022</small>
+                                    </div>
+                                </a>
+                                <a href="./6.4.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>6.4.0
+                                            Documentation</h5>
+                                        <small>November 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./6.3.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>6.3.1
+                                            Documentation</h5>
+                                        <small>September 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./6.3.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>6.3.0
+                                            Documentation</h5>
+                                        <small>August 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./6.2.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>6.2.0
+                                            Documentation</h5>
+                                        <small>July 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./6.0.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>6.0.0
+                                            Documentation</h5>
+                                        <small>June 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./5.12/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.12
+                                            Documentation</h5>
+                                        <small>May 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./5.11/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.11
+                                            Documentation</h5>
+                                        <small>May 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./5.10/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.10
+                                            Documentation</h5>
+                                        <small>May 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./5.6/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.6
+                                            Documentation</h5>
+                                        <small>January 2021</small>
+                                    </div>
+                                </a>
+                                <a href="./5.3/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.3
+                                            Documentation</h5>
+                                        <small>November 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./5.2/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.2
+                                            Documentation</h5>
+                                        <small>November 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./5.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.1
+                                            Documentation</h5>
+                                        <small>October 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./5.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>5.0
+                                            Documentation</h5>
+                                        <small>October 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./4.3/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>4.3
+                                            Documentation</h5>
+                                        <small>October 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./4.2/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>4.2
+                                            Documentation</h5>
+                                        <small>September 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./4.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>4.1
+                                            Documentation</h5>
+                                        <small>September 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./4.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>4.0
+                                            Documentation</h5>
+                                        <small>August 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./3.4/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>3.4
+                                            Documentation</h5>
+                                        <small>July 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./3.3/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>3.3
+                                            Documentation</h5>
+                                        <small>July 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./3.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>3.1
+                                            Documentation</h5>
+                                        <small>July 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./3.0/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>3.0
+                                            Documentation</h5>
+                                        <small>June 2020</small>
+                                    </div>
+                                </a>
+                                <a href="./2.1/index.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>2.1
+                                            Documentation</h5>
+                                        <small>July 2019</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.8.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.8
+                                            Documentation</h5>
+                                        <small>December 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.7.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.7
+                                            Documentation</h5>
+                                        <small>December 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.6.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.6
+                                            Documentation</h5>
+                                        <small>November 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.5.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.5
+                                            Documentation</h5>
+                                        <small>October 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.4.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.4
+                                            Documentation</h5>
+                                        <small>October 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.3.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.3
+                                            Documentation</h5>
+                                        <small>October 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.2.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.2
+                                            Documentation</h5>
+                                        <small>August 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.1.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.1
+                                            Documentation</h5>
+                                        <small>August 2018</small>
+                                    </div>
+                                </a>
+                                <a href="./legacy/v1.0.html" class="list-group-item list-group-item-action"
+                                    aria-current="true">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1"><i class="fa fa-book" style="margin-right: 0.5em"></i>1.0
+                                            Documentation</h5>
+                                        <small>August 2018</small>
+                                    </div>
+                                </a>
+                            </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-lg-10 offset-lg-1">
-                        <div class="row">
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./9.0.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">9.0.0</div>
-                                            <div class="title">v9.0.0 Documentation</div>
-                                        </div>
-                                    </a>
+                    <div class="col-12 col-sm-6 col-lg-6"  style="margin: 1.5rem 0rem;">
+                        <h3>Coming soon...</h3>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action disabled" aria-current="true">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1"><i class="fa-solid fa-display" style="margin-right: 0.5em"></i>Command visualizer</h5>
                                 </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.8.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.8.0</div>
-                                            <div class="title">v8.8.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.7.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.7.0</div>
-                                            <div class="title">v8.7.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.6.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.6.0</div>
-                                            <div class="title">v8.6.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.5.1/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.5.1</div>
-                                            <div class="title">v8.5.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.4.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.4.0</div>
-                                            <div class="title">v8.4.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.3.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.3.0</div>
-                                            <div class="title">v8.3.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.2.1/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.2.1</div>
-                                            <div class="title">v8.2.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.2.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.2.0</div>
-                                            <div class="title">v8.2.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.1.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.1.0</div>
-                                            <div class="title">v8.1.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./8.0.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">8.0.0</div>
-                                            <div class="title">v8.0.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./7.0.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">7.0.0</div>
-                                            <div class="title">v7.0.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./6.5.4/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">6.5.4</div>
-                                            <div class="title">v6.5.4 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./6.4.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">6.4.0</div>
-                                            <div class="title">v6.4.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./6.3.1/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">6.3.1</div>
-                                            <div class="title">v6.3.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./6.3.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">6.3.0</div>
-                                            <div class="title">v6.3.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./6.2.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">6.2.0</div>
-                                            <div class="title">v6.2.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./6.0.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">6.0.0</div>
-                                            <div class="title">v6.0.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.12/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.12</div>
-                                            <div class="title">v5.12 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.11/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.11</div>
-                                            <div class="title">v5.11 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.10/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.10</div>
-                                            <div class="title">v5.10 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.6/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.6</div>
-                                            <div class="title">v5.6 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.3/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.3</div>
-                                            <div class="title">v5.3 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.2/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.2</div>
-                                            <div class="title">v5.2 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.1/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.1</div>
-                                            <div class="title">v5.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./5.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">5.0</div>
-                                            <div class="title">v5.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./4.3/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">4.3</div>
-                                            <div class="title">v4.3 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./4.2/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">4.2</div>
-                                            <div class="title">v4.2 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./4.1/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">4.1</div>
-                                            <div class="title">v4.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./4.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">4.0</div>
-                                            <div class="title">v4.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./3.4/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">3.4</div>
-                                            <div class="title">v3.4 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./3.3/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">3.3</div>
-                                            <div class="title">v3.3 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./3.1/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">3.1</div>
-                                            <div class="title">v3.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./3.0/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">3.0</div>
-                                            <div class="title">v3.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./2.1/index.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">2.1</div>
-                                            <div class="title">v2.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.8.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.8</div>
-                                            <div class="title">v1.8 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.7.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.7</div>
-                                            <div class="title">v1.7 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.6.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.6</div>
-                                            <div class="title">v1.6 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.5.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.5</div>
-                                            <div class="title">v1.5 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.4.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.4</div>
-                                            <div class="title">v1.4 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.3.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.3</div>
-                                            <div class="title">v1.3 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.2.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.2</div>
-                                            <div class="title">v1.2 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.1.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.1</div>
-                                            <div class="title">v1.1 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 col-lg-3">
-                                <div class="card no-hover color">
-                                    <a href="./legacy/v1.0.html">
-                                        <div class="card-body d-flex flex-column align-items-center">
-                                            <div class="swatch">1.0</div>
-                                            <div class="title">v1.0 Documentation</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                                <p class="mb-1">Visualize and mock-up what your commands will look like, right in your browser!</p>
+                            </a>
                         </div>
                     </div>
                 </div>

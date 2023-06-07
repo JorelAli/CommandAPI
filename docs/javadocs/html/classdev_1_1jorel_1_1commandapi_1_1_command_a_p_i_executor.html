@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CommandAPI: dev.jorel.commandapi.CommandAPIExecutor&lt; T extends CommandSender &gt; Class Template Reference</title>
+<title>CommandAPI: dev.jorel.commandapi.CommandAPIExecutor&lt; CommandSender, WrapperType &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;8.8.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -87,7 +88,7 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">dev.jorel.commandapi.CommandAPIExecutor&lt; T extends CommandSender &gt; Class Template Reference</div></div>
+  <div class="headertitle"><div class="title">dev.jorel.commandapi.CommandAPIExecutor&lt; CommandSender, WrapperType &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -96,45 +97,56 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_co
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aee63edf241c524e0088cee2a474d3756"><td class="memItemLeft" align="right" valign="top"><a id="aee63edf241c524e0088cee2a474d3756" name="aee63edf241c524e0088cee2a474d3756"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>execute</b> (CommandSender sender, Object[] arguments)  throws CommandSyntaxException </td></tr>
-<tr class="separator:aee63edf241c524e0088cee2a474d3756"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a451f524132a214b26056868f4497bb"><td class="memItemLeft" align="right" valign="top"><a id="a6a451f524132a214b26056868f4497bb" name="a6a451f524132a214b26056868f4497bb"></a>
-List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html">IExecutorNormal</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNormalExecutors</b> ()</td></tr>
-<tr class="separator:a6a451f524132a214b26056868f4497bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf391d6e9d27e6726e2cf711030b6957"><td class="memItemLeft" align="right" valign="top"><a id="abf391d6e9d27e6726e2cf711030b6957" name="abf391d6e9d27e6726e2cf711030b6957"></a>
-List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html">IExecutorResulting</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getResultingExecutors</b> ()</td></tr>
-<tr class="separator:abf391d6e9d27e6726e2cf711030b6957"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b37be438da6f2892d28ab8f73ddcfec"><td class="memItemLeft" align="right" valign="top"><a id="a7b37be438da6f2892d28ab8f73ddcfec" name="a7b37be438da6f2892d28ab8f73ddcfec"></a>
+<tr class="memitem:a52044be26ded2935e4156d78d3607ddc"><td class="memItemLeft" align="right" valign="top"><a id="a52044be26ded2935e4156d78d3607ddc" name="a52044be26ded2935e4156d78d3607ddc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addNormalExecutor</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html">NormalExecutor</a>&lt;?, ?&gt; executor)</td></tr>
+<tr class="separator:a52044be26ded2935e4156d78d3607ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfbc3a21c80388512f7163acb728d278"><td class="memItemLeft" align="right" valign="top"><a id="acfbc3a21c80388512f7163acb728d278" name="acfbc3a21c80388512f7163acb728d278"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addResultingExecutor</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html">ResultingExecutor</a>&lt;?, ?&gt; executor)</td></tr>
+<tr class="separator:acfbc3a21c80388512f7163acb728d278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c3243c1833125499038439faa7e3afd"><td class="memItemLeft" align="right" valign="top"><a id="a2c3243c1833125499038439faa7e3afd" name="a2c3243c1833125499038439faa7e3afd"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>execute</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; CommandSender, WrapperType &gt; info)  throws CommandSyntaxException </td></tr>
+<tr class="separator:a2c3243c1833125499038439faa7e3afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0539d60d4e734c859281cb3ea92024b1"><td class="memItemLeft" align="right" valign="top"><a id="a0539d60d4e734c859281cb3ea92024b1" name="a0539d60d4e734c859281cb3ea92024b1"></a>
+List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html">NormalExecutor</a>&lt; CommandSender, WrapperType &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNormalExecutors</b> ()</td></tr>
+<tr class="separator:a0539d60d4e734c859281cb3ea92024b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab13e482f50201f6839bbee230dec08a"><td class="memItemLeft" align="right" valign="top"><a id="aab13e482f50201f6839bbee230dec08a" name="aab13e482f50201f6839bbee230dec08a"></a>
+List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html">ResultingExecutor</a>&lt; CommandSender, WrapperType &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getResultingExecutors</b> ()</td></tr>
+<tr class="separator:aab13e482f50201f6839bbee230dec08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0efd12cf6a33ed95493b69ae3c8c7c"><td class="memItemLeft" align="right" valign="top"><a id="aab0efd12cf6a33ed95493b69ae3c8c7c" name="aab0efd12cf6a33ed95493b69ae3c8c7c"></a>
 boolean&#160;</td><td class="memItemRight" valign="bottom"><b>hasAnyExecutors</b> ()</td></tr>
-<tr class="separator:a7b37be438da6f2892d28ab8f73ddcfec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9e1204dac55b6289e2c6f92c6fa0a45"><td class="memItemLeft" align="right" valign="top"><a id="ab9e1204dac55b6289e2c6f92c6fa0a45" name="ab9e1204dac55b6289e2c6f92c6fa0a45"></a>
+<tr class="separator:aab0efd12cf6a33ed95493b69ae3c8c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a805a16db77d11467601171a8266dc119"><td class="memItemLeft" align="right" valign="top"><a id="a805a16db77d11467601171a8266dc119" name="a805a16db77d11467601171a8266dc119"></a>
 boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isForceNative</b> ()</td></tr>
-<tr class="separator:ab9e1204dac55b6289e2c6f92c6fa0a45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a433de7908c5159b3ff9d20795c0ca92d"><td class="memItemLeft" align="right" valign="top"><a id="a433de7908c5159b3ff9d20795c0ca92d" name="a433de7908c5159b3ff9d20795c0ca92d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setNormalExecutors</b> (List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_normal.html">IExecutorNormal</a>&lt; T &gt; &gt; normalExecutors)</td></tr>
-<tr class="separator:a433de7908c5159b3ff9d20795c0ca92d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae312ed7f2bec5522c0801a80eab5dac7"><td class="memItemLeft" align="right" valign="top"><a id="ae312ed7f2bec5522c0801a80eab5dac7" name="ae312ed7f2bec5522c0801a80eab5dac7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setResultingExecutors</b> (List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_i_executor_resulting.html">IExecutorResulting</a>&lt; T &gt; &gt; resultingExecutors)</td></tr>
-<tr class="separator:ae312ed7f2bec5522c0801a80eab5dac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a805a16db77d11467601171a8266dc119"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace21d98a5e0c0e9068bc1c69e5232948"><td class="memItemLeft" align="right" valign="top"><a id="ace21d98a5e0c0e9068bc1c69e5232948" name="ace21d98a5e0c0e9068bc1c69e5232948"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setNormalExecutors</b> (List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html">NormalExecutor</a>&lt; CommandSender, WrapperType &gt; &gt; normalExecutors)</td></tr>
+<tr class="separator:ace21d98a5e0c0e9068bc1c69e5232948"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5113ede08f36c9523ec32976fe56fe14"><td class="memItemLeft" align="right" valign="top"><a id="a5113ede08f36c9523ec32976fe56fe14" name="a5113ede08f36c9523ec32976fe56fe14"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setResultingExecutors</b> (List&lt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html">ResultingExecutor</a>&lt; CommandSender, WrapperType &gt; &gt; resultingExecutors)</td></tr>
+<tr class="separator:a5113ede08f36c9523ec32976fe56fe14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p ><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html" title="CommandAPIExecutor is the main executor implementation for command executors.">CommandAPIExecutor</a> is the main executor implementation for command executors. </p>
 <p >It contains a list of all executors (normal and resulting executors) and switches its execution implementation based on the provided command executor types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">&lt;T&gt;</td><td>a command sender </td></tr>
+    <tr><td class="paramname">&lt;CommandSender&gt;</td><td>The CommandSender for this executor </td></tr>
+    <tr><td class="paramname">&lt;WrapperType&gt;</td><td>The AbstractCommandSender that wraps the CommandSender </td></tr>
   </table>
   </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html">CommandAPIExecutor</a></li>
-    <li class="footer">Generated on Tue Mar 14 2023 21:10:49 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html">CommandAPIExecutor</a></li>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:14 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

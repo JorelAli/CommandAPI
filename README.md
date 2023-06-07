@@ -48,21 +48,21 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.0.1 | 9.0.1                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.0.1 | 9.0.1                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.0.1 | 9.0.1                        | 16                                                        |
-| **1.17**           | 6.0.x - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.19**           | 8.3.0 - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.19.2**         | 8.5.1 - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.19.3**         | 8.7.0 - 9.0.1               | 9.0.1                        | 16                                                        |
-| **1.19.4**         | 8.8.0 - 9.0.1               | 9.0.1                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.0.2 | 9.0.2                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.0.2 | 9.0.2                        | 16                                                        |
+| **1.17**           | 6.0.x - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.19**           | 8.3.0 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.19.3**         | 8.7.0 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.19.4**         | 8.8.0 - 9.0.2               | 9.0.2                        | 16                                                        |
 
 -----
 
@@ -367,6 +367,26 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>9.0.2</b></td>
+            <td valign="top">June 2023</td>
+            <td valign="top">
+                <b>CommandAPI changes:</b>
+                <ul>
+                    <li>Add the ability to retrieve <code>LiteralArgument</code>s and <code>MultiLiteralArgument</code>s by their node names</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/363 Adds <code>withUsage()</code> method to customise command usage info</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/371 Updates default short description to now mention the plugin creating the command</li>
+                    <li>Fixed literal arguments in command conversion causing errors due to parsing problems</li>
+                    <li>Adds support for Minecraft 1.20</li>
+                </ul>
+                <b>Other changes:</b>
+                <ul>
+                    <li>Update the look-and-feel of the CommandAPI website</li>
+                    <li>Update the look-and-feel of the CommandAPI JavaDocs</li>
+                    <li>Fix various classes in the CommandAPI JavaDocs not having their methods declared</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>9.0.1</b></td>
             <td valign="top">May 2023</td>

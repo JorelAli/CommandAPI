@@ -20,16 +20,26 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.LiteralMessage;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.commandsenders.*;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.executors.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+
+import dev.jorel.commandapi.commandsenders.AbstractBlockCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractConsoleCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractEntity;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
+import dev.jorel.commandapi.commandsenders.AbstractProxiedCommandSender;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.executors.ExecutionInfo;
+import dev.jorel.commandapi.executors.ExecutorType;
+import dev.jorel.commandapi.executors.NormalExecutor;
+import dev.jorel.commandapi.executors.ResultingExecutor;
+import dev.jorel.commandapi.executors.TypedExecutor;
 
 /**
  * CommandAPIExecutor is the main executor implementation for command
@@ -40,7 +50,11 @@ import java.util.NoSuchElementException;
  * @param <CommandSender> The CommandSender for this executor
  * @param <WrapperType> The AbstractCommandSender that wraps the CommandSender
  */
-public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractCommandSender<? extends CommandSender>> {
+public class CommandAPIExecutor<CommandSender, WrapperType
+/// @cond DOX
+extends AbstractCommandSender<? extends CommandSender>
+/// @endcond
+> {
 
 	private List<NormalExecutor<CommandSender, WrapperType>> normalExecutors;
 	private List<ResultingExecutor<CommandSender, WrapperType>> resultingExecutors;
@@ -61,7 +75,6 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 	}
 
 	public int execute(ExecutionInfo<CommandSender, WrapperType> info) throws CommandSyntaxException {
-
 		// Parse executor type
 		if (!resultingExecutors.isEmpty()) {
 			// Run resulting executor
@@ -69,9 +82,13 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 				return execute(resultingExecutors, info);
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
-			} catch (Exception e) {
-				e.printStackTrace(System.out);
-				return 0;
+			} catch (Throwable ex) {
+				CommandAPI.getLogger().severe("Unhandled exception executing '" + info.args().getFullInput() + "'", ex);
+				if (ex instanceof Exception) {
+					throw ex;
+				} else {
+					throw new RuntimeException(ex);
+				}
 			}
 		} else {
 			// Run normal executor
@@ -79,9 +96,13 @@ public class CommandAPIExecutor<CommandSender, WrapperType extends AbstractComma
 				return execute(normalExecutors, info);
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
-			} catch (Exception e) {
-				e.printStackTrace(System.out);
-				return 0;
+			} catch (Throwable ex) {
+				CommandAPI.getLogger().severe("Unhandled exception executing '" + info.args().getFullInput() + "'", ex);
+				if (ex instanceof Exception) {
+					throw ex;
+				} else {
+					throw new RuntimeException(ex);
+				}
 			}
 		}
 	}

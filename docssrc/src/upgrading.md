@@ -1,5 +1,40 @@
 # Upgrading guide
 
+## From 9.0.1 to 9.0.2
+
+### MultiLiteralArgument and LiteralArgument changes
+
+In previous versions, the ability has been introduced to access arguments by their node names. However, while this was possible for every other argument, it wasn't possible for `MultiLiteralArgument`s. This was now changed because the values from the `MultiLiteralArgument` are included in the `CommandArguments` of a command.
+
+Therefore, the current constructor has been deprecated and the new one should be used:
+
+<div class="multi-pre">
+
+```java,9.0.1
+withArguments(new MultiLiteralArgument("survival", "creative", "adventure", "spectator"))
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.2
+withArguments(new MultiLiteralArgument("gamemodes", List.of("survival", "creative", "adventure", "spectator")))
+```
+
+</div>
+
+Because it is possible to list `LiteralArgument`s in the `CommandArguments` of a command, there was also an additional constructor add to the `LiteralArgument` class. The other one is not deprecated.
+
+Now, the `LiteralArgument` class contains two possible constructors:
+
+```java
+public LiteralArgument(String literal) // Recommended if the literal is not listed
+public LiteralArgument(String nodeName, String literal)
+```
+
 ## From 9.0.0 to 9.0.1
 
 ### CustomArgumentException changes

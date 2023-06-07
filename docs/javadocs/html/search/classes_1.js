@@ -19,10 +19,13 @@ var searchData=
   ['bukkitcommandsender_3c_20proxiedcommandsender_20_3e_16',['BukkitCommandSender&lt; ProxiedCommandSender &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html',1,'dev::jorel::commandapi::commandsenders']]],
   ['bukkitconsolecommandsender_17',['BukkitConsoleCommandSender',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_console_command_sender.html',1,'dev::jorel::commandapi::commandsenders']]],
   ['bukkitentity_18',['BukkitEntity',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_entity.html',1,'dev::jorel::commandapi::commandsenders']]],
-  ['bukkitexecutable_3c_20impl_20extends_20bukkitexecutable_19',['BukkitExecutable&lt; Impl extends BukkitExecutable',['../interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable_3_01_impl_01extends_01_bukkit_executable.html',1,'dev::jorel::commandapi']]],
-  ['bukkitnativeproxycommandsender_20',['BukkitNativeProxyCommandSender',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_native_proxy_command_sender.html',1,'dev::jorel::commandapi::commandsenders']]],
-  ['bukkitplayer_21',['BukkitPlayer',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_player.html',1,'dev::jorel::commandapi::commandsenders']]],
-  ['bukkitproxiedcommandsender_22',['BukkitProxiedCommandSender',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_proxied_command_sender.html',1,'dev::jorel::commandapi::commandsenders']]],
-  ['bukkitstringtooltip_23',['BukkitStringTooltip',['../classdev_1_1jorel_1_1commandapi_1_1_bukkit_string_tooltip.html',1,'dev::jorel::commandapi']]],
-  ['bukkittooltip_24',['BukkitTooltip',['../classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html',1,'dev::jorel::commandapi']]]
+  ['bukkitexecutable_19',['BukkitExecutable',['../interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html',1,'dev::jorel::commandapi']]],
+  ['bukkitexecutable_3c_20argument_3c_20t_20_3e_20_3e_20',['BukkitExecutable&lt; Argument&lt; T &gt; &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html',1,'dev::jorel::commandapi']]],
+  ['bukkitexecutable_3c_20commandapicommand_20_3e_21',['BukkitExecutable&lt; CommandAPICommand &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html',1,'dev::jorel::commandapi']]],
+  ['bukkitexecutable_3c_20commandtree_20_3e_22',['BukkitExecutable&lt; CommandTree &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html',1,'dev::jorel::commandapi']]],
+  ['bukkitnativeproxycommandsender_23',['BukkitNativeProxyCommandSender',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_native_proxy_command_sender.html',1,'dev::jorel::commandapi::commandsenders']]],
+  ['bukkitplayer_24',['BukkitPlayer',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_player.html',1,'dev::jorel::commandapi::commandsenders']]],
+  ['bukkitproxiedcommandsender_25',['BukkitProxiedCommandSender',['../classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_proxied_command_sender.html',1,'dev::jorel::commandapi::commandsenders']]],
+  ['bukkitstringtooltip_26',['BukkitStringTooltip',['../classdev_1_1jorel_1_1commandapi_1_1_bukkit_string_tooltip.html',1,'dev::jorel::commandapi']]],
+  ['bukkittooltip_27',['BukkitTooltip',['../classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html',1,'dev::jorel::commandapi']]]
 ];

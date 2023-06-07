@@ -74,7 +74,11 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
  * @param <Source> The class for running Brigadier commands
  */
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> {
+public class CommandAPIHandler<Argument
+/// @cond DOX
+extends AbstractArgument<?, ?, Argument, CommandSender>
+/// @endcond
+, CommandSender, Source> {
 	private static final SafeVarHandle<CommandContext<?>, Map<String, ParsedArgument<?, ?>>> commandContextArguments;
 
 	// Compute all var handles all in one go so we don't do this during main server
@@ -396,9 +400,14 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 			if (args[index] instanceof MultiLiteral) {
 				MultiLiteral<? extends Argument> superArg = (MultiLiteral<? extends Argument>) args[index];
 
+				String nodeName = superArg.instance().getNodeName();
+
 				// Add all of its entries
 				for (String literal: superArg.getLiterals()) {
-					Argument litArg = platform.newConcreteLiteralArgument(literal);
+					// TODO: We only expect nodeName to be null here because the constructor for a MultiLiteralArgument
+					//  without a nodeName is currently deprecated but not removed. Once that constructor is removed,
+					//  this `nodeName == null` statement can probably be removed as well
+					Argument litArg = platform.newConcreteLiteralArgument(nodeName == null ? literal : nodeName, literal);
 
 					litArg.setListed(superArg.instance().isListed())
 						.withPermission(superArg.instance().getArgumentPermission())
@@ -573,6 +582,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 		Predicate<CommandSender> requirements = meta.requirements;
 		Optional<String> shortDescription = meta.shortDescription;
 		Optional<String> fullDescription = meta.fullDescription;
+		Optional<String[]> usageDescription = meta.usageDescription;
 
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
@@ -587,7 +597,7 @@ public class CommandAPIHandler<Argument extends AbstractArgument<?, ?, Argument,
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString, shortDescription,
-					fullDescription, aliases, permission));
+					fullDescription, usageDescription, aliases, permission));
 		}
 
 		// Handle previewable arguments

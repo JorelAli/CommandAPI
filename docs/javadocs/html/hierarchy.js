@@ -9,15 +9,18 @@ var hierarchy =
     [ "dev.jorel.commandapi.annotations.arguments.ABlockPredicateArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_block_predicate_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.ABlockStateArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_block_state_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.ABooleanArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_boolean_argument.html", null ],
-    [ "dev.jorel.commandapi.arguments.AbstractArgument< T, Impl extends AbstractArgument< T, Impl, Argument, CommandSender >, Argument extends AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument_3_01_t_00_01_impl_01extends_038e2051fb20fef301d19d223ba02a0ae.html", null ],
-    [ "dev.jorel.commandapi.AbstractArgumentTree< Impl extends AbstractArgumentTree< Impl, Argument, CommandSender >, Argument extends AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree_3_01_impl_01extends_01_abstract_argum173dd89f79bc03663b315bd2bc99750f.html", null ],
+    [ "dev.jorel.commandapi.arguments.AbstractArgument< T, Argument< T >, Argument<?>, CommandSender >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html", [
+      [ "dev.jorel.commandapi.arguments.Argument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
+        [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html", null ],
+        [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< T, S >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", null ]
+      ] ]
+    ] ],
     [ "dev.jorel.commandapi.commandsenders.AbstractBlockCommandSender< BlockCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_block_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_block_command_sender.html", null ]
     ] ],
-    [ "AbstractCommandAPICommand", null, [
+    [ "dev.jorel.commandapi.AbstractCommandAPICommand< CommandAPICommand, Argument<?>, CommandSender >", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command.html", [
       [ "dev.jorel.commandapi.CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.AbstractCommandAPICommand< Impl extends AbstractCommandAPICommand< Impl, Argument, CommandSender >, Argument extends AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command_3_01_impl_01extends_01_abstrafd8ac10ec94839aef1e6a53690e5b011.html", null ],
     [ "dev.jorel.commandapi.commandsenders.AbstractCommandSender< Source >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.AbstractBlockCommandSender< Source >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_block_command_sender.html", null ],
       [ "dev.jorel.commandapi.commandsenders.AbstractConsoleCommandSender< Source >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_console_command_sender.html", null ],
@@ -27,10 +30,9 @@ var hierarchy =
       [ "dev.jorel.commandapi.commandsenders.AbstractProxiedCommandSender< Source >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_proxied_command_sender.html", null ],
       [ "dev.jorel.commandapi.commandsenders.BukkitCommandSender< Source extends CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", null ]
     ] ],
-    [ "AbstractCommandTree", null, [
+    [ "dev.jorel.commandapi.AbstractCommandTree< CommandTree, Argument<?>, CommandSender >", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html", [
       [ "dev.jorel.commandapi.CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.AbstractCommandTree< Impl extends AbstractCommandTree< Impl, Argument, CommandSender >, Argument extends AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree_3_01_impl_01extends_01_abstract_commanb1349bf66a5108463adf65fe1092c200.html", null ],
     [ "dev.jorel.commandapi.commandsenders.AbstractConsoleCommandSender< ConsoleCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_console_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_console_command_sender.html", null ]
     ] ],
@@ -126,7 +128,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.arguments.StringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.TextArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_text_argument.html", null ]
     ] ],
-    [ "com.mojang.brigadier.builder.ArgumentBuilder", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html", null ],
+    [ "com.mojang.brigadier.builder.ArgumentBuilder< S, T >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html", null ],
     [ "com.mojang.brigadier.builder.ArgumentBuilder< S, LiteralArgumentBuilder< S > >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html", [
       [ "com.mojang.brigadier.builder.LiteralArgumentBuilder< S >", "classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html", null ]
     ] ],
@@ -154,6 +156,7 @@ var hierarchy =
     [ "com.mojang.brigadier.arguments.ArgumentType< String >", "interfacecom_1_1mojang_1_1brigadier_1_1arguments_1_1_argument_type.html", [
       [ "com.mojang.brigadier.arguments.StringArgumentType", "classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html", null ]
     ] ],
+    [ "com.mojang.brigadier.arguments.ArgumentType<?>", "interfacecom_1_1mojang_1_1brigadier_1_1arguments_1_1_argument_type.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.ARotationArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_rotation_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AScoreboardSlotArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_scoreboard_slot_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument.html", null ],
@@ -186,24 +189,42 @@ var hierarchy =
     [ "dev.jorel.commandapi.commandsenders.BukkitCommandSender< ProxiedCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_proxied_command_sender.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.BukkitExecutable< Impl extends BukkitExecutable", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable_3_01_impl_01extends_01_bukkit_executable.html", null ],
-    [ "dev.jorel.commandapi.ChainableBuilder< Impl >", "interfacedev_1_1jorel_1_1commandapi_1_1_chainable_builder.html", null ],
+    [ "dev.jorel.commandapi.BukkitExecutable< Argument< T > >", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html", null ],
+    [ "dev.jorel.commandapi.BukkitExecutable< CommandAPICommand >", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html", [
+      [ "dev.jorel.commandapi.CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.BukkitExecutable< CommandTree >", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html", [
+      [ "dev.jorel.commandapi.CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.ChainableBuilder< Impl >", "interfacedev_1_1jorel_1_1commandapi_1_1_chainable_builder.html", [
+      [ "dev.jorel.commandapi.CommandAPIConfig< Impl >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html", null ],
+      [ "dev.jorel.commandapi.PlatformExecutable< Impl, CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1_platform_executable.html", [
+        [ "dev.jorel.commandapi.BukkitExecutable< Impl >", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html", [
+          [ "dev.jorel.commandapi.arguments.Argument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", null ]
+        ] ]
+      ] ],
+      [ "dev.jorel.commandapi.arguments.Literal< Impl >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal.html", null ],
+      [ "dev.jorel.commandapi.arguments.MultiLiteral< Impl >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal.html", null ],
+      [ "dev.jorel.commandapi.arguments.SafeOverrideable< T, S, Impl, Argument, CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable.html", null ]
+    ] ],
     [ "com.mojang.brigadier.Command< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_command.html", null ],
     [ "dev.jorel.commandapi.annotations.Command", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_command.html", null ],
     [ "dev.jorel.commandapi.CommandAPI", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html", null ],
     [ "dev.jorel.commandapi.arguments.CommandAPIArgumentType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html", null ],
     [ "dev.jorel.commandapi.CommandAPIBukkit<?>", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html", null ],
-    [ "CommandAPIConfig", null, [
+    [ "dev.jorel.commandapi.CommandAPIConfig< CommandAPIBukkitConfig >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html", [
       [ "dev.jorel.commandapi.CommandAPIBukkitConfig", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.CommandAPIConfig< Impl extends CommandAPIConfig", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config_3_01_impl_01extends_01_command_a_p_i_config.html", null ],
-    [ "dev.jorel.commandapi.CommandAPIExecutor< CommandSender, WrapperType extends AbstractCommandSender", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor_3_01_command_sender_00_01_wrapper_typ34ec43c9c93f7f61f9afb1654e224c82.html", null ],
-    [ "dev.jorel.commandapi.CommandAPIHandler< Argument extends AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler_3_01_argument_01extends_01_abstract_argument.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIExecutor< CommandSender, WrapperType >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIExecutor< CommandSender, dev.jorel.commandapi.commandsenders.AbstractCommandSender<? extends CommandSender > >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIHandler< Argument, CommandSender, Source >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIHandler<?, ?, ?>", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html", null ],
     [ "dev.jorel.commandapi.CommandAPILogger", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_logger.html", null ],
-    [ "CommandAPIPlatform", null, [
+    [ "dev.jorel.commandapi.CommandAPIPlatform< Argument, CommandSender, Source >", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIPlatform< Argument<?>, CommandSender, Source >", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html", [
       [ "dev.jorel.commandapi.CommandAPIBukkit< Source >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.CommandAPIPlatform< Argument extends AbstractArgument", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform_3_01_argument_01extends_01_abstract_argument.html", null ],
+    [ "dev.jorel.commandapi.CommandAPIPlatform< dev.jorel.commandapi.arguments.Argument, CommandSender, Source >", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html", null ],
     [ "dev.jorel.commandapi.executors.CommandArguments", "classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html", null ],
     [ "com.mojang.brigadier.context.CommandContext< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html", null ],
     [ "com.mojang.brigadier.context.CommandContextBuilder< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html", null ],
@@ -247,8 +268,8 @@ var hierarchy =
       [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >.CustomArgumentException", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument_1_1_custom_argument_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.Execution< CommandSender, Argument extends AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1_execution_3_01_command_sender_00_01_argument_01extends_01_abstract_argument.html", null ],
-    [ "dev.jorel.commandapi.executors.ExecutionInfo< Sender, WrapperType extends AbstractCommandSender", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info_3_01_sender_00_01_wrapper_tyf5ca6fbedabfa0521061c28350fc6a6c.html", null ],
+    [ "dev.jorel.commandapi.Execution< CommandSender, Argument >", "classdev_1_1jorel_1_1commandapi_1_1_execution.html", null ],
+    [ "dev.jorel.commandapi.executors.ExecutionInfo< Sender, WrapperType >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html", null ],
     [ "dev.jorel.commandapi.executors.ExecutorType", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html", null ],
     [ "dev.jorel.commandapi.wrappers.FloatRange", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_float_range.html", null ],
     [ "com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type_1_1_function.html", null ],
@@ -279,7 +300,9 @@ var hierarchy =
     [ "dev.jorel.commandapi.arguments.ListArgumentBuilder< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder.html", null ],
     [ "dev.jorel.commandapi.arguments.ListArgumentBuilder< T >.ListArgumentBuilderSuggests.ListArgumentBuilderFinished", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builderf8b22eb51070fbe57649eff900a572ca.html", null ],
     [ "dev.jorel.commandapi.arguments.ListArgumentBuilder< T >.ListArgumentBuilderSuggests", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builder_suggests.html", null ],
-    [ "dev.jorel.commandapi.arguments.Literal< Impl extends AbstractArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_3_01_impl_01extends_01_abstract_argument.html", null ],
+    [ "dev.jorel.commandapi.arguments.Literal< Argument< String > >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal.html", [
+      [ "dev.jorel.commandapi.arguments.LiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.arguments.LocationType", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument.ManyEntities", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_many_entities.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument.ManyPlayers", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_many_players.html", null ],
@@ -292,7 +315,9 @@ var hierarchy =
     [ "com.mojang.brigadier.Message", "interfacecom_1_1mojang_1_1brigadier_1_1_message.html", [
       [ "com.mojang.brigadier.LiteralMessage", "classcom_1_1mojang_1_1brigadier_1_1_literal_message.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.arguments.MultiLiteral< Impl extends AbstractArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_3_01_impl_01extends_01_abstract_argument.html", null ],
+    [ "dev.jorel.commandapi.arguments.MultiLiteral< Argument< String > >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal.html", [
+      [ "dev.jorel.commandapi.arguments.MultiLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument.Multiple", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument_1_1_multiple.html", null ],
     [ "dev.jorel.commandapi.annotations.NeedsOp", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_needs_op.html", null ],
     [ "dev.jorel.commandapi.nms.NMS< CommandListenerWrapper >", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html", [
@@ -300,23 +325,32 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.nms.NMS< Source >", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html", null ],
     [ "dev.jorel.commandapi.nms.NMS<?>", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html", null ],
-    [ "NormalExecutor", null, [
+    [ "dev.jorel.commandapi.executors.NormalExecutor< BlockCommandSender, BukkitBlockCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
       [ "dev.jorel.commandapi.executors.CommandBlockCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.CommandBlockExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info.html", null ],
+      [ "dev.jorel.commandapi.executors.CommandBlockExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.NormalExecutor< CommandSender, BukkitCommandSender<? extends CommandSender > >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
       [ "dev.jorel.commandapi.executors.CommandExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_execution_info.html", null ],
-      [ "dev.jorel.commandapi.executors.CommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.CommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.NormalExecutor< ConsoleCommandSender, BukkitConsoleCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
       [ "dev.jorel.commandapi.executors.ConsoleCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.ConsoleExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_execution_info.html", null ],
+      [ "dev.jorel.commandapi.executors.ConsoleExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_execution_info.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.NormalExecutor< Entity, BukkitEntity >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
       [ "dev.jorel.commandapi.executors.EntityCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.EntityExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_execution_info.html", null ],
+      [ "dev.jorel.commandapi.executors.EntityExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_execution_info.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.NormalExecutor< NativeProxyCommandSender, BukkitNativeProxyCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
       [ "dev.jorel.commandapi.executors.NativeCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html", null ],
       [ "dev.jorel.commandapi.executors.NativeExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_execution_info.html", null ],
-      [ "dev.jorel.commandapi.executors.PlayerCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.PlayerExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_execution_info.html", null ],
       [ "dev.jorel.commandapi.executors.ProxyCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_command_executor.html", null ],
       [ "dev.jorel.commandapi.executors.ProxyExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_execution_info.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.executors.NormalExecutor< CommandSender, WrapperType extends AbstractCommandSender", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor_3_01_command_sender_00_01_w335731d8fcfc784d8092da3292413472.html", null ],
+    [ "dev.jorel.commandapi.executors.NormalExecutor< Player, BukkitPlayer >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
+      [ "dev.jorel.commandapi.executors.PlayerCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.PlayerExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_execution_info.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument.OneEntity", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_one_entity.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument.OnePlayer", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_entity_selector_argument_1_1_one_player.html", null ],
     [ "dev.jorel.commandapi.PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html", null ],
@@ -324,8 +358,13 @@ var hierarchy =
     [ "com.mojang.brigadier.context.ParsedCommandNode< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_parsed_command_node.html", null ],
     [ "com.mojang.brigadier.ParseResults< S >", "classcom_1_1mojang_1_1brigadier_1_1_parse_results.html", null ],
     [ "dev.jorel.commandapi.annotations.Permission", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_permission.html", null ],
-    [ "dev.jorel.commandapi.PlatformExecutable< Impl extends PlatformExecutable", "interfacedev_1_1jorel_1_1commandapi_1_1_platform_executable_3_01_impl_01extends_01_platform_executable.html", null ],
-    [ "dev.jorel.commandapi.arguments.Previewable< T extends AbstractArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_previewable_3_01_t_01extends_01_abstract_argument.html", null ],
+    [ "dev.jorel.commandapi.arguments.Previewable< T, A >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_previewable.html", null ],
+    [ "dev.jorel.commandapi.arguments.Previewable< AdventureChatArgument, Component >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_previewable.html", [
+      [ "dev.jorel.commandapi.arguments.AdventureChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.arguments.Previewable< ChatArgument, BaseComponent[]>", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_previewable.html", [
+      [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.wrappers.PreviewableFunction< T >", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html", null ],
     [ "dev.jorel.commandapi.wrappers.PreviewableFunction< BaseComponent[]>", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_previewable_function.html", [
       [ "dev.jorel.commandapi.wrappers.PreviewLegacy", "interfacedev_1_1jorel_1_1commandapi_1_1wrappers_1_1_preview_legacy.html", null ]
@@ -336,23 +375,32 @@ var hierarchy =
     [ "dev.jorel.commandapi.annotations.arguments.Primitive", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_primitive.html", null ],
     [ "com.mojang.brigadier.RedirectModifier< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_redirect_modifier.html", null ],
     [ "com.mojang.brigadier.ResultConsumer< S >", "interfacecom_1_1mojang_1_1brigadier_1_1_result_consumer.html", null ],
-    [ "ResultingExecutor", null, [
+    [ "dev.jorel.commandapi.executors.ResultingExecutor< BlockCommandSender, BukkitBlockCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
       [ "dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.CommandBlockResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_execution_info.html", null ],
-      [ "dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.ConsoleResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_execution_info.html", null ],
-      [ "dev.jorel.commandapi.executors.EntityResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.EntityResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_execution_info.html", null ],
-      [ "dev.jorel.commandapi.executors.NativeResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.NativeResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_execution_info.html", null ],
-      [ "dev.jorel.commandapi.executors.PlayerResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.PlayerResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_execution_info.html", null ],
-      [ "dev.jorel.commandapi.executors.ProxyResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html", null ],
-      [ "dev.jorel.commandapi.executors.ProxyResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_execution_info.html", null ],
+      [ "dev.jorel.commandapi.executors.CommandBlockResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_execution_info.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.ResultingExecutor< CommandSender, BukkitCommandSender<? extends CommandSender > >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
       [ "dev.jorel.commandapi.executors.ResultingCommandExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_execution_info.html", null ],
       [ "dev.jorel.commandapi.executors.ResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.executors.ResultingExecutor< CommandSender, WrapperType extends AbstractCommandSender", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor_3_01_command_sender_00_07c2c973b982f777ff7ea30b22430bc3d.html", null ],
+    [ "dev.jorel.commandapi.executors.ResultingExecutor< ConsoleCommandSender, BukkitConsoleCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
+      [ "dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.ConsoleResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_execution_info.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.ResultingExecutor< Entity, BukkitEntity >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
+      [ "dev.jorel.commandapi.executors.EntityResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.EntityResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_execution_info.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.ResultingExecutor< NativeProxyCommandSender, BukkitNativeProxyCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
+      [ "dev.jorel.commandapi.executors.NativeResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.NativeResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_execution_info.html", null ],
+      [ "dev.jorel.commandapi.executors.ProxyResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.ProxyResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_proxy_resulting_execution_info.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.ResultingExecutor< Player, BukkitPlayer >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
+      [ "dev.jorel.commandapi.executors.PlayerResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.PlayerResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_player_resulting_execution_info.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.wrappers.Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", null ],
     [ "RuntimeException", null, [
       [ "dev.jorel.commandapi.exceptions.BadLiteralException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html", null ],
@@ -368,10 +416,9 @@ var hierarchy =
       [ "dev.jorel.commandapi.exceptions.SpigotNotFoundException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_spigot_not_found_exception.html", null ],
       [ "dev.jorel.commandapi.exceptions.UnimplementedArgumentException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_unimplemented_argument_exception.html", null ]
     ] ],
-    [ "SafeOverrideable", null, [
+    [ "dev.jorel.commandapi.arguments.SafeOverrideable< T, S, Argument< T >, Argument<?>, CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable.html", [
       [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< T, S >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.arguments.SafeOverrideable< T, S, Impl extends AbstractArgument< T, Impl, Argument, CommandSender >, Argument extends AbstractArgument", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_3_01_t_00_01_s_00_01_impl5f5c14ba98922a00f47cc02f6a3865d4.html", null ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< Advancement, Advancement >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", null ]
     ] ],
@@ -484,6 +531,7 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeSuggestions< S, CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_suggestions.html", null ],
     [ "dev.jorel.commandapi.SafeVarHandle< Type, FieldType >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
+    [ "dev.jorel.commandapi.SafeVarHandle< com.mojang.brigadier.context.CommandContext<?>, Map< String, com.mojang.brigadier.context.ParsedArgument<?, ?> > >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
     [ "dev.jorel.commandapi.SafeVarHandle< com.mojang.brigadier.tree.CommandNode<?>, Map< String, com.mojang.brigadier.tree.CommandNode<?> > >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
     [ "dev.jorel.commandapi.Schedulers", "classdev_1_1jorel_1_1commandapi_1_1_schedulers.html", null ],
     [ "dev.jorel.commandapi.arguments.ScoreHolderArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html", null ],
@@ -502,20 +550,12 @@ var hierarchy =
     [ "dev.jorel.commandapi.Tooltip< S >", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", [
       [ "dev.jorel.commandapi.BukkitTooltip< S >", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html", null ]
     ] ],
-    [ "dev.jorel.commandapi.executors.TypedExecutor< CommandSender, WrapperType extends AbstractCommandSender", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_typed_executor_3_01_command_sender_00_01_wr1a48c7fef18c62accbd24a9f2b3aa4d3.html", null ],
-    [ "AbstractArgument", null, [
-      [ "dev.jorel.commandapi.arguments.Argument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
-        [ "dev.jorel.commandapi.arguments.CustomArgument< T, B >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_custom_argument.html", null ],
-        [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< T, S >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", null ]
-      ] ]
+    [ "dev.jorel.commandapi.executors.TypedExecutor< CommandSender, WrapperType >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_typed_executor.html", [
+      [ "dev.jorel.commandapi.executors.NormalExecutor< CommandSender, WrapperType >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.ResultingExecutor< CommandSender, WrapperType >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", null ]
     ] ],
     [ "AbstractProcessor", null, [
       [ "dev.jorel.commandapi.annotations.Annotations", "classdev_1_1jorel_1_1commandapi_1_1annotations_1_1_annotations.html", null ]
-    ] ],
-    [ "BukkitExecutable", null, [
-      [ "dev.jorel.commandapi.CommandAPICommand", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html", null ],
-      [ "dev.jorel.commandapi.CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", null ],
-      [ "dev.jorel.commandapi.arguments.Argument< T >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", null ]
     ] ],
     [ "Keyed", null, [
       [ "dev.jorel.commandapi.wrappers.ScoreboardSlot", "enumdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_scoreboard_slot.html", null ],
@@ -523,18 +563,8 @@ var hierarchy =
         [ "dev.jorel.commandapi.wrappers.FunctionWrapper", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_function_wrapper.html", null ]
       ] ]
     ] ],
-    [ "Literal", null, [
-      [ "dev.jorel.commandapi.arguments.LiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html", null ]
-    ] ],
     [ "Location", null, [
       [ "dev.jorel.commandapi.wrappers.Location2D", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_location2_d.html", null ]
-    ] ],
-    [ "MultiLiteral", null, [
-      [ "dev.jorel.commandapi.arguments.MultiLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html", null ]
-    ] ],
-    [ "Previewable", null, [
-      [ "dev.jorel.commandapi.arguments.AdventureChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html", null ],
-      [ "dev.jorel.commandapi.arguments.ChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_chat_argument.html", null ]
     ] ],
     [ "ProxiedCommandSender", null, [
       [ "dev.jorel.commandapi.wrappers.NativeProxyCommandSender", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html", null ]

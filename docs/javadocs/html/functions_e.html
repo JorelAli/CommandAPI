@@ -17,6 +17,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -24,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -106,17 +107,28 @@ $(document).ready(function(){initNavTree('functions_e.html',''); initResizable()
 <li>ENVIRONMENT&#160;:&#160;<a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a11a15d4f5e89680b7951159323c3b730">dev.jorel.commandapi.arguments.CommandAPIArgumentType</a></li>
 <li>escapeIfRequired()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a0c33b0ccbd7810e3656e94e03767e83a">com.mojang.brigadier.arguments.StringArgumentType</a></li>
 <li>execute()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#a8443e7ff61dae843193e3d930c2d0655">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a></li>
-<li>executes()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#ab7150fe8dddba54047a20556cab712c1">com.mojang.brigadier.builder.ArgumentBuilder</a></li>
+<li>executes()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_argument_builder.html#a59531d51046c67151b4fcb6b3e466c40">com.mojang.brigadier.builder.ArgumentBuilder&lt; S, T &gt;</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a8d1762584d31697c20378449f26213f7">dev.jorel.commandapi.BukkitExecutable&lt; Impl &gt;</a></li>
+<li>executesCommandBlock()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ab17bfc527a2ea0c68c81ac0d517d1ce3">dev.jorel.commandapi.BukkitExecutable&lt; Impl &gt;</a></li>
+<li>executesConsole()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ac19ca596e296e9a2fd2cf7dde69b40e2">dev.jorel.commandapi.BukkitExecutable&lt; Impl &gt;</a></li>
+<li>executesEntity()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a441a936e66c8b00338f64294ddc0fc43">dev.jorel.commandapi.BukkitExecutable&lt; Impl &gt;</a></li>
+<li>executesNative()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a735e7a224495c808898b533c31ce292f">dev.jorel.commandapi.BukkitExecutable&lt; Impl &gt;</a></li>
+<li>executesPlayer()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#af450331bdf93e3491cf1bd66389f8f00">dev.jorel.commandapi.BukkitExecutable&lt; Impl &gt;</a></li>
+<li>executesProxy()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a7bfc016e3b58741ef9fe975021e45f21">dev.jorel.commandapi.BukkitExecutable&lt; Impl &gt;</a></li>
+<li>executeWith()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html#a8231124f79ea8f541030af9698b4aa26">dev.jorel.commandapi.executors.NormalExecutor&lt; CommandSender, WrapperType &gt;</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html#acb85a14ad2115467b9dae9dee4ed5c42">dev.jorel.commandapi.executors.ResultingExecutor&lt; CommandSender, WrapperType &gt;</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_typed_executor.html#aa3637ef594635b5f9989a292754a54ba">dev.jorel.commandapi.executors.TypedExecutor&lt; CommandSender, WrapperType &gt;</a></li>
 <li>expand()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html#a6c29fc347ad568a456c7b9c2e3d2f068">com.mojang.brigadier.suggestion.Suggestion</a></li>
 <li>expect()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_string_reader.html#a7e568b144ba4b7241cbe090453e64399">com.mojang.brigadier.StringReader</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="footer">Generated on Thu May 11 2023 10:51:30 for CommandAPI by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
-  </ul>
-</div>
-</body>
+		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+			<ul>
+				<li class="footer">
+					Generated on Wed Jun 7 2023 20:12:15 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
+				</li>
+			</ul>
+		</div>
+		<script src="custom.js"></script>
+	</body>
 </html>

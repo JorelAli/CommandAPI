@@ -9,7 +9,11 @@ import java.util.Optional;
  * Minecraft's chat preview feature. To use this, the server must have
  * {@code previews-chat=true} set in its {@code server.properties} file
  */
-public interface Previewable<T extends AbstractArgument<?, ?, ?, ?>, A> {
+public interface Previewable<T
+/// @cond DOX
+extends AbstractArgument<?, ?, ?, ?>
+/// @endcond
+, A> {
 
 	/**
 	 * Sets the {@link PreviewableFunction} for this argument. This function will

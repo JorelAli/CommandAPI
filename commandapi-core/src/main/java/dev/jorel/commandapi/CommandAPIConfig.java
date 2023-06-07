@@ -30,7 +30,11 @@ import java.util.function.Function;
  * You shouldn't use this class directly. Instead, use an appropriate subclass that corresponds to
  * the platform you are developing for.
  */
-public abstract class CommandAPIConfig<Impl extends CommandAPIConfig<Impl>> implements ChainableBuilder<Impl> {
+public abstract class CommandAPIConfig<Impl
+/// @cond DOX
+extends CommandAPIConfig<Impl>
+/// @endcond
+> implements ChainableBuilder<Impl> {
 	// The default configuration. This should mirror the commandapi-plugin config.yml file.
 	boolean verboseOutput = false;
 	boolean silentLogs = false;

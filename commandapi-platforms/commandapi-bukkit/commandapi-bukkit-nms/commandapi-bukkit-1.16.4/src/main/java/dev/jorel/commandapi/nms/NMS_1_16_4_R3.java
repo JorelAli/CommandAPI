@@ -778,6 +778,12 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
 		CommandSender sender = clw.getBukkitSender();
+		if (sender == null) {
+			// Sender CANNOT be null. This can occur when using a remote console
+			// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
+			// however this may also be null, so delegate to the next most-meaningful sender.
+			sender = Bukkit.getConsoleSender();
+		}
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
@@ -786,6 +792,9 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		Entity proxyEntity = clw.getEntity();
 		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
+			if (proxy == null) {
+				proxy = sender;
+			}
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
 			return wrapCommandSender(sender);
