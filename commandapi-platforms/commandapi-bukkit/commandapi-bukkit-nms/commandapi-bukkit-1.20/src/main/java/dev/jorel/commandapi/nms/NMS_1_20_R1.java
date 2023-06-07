@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,17 +53,17 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_19_R3.CraftLootTable;
-import org.bukkit.craftbukkit.v1_19_R3.CraftParticle;
-import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.CraftSound;
-import org.bukkit.craftbukkit.v1_19_R3.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_19_R3.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R3.help.CustomHelpTopic;
-import org.bukkit.craftbukkit.v1_19_R3.help.SimpleHelpMap;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.CraftLootTable;
+import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftSound;
+import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_20_R1.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_20_R1.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -162,7 +164,6 @@ import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
-import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -600,8 +601,7 @@ public class NMS_1_20_R1 extends NMS_Common {
 	}
 
 	@Override
-	@Differs(from = {"NMS_Common"}, by = "Many MinecraftServer#get methods mapped to different names")
-	@Differs(from = "1.19.4", by = "Use of getLootData via LootDataType to get keys")
+	@Differs(from = {"NMS_Common", "1.19.4"}, by = "Many MinecraftServer#get methods mapped to different names and Use of getLootData via LootDataType to get keys")
 	public SuggestionProvider<CommandSourceStack> getSuggestionProvider(SuggestionProviders provider) {
 		return switch (provider) {
 			case FUNCTION -> (context, builder) -> {

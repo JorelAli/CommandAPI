@@ -20,7 +20,7 @@
  *******************************************************************************/
 import java.util.Map;
 
-import org.bukkit.craftbukkit.v1_19_R3.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.v1_20_R1.help.SimpleHelpMap;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Either;
