@@ -283,7 +283,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Populate array
 		for (Argument argument : args) {
 			if (argument.isListed()) {
-				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap, rawArguments.toArray(String[]::new), rawArgumentsMap, "/" + cmdCtx.getInput()));
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + cmdCtx.getInput()));
 
 				// Add the parsed argument
 				argList.add(parsedArgument);
@@ -295,7 +295,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			}
 		}
 
-		return new CommandArguments(argList.toArray(), argsMap, rawArguments.toArray(String[]::new), rawArgumentsMap, "/" + cmdCtx.getInput());
+		return new CommandArguments(argList.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + cmdCtx.getInput());
 	}
 
 	/**
@@ -834,7 +834,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			Object result;
 			try {
-				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap, rawArguments.toArray(String[]::new), rawArgumentsMap, "/" + context.getInput()));
+				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + context.getInput()));
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Redirected commands don't parse previous arguments properly. Simplest way to
@@ -856,7 +856,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				rawArgumentsMap.put(arg.getNodeName(), arg.getRawArgumentString());
 			}
 		}
-		return new CommandArguments(previousArguments.toArray(), argsMap, rawArguments.toArray(String[]::new), rawArgumentsMap, "/" + context.getInput());
+		return new CommandArguments(previousArguments.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + context.getInput());
 	}
 
 	SuggestionProvider<Source> toSuggestions(Argument theArgument, Argument[] args,
