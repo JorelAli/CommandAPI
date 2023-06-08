@@ -252,8 +252,8 @@
 - /command &lt;reload&gt; &lt;server&gt;
 </code></pre>
 <p>Now, we are implementing the <code>withUsage()</code> method:</p>
-<pre><code class="language-java">CommandAPICommand(&quot;...&quot;)
-    withUsage(
+<pre><code class="language-java">new CommandAPICommand(&quot;...&quot;)
+    .withUsage(
         &quot;/command &lt;help&gt; &lt;section&gt;&quot;,
         &quot;/command &lt;reload&gt; &lt;system&gt;&quot;
     )
