@@ -346,7 +346,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				escaped = true;
 				reader.skip();
 				continue; // Don't include this character
-			} else if (c == firstTerminatorChar && doseTerminatorContinue(reader, terminator)) {
+			} else if (c == firstTerminatorChar && doesReaderContinueWithTerminator(reader, terminator)) {
 				// If the char says the terminator is starting, make sure it continues
 				// If this is the terminator, then we're done
 				return result.toString();
@@ -471,11 +471,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					escapeQuoted = true;
 					// or at the start of an unquoted string
 					if (reader.getCursor() == 0) escapeUnquoted = true;
-				} else if (c == firstTerminatorChar && doseTerminatorContinue(reader, terminator)) {
+				} else if (c == firstTerminatorChar && doesReaderContinueWithTerminator(reader, terminator)) {
 					// If the char says the terminator is starting, make sure it continues
 					// Yes, this was the terminator. We need to escape it when unquoted
 					escapeUnquoted = true;
-					// If the result dose contain the separator, we would prefer it be quoted
+					// If the result contains the separator, we would prefer it be quoted
 					preferUnquoted = false;
 				}
 
@@ -493,7 +493,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		}
 	}
 
-	private static boolean doseTerminatorContinue(StringReader reader, String terminator) {
+	private static boolean doesReaderContinueWithTerminator(StringReader reader, String terminator) {
 		if (!reader.canRead(terminator.length())) return false;
 		for (int i = 1; i < terminator.length(); i++) {
 			if (reader.peek(i) != terminator.charAt(i)) {
