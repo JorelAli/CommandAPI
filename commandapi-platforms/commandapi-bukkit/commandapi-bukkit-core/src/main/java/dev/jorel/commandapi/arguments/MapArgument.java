@@ -71,10 +71,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			List<String> unusedValues = new ArrayList<>(valueList.results);
 
 			boolean isKey = true;
-			while (true) {
-				if (reader.getRemainingLength() == 0)
-					return startSuggestions(builder, isKey ? unusedKeys : unusedValues, isKey);
-
+			while (reader.canRead()) {
 				boolean isQuoted = reader.peek() == '"';
 				String result;
 				try {
@@ -132,6 +129,10 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				// Move to next key/value
 				isKey = !isKey;
 			}
+
+			// We reached the end exactly when a key/value and its terminator ended
+			// Start suggestions for the next key/value
+			return startSuggestions(builder, isKey ? unusedKeys : unusedValues, isKey);
 		});
 	}
 
@@ -229,13 +230,7 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		List<String> unusedValues = new ArrayList<>(valueList.results);
 
 		boolean isKey = true;
-		while (true) {
-			if (reader.getRemainingLength() == 0) {
-				// We expect a key/value
-				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader,
-					"Expected a " + (isKey ? "key after the separator" : "value after the delimiter"));
-			}
-
+		while (reader.canRead()) {
 			boolean isQuoted = reader.peek() == '"';
 			String result;
 			try {
@@ -314,6 +309,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			// Move to next key/value
 			isKey = !isKey;
 		}
+
+		// We reached the end exactly when a key/value and its terminator ended
+		// Since the terminator was given, there should have been a key/value
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader,
+			"Expected a " + (isKey ? "key after the separator" : "value after the delimiter"));
 	}
 
 	private String readQuoted(StringReader reader, boolean isKey) throws CommandSyntaxException {
