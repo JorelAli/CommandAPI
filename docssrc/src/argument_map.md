@@ -164,7 +164,7 @@ To do that, we use the previously declared `sendmessage` command like this:
 /sendmessage Player1:"Hello, Player1!" Player2:"Hello, Player2!"
 ```
 
-Here we use a colon as the delimiter and a space as the separator because those are the defaults, and we didn't specify either in the `MapArgumentBuilder` constructor. The messages were also surrounded by quotes since they contain spaces. The space is the separator for this `MapArgument`, so it otherwise might have been confused as starting the next key-value pair.
+A colon is used as the delimiter and a space as the separator because those are the defaults, and neither was specified in the `MapArgumentBuilder` constructor. Since the separator was a space, the messages were surrounded by quotes to avoid the spaces inside them from being misinterpreted as the start of the next key-value pair.
 
 </div>
 
