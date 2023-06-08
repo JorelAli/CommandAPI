@@ -42,7 +42,9 @@ public class MapArgumentBuilder<K, V> {
 	 * @param separator the separator between a key and a value
 	 */
 	public MapArgumentBuilder(String nodeName, char delimiter, String separator) {
+		if(separator == null) throw new IllegalArgumentException("The separator cannot be null!");
 		if(separator.length() == 0) throw new IllegalArgumentException("The separator cannot be an empty String!");
+		
 		this.nodeName = nodeName;
 		this.delimiter = String.valueOf(delimiter);
 		this.separator = separator;
