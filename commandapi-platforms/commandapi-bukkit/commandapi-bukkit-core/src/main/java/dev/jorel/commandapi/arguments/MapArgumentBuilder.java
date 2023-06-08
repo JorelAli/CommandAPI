@@ -93,7 +93,11 @@ public class MapArgumentBuilder<K, V> {
 			}
 
 			/**
-			 * Provides a list of values to suggest when a value was typed.
+			 * Provides a list of keys to suggest when a user types this argument. All keys given for the final map must
+			 * come from this list, otherwise a CommandSyntaxException is thrown.
+			 * <p>
+			 * Duplicate keys are never allowed since one key can only be mapped to one value. If a duplicate key is given,
+			 * a CommandSyntaxException is thrown.
 			 *
 			 * @param keyList A list of keys to suggest.
 			 * @return this map argument builder
@@ -103,7 +107,11 @@ public class MapArgumentBuilder<K, V> {
 			}
 
 			/**
-			 * When using this method, no key suggestions are displayed
+			 * When using this method, no key suggestions are displayed and any keys can be given for the final map. To
+			 * restrict the keys that can be given for this map, use {@link #withKeyList(List)} instead.
+			 * <p>
+			 * Duplicate keys are never allowed since one key can only be mapped to one value. If a duplicate key is given,
+			 * a CommandSyntaxException is thrown.
 			 *
 			 * @return this map argument builder
 			 */
@@ -123,9 +131,11 @@ public class MapArgumentBuilder<K, V> {
 				}
 
 				/**
-				 * Provides a list of values to suggest after a key was typed. Using this method will not allow writing values more than once!
+				 * Provides a list of values to suggest when a user types this argument. All values given for the final
+				 * map must come from this list, otherwise a CommandSyntaxException is thrown.
 				 * <p>
-				 * If you want to allow that, please use the {@link #withValueList(List, boolean)} method!
+				 * Additionally, duplicate values are not allowed. If a duplicate value is given, a CommandSyntaxException
+				 * is thrown. To allow duplicate values, use the {@link #withValueList(List, boolean)} method instead.
 				 *
 				 * @param valueList A list of values to suggest. The values need to be Strings, so they can be suggested
 				 * @return this map argument builder
@@ -135,7 +145,11 @@ public class MapArgumentBuilder<K, V> {
 				}
 
 				/**
-				 * Provides a list of values to suggest after a key was typed.
+				 * Provides a list of values to suggest when a user types this argument. All values given for the final
+				 * map must come from this list, otherwise a CommandSyntaxException is thrown.
+				 * <p>
+				 * If allowDuplicates is true, then multiple keys may be given the same value. Otherwise, if a duplicate
+				 * value is given, a CommandSyntaxException is thrown.
 				 *
 				 * @param valueList A list of values to suggest. The values need to be Strings, so they can be suggested
 				 * @param allowDuplicates Decides if a value can be written more than once
@@ -146,9 +160,11 @@ public class MapArgumentBuilder<K, V> {
 				}
 
 				/**
-				 * When using this method, no value suggestions are displayed! Using this method will also not allow writing values more than once!
+				 * When using this method, no value suggestions are displayed and any values can be given for the final
+				 * map. To restrict the values that can be given for this map, use {@link #withValueList(List)} instead.
 				 * <p>
-				 * If you want to allow that, please use the {@link #withValueList(List, boolean)} method!
+				 * Additionally, duplicate values are not allowed. If a duplicate value is given, a CommandSyntaxException
+				 * is thrown. To allow duplicate values, use the {@link #withoutValueList(boolean)} method instead.
 				 *
 				 * @return this map argument builder
 				 */
@@ -157,7 +173,11 @@ public class MapArgumentBuilder<K, V> {
 				}
 
 				/**
-				 * When using this method, no value suggestions are displayed!
+				 * When using this method, no value suggestions are displayed and any values can be given for the final
+				 * map. To restrict the values that can be given for this map, use {@link #withValueList(List, boolean)} instead.
+				 * <p>
+				 * If allowDuplicates is true, then multiple keys may be given the same value. Otherwise, if a duplicate
+				 * value is given, a CommandSyntaxException is thrown.
 				 *
 				 * @param allowDuplicates Decides if a value can be written more than once
 				 * @return this map argument builder
