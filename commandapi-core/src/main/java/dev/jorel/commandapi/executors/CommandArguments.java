@@ -14,19 +14,25 @@ import java.util.function.Supplier;
 public class CommandArguments {
 
 	private final Object[] args;
+	private final String[] rawArgs;
 	private final Map<String, Object> argsMap;
+	private final Map<String, String> rawArgsMap;
 	private final String fullInput;
 
 	/**
 	 * Constructs a new CommandArguments instance
 	 *
 	 * @param args      The arguments for this command
-	 * @param argsMap   The arguments for this command mapped to the node names. This is an ordered map
+	 * @param argsMap   The arguments for this command mapped to their node names. This is an ordered map
+	 * @param rawArgs   The raw arguments for this command.
+	 * @param rawArgsMap   The raw arguments for this command mapped to their node names. This is an ordered map
 	 * @param fullInput The raw command a player has entered
 	 */
-	public CommandArguments(Object[] args, Map<String, Object> argsMap, String fullInput) {
+	public CommandArguments(Object[] args, Map<String, Object> argsMap, String[] rawArgs, Map<String, String> rawArgsMap, String fullInput) {
 		this.args = args;
+		this.rawArgs = rawArgs;
 		this.argsMap = argsMap;
+		this.rawArgsMap = rawArgsMap;
 		this.fullInput = fullInput;
 	}
 	
@@ -38,12 +44,26 @@ public class CommandArguments {
 	public Object[] args() {
 		return args;
 	}
-	
+
+	/**
+	 * @return The complete raw argument array of this command
+	 */
+	public String[] rawArgs() {
+		return rawArgs;
+	}
+
 	/**
 	 * @return An unmodifiable clone of the mapping of node names to argument values
 	 */
 	public Map<String, Object> argsMap() {
 		return Collections.unmodifiableMap(argsMap);
+	}
+
+	/**
+	 * @return An unmodifiable clone of the mapping of node names to raw arguments
+	 */
+	public Map<String, String> rawArgsMap() {
+		return Collections.unmodifiableMap(rawArgsMap);
 	}
 
 	/**
@@ -82,6 +102,32 @@ public class CommandArguments {
 	@Nullable
 	public Object get(String nodeName) {
 		return argsMap.get(nodeName);
+	}
+
+	/**
+	 * Returns a raw argument by its position
+	 *
+	 * @param index The position of this argument
+	 * @return An argument which is placed at the given index, or {@code null} if the provided index does not point to an argument.
+	 */
+	@Nullable
+	public String getRaw(int index) {
+		if (args.length <= index) {
+			return null;
+		} else {
+			return rawArgs[index];
+		}
+	}
+
+	/**
+	 * Returns a raw argument by its node name
+	 *
+	 * @param nodeName The node name of this argument. This was set when initializing an argument
+	 * @return An argument which has the given node name. Can be null if <code>nodeName</code> was not found.
+	 */
+	@Nullable
+	public String getRaw(String nodeName) {
+		return rawArgsMap.get(nodeName);
 	}
 
 	/**
@@ -178,6 +224,33 @@ public class CommandArguments {
 			return Optional.empty();
 		}
 		return Optional.of(argsMap.get(nodeName));
+	}
+
+	/**
+	 * Returns an <code>Optional</code> holding the raw argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @return An optional holding the raw argument which is placed at the given index, or an empty optional if index is invalid
+	 */
+	public Optional<String> getRawOptional(int index) {
+		if (args.length <= index) {
+			return Optional.empty();
+		} else {
+			return Optional.of(rawArgs[index]);
+		}
+	}
+
+	/**
+	 * Returns an argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @return An optional holding the argument with the specified node name or an empty optional if the node name was not found
+	 */
+	public Optional<String> getRawOptional(String nodeName) {
+		if (!argsMap.containsKey(nodeName)) {
+			return Optional.empty();
+		}
+		return Optional.of(rawArgsMap.get(nodeName));
 	}
 	
 	/** Unchecked methods. These are the same as the methods above, but use

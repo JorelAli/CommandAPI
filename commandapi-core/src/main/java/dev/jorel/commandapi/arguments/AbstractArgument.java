@@ -24,6 +24,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.AbstractArgumentTree;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.executors.CommandArguments;
 
@@ -72,6 +73,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	private final String nodeName;
 	private final ArgumentType<?> rawType;
+	private String rawArgumentString = "";
 
 	/**
 	 * Constructs an argument with a given NMS/brigadier type.
@@ -100,6 +102,30 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	public final String getNodeName() {
 		return this.nodeName;
+	}
+
+	/**
+	 * Returns the raw String which is retrieved in {@link AbstractArgument#getRawStringAndParseArgument(CommandContext, String, CommandArguments)}
+	 *
+	 * @return the raw String which is retrieved in {@link AbstractArgument#getRawStringAndParseArgument(CommandContext, String, CommandArguments)}
+	 */
+	public final String getRawArgumentString() {
+		return this.rawArgumentString;
+	}
+
+	/**
+	 * Saves the String of this argument as typed when executing the command and parses the argument
+	 *
+	 * @param <Source>      the command source type
+	 * @param cmdCtx        the context which ran this command
+	 * @param key           the name of the argument node
+	 * @param previousArgs  a {@link CommandArguments} object holding previous  parsed arguments
+	 * @return the parsed object represented by this argument
+	 * @throws CommandSyntaxException if parsing fails
+	 */
+	public <Source> T getRawStringAndParseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
+		this.rawArgumentString = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
+		return parseArgument(cmdCtx, key, previousArgs);
 	}
 
 	/**
