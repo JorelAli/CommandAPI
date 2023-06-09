@@ -10,7 +10,7 @@ It returns a `LinkedHashMap` object.
 Similar to the `ListArgument`, this argument also uses a builder class to construct it.
 
 \begin{align}
-&\quad\texttt{Create a MapArgumentBuilder and possibly provide the delimiter} \\\\
+&\quad\texttt{Create a MapArgumentBuilder and possibly provide the delimiter or separator} \\\\
 \rightarrow&\quad\texttt{Provide the mapper from a string to an object of the provided key type} \\\\
 \rightarrow&\quad\texttt{Provide the mapper from a string to an object of the provided value type} \\\\
 \rightarrow&\quad\texttt{Provide the list with keys to pull suggestions from} \\\\
@@ -27,15 +27,17 @@ If you wanted to construct a `MapArgument` that returns a `LinkedHashMap<String,
 new MapArgumentBuilder<String, Integer>
 ```
 
-The `MapArgumentBuilder` has two possible constructors:
+The `MapArgumentBuilder` has three possible constructors:
 
 ```java
 public MapArgumentBuilder<K, V>(String nodeName);
 public MapArgumentBuilder<K, V>(String nodeName, char delimiter);
+public MapArgumentBuilder<K, V>(String nodeName, char delimiter, String separator)
 ```
 
 - `nodeName`: This parameter determines the node name of the `MapArgument`
-- `delimiter`: This parameter determines the delimiter. This separates a key from a value. When not provided, it defaults to a colon (`:`)
+- `delimiter`: This parameter determines the delimiter. This separates a key from a value (`key:value`). When not provided, it defaults to a colon (`:`)
+- `separator`: This parameter determines the separator. This separates one key-value pair from another (`key:value key:value`). When not provided, it defaults to a space <!-- markdownlint-disable-line MD038 -->(` `)
 
 $$\downarrow$$
 
@@ -47,14 +49,22 @@ returns a `String`, we need a way to convert a `String` into an object specified
 When providing mappers, you first need to provide the key mapper:
 
 ```java
-public MapArgumentBuilder withKeyMapper(Function<String, K>);
+public MapArgumentBuilder withKeyMapper(StringParser<K>);
 ```
 
 You then have to provide the value mapper:
 
 ```java
-public MapArgumentBuilder withValueMapper(Function<String, V>);
+public MapArgumentBuilder withValueMapper(StringParser<V>);
 ```
+
+`StringParser` is a functional interface with the following definition:
+
+```java
+{{#include ../../commandapi-core/src/main/java/dev/jorel/commandapi/arguments/StringParser.java:Declaration}}
+```
+
+This signature allows you to throw exceptions using the `CommandAPI.fail...` methods if the given String cannot be parsed (see [Handling command failures](./commandfailures.md)).
 
 $$\downarrow$$
 
@@ -90,6 +100,8 @@ public MapArgumentBuilder withValueList(List<String> valueList, boolean allowVal
 
 ```java,Any_value
 public MapArgumentBuilder withoutValueList();
+
+public MapArgumentBuilder withoutValueList(boolean allowDuplicates)
 ```
 
 </div>
@@ -143,20 +155,16 @@ To implement that, we create a command that uses a `MapArgument` and use `Player
 
 **Developer's Note:**
 
-The `MapArgument` is very strict and doesn't have room for any errors. The syntax for key/value pairs of the `MapArgument` is as following:
+The `MapArgument` is very strict and doesn't have room for any errors. A key must always be followed by the delimiter, then a value. One value and the next key must always be separated by the separator. Both keys and values also have the option to be surrounded by quotes.
 
-```txt
-<key><delimiter>"<value>"
-```
-
-Let's say you are on a server with two players, `Player1` and `Player2`. We want to send both of them the message `Hello, <playerName>!`
+For example, let's say you are on a server with two players, `Player1` and `Player2`. We want to send both of them the message `Hello, <playerName>!`
 To do that, we use the previously declared `sendmessage` command like this:
 
 ```mccmd
 /sendmessage Player1:"Hello, Player1!" Player2:"Hello, Player2!"
 ```
 
-Here we use a colon as the delimiter because we didn't specify a delimiter in the `MapArgumentBuilder` constructor.
+A colon is used as the delimiter and a space as the separator because those are the defaults, and neither was specified in the `MapArgumentBuilder` constructor. Since the separator was a space, the messages were surrounded by quotes to avoid the spaces inside them from being misinterpreted as the start of the next key-value pair.
 
 </div>
 

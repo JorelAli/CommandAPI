@@ -1,8 +1,6 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.regex.Pattern;
 
 /**
  * A builder to create a {@link MapArgument}
@@ -13,7 +11,8 @@ import java.util.regex.Pattern;
 public class MapArgumentBuilder<K, V> {
 
 	private final String nodeName;
-	private final char delimiter;
+	private final String delimiter;
+	private final String separator;
 
 	/**
 	 * Creates a new MapArgumentBuilder with a specified node name. Defaults the
@@ -32,8 +31,23 @@ public class MapArgumentBuilder<K, V> {
 	 * @param delimiter the separator for each key/value pair
 	 */
 	public MapArgumentBuilder(String nodeName, char delimiter) {
+		this(nodeName, delimiter, " ");
+	}
+
+	/**
+	 * Creates a new MapArgumentBuilder with a specified node name
+	 *
+	 * @param nodeName  the name of the node for this argument
+	 * @param delimiter the separator for each key/value pair
+	 * @param separator the separator between a key and a value
+	 */
+	public MapArgumentBuilder(String nodeName, char delimiter, String separator) {
+		if(separator == null) throw new IllegalArgumentException("The separator cannot be null!");
+		if(separator.length() == 0) throw new IllegalArgumentException("The separator cannot be an empty String!");
+		
 		this.nodeName = nodeName;
-		this.delimiter = delimiter;
+		this.delimiter = String.valueOf(delimiter);
+		this.separator = separator;
 	}
 
 	/**
@@ -41,7 +55,7 @@ public class MapArgumentBuilder<K, V> {
 	 *
 	 * @return this map argument builder
 	 */
-	public MapArgumentBuilderValueMapper withKeyMapper(Function<String, K> keyMapper) {
+	public MapArgumentBuilderValueMapper withKeyMapper(StringParser<K> keyMapper) {
 		return new MapArgumentBuilderValueMapper(keyMapper);
 	}
 
@@ -50,9 +64,9 @@ public class MapArgumentBuilder<K, V> {
 	 */
 	public class MapArgumentBuilderValueMapper {
 
-		private final Function<String, K> keyMapper;
+		private final StringParser<K> keyMapper;
 
-		public MapArgumentBuilderValueMapper(Function<String, K> keyMapper) {
+		public MapArgumentBuilderValueMapper(StringParser<K> keyMapper) {
 			this.keyMapper = keyMapper;
 		}
 
@@ -63,7 +77,7 @@ public class MapArgumentBuilder<K, V> {
 		 * @param valueMapper the mapping function that creates an instance of <code>V</code>
 		 * @return this map argument builder
 		 */
-		public MapArgumentBuilderSuggestsKey withValueMapper(Function<String, V> valueMapper) {
+		public MapArgumentBuilderSuggestsKey withValueMapper(StringParser<V> valueMapper) {
 			return new MapArgumentBuilderSuggestsKey(valueMapper);
 		}
 
@@ -72,14 +86,18 @@ public class MapArgumentBuilder<K, V> {
 		 */
 		public class MapArgumentBuilderSuggestsKey {
 
-			private final Function<String, V> valueMapper;
+			private final StringParser<V> valueMapper;
 
-			public MapArgumentBuilderSuggestsKey(Function<String, V> valueMapper) {
+			public MapArgumentBuilderSuggestsKey(StringParser<V> valueMapper) {
 				this.valueMapper = valueMapper;
 			}
 
 			/**
-			 * Provides a list of values to suggest when a value was typed.
+			 * Provides a list of keys to suggest when a user types this argument. All keys given for the final map must
+			 * come from this list, otherwise a CommandSyntaxException is thrown.
+			 * <p>
+			 * Duplicate keys are never allowed since one key can only be mapped to one value. If a duplicate key is given,
+			 * a CommandSyntaxException is thrown.
 			 *
 			 * @param keyList A list of keys to suggest.
 			 * @return this map argument builder
@@ -89,7 +107,11 @@ public class MapArgumentBuilder<K, V> {
 			}
 
 			/**
-			 * When using this method, no key suggestions are displayed
+			 * When using this method, no key suggestions are displayed and any keys can be given for the final map. To
+			 * restrict the keys that can be given for this map, use {@link #withKeyList(List)} instead.
+			 * <p>
+			 * Duplicate keys are never allowed since one key can only be mapped to one value. If a duplicate key is given,
+			 * a CommandSyntaxException is thrown.
 			 *
 			 * @return this map argument builder
 			 */
@@ -105,23 +127,15 @@ public class MapArgumentBuilder<K, V> {
 				private final List<String> keyList;
 
 				public MapArgumentBuilderSuggestsValue(List<String> keyList) {
-					Pattern keyPattern = Pattern.compile("([a-zA-Z0-9_\\.]+)");
-					if (keyList == null) {
-						this.keyList = null;
-					} else {
-						for (String key : keyList) {
-							if (!keyPattern.matcher(key).matches()) {
-								throw new IllegalArgumentException("The key '" + key + "' does not match regex '([a-zA-Z0-9_\\.]+)'! It may only contain letters from a-z and A-Z, numbers, periods and underscores.");
-							}
-						}
-						this.keyList = keyList;
-					}
+					this.keyList = keyList;
 				}
 
 				/**
-				 * Provides a list of values to suggest after a key was typed. Using this method will not allow writing values more than once!
+				 * Provides a list of values to suggest when a user types this argument. All values given for the final
+				 * map must come from this list, otherwise a CommandSyntaxException is thrown.
 				 * <p>
-				 * If you want to allow that, please use the {@link #withValueList(List, boolean)} method!
+				 * Additionally, duplicate values are not allowed. If a duplicate value is given, a CommandSyntaxException
+				 * is thrown. To allow duplicate values, use the {@link #withValueList(List, boolean)} method instead.
 				 *
 				 * @param valueList A list of values to suggest. The values need to be Strings, so they can be suggested
 				 * @return this map argument builder
@@ -131,7 +145,11 @@ public class MapArgumentBuilder<K, V> {
 				}
 
 				/**
-				 * Provides a list of values to suggest after a key was typed.
+				 * Provides a list of values to suggest when a user types this argument. All values given for the final
+				 * map must come from this list, otherwise a CommandSyntaxException is thrown.
+				 * <p>
+				 * If allowDuplicates is true, then multiple keys may be given the same value. Otherwise, if a duplicate
+				 * value is given, a CommandSyntaxException is thrown.
 				 *
 				 * @param valueList A list of values to suggest. The values need to be Strings, so they can be suggested
 				 * @param allowDuplicates Decides if a value can be written more than once
@@ -142,12 +160,30 @@ public class MapArgumentBuilder<K, V> {
 				}
 
 				/**
-				 * When using this method, no value suggestions are displayed!
+				 * When using this method, no value suggestions are displayed and any values can be given for the final
+				 * map. To restrict the values that can be given for this map, use {@link #withValueList(List)} instead.
+				 * <p>
+				 * Additionally, duplicate values are not allowed. If a duplicate value is given, a CommandSyntaxException
+				 * is thrown. To allow duplicate values, use the {@link #withoutValueList(boolean)} method instead.
 				 *
 				 * @return this map argument builder
 				 */
 				public MapArgumentBuilderFinished withoutValueList() {
 					return withValueList(null);
+				}
+
+				/**
+				 * When using this method, no value suggestions are displayed and any values can be given for the final
+				 * map. To restrict the values that can be given for this map, use {@link #withValueList(List, boolean)} instead.
+				 * <p>
+				 * If allowDuplicates is true, then multiple keys may be given the same value. Otherwise, if a duplicate
+				 * value is given, a CommandSyntaxException is thrown.
+				 *
+				 * @param allowDuplicates Decides if a value can be written more than once
+				 * @return this map argument builder
+				 */
+				public MapArgumentBuilderFinished withoutValueList(boolean allowDuplicates) {
+					return withValueList(null, allowDuplicates);
 				}
 
 				/**
@@ -169,16 +205,10 @@ public class MapArgumentBuilder<K, V> {
 					 * @return a new {@link MapArgument}
 					 */
 					public MapArgument<K, V> build() {
-						return new MapArgument<>(nodeName, delimiter, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
+						return new MapArgument<>(nodeName, delimiter, separator, keyMapper, valueMapper, keyList, valueList, allowValueDuplicates);
 					}
-
 				}
-
 			}
-
 		}
-
 	}
-
-
 }
