@@ -368,6 +368,22 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.0.3</b></td>
+            <td valign="top">TBD</td>
+            <td valign="top">
+				<ul>
+					<li>
+						https://github.com/JorelAli/CommandAPI/pull/455 Reworked the `MapArgument` with various features, including:
+						<ul>
+							<li>Optional quotes around keys and values</li>
+							<li>No restriction on the characters that are allowed in a key (previously only letters, digits, and underscore)</li>
+							<li>May define a String separator between key-value pairs (instead of just space)</li>
+						</ul>
+					</li>
+				</ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.0.2</b></td>
             <td valign="top">June 2023</td>
             <td valign="top">
