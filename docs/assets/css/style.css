@@ -1075,9 +1075,43 @@ img {
     background-color: var(--card-bg-hover);
 }
 
+.card-text {
+    color: white;
+}
+
 @media (max-width: 991px) {
     nav a.btn {
         width: 100%;
         margin: 0 0 2px 0;
     }
+}
+
+.contributor {
+    width: 100px;
+    border-radius: 100%;
+    margin: auto;
+    margin-top: 2rem;
+}
+
+.contributor-lg {
+    width: 200px;
+    margin-top: 0;
+}
+
+.contributor-sm {
+    width: 80px;
+    margin-top: 0;
+}
+
+.early-contributors > div {
+    padding-bottom: 2rem;
+}
+
+.early-contributors a {
+    /* I give up */
+    border-bottom: none !important;
+}
+
+.early-contributors p {
+    padding-top: 1rem;
 }
