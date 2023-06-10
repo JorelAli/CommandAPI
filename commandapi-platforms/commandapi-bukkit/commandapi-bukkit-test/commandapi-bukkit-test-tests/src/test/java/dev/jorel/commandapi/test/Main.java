@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.test;
 import java.io.File;
+import java.util.function.Function;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,16 +13,24 @@ import dev.jorel.commandapi.CommandAPILogger;
 
 public class Main extends JavaPlugin {
 	
+	public static Class nbtContainerClass = null;
+	public static Function nbtContainerConstructor = null;
+	
 	@Override
 	public void onLoad() {
 		getDataFolder().mkdirs();
 		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
-		CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
-			.useLatestNMSVersion(true) // Doesn't matter because we implement CommandAPIVersionHandler here
-			.silentLogs(true)
-			.dispatcherFile(new File(getDataFolder(), "command_registration.json"))
-			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
-		);
+		
+		CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this)
+		.useLatestNMSVersion(true) // Doesn't matter because we implement CommandAPIVersionHandler here
+		.silentLogs(true)
+		.dispatcherFile(new File(getDataFolder(), "command_registration.json"));
+		
+		if (nbtContainerClass != null && nbtContainerConstructor != null) {
+			config = config.initializeNBTAPI(nbtContainerClass, nbtContainerConstructor);
+		}
+		
+		CommandAPI.onLoad(config);
 	}
 
 	@Override
