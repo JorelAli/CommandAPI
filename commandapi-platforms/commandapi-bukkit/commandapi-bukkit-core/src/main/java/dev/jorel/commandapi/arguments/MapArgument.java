@@ -80,8 +80,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					// Exception is thrown when the key/value never terminates
 					//  That means this key/value ends the argument, so we should do the suggestions now
 					builder = builder.createOffset(builder.getStart() + reader.getCursor() - (isQuoted ? 1 : 0));
-					if (!(isKey ? keyListEmpty : valueListEmpty))
+					if (!(isKey ? keyListEmpty : valueListEmpty)) {
 						return doResultSuggestions(readEscapedUntilEnd(reader), builder, isKey ? unusedKeys : unusedValues, isKey, isQuoted);
+					}
 					return doEmptySuggestions(reader.getRemaining(), builder, isKey, isQuoted);
 				}
 
@@ -89,9 +90,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					// Enforce the lists if they are not empty
 					List<String> relaventList = isKey ? unusedKeys : unusedValues;
 
-					if (!relaventList.contains(result)) throw invalidResult(result, reader, isKey, isQuoted);
+					if (!relaventList.contains(result)) {
+						throw invalidResult(result, reader, isKey, isQuoted);
+					}
 
-					if (isKey || !allowValueDuplicates) relaventList.remove(result);
+					if (isKey || !allowValueDuplicates) {
+						relaventList.remove(result);
+					}
 				} else if ((isKey || !allowValueDuplicates) && !(isKey ? givenKeys : givenValues).add(result)) {
 					// If no lists given, we still enforce duplicates using the 'given' sets
 					throw invalidResult(result, reader, isKey, isQuoted);
@@ -99,8 +104,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 				// Make sure result is valid according to the parsers
 				try {
-					if (isKey) keyMapper.parse(result);
-					else valueMapper.parse(result);
+					if (isKey) {
+						keyMapper.parse(result);
+					} else {
+						valueMapper.parse(result);
+					}
 				} catch (Exception e) {
 					throw handleParserException(e, result, reader, isKey, isQuoted);
 				}
@@ -144,10 +152,14 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		for (String result : unusedResults) {
 			// We either prefer quoted or unquoted, so this should only suggest 1 per result
 			String unquotedSuggestion = relevantList.preferredUnquoted.get(result);
-			if (unquotedSuggestion != null) builder.suggest(unquotedSuggestion);
+			if (unquotedSuggestion != null) {
+				builder.suggest(unquotedSuggestion);
+			}
 
 			String quotedSuggestion = relevantList.preferredQuoted.get(result);
-			if (quotedSuggestion != null) builder.suggest('"' + quotedSuggestion + '"');
+			if (quotedSuggestion != null) {
+				builder.suggest('"' + quotedSuggestion + '"');
+			}
 		}
 		return builder.buildFuture();
 	}
@@ -187,16 +199,22 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 			boolean escaped = false;
 			int i = length - 2;
 			while (i >= 0) {
-				if (suggestion.charAt(i) != '\\') break;
+				if (suggestion.charAt(i) != '\\') {
+					break;
+				}
 				i--;
 				escaped = !escaped;
 			}
 			// If there is an unescaped \ at the end, suggest another backslash to eat up its effect
-			if (!escaped) suggestion += '\\';
+			if (!escaped) {
+				suggestion += '\\';
+			}
 		}
 
 		// Add quotes around suggestion
-		if (isQuoted) suggestion = "\"" + suggestion + "\"";
+		if (isQuoted) {
+			suggestion = "\"" + suggestion + "\"";
+		}
 
 		// Add terminator
 		suggestion = suggestion + (isKey ? delimiter : separator);
@@ -219,7 +237,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		StringReader reader = new StringReader(cmdCtx.getArgument(key, String.class));
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
-		if (reader.getRemainingLength() == 0) return results;
+		if (reader.getRemainingLength() == 0) {
+			return results;
+		}
 
 		K builtKey = null;
 
@@ -246,8 +266,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					//  we actually want to validate the key first before using the missing delimiter message
 					//  https://github.com/JorelAli/CommandAPI/commit/a613894975a23824d05b09b38c603d64fe5c243c#r114318082
 					result = readEscapedUntilEnd(reader);
-					if (!(keyListEmpty ? givenKeys.add(result) : unusedKeys.contains(result)))
+					if (!(keyListEmpty ? givenKeys.add(result) : unusedKeys.contains(result))) {
 						throw invalidResult(result, reader, true, false);
+					}
 					throw e;
 				} else {
 					throw e;
@@ -258,9 +279,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				// Enforce the lists if they are not empty
 				List<String> relaventList = isKey ? unusedKeys : unusedValues;
 
-				if (!relaventList.contains(result)) throw invalidResult(result, reader, isKey, isQuoted);
+				if (!relaventList.contains(result)) {
+					throw invalidResult(result, reader, isKey, isQuoted);
+				}
 
-				if (isKey || !allowValueDuplicates) relaventList.remove(result);
+				if (isKey || !allowValueDuplicates) {
+					relaventList.remove(result);
+				}
 			} else if ((isKey || !allowValueDuplicates) && !(isKey ? givenKeys : givenValues).add(result)) {
 				// If no lists given, we still enforce duplicates using the 'given' sets
 				throw invalidResult(result, reader, isKey, isQuoted);
@@ -284,12 +309,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				// Argument ends at a separator
 				if (!reader.canRead()) {
 					// There is no trailing data
-					if (!isKey)
+					if (!isKey) {
 						// If we just read a value, we're all done!
 						return results;
-					else
+					} else {
 						// Otherwise, we ended on a key with no value
 						throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, separatorRequiredMessage(true));
+					}
 				}
 
 				// There is trailing data
@@ -319,8 +345,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	private String readQuoted(StringReader reader, boolean isKey) throws CommandSyntaxException {
 		// This method should only be called after a " was found
 		//  If this method is called in any other circumstance, that's a problem with the code
-		if (reader.read() != '"')
+		if (reader.read() != '"') {
 			throw new IllegalStateException("readQuoted was called, but the reader did not start with '\"'");
+		}
 
 		String result = readUntil(reader, "\"", "A quoted " + (isKey ? "key" : "value") + " must end with a quotation mark");
 		reader.skip(); // We know this terminated with " - skip that so caller can start reading separator
@@ -408,10 +435,13 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		context.setCursor(context.getCursor() - result.length() - (isQuoted ? 2 : 0));
 
 		Message message;
-		if (e instanceof WrapperCommandSyntaxException wCSE) message = wCSE.getRawMessage();
-		else message = new LiteralMessage(
-			"Invalid " + (isKey ? "key" : "value") + " (" + result + "): cannot be converted to a " + (isKey ? "key" : "value")
-		);
+		if (e instanceof WrapperCommandSyntaxException wCSE) {
+			message = wCSE.getRawMessage();
+		} else {
+			message = new LiteralMessage(
+				"Invalid " + (isKey ? "key" : "value") + " (" + result + "): cannot be converted to a " + (isKey ? "key" : "value")
+			);
+		}
 
 		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(context, message);
 	}
@@ -439,10 +469,11 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				unquoted.put(result, unquotedResult.toString());
 				quoted.put(result, quotedResult.toString());
 
-				if (preferUnquoted)
+				if (preferUnquoted) {
 					preferredUnquoted.put(result, unquotedResult.toString());
-				else
+				} else {
 					preferredQuoted.put(result, quotedResult.toString());
+				}
 			}
 
 			return new ResultList(results, unquoted, quoted, preferredUnquoted, preferredQuoted);
@@ -470,7 +501,9 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 					// " is only escaped when in a quote
 					escapeQuoted = true;
 					// or at the start of an unquoted string
-					if (reader.getCursor() == 0) escapeUnquoted = true;
+					if (reader.getCursor() == 0) {
+						escapeUnquoted = true;
+					}
 				} else if (c == firstTerminatorChar && doesReaderContinueWithTerminator(reader, terminator)) {
 					// If the char says the terminator is starting, make sure it continues
 					// Yes, this was the terminator. We need to escape it when unquoted
@@ -480,10 +513,14 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 				}
 
 				// Add the character, escaping if deemed necessary
-				if (escapeUnquoted) unquotedResult.append('\\');
+				if (escapeUnquoted) {
+					unquotedResult.append('\\');
+				}
 				unquotedResult.append(c);
 
-				if (escapeQuoted) quotedResult.append('\\');
+				if (escapeQuoted) {
+					quotedResult.append('\\');
+				}
 				quotedResult.append(c);
 
 				reader.skip();
