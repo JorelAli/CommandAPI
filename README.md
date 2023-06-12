@@ -63,6 +63,7 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.19.2**         | 8.5.1 - 9.0.2               | 9.0.2                        | 16                                                        |
 | **1.19.3**         | 8.7.0 - 9.0.2               | 9.0.2                        | 16                                                        |
 | **1.19.4**         | 8.8.0 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.20**           | 9.0.2                       | 9.0.2                        | 16                                                        |
 
 -----
 

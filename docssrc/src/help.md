@@ -116,8 +116,8 @@ Usage:
 Now, we are implementing the `withUsage()` method:
 
 ```java
-CommandAPICommand("...")
-    withUsage(
+new CommandAPICommand("...")
+    .withUsage(
         "/command <help> <section>",
         "/command <reload> <system>"
     )
