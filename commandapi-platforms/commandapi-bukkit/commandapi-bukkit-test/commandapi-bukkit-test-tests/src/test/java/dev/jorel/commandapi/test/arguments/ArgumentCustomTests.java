@@ -52,6 +52,12 @@ class ArgumentCustomTests extends TestBase {
 			}
 		}).replaceSuggestions(ArgumentSuggestions.strings(info -> Bukkit.getWorlds().stream().map(World::getName).toArray(String[]::new)));
 	}
+	
+	public Argument<World> customArgumentThatThrowsException(String nodeName) {
+		return new CustomArgument<World, String>(new StringArgument(nodeName), info -> {
+			throw new RuntimeException("👻 Spoopy Exception 👻");
+		});
+	}
 
 	/*********
 	 * Tests *
@@ -74,12 +80,31 @@ class ArgumentCustomTests extends TestBase {
 		server.addSimpleWorld("world2");
 		server.addSimpleWorld("world3");
 
-		// /test world
+		// /test unknownworld
 		assertCommandFailsWith(player, "test unknownworld", "Unknown world: unknownworld");
 
 		// /test world1
 		server.dispatchCommand(player, "test world1");
 		assertEquals(world1, results.get());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithCustomArgumentThatThrowsException() {
+		Mut<World> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(customArgumentThatThrowsException("world"))
+			.executesPlayer((player, args) -> {
+				results.set(args.getUnchecked(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// /test world
+		assertCommandFailsWith(player, "test world", "Error in executing command test world - world<--[HERE]");
 
 		assertNoMoreResults(results);
 	}
