@@ -203,7 +203,7 @@ new CommandAPICommand("perm")
 
 <details>
     <summary><b>Command trees</b></summary>
-	
+    
 ```java
 new CommandTree("perm")
     .then(new MultiLiteralArgument("group", "user")
@@ -372,16 +372,17 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top"><b>9.0.3</b></td>
             <td valign="top">TBD</td>
             <td valign="top">
-				<ul>
-					<li>
-						https://github.com/JorelAli/CommandAPI/pull/455 Reworked the <code>MapArgument</code> with various features, including:
-						<ul>
-							<li>Optional quotes around keys and values</li>
-							<li>No restriction on the characters that are allowed in a key (previously only letters, digits, and underscore)</li>
-							<li>May define a String separator between key-value pairs (instead of just space)</li>
-						</ul>
-					</li>
-				</ul>
+                <ul>
+                    <li>
+                        https://github.com/JorelAli/CommandAPI/pull/455 Reworked the <code>MapArgument</code> with various features, including:
+                        <ul>
+                            <li>Optional quotes around keys and values</li>
+                            <li>No restriction on the characters that are allowed in a key (previously only letters, digits, and underscore)</li>
+                            <li>May define a String separator between key-value pairs (instead of just space)</li>
+                        </ul>
+                    </li>
+                    <li>Fixed <code>use-latest-nms-version</code> not pointing to 1.20</li>
+                </ul>
             </td>
         </tr>
         <tr>
@@ -666,12 +667,12 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                     <li>Decouples CustomArgument from CommandAPIHandler</li>
                     <li>Decouples EntitySelector from EntitySelectorArgument</li>
                 </ul>
-				<b>NBT API Support:</b>
+                <b>NBT API Support:</b>
                 <ul>
-					<li>Allow developers to shade their own copy of an NBT API framework (e.g. NBT API or PowerNBT)</li>
-					<li>Includes the NBT API built-in for plugin versions</li>
+                    <li>Allow developers to shade their own copy of an NBT API framework (e.g. NBT API or PowerNBT)</li>
+                    <li>Includes the NBT API built-in for plugin versions</li>
                 </ul>
-				<b>Other:</b>
+                <b>Other:</b>
                 <ul>
                     <li>Implement base arguments for CustomArguments, allowing more powerful parsing</li>
                     <li>Implement common NMS code for 1.17+</li>
