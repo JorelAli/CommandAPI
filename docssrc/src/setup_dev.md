@@ -45,7 +45,7 @@ depend: [CommandAPI]
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-bukkit-core:9.0.2"
+      compileOnly "dev.jorel:commandapi-bukkit-core:9.0.4"
   }
   ```
 
