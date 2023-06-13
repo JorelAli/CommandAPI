@@ -56,7 +56,7 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 		if(literals == null) {
 			throw new BadLiteralException(true);
 		}
-		if(literals.size() == 0) {
+		if(literals.isEmpty()) {
 			throw new BadLiteralException(false);
 		}
 		this.literals = literals.toArray(String[]::new);
