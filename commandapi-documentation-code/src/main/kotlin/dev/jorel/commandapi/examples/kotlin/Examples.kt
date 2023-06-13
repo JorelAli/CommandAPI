@@ -566,6 +566,7 @@ fun argument_map() {
 /* ANCHOR: argumentMap1 */
 CommandAPICommand("sendmessage")
     // Parameter 'delimiter' is missing, delimiter will be a colon
+    // Parameter 'separator' is missing, separator will be a space
     .withArguments(MapArgumentBuilder<Player, String>("message")
 
         // Providing a key mapper to convert a String into a Player
@@ -578,7 +579,8 @@ CommandAPICommand("sendmessage")
         .withKeyList(Bukkit.getOnlinePlayers().map { player: Player -> player.name }.toList())
 
         // Don't provide a list of values so messages can be chosen without restrictions
-        .withoutValueList()
+        // Allow duplicates in case the same message should be sent to different players
+        .withoutValueList(true)
 
         // Build the MapArgument
         .build()

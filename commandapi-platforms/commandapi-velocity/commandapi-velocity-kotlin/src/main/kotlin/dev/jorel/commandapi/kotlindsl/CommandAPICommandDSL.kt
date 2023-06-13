@@ -41,7 +41,6 @@ inline fun CommandAPICommand.textArgument(nodeName: String, optional: Boolean = 
 inline fun CommandAPICommand.greedyStringArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(GreedyStringArgument(nodeName).setOptional(optional).apply(block))
 
 // Literal arguments
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("literalArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandAPICommand.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LiteralArgument.of(literal, literal).setOptional(optional).apply(block))
 
 @Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, listOf(literals))", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)

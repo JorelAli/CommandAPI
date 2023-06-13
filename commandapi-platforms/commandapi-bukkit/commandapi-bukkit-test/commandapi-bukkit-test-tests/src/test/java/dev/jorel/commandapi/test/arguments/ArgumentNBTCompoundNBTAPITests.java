@@ -15,7 +15,6 @@ import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
-import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -24,7 +23,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link NBTCompoundArgument}
  */
-class ArgumentNBTCompoundTests extends TestBase {
+class ArgumentNBTCompoundNBTAPITests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -35,10 +34,7 @@ class ArgumentNBTCompoundTests extends TestBase {
 		// NBT API can't run via Mojang Mappings
 		assumeTrue(!CommandAPIVersionHandler.IS_MOJANG_MAPPED);
 
-		// TODO: Currently skipping 1.20 tests, will test later.
-		assumeTrue(version.lessThan(MCVersion.V1_20));
-
-		super.setUp();
+		super.setUp(NBTContainer.class, NBTContainer::new);
 		MinecraftVersion.disableBStats();
 		MinecraftVersion.disablePackageWarning();
 		MinecraftVersion.disableUpdateCheck();
@@ -49,6 +45,7 @@ class ArgumentNBTCompoundTests extends TestBase {
 			case V1_18 -> MinecraftVersion.MC1_18_R1;
 			case V1_19_2 -> MinecraftVersion.MC1_19_R1;
 			case V1_19_4 -> MinecraftVersion.MC1_19_R3;
+			case V1_20 -> MinecraftVersion.MC1_20_R1;
 			default -> throw new IllegalArgumentException("Unexpected value: " + version);
 		};
 		MockPlatform.setField(MinecraftVersion.class, "version", null, currentNBTAPIMinecraftVersion);

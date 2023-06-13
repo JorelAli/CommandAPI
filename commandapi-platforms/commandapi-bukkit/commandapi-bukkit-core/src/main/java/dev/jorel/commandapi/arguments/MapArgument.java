@@ -1,16 +1,18 @@
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.LiteralMessage;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.function.Function;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * An argument that represents a key-value pair.
@@ -23,17 +25,16 @@ import java.util.regex.Pattern;
 @SuppressWarnings("rawtypes")
 public class MapArgument<K, V> extends Argument<LinkedHashMap> implements GreedyArgument {
 
-	private final char delimiter;
-	private final Function<String, K> keyMapper;
-	private final Function<String, V> valueMapper;
+	private final String delimiter;
+	private final String separator;
+	private final StringParser<K> keyMapper;
+	private final StringParser<V> valueMapper;
 
-	private final List<String> keyList;
-	private final List<String> valueList;
+	private final ResultList keyList;
+	private final ResultList valueList;
 	private final boolean allowValueDuplicates;
 	private final boolean keyListEmpty;
 	private final boolean valueListEmpty;
-
-	private final Pattern keyPattern = Pattern.compile("([a-zA-Z0-9_\\.]+)");
 
 	/**
 	 * Constructs a {@link MapArgument}
@@ -41,15 +42,16 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 	 * @param nodeName  the name to assign to this argument node
 	 * @param delimiter This is used to separate key-value pairs
 	 */
-	MapArgument(String nodeName, char delimiter, Function<String, K> keyMapper, Function<String, V> valueMapper, List<String> keyList, List<String> valueList, boolean allowValueDuplicates) {
+	MapArgument(String nodeName, String delimiter, String separator, StringParser<K> keyMapper, StringParser<V> valueMapper, List<String> keyList, List<String> valueList, boolean allowValueDuplicates) {
 		super(nodeName, StringArgumentType.greedyString());
 
 		this.delimiter = delimiter;
+		this.separator = separator;
 		this.keyMapper = keyMapper;
 		this.valueMapper = valueMapper;
 
-		this.keyList = keyList == null ? new ArrayList<>() : new ArrayList<>(keyList);
-		this.valueList = valueList == null ? new ArrayList<>() : new ArrayList<>(valueList);
+		this.keyList = ResultList.formatResults(keyList, delimiter);
+		this.valueList = ResultList.formatResults(valueList, separator);
 		this.allowValueDuplicates = allowValueDuplicates;
 
 		this.keyListEmpty = keyList == null;
@@ -60,172 +62,165 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 
 	private void applySuggestions() {
 		super.replaceSuggestions((info, builder) -> {
-			String currentArgument = info.currentArg();
+			StringReader reader = new StringReader(info.currentArg());
 
-			List<String> keyValues = new ArrayList<>(keyList);
-			List<String> valueValues = new ArrayList<>(valueList);
+			// Read through the keys and values
+			Set<String> givenKeys = new HashSet<>();
+			Set<String> givenValues = new HashSet<>();
+			List<String> unusedKeys = new ArrayList<>(keyList.results);
+			List<String> unusedValues = new ArrayList<>(valueList.results);
 
-			MapArgumentSuggestionInfo suggestionInfo = getSuggestionCode(currentArgument, keyValues, valueValues);
-
-			switch (suggestionInfo.getSuggestionCode()) {
-				case KEY_SUGGESTION -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentKey().length());
-					for (String key : keyValues) {
-						if (key.startsWith(suggestionInfo.getCurrentKey())) {
-							builder.suggest(key);
-						}
+			boolean isKey = true;
+			while (reader.canRead()) {
+				boolean isQuoted = reader.peek() == '"';
+				String result;
+				try {
+					result = isQuoted ? readQuoted(reader, isKey) : readUnquoted(reader, isKey);
+				} catch (CommandSyntaxException ignored) {
+					// Exception is thrown when the key/value never terminates
+					//  That means this key/value ends the argument, so we should do the suggestions now
+					builder = builder.createOffset(builder.getStart() + reader.getCursor() - (isQuoted ? 1 : 0));
+					if (!(isKey ? keyListEmpty : valueListEmpty)) {
+						return doResultSuggestions(readEscapedUntilEnd(reader), builder, isKey ? unusedKeys : unusedValues, isKey, isQuoted);
 					}
+					return doEmptySuggestions(reader.getRemaining(), builder, isKey, isQuoted);
 				}
-				case DELIMITER_SUGGESTION -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length());
-					builder.suggest(String.valueOf(delimiter));
-				}
-				case QUOTATION_MARK_SUGGESTION -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length());
-					builder.suggest("\"");
-				}
-				case VALUE_SUGGESTION -> {
-					builder = builder.createOffset(builder.getStart() + currentArgument.length() - suggestionInfo.getCurrentValue().length());
-					for (String value : valueValues) {
-						if (value.startsWith(suggestionInfo.getCurrentValue())) {
-							builder.suggest(value);
-						}
+
+				if (!(isKey ? keyListEmpty : valueListEmpty)) {
+					// Enforce the lists if they are not empty
+					List<String> relaventList = isKey ? unusedKeys : unusedValues;
+
+					if (!relaventList.contains(result)) {
+						throw invalidResult(result, reader, isKey, isQuoted);
 					}
+
+					if (isKey || !allowValueDuplicates) {
+						relaventList.remove(result);
+					}
+				} else if ((isKey || !allowValueDuplicates) && !(isKey ? givenKeys : givenValues).add(result)) {
+					// If no lists given, we still enforce duplicates using the 'given' sets
+					throw invalidResult(result, reader, isKey, isQuoted);
 				}
+
+				// Make sure result is valid according to the parsers
+				try {
+					if (isKey) {
+						keyMapper.parse(result);
+					} else {
+						valueMapper.parse(result);
+					}
+				} catch (Exception e) {
+					throw handleParserException(e, result, reader, isKey, isQuoted);
+				}
+
+				// Handle separator
+				String relevantSeparator = isKey ? delimiter : separator;
+				if (!reader.canRead(relevantSeparator.length())) {
+					// Argument ends at a separator
+					//  If the separator is being typed correctly, suggest they keep going
+					//  If the separator is being typed incorrectly, this suggests overriding with the correct separator
+					builder = builder.createOffset(builder.getStart() + reader.getCursor());
+					builder.suggest(relevantSeparator);
+					return builder.buildFuture();
+				} else {
+					// Argument seems to keep going, validate separator
+					int start = reader.getCursor();
+					reader.setCursor(start + relevantSeparator.length());
+					String typedSeparator = reader.getString().substring(start, reader.getCursor());
+					if (!relevantSeparator.equals(typedSeparator)) {
+						reader.setCursor(start); // Set cursor back to start to underline bad typed separator
+						throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, separatorRequiredMessage(isKey));
+					}
+					// All good, keep going
+				}
+
+				// Move to next key/value
+				isKey = !isKey;
 			}
 
-			return builder.buildFuture();
+			// We reached the end exactly when a key/value and its terminator ended
+			// Start suggestions for the next key/value
+			return startSuggestions(builder, isKey ? unusedKeys : unusedValues, isKey);
 		});
 	}
 
-	/**
-	 * Parses the current argument and returns an enum value based on what should be suggested
-	 * <ul>
-	 *     <li><code>KEY_SUGGESTION</code> if a key should be suggested</li>
-	 *     <li><code>DELIMITER_SUGGESTION</code> if the delimiter should be suggested</li>
-	 *     <li><code>QUOTATION_MARK_SUGGESTION</code> if a quotation mark should be suggested</li>
-	 *     <li><code>VALUE_SUGGESTION</code> if a value should be suggested</li>
-	 * </ul>
-	 *
-	 * @return An enum value based on what to suggest
-	 */
-	private MapArgumentSuggestionInfo getSuggestionCode(String currentArgument, List<String> keys, List<String> values) throws CommandSyntaxException {
-		String currentKey = "";
-		String currentValue = "";
+	private CompletableFuture<Suggestions> startSuggestions(SuggestionsBuilder builder, List<String> unusedResults, boolean isKey) {
+		// Nothing written yet, give the preferred suggestions
+		builder = builder.createOffset(builder.getStart() + builder.getRemaining().length());
+		ResultList relevantList = isKey ? keyList : valueList;
 
-		MapArgumentSuggestionInfo suggestionInfo = new MapArgumentSuggestionInfo(currentKey, currentValue, SuggestionCode.KEY_SUGGESTION);
-
-		if (currentArgument.equals("")) {
-			suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
-		}
-
-		boolean isAKeyBeingBuilt = true;
-		boolean isAValueBeingBuilt = false;
-		boolean isFirstValueCharacter = true;
-
-		StringBuilder keyBuilder = new StringBuilder();
-		StringBuilder valueBuilder = new StringBuilder();
-		StringBuilder visitedCharacters = new StringBuilder();
-
-		char[] rawValuesChars = currentArgument.toCharArray();
-		int currentIndex = -1;
-		for (char currentChar : rawValuesChars) {
-			currentIndex++;
-			visitedCharacters.append(currentChar);
-			if (isAKeyBeingBuilt) {
-				currentValue = "";
-				suggestionInfo.setCurrentValue(currentValue);
-				if (currentChar == delimiter) {
-					isAKeyBeingBuilt = false;
-					isAValueBeingBuilt = true;
-					suggestionInfo.setSuggestionCode(SuggestionCode.QUOTATION_MARK_SUGGESTION);
-					continue;
-				}
-				if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
-				}
-				keyBuilder.append(currentChar);
-				currentKey = keyBuilder.toString();
-				suggestionInfo.setCurrentKey(currentKey);
-				validateKey(visitedCharacters, keyPattern, keyBuilder.toString());
-				for (String key : keys) {
-					if (key.equals(keyBuilder.toString())) {
-						suggestionInfo.setSuggestionCode(SuggestionCode.DELIMITER_SUGGESTION);
-						break;
-					}
-					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
-				}
+		for (String result : unusedResults) {
+			// We either prefer quoted or unquoted, so this should only suggest 1 per result
+			String unquotedSuggestion = relevantList.preferredUnquoted.get(result);
+			if (unquotedSuggestion != null) {
+				builder.suggest(unquotedSuggestion);
 			}
-			if (isAValueBeingBuilt) {
-				if (isFirstValueCharacter) {
-					validateValueStart(currentChar, visitedCharacters); // currentChar should be a quotation mark
-					suggestionInfo.setSuggestionCode(SuggestionCode.VALUE_SUGGESTION);
-					isFirstValueCharacter = false;
-					continue;
-				}
-				if (currentChar == '\\') {
-					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						valueBuilder.append('\\');
-						for (String value : values) {
-							if (value.equals(valueBuilder.toString())) {
-								suggestionInfo.setSuggestionCode(SuggestionCode.QUOTATION_MARK_SUGGESTION);
-								break;
-							}
-							suggestionInfo.setSuggestionCode(SuggestionCode.VALUE_SUGGESTION);
-						}
-						continue;
-					}
-					continue;
-				}
-				if (currentChar == '"') {
-					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						valueBuilder.append('"');
-						for (String value : values) {
-							if (value.equals(valueBuilder.toString())) {
-								suggestionInfo.setSuggestionCode(SuggestionCode.QUOTATION_MARK_SUGGESTION);
-								break;
-							}
-							suggestionInfo.setSuggestionCode(SuggestionCode.VALUE_SUGGESTION);
-						}
-						continue;
-					}
-					currentKey = "";
-					suggestionInfo.setCurrentKey(currentKey);
-					isFirstValueCharacter = true;
 
-					keys.remove(keyBuilder.toString());
-					if (!allowValueDuplicates) {
-						values.remove(valueBuilder.toString());
-					}
-
-					keyBuilder.setLength(0);
-					valueBuilder.setLength(0);
-
-					isAValueBeingBuilt = false;
-					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
-					continue;
-				}
-				valueBuilder.append(currentChar);
-				currentValue = valueBuilder.toString();
-				suggestionInfo.setCurrentValue(currentValue);
-				for (String value : values) {
-					if (value.equals(valueBuilder.toString())) {
-						suggestionInfo.setSuggestionCode(SuggestionCode.QUOTATION_MARK_SUGGESTION);
-						break;
-					}
-					suggestionInfo.setSuggestionCode(SuggestionCode.VALUE_SUGGESTION);
-				}
-			}
-			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
-				if (currentChar != ' ') {
-					isAKeyBeingBuilt = true;
-					keyBuilder.append(currentChar);
-					suggestionInfo.setSuggestionCode(SuggestionCode.KEY_SUGGESTION);
-					suggestionInfo.setCurrentKey(keyBuilder.toString());
-				}
+			String quotedSuggestion = relevantList.preferredQuoted.get(result);
+			if (quotedSuggestion != null) {
+				builder.suggest('"' + quotedSuggestion + '"');
 			}
 		}
-		return suggestionInfo;
+		return builder.buildFuture();
+	}
+
+	private CompletableFuture<Suggestions> doResultSuggestions(String ending, SuggestionsBuilder builder, List<String> unusedResults, boolean isKey, boolean isQuoted) {
+		String quotedInsert = isQuoted ? "\"" : "";
+		String relevantSeparator = isKey ? delimiter : separator;
+
+		ResultList relevantList = isKey ? keyList : valueList;
+		Map<String, String> suggestionsMap = isQuoted ? relevantList.quoted : relevantList.unquoted;
+
+		// Suggest key/value if they fit
+		for (String result : unusedResults) {
+			// If result starts with ending, and they are the same length, they must be equal
+			boolean sameLength = result.length() == ending.length();
+			if (result.startsWith(ending)) {
+				// Started typing one of the results
+				//  If they are equal, the key/value is complete, so we should also add the separator
+				builder.suggest(quotedInsert + suggestionsMap.get(result) + quotedInsert + (sameLength ? relevantSeparator : ""));
+			}
+			if (!sameLength && ending.startsWith(result)) {
+				// Typed a value result, then attempted to start the separator
+				//  Always suggest the separator following because it is necessary
+				builder.suggest(quotedInsert + suggestionsMap.get(result) + quotedInsert + relevantSeparator);
+			}
+		}
+
+		return builder.buildFuture();
+	}
+
+	private CompletableFuture<Suggestions> doEmptySuggestions(String ending, SuggestionsBuilder builder, boolean isKey, boolean isQuoted) {
+		// If the result isn't from a set list, always suggest completing it with the terminator at the end
+		String suggestion = ending;
+
+		int length = suggestion.length();
+		if (length != 0 && suggestion.charAt(length - 1) == '\\') {
+			boolean escaped = false;
+			int i = length - 2;
+			while (i >= 0) {
+				if (suggestion.charAt(i) != '\\') {
+					break;
+				}
+				i--;
+				escaped = !escaped;
+			}
+			// If there is an unescaped \ at the end, suggest another backslash to eat up its effect
+			if (!escaped) {
+				suggestion += '\\';
+			}
+		}
+
+		// Add quotes around suggestion
+		if (isQuoted) {
+			suggestion = "\"" + suggestion + "\"";
+		}
+
+		// Add terminator
+		suggestion = suggestion + (isKey ? delimiter : separator);
+
+		builder.suggest(suggestion);
+		return builder.buildFuture();
 	}
 
 	@Override
@@ -238,268 +233,311 @@ public class MapArgument<K, V> extends Argument<LinkedHashMap> implements Greedy
 		return CommandAPIArgumentType.MAP;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <Source> LinkedHashMap<K, V> parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		String rawValues = cmdCtx.getArgument(key, String.class);
+		StringReader reader = new StringReader(cmdCtx.getArgument(key, String.class));
 		LinkedHashMap<K, V> results = new LinkedHashMap<>();
+		if (reader.getRemainingLength() == 0) {
+			return results;
+		}
 
-		K mapKey = null;
-		V mapValue = null;
+		K builtKey = null;
 
-		boolean isAKeyBeingBuilt = true;
-		boolean isAValueBeingBuilt = false;
-		boolean isFirstValueCharacter = true;
-		
-		StringBuilder keyValueBuffer = new StringBuilder();
-		StringBuilder visitedCharacters = new StringBuilder();
+		// Read through the keys and values
+		Set<String> givenKeys = new HashSet<>();
+		Set<String> givenValues = new HashSet<>();
+		List<String> unusedKeys = new ArrayList<>(keyList.results);
+		List<String> unusedValues = new ArrayList<>(valueList.results);
 
-		char[] rawValuesChars = rawValues.toCharArray();
-		int currentIndex = -1;
-		for (char currentChar : rawValuesChars) {
-			currentIndex++;
-			visitedCharacters.append(currentChar);
-			if (isAKeyBeingBuilt) {
-				if (currentChar == delimiter) {
-					if (!keyList.contains(keyValueBuffer.toString()) && !keyListEmpty) {
-						throw throwInvalidKey(visitedCharacters, keyValueBuffer.toString(), true);
+		boolean isKey = true;
+		while (reader.canRead()) {
+			boolean isQuoted = reader.peek() == '"';
+			String result;
+			try {
+				result = isQuoted ? readQuoted(reader, isKey) : readUnquoted(reader, isKey);
+			} catch (CommandSyntaxException e) {
+				// Usually, this error is correct
+				if (!isQuoted && !isKey) {
+					//  However, if this is an unquoted value (not quoted and not key),
+					//  it does make sense for the argument to end without the separator
+					result = readEscapedUntilEnd(reader);
+				} else if (!isQuoted /* implicit `&& isKey` check */) {
+					// If this is an unquoted key that ended because the delimiter was not present,
+					//  we actually want to validate the key first before using the missing delimiter message
+					//  https://github.com/JorelAli/CommandAPI/commit/a613894975a23824d05b09b38c603d64fe5c243c#r114318082
+					result = readEscapedUntilEnd(reader);
+					if (!(keyListEmpty ? givenKeys.add(result) : unusedKeys.contains(result))) {
+						throw invalidResult(result, reader, true, false);
 					}
-
-					if (currentIndex == rawValuesChars.length - 1) {
-						throw missingQuotationMark(visitedCharacters);
-					}
-
-					try {
-						mapKey = keyMapper.apply(keyValueBuffer.toString());
-					} catch (Exception e) {
-						throw cannotParseKey(visitedCharacters, keyValueBuffer);
-					}
-
-					if (results.containsKey(mapKey)) {
-						throw duplicateKey(visitedCharacters);
-					}
-
-					// No need to check the key here because we already know it only consists of letters
-
-					keyValueBuffer.setLength(0);
-					isAKeyBeingBuilt = false;
-					isAValueBeingBuilt = true;
-					continue;
+					throw e;
+				} else {
+					throw e;
 				}
-				if (currentChar == '"') {
-					throw throwValueEarlyStart(visitedCharacters, String.valueOf(delimiter));
-				}
-				keyValueBuffer.append(currentChar);
+			}
 
-				final String keyValueBufferString = keyValueBuffer.toString();
-				final boolean isInvalidKey = validateKey(visitedCharacters, keyPattern, keyValueBufferString);
-				if (currentIndex == rawValuesChars.length - 1) {
-					if (isInvalidKey) {
-						throw throwInvalidKey(visitedCharacters, keyValueBufferString, false);
+			if (!(isKey ? keyListEmpty : valueListEmpty)) {
+				// Enforce the lists if they are not empty
+				List<String> relaventList = isKey ? unusedKeys : unusedValues;
+
+				if (!relaventList.contains(result)) {
+					throw invalidResult(result, reader, isKey, isQuoted);
+				}
+
+				if (isKey || !allowValueDuplicates) {
+					relaventList.remove(result);
+				}
+			} else if ((isKey || !allowValueDuplicates) && !(isKey ? givenKeys : givenValues).add(result)) {
+				// If no lists given, we still enforce duplicates using the 'given' sets
+				throw invalidResult(result, reader, isKey, isQuoted);
+			}
+
+			// Make sure result is valid according to the parsers
+			try {
+				if (isKey) {
+					builtKey = keyMapper.parse(result);
+				} else {
+					V value = valueMapper.parse(result);
+					results.put(builtKey, value);
+				}
+			} catch (Exception e) {
+				throw handleParserException(e, result, reader, isKey, isQuoted);
+			}
+
+			// Handle separator
+			String relevantSeparator = isKey ? delimiter : separator;
+			if (!reader.canRead(relevantSeparator.length())) {
+				// Argument ends at a separator
+				if (!reader.canRead()) {
+					// There is no trailing data
+					if (!isKey) {
+						// If we just read a value, we're all done!
+						return results;
 					} else {
-						throw missingDelimiter(visitedCharacters);
+						// Otherwise, we ended on a key with no value
+						throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, separatorRequiredMessage(true));
 					}
+				}
+
+				// There is trailing data
+				throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, separatorRequiredMessage(isKey));
+			} else {
+				// Argument seems to keep going, validate separator
+				int start = reader.getCursor();
+				reader.setCursor(start + relevantSeparator.length());
+				String typedSeparator = reader.getString().substring(start, reader.getCursor());
+				if (!relevantSeparator.equals(typedSeparator)) {
+					reader.setCursor(start); // Set cursor back to start to underline bad typed separator
+					throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, separatorRequiredMessage(isKey));
+				}
+				// All good, keep going
+			}
+
+			// Move to next key/value
+			isKey = !isKey;
+		}
+
+		// We reached the end exactly when a key/value and its terminator ended
+		// Since the terminator was given, there should have been a key/value
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader,
+			"Expected a " + (isKey ? "key after the separator" : "value after the delimiter"));
+	}
+
+	private String readQuoted(StringReader reader, boolean isKey) throws CommandSyntaxException {
+		// This method should only be called after a " was found
+		//  If this method is called in any other circumstance, that's a problem with the code
+		if (reader.read() != '"') {
+			throw new IllegalStateException("readQuoted was called, but the reader did not start with '\"'");
+		}
+
+		String result = readUntil(reader, "\"", "A quoted " + (isKey ? "key" : "value") + " must end with a quotation mark");
+		reader.skip(); // We know this terminated with " - skip that so caller can start reading separator
+		return result;
+	}
+
+	private String readUnquoted(StringReader reader, boolean isKey) throws CommandSyntaxException {
+		return readUntil(reader, isKey ? delimiter : separator, separatorRequiredMessage(isKey));
+	}
+
+	private String readUntil(StringReader reader, String terminator, String reachedEndErrorMessage) throws CommandSyntaxException {
+		// Inspired by StringReader#readUntil, but what I wish it would actually do
+		int start = reader.getCursor();
+		char firstTerminatorChar = terminator.charAt(0);
+
+		StringBuilder result = new StringBuilder();
+		boolean escaped = false;
+		while (reader.canRead()) {
+			char c = reader.peek();
+			if (escaped) {
+				escaped = false;
+			} else if (c == '\\') {
+				escaped = true;
+				reader.skip();
+				continue; // Don't include this character
+			} else if (c == firstTerminatorChar && doesReaderContinueWithTerminator(reader, terminator)) {
+				// If the char says the terminator is starting, make sure it continues
+				// If this is the terminator, then we're done
+				return result.toString();
+			}
+			result.append(c);
+			reader.skip();
+		}
+
+		// Reset the cursor, so it underlines the entire invalid key/value
+		reader.setCursor(start);
+		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, reachedEndErrorMessage);
+	}
+
+	private String readEscapedUntilEnd(StringReader reader) {
+		StringBuilder result = new StringBuilder();
+		boolean escaped = false;
+		while (reader.canRead()) {
+			char c = reader.read();
+			if (escaped) {
+				result.append(c);
+				escaped = false;
+			} else if (c == '\\') {
+				escaped = true;
+			} else {
+				result.append(c);
+			}
+		}
+		return result.toString();
+	}
+
+	private CommandSyntaxException invalidResult(String result, StringReader context, boolean isKey, boolean isQuoted) {
+		List<String> relaventList = (isKey ? keyList : valueList).results;
+
+		String message;
+		if ((isKey ? keyListEmpty : valueListEmpty) || relaventList.contains(result)) {
+			// Either:
+			//  The lists are empty, so this method call came because the given sets found a duplicate
+			//  Or it used to be in the list and was removed from the local copy
+			// Therefore, the result was a duplicate when duplicates were not allowed
+			message = "Duplicate " + (isKey ? "keys" : "values") + " are not allowed!";
+		} else {
+			// Result was invalid because it was never part of the allowed set in the first place
+			message = "Invalid " + (isKey ? "key" : "value") + ": " + result;
+		}
+
+		// Reset cursor to underline entire invalid result, adjusting for quotes
+		context.setCursor(context.getCursor() - result.length() - (isQuoted ? 2 : 0));
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(context, message);
+	}
+
+	private String separatorRequiredMessage(boolean isKey) {
+		return (isKey ? "Delimiter \"" + delimiter : "Separator \"" + separator) +
+			"\" required after writing a " +
+			(isKey ? "key" : "value");
+	}
+
+	private CommandSyntaxException handleParserException(Exception e, String result, StringReader context, boolean isKey, boolean isQuoted) {
+		// Reset cursor to underline entire invalid result, adjusting for quotes
+		context.setCursor(context.getCursor() - result.length() - (isQuoted ? 2 : 0));
+
+		Message message;
+		if (e instanceof WrapperCommandSyntaxException wCSE) {
+			message = wCSE.getRawMessage();
+		} else {
+			message = new LiteralMessage(
+				"Invalid " + (isKey ? "key" : "value") + " (" + result + "): cannot be converted to a " + (isKey ? "key" : "value")
+			);
+		}
+
+		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(context, message);
+	}
+
+	private record ResultList(List<String> results, Map<String, String> unquoted, Map<String, String> quoted,
+							  Map<String, String> preferredUnquoted, Map<String, String> preferredQuoted) {
+		public static ResultList EMPTY = new ResultList(List.of(), Map.of(), Map.of(), Map.of(), Map.of());
+
+		private static ResultList formatResults(List<String> results, String terminator) {
+			// Format results and sort for suggestions
+			if (results == null) return EMPTY;
+
+			Map<String, String> unquoted = new HashMap<>();
+			Map<String, String> quoted = new HashMap<>();
+			Map<String, String> preferredUnquoted = new HashMap<>();
+			Map<String, String> preferredQuoted = new HashMap<>();
+
+			for (String result : results) {
+				// Figure out escape sequences that would produce result if quoted or unquoted
+				StringBuilder unquotedResult = new StringBuilder();
+				StringBuilder quotedResult = new StringBuilder();
+				boolean preferUnquoted = unescapeString(result, terminator, unquotedResult, quotedResult);
+
+				// Update lists
+				unquoted.put(result, unquotedResult.toString());
+				quoted.put(result, quotedResult.toString());
+
+				if (preferUnquoted) {
+					preferredUnquoted.put(result, unquotedResult.toString());
+				} else {
+					preferredQuoted.put(result, quotedResult.toString());
 				}
 			}
-			if (isAValueBeingBuilt) {
-				if (isFirstValueCharacter) {
-					validateValueStart(currentChar, visitedCharacters);
-					if (currentIndex == rawValuesChars.length - 1) {
-						throw missingValue(visitedCharacters);
+
+			return new ResultList(results, unquoted, quoted, preferredUnquoted, preferredQuoted);
+		}
+
+		// Determines the sequence needed to represent a result, adding escape characters when necessary to make it work
+		private static boolean unescapeString(String result, String terminator, StringBuilder unquotedResult, StringBuilder quotedResult) {
+			char firstTerminatorChar = terminator.charAt(0);
+			StringReader reader = new StringReader(result);
+
+			// Prefer the simplest by default, which is unquoted
+			boolean preferUnquoted = true;
+
+			while (reader.canRead()) {
+				char c = reader.peek();
+				boolean escapeUnquoted = false;
+				boolean escapeQuoted = false;
+
+				// Determine where escape is needed
+				if (c == '\\') {
+					// \ is always escaped
+					escapeUnquoted = true;
+					escapeQuoted = true;
+				} else if (c == '"') {
+					// " is only escaped when in a quote
+					escapeQuoted = true;
+					// or at the start of an unquoted string
+					if (reader.getCursor() == 0) {
+						escapeUnquoted = true;
 					}
-					isFirstValueCharacter = false;
-					continue;
+				} else if (c == firstTerminatorChar && doesReaderContinueWithTerminator(reader, terminator)) {
+					// If the char says the terminator is starting, make sure it continues
+					// Yes, this was the terminator. We need to escape it when unquoted
+					escapeUnquoted = true;
+					// If the result contains the separator, we would prefer it be quoted
+					preferUnquoted = false;
 				}
-				if (currentChar == '\\') {
-					if (rawValuesChars[currentIndex] == '\\' && rawValuesChars[currentIndex - 1] == '\\') {
-						keyValueBuffer.append('\\');
-						continue;
-					}
-					continue;
+
+				// Add the character, escaping if deemed necessary
+				if (escapeUnquoted) {
+					unquotedResult.append('\\');
 				}
-				if (currentChar == '"') {
-					if (rawValuesChars[currentIndex - 1] == '\\' && rawValuesChars[currentIndex - 2] != '\\') {
-						keyValueBuffer.append('"');
-						continue;
-					}
-					if (!valueList.contains(keyValueBuffer.toString()) && !valueListEmpty) {
-						throw throwInvalidValue(visitedCharacters, keyValueBuffer.toString());
-					}
+				unquotedResult.append(c);
 
-					try {
-						mapValue = valueMapper.apply(keyValueBuffer.toString());
-					} catch (Exception e) {
-						throw cannotParseValue(visitedCharacters, keyValueBuffer);
-					}
-
-					if (results.containsValue(mapValue) && !allowValueDuplicates) {
-						throw duplicateValue(visitedCharacters);
-					}
-
-					keyValueBuffer.setLength(0);
-					isFirstValueCharacter = true;
-					results.put(mapKey, mapValue);
-					mapKey = null;
-
-					isAValueBeingBuilt = false;
-					continue;
+				if (escapeQuoted) {
+					quotedResult.append('\\');
 				}
-				keyValueBuffer.append(currentChar);
+				quotedResult.append(c);
+
+				reader.skip();
 			}
-			if (!isAKeyBeingBuilt && !isAValueBeingBuilt) {
-				if (currentChar != ' ') {
-					isAKeyBeingBuilt = true;
-					keyValueBuffer.append(currentChar);
-				}
+
+			return preferUnquoted;
+		}
+	}
+
+	private static boolean doesReaderContinueWithTerminator(StringReader reader, String terminator) {
+		if (!reader.canRead(terminator.length())) return false;
+		for (int i = 1; i < terminator.length(); i++) {
+			if (reader.peek(i) != terminator.charAt(i)) {
+				// Characters did not match, not the terminator
+				return false;
 			}
 		}
-		validateValueInput(keyValueBuffer, visitedCharacters);
-		return results;
+		return true;
 	}
-
-	private boolean validateKey(StringBuilder visitedCharacters, Pattern keyPattern, String keyValueBufferString) throws CommandSyntaxException {
-		if (!keyPattern.matcher(keyValueBufferString).matches()) {
-			throw throwInvalidKeyCharacter(visitedCharacters);
-		}
-		return !keyList.contains(keyValueBufferString) && !keyListEmpty;
-	}
-
-	private void validateValueStart(char currentChar, StringBuilder visitedCharacters) throws CommandSyntaxException {
-		if (currentChar != '"') {
-			String context = visitedCharacters.toString();
-			StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-			reader.setCursor(context.substring(0, context.length() - 1).length());
-			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must start with a quotation mark");
-		}
-	}
-
-	private void validateValueInput(StringBuilder valueBuilder, StringBuilder visitedCharacters) throws CommandSyntaxException {
-		if (valueBuilder.length() != 0) {
-			StringReader reader = new StringReader(visitedCharacters.toString());
-			reader.setCursor(visitedCharacters.toString().length());
-			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A value must end with a quotation mark");
-		}
-	}
-
-	private CommandSyntaxException throwInvalidKeyCharacter(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "A key must only contain letters from a-z and A-Z, numbers, underscores and periods");
-	}
-
-	private CommandSyntaxException throwValueEarlyStart(StringBuilder visitedCharacters, String delimiter) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "You must separate a key/value pair with a '" + delimiter + "'");
-	}
-
-	private CommandSyntaxException throwInvalidKey(StringBuilder visitedCharacters, String key, boolean cutLastCharacter) {
-		String context = visitedCharacters.toString();
-		StringReader reader = (cutLastCharacter) ? new StringReader(context.substring(0, context.length() - 1)) : new StringReader(context);
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key: " + key);
-	}
-
-	private CommandSyntaxException throwInvalidValue(StringBuilder visitedCharacters, String value) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value: " + value);
-	}
-
-	private CommandSyntaxException duplicateKey(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate keys are not allowed");
-	}
-
-	private CommandSyntaxException duplicateValue(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Duplicate values are not allowed here");
-	}
-
-	private CommandSyntaxException missingDelimiter(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Delimiter required after writing a key");
-	}
-
-	private CommandSyntaxException missingQuotationMark(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Quotation mark required after writing the delimiter");
-	}
-
-	private CommandSyntaxException missingValue(StringBuilder visitedCharacters) {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		return CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Value required after opening quotation mark");
-	}
-
-	private CommandSyntaxException cannotParseKey(StringBuilder visitedCharacters, StringBuilder keyValueBuffer) throws CommandSyntaxException {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context.substring(0, context.length() - 1));
-		reader.setCursor(context.length() - 1);
-		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid key (" + keyValueBuffer + "): cannot be converted to a key");
-	}
-
-	private CommandSyntaxException cannotParseValue(StringBuilder visitedCharacters, StringBuilder keyValueBuffer) throws CommandSyntaxException {
-		String context = visitedCharacters.toString();
-		StringReader reader = new StringReader(context);
-		reader.setCursor(context.length());
-		throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, "Invalid value (" + keyValueBuffer + "): cannot be converted to a value");
-	}
-
-	private static class MapArgumentSuggestionInfo {
-
-		private String currentKey;
-		private String currentValue;
-		private SuggestionCode suggestionCode;
-
-		MapArgumentSuggestionInfo(String currentKey, String currentValue, SuggestionCode suggestionCode) {
-			this.currentKey = currentKey;
-			this.currentValue = currentValue;
-			this.suggestionCode = suggestionCode;
-		}
-
-		public String getCurrentKey() {
-			return currentKey;
-		}
-
-		public void setCurrentKey(String currentKey) {
-			this.currentKey = currentKey;
-		}
-
-		public String getCurrentValue() {
-			return currentValue;
-		}
-
-		public void setCurrentValue(String currentValue) {
-			this.currentValue = currentValue;
-		}
-
-		public SuggestionCode getSuggestionCode() {
-			return suggestionCode;
-		}
-
-		public void setSuggestionCode(SuggestionCode suggestionCode) {
-			this.suggestionCode = suggestionCode;
-		}
-	}
-
-	private enum SuggestionCode {
-		KEY_SUGGESTION,
-		DELIMITER_SUGGESTION,
-		QUOTATION_MARK_SUGGESTION,
-		VALUE_SUGGESTION
-	}
-
 }

@@ -50,7 +50,7 @@ public interface CommandAPIVersionHandler {
 	 */
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_19_4_R3();
+			return new NMS_1_20_R1();
 		} else {
 			String bukkit = Bukkit.getServer().toString();
 			String version = bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1);
@@ -68,7 +68,7 @@ public interface CommandAPIVersionHandler {
 				case "1.19.1", "1.19.2" -> new NMS_1_19_1_R1();
 				case "1.19.3" -> new NMS_1_19_3_R2();
 				case "1.19.4" -> new NMS_1_19_4_R3();
-				case "1.20" -> new NMS_1_20_R1();
+				case "1.20", "1.20.1" -> new NMS_1_20_R1();
 				default -> throw new UnsupportedVersionException(version);
 			};
 		}

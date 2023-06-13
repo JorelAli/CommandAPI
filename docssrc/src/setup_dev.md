@@ -24,7 +24,7 @@ depend: [CommandAPI]
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-bukkit-core</artifactId>
-          <version>9.0.2</version>
+          <version>9.0.3</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>

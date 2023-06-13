@@ -257,7 +257,7 @@ public class NMS_1_20_R1 extends NMS_Common {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.20" };
+		return new String[] { "1.20", "1.20.1" };
 	};
 
 	@Override

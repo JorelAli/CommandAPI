@@ -34,7 +34,6 @@ inline fun CommandTree.textArgument(nodeName: String, optional: Boolean = false,
 inline fun CommandTree.greedyStringArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(GreedyStringArgument(nodeName).setOptional(optional).apply(block))
 
 // Literal arguments
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("literalArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandTree.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(LiteralArgument(literal).setOptional(optional).apply(block))
 
 @Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
@@ -70,7 +69,6 @@ inline fun Argument<*>.textArgument(nodeName: String, optional: Boolean = false,
 inline fun Argument<*>.greedyStringArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(GreedyStringArgument(nodeName).setOptional(optional).apply(block))
 
 // Literal arguments
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("literalArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun Argument<*>.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument(literal).setOptional(optional).apply(block))
 
 @Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)

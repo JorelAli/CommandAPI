@@ -86,6 +86,7 @@ public record RegisteredCommand {
     List<String> argsAsStr();
     Optional<String> shortDescription();
     Optional<String> fullDescription();
+    Optional<String[]> usageDescription();
     String[] aliases();
     CommandPermission permission();
 }
