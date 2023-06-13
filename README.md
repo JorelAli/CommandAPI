@@ -371,7 +371,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     <tbody>
         <tr>
             <td valign="top"><b>9.0.3</b></td>
-            <td valign="top">TBD</td>
+            <td valign="top">June 2023</td>
             <td valign="top">
                 <ul>
                     <li>
