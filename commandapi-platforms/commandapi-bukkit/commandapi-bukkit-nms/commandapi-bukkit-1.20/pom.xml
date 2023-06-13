@@ -28,8 +28,8 @@
 	<artifactId>commandapi-bukkit-1.20</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.20-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.20-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.20.1-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.20.1-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
