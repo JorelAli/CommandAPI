@@ -303,7 +303,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	private List<String> getUsageList(RegisteredCommand currentCommand) {
 		List<RegisteredCommand> commandsWithIdenticalNames = new ArrayList<>();
-		List<String> usages;
 
 		// Collect every command with the same name
 		for (RegisteredCommand registeredCommand : CommandAPIHandler.getInstance().registeredCommands) {
@@ -313,9 +312,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		// Generate command usage or fill it with a user provided one
+		final List<String> usages;
 		final Optional<String[]> usageDescription = currentCommand.usageDescription();
 		if (usageDescription.isPresent()) {
-			usages = new ArrayList<>(List.of(usageDescription.get()));
+			usages = List.of(usageDescription.get());
 		} else {
 			// TODO: Figure out if default usage generation should be updated
 			usages = new ArrayList<>();
