@@ -282,9 +282,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
 		// Generate usages
-		List<String> usages = getUsageList(command);
+		String[] usages = getUsageList(command);
 
-		if (usages.isEmpty()) {
+		if (usages.length == 0) {
 			// Might happen if the developer calls `.withUsage()` with no parameters
 			// They didn't give any usage, so we won't put any there
 			return;
@@ -292,8 +292,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
 		// If 1 usage, put it on the same line, otherwise format like a list
-		if (usages.size() == 1) {
-			sb.append(usages.get(0));
+		if (usages.length == 1) {
+			sb.append(usages[0]);
 		} else {
 			for (String usage : usages) {
 				sb.append("\n- ").append(usage);
@@ -301,7 +301,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private List<String> getUsageList(RegisteredCommand currentCommand) {
+	private String[] getUsageList(RegisteredCommand currentCommand) {
 		List<RegisteredCommand> commandsWithIdenticalNames = new ArrayList<>();
 
 		// Collect every command with the same name
@@ -312,20 +312,22 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		// Generate command usage or fill it with a user provided one
-		final List<String> usages;
+		final String[] usages;
 		final Optional<String[]> usageDescription = currentCommand.usageDescription();
 		if (usageDescription.isPresent()) {
-			usages = List.of(usageDescription.get());
+			usages = usageDescription.get();
 		} else {
 			// TODO: Figure out if default usage generation should be updated
-			usages = new ArrayList<>();
-			for (RegisteredCommand command : commandsWithIdenticalNames) {
+			final int numCommandsWithIdenticalNames = commandsWithIdenticalNames.size();
+			usages = new String[numCommandsWithIdenticalNames];
+			for (int i = 0; i < numCommandsWithIdenticalNames; i++) {
+				final RegisteredCommand command = commandsWithIdenticalNames.get(i);
 				StringBuilder usageString = new StringBuilder();
 				usageString.append("/").append(command.commandName()).append(" ");
 				for (String arg : command.argsAsStr()) {
 					usageString.append("<").append(arg.split(":")[0]).append("> ");
 				}
-				usages.add(usageString.toString().trim());
+				usages[i] = usageString.toString().trim();
 			}
 		}
 		return usages;
