@@ -116,7 +116,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-shade</artifactId>
-        <version>9.0.3</version>
+        <version>9.0.4</version>
     </dependency>
 </dependencies>
 ```
