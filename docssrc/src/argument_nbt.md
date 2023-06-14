@@ -13,7 +13,6 @@ By default, the CommandAPI plugin includes a copy of the [NBT API by tr7zw](http
 In order to use the `NBTCompoundArgument`, you will have to use an NBT API that can create an NBT Compound object from an `Object` (ideally a `net.minecraft.nbt.NBTTagCompound` object). Examples of NBT APIs that can do this are _(these are not sponsored in any way)_:
 
 - [NBT API](https://www.spigotmc.org/resources/nbt-api.7939/), via the [`new NBTContainer(Object)`](https://tr7zw.github.io/Item-NBT-API/v2-api/de/tr7zw/changeme/nbtapi/NBTContainer.html#NBTContainer-java.lang.Object-) constructor
-- [PowerNBT](https://www.spigotmc.org/resources/powernbt.9098/), via the [`NBTCompound.forNBT(Object)`](https://flinbein.github.io/PowerNBT/apidocs/me/dpohvar/powernbt/api/NBTCompound.html#forNBT-java.lang.Object-) static method
 
 ### Hooking into an NBT API
 
@@ -61,7 +60,7 @@ We're now able to use the `NBTContainer` as our implemented type for the `NBTCom
 
 ### Example - ???
 
-Since the underlying implementation of the `NBTCompoundArgument` can change (e.g. `NBTContainer` if you're using the NBT API or `NBTCompound` if you're using PowerNBT), the type of your NBT compound implementation has to be declared in angle brackets.
+Since the underlying implementation of the `NBTCompoundArgument` can change (e.g. `NBTContainer` if you're using the NBT API), the type of your NBT compound implementation has to be declared in angle brackets.
 
 <div class="multi-pre">
 

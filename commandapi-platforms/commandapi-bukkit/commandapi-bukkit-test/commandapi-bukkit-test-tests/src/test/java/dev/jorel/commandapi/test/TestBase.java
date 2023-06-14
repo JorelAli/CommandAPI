@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -50,6 +51,12 @@ public abstract class TestBase {
 			SafeVarHandle.USING_MOJANG_MAPPINGS = true;
 		}
 		this.version = CommandAPIVersionHandler.getVersion();
+	}
+	
+	public <NBTContainer> void setUp(Class<NBTContainer> nbtContainerClass, Function<Object, NBTContainer> nbtContainerConstructor) {
+		Main.nbtContainerClass = nbtContainerClass;
+		Main.nbtContainerConstructor = nbtContainerConstructor;
+		setUp(Main.class);
 	}
 
 	public void setUp() {

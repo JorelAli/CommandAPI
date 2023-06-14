@@ -621,6 +621,7 @@ new CommandAPICommand("giveloottable")
 /* ANCHOR_END: argumentLootTable1 */
 }
 
+@SuppressWarnings({ "unchecked", "null" })
 void argument_map() {
 /* ANCHOR: argumentMap1 */
 new CommandAPICommand("sendmessage")
@@ -649,14 +650,15 @@ new CommandAPICommand("sendmessage")
         LinkedHashMap<Player, String> map = (LinkedHashMap<Player, String>) args.get("message");
 
         // Sending the messages to the players
-        for (Player messageRecipient : map.keySet()) {
-            messageRecipient.sendMessage(map.get(messageRecipient));
+        for (Entry<Player, String> messageRecipients : map.entrySet()) {
+            messageRecipients.getKey().sendMessage(messageRecipients.getValue());
         }
     })
     .register();
 /* ANCHOR_END: argumentMap1 */
 }
 
+@SuppressWarnings("null")
 void argument_mathOperation() {
 /* ANCHOR: argumentMathOperation1 */
 new CommandAPICommand("changelevel")
@@ -674,6 +676,7 @@ new CommandAPICommand("changelevel")
 /* ANCHOR_END: argumentMathOperation1 */
 }
 
+@SuppressWarnings("null")
 void argument_multiLiteral() {
 /* ANCHOR: argumentMultiLiteral1 */
 new CommandAPICommand("gamemode")
@@ -755,6 +758,7 @@ new CommandAPICommand("unregisterall")
 /* ANCHOR_END: argumentObjectives2 */
 }
 
+@SuppressWarnings("null")
 void argument_particle() {
 /* ANCHOR: argumentParticle1 */
 new CommandAPICommand("showparticle")
@@ -777,6 +781,7 @@ new CommandAPICommand("showparticle")
 /* ANCHOR_END: argumentParticle2 */
 }
 
+@SuppressWarnings("null")
 void argument_potion() {
 /* ANCHOR: argumentPotion1 */
 new CommandAPICommand("potion")
@@ -797,6 +802,7 @@ new CommandAPICommand("potion")
 /* ANCHOR_END: argumentPotion1 */
 }
 
+@SuppressWarnings("null")
 void argument_primitives() {
 /* ANCHOR: argumentPrimitives1 */
 // Load keys from config file

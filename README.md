@@ -48,21 +48,23 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.0.2 | 9.0.2                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.0.2 | 9.0.2                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.0.2 | 9.0.2                        | 16                                                        |
-| **1.17**           | 6.0.x - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.19**           | 8.3.0 - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.19.2**         | 8.5.1 - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.19.3**         | 8.7.0 - 9.0.2               | 9.0.2                        | 16                                                        |
-| **1.19.4**         | 8.8.0 - 9.0.2               | 9.0.2                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.0.3 | 9.0.3                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.0.3 | 9.0.3                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.0.3 | 9.0.3                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.0.3 | 9.0.3                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.0.3 | 9.0.3                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.0.3 | 9.0.3                        | 16                                                        |
+| **1.17**           | 6.0.x - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.19**           | 8.3.0 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.19.3**         | 8.7.0 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.19.4**         | 8.8.0 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.20**           | 9.0.2 - 9.0.3               | 9.0.3                        | 16                                                        |
+| **1.20.1**         | 9.0.3                       | 9.0.3                        | 16                                                        |
 
 -----
 
@@ -202,7 +204,7 @@ new CommandAPICommand("perm")
 
 <details>
     <summary><b>Command trees</b></summary>
-	
+    
 ```java
 new CommandTree("perm")
     .then(new MultiLiteralArgument("group", "user")
@@ -369,18 +371,20 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     <tbody>
         <tr>
             <td valign="top"><b>9.0.3</b></td>
-            <td valign="top">TBD</td>
+            <td valign="top">June 2023</td>
             <td valign="top">
-				<ul>
-					<li>
-						https://github.com/JorelAli/CommandAPI/pull/455 Reworked the <code>MapArgument</code> with various features, including:
-						<ul>
-							<li>Optional quotes around keys and values</li>
-							<li>No restriction on the characters that are allowed in a key (previously only letters, digits, and underscore)</li>
-							<li>May define a String separator between key-value pairs (instead of just space)</li>
-						</ul>
-					</li>
-				</ul>
+                <ul>
+                    <li>
+                        https://github.com/JorelAli/CommandAPI/pull/455 Reworked the <code>MapArgument</code> with various features, including:
+                        <ul>
+                            <li>Optional quotes around keys and values</li>
+                            <li>No restriction on the characters that are allowed in a key (previously only letters, digits, and underscore)</li>
+                            <li>May define a String separator between key-value pairs (instead of just space)</li>
+                        </ul>
+                    </li>
+                    <li>Fixed <code>use-latest-nms-version</code> not pointing to 1.20</li>
+                    <li>Adds support for Minecraft 1.20.1</li>
+                </ul>
             </td>
         </tr>
         <tr>
@@ -665,12 +669,12 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                     <li>Decouples CustomArgument from CommandAPIHandler</li>
                     <li>Decouples EntitySelector from EntitySelectorArgument</li>
                 </ul>
-				<b>NBT API Support:</b>
+                <b>NBT API Support:</b>
                 <ul>
-					<li>Allow developers to shade their own copy of an NBT API framework (e.g. NBT API or PowerNBT)</li>
-					<li>Includes the NBT API built-in for plugin versions</li>
+                    <li>Allow developers to shade their own copy of an NBT API framework (e.g. NBT API or PowerNBT)</li>
+                    <li>Includes the NBT API built-in for plugin versions</li>
                 </ul>
-				<b>Other:</b>
+                <b>Other:</b>
                 <ul>
                     <li>Implement base arguments for CustomArguments, allowing more powerful parsing</li>
                     <li>Implement common NMS code for 1.17+</li>
