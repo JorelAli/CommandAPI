@@ -104,9 +104,13 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
 		//  the arguments for this command context (most likely because it's a redirected command).
 		//  We need to figure out how to handle this case.
-		if(parsedArgument != null) {
+		if (parsedArgument != null) {
+			// Sanity check: See https://github.com/JorelAli/CommandAPI/wiki/Implementation-details#chatcomponentargument-raw-arguments
 			StringRange range = parsedArgument.getRange();
-			return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+			if (range.getEnd() > cmdCtx.getInput().length()) {
+				range = StringRange.between(range.getStart(), cmdCtx.getInput().length());
+			}
+			return range.get(cmdCtx.getInput());
 		} else {
 			return "";
 		}
