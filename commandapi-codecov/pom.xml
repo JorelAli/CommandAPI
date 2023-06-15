@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>dev.jorel</groupId>
 		<artifactId>commandapi</artifactId>
-		<version>9.0.3</version>
+		<version>9.0.4</version>
 	</parent>
 
 	<artifactId>commandapi-codecov</artifactId>
@@ -72,6 +72,12 @@
 		</dependency>
 
 		<!-- NMS-specific implementations -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-1.20</artifactId>
+			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
+		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-1.19.4</artifactId>

@@ -621,10 +621,12 @@ new CommandAPICommand("giveloottable")
 /* ANCHOR_END: argumentLootTable1 */
 }
 
+@SuppressWarnings({ "unchecked", "null" })
 void argument_map() {
 /* ANCHOR: argumentMap1 */
 new CommandAPICommand("sendmessage")
     // Parameter 'delimiter' is missing, delimiter will be a colon
+    // Parameter 'separator' is missing, separator will be a space
     .withArguments(new MapArgumentBuilder<Player, String>("message")
 
         // Providing a key mapper to convert a String into a Player
@@ -637,7 +639,8 @@ new CommandAPICommand("sendmessage")
         .withKeyList(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList())
 
         // Don't provide a list of values so messages can be chosen without restrictions
-        .withoutValueList()
+        // Allow duplicates in case the same message should be sent to different players
+        .withoutValueList(true)
 
         // Build the MapArgument
         .build()
@@ -647,14 +650,15 @@ new CommandAPICommand("sendmessage")
         LinkedHashMap<Player, String> map = (LinkedHashMap<Player, String>) args.get("message");
 
         // Sending the messages to the players
-        for (Player messageRecipient : map.keySet()) {
-            messageRecipient.sendMessage(map.get(messageRecipient));
+        for (Entry<Player, String> messageRecipients : map.entrySet()) {
+            messageRecipients.getKey().sendMessage(messageRecipients.getValue());
         }
     })
     .register();
 /* ANCHOR_END: argumentMap1 */
 }
 
+@SuppressWarnings("null")
 void argument_mathOperation() {
 /* ANCHOR: argumentMathOperation1 */
 new CommandAPICommand("changelevel")
@@ -672,10 +676,11 @@ new CommandAPICommand("changelevel")
 /* ANCHOR_END: argumentMathOperation1 */
 }
 
+@SuppressWarnings("null")
 void argument_multiLiteral() {
 /* ANCHOR: argumentMultiLiteral1 */
 new CommandAPICommand("gamemode")
-    .withArguments(new MultiLiteralArgument("gamemodes", List.of("adventure", "creative", "spectator", "survival")))
+    .withArguments(new MultiLiteralArgument("gamemodes", "adventure", "creative", "spectator", "survival"))
     .executesPlayer((player, args) -> {
         // The literal string that the player enters IS available in the args[]
         switch((String) args.get(0)) {
@@ -753,6 +758,7 @@ new CommandAPICommand("unregisterall")
 /* ANCHOR_END: argumentObjectives2 */
 }
 
+@SuppressWarnings("null")
 void argument_particle() {
 /* ANCHOR: argumentParticle1 */
 new CommandAPICommand("showparticle")
@@ -775,6 +781,7 @@ new CommandAPICommand("showparticle")
 /* ANCHOR_END: argumentParticle2 */
 }
 
+@SuppressWarnings("null")
 void argument_potion() {
 /* ANCHOR: argumentPotion1 */
 new CommandAPICommand("potion")
@@ -795,6 +802,7 @@ new CommandAPICommand("potion")
 /* ANCHOR_END: argumentPotion1 */
 }
 
+@SuppressWarnings("null")
 void argument_primitives() {
 /* ANCHOR: argumentPrimitives1 */
 // Load keys from config file
@@ -1341,7 +1349,7 @@ CommandAPI.unregister("gamemode", true);
 
 // Register our new /gamemode, with survival, creative, adventure and spectator
 new CommandAPICommand("gamemode")
-    .withArguments(new MultiLiteralArgument("gamemodes", List.of("survival", "creative", "adventure", "spectator")))
+    .withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
     .executes((sender, args) -> {
         // Implementation of our /gamemode command
     })
@@ -1442,13 +1450,13 @@ Converter.convert(essentials, "speed", new PlayerArgument("target"));
 
 // /speed <walk/fly> <speed>
 Converter.convert(essentials, "speed", 
-    new MultiLiteralArgument("modes", List.of("walk", "fly")),
+    new MultiLiteralArgument("modes", "walk", "fly"),
     new IntegerArgument("speed", 0, 10)
 );
 
 // /speed <walk/fly> <speed> <target>
 Converter.convert(essentials, "speed", 
-    new MultiLiteralArgument("modes", List.of("walk", "fly")),
+    new MultiLiteralArgument("modes", "walk", "fly"),
     new IntegerArgument("speed", 0, 10), 
     new PlayerArgument("target")
 );

@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.2</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.3</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -104,14 +104,14 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae6e496f9ab66510e911e2513e108bfbe"><td class="memItemLeft" align="right" valign="top"><a id="ae6e496f9ab66510e911e2513e108bfbe" name="ae6e496f9ab66510e911e2513e108bfbe"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MapArgumentBuilderSuggestsKey</b> (Function&lt; String, V &gt; valueMapper)</td></tr>
-<tr class="separator:ae6e496f9ab66510e911e2513e108bfbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41d634f78a4689e823b8ca037e6b8809"><td class="memItemLeft" align="right" valign="top"><a id="a41d634f78a4689e823b8ca037e6b8809" name="a41d634f78a4689e823b8ca037e6b8809"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>MapArgumentBuilderSuggestsKey</b> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_parser.html">StringParser</a>&lt; V &gt; valueMapper)</td></tr>
+<tr class="separator:a41d634f78a4689e823b8ca037e6b8809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e0185f06a804ff1e14ff41f144e0f72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v629d6d768a8fcc21e4eaad5757e9c0c1.html">MapArgumentBuilderSuggestsValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html#a8e0185f06a804ff1e14ff41f144e0f72">withKeyList</a> (List&lt; String &gt; keyList)</td></tr>
-<tr class="memdesc:a8e0185f06a804ff1e14ff41f144e0f72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a list of values to suggest when a value was typed.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html#a8e0185f06a804ff1e14ff41f144e0f72">More...</a><br /></td></tr>
+<tr class="memdesc:a8e0185f06a804ff1e14ff41f144e0f72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a list of keys to suggest when a user types this argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html#a8e0185f06a804ff1e14ff41f144e0f72">More...</a><br /></td></tr>
 <tr class="separator:a8e0185f06a804ff1e14ff41f144e0f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76b508cb1da104670320734a852df2bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v629d6d768a8fcc21e4eaad5757e9c0c1.html">MapArgumentBuilderSuggestsValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html#a76b508cb1da104670320734a852df2bf">withoutKeyList</a> ()</td></tr>
-<tr class="memdesc:a76b508cb1da104670320734a852df2bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">When using this method, no key suggestions are displayed.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html#a76b508cb1da104670320734a852df2bf">More...</a><br /></td></tr>
+<tr class="memdesc:a76b508cb1da104670320734a852df2bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">When using this method, no key suggestions are displayed and any keys can be given for the final map.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html#a76b508cb1da104670320734a852df2bf">More...</a><br /></td></tr>
 <tr class="separator:a76b508cb1da104670320734a852df2bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -133,7 +133,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Provides a list of values to suggest when a value was typed. </p>
+<p>Provides a list of keys to suggest when a user types this argument. </p>
+<p >All keys given for the final map must come from this list, otherwise a CommandSyntaxException is thrown. </p>
+<p >Duplicate keys are never allowed since one key can only be mapped to one value. If a duplicate key is given, a CommandSyntaxException is thrown.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">keyList</td><td>A list of keys to suggest. </td></tr>
@@ -159,7 +161,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>When using this method, no key suggestions are displayed. </p>
+<p>When using this method, no key suggestions are displayed and any keys can be given for the final map. </p>
+<p >To restrict the keys that can be given for this map, use <code><a class="el" href="">withKeyList(List)</a></code> instead. </p>
+<p >Duplicate keys are never allowed since one key can only be mapped to one value. If a duplicate key is given, a CommandSyntaxException is thrown.</p>
 <dl class="section return"><dt>Returns</dt><dd>this map argument builder </dd></dl>
 
 </div>
@@ -171,7 +175,7 @@ Public Member Functions</h2></td></tr>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder.html">MapArgumentBuilder</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_value_mapper.html">MapArgumentBuilderValueMapper</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html">MapArgumentBuilderSuggestsKey</a></li>
 				<li class="footer">
-					Generated on Wed Jun 7 2023 20:12:15 for CommandAPI 9.0.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Jun 13 2023 20:20:33 for CommandAPI 9.0.3 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

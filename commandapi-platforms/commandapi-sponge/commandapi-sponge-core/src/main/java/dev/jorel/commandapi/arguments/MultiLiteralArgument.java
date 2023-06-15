@@ -22,7 +22,6 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
@@ -37,7 +36,25 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 
 	/**
 	 * A multiliteral argument. Takes in string literals which cannot be modified
+	 *
+	 * @param nodeName the node name for this argument
 	 * @param literals the literals that this argument represents
+	 */
+	public MultiLiteralArgument(String nodeName, String... literals) {
+		super(nodeName, null);
+		if(literals == null) {
+			throw new BadLiteralException(true);
+		}
+		if(literals.length == 0) {
+			throw new BadLiteralException(false);
+		}
+		this.literals = literals;
+	}
+
+	/**
+	 * A multiliteral argument. Takes in string literals which cannot be modified
+	 * @param literals the literals that this argument represents
+	 * @deprecated Use {@link MultiLiteralArgument#MultiLiteralArgument(String, String...)} instead
 	 */
 	@Deprecated(since = "9.0.2", forRemoval = true)
 	public MultiLiteralArgument(final List<String> literals) {
@@ -49,16 +66,11 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	 *
 	 * @param nodeName the node name for this argument
 	 * @param literals the literals that this argument represents
+	 * @deprecated Use {@link MultiLiteralArgument#MultiLiteralArgument(String, String...)} instead
 	 */
+	@Deprecated(since = "9.0.4", forRemoval = true)
 	public MultiLiteralArgument(String nodeName, final List<String> literals) {
-		super(nodeName, null);
-		if(literals == null) {
-			throw new BadLiteralException(true);
-		}
-		if(literals.size() == 0) {
-			throw new BadLiteralException(false);
-		}
-		this.literals = literals.toArray(String[]::new);
+		this(nodeName, literals.toArray(new String[0]));
 	}
 
 	@Override

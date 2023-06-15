@@ -106,14 +106,15 @@ inline fun CommandAPICommand.itemStackPredicateArgument(nodeName: String, option
 inline fun <NBTContainer> CommandAPICommand.nbtCompoundArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(NBTCompoundArgument<NBTContainer>(nodeName).setOptional(optional).apply(block))
 
 // Literal arguments
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("literalArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandAPICommand.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LiteralArgument.of(literal, literal).setOptional(optional).apply(block))
+inline fun CommandAPICommand.literalArgument(nodeName: String, literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LiteralArgument.of(nodeName, literal).setOptional(optional).apply(block))
 
 @Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, listOf(literals))", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandAPICommand.multiLiteralArgument(vararg literals: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(MultiLiteralArgument(literals).setOptional(optional).apply(block))
-
-inline fun CommandAPICommand.literalArgument(nodeName: String, literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(LiteralArgument.of(nodeName, literal).setOptional(optional).apply(block))
+@Deprecated("This method has been deprecated since version 9.0.4", ReplaceWith("multiLiteralArgument(nodeName, literals)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandAPICommand.multiLiteralArgument(nodeName: String, literals: List<String>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(MultiLiteralArgument(nodeName, literals).setOptional(optional).apply(block))
+
+inline fun CommandAPICommand.multiLiteralArgument(nodeName: String, vararg literals: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(MultiLiteralArgument(nodeName, *literals).setOptional(optional).apply(block))
 
 // Function arguments
 inline fun CommandAPICommand.functionArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(FunctionArgument(nodeName).setOptional(optional).apply(block))

@@ -1,5 +1,29 @@
 # Upgrading guide
 
+## From 9.0.3 to 9.0.4
+
+### MultiLiteralArgument changes
+
+All `MultiLiteralArgument` constructors have been deprecated in 9.0.4! Instead the new `MultiLiteralArgument` constructor should be used:
+
+<div class="multi-pre">
+
+```java,9.0.3
+withArguments(new MultiLiteralArgument("gamemodes", List.of("survival", "creative", "adventure", "spectator")))
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.0.4
+withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
+```
+
+</div>
+
 ## From 9.0.1 to 9.0.2
 
 ### MultiLiteralArgument and LiteralArgument changes
