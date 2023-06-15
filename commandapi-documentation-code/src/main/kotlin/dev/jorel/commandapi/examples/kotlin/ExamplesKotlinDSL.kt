@@ -522,7 +522,7 @@ commandAPICommand("changelevel") {
 fun argument_multiLiteral() {
 /* ANCHOR: argumentMultiLiteral1 */
 commandAPICommand("gamemode") {
-    multiLiteralArgument("adventure", "creative", "spectator", "survival")
+    multiLiteralArgument(nodeName = "gamemodes", "adventure", "creative", "spectator", "survival") // Adding this for now, needed because ambiguous methods exist
     playerExecutor { player, args ->
         // The literal string that the player enters IS available in the args[]
         when (args[0] as String) {

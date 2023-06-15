@@ -618,7 +618,7 @@ CommandAPICommand("changelevel")
 fun argument_multiLiteral() {
 /* ANCHOR: argumentMultiLiteral1 */
 CommandAPICommand("gamemode")
-    .withArguments(MultiLiteralArgument("gamemodes", listOf("adventure", "creative", "spectator", "survival")))
+    .withArguments(MultiLiteralArgument("gamemodes", "adventure", "creative", "spectator", "survival"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         // The literal string that the player enters IS available in the args[]
         when (args[0] as String) {
@@ -1263,7 +1263,7 @@ CommandAPI.unregister("gamemode", true)
 
 // Register our new /gamemode, with survival, creative, adventure and spectator
 CommandAPICommand("gamemode")
-    .withArguments(MultiLiteralArgument("gamemodes", listOf("survival", "creative", "adventure", "spectator")))
+    .withArguments(MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
     .executes(CommandExecutor { sender, args ->
         // Implementation of our /gamemode command
     })
@@ -1364,13 +1364,13 @@ Converter.convert(essentials, "speed", PlayerArgument("target"))
 
 // /speed <walk/fly> <speed>
 Converter.convert(essentials, "speed",
-    MultiLiteralArgument("modes", listOf("walk", "fly")),
+    MultiLiteralArgument("modes", "walk", "fly"),
     IntegerArgument("speed", 0, 10)
 )
 
 // /speed <walk/fly> <speed> <target>
 Converter.convert(essentials, "speed",
-    MultiLiteralArgument("modes", listOf("walk", "fly")),
+    MultiLiteralArgument("modes", "walk", "fly"),
     IntegerArgument("speed", 0, 10),
     PlayerArgument("target")
 )

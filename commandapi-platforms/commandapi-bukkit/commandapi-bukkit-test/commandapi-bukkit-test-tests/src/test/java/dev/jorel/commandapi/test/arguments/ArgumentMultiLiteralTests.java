@@ -45,7 +45,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument("literals", List.of("literal", "literal1", "literal2")))
+			.withArguments(new MultiLiteralArgument("literals", "literal", "literal1", "literal2"))
 			.executesPlayer((player, args) -> {
 				results.set((String) args.get(0));
 			})
@@ -72,7 +72,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument("literals",List.of("literal", "literal1", "literal2")))
+			.withArguments(new MultiLiteralArgument("literals", "literal", "literal1", "literal2"))
 			.executesPlayer((player, args) -> {
 				results.set((String) args.get("literals"));
 			})
@@ -96,8 +96,8 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument("literals1", List.of("lit1", "lit2")))
-			.withArguments(new MultiLiteralArgument("literals2", List.of("lit1", "lit3")))
+			.withArguments(new MultiLiteralArgument("literals1", "lit1", "lit2"))
+			.withArguments(new MultiLiteralArgument("literals2", "lit1", "lit3"))
 			.executes((player, args) -> {
 				results.set(args.getUnchecked("literals1"));
 				results.set(args.getUnchecked("literals2"));
@@ -161,6 +161,31 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		assertEquals(5, results.get());
 	}
 
+	@Test
+	public void executionTestWithArrayConstructor() {
+		Mut<String> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MultiLiteralArgument(new String[]{"lit1", "lit2", "lit3"}))
+			.executesPlayer(info -> {
+				results.set((String) info.args().get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		server.dispatchCommand(player, "test lit1");
+		assertEquals("lit1", results.get());
+
+		server.dispatchCommand(player, "test lit2");
+		assertEquals("lit2", results.get());
+
+		server.dispatchCommand(player, "test lit3");
+		assertEquals("lit3", results.get());
+
+		assertNoMoreResults(results);
+	}
+
 	/********************
 	 * Suggestion tests *
 	 ********************/
@@ -168,7 +193,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	@Test
 	public void suggestionTestWithMultiLiteralArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument("literals", List.of("literal", "literal1", "literal2")))
+			.withArguments(new MultiLiteralArgument("literals", "literal", "literal1", "literal2"))
 			.executesPlayer(P_EXEC)
 			.register();
 
