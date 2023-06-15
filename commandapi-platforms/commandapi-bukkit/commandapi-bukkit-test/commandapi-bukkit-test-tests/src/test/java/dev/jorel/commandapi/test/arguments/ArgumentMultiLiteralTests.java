@@ -161,6 +161,31 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		assertEquals(5, results.get());
 	}
 
+	@Test
+	public void executionTestWithArrayConstructor() {
+		Mut<String> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new MultiLiteralArgument(new String[]{"lit1", "lit2", "lit3"}))
+			.executesPlayer(info -> {
+				results.set((String) info.args().get(0));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		server.dispatchCommand(player, "test lit1");
+		assertEquals("lit1", results.get());
+
+		server.dispatchCommand(player, "test lit2");
+		assertEquals("lit2", results.get());
+
+		server.dispatchCommand(player, "test lit3");
+		assertEquals("lit3", results.get());
+
+		assertNoMoreResults(results);
+	}
+
 	/********************
 	 * Suggestion tests *
 	 ********************/
