@@ -70,7 +70,7 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	 * @param literals the literals that this argument represents
 	 * @deprecated Use {@link MultiLiteralArgument#MultiLiteralArgument(String, String...)} instead
 	 */
-	@Deprecated(since = "9.0.3", forRemoval = true)
+	@Deprecated(since = "9.0.4", forRemoval = true)
 	public MultiLiteralArgument(String nodeName, final List<String> literals) {
 		this(nodeName, literals.toArray(new String[0]));
 	}
