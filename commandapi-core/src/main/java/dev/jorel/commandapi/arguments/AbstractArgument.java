@@ -105,30 +105,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Returns the raw String which is retrieved in {@link AbstractArgument#getRawStringAndParseArgument(CommandContext, String, CommandArguments)}
-	 *
-	 * @return the raw String which is retrieved in {@link AbstractArgument#getRawStringAndParseArgument(CommandContext, String, CommandArguments)}
-	 */
-	public final String getRawArgumentString() {
-		return this.rawArgumentString;
-	}
-
-	/**
-	 * Saves the String of this argument as typed when executing the command and parses the argument
-	 *
-	 * @param <Source>      the command source type
-	 * @param cmdCtx        the context which ran this command
-	 * @param key           the name of the argument node
-	 * @param previousArgs  a {@link CommandArguments} object holding previous  parsed arguments
-	 * @return the parsed object represented by this argument
-	 * @throws CommandSyntaxException if parsing fails
-	 */
-	public <Source> T getRawStringAndParseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		this.rawArgumentString = CommandAPIHandler.getRawArgumentInput(cmdCtx, key);
-		return parseArgument(cmdCtx, key, previousArgs);
-	}
-
-	/**
 	 * Parses an argument, returning the specific Bukkit object that the argument
 	 * represents. This is intended for use by the internals of the CommandAPI and
 	 * isn't expected to be used outside the CommandAPI

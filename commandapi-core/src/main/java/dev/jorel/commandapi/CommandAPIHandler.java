@@ -102,8 +102,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		final ParsedArgument<?, ?> parsedArgument = commandContextArguments.get(cmdCtx).get(key);
 		
 		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
-		// the arguments for this command context (most likely because it's a redirected command).
-		// We need to figure out how to handle this case.
+		//  the arguments for this command context (most likely because it's a redirected command).
+		//  We need to figure out how to handle this case.
 		if(parsedArgument != null) {
 			StringRange range = parsedArgument.getRange();
 			return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
@@ -290,8 +290,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				argsMap.put(argument.getNodeName(), parsedArgument);
 
 				// Add the raw argument
-				rawArguments.add(argument.getRawArgumentString()); // Should exist; argument was already parsed which is when the raw argument String is saved
-				rawArgumentsMap.put(argument.getNodeName(), argument.getRawArgumentString());
+				String rawArgumentString = getRawArgumentInput(cmdCtx, argument.getNodeName());
+
+				rawArguments.add(rawArgumentString);
+				rawArgumentsMap.put(argument.getNodeName(), rawArgumentString);
 			}
 		}
 
@@ -309,7 +311,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, CommandArguments previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
-			return value.getRawStringAndParseArgument(cmdCtx, key, previousArgs);
+			return value.parseArgument(cmdCtx, key, previousArgs);
 		} else {
 			return null;
 		}
@@ -852,8 +854,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				argsMap.put(arg.getNodeName(), result);
 
 				// Add the raw argument
-				rawArguments.add(arg.getRawArgumentString()); // Should exist; argument was already parsed which is when the raw argument String is saved
-				rawArgumentsMap.put(arg.getNodeName(), arg.getRawArgumentString());
+				String rawArgumentString = getRawArgumentInput(context, arg.getNodeName());
+
+				rawArguments.add(rawArgumentString);
+				rawArgumentsMap.put(arg.getNodeName(), rawArgumentString);
 			}
 		}
 		return new CommandArguments(previousArguments.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + context.getInput());
