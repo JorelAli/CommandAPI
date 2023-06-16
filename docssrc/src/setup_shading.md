@@ -238,11 +238,11 @@ shadowJar {
 ```
 
 ```kotlin,build.gradle.kts
-shadowJar {
+tasks.withType<ShadowJar> {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.0.4")
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.0.4"))
     }
-
+    
     // TODO: Change this to my own package name
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
