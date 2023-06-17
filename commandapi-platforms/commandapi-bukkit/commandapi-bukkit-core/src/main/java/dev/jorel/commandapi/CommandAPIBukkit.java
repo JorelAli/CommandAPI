@@ -64,6 +64,8 @@ import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitRemoteConsoleCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.network.BukkitCommandAPIMessenger;
+import dev.jorel.commandapi.network.CommandAPIProtocol;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -511,6 +513,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				p.updateCommands();
 			}
 		}
+	}
+
+	@Override
+	public BukkitCommandAPIMessenger setupMessenger() {
+		return new BukkitCommandAPIMessenger(CommandAPIProtocol.CHANNEL_NAME, getConfiguration().getPlugin());
 	}
 
 	@Override

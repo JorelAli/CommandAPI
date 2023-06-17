@@ -18,11 +18,15 @@ import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.*;
+import dev.jorel.commandapi.network.CommandAPIProtocol;
+import dev.jorel.commandapi.network.VelocityCommandAPIMessenger;
+import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
@@ -31,6 +35,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, CommandSource, CommandSource> {
 
@@ -38,6 +43,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	private static CommandAPIVelocity instance;
 	private static InternalVelocityConfig config;
 
+	private VelocityCommandAPIMessenger messenger;
 	private CommandManager commandManager;
 	private CommandDispatcher<CommandSource> dispatcher;
 
@@ -106,6 +112,20 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces) {
 		commandManager.unregister(commandName);
+	}
+
+	@Override
+	public VelocityCommandAPIMessenger setupMessenger() {
+		messenger = new VelocityCommandAPIMessenger(
+			CommandAPIProtocol.CHANNEL_NAME,
+			getConfiguration().getPlugin(),
+			getConfiguration().getServer()
+		);
+		return messenger;
+	}
+
+	public VelocityCommandAPIMessenger getMessenger() {
+		return messenger;
 	}
 
 	@Override
@@ -230,8 +250,15 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
-	public void updateRequirements(AbstractPlayer<?> player) {
-		// TODO Auto-generated method stub
+	public void updateRequirements(AbstractPlayer<?> playerWrapper) {
+		Player player = (Player) playerWrapper.getSource();
+		Optional<ServerConnection> optionalServer = player.getCurrentServer();
+
+		// If the ServerConnection is not present, I think the player is not currently connected to any server.
+		//  Therefore, they don't have any commands, so they don't need to be updated
+		if(optionalServer.isEmpty()) return;
+
+		getMessenger().sendPacket(optionalServer.get(), ClientToServerUpdateRequirementsPacket.create());
 	}
 
 	@Override
