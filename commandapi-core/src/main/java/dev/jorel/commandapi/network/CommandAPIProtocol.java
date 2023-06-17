@@ -13,11 +13,14 @@ import java.util.function.Function;
  * A utility class that defines the network protocol of the CommandAPI. It handles converting bytes off the network into
  * {@link CommandAPIPacket}s.
  */
-public class CommandAPIProtocol {
+public final class CommandAPIProtocol {
+	// Utility class should never be instantiated
+	private CommandAPIProtocol() {}
+
 	/**
 	 * The identifier for the channel used by the CommandAPI to communicate across the network.
 	 */
-	public static String CHANNEL_NAME = "commandapi:plugin";
+	public static final String CHANNEL_NAME = "commandapi:plugin";
 
 	private static final List<Function<ByteArrayDataInput, ? extends CommandAPIPacket>> idToPacket = new ArrayList<>();
 	private static final Map<Class<? extends CommandAPIPacket>, Integer> packetToId = new HashMap<>();
