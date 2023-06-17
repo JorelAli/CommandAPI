@@ -238,7 +238,7 @@ shadowJar {
 ```
 
 ```kotlin,build.gradle.kts
-tasks.withType<ShadowJar> {
+shadowJar {
     dependencies {
         include(dependency("dev.jorel:commandapi-bukkit-shade:9.0.4"))
     }
