@@ -370,6 +370,15 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.0.4</b></td>
+            <td valign="top">?????????????????????????????</td>
+            <td valign="top">
+                <ul>
+                    <li>Fixed the CommandAPI disabling datapacks on Paper 1.20.1 #40+ because it thought it was running on a Folia server</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.0.3</b></td>
             <td valign="top">June 2023</td>
             <td valign="top">
