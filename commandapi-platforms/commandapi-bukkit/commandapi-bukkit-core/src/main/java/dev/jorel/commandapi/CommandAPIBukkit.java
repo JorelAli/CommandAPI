@@ -180,7 +180,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		boolean isFoliaPresent = false;
 		
 		try {
-			Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler");
+			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
 			isFoliaPresent = true;
 			CommandAPI.logNormal("Hooked into Folia for folia-specific API implementations");
 			CommandAPI.logNormal("Folia support is still in development. Please report any issues to the CommandAPI developers!");
