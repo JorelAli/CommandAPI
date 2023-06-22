@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import dev.jorel.commandapi.nms.NMS_1_19_4_R3;
 import dev.jorel.commandapi.nms.NMS_1_20_R1;
 import dev.jorel.commandapi.test.MockNMS;
+import dev.jorel.commandapi.test.Version;
 
 /**
  * This file handles loading the correct platform implementation. The CommandAPIVersionHandler
@@ -17,11 +18,6 @@ public interface CommandAPIVersionHandler {
 	
 	public static void setVersion(Version version) {
 		CommandAPIVersionHandler.version.set(version);
-	}
-	
-	public static enum Version {
-		MINECRAFT_1_20,
-		MINECRAFT_1_19_4;
 	}
 	
 	// The only important thing we care about.

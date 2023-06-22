@@ -19,9 +19,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
-import dev.jorel.commandapi.CommandAPIVersionHandler.Version;
 import dev.jorel.commandapi.test.CommandAPIServerMock;
 import dev.jorel.commandapi.test.MockPlatform;
+import dev.jorel.commandapi.test.Version;
 
 public class MyTests {
 
