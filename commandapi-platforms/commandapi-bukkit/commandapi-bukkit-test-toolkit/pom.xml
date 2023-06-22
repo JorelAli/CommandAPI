@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>commandapi-bukkit</artifactId>
+		<groupId>dev.jorel</groupId>
+		<version>9.0.4</version>
+	</parent>
+	
+	<artifactId>commandapi-bukkit-test-toolkit</artifactId>
+
+	<repositories>
+		<repository>
+			<!-- Spigot -->
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<!-- MockBukkit -->
+			<id>papermc</id>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
+		</repository>
+		<repository>
+			<!-- Brigadier -->
+			<id>minecraft-libraries</id>
+			<url>https://libraries.minecraft.net</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<!-- We just need this for some basic classes such as "CommandSender" -->
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.20.1-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Needed if we want to use CommandSyntaxException -->
+			<groupId>com.mojang</groupId>
+			<artifactId>brigadier</artifactId>
+			<version>1.0.17</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<!-- We just need a version of JUnit 5 for the various classes... -->
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<!-- We just need this for basic classes, this'll be provided by the
+				 versioned impl dependency instead-->
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.19</artifactId>
+			<version>2.29.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Again, we just need this for compilation, this'll be provided
+				 by the versioned impl dependency instead -->
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-impl-1.20</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Actually something useful. -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-shade</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

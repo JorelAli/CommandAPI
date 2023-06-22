@@ -6,7 +6,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<commandapi.version>9.0.3</commandapi.version>
+		<commandapi.version>9.0.4</commandapi.version>
 	</properties>
 
 	<repositories>
@@ -70,7 +70,7 @@
 			 - commandapi-bukkit-test-impl-1.20 for testing against Minecraft 1.20 -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-shade</artifactId>
+			<artifactId>commandapi-bukkit-test-toolkit</artifactId>
 			<version>${commandapi.version}</version>
 		</dependency>
 		<dependency>

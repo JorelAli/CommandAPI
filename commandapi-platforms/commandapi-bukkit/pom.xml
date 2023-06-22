@@ -24,12 +24,17 @@
 		<module>commandapi-bukkit-vh</module>
 		<module>commandapi-bukkit-mojang-mapped</module>
 
+		<!-- Testing -->
+		<module>commandapi-bukkit-test</module>
+
 		<!-- Outputs -->
 		<module>commandapi-bukkit-plugin</module>
-		<module>commandapi-bukkit-test</module>
 		<module>commandapi-bukkit-shade</module>
-		
 		<module>commandapi-bukkit-plugin-mojang-mapped</module>
 		<module>commandapi-bukkit-shade-mojang-mapped</module>
+
+		<!-- TODO: Figure out what these are and what to do with them -->
+		<module>commandapi-bukkit-kotlin</module>
+		<module>commandapi-bukkit-test-toolkit</module>
 	</modules>
 </project>
