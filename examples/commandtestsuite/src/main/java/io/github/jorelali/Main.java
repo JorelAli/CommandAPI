@@ -35,12 +35,14 @@ public class Main extends JavaPlugin {
 		// Enable the CommandAPI
 		CommandAPI.onEnable();
 
+		// Register my commands as normal
 		MyCommands myCommands = new MyCommands(this);
 		myCommands.registerAllCommands();
 	}
 
 	@Override
 	public void onDisable() {
+		// Disable the CommandAPI
 		CommandAPI.onDisable();
 	}
 

@@ -23,22 +23,16 @@ import dev.jorel.commandapi.test.CommandAPIServerMock;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Version;
 
-public class MyTests {
+class MyTests {
 
-	private CommandAPIServerMock server;
-	private Main plugin;
+	////////////////
+	// Test setup //
+	////////////////
 
-	private String getDispatcherString() {
-		try {
-			return Files.readString(new File("command_registration.json").toPath());
-		} catch (IOException e) {
-			return "";
-		}
-	}
+	private CommandAPIServerMock server; // The server
+	private Main plugin; // Our plugin
 
-	public void assertInvalidSyntax(CommandSender sender, String command) {
-		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(sender,command)));
-	}
+	// Set up a test for Minecraft 1.20
 
 	@BeforeEach
 	public void setUp() {
@@ -46,10 +40,12 @@ public class MyTests {
 		server = MockBukkit.mock(new CommandAPIServerMock());
 		plugin = MockBukkit.load(Main.class);
 	}
-		
+
+	// Teardown our tests.
+
 	@AfterEach
 	public void tearDown() {
-		if(server != null) {
+		if (server != null) {
 			Bukkit.getScheduler().cancelTasks(plugin);
 			if (plugin != null) {
 				plugin.onDisable();
@@ -61,16 +57,35 @@ public class MyTests {
 		MockPlatform.unload();
 	}
 
+	///////////
+	// Tests //
+	///////////
+
 	@Test
 	public void executionTest() {
 		PlayerMock player = server.addPlayer("myname");
-		
+
 		server.dispatchCommand(player, "myeffect myname speed");
-		
+
 		assertEquals(1, player.getActivePotionEffects().size());
-		
-//		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "break ~ ~ ~ ~"));
-//		assertDoesNotThrow(() -> server.dispatchThrowableCommand(player, "break ~ ~ ~"));
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Utility methods, probably stuff that the CommandAPI Test Toolkit will //
+	// include, but I'm including them here for now until I figure out what //
+	// features we want //
+	///////////////////////////////////////////////////////////////////////////
+
+	private String getDispatcherString() {
+		try {
+			return Files.readString(new File("command_registration.json").toPath());
+		} catch (IOException e) {
+			return "";
+		}
+	}
+
+	public void assertInvalidSyntax(CommandSender sender, String command) {
+		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(sender, command)));
 	}
 
 }
