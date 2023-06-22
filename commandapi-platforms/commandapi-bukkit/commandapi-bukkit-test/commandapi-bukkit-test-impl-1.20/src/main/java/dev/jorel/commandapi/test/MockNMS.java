@@ -26,10 +26,12 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemFactory;
 import org.bukkit.enchantments.Enchantment;
@@ -81,6 +83,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.phys.Vec2;
@@ -267,6 +270,17 @@ public class MockNMS extends Enums {
 			ServerLevel worldServerMock = Mockito.mock(ServerLevel.class);
 			Mockito.when(css.getLevel()).thenReturn(worldServerMock);
 			Mockito.when(css.getLevel().hasChunkAt(any(BlockPos.class))).thenReturn(true);
+//			Mockito.when(css.getLevel().getBlockState(any(BlockPos.class))).thenAnswer(i -> {
+//				BlockPos bp = i.getArgument(0);
+//				Block b = Bukkit.getWorlds().get(0).getBlockAt(bp.getX(), bp.getY(), bp.getZ());
+//				BlockState bs = Mockito.mock(BlockState.class);
+//				Mockito.when(bs.is(any(net.minecraft.world.level.block.Block.class))).thenAnswer(j -> {
+////					net.minecraft.world.level.block.Block nmsBlock = j.getArgument(0);
+////					nmsBlock.equals(bs.getBlock());
+//					return true;
+//				});
+//				return bs;
+//			});
 			Mockito.when(css.getLevel().isInWorldBounds(any(BlockPos.class))).thenReturn(true);
 			Mockito.when(css.getAnchor()).thenReturn(Anchor.EYES);
 

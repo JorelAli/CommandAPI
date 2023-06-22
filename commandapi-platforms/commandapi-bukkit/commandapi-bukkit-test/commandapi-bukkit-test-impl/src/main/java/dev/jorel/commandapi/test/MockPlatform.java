@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -155,6 +156,12 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 		} catch (ReflectiveOperationException e) {
 			return null;
 		}
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static <T> T forceGetArgument(CommandContext cmdCtx, String key) {
+		ParsedArgument result = (ParsedArgument) getFieldAs(CommandContext.class, "arguments", cmdCtx, Map.class).get(key);
+		return (T) result.getResult();
 	}
 
 	/***************
