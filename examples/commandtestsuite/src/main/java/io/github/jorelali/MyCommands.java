@@ -29,7 +29,7 @@ public class MyCommands {
 			// We want to target blocks in particular, so use BLOCK_POSITION
 			.withArguments(new LocationArgument("block", LocationType.BLOCK_POSITION))
 			.executesPlayer((player, args) -> {
-				((Location) args[0]).getBlock().breakNaturally();
+				((Location) args.get("block")).getBlock().breakNaturally();
 			})
 			.register();
 
@@ -41,8 +41,8 @@ public class MyCommands {
 			.withArguments(new PlayerArgument("target"))
 			.withArguments(new PotionEffectArgument("potion"))
 			.executes((sender, args) -> {
-				Player target = (Player) args[0];
-				PotionEffectType potionEffectType = (PotionEffectType) args[1];
+				Player target = (Player) args.get("target");
+				PotionEffectType potionEffectType = (PotionEffectType) args.get("potion");
 				target.addPotionEffect(new PotionEffect(potionEffectType, 300 * 20, 1));
 			})
 			.register();

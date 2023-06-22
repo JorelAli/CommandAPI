@@ -6,6 +6,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<commandapi.version>9.0.3</commandapi.version>
 	</properties>
 
 	<repositories>
@@ -13,6 +14,10 @@
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>papermc</id>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
 		
 		<!-- Required for brigadier -->
@@ -23,34 +28,10 @@
 	</repositories>
 
 	<dependencies>
-		<!--This adds the Spigot API artifact to the build -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<!-- We need spigot because spigot has NMS implementations which we may indirectly access -->
-			<artifactId>spigot</artifactId>
-			 <!-- Must be 1.19 or above. Anything lower screws up potion effects -->
-			<version>1.19.2-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-shade</artifactId>
-			<version>8.5.1</version>
-		</dependency>
-
-		<!-- CommandAPI plugin test suite -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-plugin-test</artifactId>
-			<version>8.6.0-SNAPSHOT</version>
-		</dependency>
 		
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.19</artifactId>
-			<version>2.29.0</version>
-		</dependency>
+		<!-- Test dependencies. These are dependencies that we use to write
+			 the majority of our tests. This includes JUnit 5, Mockito and
+			 Brigadier (for command error checking) -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -62,12 +43,55 @@
 			<artifactId>mockito-core</artifactId>
 			<version>4.6.1</version>
 		</dependency>
-		<!-- Needed if we want to use CommandSyntaxException -->
 		<dependency>
+			<!-- Needed if we want to use CommandSyntaxException -->
 			<groupId>com.mojang</groupId>
 			<artifactId>brigadier</artifactId>
 			<version>1.0.17</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<!-- Needed for 1.19.4+ Brigadier logging. This is also present in
+			 commandapi-core, but isn't inherited here automatically, so we add
+			 it here. If we don't include this, Maven complains with:
+
+			   java.lang.NullPointerException: Cannot invoke "org.eclipse.aether.RepositorySystem.newLocalRepositoryManager(org.eclipse.aether.RepositorySystemSession, org.eclipse.aether.repository.LocalRepository)" because "this.repository" is null
+			     at org.bukkit.plugin.java.LibraryLoader.<init>(LibraryLoader.java:62)
+			     at org.bukkit.plugin.java.JavaPluginLoader.<init>(JavaPluginLoader.java:71)
+			-->
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.19.0</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- CommandAPI testing dependencies. We need two dependencies here:
+			 - commandapi-bukkit-shade for our main CommandAPI implementation
+			 - commandapi-bukkit-test-impl-1.20 for testing against Minecraft 1.20 -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-shade</artifactId>
+			<version>${commandapi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-impl-1.20</artifactId>
+			<version>${commandapi.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!--This adds the Spigot API artifact to the build -->
+		<dependency>
+			<!-- We need spigot because spigot has NMS implementations which we may indirectly access -->
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.20.1-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>1.20-R0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
@@ -88,29 +112,6 @@
 				<configuration>
 					<trimStackTrace>false</trimStackTrace>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>shade</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<relocations>
-								<relocation>
-									<pattern>dev.jorel.commandapi</pattern>
-									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

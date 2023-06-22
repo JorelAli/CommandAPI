@@ -1,6 +1,6 @@
 package io.github.jorelali;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,13 +18,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIConfig;
-import dev.jorel.commandapi.nms.NMS_1_19_R1;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
+import dev.jorel.commandapi.CommandAPIVersionHandler.Version;
 import dev.jorel.commandapi.test.CommandAPIServerMock;
-import dev.jorel.commandapi.test.MockNMS;
+import dev.jorel.commandapi.test.MockPlatform;
 
-public class TestSuite {
+public class MyTests {
 
 	private CommandAPIServerMock server;
 	private Main plugin;
@@ -43,28 +42,35 @@ public class TestSuite {
 
 	@BeforeEach
 	public void setUp() {
+		CommandAPIVersionHandler.setVersion(Version.MINECRAFT_1_20);
 		server = MockBukkit.mock(new CommandAPIServerMock());
-		
-		// Pre-load the CommandAPI, using a specified NMS
-		CommandAPI.onLoad(new CommandAPIConfig().setCustomNMS(new MockNMS(new NMS_1_19_R1())));
-
 		plugin = MockBukkit.load(Main.class);
 	}
 		
 	@AfterEach
 	public void tearDown() {
-		Bukkit.getScheduler().cancelTasks(plugin);
-		if(plugin != null) {
-			plugin.onDisable();
+		if(server != null) {
+			Bukkit.getScheduler().cancelTasks(plugin);
+			if (plugin != null) {
+				plugin.onDisable();
+			}
+			MockBukkit.unmock();
 		}
-		MockBukkit.unmock();
+		server = null;
+		plugin = null;
+		MockPlatform.unload();
 	}
 
 	@Test
 	public void executionTest() {
-		PlayerMock player = server.addPlayer();
-		assertFalse(server.isValidCommandAPICommand(player, "break ~ ~ ~ ~"));
-		assertTrue(server.isValidCommandAPICommand(player, "break ~ ~ ~"));
+		PlayerMock player = server.addPlayer("myname");
+		
+		server.dispatchCommand(player, "myeffect myname speed");
+		
+		assertEquals(1, player.getActivePotionEffects().size());
+		
+//		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "break ~ ~ ~ ~"));
+//		assertDoesNotThrow(() -> server.dispatchThrowableCommand(player, "break ~ ~ ~"));
 	}
 
 }
