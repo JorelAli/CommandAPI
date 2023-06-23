@@ -30,6 +30,7 @@ public class BukkitCommandAPIMessenger extends CommandAPIMessenger<Player, Playe
 		// Register to listen for plugin messages
 		Messenger messenger = Bukkit.getServer().getMessenger();
 		messenger.registerIncomingPluginChannel(this.plugin, channelName, this);
+		messenger.registerOutgoingPluginChannel(this.plugin, channelName);
 	}
 
 	@Override
@@ -37,6 +38,7 @@ public class BukkitCommandAPIMessenger extends CommandAPIMessenger<Player, Playe
 		// Unregister this listener
 		Messenger messenger = Bukkit.getServer().getMessenger();
 		messenger.unregisterIncomingPluginChannel(this.plugin, channelName);
+		messenger.unregisterOutgoingPluginChannel(this.plugin, channelName);
 	}
 
 	@Override

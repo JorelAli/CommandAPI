@@ -82,6 +82,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
 	private CommandRegistrationStrategy<Source> commandRegistrationStrategy;
+	private BukkitCommandAPIMessenger messenger;
 
 	protected CommandAPIBukkit() {
 		CommandAPIBukkit.instance = this;
@@ -517,7 +518,12 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public BukkitCommandAPIMessenger setupMessenger() {
-		return new BukkitCommandAPIMessenger(CommandAPIProtocol.CHANNEL_NAME, getConfiguration().getPlugin());
+		messenger = new BukkitCommandAPIMessenger(CommandAPIProtocol.CHANNEL_NAME, getConfiguration().getPlugin());
+		return messenger;
+	}
+
+	public BukkitCommandAPIMessenger getMessenger() {
+		return messenger;
 	}
 
 	@Override
