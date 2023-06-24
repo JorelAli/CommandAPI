@@ -67,4 +67,9 @@ public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket 
 		if(obj == null) return false;
 		return obj instanceof ClientToServerUpdateRequirementsPacket;
 	}
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
 }

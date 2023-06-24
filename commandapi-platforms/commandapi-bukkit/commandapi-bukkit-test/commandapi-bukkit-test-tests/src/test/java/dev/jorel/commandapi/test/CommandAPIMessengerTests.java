@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.spy;
 
-public class CommandAPIMessengerTests extends TestBase {
+class CommandAPIMessengerTests extends TestBase {
 
 	/*********
 	 * Setup *
