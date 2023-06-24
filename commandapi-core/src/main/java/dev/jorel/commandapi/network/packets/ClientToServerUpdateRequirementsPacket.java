@@ -56,4 +56,15 @@ public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket 
 	public <InputChannel> void handle(InputChannel sender, CommandAPIPacketHandler<InputChannel> packetHandler) {
 		packetHandler.handleUpdateRequirementsPacket(sender, this);
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) return false;
+		return obj instanceof ClientToServerUpdateRequirementsPacket;
+	}
 }
