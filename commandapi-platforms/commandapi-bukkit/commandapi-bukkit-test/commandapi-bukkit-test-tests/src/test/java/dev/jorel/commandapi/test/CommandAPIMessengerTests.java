@@ -63,7 +63,7 @@ class CommandAPIMessengerTests extends TestBase {
 
 		// Register test packet for further testing
 		testPacketId = (byte) CommandAPIProtocol.getId(TestPacket.class);
-		if(testPacketId == -1) {
+		if (testPacketId == -1) {
 			testPacketId = (byte) MockPlatform.getFieldAs(CommandAPIProtocol.class, "idToPacket", null, List.class).size();
 			try {
 				Method registerPacket = CommandAPIProtocol.class.getDeclaredMethod("register", Class.class, Function.class);
@@ -129,9 +129,8 @@ class CommandAPIMessengerTests extends TestBase {
 			// Nothing to do
 		}
 	}
-	
-	private static class TestPacket implements CommandAPIPacket  {
 
+	private static class TestPacket implements CommandAPIPacket {
 		public static TestPacket deserialize(ByteArrayDataInput input) {
 			int a = input.readInt();
 			int b = input.readInt();
@@ -163,8 +162,8 @@ class CommandAPIMessengerTests extends TestBase {
 
 		@Override
 		public boolean equals(Object obj) {
-			if(obj == null) return false;
-			if(!(obj instanceof TestPacket other)) return false;
+			if (obj == null) return false;
+			if (!(obj instanceof TestPacket other)) return false;
 			return this.a == other.a && this.b == other.b;
 		}
 	}
