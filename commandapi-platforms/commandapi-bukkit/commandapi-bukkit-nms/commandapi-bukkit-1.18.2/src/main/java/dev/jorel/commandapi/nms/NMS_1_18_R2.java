@@ -86,7 +86,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -164,7 +163,6 @@ import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.gameevent.BlockPositionSource;
-import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -173,21 +171,24 @@ import net.minecraft.world.phys.Vec3;
  * NMS implementation for Minecraft 1.18.2
  */
 @NMSMeta(compatibleWith = "1.18.2")
-@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-@RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
-@RequireField(in = EntityPositionSource.class, name = "sourceEntity", ofType = Optional.class)
+@RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
+@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 public class NMS_1_18_R2 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
+	private static final SafeVarHandle<EntitySelector, Boolean> entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
+	private static final SafeVarHandle<ServerFunctionLibrary, CommandDispatcher<CommandSourceStack>> serverFunctionLibraryDispatcher;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		entitySelectorUsesSelector = SafeVarHandle.ofOrNull(EntitySelector.class, "o", "usesSelector", Boolean.class);
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
+		serverFunctionLibraryDispatcher = SafeVarHandle.ofOrNull(ServerFunctionLibrary.class, "i", "dispatcher", CommandDispatcher.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -398,11 +399,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 		// entity selectors
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
-		try {
-			CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector").set(argument, false);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
-		}
+		entitySelectorUsesSelector.set(argument, false);
 
 		return switch (subType) {
 			case ENTITYSELECTOR_MANY_ENTITIES:
@@ -714,12 +711,7 @@ public class NMS_1_18_R2 extends NMS_Common {
 		serverResources.managers().commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
-		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher")
-					.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 
 		// From this.<MinecraftServer>getMinecraftServer().reloadResources //
 		// Discover new packs

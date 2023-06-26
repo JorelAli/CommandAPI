@@ -75,7 +75,8 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 
 		// We can't use a SafeVarHandle here because we don't have direct access to the
 		//  `com.velocitypowered.proxy.command.VelocityCommandManager` class that holds the field.
-		//  Instead, the class comes from `commandManager.getClass()`
+		//  That only exists in the proxy dependency, but we are using velocity-api.
+		//  However, we can get the class here through `commandManager.getClass()`.
 		Field dispatcherField = CommandAPIHandler.getField(commandManager.getClass(), "dispatcher");
 		try {
 			dispatcher = (CommandDispatcher<CommandSource>) dispatcherField.get(commandManager);

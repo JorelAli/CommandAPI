@@ -160,29 +160,33 @@ import net.minecraft.server.v1_15_R1.Vec3D;
  * NMS implementation for Minecraft 1.15, 1.15.1 and 1.15.2
  */
 @NMSMeta(compatibleWith = { "1.15", "1.15.1", "1.15.2" })
-@RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
-@RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
+@RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
+@RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
 public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
+	private static final SafeVarHandle<EntitySelector, Boolean> entitySelectorCheckPermissions;
 	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
 	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
 	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
+	private static final SafeVarHandle<CraftSound, String> craftSoundMinecraftKey;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		entitySelectorCheckPermissions = SafeVarHandle.ofOrNull(EntitySelector.class, "checkPermissions", "checkPermissions", Boolean.class);
 		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", "c", IBlockData.class);
 		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", "c", ItemStack.class);
 		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", "f", float.class);
 		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
+		craftSoundMinecraftKey = SafeVarHandle.ofOrNull(CraftSound.class, "minecraftKey", "minecraftKey", String.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -530,11 +534,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	@Override
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
-		try {
-			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions", "checkPermissions").set(argument, false);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
-		}
+		entitySelectorCheckPermissions.set(argument, false);
 
 		return switch (subType) {
 			case ENTITYSELECTOR_MANY_ENTITIES:
@@ -838,14 +838,8 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		return switch(subType) {
 			case SOUND_SOUND -> {
 				for (CraftSound sound : CraftSound.values()) {
-					try {
-						if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey", "minecraftKey").get(sound)
-								.equals(soundResource.getKey())) {
-							yield Sound.valueOf(sound.name());
-						}
-					} catch (IllegalArgumentException | IllegalAccessException e1) {
-						e1.printStackTrace();
-						yield null;
+					if(craftSoundMinecraftKey.get(sound).equals(soundResource.getKey())) {
+						yield Sound.valueOf(sound.name());
 					}
 				}
 				yield null;

@@ -26,11 +26,14 @@ import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import com.mojang.brigadier.CommandDispatcher;
+import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.preprocessor.RequireField;
+import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Recipe;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
@@ -42,14 +45,22 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
  * NMS implementation for Minecraft 1.17
  */
 @NMSMeta(compatibleWith = { "1.17" })
+@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 public class NMS_1_17 extends NMS_1_17_Common {
+
+	private static final SafeVarHandle<ServerFunctionLibrary, CommandDispatcher<CommandSourceStack>> serverFunctionLibraryDispatcher;
+
+	// Compute all var handles all in one go so we don't do this during main server
+	// runtime
+	static {
+		serverFunctionLibraryDispatcher = SafeVarHandle.ofOrNull(ServerFunctionLibrary.class, "i", "dispatcher", CommandDispatcher.class);
+	}
 
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.17" };
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
@@ -62,12 +73,7 @@ public class NMS_1_17 extends NMS_1_17_Common {
 		serverResources.commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
-		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher")
-				.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		serverFunctionLibraryDispatcher.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
 
 		// Construct the new CompletableFuture that now uses our updated serverResources
 		CompletableFuture<?> unitCompletableFuture = ((ReloadableResourceManager) serverResources.getResourceManager())
