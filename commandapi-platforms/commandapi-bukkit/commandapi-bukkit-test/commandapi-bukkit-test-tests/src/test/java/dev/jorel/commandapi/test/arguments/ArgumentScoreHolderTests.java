@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,11 +65,17 @@ class ArgumentScoreHolderTests extends TestBase {
 		assertEquals(uuid.toString(), results.get());
 
 		// /test @e[type=player,scores={deaths=..9},limit=1]
-		// TODO: I don't know why this fails... I'll have to look into it!
+		// This should fail because the user doesn't have permission
 		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9},limit=1]", "Selector not allowed");
 
 		// /test @e[type=player,scores={deaths=..9}]
 		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9}]", "Only one entity is allowed, but the provided selector allows more than one");
+
+		player.setOp(true);
+		
+		// /test @e[type=player,scores={deaths=..9},limit=1]
+		// TODO: Set an entity
+		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9},limit=1]", "No entity was found");
 
 		assertNoMoreResults(results);
 	}
@@ -97,12 +104,22 @@ class ArgumentScoreHolderTests extends TestBase {
 		assertIterableEquals(Set.of(uuid.toString()), results.get());
 
 		// /test @e[type=player,scores={deaths=..9},limit=1]
-		// TODO: I don't know why this fails... I'll have to look into it!
+		// This should fail because the user doesn't have permission
 		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9},limit=1]", "Selector not allowed");
 
 		// /test @e[type=player,scores={deaths=..9}]
-		// TODO: I don't know why this fails... I'll have to look into it!
+		// This should fail because the user doesn't have permission
 		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9}]", "Selector not allowed");
+
+		player.setOp(true);
+
+		// /test @e[type=player,scores={deaths=..9},limit=1]
+		// TODO: Set an entity
+		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9},limit=1]", "No entity was found");
+
+		// /test @e[type=player,scores={deaths=..9}]
+		// TODO: Set an entity
+		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9}]", "No entity was found");
 
 		assertNoMoreResults(results);
 	}
