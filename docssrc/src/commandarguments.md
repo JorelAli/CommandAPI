@@ -6,18 +6,18 @@ While the argument array just gives the possibility to access the arguments via 
 
 - [Access the inner structure directly](#access-the-inner-structure-directly)
 - [What terms are used?](#what-terms-are-used)
-    - [`nodeName`](#nodename)
-    - [`raw argument`](#raw-argument)
-    - [`unsafe argument`](#unsafe-argument)
+  - [`nodeName`](#nodename)
+  - [`raw argument`](#raw-argument)
+  - [`unsafe argument`](#unsafe-argument)
 - [Access arguments](#access-arguments)
-    - [Access arguments by node name](#access-arguments-by-node-name)
-    - [Access arguments by index](#access-arguments-by-index)
+  - [Access arguments by node name](#access-arguments-by-node-name)
+  - [Access arguments by index](#access-arguments-by-index)
 - [Access raw arguments](#access-raw-arguments)
-    - [Access raw arguments by node name](#access-raw-arguments-by-node-name)
-    - [Access raw arguments by index](#access-raw-arguments-by-index)
+  - [Access raw arguments by node name](#access-raw-arguments-by-node-name)
+  - [Access raw arguments by index](#access-raw-arguments-by-index)
 - [Access unsafe arguments](#access-unsafe-arguments)
-    - [Access arguments by node name](#access-arguments-by-node-name-1)
-    - [Access arguments by index](#access-arguments-by-index-1)
+  - [Access arguments by node name](#access-arguments-by-node-name-1)
+  - [Access arguments by index](#access-arguments-by-index-1)
 
 
 ATTENTION!!!!! Every executable and generated documentation has to be deleted before committing anything!
@@ -99,10 +99,10 @@ Object get(String nodeName);
 Optional<Object> getOptional(String nodeName);
 ```
 
-There is no downside of using one method over the other but the `CommandArguments#getOptional(String)` method is especially great when you have an optional argument in your command.
+There is no downside of using one method over the other but the `CommandArguments#getOptional(String)` method is especially great when you have optional arguments in your command.
 
 ### Access arguments by index
-Accessing arguments by their index as the original way of accessing arguments. However, we recommend to [access arguments by node name](#access-arguments-by-node-name).
+Accessing arguments by their index is the original way of accessing arguments. However, we recommend to [access arguments by node name](#access-arguments-by-node-name).
 
 Similar to the two methods of accessing arguments by their node name, there also are two methods you can use to access arguments by their index:
 
@@ -120,15 +120,65 @@ Optional<Object> getOptional(int index);
 -----
 
 ## Access raw arguments
+Raw arguments are accessed basically the same way you would [access arguments](#access-arguments). You can access them by their node name and their index in the argument array.
 
 ### Access raw arguments by node name
+Accessing raw arguments by their node name is the recommended way of doing it.
+
+To access raw arguments by their node name, you can use these methods:
+
+```java
+String getRaw(String nodeName);
+Optional<String> getRawOptional(String nodeName);
+```
 
 ### Access raw arguments by index
+Of course, if you don't want to access raw arguments by their node name, we also provide the option to access them by index with these methods:
+
+```java
+String getRaw(int index);
+Optional<String> getRawOptional(int index);
+```
+
+<div class="example">
+
+### Example - Access raw arguments by node name and index
+
+</div>
 
 -----
 
 ## Access unsafe arguments
+Accessing unsafe arguments is a nice way to shorten your code as you do not need to cast the argument to its corresponding type.
+
+Here, you might notice the usage of several `getOrDefaultUnchecked` methods and not the `getOptionalUnchecked` methods you might have expected.
+This is the case because Java's type inference only goes one level deep which cases issues when calling a method on the `Optional` that is returned to provide a default value.
+That is not a problem when [accessing arguments](#access-arguments) because here you are expected to cast the argument anyway but if you used the `getOptionalUnchecked` method you still would have to provide a type which is not ideal when you don't want to cast arguments.
+
+Unsafe arguments can also be accessed by their node names and their indices.
 
 ### Access arguments by node name
+Unsafe arguments can also be accessed by node name which, again, is the recommended way of doing it.
+
+In the case of unsafe arguments, the CommandAPI doesn't provide two but instead three methods to access them:
+
+```java
+T getUnchecked(String nodeName);
+T getOrDefaultUnchecked(String nodeName, T defaultValue);
+T getOrDefaultUnchecked(String nodeName, Supplier<T> defaultValue);
+```
 
 ### Access arguments by index
+If you want to access unsafe arguments by index, you can do that by using these methods:
+
+```java
+T getUnchecked(int nodeName);
+T getOrDefaultUnchecked(int nodeName, T defaultValue);
+T getOrDefaultUnchecked(int nodeName, Supplier<T> defaultValue);
+```
+
+<div class="example">
+
+### Example - Access unsafe arguments by node name and index
+
+</div>
