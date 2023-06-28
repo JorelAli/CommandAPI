@@ -35,7 +35,7 @@ public class CommandArguments {
 		this.rawArgsMap = rawArgsMap;
 		this.fullInput = fullInput;
 	}
-	
+
 	// Access the inner structure directly
 
 	/**
@@ -64,6 +64,15 @@ public class CommandArguments {
 	 */
 	public Map<String, String> rawArgsMap() {
 		return Collections.unmodifiableMap(rawArgsMap);
+	}
+
+	/**
+	 * This returns the raw command string a player has entered
+	 *
+	 * @return The raw command string a player has entered
+	 */
+	public String getFullInput() {
+		return fullInput;
 	}
 
 	/**
@@ -105,49 +114,12 @@ public class CommandArguments {
 	}
 
 	/**
-	 * Returns a raw argument by its position
-	 *
-	 * @param index The position of this argument
-	 * @return An argument which is placed at the given index, or {@code null} if the provided index does not point to an argument.
-	 */
-	@Nullable
-	public String getRaw(int index) {
-		if (args.length <= index) {
-			return null;
-		} else {
-			return rawArgs[index];
-		}
-	}
-
-	/**
-	 * Returns a raw argument by its node name
-	 *
-	 * @param nodeName The node name of this argument. This was set when initializing an argument
-	 * @return An argument which has the given node name. Can be null if <code>nodeName</code> was not found.
-	 */
-	@Nullable
-	public String getRaw(String nodeName) {
-		return rawArgsMap.get(nodeName);
-	}
-
-	/**
-	 * This returns the raw command string a player has entered
-	 *
-	 * @return The raw command string a player has entered
-	 */
-	public String getFullInput() {
-		return fullInput;
-	}
-
-	/**
 	 * Returns an argument by its index
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public Object getOrDefault(int index, Object defaultValue) {
 		if (args.length <= index) {
 			return defaultValue;
@@ -161,10 +133,8 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public Object getOrDefault(String nodeName, Object defaultValue) {
 		return argsMap.getOrDefault(nodeName, defaultValue);
 	}
@@ -174,10 +144,8 @@ public class CommandArguments {
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public Object getOrDefault(int index, Supplier<?> defaultValue) {
 		if (args.length <= index) {
 			return defaultValue.get();
@@ -191,10 +159,8 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptional(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public Object getOrDefault(String nodeName, Supplier<?> defaultValue) {
 		return argsMap.getOrDefault(nodeName, defaultValue.get());
 	}
@@ -227,13 +193,91 @@ public class CommandArguments {
 	}
 
 	/**
+	 * Returns a raw argument by its position
+	 *
+	 * @param index The position of this argument
+	 * @return An argument which is placed at the given index, or {@code null} if the provided index does not point to an argument.
+	 */
+	@Nullable
+	public String getRaw(int index) {
+		if (rawArgs.length <= index) {
+			return null;
+		} else {
+			return rawArgs[index];
+		}
+	}
+
+	/**
+	 * Returns a raw argument by its node name
+	 *
+	 * @param nodeName The node name of this argument. This was set when initializing an argument
+	 * @return A raw argument which has the given node name. Can be null if <code>nodeName</code> was not found.
+	 */
+	@Nullable
+	public String getRaw(String nodeName) {
+		return rawArgsMap.get(nodeName);
+	}
+
+	/**
+	 * Returns a raw argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @param defaultValue The String returned if the raw argument is not existent
+	 * @return A raw argument which is placed at the given index, or the provided default value
+	 */
+	public String getOrDefaultRaw(int index, String defaultValue) {
+		if (rawArgs.length <= index) {
+			return defaultValue;
+		} else {
+			return rawArgs[index];
+		}
+	}
+
+	/**
+	 * Returns a raw argument by its node name
+	 *
+	 * @param nodeName     The node name of this argument. This was set when initializing an argument
+	 * @param defaultValue The String returned if the raw argument was not found.
+	 * @return A raw argument with the specified node name or the provided default value
+	 */
+	public String getOrDefaultRaw(String nodeName, String defaultValue) {
+		return rawArgsMap.getOrDefault(nodeName, defaultValue);
+	}
+
+	/**
+	 * Returns a raw argument by its index
+	 *
+	 * @param index The position of this argument
+	 * @param defaultValue The String returned if the raw argument is not existent
+	 * @return A raw argument which is placed at the given index, or the provided default value
+	 */
+	public String getOrDefaultRaw(int index, Supplier<String> defaultValue) {
+		if (rawArgs.length <= index) {
+			return defaultValue.get();
+		} else {
+			return rawArgs[index];
+		}
+	}
+
+	/**
+	 * Returns a raw argument by its node name
+	 *
+	 * @param nodeName     The node name of this raw argument. This was set when initializing an argument
+	 * @param defaultValue The String returned if the raw argument was not found.
+	 * @return A raw argument with the specified node name or the provided default value
+	 */
+	public String getOrDefaultRaw(String nodeName, Supplier<String> defaultValue) {
+		return rawArgsMap.getOrDefault(nodeName, defaultValue.get());
+	}
+
+	/**
 	 * Returns an <code>Optional</code> holding the raw argument by its index
 	 *
 	 * @param index The position of this argument
 	 * @return An optional holding the raw argument which is placed at the given index, or an empty optional if index is invalid
 	 */
 	public Optional<String> getRawOptional(int index) {
-		if (args.length <= index) {
+		if (rawArgs.length <= index) {
 			return Optional.empty();
 		} else {
 			return Optional.of(rawArgs[index]);
@@ -302,10 +346,8 @@ public class CommandArguments {
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public <T> T getOrDefaultUnchecked(int index, T defaultValue) {
 		return (T) getOrDefault(index, defaultValue);
 	}
@@ -315,10 +357,8 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public <T> T getOrDefaultUnchecked(String nodeName, T defaultValue) {
 		return (T) getOrDefault(nodeName, defaultValue);
 	}
@@ -328,10 +368,8 @@ public class CommandArguments {
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The Object returned if the argument is not existent
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(int)}
 	 * @return An argument which is placed at the given index, or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public <T> T getOrDefaultUnchecked(int index, Supplier<T> defaultValue) {
 		return (T) getOrDefault(index, defaultValue);
 	}
@@ -341,10 +379,8 @@ public class CommandArguments {
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The Object returned if the argument was not found.
-	 * @deprecated This method has been deprecated! Please use {@link CommandArguments#getOptionalUnchecked(String)}
 	 * @return The argument with the specified node name or the provided default value
 	 */
-	@Deprecated(since = "9.0.1", forRemoval = true)
 	public <T> T getOrDefaultUnchecked(String nodeName, Supplier<T> defaultValue) {
 		return (T) getOrDefault(nodeName, defaultValue);
 	}
