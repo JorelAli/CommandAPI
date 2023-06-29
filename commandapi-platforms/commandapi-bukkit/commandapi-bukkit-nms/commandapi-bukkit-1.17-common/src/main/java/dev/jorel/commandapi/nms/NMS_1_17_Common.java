@@ -22,6 +22,7 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -160,14 +162,15 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.NAME_CHANGE
 public abstract class NMS_1_17_Common extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
-	private static final SafeVarHandle<EntitySelector, Boolean> entitySelectorUsesSelector;
+	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
-		entitySelectorUsesSelector = SafeVarHandle.ofOrNull(EntitySelector.class, "o", "usesSelector", Boolean.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector");
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
@@ -339,7 +342,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		// entity selectors
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
-		entitySelectorUsesSelector.set(argument, false);
+		try {
+			entitySelectorUsesSelector.set(argument, false);
+		} catch (IllegalAccessException e) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
+		}
 
 		return switch (subType) {
 			case ENTITYSELECTOR_MANY_ENTITIES:
