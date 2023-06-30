@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -192,33 +193,37 @@ import net.minecraft.server.v1_16_R3.Vec3D;
  * NMS implementation for Minecraft 1.16.4
  */
 @NMSMeta(compatibleWith = "1.16.4")
-@RequireField(in = DataPackResources.class, name = "i", ofType = CustomFunctionManager.class)
-@RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
-@RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
-@RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
+@RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
+@RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
+@RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
 public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
-	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
+	private static final Field entitySelectorCheckPermissions;
 	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
 	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
 	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
+	private static final SafeVarHandle<CustomFunctionManager, CommandDispatcher<CommandListenerWrapper>> customFunctionManagerBrigadierDispatcher;
+	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", "b", IReloadableResourceManager.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		entitySelectorCheckPermissions = CommandAPIHandler.getField(EntitySelector.class, "checkPermissions", "checkPermissions");
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
 		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", "c", IBlockData.class);
 		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", "c", ItemStack.class);
 		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "g", "g", float.class);
 		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
+		customFunctionManagerBrigadierDispatcher = SafeVarHandle.ofOrNull(CustomFunctionManager.class, "h", "h", CommandDispatcher.class);
+		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", "b", IReloadableResourceManager.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -510,9 +515,9 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions", "checkPermissions").set(argument, false);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			entitySelectorCheckPermissions.set(argument, false);
+		} catch (IllegalAccessException e) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
 
 		return switch (subType) {
@@ -895,14 +900,8 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		DataPackResources datapackResources = this.<MinecraftServer>getMinecraftServer().dataPackResources;
 		datapackResources.commandDispatcher = this.<MinecraftServer>getMinecraftServer().getCommandDispatcher();
 
-		// Update the CustomFunctionManager for the datapackResources which now has the
-		// new commandDispatcher
-		try {
-			CommandAPIHandler.getField(CustomFunctionManager.class, "h", "h").set(datapackResources.a(),
-					getBrigadierDispatcher());
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
-		}
+		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
+		customFunctionManagerBrigadierDispatcher.set(datapackResources.a(), getBrigadierDispatcher());
 
 		// Construct the new CompletableFuture that now uses our updated
 		// datapackResources

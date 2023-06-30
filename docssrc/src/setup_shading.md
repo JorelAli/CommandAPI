@@ -240,7 +240,7 @@ shadowJar {
 ```kotlin,build.gradle.kts
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.0.4")
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.0.4"))
     }
 
     // TODO: Change this to my own package name

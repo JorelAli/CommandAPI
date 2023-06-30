@@ -22,6 +22,7 @@ package dev.jorel.commandapi.nms;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,6 +33,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.preprocessor.Unimplemented;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -79,7 +82,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -133,7 +135,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ColumnPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -143,9 +144,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.gameevent.BlockPositionSource;
-import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.NAME_CHANGED;
 
 // Mojang-Mapped reflection
 /**
@@ -154,20 +156,21 @@ import net.minecraft.world.phys.Vec3;
  * to two different fields (aC or aB) for 1.17 and 1.17.1 respectively. This
  * common implementation is built those two ways by the corresponding modules.
  */
-@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-@RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
-@RequireField(in = EntityPositionSource.class, name = "sourceEntity", ofType = Optional.class)
+@RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 public abstract class NMS_1_17_Common extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
+	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector");
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 	}
 
@@ -340,9 +343,9 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector").set(argument, false);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			entitySelectorUsesSelector.set(argument, false);
+		} catch (IllegalAccessException e) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
 
 		return switch (subType) {
@@ -647,6 +650,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	@Unimplemented(because = NAME_CHANGED, info = "Unmapped as MinecraftServer.resources", from = "aB (1.17)", to = "aC (1.17.1)")
 	public abstract void reloadDataPacks();
 
 	@Override

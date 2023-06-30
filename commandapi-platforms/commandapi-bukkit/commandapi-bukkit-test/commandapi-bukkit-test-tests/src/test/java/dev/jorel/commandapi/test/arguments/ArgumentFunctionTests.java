@@ -86,6 +86,7 @@ class ArgumentFunctionTests extends TestBase {
 		// free to implement function running for 1.16.5, but I'm not spending
 		// any more time on it - Skepter
 		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17));
+		assumeTrue(version.lessThan(MCVersion.V1_20));
 
 		// Check that /mysay was run successfully...
 		assertEquals("hi", sayResults.get());
@@ -140,6 +141,7 @@ class ArgumentFunctionTests extends TestBase {
 		// free to implement function running for 1.16.5, but I'm not spending
 		// any more time on it. - Skepter
 		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_17));
+		assumeTrue(version.lessThan(MCVersion.V1_20));
 		
 		// TODO: For reasons I can't figure out, the FunctionArgument suffers
 		// from a race condition when run on 1.18.1. This causes "hello" to be

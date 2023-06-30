@@ -69,6 +69,7 @@ import net.minecraft.server.v1_16_R3.GameProfilerDisabled;
 import net.minecraft.server.v1_16_R3.GameRules;
 import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
+import net.minecraft.server.v1_16_R3.IScoreboardCriteria;
 import net.minecraft.server.v1_16_R3.LootTableRegistry;
 import net.minecraft.server.v1_16_R3.LootTables;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
@@ -77,6 +78,7 @@ import net.minecraft.server.v1_16_R3.MobEffectList;
 import net.minecraft.server.v1_16_R3.PlayerList;
 import net.minecraft.server.v1_16_R3.Recipes;
 import net.minecraft.server.v1_16_R3.ResourceKey;
+import net.minecraft.server.v1_16_R3.ScoreboardObjective;
 import net.minecraft.server.v1_16_R3.ScoreboardServer;
 import net.minecraft.server.v1_16_R3.ScoreboardTeam;
 import net.minecraft.server.v1_16_R3.SharedConstants;
@@ -417,6 +419,20 @@ public class MockNMS extends Enums {
 				return null;
 			} else {
 				return new ScoreboardTeam(scoreboardServerMock, teamName);
+			}
+		});
+		Mockito.when(scoreboardServerMock.getObjective(anyString())).thenAnswer(invocation -> { // Scoreboard#getObjective
+			String objectiveName = invocation.getArgument(0);
+			org.bukkit.scoreboard.Objective bukkitObjective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+			if (bukkitObjective == null) {
+				return null;
+			} else {
+				return new ScoreboardObjective(scoreboardServerMock, objectiveName, IScoreboardCriteria.a(bukkitObjective.getCriteria()).get(), new ChatComponentText(bukkitObjective.getDisplayName()), switch(bukkitObjective.getRenderType()) {
+					case HEARTS:
+						yield IScoreboardCriteria.EnumScoreboardHealthDisplay.HEARTS;
+					case INTEGER:
+						yield IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER;
+				});
 			}
 		});
 		Mockito.when(minecraftServerMock.getScoreboard()).thenReturn(scoreboardServerMock); // MinecraftServer#getScoreboard

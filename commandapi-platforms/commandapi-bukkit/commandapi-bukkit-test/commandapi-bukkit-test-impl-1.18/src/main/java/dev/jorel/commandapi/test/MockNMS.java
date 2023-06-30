@@ -89,7 +89,10 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType;
 
 public class MockNMS extends Enums {
 
@@ -415,6 +418,20 @@ public class MockNMS extends Enums {
 				return null;
 			} else {
 				return new PlayerTeam(scoreboardServerMock, teamName);
+			}
+		});
+		Mockito.when(scoreboardServerMock.getObjective(anyString())).thenAnswer(invocation -> { // Scoreboard#getObjective
+			String objectiveName = invocation.getArgument(0);
+			org.bukkit.scoreboard.Objective bukkitObjective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+			if (bukkitObjective == null) {
+				return null;
+			} else {
+				return new Objective(scoreboardServerMock, objectiveName, ObjectiveCriteria.byName(bukkitObjective.getCriteria()).get(), new TextComponent(bukkitObjective.getDisplayName()), switch(bukkitObjective.getRenderType()) {
+					case HEARTS:
+						yield RenderType.HEARTS;
+					case INTEGER:
+						yield RenderType.INTEGER;
+				});
 			}
 		});
 		Mockito.when(minecraftServerMock.getScoreboard()).thenReturn(scoreboardServerMock); // MinecraftServer#getScoreboard

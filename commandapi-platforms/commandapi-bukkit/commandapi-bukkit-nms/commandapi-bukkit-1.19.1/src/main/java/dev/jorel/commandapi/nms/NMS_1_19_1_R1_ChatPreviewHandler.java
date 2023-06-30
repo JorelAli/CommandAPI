@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.nms;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.PacketSendListener;
@@ -15,23 +15,26 @@ import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 
-@RequireField(in = ServerGamePacketListenerImpl.class, name = "chatPreviewCache", ofType = ChatPreviewCache.class)
 @RequireField(in = ServerGamePacketListenerImpl.class, name = "chatPreviewThrottler", ofType = ChatPreviewThrottler.class)
+@RequireField(in = ServerGamePacketListenerImpl.class, name = "chatPreviewCache", ofType = ChatPreviewCache.class)
 public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPreviewHandler {
+
+	private static final SafeVarHandle<ServerGamePacketListenerImpl, ChatPreviewThrottler> packetListenerPreviewThrottler;
+	private static final SafeVarHandle<ServerGamePacketListenerImpl, ChatPreviewCache> packetListenerPreviewCache;
+
+	static {
+		packetListenerPreviewThrottler = SafeVarHandle.ofOrNull(ServerGamePacketListenerImpl.class, "M", "chatPreviewThrottler", ChatPreviewThrottler.class);
+		packetListenerPreviewCache = SafeVarHandle.ofOrNull(ServerGamePacketListenerImpl.class, "L", "chatPreviewCache", ChatPreviewCache.class);
+	}
+
 	ChatPreviewThrottler throttler;
 
 	public NMS_1_19_1_R1_ChatPreviewHandler(CommandAPIBukkit<CommandSourceStack> platform, Plugin plugin, Player player) {
 		super(platform, plugin, player);
 
-		try {
-			Field f = CommandAPIHandler.getField(ServerGamePacketListenerImpl.class, "M", "chatPreviewThrottler");
-			throttler = (ChatPreviewThrottler) f.get(((CraftPlayer) player).getHandle().connection);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		throttler = packetListenerPreviewThrottler.get(((CraftPlayer) player).getHandle().connection);
 	}
 
 	@Override
@@ -47,14 +50,8 @@ public class NMS_1_19_1_R1_ChatPreviewHandler extends NMS_1_19_Common_ChatPrevie
 			// Update player's ChatPreviewCache
 			result.thenAcceptAsync(component -> {
 				if(component == null) return;
-				try {
-					Field f = ServerGamePacketListenerImpl.class.getDeclaredField("L"); // chatPreviewCache TODO: Unoptimized reflection access here. Should use CommandAPIHandler instead
-					f.setAccessible(true);
-					ChatPreviewCache c = (ChatPreviewCache) f.get(((CraftPlayer) player).getHandle().connection);
-					c.set(chatPreview.query().substring(1), component);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				ChatPreviewCache c = packetListenerPreviewCache.get(((CraftPlayer) player).getHandle().connection);
+				c.set(chatPreview.query().substring(1), component);
 			});
 
 			// Send ChatPreviewPacket using the throttler

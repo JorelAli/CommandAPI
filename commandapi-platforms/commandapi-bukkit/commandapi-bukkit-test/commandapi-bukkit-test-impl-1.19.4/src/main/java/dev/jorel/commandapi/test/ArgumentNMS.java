@@ -53,6 +53,8 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.core.Holder;
@@ -86,12 +88,20 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockPredicate() {
-		return baseNMS._ArgumentBlockPredicate();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.BLOCK.asLookup()); // Registry.BLOCK
+		return BlockPredicateArgument.blockPredicate(buildContextMock);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockState() {
-		return baseNMS._ArgumentBlockState();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.BLOCK.asLookup()); // Registry.BLOCK
+		return BlockStateArgument.block(buildContextMock);
 	}
 
 	@Override

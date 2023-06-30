@@ -50,6 +50,7 @@ import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.core.HolderLookup;
@@ -80,12 +81,20 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockPredicate() {
-		return baseNMS._ArgumentBlockPredicate();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(HolderLookup.forRegistry(Registry.BLOCK)); // Registry.BLOCK
+		return net.minecraft.commands.arguments.blocks.BlockPredicateArgument.blockPredicate(buildContextMock);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockState() {
-		return baseNMS._ArgumentBlockState();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(HolderLookup.forRegistry(Registry.BLOCK)); // Registry.BLOCK
+		return BlockStateArgument.block(buildContextMock);
 	}
 
 	@Override
