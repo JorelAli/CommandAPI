@@ -72,7 +72,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	private final String nodeName;
 	private final ArgumentType<?> rawType;
-	private String rawArgumentString = "";
 
 	/**
 	 * Constructs an argument with a given NMS/brigadier type.

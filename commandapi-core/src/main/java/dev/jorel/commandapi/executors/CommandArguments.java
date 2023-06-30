@@ -291,7 +291,7 @@ public class CommandArguments {
 	 * @return An optional holding the argument with the specified node name or an empty optional if the node name was not found
 	 */
 	public Optional<String> getRawOptional(String nodeName) {
-		if (!argsMap.containsKey(nodeName)) {
+		if (!rawArgsMap.containsKey(nodeName)) {
 			return Optional.empty();
 		}
 		return Optional.of(rawArgsMap.get(nodeName));

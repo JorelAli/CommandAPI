@@ -79,7 +79,7 @@ public class SuggestionsBranch<CommandSender> {
 
 			if (currentSuggestion != null) {
 				// Validate argument on the path
-				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, new CommandArguments(processedArguments.toArray(), new HashMap<>(), processedArguments.toArray(new String[0]), new LinkedHashMap<>(), currentInput.toString()), currentInput.toString(), "");
+				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, new CommandArguments(processedArguments.toArray(), new LinkedHashMap<>(), processedArguments.toArray(new String[0]), new LinkedHashMap<>(), currentInput.toString()), currentInput.toString(), "");
 				SuggestionsBuilder builder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
 				currentSuggestion.suggest(info, builder);
 				if (builder.build().getList().stream().map(Suggestion::getText).noneMatch(currentArgument::equals)) {
@@ -184,7 +184,7 @@ public class SuggestionsBranch<CommandSender> {
 
 			if (currentSuggestion != null) {
 				// Validate argument on the path
-				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, new CommandArguments(processedArguments.toArray(), new HashMap<>(), processedArguments.toArray(new String[0]), new LinkedHashMap<>(), currentInput.toString()), currentInput.toString(), "");
+				SuggestionInfo<CommandSender> info = new SuggestionInfo<>(sender, new CommandArguments(processedArguments.toArray(), new LinkedHashMap<>(), processedArguments.toArray(new String[0]), new LinkedHashMap<>(), currentInput.toString()), currentInput.toString(), "");
 				SuggestionsBuilder builder = new SuggestionsBuilder(currentInput.toString(), currentInput.length());
 				try {
 					currentSuggestion.suggest(info, builder);
