@@ -40,7 +40,7 @@ Object[] args();                  // Returns the argument array
 Map<String, Object> argsMap();    // Returns an unmodifiable map containing the arguments mapped to their node names
 String[] rawArgs();               // Returns the raw argument array
 Map<String, String> rawArgsMap(); // Returns an unmodifiable map containing the raw arguments mapped to their node names
-String fullInput();               // Returns the full command string (including the /)
+String getFullInput();               // Returns the full command string (including the /)
 ```
 
 Additionally, the `CommandArguments` class has one more method that isn't directly backed by a field and returns the amount of arguments for a command:
@@ -99,23 +99,25 @@ You can choose to access arguments by their node name or by their index.
 
 Accessing arguments by their node name is the recommended way of accessing arguments.
 
-There are two methods you can use to access arguments by their node name:
+There are four methods you can use to access arguments by their node name:
 
 ```java
 Object get(String nodeName);
+Object getOrDefault(String nodeName, Object defaultValue);
+Object getOrDefault(String nodeName, Supplier<?> defaultValue);
 Optional<Object> getOptional(String nodeName);
 ```
-
-There is no downside of using one method over the other but the `CommandArguments#getOptional(String)` method is especially great when you have optional arguments in your command.
 
 ### Access arguments by index
 
 Accessing arguments by their index is the original way of accessing arguments. However, we recommend to [access arguments by node name](#access-arguments-by-node-name).
 
-Similar to the two methods of accessing arguments by their node name, there also are two methods you can use to access arguments by their index:
+Similar to the four methods of accessing arguments by their node name, there also are four methods you can use to access arguments by their index:
 
 ```java
 Object get(int index);
+Object getOrDefault(int index, Object defaultValue);
+Object getOrDefault(int index, Supplier<?> defaultValue);
 Optional<Object> getOptional(int index);
 ```
 
@@ -139,6 +141,8 @@ To access raw arguments by their node name, you can use these methods:
 
 ```java
 String getRaw(String nodeName);
+String getOrDefaultRaw(String nodeName, String defaultValue);
+String getOrDefaultRaw(String nodeName, Supplier<String> defaultValue);
 Optional<String> getRawOptional(String nodeName);
 ```
 
@@ -148,6 +152,8 @@ Of course, if you don't want to access raw arguments by their node name, we also
 
 ```java
 String getRaw(int index);
+String getOrDefaultRaw(int index, String defaultValue);
+String getOrDefaultRaw(int index, Supplier<String> defaultValue);
 Optional<String> getRawOptional(int index);
 ```
 
@@ -163,22 +169,19 @@ Optional<String> getRawOptional(int index);
 
 Accessing unsafe arguments is a nice way to shorten your code as you do not need to cast the argument to its corresponding type.
 
-Here, you might notice the usage of several `getOrDefaultUnchecked` methods and not the `getOptionalUnchecked` methods you might have expected.
-This is the case because Java's type inference only goes one level deep which cases issues when calling a method on the `Optional` that is returned to provide a default value.
-That is not a problem when [accessing arguments](#access-arguments) because here you are expected to cast the argument anyway but if you used the `getOptionalUnchecked` method you still would have to provide a type which is not ideal when you don't want to cast arguments.
-
 Unsafe arguments can also be accessed by their node names and their indices.
 
 ### Access arguments by node name
 
 Unsafe arguments can also be accessed by node name which, again, is the recommended way of doing it.
 
-In the case of unsafe arguments, the CommandAPI doesn't provide two but instead three methods to access them:
+Use these methods when accessing unsafe arguments by their node name:
 
 ```java
 T getUnchecked(String nodeName);
 T getOrDefaultUnchecked(String nodeName, T defaultValue);
 T getOrDefaultUnchecked(String nodeName, Supplier<T> defaultValue);
+Optional<T> getOptionalUnchecked(String nodeName);
 ```
 
 ### Access arguments by index
@@ -186,9 +189,10 @@ T getOrDefaultUnchecked(String nodeName, Supplier<T> defaultValue);
 If you want to access unsafe arguments by index, you can do that by using these methods:
 
 ```java
-T getUnchecked(int nodeName);
-T getOrDefaultUnchecked(int nodeName, T defaultValue);
-T getOrDefaultUnchecked(int nodeName, Supplier<T> defaultValue);
+T getUnchecked(int index);
+T getOrDefaultUnchecked(int index, T defaultValue);
+T getOrDefaultUnchecked(int index, Supplier<T> defaultValue);
+Optional<T> getOptionalUnchecked(int index);
 ```
 
 <div class="example">
