@@ -1,6 +1,6 @@
 # Normal command executors
 
-Command executors are of the following format, where `sender` is a [`CommandSender`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html), and `args` is a `CommandArguments` object, which represents arguments which are parsed by the CommandAPI.
+Command executors are of the following format, where `sender` is a [`CommandSender`](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/command/CommandSender.html), and `args` is a [`CommandArguments`](./commandarguments.md) object, which represents arguments which are parsed by the CommandAPI.
 
 ```java
 new CommandAPICommand("...")

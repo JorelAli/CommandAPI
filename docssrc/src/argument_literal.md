@@ -30,7 +30,7 @@ There is a simpler alternative to the `LiteralArgument` class! Instead of having
 
 ## Literal arguments vs regular arguments
 
-Unlike regular arguments that are shown in this chapter, the literal argument is _technically_ not an argument. Due to this fact, literal arguments are [unlisted](./listed.md) by default. In other words, **the literal argument is not present in the `CommandArguments args` for the command declaration.**
+Unlike regular arguments that are shown in this chapter, the literal argument is _technically_ not an argument. Due to this fact, literal arguments are [unlisted](./listed.md) by default. In other words, **the literal argument is not present in the [`CommandArguments args`](./commandarguments.md) for the command declaration.**
 
 <div class="example">
 

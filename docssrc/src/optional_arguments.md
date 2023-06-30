@@ -78,7 +78,7 @@ However, calling `withOptionalArguments` is safer because it makes sure that the
 
 ## Avoiding null values
 
-Previously, we've looked at how to handle null values. To make all of this easier, the CommandAPI implements multiple `getOptional()` methods for `CommandArguments`:
+Previously, we've looked at how to handle null values. To make all of this easier, the CommandAPI implements multiple `getOptional()` methods for [`CommandArguments`](./commandarguments.md):
 
 <div class="warning">
 
