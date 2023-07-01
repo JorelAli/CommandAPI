@@ -24,6 +24,10 @@ withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adv
 
 </div>
 
+### CommandArguments changes
+
+For 9.0.4 all deprecated methods are no longer deprecated. To learn about all the methods now available, refer to the [CommandArguments](./commandarguments.md) page.
+
 ## From 9.0.1 to 9.0.2
 
 ### MultiLiteralArgument and LiteralArgument changes

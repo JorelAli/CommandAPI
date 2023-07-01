@@ -40,6 +40,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 9.0.3 \\(\rightarrow\\) 9.0.4
 
 - Updates [Multi literal arguments](./argument_multiliteral.md) page to mention new `MultiLiteralArgument` constructor
+- Adds [CommandArguments](./commandarguments.md) page to explain the `CommandArguments` class introduced in 9.0.0
 
 ### Documentation changes 9.0.2 \\(\rightarrow\\) 9.0.3
 
