@@ -5,19 +5,9 @@ The `CommandArguments` class was introduced in CommandAPI 9.0.0 and provides a m
 While the argument array just gives the possibility to access the arguments via the array notation (`args[0]`), the `CommandArguments` class offers much more, including:
 
 - [Access the inner structure directly](#access-the-inner-structure-directly)
-- [What terms are used?](#what-terms-are-used)
-  - [`nodeName`](#nodename)
-  - [`raw argument`](#raw-argument)
-  - [`unsafe argument`](#unsafe-argument)
 - [Access arguments](#access-arguments)
-  - [Access arguments by node name](#access-arguments-by-node-name)
-  - [Access arguments by index](#access-arguments-by-index)
 - [Access raw arguments](#access-raw-arguments)
-  - [Access raw arguments by node name](#access-raw-arguments-by-node-name)
-  - [Access raw arguments by index](#access-raw-arguments-by-index)
 - [Access unsafe arguments](#access-unsafe-arguments)
-  - [Access arguments by node name](#access-arguments-by-node-name-1)
-  - [Access arguments by index](#access-arguments-by-index-1)
 
 ATTENTION!!!!! Every executable and generated documentation has to be deleted before committing anything!
 
@@ -25,67 +15,46 @@ ATTENTION!!!!! Every executable and generated documentation has to be deleted be
 
 ## Access the inner structure directly
 
-To provide arguments, the `CommandArguments` class stores:
+To access the inner structure of the `CommandArguments` class directly, it provides various methods which you can learn about below:
 
-- a `Object[]` of parsed arguments
-- a `Map<String, Object>` of parsed arguments mapped to their node names
-- a `String[]` of raw arguments
-- a `Map<String, String>` of raw arguments mapped to their node names
-- a `String` which holds the full input
-
-Although not recommended, it is possible to access these fields directly with methods the `CommandArguments` class provides:
+**Get the argument array**
 
 ```java
-Object[] args();                  // Returns the argument array
-Map<String, Object> argsMap();    // Returns an unmodifiable map containing the arguments mapped to their node names
-String[] rawArgs();               // Returns the raw argument array
-Map<String, String> rawArgsMap(); // Returns an unmodifiable map containing the raw arguments mapped to their node names
-String getFullInput();               // Returns the full command string (including the /)
+Object[] args();
 ```
 
-Additionally, the `CommandArguments` class has one more method that isn't directly backed by a field and returns the amount of arguments for a command:
+This returns the array of arguments as defined when creating your command.
+
+**Get the arguments mapped to their node name**
 
 ```java
-int count();
+Map<String, Object> argsMap();
 ```
 
-While these methods can be used to access arguments, it may be safer to use the other methods the `CommandArguments` class provides to access arguments.
+This returns an unmodifiable map which contains the arguments mapped to their node names.
 
------
-
-## What terms are used?
-
-Throughout this page, multiple terms are used that may need an explanation.
-
-### `nodeName`
-
-The `nodeName` is set when initializing an argument. For example:
+**Get the raw argument array**
 
 ```java
-new StringArgument("string") 
+String[] rawArgs();
+ ```
+
+This returns the array of raw arguments. An explanation of what raw arguments are can be found in the section about [accessing raw arguments](#access-raw-arguments).
+
+**Get the raw arguments mapped to their node name**
+
+```java
+Map<String, String> rawArgsMap();
 ```
 
-The `nodeName` here would be `string`.
+This returns an unmodifiable map which contains the raw arguments mapped to their node names. An explanation of what raw arguments are can be found in the section about [accessing raw arguments](#access-raw-arguments).
 
-### `raw argument`
+**Other useful methods**
 
-A "raw argument" is the `String` form of an argument as written in a command. For example:
-
-A user defines a command `/mycommand` that accepts a `double` as the first argument and an entity selector as the second argument. It could be executed with the values `15.3` as the `double` value and `@e` as the entity selector:
-
-```mccmd
-/mycommand 15.3 @e
+```java
+String getFullInput(); // Returns the full command input (including the / character)
+int count();           // Returns the amount of arguments
 ```
-
-When [accessing the raw arguments](#access-raw-arguments) of this command there are `15.3` and `@e` available as `String`s.
-
-However, when [accessing the arguments](#access-arguments) of this command there is `15.3` available as `double` and `@e` available as `Collection<Entity>`.
-
-### `unsafe argument`
-
-When [accessing arguments](#access-arguments) you need to cast the `Object` returned by these methods to the type the argument returns. More about casting arguments [here](./arguments.md#argument-casting).
-
-However, the `CommandArguments` class provides a way to remove the need to cast the arguments which is referred to as `unsafe arguments` in this page.
 
 -----
 
@@ -131,6 +100,19 @@ Optional<Object> getOptional(int index);
 
 ## Access raw arguments
 
+A "raw argument" is the `String` form of an argument as written in a command. For example:
+
+A user defines a command `/mycommand` that accepts a `double` as the first argument and an entity selector as the second argument. It could be executed with the values `15.3` as the `double` value and `@e` as the entity selector:
+
+```mccmd
+/mycommand 15.3 @e
+```
+
+When [accessing the raw arguments](#access-raw-arguments) of this command there are `15.3` and `@e` available as `String`s.
+
+However, when [accessing the arguments](#access-arguments) of this command there is `15.3` available as `double` and `@e` available as `Collection<Entity>`.
+
+
 Raw arguments are accessed basically the same way you would [access arguments](#access-arguments). You can access them by their node name and their index in the argument array.
 
 ### Access raw arguments by node name
@@ -167,7 +149,13 @@ Optional<String> getRawOptional(int index);
 
 ## Access unsafe arguments
 
+When [accessing arguments](#access-arguments) you need to cast the `Object` returned by these methods to the type the argument returns. More about casting arguments [here](./arguments.md#argument-casting).
+
+However, the `CommandArguments` class provides a way to remove the need to cast the arguments which is referred to as `unsafe arguments` in this page.
+
 Accessing unsafe arguments is a nice way to shorten your code as you do not need to cast the argument to its corresponding type.
+
+_insert example of what an unsafe argument is_
 
 Unsafe arguments can also be accessed by their node names and their indices.
 
