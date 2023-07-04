@@ -86,10 +86,10 @@ public class HordeCommand2 {
 			}
 			
 			@Suggestion
-			class LocationSuggestions implements Supplier<SafeSuggestions<Location>> {
+			class LocationSuggestions implements Supplier<SafeSuggestions<Location, ?>> {
 
 				@Override
-				public SafeSuggestions<Location> get() {
+				public SafeSuggestions<Location, ?> get() {
 					return SafeSuggestions.suggest(new Location[0]);
 				}
 				
@@ -114,10 +114,10 @@ public class HordeCommand2 {
 	}
 	
 	@Suggestion
-	class LocationSuggestions implements Supplier<SafeSuggestions<Location>> {
+	class LocationSuggestions implements Supplier<SafeSuggestions<Location, ?>> {
 
 		@Override
-		public SafeSuggestions<Location> get() {
+		public SafeSuggestions<Location, ?> get() {
 			return SafeSuggestions.suggest(new Location[0]);
 		}
 		

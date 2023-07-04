@@ -451,12 +451,13 @@ public class Parser {
 		// SafeSuggestions<Location>
 		if (supplierMirror instanceof DeclaredType declaredType) {
 			for (TypeMirror typeArgument : declaredType.getTypeArguments()) {
-				if (types.isSameType(argumentSuggestionsMirror, typeArgument)) {
+				if (types.isSameType(types.erasure(argumentSuggestionsMirror), types.erasure(typeArgument))) {
 					return new SuggestionClass(typeElement, processingEnv);
 				} else if (types.isSameType(types.erasure(safeSuggestionsMirror), types.erasure(typeArgument))) {
 					// TODO: More type checking here
 					return new SuggestionClass(typeElement, processingEnv);
 				} else {
+					// TODO: Fix this error message, it's not good enough!
 					logging.complain(typeElement,
 							"@Suggests class's Supplier has an invalid type argument. Expected Supplier<ArgumentSuggestions> or Supplier<SafeSuggestions>");
 				}

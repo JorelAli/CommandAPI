@@ -17,7 +17,7 @@ public class Logging {
 	
 	public void complain(Element element, String message) {
 		errorsLogged = true;
-		System.out.println(message);
+		System.out.println(message + " at " + element);
 		processingEnv.getMessager().printMessage(Kind.ERROR, message, element);
 	}
 	

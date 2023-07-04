@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * @param <S> the type of the suggestions
  */
 @FunctionalInterface
-public interface SafeSuggestions<S, CommandSender> {
+public interface SafeSuggestions<S, CommandSender> extends ISuggestions {
 
 	/**
 	 * Convert this {@link SafeSuggestions} object into an {@link ArgumentSuggestions} by mapping the values with a string
