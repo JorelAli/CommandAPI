@@ -9,8 +9,6 @@ While the argument array just gives the possibility to access the arguments via 
 - [Access raw arguments](#access-raw-arguments)
 - [Access unsafe arguments](#access-unsafe-arguments)
 
-ATTENTION!!!!! Every executable and generated documentation has to be deleted before committing anything!
-
 -----
 
 ## Access the inner structure directly
