@@ -50,7 +50,7 @@ This returns an unmodifiable map which contains the raw arguments mapped to thei
 **Other useful methods**
 
 ```java
-String getFullInput(); // Returns the full command input (including the / character)
+String fullInput();    // Returns the full command input (including the / character)
 int count();           // Returns the amount of arguments
 ```
 

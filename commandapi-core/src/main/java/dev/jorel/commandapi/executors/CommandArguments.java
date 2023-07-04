@@ -10,48 +10,17 @@ import java.util.function.Supplier;
 
 /**
  * This class stores the arguments for this command
+ *
+ * @param args      The arguments for this command
+ * @param argsMap   The arguments for this command mapped to their node names. This is an ordered map
+ * @param rawArgs   The raw arguments for this command.
+ * @param rawArgsMap   The raw arguments for this command mapped to their node names. This is an ordered map
+ * @param fullInput The command string a player has entered (including the /)
  */
 @SuppressWarnings("unchecked")
-public class CommandArguments {
-
-	private final Object[] args;
-	private final String[] rawArgs;
-	private final Map<String, Object> argsMap;
-	private final Map<String, String> rawArgsMap;
-	private final String fullInput;
-
-	/**
-	 * Constructs a new CommandArguments instance
-	 *
-	 * @param args      The arguments for this command
-	 * @param argsMap   The arguments for this command mapped to their node names. This is an ordered map
-	 * @param rawArgs   The raw arguments for this command.
-	 * @param rawArgsMap   The raw arguments for this command mapped to their node names. This is an ordered map
-	 * @param fullInput The raw command a player has entered
-	 */
-	public CommandArguments(Object[] args, Map<String, Object> argsMap, String[] rawArgs, Map<String, String> rawArgsMap, String fullInput) {
-		this.args = args;
-		this.rawArgs = rawArgs;
-		this.argsMap = argsMap;
-		this.rawArgsMap = rawArgsMap;
-		this.fullInput = fullInput;
-	}
+public record CommandArguments(Object[] args, Map<String, Object> argsMap, String[] rawArgs, Map<String, String> rawArgsMap, String fullInput) {
 
 	// Access the inner structure directly
-
-	/**
-	 * @return The complete argument array of this command
-	 */
-	public Object[] args() {
-		return args;
-	}
-
-	/**
-	 * @return The complete raw argument array of this command
-	 */
-	public String[] rawArgs() {
-		return rawArgs;
-	}
 
 	/**
 	 * @return An unmodifiable clone of the mapping of node names to argument values
@@ -70,14 +39,16 @@ public class CommandArguments {
 	/**
 	 * This returns the raw command string a player has entered
 	 *
+	 * @deprecated This method has been deprecated in favour of {@link CommandArguments#fullInput()}
 	 * @return The raw command string a player has entered
 	 */
+	@Deprecated(since = "9.0.4", forRemoval = true)
 	public String getFullInput() {
 		return fullInput;
 	}
 
 	/**
-	 * @return The number of arguments in this object
+	 * @return The number of arguments for this command
 	 */
 	public int count() {
 		return args.length;
