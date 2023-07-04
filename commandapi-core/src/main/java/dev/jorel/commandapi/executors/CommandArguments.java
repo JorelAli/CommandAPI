@@ -2,6 +2,7 @@ package dev.jorel.commandapi.executors;
 
 import javax.annotation.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -106,7 +107,7 @@ public class CommandArguments {
 	 * Returns an argument by its node name
 	 *
 	 * @param nodeName The node name of this argument. This was set when initializing an argument
-	 * @return An argument which has the given node name. Can be null if <code>nodeName</code> was not found.
+	 * @return An argument which has the given node name. Can be {@code null} if <code>nodeName</code> was not found.
 	 */
 	@Nullable
 	public Object get(String nodeName) {
@@ -194,6 +195,12 @@ public class CommandArguments {
 
 	/**
 	 * Returns a raw argument by its position
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param index The position of this argument
 	 * @return An argument which is placed at the given index, or {@code null} if the provided index does not point to an argument.
@@ -209,9 +216,15 @@ public class CommandArguments {
 
 	/**
 	 * Returns a raw argument by its node name
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param nodeName The node name of this argument. This was set when initializing an argument
-	 * @return A raw argument which has the given node name. Can be null if <code>nodeName</code> was not found.
+	 * @return A raw argument which has the given node name. Can be {@code null} if <code>nodeName</code> was not found.
 	 */
 	@Nullable
 	public String getRaw(String nodeName) {
@@ -220,6 +233,12 @@ public class CommandArguments {
 
 	/**
 	 * Returns a raw argument by its index
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The String returned if the raw argument is not existent
@@ -235,6 +254,12 @@ public class CommandArguments {
 
 	/**
 	 * Returns a raw argument by its node name
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @param defaultValue The String returned if the raw argument was not found.
@@ -246,6 +271,12 @@ public class CommandArguments {
 
 	/**
 	 * Returns a raw argument by its index
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param index The position of this argument
 	 * @param defaultValue The String returned if the raw argument is not existent
@@ -261,6 +292,12 @@ public class CommandArguments {
 
 	/**
 	 * Returns a raw argument by its node name
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param nodeName     The node name of this raw argument. This was set when initializing an argument
 	 * @param defaultValue The String returned if the raw argument was not found.
@@ -271,7 +308,13 @@ public class CommandArguments {
 	}
 
 	/**
-	 * Returns an <code>Optional</code> holding the raw argument by its index
+	 * Returns an {@link Optional} holding the raw argument by its index
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param index The position of this argument
 	 * @return An optional holding the raw argument which is placed at the given index, or an empty optional if index is invalid
@@ -285,7 +328,13 @@ public class CommandArguments {
 	}
 
 	/**
-	 * Returns an argument by its node name
+	 * Returns an  {@link Optional} holding the raw argument by its node name
+	 * <p>
+	 * A raw argument is the {@link String} form of an argument as written in a command. For example take this command:
+	 * <p>
+	 * {@code /mycommand @e 15.3}
+	 * <p>
+	 * When using this method to access these arguments, {@code @e} and {@code 15.3} will be available as {@link String}s and not as a {@link Collection} and {@link Double}
 	 *
 	 * @param nodeName     The node name of this argument. This was set when initializing an argument
 	 * @return An optional holding the argument with the specified node name or an empty optional if the node name was not found
@@ -309,14 +358,6 @@ public class CommandArguments {
 	 *   CommandArguments args = ...;
 	 *   String myString = args.getUnchecked("target");
 	 *
-	 * These methods are to be avoided in Kotlin as Kotlin's type inference
-	 * system cannot infer the type variable T by default and would require
-	 * explicit generic type parameters or type declaration, as well as a
-	 * non-null assertion operator:
-	 *
-	 *   val args: CommandArguments = ...
-	 *   val myString = args.<String>getUnchecked("target")!!  // Needs this
-	 *   val myString: String = args.getUnchecked(0)!!         // Or this
 	 */
 
 	/**
