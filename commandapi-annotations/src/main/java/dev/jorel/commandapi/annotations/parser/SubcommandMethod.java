@@ -171,7 +171,7 @@ public class SubcommandMethod extends CommandElement {
 				}
 				
 				// Generate the argument assignment
-				out.println(currentArgument.getArgumentVariableName() + " = (" + currentArgument.getTypeMirror().toString() + ") args[" + argumentIndex + "];");
+				out.println(currentArgument.getArgumentVariableName() + " = (" + currentArgument.getTypeMirror().toString() + ") args.get(" + argumentIndex + ");");
 				argumentIndex++;
 			}
 			commandDataIndex++;
@@ -190,7 +190,7 @@ public class SubcommandMethod extends CommandElement {
 		out.print(methodElement.getSimpleName() + "(sender");
 		for(int i = 0; i < this.arguments.size(); i++) {
 			ArgumentData argument = this.arguments.get(i);
-			out.print(", (" + argument.getTypeMirror().toString() + ") args[" + (i + argumentIndex) + "]");
+			out.print(", (" + argument.getTypeMirror().toString() + ") args.get(" + (i + argumentIndex) + ")");
 		}
 		out.println(");");
 	}

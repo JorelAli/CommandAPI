@@ -13,7 +13,17 @@ public class RegisteringTest {
 			final Object commandsClassInstance = commandsClass.getDeclaredConstructor().newInstance();
 			commandsClass.getDeclaredMethod("register", commandClass).invoke(commandsClassInstance, instance);
 		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
+			boolean shouldPrint = true;
+			if (e.getCause() instanceof IllegalStateException illegalStateException) {
+				if (illegalStateException.getMessage().contains("Tried to access CommandAPIHandler instance")) {
+					// Shh shh shh, there there...
+					shouldPrint = false;
+				}
+			}
+			
+			if (shouldPrint) {
+				e.printStackTrace();
+			}
 		}
 	}
 
