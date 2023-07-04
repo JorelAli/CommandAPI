@@ -112,7 +112,6 @@ When [accessing the raw arguments](#access-raw-arguments) of this command there 
 
 However, when [accessing the arguments](#access-arguments) of this command there is `15.3` available as `double` and `@e` available as `Collection<Entity>`.
 
-
 Raw arguments are accessed basically the same way you would [access arguments](#access-arguments). You can access them by their node name and their index in the argument array.
 
 ### Access raw arguments by node name
@@ -151,11 +150,17 @@ Optional<String> getRawOptional(int index);
 
 When [accessing arguments](#access-arguments) you need to cast the `Object` returned by these methods to the type the argument returns. More about casting arguments [here](./arguments.md#argument-casting).
 
-However, the `CommandArguments` class provides a way to remove the need to cast the arguments which is referred to as `unsafe arguments` in this page.
+Unsafe arguments provide the ability to access an argument without needing to cast it to the argument's type. When not using unsafe arguments, your code looks like this:
 
-Accessing unsafe arguments is a nice way to shorten your code as you do not need to cast the argument to its corresponding type.
+```java
+String name = (String) args.get("name");
+```
 
-_insert example of what an unsafe argument is_
+When using unsafe arguments you can make your code look like this:
+
+```java
+String name = args.getUnchecked("name");
+```
 
 Unsafe arguments can also be accessed by their node names and their indices.
 
