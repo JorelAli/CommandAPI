@@ -23,9 +23,8 @@ import dev.jorel.commandapi.annotations.arguments.ALongArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument;
 import dev.jorel.commandapi.annotations.arguments.Primitive;
-import dev.jorel.commandapi.arguments.EntitySelector;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.LocationType;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 
 @SuppressWarnings("deprecation")
 public class ArgumentData extends CommandElement {
@@ -176,9 +175,9 @@ public class ArgumentData extends CommandElement {
 		} else if (argumentAnnotation instanceof ALocationArgument argument) {
 			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
 		} else if (argumentAnnotation instanceof AEntitySelectorArgument argument) {
-			out.print(", " + EntitySelector.class.getSimpleName() + "." + argument.value().toString());
+			out.print(", " + ArgumentSubType.class.getSimpleName() + "." + argument.value().toString());
 		} else if (argumentAnnotation instanceof AScoreHolderArgument argument) {
-			out.print(", " + ScoreHolderType.class.getSimpleName() + "." + argument.value().toString());
+			out.print(", " + ArgumentSubType.class.getSimpleName() + "." + argument.value().toString());
 		} else if (argumentAnnotation instanceof AMultiLiteralArgument argument) {
 			out.print(Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
 		} else if (argumentAnnotation instanceof ALiteralArgument argument) {

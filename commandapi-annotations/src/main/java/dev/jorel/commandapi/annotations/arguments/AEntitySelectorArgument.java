@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import dev.jorel.commandapi.arguments.EntitySelector;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 
 /**
@@ -44,6 +44,6 @@ public interface AEntitySelectorArgument {
 	/**
 	 * @return the entity selector for this argument
 	 */
-	EntitySelector value() default EntitySelector.ONE_ENTITY;
+	ArgumentSubType value() default ArgumentSubType.ENTITYSELECTOR_ONE_ENTITY;
 	
 }

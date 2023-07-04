@@ -23,6 +23,8 @@ package dev.jorel.commandapi;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 /**
  * A representation of permission nodes for commands. Represents permission
  * nodes, being op and having all permissions
@@ -125,19 +127,20 @@ public class CommandPermission {
 		return (negated ? "not " : "") + result;
 	}
 
-	Optional<String> getPermission() {
+	public Optional<String> getPermission() {
 		return Optional.ofNullable(this.permission);
 	}
 
+	@Nullable
 	PermissionNode getPermissionNode() {
 		return this.permissionNode;
 	}
 
-	boolean isNegated() {
+	public boolean isNegated() {
 		return this.negated;
 	}
 
-	CommandPermission negate() {
+	public CommandPermission negate() {
 		this.negated = true;
 		return this;
 	}

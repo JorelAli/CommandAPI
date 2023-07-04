@@ -58,7 +58,6 @@ import dev.jorel.commandapi.annotations.arguments.ADoubleArgument;
 import dev.jorel.commandapi.annotations.arguments.AEnchantmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntitySelectorArgument;
 import dev.jorel.commandapi.annotations.arguments.AEntityTypeArgument;
-import dev.jorel.commandapi.annotations.arguments.AEnvironmentArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatArgument;
 import dev.jorel.commandapi.annotations.arguments.AFloatRangeArgument;
 import dev.jorel.commandapi.annotations.arguments.AFunctionArgument;
@@ -112,7 +111,7 @@ public class Annotations extends AbstractProcessor {
 			AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
 			ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
 			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class,
-			AEntityTypeArgument.class, AEnvironmentArgument.class, AFloatArgument.class, AFloatRangeArgument.class,
+			AEntityTypeArgument.class, AFloatArgument.class, AFloatRangeArgument.class,
 			AFunctionArgument.class, AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class,
 			AItemStackArgument.class, AItemStackPredicateArgument.class, ALiteralArgument.class,
 			ALocation2DArgument.class, ALocationArgument.class, ALongArgument.class, ALootTableArgument.class,
