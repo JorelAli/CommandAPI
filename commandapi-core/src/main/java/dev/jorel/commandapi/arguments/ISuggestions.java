@@ -1,6 +1,11 @@
 package dev.jorel.commandapi.arguments;
 
-// For annotations
+/**
+ * Parent interface of Suggestions for annotations
+ *
+ * Apparently rawtype warnings are unavoidable here. See
+ * https://stackoverflow.com/questions/69491202/how-to-use-sealed-classes-with-generics
+ */
 public interface ISuggestions {
 
 }
