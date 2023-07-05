@@ -375,6 +375,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top">
                 <ul>
                     <li>Fixed the CommandAPI disabling datapacks on Paper 1.20.1 #40+ because it thought it was running on a Folia server</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/459 Added the ability to access raw arguments in the command executor</li>
                 </ul>
             </td>
         </tr>
