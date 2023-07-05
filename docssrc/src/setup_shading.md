@@ -116,7 +116,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-shade</artifactId>
-        <version>9.0.4</version>
+        <version>9.0.4-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
@@ -210,13 +210,13 @@ Next, we declare our dependencies:
 
 ```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade:9.0.4"
+    implementation "dev.jorel:commandapi-bukkit-shade:9.0.4-SNAPSHOT"
 }
 ```
 
 ```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade:9.0.4")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.0.4-SNAPSHOT")
 }
 ```
 
@@ -229,7 +229,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```groovy,build.gradle
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.0.4")
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.0.4-SNAPSHOT")
     }
 
     // TODO: Change this to my own package name
@@ -240,7 +240,7 @@ shadowJar {
 ```kotlin,build.gradle.kts
 shadowJar {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.0.4"))
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.0.4-SNAPSHOT"))
     }
 
     // TODO: Change this to my own package name

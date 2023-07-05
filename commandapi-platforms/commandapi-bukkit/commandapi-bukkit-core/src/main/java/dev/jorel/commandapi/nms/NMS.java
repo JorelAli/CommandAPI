@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
@@ -72,6 +70,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public interface NMS<CommandListenerWrapper> {
@@ -283,6 +282,8 @@ public interface NMS<CommandListenerWrapper> {
 	Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
 	Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+
+	NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
