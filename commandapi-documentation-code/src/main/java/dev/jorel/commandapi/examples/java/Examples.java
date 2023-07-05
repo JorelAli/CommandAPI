@@ -2050,7 +2050,7 @@ new CommandAPICommand("removeeffect")
     .withArguments(safeArgs)
     .executesPlayer((player, args) -> {
         Player target = (Player) args.get("target");
-        PotionEffectType potionEffect = (PotionEffectType) args.get("potionEffect");
+        PotionEffectType potionEffect = (PotionEffectType) args.get("potioneffect");
         target.removePotionEffect(potionEffect);
     })
     .register();
