@@ -329,7 +329,7 @@ public class Parser {
 
 		// Create ArgumentData
 		ArgumentData argumentData = new ArgumentData(logging, varElement, annotation, permission, nodeName, suggests,
-				suggestionsClass, commandData, classArgument);
+				suggestionsClass, commandData, classArgument, true);
 		if (suggestionsClass.isPresent()) {
 			argumentData.validateSuggestionsClass(processingEnv);
 		}

@@ -137,7 +137,7 @@ public class CommandData extends CommandElement {
 			// Convert @Subcommand into a multiliteral argument
 			if(current.isSubcommand) {
 				Annotation multiLiteralArgumentAnnotation = asMultiLiteralAnnotation(current);
-				inheritedArguments.add(0, new ArgumentData(super.logging, current.typeElement, multiLiteralArgumentAnnotation, current.permission, current.name, Optional.empty(), Optional.empty(), current, false));
+				inheritedArguments.add(0, new ArgumentData(super.logging, current.typeElement, multiLiteralArgumentAnnotation, current.permission, current.name, Optional.empty(), Optional.empty(), current, false, false));
 			}
 			
 			current = current.parent;

@@ -67,9 +67,15 @@ public class ArgumentData extends CommandElement {
 	 * argument declared in the arguments of a method)?
 	 */
 	private final boolean classArgument;
+	
+	/**
+	 * Is this argument listed? If it is, we don't need to emit isListed(true). If
+	 * it isn't then we emit isListed(false).
+	 */
+	private final boolean isListed;
 
 	public ArgumentData(Logging logging, Element varElement, Annotation annotation, CommandPermission permission,
-			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions, CommandData parent, boolean classArgument) {
+			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions, CommandData parent, boolean classArgument, boolean isListed) {
 		super(logging);
 		this.varElement = varElement;
 		this.primitiveTypes = annotation.annotationType().getAnnotation(Primitive.class).value();
@@ -81,6 +87,7 @@ public class ArgumentData extends CommandElement {
 		this.suggestions = suggestions;
 		this.parent = parent;
 		this.classArgument = classArgument;
+		this.isListed = isListed;
 	}
 	
 	public boolean isClassArgument() {
@@ -224,6 +231,12 @@ public class ArgumentData extends CommandElement {
 		// Argument listing. Only applies to @LiteralArgument
 		if (argumentAnnotation instanceof ALiteralArgument) {
 			out.println(indentation() + ".setListed(true)");
+		}
+		
+		if (!isListed) {
+			out.println();
+			out.print(indentation() + ".setListed(false)");
+			printedAnyOptionalFeatures = true;
 		}
 		
 		dedent();
