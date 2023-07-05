@@ -25,25 +25,37 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 
 /**
  * Annotation equivalent of the {@link EntitySelectorArgument}
  */
-public interface AEntitySelectorArgument {
+@Retention(RetentionPolicy.SOURCE)
+@Target({})
+public @interface AEntitySelectorArgument {
 
-	/**
-	 * Annotation equivalent of the {@link EntitySelectorArgument} for one entity
-	 */
+	@Primitive("java.util.Collection<org.bukkit.entity.Player>")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target({ ElementType.PARAMETER, ElementType.FIELD })
+	public @interface ManyPlayers {
+	}
+
+	@Primitive("org.bukkit.entity.Player")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target({ ElementType.PARAMETER, ElementType.FIELD })
+	public @interface OnePlayer {
+	}
+
+	@Primitive("java.util.Collection<org.bukkit.entity.Entity>")
+	@Retention(RetentionPolicy.SOURCE)
+	@Target({ ElementType.PARAMETER, ElementType.FIELD })
+	public @interface ManyEntities {
+	}
+
 	@Primitive("org.bukkit.entity.Entity")
 	@Retention(RetentionPolicy.SOURCE)
-	@Target(ElementType.PARAMETER)
-	public @interface OneEntity { }
-	
-	/**
-	 * @return the entity selector for this argument
-	 */
-	ArgumentSubType value() default ArgumentSubType.ENTITYSELECTOR_ONE_ENTITY;
-	
+	@Target({ ElementType.PARAMETER, ElementType.FIELD })
+	public @interface OneEntity {
+	}
+
 }

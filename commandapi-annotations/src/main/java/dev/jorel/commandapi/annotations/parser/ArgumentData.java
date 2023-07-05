@@ -143,8 +143,20 @@ public class ArgumentData extends CommandElement {
 		this.indentation = currentIndentation;
 		out.print(indentation() + ".withArguments(new ");
 
-		// We're assuming that the name of the argument MUST be "A" + the same name
-		out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
+		// We're assuming that the name of the argument MUST be "A" + the same name. If
+		// we're in the EntitySelectorArgument, we need to append the parent class name
+		// as well. TODO: Implement this for the generic case so we don't have to add
+		// every single nested annotation to this list
+		if (argumentAnnotation instanceof AEntitySelectorArgument.ManyPlayers ||
+			argumentAnnotation instanceof AEntitySelectorArgument.ManyEntities ||
+			argumentAnnotation instanceof AEntitySelectorArgument.OneEntity ||
+			argumentAnnotation instanceof AEntitySelectorArgument.OnePlayer) {
+			out.print(AEntitySelectorArgument.class.getSimpleName().substring(1));
+			out.append(".");
+			out.append(argumentAnnotation.annotationType().getSimpleName());
+		} else {
+			out.print(argumentAnnotation.annotationType().getSimpleName().substring(1));
+		}
 
 		// Handle parameters
 		out.print("(");
@@ -174,8 +186,8 @@ public class ArgumentData extends CommandElement {
 			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
 		} else if (argumentAnnotation instanceof ALocationArgument argument) {
 			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
-		} else if (argumentAnnotation instanceof AEntitySelectorArgument argument) {
-			out.print(", " + ArgumentSubType.class.getSimpleName() + "." + argument.value().toString());
+//		} else if (argumentAnnotation instanceof AEntitySelectorArgument argument) {
+//			out.print(", " + ArgumentSubType.class.getSimpleName() + "." + argument.value().toString());
 		} else if (argumentAnnotation instanceof AScoreHolderArgument argument) {
 			out.print(", " + ArgumentSubType.class.getSimpleName() + "." + argument.value().toString());
 		} else if (argumentAnnotation instanceof AMultiLiteralArgument argument) {

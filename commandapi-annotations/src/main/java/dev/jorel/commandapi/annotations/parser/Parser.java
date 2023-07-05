@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -321,7 +322,8 @@ public class Parser {
 			})) {
 				logging.complain(varElement,
 						"Mismatched argument types. This argument of type " + varType + " does not match @"
-								+ Utils.getArgumentAnnotation(varElement).annotationType().getSimpleName());
+								+ Utils.getArgumentAnnotation(varElement).annotationType().getSimpleName() + 
+								", expected any of the following: " + Arrays.stream(primitives).map(x -> x.toString()).collect(Collectors.joining(", ")));
 			}
 		}
 

@@ -107,30 +107,36 @@ public class Annotations extends AbstractProcessor {
 	 * on in the list so they are chosen in {@link Utils#predictAnnotation}
 	 */
 	public static final Set<Class<? extends Annotation>> ARGUMENT_ANNOTATIONS = Set.of(AAdvancementArgument.class,
-			AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
-			AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
-			ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
-			ADoubleArgument.class, AEnchantmentArgument.class, AEntitySelectorArgument.class,
-			AEntityTypeArgument.class, AFloatArgument.class, AFloatRangeArgument.class,
-			AFunctionArgument.class, AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class,
-			AItemStackArgument.class, AItemStackPredicateArgument.class, ALiteralArgument.class,
-			ALocation2DArgument.class, ALocationArgument.class, ALongArgument.class, ALootTableArgument.class,
-			AMathOperationArgument.class, AMultiLiteralArgument.class, ANamespacedKeyArgument.class, ANBTCompoundArgument.class,
-			AObjectiveArgument.class, AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class,
-			AParticleArgument.class, APlayerArgument.class, APotionEffectArgument.class, ARecipeArgument.class,
-			ARotationArgument.class, AScoreboardSlotArgument.class, AScoreHolderArgument.class, ASoundArgument.class,
-			AStringArgument.class, ATeamArgument.class, ATextArgument.class, ATimeArgument.class, AUUIDArgument.class);
+		AAdventureChatArgument.class, AAdventureChatComponentArgument.class, AAngleArgument.class,
+		AAxisArgument.class, ABiomeArgument.class, ABlockPredicateArgument.class, ABlockStateArgument.class,
+		ABooleanArgument.class, AChatArgument.class, AChatColorArgument.class, AChatComponentArgument.class,
+		ADoubleArgument.class, AEnchantmentArgument.class,
+
+		AEntitySelectorArgument.ManyPlayers.class,
+		AEntitySelectorArgument.OnePlayer.class,
+		AEntitySelectorArgument.ManyEntities.class,
+		AEntitySelectorArgument.OneEntity.class,
+
+		AEntityTypeArgument.class, AFloatArgument.class, AFloatRangeArgument.class,
+		AFunctionArgument.class, AGreedyStringArgument.class, AIntegerArgument.class, AIntegerRangeArgument.class,
+		AItemStackArgument.class, AItemStackPredicateArgument.class, ALiteralArgument.class,
+		ALocation2DArgument.class, ALocationArgument.class, ALongArgument.class, ALootTableArgument.class,
+		AMathOperationArgument.class, AMultiLiteralArgument.class, ANamespacedKeyArgument.class, ANBTCompoundArgument.class,
+		AObjectiveArgument.class, AObjectiveCriteriaArgument.class, AOfflinePlayerArgument.class,
+		AParticleArgument.class, APlayerArgument.class, APotionEffectArgument.class, ARecipeArgument.class,
+		ARotationArgument.class, AScoreboardSlotArgument.class, AScoreHolderArgument.class, ASoundArgument.class,
+		AStringArgument.class, ATeamArgument.class, ATextArgument.class, ATimeArgument.class, AUUIDArgument.class);
 
 	public static final Set<Class<? extends Annotation>> OTHER_ANNOTATIONS = Set.of(Command.class, NeedsOp.class,
-			Permission.class, Help.class, Suggestion.class, ArgumentParser.class, Subcommand.class, Suggests.class);
+		Permission.class, Help.class, Suggestion.class, ArgumentParser.class, Subcommand.class, Suggests.class);
 
 	/**
 	 * Default constructor, doesn't do anything special
 	 */
 	public Annotations() {
-		
+
 	}
-	
+
 	/**
 	 * Constructor used for commandapi-annotations tests. When provided, the name of
 	 * the class which is generated will be randomized (to prevent conflicting class
@@ -141,7 +147,7 @@ public class Annotations extends AbstractProcessor {
 	public Annotations(boolean testing) {
 		this.testing = testing;
 	}
-	
+
 	// List of stuff we can deal with
 	@Override
 	public Set<String> getSupportedAnnotationTypes() {
@@ -160,8 +166,9 @@ public class Annotations extends AbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		logging = new Logging(processingEnv);
-		
-		// TODO: This check doesn't go here, but it's very important for testing. Move this to a test suite when ready
+
+		// TODO: This check doesn't go here, but it's very important for testing. Move
+		// this to a test suite when ready
 //		ARGUMENT_ANNOTATIONS.stream().forEach(annotation -> {
 //			System.out.print(annotation.getSimpleName() + ": ");
 //			Utils.getPrimitiveTypeMirror(annotation.getAnnotation(Primitive.class), processingEnv);
@@ -172,18 +179,18 @@ public class Annotations extends AbstractProcessor {
 		SortedSet<TypeElement> commandClasses = new TreeSet<>((TypeElement elem1, TypeElement elem2) -> {
 			return elem1.getQualifiedName().toString().compareTo(elem2.getQualifiedName().toString());
 		});
-		
+
 		Set<? extends Element> commandElements = roundEnv.getElementsAnnotatedWith(Command.class);
-		if(commandElements.isEmpty()) {
+		if (commandElements.isEmpty()) {
 			return false;
 		}
-		
-		for(Element element : commandElements) {
+
+		for (Element element : commandElements) {
 			commandClasses.add((TypeElement) element);
 		}
-		
-		// Change the type of commandClasses - we're asserting it's a TypeElement (it literally can't be anything else)
-		
+
+		// Change the type of commandClasses - we're asserting it's a TypeElement (it
+		// literally can't be anything else)
 
 		// We need to do multiple "phases". Firstly, we need to construct a context
 		// for each @Command class, which outlines the list of suggestion methods, its
@@ -194,12 +201,13 @@ public class Annotations extends AbstractProcessor {
 		// We then perform out semantic analysis (checking that we've not got two
 		// @Default
 		// annotations, type checking of annotations to method parameter types, ensuring
-		// suggestions map to what they should), ensuring we've not got two commands of the same name...
+		// suggestions map to what they should), ensuring we've not got two commands of
+		// the same name...
 
 		new Semantics(logging).analyze(context);
-		
+
 		try {
-			final String suffix = testing ? (String.valueOf(new Random().nextInt(Integer.MAX_VALUE))) : ""; 
+			final String suffix = testing ? (String.valueOf(new Random().nextInt(Integer.MAX_VALUE))) : "";
 			new ClassGenerator(processingEnv).generateClass("Commands" + suffix, context);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -12,6 +12,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Types;
 
 import org.bukkit.command.CommandSender;
 
@@ -62,12 +63,20 @@ public class Utils {
 		return annotation;
 	}
 	
+	/**
+	 * Gets the type mirror of a {@link Primitive}'s return type
+	 * @param primitive a CommandAPI annotation
+	 * @param processingEnv the current processing environment
+	 * @return
+	 */
 	public static TypeMirror[] getPrimitiveTypeMirror(Primitive primitive, ProcessingEnvironment processingEnv) {
 		TypeMirror[] result = new TypeMirror[primitive.value().length];
 		for(int i = 0; i < primitive.value().length; i++) {
 			String p = primitive.value()[i];
-			TypeElement element = processingEnv.getElementUtils().getTypeElement(p);
+			boolean isArray = false; // Only handling single arrays, not multi-dimensional ones
+			String genericTypes = "";
 			
+			TypeElement element = processingEnv.getElementUtils().getTypeElement(p);
 			// Check if it's a primitive (e.g. int, boolean etc.)?
 			if(element == null) {
 				for(TypeKind kind : TypeKind.values()) {
@@ -78,14 +87,15 @@ public class Utils {
 					}
 				}
 			}
-			
-			// TODO: This is where things get a little messy. Until we figure out how to do this, we ignore arrays and generics
+
 			if(element == null) {
 				if(p.contains("<")) {
+					genericTypes = p.substring(p.indexOf("<") + 1, p.lastIndexOf(">"));
 					p = p.substring(0, p.indexOf("<"));
 				}
 				if(p.contains("[")) {
 					p = p.substring(0, p.indexOf("["));
+					isArray = true;
 				}
 				element = processingEnv.getElementUtils().getTypeElement(p);
 			}
@@ -95,8 +105,14 @@ public class Utils {
 				System.out.println(p);
 			} else {
 				result[i] = element.asType();
+				if (!genericTypes.isEmpty()) {
+					// Only handling single generic types, and not nested ones!
+					result[i] = processingEnv.getTypeUtils().getDeclaredType(element, processingEnv.getElementUtils().getTypeElement(genericTypes).asType());
+				}
+				if (isArray) {
+					result[i] = processingEnv.getTypeUtils().getArrayType(result[i]);
+				}
 			}
-			
 		}
 		return result;
 	}
@@ -139,13 +155,38 @@ public class Utils {
 	 */
 	public static String predictAnnotation(VariableElement element) {
 		for (Class<? extends Annotation> annotation : Annotations.ARGUMENT_ANNOTATIONS) {
-			for (String value : annotation.getAnnotation(Primitive.class).value()) {
-				if (element.asType().toString().equals(value)) {
-					return "Did you mean to add @" + annotation.getSimpleName();
+			if (annotation.getAnnotation(Primitive.class) != null) {
+				for (String value : annotation.getAnnotation(Primitive.class).value()) {
+					if (element.asType().toString().equals(value)) {
+						return "Did you mean to add @" + annotation.getSimpleName();
+					}
 				}
+			} else {
+				return "Whoopsy do!";
 			}
 		}
 		return "";
 	}
+	
+//	/**
+//	 * provessingEnv.getTypeUtils().isSameType, but also checks arrays as well :)
+//	 * @param types
+//	 * @param mirror1
+//	 * @param mirror2
+//	 * @return
+//	 */
+//	public static boolean isSameType(Types types, TypeMirror mirror1, TypeMirror mirror2) {
+//		boolean result = types.isSameType(mirror1, mirror2);
+//		if (result) {
+//			return result;
+//		} else {
+//			if (mirror1.getKind() == TypeKind.ARRAY && mirror2.getKind() == TypeKind.ARRAY) {
+//				System.out.println(mirror1 + " c.f. " + mirror2);
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//	}
 
 }
