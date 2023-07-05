@@ -92,6 +92,29 @@ Optional<Object> getOptional(int index);
 
 ### Example - Access arguments by node name and index
 
+To demonstrate the different ways of accessing arguments, we want to register a command `/mycommand` like this:
+
+```mccmd
+/mycommand <name> <amount>
+/mycommand <name> <amount> <player>
+/mycommand <name> <amount> <player> <target>
+/mycommand <name> <amount> <player> <target> <message>
+```
+
+This is how these commands are implemented:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandArguments1}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandArguments1}}
+```
+
+</div>
+
 </div>
 
 -----
@@ -139,6 +162,26 @@ Optional<String> getRawOptional(int index);
 <div class="example">
 
 ### Example - Access raw arguments by node name and index
+
+To demonstrate how to access raw arguments, we are going to implement the `/mycommand` again, this time with the following syntax:
+
+```mccmd
+/mycommand <entities>
+```
+
+We want to find out which entity selector is being used when the command is executed.
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandArguments2}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandArguments2}}
+```
+
+</div>
 
 </div>
 
@@ -189,5 +232,25 @@ Optional<T> getOptionalUnchecked(int index);
 <div class="example">
 
 ### Example - Access unsafe arguments by node name and index
+
+Finally, we want to implement the `/mycommand` again. This time we use this syntax:
+
+```mccmd
+/mycommand <player>
+```
+
+Here, we don't actually want to cast the argument, so we use unsafe arguments to remove that cast:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandArguments3}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandArguments3}}
+```
+
+</div>
 
 </div>

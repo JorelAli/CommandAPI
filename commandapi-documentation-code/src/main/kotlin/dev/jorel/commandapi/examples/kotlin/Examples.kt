@@ -49,6 +49,7 @@ import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
+import java.util.function.Supplier
 import kotlin.collections.LinkedHashMap
 import kotlin.random.Random
 
@@ -1219,6 +1220,49 @@ CommandAPICommand("broadcast")
     })
     .register()
 /* ANCHOR_END: chatPreview4 */
+}
+
+fun commandArguments() {
+/* ANCHOR: commandArguments1 */
+CommandAPICommand("mycommand")
+    .withArguments(StringArgument("name"))
+    .withArguments(IntegerArgument("amount"))
+    .withOptionalArguments(PlayerArgument("player"))
+    .withOptionalArguments(PlayerArgument("target"))
+    .withOptionalArguments(GreedyStringArgument("message"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val name = args[0] as String // Access arguments by index
+        val amount = args["amount"] as Int // Access arguments by node name
+        val p = args.getOrDefault("player", player) as Player // Access arguments using the getOrDefault(String, Object) method
+        val target = args.getOrDefault("target") { player } as Player // Access arguments using the getOrDefault(String, Supplier<?>) method
+        val message = args.getOptional("message").orElse("Hello!") as String // Access arguments using the getOptional(String) method
+
+        // Do whatever with these values
+    })
+    .register();
+/* ANCHOR_END: commandArguments1 */
+
+/* ANCHOR: commandArguments2 */
+CommandAPICommand("mycommand")
+    .withArguments(EntitySelectorArgument.ManyEntities("entities"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val entitySelector = args.getRaw("entities")!! // Access the raw argument with getRaw(String)
+
+        // Do whatever with the entity selector
+    })
+    .register();
+/* ANCHOR_END: commandArguments2 */
+
+/* ANCHOR: commandArguments3 */
+CommandAPICommand("mycommand")
+    .withArguments(PlayerArgument("player"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val p: Player = args.getUnchecked("player")!!
+
+        // Do whatever with the player
+    })
+    .register();
+/* ANCHOR_END: commandArguments3 */
 }
 
 fun commandFailures() {

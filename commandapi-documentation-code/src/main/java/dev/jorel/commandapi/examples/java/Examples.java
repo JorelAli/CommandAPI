@@ -1307,6 +1307,49 @@ new CommandAPICommand("broadcast")
 /* ANCHOR_END: chatPreview4 */
 }
 
+void commandArguments() {
+/* ANCHOR: commandArguments1 */
+new CommandAPICommand("mycommand")
+    .withArguments(new StringArgument("name"))
+    .withArguments(new IntegerArgument("amount"))
+    .withOptionalArguments(new PlayerArgument("player"))
+    .withOptionalArguments(new PlayerArgument("target"))
+    .withOptionalArguments(new GreedyStringArgument("message"))
+    .executesPlayer((player, args) -> {
+        String name = (String) args.get(0); // Access arguments by index
+        int amount = (int) args.get("amount"); // Access arguments by node name
+        Player p = (Player) args.getOrDefault("player", player); // Access arguments using the getOrDefault(String, Object) method
+        Player target = (Player) args.getOrDefault("target", () -> player); // Access arguments using the getOrDefault(String, Supplier<?>) method
+        String message = (String) args.getOptional("message").orElse("Hello!"); // Access arguments using the getOptional(String) method
+
+        // Do whatever with these values
+    })
+    .register();
+/* ANCHOR_END: commandArguments1 */
+
+/* ANCHOR: commandArguments2 */
+new CommandAPICommand("mycommand")
+    .withArguments(new EntitySelectorArgument.ManyEntities("entities"))
+    .executesPlayer((player, args) -> {
+        String entitySelector = args.getRaw("entities"); // Access the raw argument with getRaw(String)
+
+        // Do whatever with the entity selector
+    })
+    .register();
+/* ANCHOR_END: commandArguments2 */
+
+/* ANCHOR: commandArguments3 */
+new CommandAPICommand("mycommand")
+    .withArguments(new PlayerArgument("player"))
+    .executesPlayer((player, args) -> {
+        Player p = args.getUnchecked("player");
+
+        // Do whatever with the player
+    })
+    .register();
+/* ANCHOR_END: commandArguments3 */
+}
+
 void commandFailures() {
 /* ANCHOR: commandFailures1 */
 // Array of fruit
