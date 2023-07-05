@@ -49,7 +49,7 @@ public class AdventureChatColorArgument extends SafeOverrideableArgument<NamedTe
 		super(nodeName, CommandAPIBukkit.get()._ArgumentChatFormat(), Object::toString);
 
 		try {
-			Class.forName("net.kyori.adventure.text.Component");
+			Class.forName("net.kyori.adventure.text.format.NamedTextColor");
 		} catch (ClassNotFoundException e) {
 			throw new PaperAdventureNotFoundException(this.getClass());
 		}
