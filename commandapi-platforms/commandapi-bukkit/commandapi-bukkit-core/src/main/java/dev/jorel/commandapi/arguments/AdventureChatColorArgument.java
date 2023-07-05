@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import org.bukkit.ChatColor;
 
 import com.mojang.brigadier.context.CommandContext;
@@ -46,6 +47,12 @@ public class AdventureChatColorArgument extends SafeOverrideableArgument<NamedTe
 	 */
 	public AdventureChatColorArgument(String nodeName) {
 		super(nodeName, CommandAPIBukkit.get()._ArgumentChatFormat(), Object::toString);
+
+		try {
+			Class.forName("net.kyori.adventure.text.Component");
+		} catch (ClassNotFoundException e) {
+			throw new PaperAdventureNotFoundException(this.getClass());
+		}
 	}
 	
 	@Override
