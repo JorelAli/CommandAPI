@@ -91,6 +91,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -138,6 +139,7 @@ import net.minecraft.server.v1_15_R1.CustomFunctionData;
 import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.EntityPlayer;
 import net.minecraft.server.v1_15_R1.EntitySelector;
+import net.minecraft.server.v1_15_R1.EnumChatFormat;
 import net.minecraft.server.v1_15_R1.EnumDirection.EnumAxis;
 import net.minecraft.server.v1_15_R1.IBlockData;
 import net.minecraft.server.v1_15_R1.IChatBaseComponent.ChatSerializer;
@@ -168,6 +170,7 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
+@RequireField(in = EnumChatFormat.class, name = "D", ofType = Integer.class)
 public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
@@ -177,6 +180,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
 	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
 	private static final SafeVarHandle<CraftSound, String> craftSoundMinecraftKey;
+	private static final SafeVarHandle<EnumChatFormat, Integer> enumChatFormatD;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -189,6 +193,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", "f", float.class);
 		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
 		craftSoundMinecraftKey = SafeVarHandle.ofOrNull(CraftSound.class, "minecraftKey", "minecraftKey", String.class);
+		enumChatFormatD = SafeVarHandle.ofOrNull(EnumChatFormat.class, "D", "D", Integer.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -445,6 +450,12 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
 		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+
+	@Override
+	public final NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		final Integer color = enumChatFormatD.get(ArgumentChatFormat.a(cmdCtx, key));
+		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
 	}
 
 	@Override

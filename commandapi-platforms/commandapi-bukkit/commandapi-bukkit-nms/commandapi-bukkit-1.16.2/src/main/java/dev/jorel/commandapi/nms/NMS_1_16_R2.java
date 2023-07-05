@@ -95,6 +95,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -465,6 +466,12 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
 		return GsonComponentSerializer.gson().deserialize(jsonString);
+	}
+
+	@Override
+	public final NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		final Integer color = ArgumentChatFormat.a(cmdCtx, key).e();
+		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
 	}
 
 	@Override
