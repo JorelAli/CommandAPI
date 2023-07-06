@@ -77,9 +77,9 @@ integerArgument("integer", 0, 10)
 
 **Developer's Note:**
 
-There are two arguments not having a method which directly corresponds to their respective argument.
+There are a few arguments not having a method which directly corresponds to their respective argument.
 
-These two arguments are the `CustomArgument` and the `ListArgument` as they require further implementation by the user.
+These arguments most likely use a builder pattern and because of that require further implementation by the user.
 
 To use these arguments, the DSL also provides the `argument()` method. This takes in any argument as parameter which is why you can also use this method when you need to replace suggestions of any argument or do something else with arguments.
 
