@@ -168,7 +168,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
-	private static final SafeVarHandle<ServerFunctionLibrary, CommandDispatcher<CommandSourceStack>> serverFunctionLibraryDispatcher;
+	private static final Field serverFunctionLibraryDispatcher;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -177,7 +177,8 @@ public class NMS_1_18_R1 extends NMS_Common {
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector");
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
-		serverFunctionLibraryDispatcher = SafeVarHandle.ofOrNull(ServerFunctionLibrary.class, "i", "dispatcher", CommandDispatcher.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -660,7 +661,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 		serverResources.commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
-		serverFunctionLibraryDispatcher.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
+		try {
+			serverFunctionLibraryDispatcher.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
+		}
 
 		// Construct the new CompletableFuture that now uses our updated serverResources
 		CompletableFuture<?> unitCompletableFuture = ((ReloadableResourceManager) serverResources.getResourceManager())

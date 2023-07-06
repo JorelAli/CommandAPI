@@ -191,7 +191,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
-	private static final SafeVarHandle<ServerFunctionLibrary, CommandDispatcher<CommandSourceStack>> serverFunctionLibraryDispatcher;
+	private static final Field serverFunctionLibraryDispatcher;
 
 	// From net.minecraft.server.commands.LocateCommand
 	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
@@ -220,7 +220,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector");
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
-		serverFunctionLibraryDispatcher = SafeVarHandle.ofOrNull(ServerFunctionLibrary.class, "i", "dispatcher", CommandDispatcher.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
 
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
@@ -770,7 +771,11 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		serverResources.managers().commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
-		serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
+		try {
+			serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
+		}
 
 		// From this.<MinecraftServer>getMinecraftServer().reloadResources //
 		// Discover new packs

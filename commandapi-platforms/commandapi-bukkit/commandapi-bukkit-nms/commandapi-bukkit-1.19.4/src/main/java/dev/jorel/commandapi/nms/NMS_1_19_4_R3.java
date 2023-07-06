@@ -180,7 +180,7 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
-	private static final SafeVarHandle<ServerFunctionLibrary, CommandDispatcher<CommandSourceStack>> serverFunctionLibraryDispatcher;
+	private static final Field serverFunctionLibraryDispatcher;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -198,7 +198,8 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "p", "usesSelector");
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
-		serverFunctionLibraryDispatcher = SafeVarHandle.ofOrNull(ServerFunctionLibrary.class, "g", "dispatcher", CommandDispatcher.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher");
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -654,7 +655,11 @@ public class NMS_1_19_4_R3 extends NMS_Common {
 		serverResources.managers().commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
-		serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
+		try {
+			serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
+		}
 
 		// From this.<MinecraftServer>getMinecraftServer().reloadResources //
 		// Discover new packs

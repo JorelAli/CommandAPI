@@ -210,7 +210,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
 	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
-	private static final SafeVarHandle<CustomFunctionManager, CommandDispatcher<CommandListenerWrapper>> customFunctionManagerBrigadierDispatcher;
+	private static final Field customFunctionManagerBrigadierDispatcher;
 	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
 
 	// Compute all var handles all in one go so we don't do this during main server
@@ -223,7 +223,8 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", "c", ItemStack.class);
 		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "g", "g", float.class);
 		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
-		customFunctionManagerBrigadierDispatcher = SafeVarHandle.ofOrNull(CustomFunctionManager.class, "h", "h", CommandDispatcher.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		customFunctionManagerBrigadierDispatcher = CommandAPIHandler.getField(CustomFunctionManager.class, "h", "h");
 		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", "b", IReloadableResourceManager.class);
 	}
 
@@ -908,7 +909,11 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		datapackResources.commandDispatcher = this.<MinecraftServer>getMinecraftServer().getCommandDispatcher();
 
 		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
-		customFunctionManagerBrigadierDispatcher.set(datapackResources.a(), getBrigadierDispatcher());
+		try {
+			customFunctionManagerBrigadierDispatcher.set(datapackResources.a(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
+		}
 
 		// Construct the new CompletableFuture that now uses our updated
 		// datapackResources

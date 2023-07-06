@@ -22,14 +22,14 @@ package dev.jorel.commandapi.nms;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import com.mojang.brigadier.CommandDispatcher;
-import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import net.minecraft.commands.CommandSourceStack;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Recipe;
 
@@ -48,12 +48,13 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 public class NMS_1_17 extends NMS_1_17_Common {
 
-	private static final SafeVarHandle<ServerFunctionLibrary, CommandDispatcher<CommandSourceStack>> serverFunctionLibraryDispatcher;
+	private static final Field serverFunctionLibraryDispatcher;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		serverFunctionLibraryDispatcher = SafeVarHandle.ofOrNull(ServerFunctionLibrary.class, "i", "dispatcher", CommandDispatcher.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
 	}
 
 	@Override
@@ -73,7 +74,11 @@ public class NMS_1_17 extends NMS_1_17_Common {
 		serverResources.commands = this.<MinecraftServer>getMinecraftServer().getCommands();
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
-		serverFunctionLibraryDispatcher.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
+		try {
+			serverFunctionLibraryDispatcher.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
+		}
 
 		// Construct the new CompletableFuture that now uses our updated serverResources
 		CompletableFuture<?> unitCompletableFuture = ((ReloadableResourceManager) serverResources.getResourceManager())
