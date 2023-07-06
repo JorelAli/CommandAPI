@@ -45,6 +45,7 @@ inline fun CommandTree.axisArgument(nodeName: String, optional: Boolean = false,
 inline fun CommandTree.chatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.chatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.chatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatArgument(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.adventureChatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.adventureChatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.adventureChatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatArgument(nodeName).setOptional(optional).apply(block))
 
@@ -149,6 +150,7 @@ inline fun Argument<*>.axisArgument(nodeName: String, optional: Boolean = false,
 inline fun Argument<*>.chatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.chatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.chatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatArgument(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.adventureChatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.adventureChatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.adventureChatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatArgument(nodeName).setOptional(optional).apply(block))
 
