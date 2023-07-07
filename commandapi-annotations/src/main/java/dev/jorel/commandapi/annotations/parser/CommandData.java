@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.annotations.parser;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.util.ArrayDeque;
@@ -160,10 +161,22 @@ public class CommandData extends CommandElement {
 		}
 
 		if(!isSubcommand) {
+			out.println(indentation() + "/**");
+//			out.println(indentation() + " * Registers the following commands:");
+			// TODO:
+			// /blah <blah> <blah>
+			// And so on...
+			out.println(indentation() + " * @param command an instance of {@link " + typeElement.getSimpleName() + "} for command execution");
+			out.println(indentation() + " */");
 			out.println(indentation() + "public static void register(" + typeElement.getSimpleName() + " command) {");
 			out.println();
 			indent();
 		}
+		
+		// Declare a temporary output stream. We want to compute everything first,
+		// then we can construct meaningful JavaDocs!
+		ByteArrayOutputStream tempOutStream = new ByteArrayOutputStream();
+		PrintWriter tempOut = new PrintWriter(tempOutStream);
 		
 		// TODO: Don't forget aliases, permissions, help
 		// TODO: Are we going to support requirements?
@@ -177,30 +190,35 @@ public class CommandData extends CommandElement {
 		
 		// Subcommand methods
 		for(SubcommandMethod method : subcommandMethods) {
-			out.println(indentation() + "new CommandAPICommand(\"" + commandTree.peek().name + "\")");
+			tempOut.println(indentation() + "new CommandAPICommand(\"" + commandTree.peek().name + "\")");
+//			out.print("// /" + commandTree.peek().name);
 			indent();
 			
 			// TODO: Handle formatting of this properly
-			emitPermission(out, permission);
+			emitPermission(tempOut, permission);
 			
 			for(ArgumentData argument : getInheritedArguments()) {
-				argument.emit(out, indentation);
+				argument.emit(tempOut, indentation);
+//				out.print(" " + argument.getArgumentVariableName());
 			}
-			method.emit(out, indentation);
-			
-			out.println();
+			method.emit(tempOut, indentation);
+//			out.println();
+			tempOut.println();
 			dedent();
 		}
 		
 		// Do all subcommand classes and their stuff
 		for(CommandData subcommand : subcommandClasses) {
-			subcommand.emit(out, indentation);
+			subcommand.emit(tempOut, indentation);
 		}
 		
 		if(!isSubcommand) {
 			dedent();
-			out.println(indentation() + "}"); // End public void register()
+			tempOut.println(indentation() + "}"); // End public void register()
 		}
+		
+		tempOut.flush();
+		out.print(tempOutStream.toString());
 	}
 
 }

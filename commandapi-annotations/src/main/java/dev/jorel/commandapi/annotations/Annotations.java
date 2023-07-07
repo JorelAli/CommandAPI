@@ -40,6 +40,7 @@ import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.annotations.Subcommands;
 import dev.jorel.commandapi.annotations.annotations.Suggestion;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.arguments.AAdvancementArgument;
@@ -127,8 +128,12 @@ public class Annotations extends AbstractProcessor {
 		ARotationArgument.class, AScoreboardSlotArgument.class, AScoreHolderArgument.class, ASoundArgument.class,
 		AStringArgument.class, ATeamArgument.class, ATextArgument.class, ATimeArgument.class, AUUIDArgument.class);
 
-	public static final Set<Class<? extends Annotation>> OTHER_ANNOTATIONS = Set.of(Command.class, NeedsOp.class,
-		Permission.class, Help.class, Suggestion.class, ArgumentParser.class, Subcommand.class, Suggests.class);
+	public static final Set<Class<? extends Annotation>> OTHER_ANNOTATIONS = Set.of(
+		Command.class, NeedsOp.class,
+		Permission.class, Help.class,
+		Suggestion.class, ArgumentParser.class,
+		Subcommand.class, Subcommands.class, Suggests.class
+	);
 
 	/**
 	 * Default constructor, doesn't do anything special

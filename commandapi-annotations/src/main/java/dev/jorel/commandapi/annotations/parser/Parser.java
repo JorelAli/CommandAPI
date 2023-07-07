@@ -38,6 +38,7 @@ import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.NodeName;
 import dev.jorel.commandapi.annotations.annotations.Permission;
 import dev.jorel.commandapi.annotations.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.annotations.Subcommands;
 import dev.jorel.commandapi.annotations.annotations.Suggests;
 import dev.jorel.commandapi.annotations.annotations.WithoutPermission;
 import dev.jorel.commandapi.annotations.arguments.ACustomArgument;
@@ -161,6 +162,14 @@ public class Parser {
 					if (annotation != null) {
 						commandData.addSubcommandMethod(
 								parseSubcommandMethod((ExecutableElement) typeElementChild, (Subcommand) annotation));
+					}
+					
+					annotation = typeElementChild.getAnnotation(Subcommands.class);
+					if (annotation != null) {
+						for(Subcommand subcommand : ((Subcommands) annotation).value()) {
+							commandData.addSubcommandMethod(
+								parseSubcommandMethod((ExecutableElement) typeElementChild, subcommand));
+						}
 					}
 					break;
 				case FIELD:
