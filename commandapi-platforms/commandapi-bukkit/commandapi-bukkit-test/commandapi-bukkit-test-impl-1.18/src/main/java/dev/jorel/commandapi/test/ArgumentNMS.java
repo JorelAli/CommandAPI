@@ -44,6 +44,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandSourceStack;
 
@@ -248,6 +249,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	public Component getAdventureChat(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
 		return baseNMS.getAdventureChat(cmdCtx, key);
+	}
+
+	@Override
+	public NamedTextColor getAdventureChatColor(CommandContext cmdCtx, String key) {
+		return baseNMS.getAdventureChatColor(cmdCtx, key);
 	}
 
 	@Override

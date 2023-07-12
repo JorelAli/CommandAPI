@@ -9,7 +9,7 @@ Key points:
 - Add the `commandapi-kotlin-bukkit` dependency to your project:
 
   ```kotlin
-  compileOnly("dev.jorel:commandapi-bukkit-kotlin:9.0.4")
+  compileOnly("dev.jorel:commandapi-bukkit-kotlin:9.0.4-SNAPSHOT")
   ```
 
 - The Kotlin DSL must not be shaded into your plugin
