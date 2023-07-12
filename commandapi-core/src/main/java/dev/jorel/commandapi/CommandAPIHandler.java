@@ -23,8 +23,6 @@ package dev.jorel.commandapi;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,11 +100,15 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		final ParsedArgument<?, ?> parsedArgument = commandContextArguments.get(cmdCtx).get(key);
 		
 		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
-		// the arguments for this command context (most likely because it's a redirected command).
-		// We need to figure out how to handle this case.
-		if(parsedArgument != null) {
+		//  the arguments for this command context (most likely because it's a redirected command).
+		//  We need to figure out how to handle this case.
+		if (parsedArgument != null) {
+			// Sanity check: See https://github.com/JorelAli/CommandAPI/wiki/Implementation-details#chatcomponentargument-raw-arguments
 			StringRange range = parsedArgument.getRange();
-			return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
+			if (range.getEnd() > cmdCtx.getInput().length()) {
+				range = StringRange.between(range.getStart(), cmdCtx.getInput().length());
+			}
+			return range.get(cmdCtx.getInput());
 		} else {
 			return "";
 		}
@@ -223,7 +225,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 					@Override
 					public CommandArguments args() {
-						return new CommandArguments(result, new LinkedHashMap<>(), "/" + cmdCtx.getInput());
+						return new CommandArguments(result, new LinkedHashMap<>(), result, new LinkedHashMap<>(), "/" + cmdCtx.getInput());
 					}
 				};
 
@@ -274,16 +276,30 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// LinkedHashMap for arguments for executor
 		Map<String, Object> argsMap = new LinkedHashMap<>();
 
+		// List for raw arguments
+		List<String> rawArguments = new ArrayList<>();
+
+		// LinkedHashMap for raw arguments
+		Map<String, String> rawArgumentsMap = new LinkedHashMap<>();
+
 		// Populate array
 		for (Argument argument : args) {
 			if (argument.isListed()) {
-				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap, "/" + cmdCtx.getInput()));
+				Object parsedArgument = parseArgument(cmdCtx, argument.getNodeName(), argument, new CommandArguments(argList.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + cmdCtx.getInput()));
+
+				// Add the parsed argument
 				argList.add(parsedArgument);
 				argsMap.put(argument.getNodeName(), parsedArgument);
+
+				// Add the raw argument
+				String rawArgumentString = getRawArgumentInput(cmdCtx, argument.getNodeName());
+
+				rawArguments.add(rawArgumentString);
+				rawArgumentsMap.put(argument.getNodeName(), rawArgumentString);
 			}
 		}
 
-		return new CommandArguments(argList.toArray(), argsMap, "/" + cmdCtx.getInput());
+		return new CommandArguments(argList.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + cmdCtx.getInput());
 	}
 
 	/**
@@ -809,6 +825,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// LinkedHashMap for arguments
 		Map<String, Object> argsMap = new LinkedHashMap<>();
 
+		// List for raw arguments
+		List<String> rawArguments = new ArrayList<>();
+
+		// LinkedHashMap for raw arguments
+		Map<String, String> rawArgumentsMap = new LinkedHashMap<>();
+
 		for (Argument arg : args) {
 			if (arg.getNodeName().equals(nodeName) && !(arg instanceof Literal)) {
 				break;
@@ -816,7 +838,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			Object result;
 			try {
-				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap, "/" + context.getInput()));
+				result = parseArgument(context, arg.getNodeName(), arg, new CommandArguments(previousArguments.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + context.getInput()));
 			} catch (IllegalArgumentException e) {
 				/*
 				 * Redirected commands don't parse previous arguments properly. Simplest way to
@@ -829,11 +851,18 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				result = null;
 			}
 			if (arg.isListed()) {
+				// Add the parsed argument
 				previousArguments.add(result);
 				argsMap.put(arg.getNodeName(), result);
+
+				// Add the raw argument
+				String rawArgumentString = getRawArgumentInput(context, arg.getNodeName());
+
+				rawArguments.add(rawArgumentString);
+				rawArgumentsMap.put(arg.getNodeName(), rawArgumentString);
 			}
 		}
-		return new CommandArguments(previousArguments.toArray(), argsMap, "/" + context.getInput());
+		return new CommandArguments(previousArguments.toArray(), argsMap, rawArguments.toArray(new String[0]), rawArgumentsMap, "/" + context.getInput());
 	}
 
 	SuggestionProvider<Source> toSuggestions(Argument theArgument, Argument[] args,

@@ -24,11 +24,15 @@ withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adv
 
 </div>
 
+### CommandArguments changes
+
+For 9.0.4 all deprecated methods are no longer deprecated. To learn about all the methods now available, refer to the [CommandArguments](./commandarguments.md) page.
+
 ## From 9.0.1 to 9.0.2
 
 ### MultiLiteralArgument and LiteralArgument changes
 
-In previous versions, the ability has been introduced to access arguments by their node names. However, while this was possible for every other argument, it wasn't possible for `MultiLiteralArgument`s. This was now changed because the values from the `MultiLiteralArgument` are included in the `CommandArguments` of a command.
+In previous versions, the ability has been introduced to access arguments by their node names. However, while this was possible for every other argument, it wasn't possible for `MultiLiteralArgument`s. This was now changed because the values from the `MultiLiteralArgument` are included in the [`CommandArguments`](./commandarguments.md) of a command.
 
 Therefore, the current constructor has been deprecated and the new one should be used:
 
@@ -50,7 +54,7 @@ withArguments(new MultiLiteralArgument("gamemodes", List.of("survival", "creativ
 
 </div>
 
-Because it is possible to list `LiteralArgument`s in the `CommandArguments` of a command, there was also an additional constructor add to the `LiteralArgument` class. The other one is not deprecated.
+Because it is possible to list `LiteralArgument`s in the [`CommandArguments`](./commandarguments.md) of a command, there was also an additional constructor add to the `LiteralArgument` class. The other one is not deprecated.
 
 Now, the `LiteralArgument` class contains two possible constructors:
 

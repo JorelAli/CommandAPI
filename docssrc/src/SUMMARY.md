@@ -32,6 +32,7 @@
   - [Resulting command executors](./resultingcommandexecutors.md)
   - [Handling command failures](./commandfailures.md)
 - [Command arguments](./arguments.md)
+  - [CommandArguments](./commandarguments.md)
   - [Optional arguments](./optional_arguments.md)
   - [Listed arguments](./listed.md)
   - [Argument suggestions](./argumentsuggestions.md)

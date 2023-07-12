@@ -13,7 +13,7 @@ There are four `EntitySelectorArgument` subclasses that determine what type of d
 - `EntitySelectorArgument.OnePlayer` - A single player, which returns a `Player` object.
 - `EntitySelectorArgument.ManyPlayers` - A collection of players, which returns a `Collection<Player>` object.
 
-The return type is the type to be cast when retrieved from the `CommandArguments args` in the command declaration.
+The return type is the type to be cast when retrieved from the [`CommandArguments args`](./commandarguments.md) in the command declaration.
 
 <div class="example">
 

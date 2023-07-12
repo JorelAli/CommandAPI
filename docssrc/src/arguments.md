@@ -75,7 +75,7 @@ The CommandAPI is very flexible when it comes to registering arguments, and lets
 
 ## Argument Casting
 
-To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the `CommandArguments args` is the same as the order in which the arguments were declared.
+To access arguments, they have to be casted to the type that the argument represents. The order of the arguments in the [`CommandArguments args`](./commandarguments.md) is the same as the order in which the arguments were declared.
 
 <div class="multi-pre">
 
@@ -133,7 +133,7 @@ The type to cast each argument (declared in the `dev.jorel.commandapi.arguments`
 |                                    [`LocationArgument`](./argument_locations.md#location-3d-space) | `org.bukkit.Location`                                                                                                                                                                                                                               |
 |                                     [`LongArgument`](./argument_primitives.md#numerical-arguments) | `long`                                                                                                                                                                                                                                              |
 |                                                     [`LootTableArgument`](./argument_loottable.md) | `org.bukkit.loot.LootTable`                                                                                                                                                                                                                         |
- |                                                               [`MapArgument`](./argument_map.md) | `java.util.LinkedhashMap`                                                                                                                                                                                                                            |
+ |                                                               [`MapArgument`](./argument_map.md) | `java.util.LinkedHashMap`                                                                                                                                                                                                                           |
 |                                            [`MathOperationArgument`](./argument_mathoperation.md) | `dev.jorel.commandapi.wrappers.MathOperation`                                                                                                                                                                                                       |
 |                                                       [`MultiLiteralArgument`](./argument_multiliteral.md) | `String`                                                                                                                                                                                                                                            |
 |                                                  [`NamespacedKeyArgument`](./argument_namespacedkey.md) | `org.bukkit.NamespacedKey`                                                                                                                                                                                                                          |
