@@ -18,7 +18,33 @@ import java.util.function.Supplier;
  * @param fullInput The command string a player has entered (including the /)
  */
 @SuppressWarnings("unchecked")
-public record CommandArguments(Object[] args, Map<String, Object> argsMap, String[] rawArgs, Map<String, String> rawArgsMap, String fullInput) {
+public record CommandArguments(
+
+	/**
+	 * @param The arguments for this command
+	 */
+	Object[] args,
+
+	/**
+	 *  @param The arguments for this command mapped to their node names. This is an ordered map
+	 */
+	Map<String, Object> argsMap,
+
+	/**
+	 * @param The raw arguments for this command
+	 */
+	String[] rawArgs,
+
+	/**
+	 * @param The raw arguments for this command mapped to their node names. This is an ordered map
+	 */
+	Map<String, String> rawArgsMap,
+
+	/**
+	 * @param The command string a player has entered (including the /)
+	 */
+	String fullInput
+) {
 
 	// Access the inner structure directly
 
