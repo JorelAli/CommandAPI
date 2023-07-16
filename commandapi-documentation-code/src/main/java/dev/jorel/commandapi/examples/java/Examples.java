@@ -234,6 +234,16 @@ new CommandAPICommand("set")
 
 void argument_chatAdventure() {
 /* ANCHOR: argumentChatAdventure1 */
+new CommandAPICommand("namecolor")
+    .withArguments(new AdventureChatColorArgument("chatcolor"))
+    .executesPlayer((player, args) -> {
+        NamedTextColor color = (NamedTextColor) args.get("chatcolor");
+        player.displayName(Component.text().color(color).append(Component.text(player.getName())).build());
+    })
+    .register();
+/* ANCHOR_END: argumentChatAdventure1 */
+
+/* ANCHOR: argumentChatAdventure2 */
 new CommandAPICommand("showbook")
     .withArguments(new PlayerArgument("target"))
     .withArguments(new TextArgument("title"))
@@ -250,9 +260,9 @@ new CommandAPICommand("showbook")
         target.openBook(mybook);
     })
     .register();
-/* ANCHOR_END: argumentChatAdventure1 */
+/* ANCHOR_END: argumentChatAdventure2 */
 
-/* ANCHOR: argumentChatAdventure2 */
+/* ANCHOR: argumentChatAdventure3 */
 new CommandAPICommand("pbroadcast")
     .withArguments(new AdventureChatArgument("message"))
     .executes((sender, args) -> {
@@ -263,12 +273,11 @@ new CommandAPICommand("pbroadcast")
         Bukkit.getServer().broadcast(message);
     })
     .register();
-/* ANCHOR_END: argumentChatAdventure2 */
+/* ANCHOR_END: argumentChatAdventure3 */
 }
 
-@SuppressWarnings("deprecation")
-void argument_chats(){
-/* ANCHOR: argumentChats1 */
+void argument_chatSpigot() {
+/* ANCHOR: argumentChatSpigot1 */
 new CommandAPICommand("namecolor")
     .withArguments(new ChatColorArgument("chatcolor"))
     .executesPlayer((player, args) -> {
@@ -276,20 +285,9 @@ new CommandAPICommand("namecolor")
         player.setDisplayName(color + player.getName());
     })
     .register();
-/* ANCHOR_END: argumentChats1 */
-/* ANCHOR: argumentChats2 */
-new CommandAPICommand("namecolor")
-    .withArguments(new AdventureChatColorArgument("chatcolor"))
-    .executesPlayer((player, args) -> {
-        NamedTextColor color = (NamedTextColor) args.get("chatcolor");
-        player.displayName(Component.text().color(color).append(Component.text(player.getName())).build());
-    })
-    .register();
-/* ANCHOR_END: argumentChats2 */
-}
+/* ANCHOR_END: argumentChatSpigot1 */
 
-void argument_chatSpigot() {
-/* ANCHOR: argumentChatSpigot1 */
+/* ANCHOR: argumentChatSpigot2 */
 new CommandAPICommand("makebook")
     .withArguments(new PlayerArgument("player"))
     .withArguments(new ChatComponentArgument("contents"))
@@ -309,9 +307,9 @@ new CommandAPICommand("makebook")
         player.getInventory().addItem(is);
     })
     .register();
-/* ANCHOR_END: argumentChatSpigot1 */
+/* ANCHOR_END: argumentChatSpigot2 */
 
-/* ANCHOR: argumentChatSpigot2 */
+/* ANCHOR: argumentChatSpigot3 */
 new CommandAPICommand("pbroadcast")
     .withArguments(new ChatArgument("message"))
     .executes((sender, args) -> {
@@ -321,7 +319,7 @@ new CommandAPICommand("pbroadcast")
         Bukkit.getServer().spigot().broadcast(message);
     })
     .register();
-/* ANCHOR_END: argumentChatSpigot2 */
+/* ANCHOR_END: argumentChatSpigot3 */
 }
 
 void argument_command() {

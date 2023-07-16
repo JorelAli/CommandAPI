@@ -159,6 +159,16 @@ commandAPICommand("set") {
 
 fun argument_chatAdventure() {
 /* ANCHOR: argumentChatAdventure1 */
+commandAPICommand("namecolor") {
+    chatColorArgument("chatcolor")
+    playerExecutor { player, args ->
+        val color = args["chatcolor"] as NamedTextColor
+        player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
+    }
+}
+/* ANCHOR_END: argumentChatAdventure1 */
+
+/* ANCHOR: argumentChatAdventure2 */
 commandAPICommand("showbook") {
     playerArgument("target")
     textArgument("title")
@@ -175,9 +185,9 @@ commandAPICommand("showbook") {
         target.openBook(mybook)
     }
 }
-/* ANCHOR_END: argumentChatAdventure1 */
+/* ANCHOR_END: argumentChatAdventure2 */
 
-/* ANCHOR: argumentChatAdventure2 */
+/* ANCHOR: argumentChatAdventure3 */
 commandAPICommand("pbroadcast") {
     adventureChatArgument("message")
     anyExecutor { _, args ->
@@ -188,11 +198,11 @@ commandAPICommand("pbroadcast") {
         Bukkit.getServer().broadcast(message)
     }
 }
-/* ANCHOR_END: argumentChatAdventure2 */
+/* ANCHOR_END: argumentChatAdventure3 */
 }
 
-fun argument_chats() {
-/* ANCHOR: argumentChats1 */
+fun argument_chatSpigot() {
+/* ANCHOR: argumentChatSpigot1 */
 commandAPICommand("namecolor") {
     chatColorArgument("chatcolor")
     playerExecutor { player, args ->
@@ -200,20 +210,9 @@ commandAPICommand("namecolor") {
         player.setDisplayName("$color${player.name}")
     }
 }
-/* ANCHOR_END: argumentChats1 */
-/* ANCHOR: argumentChats2 */
-commandAPICommand("namecolor") {
-    chatColorArgument("chatcolor")
-    playerExecutor { player, args ->
-        val color = args["chatcolor"] as NamedTextColor
-        player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
-    }
-}
-/* ANCHOR_END: argumentChats2 */
-}
+/* ANCHOR_END: argumentChatSpigot1 */
 
-fun argument_chatSpigot() {
-/* ANCHOR: argumentChatSpigot1 */
+/* ANCHOR: argumentChatSpigot2 */
 commandAPICommand("makebook") {
     playerArgument("player")
     chatComponentArgument("contents")
@@ -233,9 +232,9 @@ commandAPICommand("makebook") {
         player.inventory.addItem(item)
     }
 }
-/* ANCHOR_END: argumentChatSpigot1 */
+/* ANCHOR_END: argumentChatSpigot2 */
 
-/* ANCHOR: argumentChatSpigot2 */
+/* ANCHOR: argumentChatSpigot3 */
 commandAPICommand("pbroadcast") {
     chatArgument("message")
     anyExecutor { _, args ->
@@ -245,7 +244,7 @@ commandAPICommand("pbroadcast") {
         Bukkit.getServer().spigot().broadcast(*message)
     }
 }
-/* ANCHOR_END: argumentChatSpigot2 */
+/* ANCHOR_END: argumentChatSpigot3 */
 }
 
 fun argument_command() {
