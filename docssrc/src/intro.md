@@ -41,6 +41,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 - Updates [Multi literal arguments](./argument_multiliteral.md) page to mention new `MultiLiteralArgument` constructor
 - Adds [CommandArguments](./commandarguments.md) page to explain the `CommandArguments` class introduced in 9.0.0
+- Adds [Adventure chat color argument](./argument_chat_adventure.md) to the adventure chat arguments page.
 
 ### Documentation changes 9.0.2 \\(\rightarrow\\) 9.0.3
 

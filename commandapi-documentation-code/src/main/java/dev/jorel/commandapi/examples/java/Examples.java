@@ -40,6 +40,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.*;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -276,6 +277,15 @@ new CommandAPICommand("namecolor")
     })
     .register();
 /* ANCHOR_END: argumentChats1 */
+/* ANCHOR: argumentChats2 */
+new CommandAPICommand("namecolor")
+    .withArguments(new AdventureChatColorArgument("chatcolor"))
+    .executesPlayer((player, args) -> {
+        NamedTextColor color = (NamedTextColor) args.get("chatcolor");
+        player.displayName(Component.text().color(color).append(Component.text(player.getName())).build());
+    })
+    .register();
+/* ANCHOR_END: argumentChats2 */
 }
 
 void argument_chatSpigot() {

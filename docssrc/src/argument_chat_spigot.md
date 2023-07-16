@@ -1,5 +1,43 @@
 # Spigot chat arguments
 
+## Chat color argument
+
+![Chatcolor argument in-game, displaying a list of Minecraft chat colors](./images/arguments/chatcolor.png)
+
+The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green). This argument returns the `ChatColor` object.
+
+<div class="example">
+
+### Example - Username color changing plugin
+
+Say we want to create a plugin to change the color of a player's username. We want to create a command of the following form:
+
+```mccmd
+/namecolor <chatcolor>
+```
+
+We then use the `ChatColorArgument` to change the player's name color:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChats1}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChats1}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChats1}}
+```
+
+</div>
+
+</div>
+
+-----
+
 > **Developer's Note:**
 >
 > The two following classes, `ChatComponentArgument` and `ChatArgument` depend on a [Spigot](https://www.spigotmc.org/) based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`

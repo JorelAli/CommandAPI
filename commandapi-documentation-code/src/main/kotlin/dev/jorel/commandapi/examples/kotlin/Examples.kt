@@ -18,6 +18,7 @@ import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
@@ -224,6 +225,15 @@ CommandAPICommand("namecolor")
     })
     .register()
 /* ANCHOR_END: argumentChats1 */
+/* ANCHOR: argumentChats2 */
+CommandAPICommand("namecolor")
+    .withArguments(AdventureChatColorArgument("chatcolor"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val color = args["chatcolor"] as NamedTextColor
+        player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
+    })
+    .register()
+/* ANCHOR_END: argumentChats2 */
 }
 
 fun argument_chatSpigot() {

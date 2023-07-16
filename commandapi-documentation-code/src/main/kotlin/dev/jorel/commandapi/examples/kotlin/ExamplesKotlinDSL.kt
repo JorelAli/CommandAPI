@@ -10,6 +10,7 @@ import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.*
 import org.bukkit.advancement.Advancement
@@ -200,6 +201,15 @@ commandAPICommand("namecolor") {
     }
 }
 /* ANCHOR_END: argumentChats1 */
+/* ANCHOR: argumentChats2 */
+commandAPICommand("namecolor") {
+    chatColorArgument("chatcolor")
+    playerExecutor { player, args ->
+        val color = args["chatcolor"] as NamedTextColor
+        player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
+    }
+}
+/* ANCHOR_END: argumentChats2 */
 }
 
 fun argument_chatSpigot() {

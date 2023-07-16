@@ -10,6 +10,44 @@ Since this functions very similar to the Spigot chat arguments, this page won't 
 
 -----
 
+## Adventure chat color argument
+
+![Chatcolor argument in-game, displaying a list of Minecraft chat colors](./images/arguments/chatcolor.png)
+
+The `AdventureChatColorArgument` class is used to represent a given chat color (e.g. red or green). This argument returns the `NamedTextColor` object. If `reset` is passed to this argument, this will return `NamedTextColor.WHITE`.
+
+<div class="example">
+
+### Example - Username color changing plugin
+
+Say we want to create a plugin to change the color of a player's username. We want to create a command of the following form:
+
+```mccmd
+/namecolor <chatcolor>
+```
+
+We then use the `ChatColorArgument` to change the player's name color:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChats2}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChats2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChats2}}
+```
+
+</div>
+
+</div>
+
+-----
+
 ## Adventure chat component argument
 
 The `AdventureChatComponentArgument` class accepts raw chat-based JSON as valid input, as declared [here](https://minecraft.gamepedia.com/Raw_JSON_text_format). This is converted into Adventure's `Component` class.
