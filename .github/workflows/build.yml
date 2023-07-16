@@ -81,9 +81,7 @@ jobs:
 
       - name: Run Bukkit unit tests across all versions (1.19.2)
         continue-on-error: true
-        run: |
-            mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
-            mvn clean package -pl :commandapi-bukkit-test-tests-1.18 -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
+        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_19_2
 
       - name: Run Bukkit unit tests across all versions (1.18)
         continue-on-error: true

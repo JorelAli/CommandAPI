@@ -555,7 +555,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final Objective getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
+	@Overridden(in = "1.17 common", because = "The Objective.getName() method mangles itself sometimes and I don't know why. Seems to be looking for Objective.b() or something")
+	public Objective getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException {
 		String objectiveName = ObjectiveArgument.getObjective(cmdCtx, key).getName();
 		return Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
