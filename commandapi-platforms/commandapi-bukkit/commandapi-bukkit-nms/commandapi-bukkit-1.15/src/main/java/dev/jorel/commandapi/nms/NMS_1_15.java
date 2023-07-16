@@ -446,23 +446,32 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
+	/*
+	 * ADVENTURE START
+	 * These methods use the Adventure API, but the Adventure API isn't present
+	 * in paper until Minecraft 1.16.5. We assume that the developer is shading
+	 * Adventure manually (or otherwise), using https://docs.advntr.dev/platform/bukkit.html
+	 */
+
 	@Override
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
 	}
 
 	@Override
-	public final NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+	public NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		final Integer color = enumChatFormatD.get(ArgumentChatFormat.a(cmdCtx, key));
 		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
 	}
 
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
+
+	/*
+	 * ADVENTURE END
+	 */
 
 	@Override
 	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {

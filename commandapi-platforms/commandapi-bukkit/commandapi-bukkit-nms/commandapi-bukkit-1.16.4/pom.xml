@@ -52,20 +52,20 @@
 		</dependency>
 
 		<!-- Libraries -->
+		
 		<dependency>
-			<groupId>io.papermc.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>${paper.version}</version>
-			<scope>provided</scope>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-platform-bukkit</artifactId>
+			<version>4.3.0</version>
 		</dependency>
-		<!--
+		
+		<!-- Paper -->
 		<dependency>
 			<groupId>com.destroystokyo.paper</groupId>
 			<artifactId>paper-api</artifactId>
 			<version>1.16.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		-->
 
 		<!-- CommandAPI core -->
 		<dependency>
