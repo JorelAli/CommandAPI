@@ -5,9 +5,9 @@ import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPack
 import org.bukkit.entity.Player;
 
 /**
- * A {@link CommandAPIPacketHandler} for handling {@link CommandAPIPacket}s sent to Bukkit by {@link Player} connections.
+ * A {@link PlayPacketHandler} for handling {@link CommandAPIPacket}s sent to Bukkit by {@link Player} connections.
  */
-public class BukkitPacketHandler implements CommandAPIPacketHandler<Player> {
+public class BukkitPlayPacketHandler implements PlayPacketHandler<Player> {
 	@Override
 	public void handleUpdateRequirementsPacket(Player sender, ClientToServerUpdateRequirementsPacket packet) {
 		CommandAPI.updateRequirements(sender);

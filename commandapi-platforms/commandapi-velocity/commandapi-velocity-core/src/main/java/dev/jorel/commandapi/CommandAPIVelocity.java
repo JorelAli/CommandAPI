@@ -24,7 +24,6 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.*;
-import dev.jorel.commandapi.network.CommandAPIProtocol;
 import dev.jorel.commandapi.network.VelocityCommandAPIMessenger;
 import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
 import org.apache.logging.log4j.LogManager;
@@ -117,7 +116,6 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	@Override
 	public VelocityCommandAPIMessenger setupMessenger() {
 		messenger = new VelocityCommandAPIMessenger(
-			CommandAPIProtocol.CHANNEL_NAME,
 			getConfiguration().getPlugin(),
 			getConfiguration().getServer()
 		);

@@ -1,11 +1,10 @@
 package dev.jorel.commandapi.network.packets;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import dev.jorel.commandapi.exceptions.ProtocolVersionTooOldException;
 import dev.jorel.commandapi.network.CommandAPIMessenger;
 import dev.jorel.commandapi.network.CommandAPIPacket;
-import dev.jorel.commandapi.network.CommandAPIPacketHandler;
+import dev.jorel.commandapi.network.FriendlyByteBuffer;
 
 import java.util.function.Predicate;
 
@@ -21,13 +20,13 @@ import java.util.function.Predicate;
  */
 public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket {
 	/**
-	 * Reads the bytes from the given {@link ByteArrayDataInput} to create a new
+	 * Reads the bytes from the given {@link FriendlyByteBuffer} to create a new
 	 * {@link ClientToServerUpdateRequirementsPacket}.
 	 *
 	 * @param ignored This packet has no data, so nothing is read.
 	 * @return The {@link ClientToServerUpdateRequirementsPacket} sent to this plugin.
 	 */
-	public static ClientToServerUpdateRequirementsPacket deserialize(ByteArrayDataInput ignored) {
+	public static ClientToServerUpdateRequirementsPacket deserialize(FriendlyByteBuffer ignored) {
 		// Nothing to read
 		return new ClientToServerUpdateRequirementsPacket();
 	}
@@ -48,13 +47,14 @@ public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket 
 	}
 
 	@Override
-	public void write(ByteArrayDataOutput buffer) {
+	public void write(FriendlyByteBuffer buffer, Object target, int protocolVersion) throws ProtocolVersionTooOldException {
+		if (protocolVersion == 0) {
+			throw ProtocolVersionTooOldException.whileSending(target, protocolVersion,
+				// TODO: If the first released version of the CommandAPI that can receive messages is not 9.0.4, change this message
+				"CommandAPI version 9.0.4 or greater is required to receive ClientToServerUpdateRequirementsPacket"
+			);
+		}
 		// Nothing to write
-	}
-
-	@Override
-	public <InputChannel> void handle(InputChannel sender, CommandAPIPacketHandler<InputChannel> packetHandler) {
-		packetHandler.handleUpdateRequirementsPacket(sender, this);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket 
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == null) return false;
+		if (obj == null) return false;
 		return obj instanceof ClientToServerUpdateRequirementsPacket;
 	}
 

@@ -1,19 +1,18 @@
 package dev.jorel.commandapi.network;
 
-import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
-
 /**
- * An interface for handling {@link CommandAPIPacket}s. Each method handles a different packet. These methods should be
- * implemented on each platform to define what happens when each packet is received.
+ * An interface for handling {@link CommandAPIPacket}s. Direct children of this interface handles packets for each of the
+ * {@link CommandAPIProtocol}s, and those children should be implemented to handle packets for each platform.
  *
- * @param <InputChannel> The type of objects that might send a packet to this plugin
+ * @param <InputChannel> The type of objects that might send a packet to this plugin on this platform
  */
 public interface CommandAPIPacketHandler<InputChannel> {
 	/**
-	 * Handles a {@link ClientToServerUpdateRequirementsPacket}.
+	 * Handles a {@link CommandAPIPacket} according to the implementation of {@link CommandAPIPacketHandler}. This
+	 * should be implemented for each {@link CommandAPIProtocol} to handle packets on that channel.
 	 *
 	 * @param sender The source of the packet.
 	 * @param packet The data for the packet.
 	 */
-	void handleUpdateRequirementsPacket(InputChannel sender, ClientToServerUpdateRequirementsPacket packet);
+	void handlePacket(InputChannel sender, CommandAPIPacket packet);
 }
