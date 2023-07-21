@@ -436,7 +436,7 @@ public class FriendlyByteBuffer {
 	}
 
 	/**
-	 * Reads a String from this buffer. This method assumes the String was written by {@link #writeString(String).}
+	 * Reads a String from this buffer. This method assumes the String was written by {@link #writeString(String)}.
 	 *
 	 * @return The String read from this buffer.
 	 * @throws IllegalStateException If the read index goes out of bounds while reading bytes.
