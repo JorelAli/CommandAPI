@@ -28,7 +28,7 @@ import java.util.List;
 public class FriendlyByteBuffer {
 	private int readIndex = 0;
 	private int writeIndex = 0;
-	private final List<Byte> bytes = new ArrayList<>();
+	private final List<Byte> byteBuffer = new ArrayList<>();
 
 	/**
 	 * Creates a new {@link FriendlyByteBuffer} with no bytes, ready to be written to.
@@ -157,9 +157,9 @@ public class FriendlyByteBuffer {
 	 * {@link IndexOutOfBoundsException} when accessing bytes at the write index.
 	 */
 	private void padBytesWithZerosUntilWriteIndex() {
-		if(this.writeIndex > this.bytes.size()) {
-			List<Byte> paddingZeros = Collections.nCopies(this.writeIndex - this.bytes.size(), (byte) 0);
-			this.bytes.addAll(paddingZeros);
+		if(this.writeIndex > this.byteBuffer.size()) {
+			List<Byte> paddingZeros = Collections.nCopies(this.writeIndex - this.byteBuffer.size(), (byte) 0);
+			this.byteBuffer.addAll(paddingZeros);
 		}
 	}
 
@@ -167,7 +167,7 @@ public class FriendlyByteBuffer {
 		return new IllegalStateException(
 			message + "\n" +
 			"At position " + (this.readIndex - 1) + "\n" +
-			this.bytes.subList(0, this.readIndex) + " <-- HERE " + this.bytes.subList(this.readIndex, this.writeIndex)
+			this.byteBuffer.subList(0, this.readIndex) + " <-- HERE " + this.byteBuffer.subList(this.readIndex, this.writeIndex)
 		);
 	}
 
@@ -239,7 +239,7 @@ public class FriendlyByteBuffer {
 	public byte[] toByteArray() throws IllegalStateException {
 		this.checkWriteIndexIsInBounds();
 
-		return Bytes.toArray(this.bytes.subList(0, this.writeIndex));
+		return Bytes.toArray(this.byteBuffer.subList(0, this.writeIndex));
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class FriendlyByteBuffer {
 		this.checkWriteIndexIsInBounds();
 		this.checkReadIndexIsInBounds();
 
-		return Bytes.toArray(this.bytes.subList(this.readIndex, this.writeIndex));
+		return Bytes.toArray(this.byteBuffer.subList(this.readIndex, this.writeIndex));
 	}
 
 	/**
@@ -282,10 +282,10 @@ public class FriendlyByteBuffer {
 	public void writeByte(byte b) throws IllegalStateException {
 		this.checkWriteIndexIsInBounds();
 
-		if(this.writeIndex == this.bytes.size()) {
-			this.bytes.add(b);
+		if(this.writeIndex == this.byteBuffer.size()) {
+			this.byteBuffer.add(b);
 		} else {
-			this.bytes.set(this.writeIndex, b);
+			this.byteBuffer.set(this.writeIndex, b);
 		}
 
 		this.writeIndex++;
@@ -309,7 +309,7 @@ public class FriendlyByteBuffer {
 	 */
 	public byte readByte() throws IllegalStateException{
 		this.checkReadIndexIsInBounds();
-		byte b = this.bytes.get(this.readIndex);
+		byte b = this.byteBuffer.get(this.readIndex);
 
 		this.readIndex++;
 		return b;

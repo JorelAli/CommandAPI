@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-public class SetVersionPacketTests extends NetworkTestBase {
+class SetVersionPacketTests extends NetworkTestBase {
 
 	/*********
 	 * Setup *

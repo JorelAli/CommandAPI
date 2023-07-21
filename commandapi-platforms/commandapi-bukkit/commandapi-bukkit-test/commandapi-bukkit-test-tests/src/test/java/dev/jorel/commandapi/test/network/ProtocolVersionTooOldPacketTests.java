@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProtocolVersionTooOldPacketTests  extends NetworkTestBase {
+class ProtocolVersionTooOldPacketTests  extends NetworkTestBase {
 
 	/*********
 	 * Setup *
