@@ -60,7 +60,6 @@ import org.bukkit.craftbukkit.v1_20_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_20_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R1.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_20_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
@@ -767,11 +766,6 @@ public class NMS_1_20_R1 extends NMS_Common {
 				"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
 					+ stringWriter.toString());
 		}
-	}
-
-	@Override
-	public final void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
 	}
 
 	@Override

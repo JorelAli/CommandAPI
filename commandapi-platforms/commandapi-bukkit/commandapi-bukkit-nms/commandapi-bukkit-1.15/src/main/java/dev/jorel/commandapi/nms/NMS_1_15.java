@@ -42,7 +42,6 @@ import org.bukkit.craftbukkit.v1_15_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_15_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_15_R1.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_15_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
@@ -942,11 +941,6 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	@Override
 	public void reloadDataPacks() {
 		// Datapacks don't need reloading in this version
-	}
-
-	@Override
-	public void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 
 	@Override

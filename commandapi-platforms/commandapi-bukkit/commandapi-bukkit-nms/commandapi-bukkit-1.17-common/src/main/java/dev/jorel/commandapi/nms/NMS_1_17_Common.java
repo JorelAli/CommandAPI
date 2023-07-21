@@ -59,7 +59,6 @@ import org.bukkit.craftbukkit.v1_17_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_17_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_17_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_17_R1.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_17_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
@@ -669,11 +668,6 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	@Override
 	@Unimplemented(because = NAME_CHANGED, info = "Unmapped as MinecraftServer.resources", from = "aB (1.17)", to = "aC (1.17.1)")
 	public abstract void reloadDataPacks();
-
-	@Override
-	public void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
-	}
 
 	@Override
 	public Message generateMessageFromJson(String json) {

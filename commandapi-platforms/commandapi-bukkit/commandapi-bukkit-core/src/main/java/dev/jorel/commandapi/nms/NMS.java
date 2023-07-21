@@ -426,13 +426,6 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	void reloadDataPacks();
 
-	/**
-	 * Resends the command dispatcher's set of commands to a player.
-	 * 
-	 * @param player the player to send the command graph packet to
-	 */
-	void resendPackets(Player player);
-
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);

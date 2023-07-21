@@ -78,11 +78,6 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	@Override
-	public final void resendPackets(Player player) {
-		// There's nothing to do here, we can't "send packets to players"
-	}
-
-	@Override
 	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
 		// We don't want to call the NMS implementation of addToHelpMap because
 		// that uses reflection to access SimpleHelpMap. Luckily for us, the

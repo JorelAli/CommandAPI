@@ -66,7 +66,6 @@ import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_16_R3.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R3.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R3.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_16_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
@@ -957,11 +956,6 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
 							+ stringWriter.toString());
 		}
-	}
-
-	@Override
-	public void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 
 	@Override
