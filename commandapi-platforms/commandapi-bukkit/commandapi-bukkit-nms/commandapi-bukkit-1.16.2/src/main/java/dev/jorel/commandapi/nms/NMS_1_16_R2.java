@@ -1007,11 +1007,6 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
-	public void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
 	public Message generateMessageFromJson(String json) {
 		return ChatSerializer.a(json);
 	}

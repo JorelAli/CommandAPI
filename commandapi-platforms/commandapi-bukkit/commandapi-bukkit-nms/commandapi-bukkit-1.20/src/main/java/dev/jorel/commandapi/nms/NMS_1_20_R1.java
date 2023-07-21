@@ -770,11 +770,6 @@ public class NMS_1_20_R1 extends NMS_Common {
 	}
 
 	@Override
-	public final void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
 	public Message generateMessageFromJson(String json) {
 		return Serializer.fromJson(json);
 	}

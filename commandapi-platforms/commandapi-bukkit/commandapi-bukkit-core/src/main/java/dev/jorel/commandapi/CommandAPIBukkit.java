@@ -215,7 +215,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// For some reason, any other priority doesn't work
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
-				resendPackets(e.getPlayer());
+				e.getPlayer().updateCommands();
 			}
 
 		}, plugin);
@@ -528,7 +528,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public void updateRequirements(AbstractPlayer<?> player) {
-		resendPackets((Player) player.getSource());
+		((Player) player.getSource()).updateCommands();
 	}
 
 	@Override

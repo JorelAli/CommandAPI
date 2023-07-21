@@ -685,8 +685,4 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
 	public abstract void reloadDataPacks();
-
-	@Override
-	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftPlayer")
-	public abstract void resendPackets(Player player);
 }

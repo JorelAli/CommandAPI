@@ -671,11 +671,6 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	public abstract void reloadDataPacks();
 
 	@Override
-	public void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
-	}
-
-	@Override
 	public Message generateMessageFromJson(String json) {
 		return Serializer.fromJson(json);
 	}
