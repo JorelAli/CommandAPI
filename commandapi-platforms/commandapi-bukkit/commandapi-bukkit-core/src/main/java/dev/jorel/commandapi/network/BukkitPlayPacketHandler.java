@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.network;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
+import dev.jorel.commandapi.network.packets.UpdateRequirementsPacket;
 import org.bukkit.entity.Player;
 
 /**
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  */
 public class BukkitPlayPacketHandler implements PlayPacketHandler<Player> {
 	@Override
-	public void handleUpdateRequirementsPacket(Player sender, ClientToServerUpdateRequirementsPacket packet) {
+	public void handleUpdateRequirementsPacket(Player sender, UpdateRequirementsPacket packet) {
 		CommandAPI.updateRequirements(sender);
 	}
 }

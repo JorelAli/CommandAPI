@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.network;
 
-import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
+import dev.jorel.commandapi.network.packets.UpdateRequirementsPacket;
 import dev.jorel.commandapi.network.packets.ProtocolVersionTooOldPacket;
 import dev.jorel.commandapi.network.packets.SetVersionPacket;
 
@@ -28,7 +28,7 @@ public enum CommandAPIProtocol {
 	 * that happen while a server is running.
 	 */
 	PLAY("commandapi:play", new PacketSetBuilder()
-		.register(ClientToServerUpdateRequirementsPacket.class, ClientToServerUpdateRequirementsPacket::deserialize)
+		.register(UpdateRequirementsPacket.class, UpdateRequirementsPacket::deserialize)
 	);
 
 	// Global channel variables

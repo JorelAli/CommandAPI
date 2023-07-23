@@ -25,7 +25,7 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.network.VelocityCommandAPIMessenger;
-import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
+import dev.jorel.commandapi.network.packets.UpdateRequirementsPacket;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
@@ -256,7 +256,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 		//  Therefore, they don't have any commands, so they don't need to be updated
 		if(optionalServer.isEmpty()) return;
 
-		getMessenger().sendPacket(optionalServer.get(), ClientToServerUpdateRequirementsPacket.create());
+		getMessenger().sendPacket(optionalServer.get(), UpdateRequirementsPacket.create());
 	}
 
 	@Override

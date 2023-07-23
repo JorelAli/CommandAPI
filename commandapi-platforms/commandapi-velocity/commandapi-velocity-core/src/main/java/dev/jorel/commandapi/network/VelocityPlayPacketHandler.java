@@ -4,7 +4,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.messages.ChannelMessageSource;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
+import dev.jorel.commandapi.network.packets.UpdateRequirementsPacket;
 
 /**
  * A {@link PlayPacketHandler} for handling {@link CommandAPIPacket}s sent to Velocity.
@@ -15,7 +15,7 @@ import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPack
  */
 public class VelocityPlayPacketHandler implements PlayPacketHandler<ChannelMessageSource> {
 	@Override
-	public void handleUpdateRequirementsPacket(ChannelMessageSource sender, ClientToServerUpdateRequirementsPacket packet) {
+	public void handleUpdateRequirementsPacket(ChannelMessageSource sender, UpdateRequirementsPacket packet) {
 		// This client-to-server packet should never be sent by the server
 		if (sender instanceof ServerConnection) return;
 

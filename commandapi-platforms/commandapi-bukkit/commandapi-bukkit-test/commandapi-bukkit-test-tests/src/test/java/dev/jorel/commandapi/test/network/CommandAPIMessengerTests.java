@@ -96,8 +96,8 @@ class CommandAPIMessengerTests extends NetworkTestBase {
 		assertThrowsWithMessage(
 			IllegalStateException.class,
 			"Packet was larger than expected! 2 extra byte(s) found after deserializing.\n" +
-				"Given: [0, 0, 0], Read: ClientToServerUpdateRequirementsPacket",
-			// ClientToServerUpdateRequirementsPacket expects no data after id (0)
+				"Given: [0, 0, 0], Read: UpdateRequirementsPacket",
+			// UpdateRequirementsPacket expects no data after id (0)
 			() -> getHandledPacket(player, "commandapi:play", new byte[]{0, 0, 0})
 		);
 	}

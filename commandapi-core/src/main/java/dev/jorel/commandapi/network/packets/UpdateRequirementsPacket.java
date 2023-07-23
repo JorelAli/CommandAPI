@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 /**
  * A packet that signals a client wants to be sent the <a href="https://wiki.vg/Protocol#Commands">Commands packet</a>.
+ * This packet is only intended to be sent in the Client to Server direction.
  * <p>
  * This packet does not contain any data. The receiver should simply update the requirements for the client the packet
  * came from.
@@ -18,31 +19,31 @@ import java.util.function.Predicate;
  * conditions tested by {@link ArgumentBuilder#requires(Predicate)} have changed, the client is informed of those
  * changes, updating what they know about their requirements.
  */
-public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket {
+public class UpdateRequirementsPacket implements CommandAPIPacket {
 	/**
 	 * Reads the bytes from the given {@link FriendlyByteBuffer} to create a new
-	 * {@link ClientToServerUpdateRequirementsPacket}.
+	 * {@link UpdateRequirementsPacket}.
 	 *
 	 * @param ignored This packet has no data, so nothing is read.
-	 * @return The {@link ClientToServerUpdateRequirementsPacket} sent to this plugin.
+	 * @return The {@link UpdateRequirementsPacket} sent to this plugin.
 	 */
-	public static ClientToServerUpdateRequirementsPacket deserialize(FriendlyByteBuffer ignored) {
+	public static UpdateRequirementsPacket deserialize(FriendlyByteBuffer ignored) {
 		// Nothing to read
-		return new ClientToServerUpdateRequirementsPacket();
+		return new UpdateRequirementsPacket();
 	}
 
 	/**
-	 * Creates a new {@link ClientToServerUpdateRequirementsPacket}, which can be sent using
+	 * Creates a new {@link UpdateRequirementsPacket}, which can be sent using
 	 * {@link CommandAPIMessenger#sendPacket(Object, CommandAPIPacket)}.
 	 *
-	 * @return A new {@link ClientToServerUpdateRequirementsPacket}.
+	 * @return A new {@link UpdateRequirementsPacket}.
 	 */
-	public static ClientToServerUpdateRequirementsPacket create() {
+	public static UpdateRequirementsPacket create() {
 		// No parameters to write
-		return new ClientToServerUpdateRequirementsPacket();
+		return new UpdateRequirementsPacket();
 	}
 
-	private ClientToServerUpdateRequirementsPacket() {
+	private UpdateRequirementsPacket() {
 
 	}
 
@@ -51,7 +52,7 @@ public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket 
 		if (protocolVersion == 0) {
 			throw ProtocolVersionTooOldException.whileSending(target, protocolVersion,
 				// TODO: If the first released version of the CommandAPI that can receive messages is not 9.0.4, change this message
-				"CommandAPI version 9.0.4 or greater is required to receive ClientToServerUpdateRequirementsPacket"
+				"CommandAPI version 9.0.4 or greater is required to receive UpdateRequirementsPacket"
 			);
 		}
 		// Nothing to write
@@ -65,7 +66,7 @@ public class ClientToServerUpdateRequirementsPacket implements CommandAPIPacket 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
-		return obj instanceof ClientToServerUpdateRequirementsPacket;
+		return obj instanceof UpdateRequirementsPacket;
 	}
 
 	@Override

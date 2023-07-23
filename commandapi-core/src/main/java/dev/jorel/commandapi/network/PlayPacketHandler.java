@@ -1,6 +1,6 @@
 package dev.jorel.commandapi.network;
 
-import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPacket;
+import dev.jorel.commandapi.network.packets.UpdateRequirementsPacket;
 
 /**
  * An interface for handling {@link CommandAPIPacket}s on the {@link CommandAPIProtocol#PLAY} channel. Each method
@@ -12,14 +12,14 @@ import dev.jorel.commandapi.network.packets.ClientToServerUpdateRequirementsPack
 public interface PlayPacketHandler<InputChannel> extends CommandAPIPacketHandler<InputChannel> {
 	@Override
 	default void handlePacket(InputChannel sender, CommandAPIPacket packet) {
-		if (packet instanceof ClientToServerUpdateRequirementsPacket p) handleUpdateRequirementsPacket(sender, p);
+		if (packet instanceof UpdateRequirementsPacket p) handleUpdateRequirementsPacket(sender, p);
 	}
 
 	/**
-	 * Handles a {@link ClientToServerUpdateRequirementsPacket}.
+	 * Handles a {@link UpdateRequirementsPacket}.
 	 *
 	 * @param sender The source of the packet.
 	 * @param packet The data for the packet.
 	 */
-	void handleUpdateRequirementsPacket(InputChannel sender, ClientToServerUpdateRequirementsPacket packet);
+	void handleUpdateRequirementsPacket(InputChannel sender, UpdateRequirementsPacket packet);
 }
