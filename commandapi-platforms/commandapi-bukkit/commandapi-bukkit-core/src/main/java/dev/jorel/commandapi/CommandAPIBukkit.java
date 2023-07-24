@@ -463,7 +463,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 			// Sending command dispatcher packets usually happens when Players join the server
 			for(Player p: Bukkit.getOnlinePlayers()) {
-				resendPackets(p);
+				p.updateCommands();
 			}
 		}
 	}
@@ -514,7 +514,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				getHelpMap().remove("/" + commandName);
 
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					resendPackets(p);
+					p.updateCommands();
 				}
 			}
 		}
