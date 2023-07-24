@@ -13,9 +13,9 @@ import dev.jorel.commandapi.exceptions.ProtocolVersionTooOldException;
  * the packet's {@code deserialize} method will be linked to a protocol id. An appropriate method should be added
  * to one of the implementations of {@link CommandAPIPacketHandler} to handle this packet when received.
  * <p>
- * It is recommended to implement a static {@code create()} method that takes in any parameters needed for the packet
- * and returns an instance of the packet. Overriding {@link Object#toString()}, {@link Object#equals(Object)}, and
- * {@link Object#hashCode()} is also recommended for compatibility with certain error messages and the testing framework.
+ * It is also recommended to make the packet a record. This creates appropriate implementations for {@link Object#toString()},
+ * {@link Object#equals(Object)}, and {@link Object#hashCode()}, which helps with compatibility with certain error messages
+ * and the testing framework.
  */
 public interface CommandAPIPacket {
 	/**

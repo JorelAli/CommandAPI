@@ -118,7 +118,7 @@ public abstract class CommandAPIMessenger<InputChannel, OutputChannel> {
 			packet.write(output, target, this.getConnectionProtocolVersion(target));
 		} catch (ProtocolVersionTooOldException exception) {
 			// Send the exception to the other side too, so they know to update their protocol version
-			this.sendPacket(target, ProtocolVersionTooOldPacket.create(CommandAPIProtocol.PROTOCOL_VERSION, exception.getReason()));
+			this.sendPacket(target, new ProtocolVersionTooOldPacket(CommandAPIProtocol.PROTOCOL_VERSION, exception.getReason()));
 			throw exception;
 		}
 

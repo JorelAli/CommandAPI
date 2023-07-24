@@ -46,13 +46,13 @@ class SetVersionPacketTests extends NetworkTestBase {
 		// Packet is encoded as id, then a VarInt for the version inside
 		//  After receiving the packet, the version recorded for the player that sent it should update
 		assertPacketEncodesAndDecodes(player,
-			SetVersionPacket.create(1),
+			new SetVersionPacket(1),
 			new byte[]{0, 1}
 		);
 		assertEquals(1, getProtocolVersion(player));
 
 		assertPacketEncodesAndDecodes(player,
-			SetVersionPacket.create(128),
+			new SetVersionPacket(128),
 			new byte[]{0, (byte) 0x80, 0x01}
 		);
 		assertEquals(128, getProtocolVersion(player));

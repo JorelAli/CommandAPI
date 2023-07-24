@@ -2,7 +2,6 @@ package dev.jorel.commandapi.network.packets;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import dev.jorel.commandapi.exceptions.ProtocolVersionTooOldException;
-import dev.jorel.commandapi.network.CommandAPIMessenger;
 import dev.jorel.commandapi.network.CommandAPIPacket;
 import dev.jorel.commandapi.network.FriendlyByteBuffer;
 
@@ -19,7 +18,7 @@ import java.util.function.Predicate;
  * conditions tested by {@link ArgumentBuilder#requires(Predicate)} have changed, the client is informed of those
  * changes, updating what they know about their requirements.
  */
-public class UpdateRequirementsPacket implements CommandAPIPacket {
+public record UpdateRequirementsPacket() implements CommandAPIPacket {
 	/**
 	 * Reads the bytes from the given {@link FriendlyByteBuffer} to create a new
 	 * {@link UpdateRequirementsPacket}.
@@ -32,21 +31,6 @@ public class UpdateRequirementsPacket implements CommandAPIPacket {
 		return new UpdateRequirementsPacket();
 	}
 
-	/**
-	 * Creates a new {@link UpdateRequirementsPacket}, which can be sent using
-	 * {@link CommandAPIMessenger#sendPacket(Object, CommandAPIPacket)}.
-	 *
-	 * @return A new {@link UpdateRequirementsPacket}.
-	 */
-	public static UpdateRequirementsPacket create() {
-		// No parameters to write
-		return new UpdateRequirementsPacket();
-	}
-
-	private UpdateRequirementsPacket() {
-
-	}
-
 	@Override
 	public void write(FriendlyByteBuffer buffer, Object target, int protocolVersion) throws ProtocolVersionTooOldException {
 		if (protocolVersion == 0) {
@@ -56,21 +40,5 @@ public class UpdateRequirementsPacket implements CommandAPIPacket {
 			);
 		}
 		// Nothing to write
-	}
-
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		return obj instanceof UpdateRequirementsPacket;
-	}
-
-	@Override
-	public int hashCode() {
-		return toString().hashCode();
 	}
 }

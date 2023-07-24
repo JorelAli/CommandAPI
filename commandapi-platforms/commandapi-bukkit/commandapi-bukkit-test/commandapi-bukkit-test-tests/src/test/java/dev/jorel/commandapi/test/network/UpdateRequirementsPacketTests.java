@@ -37,14 +37,14 @@ class UpdateRequirementsPacketTests extends NetworkTestBase {
 			"Tried to send a packet to " + player + ", which is using protocol version 0. " +
 				"This system is using version 1. That version is too old to receive the packet. " +
 				"CommandAPI version 9.0.4 or greater is required to receive UpdateRequirementsPacket",
-			() -> getSentBytes(player, UpdateRequirementsPacket.create())
+			() -> getSentBytes(player, new UpdateRequirementsPacket())
 		);
 
 		setProtocolVersion(player, 1); // Protocol version now 1
 
 		// Packet should be encoded as just the id since no data is included
 		assertPacketEncodesAndDecodes(player,
-			UpdateRequirementsPacket.create(),
+			new UpdateRequirementsPacket(),
 			new byte[]{0}
 		);
 	}

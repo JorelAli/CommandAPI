@@ -16,7 +16,7 @@ import dev.jorel.commandapi.network.packets.SetVersionPacket;
 public class VelocityHandshakePacketHandler implements HandshakePacketHandler<ChannelMessageSource> {
 	@Override
 	public void handleSetVersionPacket(ChannelMessageSource sender, SetVersionPacket packet) {
-		int protocolVersion = packet.getProtocolVersion();
+		int protocolVersion = packet.protocolVersion();
 		VelocityCommandAPIMessenger messenger = CommandAPIVelocity.get().getMessenger();
 
 		// Incoming messages are from ChannelMessageSource, while outgoing messages are ChannelMessageSink

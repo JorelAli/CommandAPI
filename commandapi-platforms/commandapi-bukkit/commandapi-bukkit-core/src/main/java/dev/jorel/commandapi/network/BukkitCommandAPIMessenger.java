@@ -53,7 +53,7 @@ public class BukkitCommandAPIMessenger extends CommandAPIMessenger<Player, Playe
 		if (!event.getChannel().equals(CommandAPIProtocol.HANDSHAKE.getChannelIdentifier())) return;
 
 		// Send SetVersionPacket to inform player of our capabilities
-		this.sendPacket(event.getPlayer(), SetVersionPacket.create(CommandAPIProtocol.PROTOCOL_VERSION));
+		this.sendPacket(event.getPlayer(), new SetVersionPacket(CommandAPIProtocol.PROTOCOL_VERSION));
 	}
 
 	@EventHandler

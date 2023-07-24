@@ -67,7 +67,7 @@ public class VelocityCommandAPIMessenger extends CommandAPIMessenger<ChannelMess
 		this.protocolVersionPerOutgoingChannel.remove(this.previousServerConnectionPerPlayer.get(player));
 
 		// Send SetVersionPacket to inform player and server of our capabilities
-		SetVersionPacket packet = SetVersionPacket.create(CommandAPIProtocol.PROTOCOL_VERSION);
+		SetVersionPacket packet = new SetVersionPacket(CommandAPIProtocol.PROTOCOL_VERSION);
 
 		this.sendPacket(player, packet);
 

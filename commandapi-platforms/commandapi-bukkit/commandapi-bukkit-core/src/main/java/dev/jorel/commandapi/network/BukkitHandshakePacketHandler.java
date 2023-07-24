@@ -10,6 +10,6 @@ import org.bukkit.entity.Player;
 public class BukkitHandshakePacketHandler implements HandshakePacketHandler<Player> {
 	@Override
 	public void handleSetVersionPacket(Player sender, SetVersionPacket packet) {
-		CommandAPIBukkit.get().getMessenger().setProtocolVersion(sender, packet.getProtocolVersion());
+		CommandAPIBukkit.get().getMessenger().setProtocolVersion(sender, packet.protocolVersion());
 	}
 }

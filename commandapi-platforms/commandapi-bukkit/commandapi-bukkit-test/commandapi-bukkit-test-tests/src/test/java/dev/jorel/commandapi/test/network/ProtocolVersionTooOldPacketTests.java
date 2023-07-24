@@ -36,12 +36,12 @@ class ProtocolVersionTooOldPacketTests  extends NetworkTestBase {
 		// Packet is encoded as id, VarInt protocol version, then String for the reason inside
 		assertArrayEquals(
 			new byte[]{1, 0, 9, 'M', 'e', 's', 's', 'a', 'g', 'e', ' ', '1'},
-			getSentBytes(player, ProtocolVersionTooOldPacket.create(0, "Message 1"))
+			getSentBytes(player, new ProtocolVersionTooOldPacket(0, "Message 1"))
 		);
 
 		assertArrayEquals(
 			new byte[]{1, (byte) 0x80, 0x01, 11, 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'},
-			getSentBytes(player, ProtocolVersionTooOldPacket.create(128, "Hello World"))
+			getSentBytes(player, new ProtocolVersionTooOldPacket(128, "Hello World"))
 		);
 	}
 
@@ -57,6 +57,6 @@ class ProtocolVersionTooOldPacketTests  extends NetworkTestBase {
 			() -> getHandledPacket(player, "commandapi:handshake",
 				new byte[]{1, 0, 9, 'M', 'e', 's', 's', 'a', 'g', 'e', ' ', '1'})
 		);
-		assertEquals(ProtocolVersionTooOldPacket.create(0, "Message 1"), packetCapture.getValue());
+		assertEquals(new ProtocolVersionTooOldPacket(0, "Message 1"), packetCapture.getValue());
 	}
 }

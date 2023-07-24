@@ -34,6 +34,6 @@ public interface HandshakePacketHandler<InputChannel> extends CommandAPIPacketHa
 	 * @param packet The data for the packet.
 	 */
 	default void handleProtocolVersionTooOldPacket(InputChannel sender, ProtocolVersionTooOldPacket packet) {
-		throw ProtocolVersionTooOldException.received(sender, packet.getProtocolVersion(), packet.getReason());
+		throw ProtocolVersionTooOldException.received(sender, packet.protocolVersion(), packet.reason());
 	}
 }
