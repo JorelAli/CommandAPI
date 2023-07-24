@@ -25,12 +25,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.jorel.commandapi.arguments.adventure.ChatArgument;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
-import dev.jorel.commandapi.arguments.AdventureChatArgument;
-import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
+import dev.jorel.commandapi.arguments.adventure.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.AxisArgument;
@@ -38,9 +38,7 @@ import dev.jorel.commandapi.arguments.BiomeArgument;
 import dev.jorel.commandapi.arguments.BlockPredicateArgument;
 import dev.jorel.commandapi.arguments.BlockStateArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
-import dev.jorel.commandapi.arguments.ChatArgument;
-import dev.jorel.commandapi.arguments.ChatColorArgument;
-import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.spigot.ChatColorArgument;
 import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.arguments.CommandArgument;
 import dev.jorel.commandapi.arguments.DoubleArgument;
@@ -231,16 +229,16 @@ class AdvancedConverter {
 	private Argument<?> parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
 		return switch (CommandAPIArgumentType.fromInternal(argumentType)) {
 			case ADVANCEMENT -> new AdvancementArgument(nodeName);
-			case ADVENTURE_CHAT -> new AdventureChatArgument(nodeName);
-			case ADVENTURE_CHAT_COMPONENT -> new AdventureChatComponentArgument(nodeName);
+			case ADVENTURE_CHAT -> new ChatArgument(nodeName);
+			case ADVENTURE_CHAT_COMPONENT -> new ChatComponentArgument(nodeName);
 			case ANGLE -> new AngleArgument(nodeName);
 			case AXIS -> new AxisArgument(nodeName);
 			case BIOME -> new BiomeArgument(nodeName);
 			case BLOCKSTATE -> new BlockStateArgument(nodeName);
 			case BLOCK_PREDICATE -> new BlockPredicateArgument(nodeName);
-			case CHAT -> new ChatArgument(nodeName);
+			case CHAT -> new dev.jorel.commandapi.arguments.spigot.ChatArgument(nodeName);
 			case CHATCOLOR -> new ChatColorArgument(nodeName);
-			case CHAT_COMPONENT -> new ChatComponentArgument(nodeName);
+			case CHAT_COMPONENT -> new dev.jorel.commandapi.arguments.spigot.ChatComponentArgument(nodeName);
 			case COMMAND -> new CommandArgument(nodeName);
 			case ENCHANTMENT -> new EnchantmentArgument(nodeName);
 			case ENTITY_SELECTOR -> new EntitySelectorArgument.OneEntity(nodeName);

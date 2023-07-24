@@ -18,11 +18,13 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.arguments.spigot;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
+import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.ChatColor;
 

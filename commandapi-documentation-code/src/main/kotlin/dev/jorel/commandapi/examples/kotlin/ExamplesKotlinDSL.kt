@@ -160,7 +160,7 @@ commandAPICommand("set") {
 fun argument_chatAdventure() {
 /* ANCHOR: argumentChatAdventure1 */
 commandAPICommand("namecolor") {
-    chatColorArgument("chatcolor")
+    adventureChatColorArgument("chatcolor")
     playerExecutor { player, args ->
         val color = args["chatcolor"] as NamedTextColor
         player.displayName(Component.text().color(color).append(Component.text(player.name)).build())

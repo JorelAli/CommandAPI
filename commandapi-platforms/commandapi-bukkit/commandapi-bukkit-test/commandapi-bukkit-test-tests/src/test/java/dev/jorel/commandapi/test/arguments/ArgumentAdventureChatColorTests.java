@@ -4,21 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.AdventureChatColorArgument;
-import dev.jorel.commandapi.arguments.ChatColorArgument;
+import dev.jorel.commandapi.arguments.adventure.ChatColorArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 /**
- * Tests for the {@link AdventureChatColorArgument}
+ * Tests for the {@link ChatColorArgument}
  */
 class ArgumentAdventureChatColorTests extends TestBase {
 
@@ -46,7 +44,7 @@ class ArgumentAdventureChatColorTests extends TestBase {
 		Mut<NamedTextColor> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new AdventureChatColorArgument("color"))
+			.withArguments(new ChatColorArgument("color"))
 			.executesPlayer((player, args) -> {
 				results.set((NamedTextColor) args.get(0));
 			})
@@ -79,7 +77,7 @@ class ArgumentAdventureChatColorTests extends TestBase {
 	@Test
 	void suggestionTestWithChatColorArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new AdventureChatColorArgument("color"))
+			.withArguments(new ChatColorArgument("color"))
 			.executesPlayer(P_EXEC)
 			.register();
 

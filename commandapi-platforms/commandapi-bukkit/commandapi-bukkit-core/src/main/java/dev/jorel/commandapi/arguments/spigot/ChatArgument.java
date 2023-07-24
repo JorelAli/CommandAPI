@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -18,33 +18,36 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.arguments.spigot;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.commandsenders.BukkitPlayer;
-import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import java.util.Optional;
+
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.executors.CommandArguments;
-import dev.jorel.commandapi.wrappers.PreviewableFunction;
-import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.wrappers.PreviewableFunction;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
  * An argument that represents chat with entity selectors
  * 
- * @since 5.10
+ * @since 3.0
  * 
- * @apiNote Returns a {@link Component} object
+ * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class AdventureChatArgument extends Argument<Component> implements GreedyArgument, Previewable<AdventureChatArgument, Component> {
+public class ChatArgument extends Argument<BaseComponent[]> implements GreedyArgument, Previewable<ChatArgument, BaseComponent[]> {
 
-	private PreviewableFunction<Component> preview;
+	private PreviewableFunction<BaseComponent[]> preview;
 	private boolean usePreview;
 
 	/**
@@ -53,35 +56,35 @@ public class AdventureChatArgument extends Argument<Component> implements Greedy
 	 * 
 	 * @param nodeName the name of the node for argument
 	 */
-	public AdventureChatArgument(String nodeName) {
+	public ChatArgument(String nodeName) {
 		super(nodeName, CommandAPIBukkit.get()._ArgumentChat());
 
 		try {
-			Class.forName("net.kyori.adventure.text.Component");
+			Class.forName("org.spigotmc.SpigotConfig");
 		} catch (ClassNotFoundException e) {
-			throw new PaperAdventureNotFoundException(this.getClass());
+			throw new SpigotNotFoundException(this.getClass());
 		}
 	}
 
 	@Override
-	public Class<Component> getPrimitiveType() {
-		return Component.class;
+	public Class<BaseComponent[]> getPrimitiveType() {
+		return BaseComponent[].class;
 	}
 
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.ADVENTURE_CHAT;
+		return CommandAPIArgumentType.CHAT;
 	}
 
 	@Override
-	public <CommandSourceStack> Component parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
+	public <CommandSourceStack> BaseComponent[] parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
-		Component component = CommandAPIBukkit.<CommandSourceStack>get().getAdventureChat(cmdCtx, key);
+		BaseComponent[] component = CommandAPIBukkit.<CommandSourceStack>get().getChat(cmdCtx, key);
 
-		Optional<PreviewableFunction<Component>> previewOptional = getPreview();
+		Optional<PreviewableFunction<BaseComponent[]>> previewOptional = getPreview();
 		if (this.usePreview && previewOptional.isPresent() && sender instanceof Player player) {
 			try {
-				Component previewComponent = previewOptional.get()
+				BaseComponent[] previewComponent = previewOptional.get()
 					.generatePreview(new PreviewInfo<>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
 
 				component = previewComponent;
@@ -89,28 +92,27 @@ public class AdventureChatArgument extends Argument<Component> implements Greedy
 				throw e.getException();
 			}
 		}
-		
 		return component;
 	}
 
 	@Override
-	public AdventureChatArgument withPreview(PreviewableFunction<Component> preview) {
+	public ChatArgument withPreview(PreviewableFunction<BaseComponent[]> preview) {
 		this.preview = preview;
 		return this;
 	}
 
 	@Override
-	public Optional<PreviewableFunction<Component>> getPreview() {
+	public Optional<PreviewableFunction<BaseComponent[]>> getPreview() {
 		return Optional.ofNullable(preview);
 	}
 
 	@Override
 	public boolean isLegacy() {
-		return false;
+		return true;
 	}
 
 	@Override
-	public AdventureChatArgument usePreview(boolean usePreview) {
+	public ChatArgument usePreview(boolean usePreview) {
 		this.usePreview = usePreview;
 		return this;
 	}

@@ -2,7 +2,7 @@
 
 > **Developer's Note:**
 >
-> The two following classes, `AdventureChatComponentArgument` and `AdventureChatArgument` depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a `PaperAdventureNotFoundException`
+> The three following classes, `ChatColorArgument`, `ChatComponentArgument` and `ChatArgument` depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a `PaperAdventureNotFoundException`
 
 From Paper 1.16.5 build #473 onwards, Paper now includes [Kyori's Adventure API](https://github.com/KyoriPowered/adventure-platform). This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found [here](https://docs.adventure.kyori.net/index.html).
 
@@ -14,7 +14,7 @@ Since this functions very similar to the Spigot chat arguments, this page won't 
 
 ![Chatcolor argument in-game, displaying a list of Minecraft chat colors](./images/arguments/chatcolor.png)
 
-The `AdventureChatColorArgument` class is used to represent a given chat color (e.g. red or green). This argument returns the `NamedTextColor` object. If `reset` is passed to this argument, this will return `NamedTextColor.WHITE`.
+The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green). This argument returns the `NamedTextColor` object. If `reset` is passed to this argument, this will return `NamedTextColor.WHITE`.
 
 <div class="example">
 
@@ -50,7 +50,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 
 ## Adventure chat component argument
 
-The `AdventureChatComponentArgument` class accepts raw chat-based JSON as valid input, as declared [here](https://minecraft.gamepedia.com/Raw_JSON_text_format). This is converted into Adventure's `Component` class.
+The `ChatComponentArgument` class accepts raw chat-based JSON as valid input, as declared [here](https://minecraft.gamepedia.com/Raw_JSON_text_format). This is converted into Adventure's `Component` class.
 
 <div class="example">
 
@@ -86,13 +86,13 @@ We can construct a book using the Adventure API's `Book.book(Component, Componen
 
 ## Adventure chat argument
 
-The `AdventureChatArgument` class is the equivalent Adventure API class for the `ChatArgument` - it represents infinitely long strings similar to the `GreedyStringArgument` and allows entity selectors such as `@e`, `@p` and so on. The `AdventureChatArgument` returns a `Component`, similar to the `AdventureChatComponentArgument`.
+The Adventure-based `ChatArgument` class is the equivalent Adventure API class for the Spigot-based `ChatArgument` - it represents infinitely long strings similar to the `GreedyStringArgument` and allows entity selectors such as `@e`, `@p` and so on. The `ChatArgument` returns a `Component`, similar to the `ChatComponentArgument`.
 
 <div class="example">
 
 ### Example - Sending personalized messages to players
 
-We'll take the same example from the `ChatArgument` class, but using the `AdventureChatArgument` instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:
+We'll take the same example from the Spigot-based `ChatArgument` class, but using the Adventure-based `ChatArgument` instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:
 
 ```mccmd
 /pbroadcast <message>

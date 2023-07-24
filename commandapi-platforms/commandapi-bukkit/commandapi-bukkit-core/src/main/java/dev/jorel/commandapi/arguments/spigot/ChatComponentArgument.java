@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -18,50 +18,57 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.arguments.spigot;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
+import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.executors.CommandArguments;
-import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
  * An argument that represents raw JSON text
  * 
- * @since 5.10
- * @apiNote Returns a {@link Component} object
+ * @since 1.5
+ * 
+ * @apiNote Returns a {@link BaseComponent}{@code []} object
  */
-public class AdventureChatComponentArgument extends Argument<Component> {
+public class ChatComponentArgument extends Argument<BaseComponent[]> {
 
 	/**
-	 * Constructs a ChatComponent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
-	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw JSON text</a> 
+	 * Constructs a ChatComponent argument with a given node name. Represents raw
+	 * JSON text, used in Book MetaData, Chat and other various areas of Minecraft
+	 * 
+	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw
+	 *      JSON text</a>
 	 * @param nodeName the name of the node for argument
 	 */
-	public AdventureChatComponentArgument(String nodeName) {
+	public ChatComponentArgument(String nodeName) {
 		super(nodeName, CommandAPIBukkit.get()._ArgumentChatComponent());
-		
+
 		try {
-			Class.forName("net.kyori.adventure.text.Component");
-		} catch(ClassNotFoundException e) {
-			throw new PaperAdventureNotFoundException(this.getClass());
+			Class.forName("org.spigotmc.SpigotConfig");
+		} catch (ClassNotFoundException e) {
+			throw new SpigotNotFoundException(this.getClass());
 		}
 	}
-	
+
 	@Override
-	public Class<Component> getPrimitiveType() {
-		return Component.class;
+	public Class<BaseComponent[]> getPrimitiveType() {
+		return BaseComponent[].class;
 	}
-	
+
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.ADVENTURE_CHAT_COMPONENT;
+		return CommandAPIArgumentType.CHAT_COMPONENT;
 	}
-	
+
 	@Override
-	public <CommandSourceStack> Component parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandSourceStack>get().getAdventureChatComponent(cmdCtx, key);
+	public <CommandSourceStack> BaseComponent[] parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs)
+			throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getChatComponent(cmdCtx, key);
 	}
 }

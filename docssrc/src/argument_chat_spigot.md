@@ -1,5 +1,10 @@
 # Spigot chat arguments
 
+> **Developer's Note:**
+>
+> The three following classes, `ChatColorArgument`, `ChatComponentArgument` and `ChatArgument` depend on a [Spigot](https://www.spigotmc.org/) based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
+>
+
 ## Chat color argument
 
 ![Chatcolor argument in-game, displaying a list of Minecraft chat colors](./images/arguments/chatcolor.png)
@@ -37,11 +42,6 @@ We then use the `ChatColorArgument` to change the player's name color:
 </div>
 
 -----
-
-> **Developer's Note:**
->
-> The two following classes, `ChatComponentArgument` and `ChatArgument` depend on a [Spigot](https://www.spigotmc.org/) based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
->
 
 ## Chat component argument
 

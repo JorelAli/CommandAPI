@@ -50,7 +50,6 @@ import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
-import java.util.function.Supplier
 import kotlin.collections.LinkedHashMap
 import kotlin.random.Random
 
@@ -184,7 +183,9 @@ CommandAPICommand("set")
 fun argument_chatAdventure() {
 /* ANCHOR: argumentChatAdventure1 */
 CommandAPICommand("namecolor")
-    .withArguments(AdventureChatColorArgument("chatcolor"))
+    // When using this argument in an environment that is compiled against Paper only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatColorArgument("chatcolor"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val color = args["chatcolor"] as NamedTextColor
         player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
@@ -197,7 +198,9 @@ CommandAPICommand("showbook")
     .withArguments(PlayerArgument("target"))
     .withArguments(TextArgument("title"))
     .withArguments(StringArgument("author"))
-    .withArguments(AdventureChatComponentArgument("contents"))
+    // When using this argument in an environment that is compiled against Paper only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatComponentArgument("contents"))
     .executes(CommandExecutor { _, args ->
         val target = args["target"] as Player
         val title = args["title"] as String
@@ -213,7 +216,9 @@ CommandAPICommand("showbook")
 
 /* ANCHOR: argumentChatAdventure3 */
 CommandAPICommand("pbroadcast")
-    .withArguments(AdventureChatArgument("message"))
+    // When using this argument in an environment that is compiled against Paper only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatArgument("message"))
     .executes(CommandExecutor { _, args ->
         val message = args["message"] as Component
 
@@ -228,7 +233,9 @@ CommandAPICommand("pbroadcast")
 fun argument_chatSpigot() {
 /* ANCHOR: argumentChatSpigot1 */
 CommandAPICommand("namecolor")
-    .withArguments(ChatColorArgument("chatColor"))
+    // When using this argument in an environment that is compiled against Spigot only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatColorArgument("chatColor"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val color = args["chatColor"] as ChatColor
         player.setDisplayName("$color${player.name}")
@@ -239,7 +246,9 @@ CommandAPICommand("namecolor")
 /* ANCHOR: argumentChatSpigot2 */
 CommandAPICommand("makebook")
     .withArguments(PlayerArgument("player"))
-    .withArguments(ChatComponentArgument("contents"))
+    // When using this argument in an environment that is compiled against Spigot only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatComponentArgument("contents"))
     .executes(CommandExecutor { _, args ->
         val player = args["player"] as Player
         val arr = args["contents"] as Array<BaseComponent>
@@ -260,7 +269,9 @@ CommandAPICommand("makebook")
 
 /* ANCHOR: argumentChatSpigot3 */
 CommandAPICommand("pbroadcast")
-    .withArguments(ChatArgument("message"))
+    // When using this argument in an environment that is compiled against Spigot only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatArgument("message"))
     .executes(CommandExecutor { _, args ->
         val message = args["message"] as Array<BaseComponent>
 
@@ -1165,7 +1176,9 @@ CommandAPICommand("commandargument")
 fun chatPreview() {
 /* ANCHOR: chatPreview1 */
 CommandAPICommand("broadcast")
-    .withArguments(ChatArgument("message").withPreview { info ->
+    // When using this argument in an environment that is compiled against Spigot only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatArgument("message").withPreview { info ->
         // Convert parsed BaseComponent[] to plain text
         val plainText: String = BaseComponent.toPlainText(*info.parsedInput() as Array<BaseComponent>)
 
@@ -1184,7 +1197,9 @@ CommandAPICommand("broadcast")
 
 /* ANCHOR: chatPreview2 */
 CommandAPICommand("broadcast")
-    .withArguments(AdventureChatArgument("message").withPreview { info ->
+    // When using this argument in an environment that is compiled against Paper only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatArgument("message").withPreview { info ->
         // Convert parsed Component to plain text
         val plainText: String = PlainTextComponentSerializer.plainText().serialize(info.parsedInput() as Component)
 
@@ -1202,7 +1217,10 @@ CommandAPICommand("broadcast")
 
 /* ANCHOR: chatPreview3 */
 CommandAPICommand("broadcast")
-    .withArguments(ChatArgument("message").usePreview(true).withPreview { info ->
+    // When using this argument in an environment that is compiled against Spigot only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatArgument("message")
+            .usePreview(true).withPreview { info ->
         // Convert parsed BaseComponent[] to plain text
         val plainText = BaseComponent.toPlainText(*info.parsedInput() as Array<BaseComponent>)
 
@@ -1217,7 +1235,9 @@ CommandAPICommand("broadcast")
 
 /* ANCHOR: chatPreview4 */
 CommandAPICommand("broadcast")
-    .withArguments(AdventureChatArgument("message").usePreview(true).withPreview { info ->
+    // When using this argument in an environment that is compiled against Paper only,
+    // the package identifier can be omitted
+    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatArgument("message").usePreview(true).withPreview { info ->
         // Convert parsed Component to plain text
         val plainText = PlainTextComponentSerializer.plainText().serialize(info.parsedInput() as Component)
 

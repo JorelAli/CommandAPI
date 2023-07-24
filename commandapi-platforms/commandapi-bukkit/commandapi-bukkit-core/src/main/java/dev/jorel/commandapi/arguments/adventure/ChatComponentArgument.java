@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ * Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -18,55 +18,52 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
-
-import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
-import org.bukkit.ChatColor;
+package dev.jorel.commandapi.arguments.adventure;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
+import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.executors.CommandArguments;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.Component;
 
 /**
- * An argument that represents the Bukkit ChatColor object
+ * An argument that represents raw JSON text
  * 
- * @since 1.1
- * 
- * @apiNote Returns a {@link ChatColor} object
+ * @since 5.10
+ * @apiNote Returns a {@link Component} object
  */
-public class AdventureChatColorArgument extends SafeOverrideableArgument<NamedTextColor, NamedTextColor> {
+public class ChatComponentArgument extends Argument<Component> {
 
 	/**
-	 * Constructs a ChatColor argument with a given node name. Represents a color or
-	 * formatting for chat
-	 * 
+	 * Constructs a ChatComponent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
+	 * @see <a href="https://minecraft.gamepedia.com/Commands#Raw_JSON_text">Raw JSON text</a> 
 	 * @param nodeName the name of the node for argument
 	 */
-	public AdventureChatColorArgument(String nodeName) {
-		super(nodeName, CommandAPIBukkit.get()._ArgumentChatFormat(), Object::toString);
-
+	public ChatComponentArgument(String nodeName) {
+		super(nodeName, CommandAPIBukkit.get()._ArgumentChatComponent());
+		
 		try {
-			Class.forName("net.kyori.adventure.text.format.NamedTextColor");
-		} catch (ClassNotFoundException e) {
+			Class.forName("net.kyori.adventure.text.Component");
+		} catch(ClassNotFoundException e) {
 			throw new PaperAdventureNotFoundException(this.getClass());
 		}
 	}
 	
 	@Override
-	public Class<NamedTextColor> getPrimitiveType() {
-		return NamedTextColor.class;
+	public Class<Component> getPrimitiveType() {
+		return Component.class;
 	}
 	
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.CHATCOLOR;
+		return CommandAPIArgumentType.ADVENTURE_CHAT_COMPONENT;
 	}
 	
 	@Override
-	public <CommandSourceStack> NamedTextColor parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandSourceStack>get().getAdventureChatColor(cmdCtx, key);
+	public <CommandSourceStack> Component parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
+		return CommandAPIBukkit.<CommandSourceStack>get().getAdventureChatComponent(cmdCtx, key);
 	}
 }

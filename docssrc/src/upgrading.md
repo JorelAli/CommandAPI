@@ -1,5 +1,35 @@
 # Upgrading guide
 
+## From 9.?.? to 10.0.0
+
+### Component-related argument changes
+
+For 10.0.0, changes have been made to component-related arguments like the `ChatArgument` or the `AdventureChatArgument`. Some of it is just a package change, some of it is also a class name change:
+
+- Spigot-related argument changes:
+
+```patch
+- dev.jorel.commandapi.arguments.ChatArgument
+- dev.jorel.commandapi.arguments.ChatColorArgument
+- dev.jorel.commandapi.arguments.ChatComponentArgument
+
++ dev.jorel.commandapi.arguments.spigot.ChatArgument
++ dev.jorel.commandapi.arguments.spigot.ChatColorArgument
++ dev.jorel.commandapi.arguments.spigot.ChatComponentArgument
+```
+
+- Adventure-related argument changes:
+
+```patch
+- dev.jorel.commandapi.arguments.AdventureChatArgument
+- dev.jorel.commandapi.arguments.AdventureChatColorArgument
+- dev.jorel.commandapi.arguments.AdventureChatComponentArgument
+
++ dev.jorel.commandapi.arguments.adventure.ChatArgument
++ dev.jorel.commandapi.arguments.adventure.ChatColorArgument
++ dev.jorel.commandapi.arguments.adventure.ChatComponentArgument
+```
+
 ## From 9.0.3 to 9.0.4
 
 ### MultiLiteralArgument changes

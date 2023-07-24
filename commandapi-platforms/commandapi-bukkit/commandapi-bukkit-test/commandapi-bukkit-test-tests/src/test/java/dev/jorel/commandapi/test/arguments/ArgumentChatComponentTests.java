@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import dev.jorel.commandapi.arguments.adventure.ChatComponentArgument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.MCVersion;
-import dev.jorel.commandapi.arguments.AdventureChatComponentArgument;
-import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 import net.kyori.adventure.text.Component;
@@ -22,7 +21,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
 /**
- * Tests for the {@link ChatComponentArgument} and {@link AdventureChatComponentArgument}
+ * Tests for the {@link dev.jorel.commandapi.arguments.spigot.ChatComponentArgument} and {@link ChatComponentArgument}
  */
 class ArgumentChatComponentTests extends TestBase {
 
@@ -74,7 +73,7 @@ class ArgumentChatComponentTests extends TestBase {
 		Mut<BaseComponent[]> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new ChatComponentArgument("text"))
+			.withArguments(new dev.jorel.commandapi.arguments.spigot.ChatComponentArgument("text"))
 			.executesPlayer((player, args) -> {
 				results.set((BaseComponent[]) args.get(0));
 			})
@@ -107,7 +106,7 @@ class ArgumentChatComponentTests extends TestBase {
 		Mut<Component> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new AdventureChatComponentArgument("text"))
+			.withArguments(new ChatComponentArgument("text"))
 			.executesPlayer((player, args) -> {
 				results.set((Component) args.get(0));
 			})
@@ -142,7 +141,7 @@ class ArgumentChatComponentTests extends TestBase {
 	@Test
 	void suggestionTestWithSpigotChatComponentArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new ChatComponentArgument("text"))
+			.withArguments(new dev.jorel.commandapi.arguments.spigot.ChatComponentArgument("text"))
 			.executesPlayer(P_EXEC)
 			.register();
 
@@ -160,7 +159,7 @@ class ArgumentChatComponentTests extends TestBase {
 	@Test
 	void suggestionTestWithAdventureChatComponentArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new AdventureChatComponentArgument("text"))
+			.withArguments(new ChatComponentArgument("text"))
 			.executesPlayer(P_EXEC)
 			.register();
 

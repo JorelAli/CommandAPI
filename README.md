@@ -370,13 +370,20 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>10.0.0</b></td>
+            <td valign="top">?????????????????????????????</td>
+            <td valign="top">
+                <b>⚠️ This version is incompatible with any plugin that used component-related arguments in 9.x.x and below. (See documentation for more information)</b><br>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.0.4</b></td>
             <td valign="top">?????????????????????????????</td>
             <td valign="top">
                 <ul>
                     <li>Fixed the CommandAPI disabling datapacks on Paper 1.20.1 #40+ because it thought it was running on a Folia server</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/459 Added the ability to access raw arguments in the command executor</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/469 Adds <code>AdventureChatColorArgument</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/469 Adds <code>ChatColorArgument</code> for Adventure</li>
                 </ul>
             </td>
         </tr>

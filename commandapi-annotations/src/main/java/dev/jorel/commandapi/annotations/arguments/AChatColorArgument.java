@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import dev.jorel.commandapi.arguments.ChatColorArgument;
+import dev.jorel.commandapi.arguments.spigot.ChatColorArgument;
 
 /**
  * Annotation equivalent of the {@link ChatColorArgument}
