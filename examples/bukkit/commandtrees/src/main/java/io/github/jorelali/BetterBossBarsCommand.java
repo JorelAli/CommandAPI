@@ -21,7 +21,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.BooleanArgument;
-import dev.jorel.commandapi.arguments.ChatComponentArgument;
+import dev.jorel.commandapi.arguments.spigot.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
