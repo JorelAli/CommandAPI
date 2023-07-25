@@ -29,10 +29,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
@@ -208,17 +204,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 			updateHelpForCommands();
 		}, 0L);
-
-		// (Re)send command graph packet to players when they join
-		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-
-			// For some reason, any other priority doesn't work
-			@EventHandler(priority = EventPriority.MONITOR)
-			public void onPlayerJoin(PlayerJoinEvent e) {
-				e.getPlayer().updateCommands();
-			}
-
-		}, plugin);
 
 		paper.registerReloadHandler(plugin);
 	}
