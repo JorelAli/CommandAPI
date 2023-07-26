@@ -176,12 +176,14 @@ Registers the command.
 
 ## Command loading order
 
-In order to register commands properly, **commands must be registered before the server finishes loading**. The CommandAPI will output a warning if you register a command after the server has loaded. This means that all command registration must occur during a plugin's `onLoad()` or `onEnable()` method. With the CommandAPI, depending on whether you use `onLoad()` or `onEnable()` to load your commands depends on whether your plugin is used with Minecraft's functions:
+It is recommended to register commands in either the `onLoad()` or `onEnable()` method. With the CommandAPI, depending on whether you use `onLoad()` or `onEnable()` to load your commands depends on whether your plugin is used with Minecraft's functions:
 
 | When to load        | What to do                                                                                                     |
 | ------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `onLoad()` method   | Register commands to be used in Minecraft functions ([see the Function section for more info](functions.html)) |
 | `onEnable()` method | Register regular commands                                                                                      |
+
+The CommandAPI does support registering commands outside of these methods while the server is running. Commands registered after the server is done loading *should* work the same as commands registered in `onEnable`.
 
 -----
 

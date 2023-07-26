@@ -20,27 +20,26 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+
 /**
  * Main CommandAPI plugin entrypoint
  */
 public class CommandAPIMain extends JavaPlugin {
-	
+
 	private static final String PLUGINS_TO_CONVERT = "plugins-to-convert";
 
 	@Override
@@ -85,7 +84,7 @@ public class CommandAPIMain extends JavaPlugin {
 
 		convertCommands(fileConfig);
 	}
-	
+
 	private void convertCommands(FileConfiguration fileConfig) {
 		// Load all plugins at the same time
 		Map<JavaPlugin, String[]> pluginsToConvert = new HashMap<>();
@@ -102,7 +101,7 @@ public class CommandAPIMain extends JavaPlugin {
 			// Get the plugin, if it doesn't exist, scream in the console (but
 			// don't crash, we want to continue!)
 			final JavaPlugin plugin = getAndValidatePlugin((String) map.keySet().iterator().next());
-			if(plugin != null) {
+			if (plugin != null) {
 				pluginsToConvert.put(plugin, pluginCommands);
 			}
 		}
@@ -123,7 +122,7 @@ public class CommandAPIMain extends JavaPlugin {
 			new AdvancedConverter(commandName).convertCommand();
 		}
 	}
-	
+
 	private JavaPlugin getAndValidatePlugin(String pluginName) {
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 		if (plugin != null) {
@@ -142,49 +141,5 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable();
-
-		new CommandAPICommand("register")
-			.withArguments(new StringArgument("command"))
-			.withOptionalArguments(
-				new GreedyStringArgument("aliases")
-			)
-			.executes(info -> {
-				String name = info.args().getUnchecked("command");
-				assert name != null;
-
-				String aliasString = info.args().getUnchecked("aliases");
-				String[] aliases;
-				if(aliasString == null)
-					aliases = new String[0];
-				else
-					aliases = aliasString.split(" ");
-
-				new CommandAPICommand(name)
-					.withAliases(aliases)
-					.executes(i -> {
-						i.sender().sendMessage("You ran the " + name + " command!");
-					})
-					.withPermission("dynamic." + name)
-					.withShortDescription("New command!")
-					.withFullDescription("This command was added while the server was running. Do you see it?")
-					.register();
-			})
-			.register();
-
-		new CommandAPICommand("unregister")
-			.withArguments(new StringArgument("command"))
-			.executes(info -> {
-				String name = info.args().getUnchecked("command");
-				assert name != null;
-
-				CommandAPI.unregister(name, true);
-			})
-			.register();
-
-		new CommandAPICommand("updateRequirements")
-			.executesPlayer(info -> {
-				CommandAPI.updateRequirements(info.sender());
-			})
-			.register();
 	}
 }

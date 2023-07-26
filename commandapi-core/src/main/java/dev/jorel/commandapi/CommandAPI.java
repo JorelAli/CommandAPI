@@ -266,10 +266,6 @@ public class CommandAPI {
 	 *                across all plugins as well as minecraft, bukkit and spigot
 	 */
 	public static void unregister(String command, boolean force) {
-		if (!canRegister) {
-			getLogger().warning("Unexpected unregistering of /" + command
-				+ ", as server is loaded! Unregistering anyway, but this can lead to unstable results!");
-		}
 		CommandAPIHandler.getInstance().getPlatform().unregister(command, force);
 	}
 
