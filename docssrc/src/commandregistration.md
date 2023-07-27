@@ -183,7 +183,7 @@ It is recommended to register commands in either the `onLoad()` or `onEnable()` 
 | `onLoad()` method   | Register commands to be used in Minecraft functions ([see the Function section for more info](functions.html)) |
 | `onEnable()` method | Register regular commands                                                                                      |
 
-The CommandAPI does support registering commands outside of these methods while the server is running. Commands registered after the server is done loading *should* work the same as commands registered in `onEnable`.
+The CommandAPI does support registering commands outside of these methods while the server is running. Commands registered after the server is done loading _should_ work the same as commands registered in `onEnable`.
 
 -----
 
