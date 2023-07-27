@@ -944,7 +944,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommandDispatcher(), node);
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 
 	@Override

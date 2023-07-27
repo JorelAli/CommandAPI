@@ -19,6 +19,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -297,11 +298,15 @@ public class MockNMS extends Enums {
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				ServerPlayer entityPlayerMock = Mockito.mock(ServerPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
-				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
-				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
+
+				// Extract these variables first in case the onlinePlayer is a Mockito object itself
+				String name = onlinePlayer.getName();
+				UUID uuid = onlinePlayer.getUniqueId();
+
+				Mockito.when(craftPlayerMock.getName()).thenReturn(name);
+				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(uuid);
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
-				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(net.minecraft.network.chat.Component.literal(onlinePlayer.getName())); // ChatArgument,
-																																					// AdventureChatArgument
+				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(net.minecraft.network.chat.Component.literal(name)); // ChatArgument, AdventureChatArgument
 				Mockito.when(entityPlayerMock.getType()).thenReturn((net.minecraft.world.entity.EntityType) net.minecraft.world.entity.EntityType.PLAYER); // EntitySelectorArgument
 				players.add(entityPlayerMock);
 			}
@@ -525,6 +530,11 @@ public class MockNMS extends Enums {
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
 		Mockito.when(minecraftServerMock.getProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
 
+		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
+		Commands commands = new Commands();
+		MockPlatform.setField(commands.getClass(), "g", "dispatcher", commands, getBrigadierDispatcher());
+		minecraftServerMock.vanillaCommandDispatcher = commands;
+
 		return (T) minecraftServerMock;
 	}
 
@@ -558,6 +568,11 @@ public class MockNMS extends Enums {
 			tagFunctions.add(CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
 		}
 		this.tags.put(resourceLocation, tagFunctions);
+	}
+
+	@Override
+	public Class<? extends Player> getCraftPlayerClass() {
+		return CraftPlayer.class;
 	}
 
 	@Override

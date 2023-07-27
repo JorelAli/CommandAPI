@@ -1,17 +1,25 @@
 package dev.jorel.commandapi.test;
 
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.mojang.brigadier.tree.RootCommandNode;
+import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
+
+import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,12 +53,39 @@ class OnEnableTests extends TestBase {
 	}
 
 	@Test
-	void testOnEnableRegisterCommand() {
+	void testOnEnableRegisterAndUnregisterCommand() {
+		// Enable server
 		disablePaperImplementations();
 		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
 
 		assertFalse(CommandAPI.canRegister());
 
+
+		// Add a PlayerMock to the server to listen for calls to `updateCommands()`
+		PlayerMock updateCommandsPlayer = Mockito.spy(new PlayerMock(server, "updateCommandsPlayer"));
+		// Interrupt normal calls to updateCommands, because MockPlayer throws an UnimplementedOperationException
+		Mockito.doNothing().when(updateCommandsPlayer).updateCommands();
+		server.addPlayer(updateCommandsPlayer);
+
+		// Get a CraftPlayer for running VanillaCommandWrapper commands
+		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());
+		// Give player permission to run command
+		Mockito.when(runCommandsPlayer.hasPermission(ArgumentMatchers.eq("permission"))).thenReturn(true);
+		// Get location is used when creating the BrigadierSource in MockNMS
+		Mockito.when(runCommandsPlayer.getLocation()).thenReturn(new Location(null, 0, 0, 0));
+
+		// Provide proper handle as VanillaCommandWrapper expects
+		Method getHandle = assertDoesNotThrow(() -> runCommandsPlayer.getClass().getDeclaredMethod("getHandle"));
+		Object brigadierSource = Brigadier.getBrigadierSourceFromCommandSender(runCommandsPlayer);
+		Object handle = Mockito.mock(getHandle.getReturnType(), invocation -> brigadierSource);
+		// This is a funny quirk of Mockito, but you don't need to put the method call you want to mock inside `when`
+		//  As long as the method is called, `when` knows what you are talking about
+		//  That means we can mock `CraftPlayer#getHandle` indirectly using reflection
+		//  See the additional response in https://stackoverflow.com/a/10131885
+		assertDoesNotThrow(() -> getHandle.invoke(runCommandsPlayer));
+		Mockito.when(null).thenReturn(handle);
+
+		// register command while server is enabled
 		Mut<String> results = Mut.of();
 		new CommandAPICommand("command")
 			.withArguments(new StringArgument("argument"))
@@ -62,6 +97,8 @@ class OnEnableTests extends TestBase {
 			})
 			.register();
 
+		// Update commands should have been called for all players on the server
+		Mockito.verify(updateCommandsPlayer, Mockito.times(1)).updateCommands();
 
 		// Make sure command tree built correctly
 		assertEquals("""
@@ -137,11 +174,11 @@ class OnEnableTests extends TestBase {
 
 
 		// Make sure commands were added to 'resources' dispatcher
-		RootCommandNode<?> root = CommandAPIBukkit.get().getResourcesDispatcher().getRoot();
+		RootCommandNode<?> resourcesRoot = CommandAPIBukkit.get().getResourcesDispatcher().getRoot();
 
-		assertNotNull(root.getChild("command"));
-		assertNotNull(root.getChild("alias1"));
-		assertNotNull(root.getChild("alias2"));
+		assertNotNull(resourcesRoot.getChild("command"));
+		assertNotNull(resourcesRoot.getChild("alias1"));
+		assertNotNull(resourcesRoot.getChild("alias2"));
 
 
 		// Check the help topic was added
@@ -157,5 +194,98 @@ class OnEnableTests extends TestBase {
 			&6Description: &ffull description
 			&6Usage: &f/command <argument>
 			&6Aliases: &falias1, alias2"""), topic.getFullText(null));
+
+
+		// Make sure commands run correctly
+		assertStoresResult(runCommandsPlayer, "command argument", results, "argument");
+		assertStoresResult(runCommandsPlayer, "alias1 argument", results, "argument");
+		assertStoresResult(runCommandsPlayer, "alias2 argument", results, "argument");
+		assertStoresResult(runCommandsPlayer, "minecraft:command argument", results, "argument");
+		assertStoresResult(runCommandsPlayer, "minecraft:alias1 argument", results, "argument");
+		assertStoresResult(runCommandsPlayer, "minecraft:alias2 argument", results, "argument");
+
+
+		// Unregister main command without force
+		CommandAPI.unregister("command");
+
+		// Update commands should have been called for all players on the server
+		Mockito.verify(updateCommandsPlayer, Mockito.times(2)).updateCommands();
+
+		// Make sure main command was removed from tree
+		assertEquals("""
+			{
+			  "type": "root",
+			  "children": {
+			    "alias1": {
+			      "type": "literal",
+			      "children": {
+			        "argument": {
+			          "type": "argument",
+			          "parser": "brigadier:string",
+			          "properties": {
+			            "type": "word"
+			          },
+			          "executable": true
+			        }
+			      }
+			    },
+			    "alias2": {
+			      "type": "literal",
+			      "children": {
+			        "argument": {
+			          "type": "argument",
+			          "parser": "brigadier:string",
+			          "properties": {
+			            "type": "word"
+			          },
+			          "executable": true
+			        }
+			      }
+			    }
+			  }
+			}""", getDispatcherString());
+
+
+		// Make sure command is removed from Bukkit CommandMap
+		assertNull(commandMap.getCommand("command"));
+
+		// Namespace should still be there since it wasn't forced
+		assertEquals(mainCommand, commandMap.getCommand("minecraft:command"));
+
+
+		// Command should be removed from resources dispatcher
+		assertNull(resourcesRoot.getChild("command"));
+
+
+		// Help topic should be gone
+		assertNull(server.getHelpMap().getHelpTopic("/command"));
+
+
+		// Command should fail
+		assertCommandFailsWith(runCommandsPlayer, "command argument",
+				"Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+
+		// You would expect namespace to succeed since it is in the CommandMap
+		// However, running that command simply tells the Brig dispatcher to run the original command
+		// That command doesn't exist anymore, so it doesn't actually know how to run the command
+		// I'm going to say this is not a bug, just and example why you should be careful when unregistering commands
+//		// Namespace should still work since it wasn't forced
+//		assertStoresResult(runCommandsPlayer, "minecraft:command argument", results, "argument");
+
+
+		// Unregister main command with force
+		CommandAPI.unregister("command", true);
+
+		// Update commands should have been called for all players on the server
+		Mockito.verify(updateCommandsPlayer, Mockito.times(3)).updateCommands();
+
+		// Namespace should be gone since force was used
+		assertNull(commandMap.getCommand("minecraft:command"));
+
+		// Namespace should fail
+		assertCommandFailsWith(runCommandsPlayer, "minecraft:command argument",
+				"Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+
+		assertNoMoreResults(results);
 	}
 }

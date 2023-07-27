@@ -720,7 +720,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		return true;
 	}
 	
-	private void writeDispatcherToFile() {
+	public void writeDispatcherToFile() {
 		File file = CommandAPI.getConfiguration().getDispatcherFile();
 		if (file != null) {
 			try {

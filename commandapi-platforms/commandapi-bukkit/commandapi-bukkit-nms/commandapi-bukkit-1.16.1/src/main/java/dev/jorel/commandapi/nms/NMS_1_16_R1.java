@@ -975,7 +975,7 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommandDispatcher(), node);
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 
 	@Differs(from = "1.15", by = "Implement datapack reloading")

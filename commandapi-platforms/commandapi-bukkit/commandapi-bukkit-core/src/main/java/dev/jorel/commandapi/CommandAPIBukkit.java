@@ -518,6 +518,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 			}
 		}
+
+		// Update the dispatcher file
+		CommandAPIHandler.getInstance().writeDispatcherToFile();
 	}
 
 	private void removeCommandNamespace(Map<String, ?> map, String commandName) {

@@ -912,7 +912,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommandDispatcher(), node);
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 
 	@Differs(from = "1.16.2", by = "CustomFunctionManager.g -> CustomFunctionManager.h")

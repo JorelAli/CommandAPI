@@ -7,15 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.io.File;
 import java.io.IOException;
 import java.security.CodeSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -311,11 +303,16 @@ public class MockNMS extends Enums {
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				EntityPlayer entityPlayerMock = Mockito.mock(EntityPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
-				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
-				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
+
+				// Extract these variables first in case the onlinePlayer is a Mockito object itself
+				String name = onlinePlayer.getName();
+				UUID uuid = onlinePlayer.getUniqueId();
+
+				Mockito.when(craftPlayerMock.getName()).thenReturn(name);
+				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(uuid);
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
-				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
-				Mockito.when(entityPlayerMock.getScoreboardDisplayName()).thenReturn(new ChatComponentText(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
+				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new ChatComponentText(name)); // ChatArgument, AdventureChatArgument
+				Mockito.when(entityPlayerMock.getScoreboardDisplayName()).thenReturn(new ChatComponentText(name)); // ChatArgument, AdventureChatArgument
 				players.add(entityPlayerMock);
 			}
 
@@ -524,6 +521,10 @@ public class MockNMS extends Enums {
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
 		Mockito.when(minecraftServerMock.getMethodProfiler()).thenAnswer(i -> GameProfilerDisabled.a);
 
+		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
+		net.minecraft.server.v1_16_R3.CommandDispatcher commands = new net.minecraft.server.v1_16_R3.CommandDispatcher();
+		MockPlatform.setField(commands.getClass(), "b", commands, getBrigadierDispatcher());
+		minecraftServerMock.vanillaCommandDispatcher = commands;
 
 		return (T) minecraftServerMock;
 	}
@@ -558,6 +559,11 @@ public class MockNMS extends Enums {
 			tagFunctions.add(CustomFunction.a(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
 		}
 		this.tags.put(resourceLocation, tagFunctions);
+	}
+
+	@Override
+	public Class<? extends Player> getCraftPlayerClass() {
+		return CraftPlayer.class;
 	}
 
 	@Override

@@ -6,12 +6,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -109,8 +111,12 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 ******************/
 
 	public static Object getField(Class<?> className, String fieldName, Object instance) {
+		return getField(className, fieldName, fieldName, instance);
+	}
+
+	public static Object getField(Class<?> className, String fieldName, String mojangMappedName, Object instance) {
 		try {
-			Field field = className.getDeclaredField(fieldName);
+			Field field = className.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : fieldName);
 			field.setAccessible(true);
 			return field.get(instance);
 		} catch (ReflectiveOperationException e) {
@@ -119,8 +125,12 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	public static void setField(Class<?> className, String fieldName, Object instance, Object value) {
+		setField(className, fieldName, fieldName, instance, value);
+	}
+
+	public static void setField(Class<?> className, String fieldName, String mojangMappedName, Object instance, Object value) {
 		try {
-			Field field = className.getDeclaredField(fieldName);
+			Field field = className.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : fieldName);
 			field.setAccessible(true);
 			field.set(instance, value);
 		} catch (ReflectiveOperationException e) {
@@ -129,8 +139,12 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	public static <T> T getFieldAs(Class<?> className, String fieldName, Object instance, Class<T> asType) {
+		return getFieldAs(className, fieldName, fieldName, instance, asType);
+	}
+
+	public static <T> T getFieldAs(Class<?> className, String fieldName, String mojangMappedName, Object instance, Class<T> asType) {
 		try {
-			Field field = className.getDeclaredField(fieldName);
+			Field field = className.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : fieldName);
 			field.setAccessible(true);
 			return asType.cast(field.get(instance));
 		} catch (ReflectiveOperationException e) {
@@ -154,6 +168,8 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	
 	public abstract void addFunction(NamespacedKey key, List<String> commands);
 	public abstract void addTag(NamespacedKey key, List<List<String>> commands);
+
+	public abstract Class<? extends Player> getCraftPlayerClass();
 
 	/**
 	 * Converts 1.16.5 and below potion effect names to NamespacedKey names. For
