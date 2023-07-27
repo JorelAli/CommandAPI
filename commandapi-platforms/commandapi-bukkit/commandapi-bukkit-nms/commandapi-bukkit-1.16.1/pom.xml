@@ -48,6 +48,7 @@
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-platform-bukkit</artifactId>
 			<version>4.3.0</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<!-- Paper -->
