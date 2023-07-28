@@ -15,7 +15,9 @@ public interface HandshakePacketHandler<InputChannel> extends CommandAPIPacketHa
 	@Override
 	default void handlePacket(InputChannel sender, CommandAPIPacket packet) {
 		if (packet instanceof SetVersionPacket p) handleSetVersionPacket(sender, p);
-		if (packet instanceof ProtocolVersionTooOldPacket p) handleProtocolVersionTooOldPacket(sender, p);
+		else if (packet instanceof ProtocolVersionTooOldPacket p) handleProtocolVersionTooOldPacket(sender, p);
+		else throw new IllegalStateException("Tried to handle " + packet + " with HandshakePacketHandler. " +
+					"HandshakePacketHandler can't handle this packet.");
 	}
 
 	/**

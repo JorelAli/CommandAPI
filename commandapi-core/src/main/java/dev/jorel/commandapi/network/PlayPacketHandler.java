@@ -13,6 +13,8 @@ public interface PlayPacketHandler<InputChannel> extends CommandAPIPacketHandler
 	@Override
 	default void handlePacket(InputChannel sender, CommandAPIPacket packet) {
 		if (packet instanceof UpdateRequirementsPacket p) handleUpdateRequirementsPacket(sender, p);
+		else throw new IllegalStateException("Tried to handle " + packet + " with PlayPacketHandler. " +
+				"PlayPacketHandler can't handle this packet.");
 	}
 
 	/**

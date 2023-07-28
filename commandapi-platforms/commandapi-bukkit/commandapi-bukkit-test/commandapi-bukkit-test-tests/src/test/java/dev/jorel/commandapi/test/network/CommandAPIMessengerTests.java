@@ -2,8 +2,10 @@ package dev.jorel.commandapi.test.network;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.exceptions.ProtocolVersionTooOldException;
+import dev.jorel.commandapi.network.BukkitPacketHandlerProvider;
 import dev.jorel.commandapi.network.CommandAPIPacket;
 import dev.jorel.commandapi.network.FriendlyByteBuffer;
+import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,7 @@ class CommandAPIMessengerTests extends NetworkTestBase {
 	 * Tests *
 	 *********/
 
-	private static class UnregisteredPacket implements CommandAPIPacket {
+	private record UnregisteredPacket() implements CommandAPIPacket {
 		@Override
 		public void write(FriendlyByteBuffer buffer, Object target, int protocolVersion) throws ProtocolVersionTooOldException {
 		}
@@ -99,6 +101,24 @@ class CommandAPIMessengerTests extends NetworkTestBase {
 				"Given: [0, 0, 0], Read: UpdateRequirementsPacket[]",
 			// UpdateRequirementsPacket expects no data after id (0)
 			() -> getHandledPacket(player, "commandapi:play", new byte[]{0, 0, 0})
+		);
+	}
+
+	@Test
+	void exceptionTestWithPacketHandling() {
+		Player player = server.addPlayer();
+		BukkitPacketHandlerProvider packetHandlerProvider = new BukkitPacketHandlerProvider();
+
+		// Handling unknown packet throws exception
+		assertThrowsWithMessage(
+				IllegalStateException.class,
+				"Tried to handle UnregisteredPacket[] with HandshakePacketHandler. HandshakePacketHandler can't handle this packet.",
+				() -> packetHandlerProvider.getHandshakePacketHandler().handlePacket(player, new UnregisteredPacket())
+		);
+		assertThrowsWithMessage(
+				IllegalStateException.class,
+				"Tried to handle UnregisteredPacket[] with PlayPacketHandler. PlayPacketHandler can't handle this packet.",
+				() -> packetHandlerProvider.getPlayPacketHandler().handlePacket(player, new UnregisteredPacket())
 		);
 	}
 }
