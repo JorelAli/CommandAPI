@@ -38,6 +38,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -68,8 +69,11 @@ import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryAccess.Frozen;
@@ -140,6 +144,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -156,6 +161,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
+@RequireField(in = MappedRegistry.class, name = "frozen", ofType = boolean.class)
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
 public abstract class NMS_1_19_Common extends NMS_Common {
 
@@ -163,6 +169,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
+	private static final Field registryIsFrozen;
 
 	// From net.minecraft.server.commands.LocateCommand
 	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
@@ -193,6 +200,8 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		registryIsFrozen = CommandAPIHandler.getField(MappedRegistry.class, "ca", "frozen");
 
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
@@ -865,6 +874,32 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		}
 	}
 
+	@Differs(from = {"1.13", "1.14, 1.15, 1.16", "1.17", "1.18"},
+			by = "Using ArgumentTypeInfos and Registry.COMMAND_ARGUMENT_TYPE instead of ArgumentRegistry")
+	public void registerCustomArgumentType() {
+		try {
+			MappedRegistry<ArgumentTypeInfo<?, ?>> commandArgumentTypeRegistry = (MappedRegistry<ArgumentTypeInfo<?, ?>>) Registry.COMMAND_ARGUMENT_TYPE;
+			// Unfreeze registry
+			registryIsFrozen.set(commandArgumentTypeRegistry, false);
+
+			// Register argument
+			// The register method has 4 arguments, so it's not practical to use a SafeMethodHandle
+			// This code is only expected to run once, so it's not a big deal this reflection isn't cached
+			Method registerArgument = ArgumentTypeInfos.class.getDeclaredMethod(
+					SafeVarHandle.USING_MOJANG_MAPPINGS ? "register" : "a",
+					Registry.class, String.class, Class.class, ArgumentTypeInfo.class
+			);
+			registerArgument.setAccessible(true);
+
+			registerArgument.invoke(null, commandArgumentTypeRegistry, "commandapi:exception_handler",
+					ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentInfo_1_19_Common<>());
+
+			// Refreeze registry
+			registryIsFrozen.set(commandArgumentTypeRegistry, true);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public Message generateMessageFromJson(String json) {
 		return Serializer.fromJson(json);

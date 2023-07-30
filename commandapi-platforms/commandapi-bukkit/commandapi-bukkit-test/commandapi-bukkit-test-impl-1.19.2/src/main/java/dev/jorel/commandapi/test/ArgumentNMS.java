@@ -36,6 +36,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -54,6 +55,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -525,4 +527,10 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		return baseNMS.getUUID(cmdCtx, key);
 	}
 
+	@Override
+	public void registerCustomArgumentType() {
+		if(!ArgumentTypeInfos.isClassRecognized(ExceptionHandlingArgumentType.class)) {
+			baseNMS.registerCustomArgumentType();
+		}
+	}
 }

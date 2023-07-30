@@ -88,6 +88,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -716,6 +717,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
 							+ stringWriter.toString());
 		}
+	}
+
+	@Override
+	public void registerCustomArgumentType() {
+		ArgumentTypes.register("commandapi:exception_handler", ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentSerializer_1_18_R1());
 	}
 
 	@Override

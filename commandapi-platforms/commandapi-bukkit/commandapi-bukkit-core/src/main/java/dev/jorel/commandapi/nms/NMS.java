@@ -451,10 +451,14 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	void reloadDataPacks();
 
+	// TODO: Other platforms may need to register custom ArgumentTypes, so this might be moved to CommandAPIPlatform
+	void registerCustomArgumentType();
+
 	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
 
 	Map<String, HelpTopic> getHelpMap();
 
 	Message generateMessageFromJson(String json);
 
+	String extractTranslationKey(CommandSyntaxException exception);
 }

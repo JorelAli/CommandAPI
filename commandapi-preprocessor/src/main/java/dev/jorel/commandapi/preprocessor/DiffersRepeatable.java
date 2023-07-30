@@ -20,7 +20,10 @@
  *******************************************************************************/
 package dev.jorel.commandapi.preprocessor;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Literally just a fancy comment that I can put next to stuff to know how it
@@ -29,21 +32,12 @@ import java.lang.annotation.*;
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
-@Repeatable(DiffersRepeatable.class)
-public @interface Differs {
-	
+public @interface DiffersRepeatable {
+
 	/**
-	 * A list of versions that this method differs from. This need not be
-	 * exhaustive - the previous version is sufficient
-	 * @return versions that this method differs from
+	 * More syntactic sugar
+	 * @return an array of differs annotations
 	 */
-	String[] from();
-	
-	/**
-	 * A description stating why this version differs from the {@link #from()}
-	 * version
-	 * @return a description stating why this version differs
-	 */
-	String by();
+	Differs[] value();
 	
 }

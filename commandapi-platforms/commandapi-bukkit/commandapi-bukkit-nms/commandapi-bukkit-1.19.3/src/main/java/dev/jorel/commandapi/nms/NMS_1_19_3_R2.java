@@ -37,6 +37,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -65,8 +66,12 @@ import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess.Frozen;
 import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -131,6 +136,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -146,6 +152,9 @@ import java.util.function.ToIntFunction;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
+@RequireField(in = MappedRegistry.class, name = "frozen", ofType = boolean.class)
+@Differs(from = {"1.19", "1.19.1", "1.19.2"},
+		by = "MappedRegistry#ca -> MappedRegistry#l (Registry frozen)")
 @Differs(from = "1.19.2", by = "Chat preview removed")
 public class NMS_1_19_3_R2 extends NMS_Common {
 
@@ -153,6 +162,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
+	private static final Field registryIsFrozen;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -172,6 +182,7 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher");
+		registryIsFrozen = CommandAPIHandler.getField(MappedRegistry.class, "l", "frozen");
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -756,6 +767,32 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 			CommandAPI.logError(
 				"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
 					+ stringWriter.toString());
+		}
+	}
+
+	@Override
+	@Differs(from = {"1.19", "1.19.1", "1.19.2"},
+			by = "Registry.COMMAND_ARGUMENT_TYPE renamed to BuiltInRegistries.COMMAND_ARGUMENT_TYPE")
+	public void registerCustomArgumentType() {
+		try {
+			MappedRegistry<ArgumentTypeInfo<?, ?>> commandArgumentTypeRegistry = (MappedRegistry<ArgumentTypeInfo<?, ?>>) BuiltInRegistries.COMMAND_ARGUMENT_TYPE;
+			// Unfreeze registry
+			registryIsFrozen.set(commandArgumentTypeRegistry, false);
+
+			// Register argument
+			Method registerArgument = ArgumentTypeInfos.class.getDeclaredMethod(
+					SafeVarHandle.USING_MOJANG_MAPPINGS ? "register" : "a",
+					Registry.class, String.class, Class.class, ArgumentTypeInfo.class
+			);
+			registerArgument.setAccessible(true);
+
+			registerArgument.invoke(null, commandArgumentTypeRegistry, "commandapi:exception_handler",
+					ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentInfo_1_19_3<>());
+
+			// Refreeze registry
+			registryIsFrozen.set(commandArgumentTypeRegistry, true);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
 		}
 	}
 

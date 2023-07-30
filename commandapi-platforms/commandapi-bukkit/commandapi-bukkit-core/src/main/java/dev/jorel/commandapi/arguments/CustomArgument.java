@@ -48,7 +48,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
  * @since 2.0
  * @apiNote Returns a {@link T} object
  */
-public class CustomArgument<T, B> extends Argument<T> {
+public class CustomArgument<T, B> extends Argument<T> implements WrapperArgument<Argument<B>> {
 
 	private final CustomArgumentInfoParser<T, B> infoParser;
 	private final Argument<B> base;
@@ -93,6 +93,11 @@ public class CustomArgument<T, B> extends Argument<T> {
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.CUSTOM;
+	}
+
+	@Override
+	public Argument<B> getBaseArgument() {
+		return base;
 	}
 
 	@Override

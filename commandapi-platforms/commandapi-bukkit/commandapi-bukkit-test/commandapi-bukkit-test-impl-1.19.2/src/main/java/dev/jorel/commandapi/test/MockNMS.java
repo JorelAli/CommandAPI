@@ -44,6 +44,7 @@ import org.mockito.Mockito;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
@@ -116,8 +117,6 @@ public class MockNMS extends Enums {
 		CommandAPIBukkit<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		super.baseNMS = nms;
-
-//		initializeArgumentsInArgumentTypeInfos();
 
 		// Initialize WorldVersion (game version)
 		SharedConstants.tryDetectVersion();
@@ -624,190 +623,7 @@ public class MockNMS extends Enums {
 			return null;
 		}
 	}
-	
-//	@Override
-//	public void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
-//		throws IOException {
-//		Files
-//			.asCharSink(file, StandardCharsets.UTF_8)
-//			.write(new GsonBuilder()
-//				.setPrettyPrinting()
-//				.create()
-//				.toJson(DispatcherUtil.toJSON(dispatcher, dispatcher.getRoot())));
-//	}
-//
-//	@SuppressWarnings("rawtypes")
-//	private void initializeArgumentsInArgumentTypeInfos() {
-//		@SuppressWarnings("unchecked")
-//		Map<Class<?>, ArgumentTypeInfo<?, ?>> map = getFieldAs(ArgumentTypeInfos.class, "a", null, Map.class);
-//		map.put(BoolArgumentType.class, SingletonArgumentInfo.contextFree(BoolArgumentType::bool));
-//		map.put(FloatArgumentType.class, new FloatArgumentInfo());
-//		map.put(DoubleArgumentType.class, new DoubleArgumentInfo());
-//		map.put(IntegerArgumentType.class, new IntegerArgumentInfo());
-//		map.put(LongArgumentType.class, new LongArgumentInfo());
-//		map.put(StringArgumentType.class, new StringArgumentSerializer());
-//		map.put(EntityArgument.class, new EntityArgument.Info());
-//		map.put(GameProfileArgument.class, SingletonArgumentInfo.contextFree(GameProfileArgument::gameProfile));
-//		map.put(BlockPosArgument.class, SingletonArgumentInfo.contextFree(BlockPosArgument::blockPos));
-//		map.put(ColumnPosArgument.class, SingletonArgumentInfo.contextFree(ColumnPosArgument::columnPos));
-//		map.put(Vec3Argument.class, SingletonArgumentInfo.contextFree(Vec3Argument::vec3));
-//		map.put(Vec2Argument.class, SingletonArgumentInfo.contextFree(Vec2Argument::vec2));
-//		map.put(BlockStateArgument.class, SingletonArgumentInfo.contextAware(BlockStateArgument::block));
-//		map.put(BlockPredicateArgument.class, SingletonArgumentInfo.contextAware(BlockPredicateArgument::blockPredicate));
-//		map.put(ItemArgument.class, SingletonArgumentInfo.contextAware(ItemArgument::item));
-//		map.put(ItemPredicateArgument.class, SingletonArgumentInfo.contextAware(ItemPredicateArgument::itemPredicate));
-//		map.put(ColorArgument.class, SingletonArgumentInfo.contextFree(ColorArgument::color));
-//		map.put(ComponentArgument.class, SingletonArgumentInfo.contextFree(ComponentArgument::textComponent));
-//		map.put(MessageArgument.class, SingletonArgumentInfo.contextFree(MessageArgument::message));
-//		map.put(CompoundTagArgument.class, SingletonArgumentInfo.contextFree(CompoundTagArgument::compoundTag));
-//		map.put(NbtTagArgument.class, SingletonArgumentInfo.contextFree(NbtTagArgument::nbtTag));
-//		map.put(NbtPathArgument.class, SingletonArgumentInfo.contextFree(NbtPathArgument::nbtPath));
-//		map.put(ObjectiveArgument.class, SingletonArgumentInfo.contextFree(ObjectiveArgument::objective));
-//		map.put(ObjectiveCriteriaArgument.class, SingletonArgumentInfo.contextFree(ObjectiveCriteriaArgument::criteria));
-//		map.put(OperationArgument.class, SingletonArgumentInfo.contextFree(OperationArgument::operation));
-//		map.put(ParticleArgument.class, SingletonArgumentInfo.contextFree(ParticleArgument::particle));
-//		map.put(AngleArgument.class, SingletonArgumentInfo.contextFree(AngleArgument::angle));
-//		map.put(RotationArgument.class, SingletonArgumentInfo.contextFree(RotationArgument::rotation));
-//		map.put(ScoreboardSlotArgument.class, SingletonArgumentInfo.contextFree(ScoreboardSlotArgument::displaySlot));
-//		map.put(ScoreHolderArgument.class, new ScoreHolderArgument.Info());
-//		map.put(SwizzleArgument.class, SingletonArgumentInfo.contextFree(SwizzleArgument::swizzle));
-//		map.put(TeamArgument.class, SingletonArgumentInfo.contextFree(TeamArgument::team));
-//		map.put(SlotArgument.class, SingletonArgumentInfo.contextFree(SlotArgument::slot));
-//		map.put(ResourceLocationArgument.class, SingletonArgumentInfo.contextFree(ResourceLocationArgument::id));
-//		map.put(MobEffectArgument.class, SingletonArgumentInfo.contextFree(MobEffectArgument::effect));
-//		map.put(FunctionArgument.class, SingletonArgumentInfo.contextFree(FunctionArgument::functions));
-//		map.put(EntityAnchorArgument.class, SingletonArgumentInfo.contextFree(EntityAnchorArgument::anchor));
-//		map.put(RangeArgument.Ints.class, SingletonArgumentInfo.contextFree(RangeArgument::intRange));
-//		map.put(RangeArgument.Floats.class, SingletonArgumentInfo.contextFree(RangeArgument::floatRange));
-//		map.put(ItemEnchantmentArgument.class, SingletonArgumentInfo.contextFree(ItemEnchantmentArgument::enchantment));
-//		map.put(EntitySummonArgument.class, SingletonArgumentInfo.contextFree(EntitySummonArgument::id));
-//		map.put(DimensionArgument.class, SingletonArgumentInfo.contextFree(DimensionArgument::dimension));
-//		map.put(TimeArgument.class, SingletonArgumentInfo.contextFree(TimeArgument::time));
-//		map.put(ResourceOrTagLocationArgument.class, new ResourceOrTagLocationArgument.Info());
-//		map.put(ResourceKeyArgument.class, new ResourceKeyArgument.Info());
-//		map.put(TemplateMirrorArgument.class, SingletonArgumentInfo.contextFree(TemplateMirrorArgument::templateMirror));
-//		map.put(TemplateRotationArgument.class, SingletonArgumentInfo.contextFree(TemplateRotationArgument::templateRotation));
-//		map.put(UuidArgument.class, SingletonArgumentInfo.contextFree(UuidArgument::uuid));
-//	}
-//
-//	/**
-//	 * An implementation of {@link ArgumentUtils} which produces JSON from a command
-//	 * dispatcher and its root node. We have to avoid accessing IRegistry because it
-//	 * isn't mock-able and cannot be instantiated through normal means
-//	 */
-//	private static class DispatcherUtil {
-//
-//		static Map<Class<?>, String> argumentParsers = new HashMap<>();
-//
-//		static {
-//			argumentParsers.put(BoolArgumentType.class, "brigadier:bool");
-//			argumentParsers.put(FloatArgumentType.class, "brigadier:float");
-//			argumentParsers.put(DoubleArgumentType.class, "brigadier:double");
-//			argumentParsers.put(IntegerArgumentType.class, "brigadier:integer");
-//			argumentParsers.put(LongArgumentType.class, "brigadier:long");
-//			argumentParsers.put(StringArgumentType.class, "brigadier:string");
-//			argumentParsers.put(EntityArgument.class, "entity");
-//			argumentParsers.put(GameProfileArgument.class, "game_profile");
-//			argumentParsers.put(BlockPosArgument.class, "block_pos");
-//			argumentParsers.put(ColumnPosArgument.class, "column_pos");
-//			argumentParsers.put(Vec3Argument.class, "vec3");
-//			argumentParsers.put(Vec2Argument.class, "vec2");
-//			argumentParsers.put(BlockStateArgument.class, "block_state");
-//			argumentParsers.put(BlockPredicateArgument.class, "block_predicate");
-//			argumentParsers.put(ItemArgument.class, "item_stack");
-//			argumentParsers.put(ItemPredicateArgument.class, "item_predicate");
-//			argumentParsers.put(ColorArgument.class, "color");
-//			argumentParsers.put(ComponentArgument.class, "component");
-//			argumentParsers.put(MessageArgument.class, "message");
-//			argumentParsers.put(CompoundTagArgument.class, "nbt_compound_tag");
-//			argumentParsers.put(NbtTagArgument.class, "nbt_tag");
-//			argumentParsers.put(NbtPathArgument.class, "nbt_path");
-//			argumentParsers.put(ObjectiveArgument.class, "objective");
-//			argumentParsers.put(ObjectiveCriteriaArgument.class, "objective_criteria");
-//			argumentParsers.put(OperationArgument.class, "operation");
-//			argumentParsers.put(ParticleArgument.class, "particle");
-//			argumentParsers.put(AngleArgument.class, "angle");
-//			argumentParsers.put(RotationArgument.class, "rotation");
-//			argumentParsers.put(ScoreboardSlotArgument.class, "scoreboard_slot");
-//			argumentParsers.put(ScoreHolderArgument.class, "score_holder");
-//			argumentParsers.put(SwizzleArgument.class, "swizzle");
-//			argumentParsers.put(TeamArgument.class, "team");
-//			argumentParsers.put(SlotArgument.class, "item_slot");
-//			argumentParsers.put(ResourceLocationArgument.class, "resource_location");
-//			argumentParsers.put(MobEffectArgument.class, "mob_effect");
-//			argumentParsers.put(FunctionArgument.class, "function");
-//			argumentParsers.put(EntityAnchorArgument.class, "entity_anchor");
-//			argumentParsers.put(RangeArgument.Ints.class, "int_range");
-//			argumentParsers.put(RangeArgument.Floats.class, "float_range");
-//			argumentParsers.put(ItemEnchantmentArgument.class, "item_enchantment");
-//			argumentParsers.put(EntitySummonArgument.class, "entity_summon");
-//			argumentParsers.put(DimensionArgument.class, "dimension");
-//			argumentParsers.put(TimeArgument.class, "time");
-//			argumentParsers.put(ResourceOrTagLocationArgument.class, "resource_or_tag");
-//			argumentParsers.put(ResourceKeyArgument.class, "resource");
-//			argumentParsers.put(TemplateMirrorArgument.class, "template_mirror");
-//			argumentParsers.put(TemplateRotationArgument.class, "template_rotation");
-//			argumentParsers.put(UuidArgument.class, "uuid");
-//		}
-//
-//		public static <S> JsonObject toJSON(CommandDispatcher<S> dispatcher, CommandNode<S> node) {
-//			JsonObject jsonObject = new JsonObject();
-//
-//			// Unpack nodes
-//			if (node instanceof RootCommandNode) {
-//				jsonObject.addProperty("type", "root");
-//			} else if (node instanceof LiteralCommandNode) {
-//				jsonObject.addProperty("type", "literal");
-//			} else if (node instanceof ArgumentCommandNode) {
-//				ArgumentCommandNode<?, ?> argumentCommandNode = (ArgumentCommandNode<?, ?>) node;
-//				argToJSON(jsonObject, argumentCommandNode.getType());
-//			} else {
-//				jsonObject.addProperty("type", "unknown");
-//			}
-//
-//			// Write children
-//			JsonObject children = new JsonObject();
-//			for (CommandNode<S> child : node.getChildren()) {
-//				children.add(child.getName(), (JsonElement) toJSON(dispatcher, child));
-//			}
-//			if (children.size() > 0) {
-//				jsonObject.add("children", (JsonElement) children);
-//			}
-//
-//			// Write whether the command is executable
-//			if (node.getCommand() != null) {
-//				jsonObject.addProperty("executable", Boolean.valueOf(true));
-//			}
-//			if (node.getRedirect() != null) {
-//				Collection<String> redirectPaths = dispatcher.getPath(node.getRedirect());
-//				if (!redirectPaths.isEmpty()) {
-//					JsonArray redirects = new JsonArray();
-//					for (String redirectPath : redirectPaths) {
-//						redirects.add(redirectPath);
-//					}
-//					jsonObject.add("redirect", (JsonElement) redirects);
-//				}
-//			}
-//			return jsonObject;
-//		}
-//
-//		@SuppressWarnings("unchecked")
-//		private static <T extends ArgumentType<?>> void argToJSON(JsonObject jsonObject, T argument) {
-//			ArgumentTypeInfo.Template<T> argumentInfo = ArgumentTypeInfos.unpack(argument);
-//			jsonObject.addProperty("type", "argument");
-//			jsonObject.addProperty("parser", argumentParsers.get(argument.getClass()));
-//
-//			// Properties
-//			JsonObject properties = new JsonObject();
-//			@SuppressWarnings("rawtypes")
-//			ArgumentTypeInfo argumentTypeInfo = argumentInfo.type();
-//			argumentTypeInfo.serializeToJson(argumentInfo, properties);
-//			if (properties.size() > 0) {
-//				jsonObject.add("properties", (JsonElement) properties);
-//			}
-//		}
-//	}
-	
+
 	@Override
 	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
 		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
@@ -816,5 +632,10 @@ public class MockNMS extends Enums {
 	@Override
 	public Map<String, HelpTopic> getHelpMap() {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
+	}
+
+	@Override
+	public String extractTranslationKey(CommandSyntaxException exception) {
+		return baseNMS.extractTranslationKey(exception);
 	}
 }

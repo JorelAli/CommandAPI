@@ -104,6 +104,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		checkDependencies();
+		registerCustomArgumentType();
 	}
 	
 	private static void setInternalConfig(InternalBukkitConfig internalBukkitConfig) {

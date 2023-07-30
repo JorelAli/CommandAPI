@@ -88,6 +88,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -680,6 +681,10 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	@Unimplemented(because = NAME_CHANGED, info = "Unmapped as MinecraftServer.resources", from = "aB (1.17)", to = "aC (1.17.1)")
 	public abstract void reloadDataPacks();
 
+	@Override
+	public void registerCustomArgumentType() {
+		ArgumentTypes.register("commandapi:exception_handler", ExceptionHandlingArgumentType.class, new ExceptionHandlingArgumentSerializer_1_17_Common());
+	}
 	@Override
 	public Message generateMessageFromJson(String json) {
 		return Serializer.fromJson(json);
