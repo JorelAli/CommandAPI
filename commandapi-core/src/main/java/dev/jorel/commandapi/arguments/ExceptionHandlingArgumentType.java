@@ -8,11 +8,9 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.WrapperStringReader;
-import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 
 /**
  * An {@link ArgumentType} that wraps another {@link ArgumentType} and intercepts any
@@ -40,7 +38,7 @@ public record ExceptionHandlingArgumentType<T, BaseType extends ArgumentType<T>,
 		 * @param exceptionParser A function that parses the information in a {@link CommandSyntaxException} to create an
 		 * {@link ExceptionInformation} object.
 		 */
-		TriFunction<CommandSyntaxException, StringReader, BaseType, ExceptionInformation> exceptionParser
+		InitialParseExceptionParser<T, BaseType, ExceptionInformation> exceptionParser
 ) implements ArgumentType<T> {
 
     @Override
@@ -51,7 +49,7 @@ public record ExceptionHandlingArgumentType<T, BaseType extends ArgumentType<T>,
             try {
                 return exceptionHandler.handleException(new InitialParseExceptionContext<>(
                         new WrapperCommandSyntaxException(original),
-						exceptionParser.apply(original, stringReader, baseType),
+						exceptionParser.parse(original, stringReader, baseType),
                         new WrapperStringReader(stringReader)
                 ));
             } catch (WrapperCommandSyntaxException newException) {
