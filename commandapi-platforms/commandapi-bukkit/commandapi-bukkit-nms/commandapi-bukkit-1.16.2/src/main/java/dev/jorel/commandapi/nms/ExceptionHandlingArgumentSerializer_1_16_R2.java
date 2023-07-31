@@ -28,7 +28,7 @@ public class ExceptionHandlingArgumentSerializer_1_16_R2<T, BT extends ArgumentT
         // It can be found as the return type of ArgumentRegistry#get(ArgumentType)
         Class<?> entryClass = null;
         try {
-            entryClass = ArgumentRegistry.class.getDeclaredMethod("a", ArgumentType.class).getReturnType();
+            entryClass = ArgumentRegistry.class.getDeclaredMethod("b", ArgumentType.class).getReturnType();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }

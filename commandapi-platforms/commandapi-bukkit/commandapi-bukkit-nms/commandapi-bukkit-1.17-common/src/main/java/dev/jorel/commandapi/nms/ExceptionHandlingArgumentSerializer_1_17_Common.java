@@ -27,7 +27,7 @@ public class ExceptionHandlingArgumentSerializer_1_17_Common<T, BT extends Argum
         Class<?> entryClass = null;
         try {
             entryClass = ArgumentTypes.class.getDeclaredMethod(
-                    SafeVarHandle.USING_MOJANG_MAPPINGS ? "a" : "get",
+                    SafeVarHandle.USING_MOJANG_MAPPINGS ? "get" : "b",
                     ArgumentType.class).getReturnType();
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
