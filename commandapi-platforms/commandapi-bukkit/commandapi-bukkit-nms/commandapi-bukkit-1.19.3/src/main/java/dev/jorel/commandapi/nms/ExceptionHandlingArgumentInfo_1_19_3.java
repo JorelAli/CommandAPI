@@ -12,9 +12,9 @@ import net.minecraft.network.FriendlyByteBuf;
 
 @Differs(from = {"1.19", "1.19.1", "1.19.2"},
         by = "Registry.COMMAND_ARGUMENT_TYPE -> BuiltInRegistries.COMMAND_ARGUMENT_TYPE")
-public class ExceptionHandlingArgumentInfo_1_19_3<T, BT extends ArgumentType<T>, EI>
-	implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T, BT, EI>,
-        ExceptionHandlingArgumentInfo_1_19_3<T, BT, EI>.Template> {
+public class ExceptionHandlingArgumentInfo_1_19_3<T, EI>
+	implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T, EI>,
+        ExceptionHandlingArgumentInfo_1_19_3<T, EI>.Template> {
     @Override
     public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {
         ArgumentType<T> baseType = template.baseType;
@@ -46,7 +46,7 @@ public class ExceptionHandlingArgumentInfo_1_19_3<T, BT extends ArgumentType<T>,
     }
 
     @Override
-    public Template unpack(ExceptionHandlingArgumentType<T, BT, EI> exceptionHandlingArgumentType) {
+    public Template unpack(ExceptionHandlingArgumentType<T, EI> exceptionHandlingArgumentType) {
         ArgumentType<T> baseType = exceptionHandlingArgumentType.baseType();
         return new Template(baseType);
     }
@@ -63,7 +63,7 @@ public class ExceptionHandlingArgumentInfo_1_19_3<T, BT extends ArgumentType<T>,
         // on a client-disconnected screen, which is not very helpful
     }
 
-    public final class Template implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<T, BT, EI>> {
+    public final class Template implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<T, EI>> {
         final ArgumentType<T> baseType;
 
         public Template(ArgumentType<T> baseType) {
@@ -71,12 +71,12 @@ public class ExceptionHandlingArgumentInfo_1_19_3<T, BT extends ArgumentType<T>,
         }
 
         @Override
-        public ArgumentTypeInfo<ExceptionHandlingArgumentType<T, BT, EI>, ?> type() {
+        public ArgumentTypeInfo<ExceptionHandlingArgumentType<T, EI>, ?> type() {
             return ExceptionHandlingArgumentInfo_1_19_3.this;
         }
 
         @Override
-        public ExceptionHandlingArgumentType<T, BT, EI> instantiate(CommandBuildContext commandBuildContext) {
+        public ExceptionHandlingArgumentType<T, EI> instantiate(CommandBuildContext commandBuildContext) {
             // Same as ExceptionHandlingArgumentInfo_1_19_3#deserializeFromNetwork.
             // An ExceptionHandlingArgumentType should never be built from a packet,
             // so this method shouldn't be used

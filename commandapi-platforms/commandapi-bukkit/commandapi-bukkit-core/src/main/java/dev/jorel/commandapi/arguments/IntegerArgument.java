@@ -35,8 +35,7 @@ import dev.jorel.commandapi.wrappers.WrapperStringReader;
  * @since 1.1
  */
 public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer>
-	implements InitialParseExceptionArgument<Integer, IntegerArgumentType,
-		IntegerArgument.InitialParseExceptionInformation, Argument<Integer>> {
+	implements InitialParseExceptionArgument<Integer, IntegerArgument.InitialParseExceptionInformation, Argument<Integer>> {
 	/**
 	 * An integer argument
 	 *
@@ -150,13 +149,12 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer>
 	}
 
 	@Override
-	public InitialParseExceptionInformation parseInitialParseException(
-			CommandSyntaxException exception, StringReader reader, IntegerArgumentType baseType
-	) {
+	public InitialParseExceptionInformation parseInitialParseException(CommandSyntaxException exception, StringReader reader) {
 		String key = CommandAPIBukkit.get().extractTranslationKey(exception);
 		if (key == null) {
 			throw new IllegalStateException("Unexpected null translation key for IntegerArgument initial parse", exception);
 		}
+		IntegerArgumentType baseType = (IntegerArgumentType) this.getRawType();
 		int min = baseType.getMinimum();
 		int max = baseType.getMaximum();
 		return switch (key) {

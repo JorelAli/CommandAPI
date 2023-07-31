@@ -16,11 +16,10 @@ import java.nio.charset.StandardCharsets;
  * Command Data: Node Format (pre 1.19)</a>.
  *
  * @param <T> The same type parameter T for {@link ExceptionHandlingArgumentType}. This fixes a silly generics issue.
- * @param <BT> The same type parameter as BaseType in {@link ExceptionHandlingArgumentType}. This fixes a silly generics issue.
  * @param <EI> The same type parameter as ExceptionInformation in {@link ExceptionHandlingArgumentType}. This fixes a silly generics issue.
  * @param <WRITER> The netty {@link ByteBuf} subclass used to write packets in the version of Minecraft this is being used for.
  */
-public abstract class ExceptionHandlingArgumentSerializer_Common<T, BT extends ArgumentType<T>, EI, WRITER extends ByteBuf> {
+public abstract class ExceptionHandlingArgumentSerializer_Common<T, EI, WRITER extends ByteBuf> {
     /**
      * This method is expected to write the properties section for an argument node that uses the
      * {@link ExceptionHandlingArgumentType}, so that the argument can be reconstructed when received by a client.
@@ -31,7 +30,7 @@ public abstract class ExceptionHandlingArgumentSerializer_Common<T, BT extends A
      * @param argument The {@link ExceptionHandlingArgumentType} to serialize
      * @param packetWriter The netty {@link ByteBuf} that contains the data
      */
-    protected void commonSerializeToNetwork(ExceptionHandlingArgumentType<T, BT, EI> argument, WRITER packetWriter) {
+    protected void commonSerializeToNetwork(ExceptionHandlingArgumentType<T, EI> argument, WRITER packetWriter) {
         // REMOVE MY KEY FROM THE PACKET
         Object myInfo = getArgumentTypeInformation(argument);
 
@@ -61,7 +60,7 @@ public abstract class ExceptionHandlingArgumentSerializer_Common<T, BT extends A
      * @param argument The {@link ExceptionHandlingArgumentType} to serialize
      * @param properties The {@link JsonObject} to put the properties in
      */
-    protected void commonSerializeToJson(ExceptionHandlingArgumentType<T, BT, EI> argument, JsonObject properties) {
+    protected void commonSerializeToJson(ExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
         ArgumentType<T> baseType = argument.baseType();
 
         Object baseInfo = getArgumentTypeInformation(baseType);

@@ -10,9 +10,9 @@ import net.minecraft.server.v1_16_R3.ArgumentSerializer;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 
-public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T, BT extends ArgumentType<T>, EI>
-	extends ExceptionHandlingArgumentSerializer_Common<T, BT, EI, PacketDataSerializer>
-	implements ArgumentSerializer<ExceptionHandlingArgumentType<T, BT, EI>> {
+public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T, EI>
+	extends ExceptionHandlingArgumentSerializer_Common<T, EI, PacketDataSerializer>
+	implements ArgumentSerializer<ExceptionHandlingArgumentType<T, EI>> {
     // All the ? here should actually be ArgumentRegistry.a, but that is a private inner class. That makes everything really annoying.
     // TODO: We want to check this reflection, but we can't give ArgumentRegistry.a to the @RequireField annotation
     //  Hopefully something works out, but the preprocessor needs to be expanded first
@@ -60,19 +60,19 @@ public class ExceptionHandlingArgumentSerializer_1_16_4_R3<T, BT extends Argumen
     // ArgumentSerializer methods
     @Override
     // serializeToNetwork
-    public void a(ExceptionHandlingArgumentType<T, BT, EI> argument, PacketDataSerializer packetDataSerializer) {
+    public void a(ExceptionHandlingArgumentType<T, EI> argument, PacketDataSerializer packetDataSerializer) {
         commonSerializeToNetwork(argument, packetDataSerializer);
     }
 
     @Override
     // serializeToJson
-    public void a(ExceptionHandlingArgumentType<T, BT, EI> argument, JsonObject properties) {
+    public void a(ExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
         commonSerializeToJson(argument, properties);
     }
 
     @Override
     // deserializeFromNetwork
-    public ExceptionHandlingArgumentType<T, BT, EI> b(PacketDataSerializer packetDataSerializer) {
+    public ExceptionHandlingArgumentType<T, EI> b(PacketDataSerializer packetDataSerializer) {
         // Since this class overrides its ArgumentRegistry key with the baseType's,
         // this class's key should never show up in a packet and this method should never
         // be called to deserialize the ArgumentType info that wasn't put into the packet

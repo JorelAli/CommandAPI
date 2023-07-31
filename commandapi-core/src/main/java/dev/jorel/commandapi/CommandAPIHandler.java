@@ -823,8 +823,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		if (!(argument instanceof InitialParseExceptionArgument)) return rawType;
 
-		InitialParseExceptionArgument<T, ArgumentType<T>, EI, ?> iPEA =
-				(InitialParseExceptionArgument<T, ArgumentType<T>, EI, ?>) argument.instance();
+		InitialParseExceptionArgument<T, EI, ?> iPEA = (InitialParseExceptionArgument<T, EI, ?>) argument.instance();
 
 		Optional<InitialParseExceptionHandler<T, EI>> handler = iPEA.getInitialParseExceptionHandler();
 		if (handler.isEmpty()) return rawType;

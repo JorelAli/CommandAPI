@@ -14,9 +14,9 @@ import net.minecraft.network.FriendlyByteBuf;
 //  I'm not sure, since every line is pretty heavy with nms-specific classes that couldn't (?) be extracted
 @Differs(from = {"1.15", "1.16", "1.17", "1.18"},
         by = "ArgumentType serialization completely different")
-public class ExceptionHandlingArgumentInfo_1_19_Common<T, BT extends ArgumentType<T>, EI>
-	implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T, BT, EI>,
-        ExceptionHandlingArgumentInfo_1_19_Common<T, BT, EI>.Template> {
+public class ExceptionHandlingArgumentInfo_1_19_Common<T, EI>
+	implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T, EI>,
+        ExceptionHandlingArgumentInfo_1_19_Common<T, EI>.Template> {
     @Override
     public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {
         ArgumentType<T> baseType = template.baseType;
@@ -48,7 +48,7 @@ public class ExceptionHandlingArgumentInfo_1_19_Common<T, BT extends ArgumentTyp
     }
 
     @Override
-    public Template unpack(ExceptionHandlingArgumentType<T, BT, EI> exceptionHandlingArgumentType) {
+    public Template unpack(ExceptionHandlingArgumentType<T, EI> exceptionHandlingArgumentType) {
         ArgumentType<T> baseType = exceptionHandlingArgumentType.baseType();
         return new Template(baseType);
     }
@@ -65,7 +65,7 @@ public class ExceptionHandlingArgumentInfo_1_19_Common<T, BT extends ArgumentTyp
         // on a client-disconnected screen, which is not very helpful
     }
 
-    public final class Template implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<T, BT, EI>> {
+    public final class Template implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<T, EI>> {
         final ArgumentType<T> baseType;
 
         public Template(ArgumentType<T> baseType) {
@@ -73,12 +73,12 @@ public class ExceptionHandlingArgumentInfo_1_19_Common<T, BT extends ArgumentTyp
         }
 
         @Override
-        public ArgumentTypeInfo<ExceptionHandlingArgumentType<T, BT, EI>, ?> type() {
+        public ArgumentTypeInfo<ExceptionHandlingArgumentType<T, EI>, ?> type() {
             return ExceptionHandlingArgumentInfo_1_19_Common.this;
         }
 
         @Override
-        public ExceptionHandlingArgumentType<T, BT, EI> instantiate(CommandBuildContext commandBuildContext) {
+        public ExceptionHandlingArgumentType<T, EI> instantiate(CommandBuildContext commandBuildContext) {
             // Same as ExceptionHandlingArgumentInfo_1_19_Common#deserializeFromNetwork.
             // An ExceptionHandlingArgumentType should never be built from a packet,
             // so this method shouldn't be used

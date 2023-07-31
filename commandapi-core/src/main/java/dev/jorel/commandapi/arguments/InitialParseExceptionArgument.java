@@ -14,11 +14,10 @@ import java.util.Optional;
  *
  * @param <T> The class of the object returned when the {@link ArgumentType}
  *           used by this Argument parses its raw input.
- * @param <BaseType> The implementation of {@link ArgumentType} being used for this Argument.
  * @param <ExceptionInformation> The class that holds information about the exception.
  * @param <Impl> The class extending this class, used as the return type in chained calls.
  */
-public interface InitialParseExceptionArgument<T, BaseType extends ArgumentType<T>, ExceptionInformation, Impl extends AbstractArgument<?, Impl, ?, ?>> extends ChainableBuilder<Impl> {
+public interface InitialParseExceptionArgument<T, ExceptionInformation, Impl extends AbstractArgument<?, Impl, ?, ?>> extends ChainableBuilder<Impl> {
     /**
      * A map that links Arguments to their ExceptionHandlers. This is basically
      * equivalent to putting one instance variable in this interface, but Java
@@ -30,7 +29,7 @@ public interface InitialParseExceptionArgument<T, BaseType extends ArgumentType<
     // TODO: Maybe this can be a WeakHashMap, so once the Argument objects aren't being used anywhere else we can forget about
     //  them and not store them anymore. I'm not entirely sure that is what WeakHashMap does though. Are Arguments ever GC'd
     //  anyway, or do they stick around somewhere?
-    Map<InitialParseExceptionArgument<?, ?, ?, ?>, InitialParseExceptionHandler<?, ?>> exceptionHandlers = new HashMap<>();
+    Map<InitialParseExceptionArgument<?, ?, ?>, InitialParseExceptionHandler<?, ?>> exceptionHandlers = new HashMap<>();
 
     /**
      * Sets the {@link InitialParseExceptionHandler} this Argument should
@@ -59,8 +58,7 @@ public interface InitialParseExceptionArgument<T, BaseType extends ArgumentType<
      *
      * @param exception The {@link CommandSyntaxException} that was thrown.
      * @param reader The {@link StringReader} that was reading this Argument.
-     * @param baseType The {@link ArgumentType} object was parsing.
      * @return An {@link ExceptionInformation} object that holds information about the given exception.
      */
-    ExceptionInformation parseInitialParseException(CommandSyntaxException exception, StringReader reader, BaseType baseType);
+    ExceptionInformation parseInitialParseException(CommandSyntaxException exception, StringReader reader);
 }

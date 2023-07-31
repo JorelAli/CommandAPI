@@ -22,14 +22,13 @@ import java.util.concurrent.CompletableFuture;
  * {@link ExceptionInformation} object.
  *
  * @param <T> The object returned when the wrapped {@link ArgumentType} is parsed.
- * @param <BaseType> The class of the {@link ArgumentType} this object is wrapping.
  * @param <ExceptionInformation> The class that holds information about the exception.
  */
-public record ExceptionHandlingArgumentType<T, BaseType extends ArgumentType<T>, ExceptionInformation>(
+public record ExceptionHandlingArgumentType<T, ExceptionInformation>(
         /**
          * @param baseType The {@link ArgumentType} this object is wrapping
          */
-        BaseType baseType,
+        ArgumentType<T> baseType,
         /**
          * @param exceptionHandler The {@link InitialParseExceptionHandler} that handles intercepted {@link CommandSyntaxException}
          */
@@ -38,7 +37,7 @@ public record ExceptionHandlingArgumentType<T, BaseType extends ArgumentType<T>,
 		 * @param exceptionParser A function that parses the information in a {@link CommandSyntaxException} to create an
 		 * {@link ExceptionInformation} object.
 		 */
-		InitialParseExceptionParser<T, BaseType, ExceptionInformation> exceptionParser
+		InitialParseExceptionParser<T, ExceptionInformation> exceptionParser
 ) implements ArgumentType<T> {
 
     @Override
@@ -49,7 +48,7 @@ public record ExceptionHandlingArgumentType<T, BaseType extends ArgumentType<T>,
             try {
                 return exceptionHandler.handleException(new InitialParseExceptionContext<>(
                         new WrapperCommandSyntaxException(original),
-						exceptionParser.parse(original, stringReader, baseType),
+						exceptionParser.parse(original, stringReader),
                         new WrapperStringReader(stringReader)
                 ));
             } catch (WrapperCommandSyntaxException newException) {

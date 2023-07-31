@@ -13,9 +13,9 @@ import net.minecraft.resources.ResourceLocation;
 
 @Differs(from = {"1.15", "1.16", "1.17", "1.18", "1.18.1"},
         by = "ArgumentTypes.Entry.c -> ArgumentTypes.Entry.b, ArgumentTypes.Entry.b -> ArgumentTypes.Entry.a")
-public class ExceptionHandlingArgumentSerializer_1_18_R2<T, BT extends ArgumentType<T>, EI>
-	extends ExceptionHandlingArgumentSerializer_Common<T, BT, EI, FriendlyByteBuf>
-	implements ArgumentSerializer<ExceptionHandlingArgumentType<T, BT, EI>> {
+public class ExceptionHandlingArgumentSerializer_1_18_R2<T, EI>
+	extends ExceptionHandlingArgumentSerializer_Common<T, EI, FriendlyByteBuf>
+	implements ArgumentSerializer<ExceptionHandlingArgumentType<T, EI>> {
     // All the ? here should actually be ArgumentTypes.Entry, but that is a private inner class. That makes everything really annoying.
     // TODO: We want to check this reflection, but we can't give ArgumentTypes.Entry to the @RequireField annotation
     //  Hopefully something works out, but the preprocessor needs to be expanded first
@@ -64,17 +64,17 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T, BT extends ArgumentT
 
     // ArgumentSerializer methods
     @Override
-    public void serializeToNetwork(ExceptionHandlingArgumentType<T, BT, EI> argument, FriendlyByteBuf friendlyByteBuf) {
+    public void serializeToNetwork(ExceptionHandlingArgumentType<T, EI> argument, FriendlyByteBuf friendlyByteBuf) {
         commonSerializeToNetwork(argument, friendlyByteBuf);
     }
 
     @Override
-    public void serializeToJson(ExceptionHandlingArgumentType<T, BT, EI> argument, JsonObject properties) {
+    public void serializeToJson(ExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
         commonSerializeToJson(argument, properties);
     }
 
     @Override
-    public ExceptionHandlingArgumentType<T, BT, EI> deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
+    public ExceptionHandlingArgumentType<T, EI> deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
         // Since this class overrides its ArgumentRegistry key with the baseType's,
         // this class's key should never show up in a packet and this method should never
         // be called to deserialize the ArgumentType info that wasn't put into the packet
