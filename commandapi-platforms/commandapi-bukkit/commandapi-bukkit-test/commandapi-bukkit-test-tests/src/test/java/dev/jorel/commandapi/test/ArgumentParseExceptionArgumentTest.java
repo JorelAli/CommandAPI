@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.List;
 
-public class ArgumentParseExceptionArgumentTest extends TestBase {
+class ArgumentParseExceptionArgumentTest extends TestBase {
 
     /*********
      * Setup *

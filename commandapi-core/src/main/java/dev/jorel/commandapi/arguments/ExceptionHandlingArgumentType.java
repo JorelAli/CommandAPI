@@ -37,7 +37,7 @@ public record ExceptionHandlingArgumentType<T, ExceptionInformation>(
 		 * @param exceptionParser A function that parses the information in a {@link CommandSyntaxException} to create an
 		 * {@link ExceptionInformation} object.
 		 */
-		InitialParseExceptionParser<T, ExceptionInformation> exceptionParser
+		InitialParseExceptionParser<ExceptionInformation> exceptionParser
 ) implements ArgumentType<T> {
 
     @Override

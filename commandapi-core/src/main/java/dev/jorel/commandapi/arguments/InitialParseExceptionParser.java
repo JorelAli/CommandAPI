@@ -8,11 +8,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
  * Extracts information about an exception that was thrown when an {@link ArgumentType} fails to parse.
  * See {@link InitialParseExceptionArgument#parseInitialParseException(CommandSyntaxException, StringReader)}.
  *
- * @param <T> The object returned when the wrapped {@link ArgumentType} is parsed.
  * @param <ExceptionInformation> The class that holds information about the exception.
  */
 @FunctionalInterface
-public interface InitialParseExceptionParser<T, ExceptionInformation> {
+public interface InitialParseExceptionParser<ExceptionInformation> {
     /**
      * Extracts information about an exception that was thrown when an {@link ArgumentType} fails to parse.
      * See {@link InitialParseExceptionArgument#parseInitialParseException(CommandSyntaxException, StringReader)}.
