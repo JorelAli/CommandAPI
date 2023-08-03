@@ -488,7 +488,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		if (!CommandAPI.canRegister() || force) {
 			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
 			// If we're forcing, we'll also go here to make sure commands are really gone
-			Map<String, Command> knownCommands = getKnownCommands();
+			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 			knownCommands.remove(commandName);
 			if (force) removeCommandNamespace(knownCommands, commandName);
 
@@ -529,10 +529,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				map.remove(key);
 			}
 		}
-	}
-
-	private Map<String, Command> getKnownCommands() {
-		return commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 	}
 
 	@Override
