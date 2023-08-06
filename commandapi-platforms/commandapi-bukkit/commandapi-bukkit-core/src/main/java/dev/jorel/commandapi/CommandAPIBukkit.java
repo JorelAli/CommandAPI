@@ -447,6 +447,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
 			root.addChild(resultantNode);
+			root.addChild(namespaceNode(resultantNode));
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
@@ -456,6 +457,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				command.setPermission(permNode);
 
 				root.addChild(node);
+				root.addChild(namespaceNode(node));
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
@@ -466,6 +468,23 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				p.updateCommands();
 			}
 		}
+	}
+
+	private LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original) {
+		// Adapted from a section of `CraftServer#syncCommands`
+		LiteralCommandNode<Source> clone = new LiteralCommandNode<>(
+			"minecraft:" + original.getLiteral(),
+			original.getCommand(),
+			original.getRequirement(),
+			original.getRedirect(),
+			original.getRedirectModifier(),
+			original.isFork()
+		);
+
+		for (CommandNode<Source> child : original.getChildren()) {
+			clone.addChild(child);
+		}
+		return clone;
 	}
 
 	@Override

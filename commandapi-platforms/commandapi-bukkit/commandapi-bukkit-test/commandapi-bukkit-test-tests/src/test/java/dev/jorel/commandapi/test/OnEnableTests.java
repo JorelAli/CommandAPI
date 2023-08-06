@@ -180,6 +180,11 @@ class OnEnableTests extends TestBase {
 		assertNotNull(resourcesRoot.getChild("alias1"));
 		assertNotNull(resourcesRoot.getChild("alias2"));
 
+		// Namespaces should be in the resources dispatcher too
+		assertNotNull(resourcesRoot.getChild("minecraft:command"));
+		assertNotNull(resourcesRoot.getChild("minecraft:alias1"));
+		assertNotNull(resourcesRoot.getChild("minecraft:alias2"));
+
 
 		// Check the help topic was added
 		HelpTopic topic = server.getHelpMap().getHelpTopic("/command");
@@ -256,6 +261,9 @@ class OnEnableTests extends TestBase {
 		// Command should be removed from resources dispatcher
 		assertNull(resourcesRoot.getChild("command"));
 
+		// Namespace should still be there
+		assertNotNull(resourcesRoot.getChild("minecraft:command"));
+
 
 		// Help topic should be gone
 		assertNull(server.getHelpMap().getHelpTopic("/command"));
@@ -280,8 +288,11 @@ class OnEnableTests extends TestBase {
 		// Update commands should have been called for all players on the server
 		Mockito.verify(updateCommandsPlayer, Mockito.times(3)).updateCommands();
 
-		// Namespace should be gone
+		// Namespace should be gone from Bukkit's map
 		assertNull(commandMap.getCommand("minecraft:command"));
+
+		// Namespace should be gone from resources dispatcher
+		assertNull(resourcesRoot.getChild("minecraft:command"));
 
 		// Namespace should fail
 		assertCommandFailsWith(runCommandsPlayer, "minecraft:command argument",
