@@ -72,7 +72,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public void unregister(String commandName, boolean force) {
+	public void unregister(String commandName, boolean unregisterNamespaces) {
 //		commandManager.unregister(commandName);
 	}
 

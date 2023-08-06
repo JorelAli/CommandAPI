@@ -262,11 +262,12 @@ public class CommandAPI {
 	 * Unregisters a command, by force (removes all instances of that command)
 	 *
 	 * @param command the name of the command to unregister
-	 * @param force   if true, attempt to unregister all instances of the command
-	 *                across all plugins as well as minecraft, bukkit and spigot
+	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
+	 *                                command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
+	 *                                or `plugin:command`
 	 */
-	public static void unregister(String command, boolean force) {
-		CommandAPIHandler.getInstance().getPlatform().unregister(command, force);
+	public static void unregister(String command, boolean unregisterNamespaces) {
+		CommandAPIHandler.getInstance().getPlatform().unregister(command, unregisterNamespaces);
 	}
 
 	/**

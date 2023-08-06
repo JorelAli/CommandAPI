@@ -205,7 +205,7 @@ class OnEnableTests extends TestBase {
 		assertStoresResult(runCommandsPlayer, "minecraft:alias2 argument", results, "argument");
 
 
-		// Unregister main command without force
+		// Unregister just the main command
 		CommandAPI.unregister("command");
 
 		// Update commands should have been called for all players on the server
@@ -249,7 +249,7 @@ class OnEnableTests extends TestBase {
 		// Make sure command is removed from Bukkit CommandMap
 		assertNull(commandMap.getCommand("command"));
 
-		// Namespace should still be there since it wasn't forced
+		// Namespace should still be there
 		assertEquals(mainCommand, commandMap.getCommand("minecraft:command"));
 
 
@@ -267,19 +267,20 @@ class OnEnableTests extends TestBase {
 
 		// You would expect namespace to succeed since it is in the CommandMap
 		// However, running that command simply tells the Brig dispatcher to run the original command
-		// That command doesn't exist anymore, so it doesn't actually know how to run the command
-		// I'm going to say this is not a bug, just and example why you should be careful when unregistering commands
-//		// Namespace should still work since it wasn't forced
+		// The command was removed from the Brig dispacter, so it doesn't actually know how to do that
+		// I'm going to say this is not a bug, just an example why you should be careful when unregistering commands
+		// As a result, this test doesn't actually pass
+//		// Namespace command should still work
 //		assertStoresResult(runCommandsPlayer, "minecraft:command argument", results, "argument");
 
 
-		// Unregister main command with force
+		// Unregister the namespaced version of the command
 		CommandAPI.unregister("command", true);
 
 		// Update commands should have been called for all players on the server
 		Mockito.verify(updateCommandsPlayer, Mockito.times(3)).updateCommands();
 
-		// Namespace should be gone since force was used
+		// Namespace should be gone
 		assertNull(commandMap.getCommand("minecraft:command"));
 
 		// Namespace should fail

@@ -114,11 +114,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Unregisters a command from the CommandGraph so it can't be run anymore.
 	 *
 	 * @param commandName the name of the command to unregister
-	 * @param force       whether the unregistration system should attempt to remove
-	 *                    all instances of the command, regardless of whether they
-	 *                    have been registered by Minecraft, Bukkit or Spigot etc.
+	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
+	 *                                command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
+	 *                                or `plugin:command`
 	 */
-	public abstract void unregister(String commandName, boolean force);
+	public abstract void unregister(String commandName, boolean unregisterNamespaces);
 
 	/**
 	 * @return The Brigadier CommandDispatcher tree being used by the platform's server

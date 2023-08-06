@@ -104,7 +104,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
-	public void unregister(String commandName, boolean force) {
+	public void unregister(String commandName, boolean unregisterNamespaces) {
 		commandManager.unregister(commandName);
 	}
 

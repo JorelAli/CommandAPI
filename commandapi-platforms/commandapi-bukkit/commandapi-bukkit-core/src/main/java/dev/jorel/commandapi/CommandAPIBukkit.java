@@ -426,7 +426,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		if(!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
-			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher" and leave it. As the server finishes setup,
+			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
 			// it and the CommandAPI do some extra stuff to make everything work, and we move on.
 			// So, if we want to register commands while the server is running, we need to do all that extra stuff, and
 			// that is what this code does.
@@ -474,61 +474,101 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void unregister(String commandName, boolean force) {
+	public void unregister(String commandName, boolean unregisterNamespaces) {
+		unregister(commandName, unregisterNamespaces, false);
+	}
+
+	// TODO: Should there be a static version of this method so developers don't have to call CommandAPIBukkit.get()?
+	/**
+	 * Unregisters a command from the CommandGraph so it can't be run anymore.
+	 *
+	 * @param commandName          the name of the command to unregister
+	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
+	 *                                command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
+	 *                                or `plugin:command`
+	 * @param unregisterBukkit     whether the unregistration system should unregister
+	 */
+	public void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
 		CommandAPI.logInfo("Unregistering command /" + commandName);
 
-		// Remove nodes from the Brigadier dispatcher
-		RootCommandNode<Source> brigRoot = getBrigadierDispatcher().getRoot();
-		commandNodeChildren.get(brigRoot).remove(commandName);
-		commandNodeLiterals.get(brigRoot).remove(commandName);
-		// We really only expect commands to be represented as literals, but it is technically possible
-		// to put an ArgumentCommandNode in here, so we'll check
-		commandNodeArguments.get(brigRoot).remove(commandName);
+		if(!unregisterBukkit) {
+			// Remove nodes from the Vanilla dispatcher
+			// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
+			//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
+			removeBrigadierCommands(getBrigadierDispatcher(), commandName, unregisterNamespaces);
 
-		if (!CommandAPI.canRegister() || force) {
-			// Bukkit is done with normal command stuff, so we have to modify their CommandMap ourselves
-			// If we're forcing, we'll also go here to make sure commands are really gone
+			// Update the dispatcher file
+			CommandAPIHandler.getInstance().writeDispatcherToFile();
+		}
+
+		if(unregisterBukkit || !CommandAPI.canRegister()) {
+			// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
+			//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
+			//  moved the Vanilla command into the CommandMap
+			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
+			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
+
 			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
-			knownCommands.remove(commandName);
-			if (force) removeCommandNamespace(knownCommands, commandName);
 
-			// Remove commands from the resources dispatcher
-			RootCommandNode<Source> resourcesRoot = getResourcesDispatcher().getRoot();
-			Map<String, CommandNode<?>> children = commandNodeChildren.get(resourcesRoot);
-			Map<String, CommandNode<?>> literals = commandNodeLiterals.get(resourcesRoot);
-			Map<String, CommandNode<?>> arguments = commandNodeArguments.get(resourcesRoot);
+			boolean isMainVanilla = isVanillaCommandWrapper(knownCommands.get(commandName));
+			if(unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
 
-			children.remove(commandName);
-			literals.remove(commandName);
-			arguments.remove(commandName);
+			if(unregisterNamespaces) {
+				for (String key : new HashSet<>(knownCommands.keySet())) {
+					if(!isThisTheCommandButNamespaced(commandName, key)) continue;
 
-			// Since the commands in here are copied from Bukkit's map, there may be namespaced versions of the command, which we should remove
-			if (force) {
-				removeCommandNamespace(children, commandName);
-				removeCommandNamespace(literals, commandName);
-				removeCommandNamespace(arguments, commandName);
-			}
-
-			if (!CommandAPI.canRegister()) {
-				// If the server actually is running (not just force unregistering), we should also update help and notify players
-				getHelpMap().remove("/" + commandName);
-
-				for (Player p : Bukkit.getOnlinePlayers()) {
-					p.updateCommands();
+					boolean isVanilla = isVanillaCommandWrapper(knownCommands.get(key));
+					if(unregisterBukkit ^ isVanilla) knownCommands.remove(key);
 				}
 			}
 		}
 
-		// Update the dispatcher file
-		CommandAPIHandler.getInstance().writeDispatcherToFile();
+		if(!CommandAPI.canRegister()) {
+			// If the server is enabled, we have extra cleanup to do
+
+			// Remove commands from the resources dispatcher
+			removeBrigadierCommands(getResourcesDispatcher(), commandName, unregisterNamespaces);
+
+			// Help topics (from Bukkit and CommandAPI) are only setup after plugins enable, so we only need to worry
+			//  about removing them once the server is loaded.
+			getHelpMap().remove("/" + commandName);
+
+			// Notify players
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				p.updateCommands();
+			}
+		}
 	}
 
-	private void removeCommandNamespace(Map<String, ?> map, String commandName) {
+	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName, boolean unregisterNamespaces) {
+		RootCommandNode<Source> root = dispatcher.getRoot();
+		Map<String, CommandNode<?>> children = commandNodeChildren.get(root);
+		Map<String, CommandNode<?>> literals = commandNodeLiterals.get(root);
+		Map<String, CommandNode<?>> arguments = commandNodeArguments.get(root);
+
+		children.remove(commandName);
+		literals.remove(commandName);
+		// Commands should really only be represented as literals, but it is technically possible
+		// to put an ArgumentCommandNode in the root, so we'll check
+		arguments.remove(commandName);
+
+		if (unregisterNamespaces) {
+			removeBrigadierCommandNamespace(children, commandName);
+			removeBrigadierCommandNamespace(literals, commandName);
+			removeBrigadierCommandNamespace(arguments, commandName);
+		}
+	}
+
+	private void removeBrigadierCommandNamespace(Map<String, CommandNode<?>> map, String commandName) {
 		for(String key : new HashSet<>(map.keySet())) {
-			if(key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
+			if(isThisTheCommandButNamespaced(commandName, key)) {
 				map.remove(key);
 			}
 		}
+	}
+
+	private static boolean isThisTheCommandButNamespaced(String commandName, String key) {
+		return key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName);
 	}
 
 	@Override
