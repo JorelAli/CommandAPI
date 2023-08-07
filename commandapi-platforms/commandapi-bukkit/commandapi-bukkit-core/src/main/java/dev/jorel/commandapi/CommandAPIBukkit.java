@@ -494,20 +494,28 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces) {
-		unregister(commandName, unregisterNamespaces, false);
+		unregisterInternal(commandName, unregisterNamespaces, false);
 	}
 
-	// TODO: Should there be a static version of this method so developers don't have to call CommandAPIBukkit.get()?
 	/**
-	 * Unregisters a command from the CommandGraph so it can't be run anymore.
+	 * Unregisters a command from the CommandGraph, so it can't be run anymore. This Bukkit-specific unregister has an
+	 * additional parameter, {@code unregisterBukkit}, compared to {@link CommandAPI#unregister(String, boolean)}.
 	 *
 	 * @param commandName          the name of the command to unregister
 	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
-	 *                                command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
-	 *                                or `plugin:command`
-	 * @param unregisterBukkit     whether the unregistration system should unregister
+	 *                                command that start with a namespace. E.g. `minecraft:command`, `bukkit:command`,
+	 *                                or `plugin:command`. If true, these namespaced versions of a command are also
+	 *                                unregistered.
+	 * @param unregisterBukkit     whether the unregistration system should unregister Vanilla or Bukkit commands. If true,
+	 *                             only Bukkit commands are unregistered, otherwise only Vanilla commands are unregistered.
+	 *                             For the purposes of this parameter, commands registered using the CommandAPI are Vanilla
+	 *                             commands, and commands registered by other plugin using Bukkit API are Bukkit commands.
 	 */
-	public void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
+	public static void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
+		CommandAPIBukkit.get().unregisterInternal(commandName, unregisterNamespaces, unregisterBukkit);
+	}
+
+	private void unregisterInternal(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
 		CommandAPI.logInfo("Unregistering command /" + commandName);
 
 		if(!unregisterBukkit) {
