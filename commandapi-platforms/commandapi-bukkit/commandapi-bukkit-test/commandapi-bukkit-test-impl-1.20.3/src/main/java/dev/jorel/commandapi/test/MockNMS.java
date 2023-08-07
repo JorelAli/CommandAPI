@@ -48,6 +48,7 @@ import com.google.common.collect.Streams;
 import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.serialization.JsonOps;
 
@@ -660,6 +661,11 @@ public class MockNMS extends Enums {
 //				throw new IllegalStateException("getRoot is unimplemented");
 //			}
 		};
+	}
+
+	@Override
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean forceNative) {
+		return baseNMS.getSenderForCommand(cmdCtx, forceNative);
 	}
 
 	@Override

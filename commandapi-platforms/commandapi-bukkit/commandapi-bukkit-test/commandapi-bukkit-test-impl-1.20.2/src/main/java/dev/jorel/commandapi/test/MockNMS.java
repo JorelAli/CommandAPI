@@ -47,6 +47,7 @@ import org.mockito.Mockito;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
 
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -647,6 +648,11 @@ public class MockNMS extends Enums {
 //				throw new IllegalStateException("getRoot is unimplemented");
 //			}
 		};
+	}
+
+	@Override
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean forceNative) {
+		return baseNMS.getSenderForCommand(cmdCtx, forceNative);
 	}
 
 	@Override

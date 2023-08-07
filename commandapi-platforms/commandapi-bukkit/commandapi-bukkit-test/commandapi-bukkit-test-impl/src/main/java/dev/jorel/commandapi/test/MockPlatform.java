@@ -1,5 +1,21 @@
 package dev.jorel.commandapi.test;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.wrappers.ParticleData;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,28 +31,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
 import org.bukkit.Registry;
-import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
-
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
 
 public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	/*****************
@@ -83,11 +80,6 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 			this.resourcesDispatcher = new CommandDispatcher<>();
 		}
 		return this.resourcesDispatcher;
-	}
-
-	@Override
-	public final BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CLW> cmdCtx, boolean forceNative) {
-		return getCommandSenderFromCommandSource(cmdCtx.getSource());
 	}
 
 	@Override
