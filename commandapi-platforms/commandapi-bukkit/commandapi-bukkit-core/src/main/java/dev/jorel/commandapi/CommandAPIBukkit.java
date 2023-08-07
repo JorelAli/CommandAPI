@@ -33,6 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,9 +54,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private PaperImplementations paper;
 
 	// Static VarHandles
-	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeChildren;
-	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeLiterals;
-	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeArguments;
+	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
+	//  parameter Source. We still need to cast to that signature for map, so Map is raw.
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeChildren;
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeLiterals;
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeArguments;
 	private static final SafeVarHandle<SimpleCommandMap, Map<String, Command>> commandMapKnownCommands;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
@@ -522,7 +525,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// Remove nodes from the Vanilla dispatcher
 			// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
 			//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
-			removeBrigadierCommands(getBrigadierDispatcher(), commandName, unregisterNamespaces);
+			removeBrigadierCommands(getBrigadierDispatcher(), commandName, unregisterNamespaces, c -> true);
 
 			// Update the dispatcher file
 			CommandAPIHandler.getInstance().writeDispatcherToFile();
@@ -532,21 +535,15 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
 			//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
 			//  moved the Vanilla command into the CommandMap
-			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
-			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
-
 			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 
+			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
+			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
 			boolean isMainVanilla = isVanillaCommandWrapper(knownCommands.get(commandName));
 			if(unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
 
 			if(unregisterNamespaces) {
-				for (String key : new HashSet<>(knownCommands.keySet())) {
-					if(!isThisTheCommandButNamespaced(commandName, key)) continue;
-
-					boolean isVanilla = isVanillaCommandWrapper(knownCommands.get(key));
-					if(unregisterBukkit ^ isVanilla) knownCommands.remove(key);
-				}
+				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper(c));
 			}
 		}
 
@@ -554,7 +551,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// If the server is enabled, we have extra cleanup to do
 
 			// Remove commands from the resources dispatcher
-			removeBrigadierCommands(getResourcesDispatcher(), commandName, unregisterNamespaces);
+			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
+			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
+			removeBrigadierCommands(getResourcesDispatcher(), commandName, unregisterNamespaces,
+				c -> !unregisterBukkit ^ isBukkitCommandWrapper(c));
 
 			// Help topics (from Bukkit and CommandAPI) are only setup after plugins enable, so we only need to worry
 			//  about removing them once the server is loaded.
@@ -567,31 +567,38 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName, boolean unregisterNamespaces) {
-		RootCommandNode<Source> root = dispatcher.getRoot();
-		Map<String, CommandNode<?>> children = commandNodeChildren.get(root);
-		Map<String, CommandNode<?>> literals = commandNodeLiterals.get(root);
-		Map<String, CommandNode<?>> arguments = commandNodeArguments.get(root);
+	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,
+										 boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
+		RootCommandNode<?> root = dispatcher.getRoot();
+		Map<String, CommandNode<Source>> children = (Map<String, CommandNode<Source>>) commandNodeChildren.get(root);
+		Map<String, CommandNode<Source>> literals = (Map<String, CommandNode<Source>>) commandNodeLiterals.get(root);
+		Map<String, CommandNode<Source>> arguments = (Map<String, CommandNode<Source>>) commandNodeArguments.get(root);
 
-		children.remove(commandName);
-		literals.remove(commandName);
+		removeCommandFromMapIfCheckPasses(children, commandName, extraCheck);
+		removeCommandFromMapIfCheckPasses(literals, commandName, extraCheck);
 		// Commands should really only be represented as literals, but it is technically possible
 		// to put an ArgumentCommandNode in the root, so we'll check
-		arguments.remove(commandName);
+		removeCommandFromMapIfCheckPasses(arguments, commandName, extraCheck);
 
 		if (unregisterNamespaces) {
-			removeBrigadierCommandNamespace(children, commandName);
-			removeBrigadierCommandNamespace(literals, commandName);
-			removeBrigadierCommandNamespace(arguments, commandName);
+			removeCommandNamespace(children, commandName, extraCheck);
+			removeCommandNamespace(literals, commandName, extraCheck);
+			removeCommandNamespace(arguments, commandName, extraCheck);
 		}
 	}
 
-	private void removeBrigadierCommandNamespace(Map<String, CommandNode<?>> map, String commandName) {
-		for(String key : new HashSet<>(map.keySet())) {
-			if(isThisTheCommandButNamespaced(commandName, key)) {
-				map.remove(key);
-			}
+	private static <T> void removeCommandNamespace(Map<String, T> map, String commandName, Predicate<T> extraCheck) {
+		for (String key : new HashSet<>(map.keySet())) {
+			if (!isThisTheCommandButNamespaced(commandName, key)) continue;
+
+			removeCommandFromMapIfCheckPasses(map, key, extraCheck);
 		}
+	}
+
+	private static <T> void removeCommandFromMapIfCheckPasses(Map<String, T> map, String key, Predicate<T> extraCheck) {
+		T element = map.get(key);
+		if (element == null) return;
+		if (extraCheck.test(map.get(key))) map.remove(key);
 	}
 
 	private static boolean isThisTheCommandButNamespaced(String commandName, String key) {

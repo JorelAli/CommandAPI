@@ -30,6 +30,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.logging.LogUtils;
 import dev.jorel.commandapi.CommandAPI;
@@ -112,6 +113,7 @@ import org.bukkit.craftbukkit.v1_19_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_19_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R2.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_19_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R2.help.CustomHelpTopic;
@@ -628,6 +630,11 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
 	}
 
 	@Differs(from = "1.19.2", by = """

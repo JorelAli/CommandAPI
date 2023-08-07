@@ -25,6 +25,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -640,6 +641,10 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
 	public abstract Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node);
+
+	@Override
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
+	public abstract boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node);
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)

@@ -21,6 +21,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -44,6 +45,7 @@ import org.bukkit.craftbukkit.v1_16_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_16_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_16_R2.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
@@ -962,6 +964,11 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandListenerWrapper> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
 	}
 
 	@Override

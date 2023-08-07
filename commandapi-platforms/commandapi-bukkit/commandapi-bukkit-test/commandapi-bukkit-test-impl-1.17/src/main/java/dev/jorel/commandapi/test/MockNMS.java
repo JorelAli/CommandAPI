@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.SafeVarHandle;
 import net.minecraft.commands.Commands;
@@ -262,6 +263,11 @@ public class MockNMS extends Enums {
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
 		return baseNMS.wrapToVanillaCommandWrapper(node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return baseNMS.isBukkitCommandWrapper(node);
 	}
 
 	@Override

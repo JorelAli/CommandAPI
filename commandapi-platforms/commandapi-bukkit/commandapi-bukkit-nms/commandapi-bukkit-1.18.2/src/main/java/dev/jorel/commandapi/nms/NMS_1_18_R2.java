@@ -38,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -61,6 +62,7 @@ import org.bukkit.craftbukkit.v1_18_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_18_R2.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_18_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.help.CustomHelpTopic;
@@ -715,6 +717,11 @@ public class NMS_1_18_R2 extends NMS_Common {
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
 	}
 
 	@Differs(from = "1.18", by = "Completely rewritten way of reloading datapacks")

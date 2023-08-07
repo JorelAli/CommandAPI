@@ -41,6 +41,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
@@ -64,6 +65,7 @@ import org.bukkit.craftbukkit.v1_16_R3.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.CraftSound;
 import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_16_R3.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R3.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R3.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
@@ -913,6 +915,11 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandListenerWrapper> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
 	}
 
 	@Differs(from = "1.16.2", by = "CustomFunctionManager.g -> CustomFunctionManager.h")

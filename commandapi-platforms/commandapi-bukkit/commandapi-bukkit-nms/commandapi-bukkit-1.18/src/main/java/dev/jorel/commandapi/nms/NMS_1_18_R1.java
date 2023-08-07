@@ -37,6 +37,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -60,6 +61,7 @@ import org.bukkit.craftbukkit.v1_18_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_18_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_18_R1.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_18_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R1.help.CustomHelpTopic;
@@ -659,6 +661,11 @@ public class NMS_1_18_R1 extends NMS_Common {
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
@@ -260,6 +261,11 @@ public class MockNMS extends Enums {
 	@Override
 	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
 		return baseNMS.wrapToVanillaCommandWrapper(node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return baseNMS.isBukkitCommandWrapper(node);
 	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
