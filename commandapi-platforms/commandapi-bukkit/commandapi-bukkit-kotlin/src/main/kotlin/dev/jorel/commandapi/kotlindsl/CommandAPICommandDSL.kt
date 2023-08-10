@@ -121,4 +121,5 @@ inline fun CommandAPICommand.multiLiteralArgument(nodeName: String, vararg liter
 inline fun CommandAPICommand.functionArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(FunctionArgument(nodeName).setOptional(optional).apply(block))
 
 // Requirements
+@Deprecated("This method has been deprecated since version 9.1.0 as it is not needed anymore. See the documentation for more information", ReplaceWith(""), DeprecationLevel.WARNING)
 inline fun CommandAPICommand.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(base.setOptional(optional).withRequirement(predicate).apply(block))
