@@ -72,7 +72,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public void unregister(String commandName, boolean force) {
+	public void unregister(String commandName, boolean unregisterNamespaces) {
 //		commandManager.unregister(commandName);
 	}
 
@@ -124,7 +124,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<Object> resultantNode, List<LiteralCommandNode<Object>> aliasNodes) {
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Object> resultantNode, List<LiteralCommandNode<Object>> aliasNodes) {
 		// Nothing to do?
 	}
 

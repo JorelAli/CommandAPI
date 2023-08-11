@@ -176,50 +176,11 @@ Registers the command.
 
 ## Command loading order
 
-In order to register commands properly, **commands must be registered before the server finishes loading**. The CommandAPI will output a warning if you register a command after the server has loaded. This means that all command registration must occur during a plugin's `onLoad()` or `onEnable()` method. With the CommandAPI, depending on whether you use `onLoad()` or `onEnable()` to load your commands depends on whether your plugin is used with Minecraft's functions:
+It is recommended to register commands in either the `onLoad()` or `onEnable()` method. With the CommandAPI, depending on whether you use `onLoad()` or `onEnable()` to load your commands depends on whether your plugin is used with Minecraft's functions:
 
 | When to load        | What to do                                                                                                     |
-| ------------------- | -------------------------------------------------------------------------------------------------------------- |
+|---------------------|----------------------------------------------------------------------------------------------------------------|
 | `onLoad()` method   | Register commands to be used in Minecraft functions ([see the Function section for more info](functions.html)) |
 | `onEnable()` method | Register regular commands                                                                                      |
 
------
-
-## Command unregistration
-
-The CommandAPI has support to unregister commands completely from Minecraft's command list. This includes Minecraft built in commands!
-
-<div class="warning">
-
-**Developer's Note:**
-
-Command unregistration, although powerful, is not recommended! It is the CommandAPI's most "dangerous" feature as it can cause unexpected side effects, such as command blocks executing commands you wouldn't expect them to. In almost every case, I'd recommend just creating a new command instead of unregistering one to replace it.
-
-For instance, instead of unregistering `/gamemode`, you could register a command `/gm` or `/changegamemode`.
-
-</div>
-
-| Method                                             | Result                                                       |
-| -------------------------------------------------- | ------------------------------------------------------------ |
-| `CommandAPI.unregister(String cmd)`                | Unregisters a command from the game                          |
-| `CommandAPI.unregister(String cmd, boolean force)` | Attempts to unregister a command from the game by force. This includes `/minecraft:cmd`, `/bukkit:cmd` and `/spigot:cmd` commands as well. |
-
-<div class="example">
-
-### Example - Replacing Minecraft's `/gamemode` command
-
-To replace a command, we can first unregister it and then register our implementation of that command.
-
-<div class="multi-pre">
-
-```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandRegistration2}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandRegistration2}}
-```
-
-</div>
-
-</div>
+The CommandAPI does support registering commands outside of these methods while the server is running. Commands registered after the server is done loading _should_ work the same as commands registered in `onEnable`.

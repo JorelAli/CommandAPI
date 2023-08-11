@@ -377,6 +377,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                     <li>Fixed the CommandAPI disabling datapacks on Paper 1.20.1 #40+ because it thought it was running on a Folia server</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/459 Added the ability to access raw arguments in the command executor</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/469 Adds <code>AdventureChatColorArgument</code></li>
+					<li>https://github.com/JorelAli/CommandAPI/pull/417 Added the ability for commands to be registered and unregistered while the server is running</li>
                 </ul>
             </td>
         </tr>
