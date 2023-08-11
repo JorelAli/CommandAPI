@@ -276,7 +276,7 @@ class OnEnableTests extends TestBase {
 		// You would expect namespace to succeed since it is in the CommandMap
 		// However, running that command simply tells the Brig dispatcher to run the original command
 		// The command was removed from the Brig dispacter, so it doesn't actually know how to do that
-		// I'm going to say this is not a bug, just an example why you should be careful when unregistering commands
+		// This behavior is documented at the bottom of the docs page for Command unregistration
 		// As a result, this test doesn't actually pass
 //		// Namespace command should still work
 //		assertStoresResult(runCommandsPlayer, "minecraft:command argument", results, "argument");
