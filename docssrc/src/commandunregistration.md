@@ -164,7 +164,7 @@ depend:
 >
 > For the ExamplePlugin, setting `verbose-outputs` to `true` gives this:
 >
-> ```
+> ```log
 > [Server thread/INFO]: [ExamplePlugin] Enabling ExamplePlugin v0.0.1
 > [Server thread/INFO]: [CommandAPI] Registering command /break block<LocationArgument>
 > [Server thread/INFO]: [CommandAPI] Registering command /myeffect target<PlayerArgument> potion<PotionEffectArgument>
