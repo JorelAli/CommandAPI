@@ -1396,118 +1396,6 @@ new CommandAPICommand("broadcastmsg")
 /* ANCHOR_END: commandRegistration1 */
 }
 
-class CommandUnregistration {
-class UnregistrationBukkit extends JavaPlugin {
-/* ANCHOR: commandUnregistrationBukkit */
-@Override
-public void onLoad() {
-    CommandAPIBukkit.unregister("version", true, true);
-}
-/* ANCHOR_END: commandUnregistrationBukkit */
-}
-
-class UnregistrationVanilla extends JavaPlugin {
-/* ANCHOR: commandUnregistrationVanilla */
-@Override
-public void onEnable() {
-    CommandAPI.unregister("gamemode");
-}
-/* ANCHOR_END: commandUnregistrationVanilla */
-}
-
-class UnregistrationReplaceVanilla extends JavaPlugin {
-/* ANCHOR: commandUnregistrationReplaceVanilla */
-@Override
-public void onEnable() {
-    CommandAPI.unregister("gamemode");
-
-    // Register our new /gamemode, with survival, creative, adventure and spectator
-    new CommandAPICommand("gamemode")
-        .withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
-        .executes((sender, args) -> {
-            // Implementation of our /gamemode command
-        })
-        .register();
-}
-/* ANCHOR_END: commandUnregistrationReplaceVanilla */
-}
-
-class UnregistrationPlugin extends JavaPlugin {
-/* ANCHOR: commandUnregistrationPlugin */
-@Override
-public void onEnable() {
-    CommandAPIBukkit.unregister("luckperms:luckperms", false, true);
-}
-/* ANCHOR_END: commandUnregistrationPlugin */
-}
-
-class UnregistrationCommandAPI extends JavaPlugin {
-/* ANCHOR: commandUnregistrationCommandAPI */
-@Override
-public void onEnable() {
-    CommandAPI.unregister("break");
-}
-/* ANCHOR_END: commandUnregistrationCommandAPI */
-}
-
-class UnregistrationBukkitHelp extends JavaPlugin {
-/* ANCHOR: commandUnregistrationBukkitHelp */
-@Override
-public void onEnable() {
-    new BukkitRunnable() {
-        @Override
-        public void run() {
-            CommandAPIBukkit.unregister("help", false, true);
-        }
-    }.runTaskLater(this, 0);
-}
-/* ANCHOR_END: commandUnregistrationBukkitHelp */
-}
-
-class UnregistrationOnlyVanillaNamespace extends JavaPlugin {
-/* ANCHOR: commandUnregistrationOnlyVanillaNamespace */
-@Override
-public void onEnable() {
-    new BukkitRunnable() {
-        @Override
-        public void run() {
-            CommandAPI.unregister("minecraft:gamemode");
-        }
-    }.runTaskLater(this, 0);
-}
-/* ANCHOR_END: commandUnregistrationOnlyVanillaNamespace */
-}
-
-class UnregistrationDealyedVanillaBad extends JavaPlugin {
-/* ANCHOR: commandUnregistrationDealyedVanillaBad */
-// NOT RECOMMENDED
-@Override
-public void onEnable() {
-    new BukkitRunnable() {
-        @Override
-        public void run() {
-            CommandAPI.unregister("gamemode");
-        }
-    }.runTaskLater(this, 0);
-}
-/* ANCHOR_END: commandUnregistrationDealyedVanillaBad */
-}
-
-class UnregistrationDealyedVanillaBetter extends JavaPlugin {
-/* ANCHOR: commandUnregistrationDealyedVanillaBetter */
-@Override
-public void onEnable() {
-    new BukkitRunnable() {
-        @Override
-        public void run() {
-            CommandAPI.unregister("gamemode", true);
-        }
-    }.runTaskLater(this, 0);
-}
-/* ANCHOR_END: commandUnregistrationDealyedVanillaBetter */
-}
-}
-
 class commandTrees extends JavaPlugin {
 {
 /* ANCHOR: commandTrees1 */
@@ -1573,6 +1461,118 @@ public Sign getTargetSign(Player player) throws WrapperCommandSyntaxException {
     } else {
         throw CommandAPI.failWithString("You're not looking at a sign!");
     }
+}
+}
+
+class CommandUnregistration {
+class UnregistrationBukkit extends JavaPlugin {
+/* ANCHOR: commandUnregistration1 */
+@Override
+public void onLoad() {
+    CommandAPIBukkit.unregister("version", true, true);
+}
+/* ANCHOR_END: commandUnregistration1 */
+}
+
+class UnregistrationVanilla extends JavaPlugin {
+/* ANCHOR: commandUnregistration2 */
+@Override
+public void onEnable() {
+    CommandAPI.unregister("gamemode");
+}
+/* ANCHOR_END: commandUnregistration2 */
+}
+
+class UnregistrationReplaceVanilla extends JavaPlugin {
+/* ANCHOR: commandUnregistration3 */
+@Override
+public void onEnable() {
+    CommandAPI.unregister("gamemode");
+
+    // Register our new /gamemode, with survival, creative, adventure and spectator
+    new CommandAPICommand("gamemode")
+        .withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
+        .executes((sender, args) -> {
+            // Implementation of our /gamemode command
+        })
+        .register();
+}
+/* ANCHOR_END: commandUnregistration3 */
+}
+
+class UnregistrationPlugin extends JavaPlugin {
+/* ANCHOR: commandUnregistration4 */
+@Override
+public void onEnable() {
+    CommandAPIBukkit.unregister("luckperms:luckperms", false, true);
+}
+/* ANCHOR_END: commandUnregistration4 */
+}
+
+class UnregistrationCommandAPI extends JavaPlugin {
+/* ANCHOR: commandUnregistration5 */
+@Override
+public void onEnable() {
+    CommandAPI.unregister("break");
+}
+/* ANCHOR_END: commandUnregistration5 */
+}
+
+class UnregistrationBukkitHelp extends JavaPlugin {
+/* ANCHOR: commandUnregistration6 */
+@Override
+public void onEnable() {
+    new BukkitRunnable() {
+        @Override
+        public void run() {
+            CommandAPIBukkit.unregister("help", false, true);
+        }
+    }.runTaskLater(this, 0);
+}
+/* ANCHOR_END: commandUnregistration6 */
+}
+
+class UnregistrationOnlyVanillaNamespace extends JavaPlugin {
+/* ANCHOR: commandUnregistration7 */
+@Override
+public void onEnable() {
+    new BukkitRunnable() {
+        @Override
+        public void run() {
+            CommandAPI.unregister("minecraft:gamemode");
+        }
+    }.runTaskLater(this, 0);
+}
+/* ANCHOR_END: commandUnregistration7 */
+}
+
+class UnregistrationDelayedVanillaBad extends JavaPlugin {
+/* ANCHOR: commandUnregistration8 */
+// NOT RECOMMENDED
+@Override
+public void onEnable() {
+    new BukkitRunnable() {
+        @Override
+        public void run() {
+            CommandAPI.unregister("gamemode");
+        }
+    }.runTaskLater(this, 0);
+}
+/* ANCHOR_END: commandUnregistration8 */
+}
+
+class UnregistrationDelayedVanillaBetter extends JavaPlugin {
+/* ANCHOR: commandUnregistration9 */
+@Override
+public void onEnable() {
+    new BukkitRunnable() {
+        @Override
+        public void run() {
+            CommandAPI.unregister("gamemode", true);
+        }
+    }.runTaskLater(this, 0);
+}
+/* ANCHOR_END: commandUnregistration9 */
 }
 }
 

@@ -1312,105 +1312,6 @@ CommandAPICommand("broadcastmsg")
 /* ANCHOR_END: commandRegistration1 */
 }
 
-class CommandUnregistration {
-class UnregistrationBukkit : JavaPlugin() {
-/* ANCHOR: commandUnregistrationBukkit */
-override fun onLoad() {
-    CommandAPIBukkit.unregister("version", false, true)
-}
-/* ANCHOR_END: commandUnregistrationBukkit */
-}
-
-class UnregistrationVanilla : JavaPlugin() {
-/* ANCHOR: commandUnregistrationVanilla */
-override fun onEnable() {
-    CommandAPI.unregister("gamemode")
-}
-/* ANCHOR_END: commandUnregistrationVanilla */
-}
-
-class UnregistrationReplaceVanilla : JavaPlugin() {
-/* ANCHOR: commandUnregistrationReplaceVanilla */
-override fun onEnable() {
-    CommandAPI.unregister("gamemode");
-
-    // Register our new /gamemode, with survival, creative, adventure and spectator
-    CommandAPICommand("gamemode")
-        .withArguments(MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
-        .executes(CommandExecutor { sender, args ->
-            // Implementation of our /gamemode command
-        })
-        .register()
-}
-/* ANCHOR_END: commandUnregistrationReplaceVanilla */
-}
-
-class UnregistrationPlugin : JavaPlugin() {
-/* ANCHOR: commandUnregistrationPlugin */
-override fun onEnable() {
-    CommandAPIBukkit.unregister("luckperms:luckperms", false, true)
-}
-/* ANCHOR_END: commandUnregistrationPlugin */
-}
-
-class UnregistrationCommandAPI : JavaPlugin() {
-/* ANCHOR: commandUnregistrationCommandAPI */
-override fun onEnable() {
-    CommandAPI.unregister("break")
-}
-/* ANCHOR_END: commandUnregistrationCommandAPI */
-}
-
-class UnregistrationBukkitHelp : JavaPlugin() {
-/* ANCHOR: commandUnregistrationBukkitHelp */
-override fun onEnable() {
-    object : BukkitRunnable() {
-        override fun run() {
-            CommandAPIBukkit.unregister("help", false, true)
-        }
-    }.runTaskLater(this, 0)
-}
-/* ANCHOR_END: commandUnregistrationBukkitHelp */
-}
-
-class UnregistrationOnlyVanillaNamespace : JavaPlugin() {
-/* ANCHOR: commandUnregistrationOnlyVanillaNamespace */
-override fun onEnable() {
-    object : BukkitRunnable() {
-        override fun run() {
-            CommandAPI.unregister("minecraft:gamemode")
-        }
-    }.runTaskLater(this, 0)
-}
-/* ANCHOR_END: commandUnregistrationOnlyVanillaNamespace */
-}
-
-class UnregistrationDealyedVanillaBad : JavaPlugin() {
-/* ANCHOR: commandUnregistrationDealyedVanillaBad */
-// NOT RECOMMENDED
-override fun onEnable() {
-    object : BukkitRunnable() {
-        override fun run() {
-            CommandAPI.unregister("gamemode")
-        }
-    }.runTaskLater(this, 0)
-}
-/* ANCHOR_END: commandUnregistrationDealyedVanillaBad */
-}
-
-class UnregistrationDealyedVanillaBetter : JavaPlugin() {
-/* ANCHOR: commandUnregistrationDealyedVanillaBetter */
-override fun onEnable() {
-    object : BukkitRunnable() {
-        override fun run() {
-            CommandAPI.unregister("gamemode", true)
-        }
-    }.runTaskLater(this, 0)
-}
-/* ANCHOR_END: commandUnregistrationDealyedVanillaBetter */
-}
-}
-
 class commandTrees : JavaPlugin() {
 fun commandTrees1() {
 /* ANCHOR: commandTrees1 */
@@ -1477,6 +1378,105 @@ fun getTargetSign(player: Player): Sign {
     } else {
         throw CommandAPI.failWithString("You're not looking at a sign!")
     }
+}
+}
+
+class CommandUnregistration {
+class UnregistrationBukkit : JavaPlugin() {
+/* ANCHOR: commandUnregistration1 */
+override fun onLoad() {
+    CommandAPIBukkit.unregister("version", false, true)
+}
+/* ANCHOR_END: commandUnregistration1 */
+}
+
+class UnregistrationVanilla : JavaPlugin() {
+/* ANCHOR: commandUnregistration2 */
+override fun onEnable() {
+    CommandAPI.unregister("gamemode")
+}
+/* ANCHOR_END: commandUnregistration2 */
+}
+
+class UnregistrationReplaceVanilla : JavaPlugin() {
+/* ANCHOR: commandUnregistration3 */
+override fun onEnable() {
+    CommandAPI.unregister("gamemode");
+
+    // Register our new /gamemode, with survival, creative, adventure and spectator
+    CommandAPICommand("gamemode")
+        .withArguments(MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
+        .executes(CommandExecutor { sender, args ->
+            // Implementation of our /gamemode command
+        })
+        .register()
+}
+/* ANCHOR_END: commandUnregistration3 */
+}
+
+class UnregistrationPlugin : JavaPlugin() {
+/* ANCHOR: commandUnregistration4 */
+override fun onEnable() {
+    CommandAPIBukkit.unregister("luckperms:luckperms", false, true)
+}
+/* ANCHOR_END: commandUnregistration4 */
+}
+
+class UnregistrationCommandAPI : JavaPlugin() {
+/* ANCHOR: commandUnregistration5 */
+override fun onEnable() {
+    CommandAPI.unregister("break")
+}
+/* ANCHOR_END: commandUnregistration5 */
+}
+
+class UnregistrationBukkitHelp : JavaPlugin() {
+/* ANCHOR: commandUnregistration6 */
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPIBukkit.unregister("help", false, true)
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration6 */
+}
+
+class UnregistrationOnlyVanillaNamespace : JavaPlugin() {
+/* ANCHOR: commandUnregistration7 */
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPI.unregister("minecraft:gamemode")
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration7 */
+}
+
+class UnregistrationDelayedVanillaBad : JavaPlugin() {
+/* ANCHOR: commandUnregistration8 */
+// NOT RECOMMENDED
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPI.unregister("gamemode")
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration8 */
+}
+
+class UnregistrationDelayedVanillaBetter : JavaPlugin() {
+/* ANCHOR: commandUnregistration9 */
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPI.unregister("gamemode", true)
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration9 */
 }
 }
 
