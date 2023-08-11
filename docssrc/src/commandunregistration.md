@@ -6,7 +6,7 @@ There are three methods you might use when unregistering commands:
 
 ```java
 CommandAPI.unregister(String commandName);
-CommandAPI.unregister(String commandName, boolean unreigsterNamespaces);
+CommandAPI.unregister(String commandName, boolean unregisterNamespaces);
 CommandAPIBukkit.unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit);
 ```
 
@@ -36,13 +36,13 @@ CommandAPI.unregister(String commandName);
 Unregisters a command from the Vanilla CommandDispatcher.
 
 ```java
-CommandAPI.unreigster(String commandName, boolean unreigsterNamespaces);
+CommandAPI.unregister(String commandName, boolean unregisterNamespaces);
 ```
 
 Unregisters a command from the Vanilla CommandDispatcher. If `unregisterNamespaces` is `true`, then any namespaced version of the command is also unregistered.
 
 ```java
-CommandAPIBukkit.unregister(String commandName, boolean unregisterNamespaces, boolean unreigsterBukkit);
+CommandAPIBukkit.unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit);
 ```
 
 Unregisters a command from Bukkit. As before, if `unregisterNamespaces` is `true`, then any namespaced version of the command is also unregistered. If `unregisterBukkit` is `true`, then only Bukkit commands in the Bukkit CommandMap are unregistered. If `unregisterBukkit` is `false`, only commands from the Vanilla CommandDispatcher are unregistered.
@@ -67,13 +67,13 @@ Since this command exists in the Bukkit CommandMap, we'll need to use `CommandAP
 
 </div>
 
-With this plugin, executing `/version` or `/bukkit:version` will give the unknown command message. Note that aliases like `/ver` and its namespaced version `/bukkit:ver` will still work. To remove aliases as well, you need to unregister each as its own command. For, `/ver`, that would mean calling `CommandAPIBukkit.unreigster("ver", true, true)`.
+With this plugin, executing `/version` or `/bukkit:version` will give the unknown command message. Note that aliases like `/ver` and its namespaced version `/bukkit:ver` will still work. To remove aliases as well, you need to unregister each as its own command. For, `/ver`, that would mean calling `CommandAPIBukkit.unregister("ver", true, true)`.
 
 ## Unregistering a Vanilla command - `/gamemode`
 
 `/gamemode` is a command provided by Vanilla Minecraft. Like the [previous example](#unregistering-a-bukkit-command---version), Vanilla commands are created in step 1, before plugins are loaded in step 3. For variety, we'll unregister the command in our plugin's `onEnable` -- step 4 -- but the same code would also work in `onLoad`.
 
-Since this command exists in the Vanilla CommandDispatcher, we can use `CommandAPI#unregister`. That works the same as `CommandAPIBukkit#unregister` with `unregisterBukkit` set to `false`. We don't care about the namespace, so `unregisterNamespaces` will be `false`. That means we can use the simplest method, `CommandAPI.unreigster(String commandName)`, since it sets `unregisterNamespaces` to `false` by default. All together, the code looks like this:
+Since this command exists in the Vanilla CommandDispatcher, we can use `CommandAPI#unregister`. That works the same as `CommandAPIBukkit#unregister` with `unregisterBukkit` set to `false`. We don't care about the namespace, so `unregisterNamespaces` will be `false`. That means we can use the simplest method, `CommandAPI.unregister(String commandName)`, since it sets `unregisterNamespaces` to `false` by default. All together, the code looks like this:
 
 <div class="multi-pre">
 
@@ -255,7 +255,7 @@ Doing the opposite action here -- only unregistering `/gamemode` but keeping `/m
 
 The expected outcome of this code is that `/minecraft:gamemode` would work as expected, and `/gamemode` would give the command not found message. However, that is only true for the player's commands. If you try to use `/minecraft:gamemode` in the console, it *will not work* properly. Specifically, while you can tab-complete the command's label, `minecraft:gamemode` the command's arguments will not have any suggestions. If you try to execute `/minecraft:gamemode` in the console, it will always tell you your command is unknown or incomplete.
 
-The main point is that if you ever try to unregister a Vanilla command after the server is enabled, the namespaced version of that command will break for the console. To avoid this issue, always set `unreigsterNamespaces` to `true` if `unreigsterBukkit` is `false` when unregistering commands after the server is enabled.
+The main point is that if you ever try to unregister a Vanilla command after the server is enabled, the namespaced version of that command will break for the console. To avoid this issue, always set `unregisterNamespaces` to `true` if `unregisterBukkit` is `false` when unregistering commands after the server is enabled.
 
 <div class="multi-pre">
 
