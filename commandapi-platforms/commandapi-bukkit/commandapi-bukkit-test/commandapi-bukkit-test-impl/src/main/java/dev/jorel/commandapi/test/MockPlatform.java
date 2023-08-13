@@ -170,7 +170,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	public abstract void addFunction(NamespacedKey key, List<String> commands);
 	public abstract void addTag(NamespacedKey key, List<List<String>> commands);
 
-	public abstract Class<? extends Player> getCraftPlayerClass();
+	public abstract Player setupMockedCraftPlayer(String name);
 
 	/**
 	 * Converts 1.16.5 and below potion effect names to NamespacedKey names. For
