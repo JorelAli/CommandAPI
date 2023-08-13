@@ -81,3 +81,29 @@ This can now be used via the following command examples:
 ```
 
 </div>
+
+---
+
+You may also create a `NativeProxyCommandSender` object yourself using the static `from` method:
+
+```java
+public static NativeProxyCommandSender from(CommandSender caller, CommandSender callee, Location location, World world);
+```
+
+This `CommandSender` will work the same as any other `NativeProxyCommandSender` you would get while using `executesNative`. For example, you could use it to make a simple version of `/execute`, like so:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:native2}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:native2}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:native2}}
+```
+
+</div>
