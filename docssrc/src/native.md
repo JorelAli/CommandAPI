@@ -82,7 +82,7 @@ This can now be used via the following command examples:
 
 </div>
 
----
+-----
 
 You may also create a `NativeProxyCommandSender` object yourself using the static `from` method:
 
