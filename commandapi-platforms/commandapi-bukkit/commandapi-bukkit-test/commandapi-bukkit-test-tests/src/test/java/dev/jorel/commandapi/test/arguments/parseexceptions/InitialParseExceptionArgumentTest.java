@@ -1,8 +1,10 @@
-package dev.jorel.commandapi.test;
+package dev.jorel.commandapi.test.arguments.parseexceptions;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.test.Mut;
+import dev.jorel.commandapi.test.TestBase;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
