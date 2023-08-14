@@ -25,6 +25,7 @@
 # Creating Commands
 
 - [Command registration](./commandregistration.md)
+- [Command unregistration](./commandunregistration.md)
 - [Command executors](./commandexecutors.md)
   - [Normal command executors](./normalexecutors.md)
   - [Proxied commandsenders](./proxysender.md)

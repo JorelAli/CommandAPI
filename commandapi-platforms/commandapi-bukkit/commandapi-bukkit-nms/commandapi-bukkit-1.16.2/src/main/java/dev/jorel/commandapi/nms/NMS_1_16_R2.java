@@ -21,6 +21,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,6 +45,7 @@ import org.bukkit.craftbukkit.v1_16_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_16_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_16_R2.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
@@ -403,10 +406,8 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
-		// because we're updating an existing help topic, not adding a new help topic
-		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
+	public Map<String, HelpTopic> getHelpMap() {
+		return helpMapTopics.get((SimpleHelpMap) Bukkit.getHelpMap());
 	}
 
 	@Override
@@ -532,6 +533,11 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	@Override
 	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
 		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a();
+	}
+
+	@Override
+	public CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher() {
+		return this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a();
 	}
 
 	@Override
@@ -953,6 +959,16 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	@Override
 	public boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
+	}
+
+	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandListenerWrapper> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
 	}
 
 	@Override

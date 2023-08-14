@@ -39,7 +39,7 @@ import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
  * Main CommandAPI plugin entrypoint
  */
 public class CommandAPIMain extends JavaPlugin {
-	
+
 	private static final String PLUGINS_TO_CONVERT = "plugins-to-convert";
 
 	@Override
@@ -84,7 +84,7 @@ public class CommandAPIMain extends JavaPlugin {
 
 		convertCommands(fileConfig);
 	}
-	
+
 	private void convertCommands(FileConfiguration fileConfig) {
 		// Load all plugins at the same time
 		Map<JavaPlugin, String[]> pluginsToConvert = new HashMap<>();
@@ -101,7 +101,7 @@ public class CommandAPIMain extends JavaPlugin {
 			// Get the plugin, if it doesn't exist, scream in the console (but
 			// don't crash, we want to continue!)
 			final JavaPlugin plugin = getAndValidatePlugin((String) map.keySet().iterator().next());
-			if(plugin != null) {
+			if (plugin != null) {
 				pluginsToConvert.put(plugin, pluginCommands);
 			}
 		}
@@ -122,7 +122,7 @@ public class CommandAPIMain extends JavaPlugin {
 			new AdvancedConverter(commandName).convertCommand();
 		}
 	}
-	
+
 	private JavaPlugin getAndValidatePlugin(String pluginName) {
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
 		if (plugin != null) {

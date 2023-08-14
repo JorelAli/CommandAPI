@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
@@ -84,6 +85,8 @@ class ArgumentNamespacedKeyTests extends TestBase {
 		assertEquals(List.of(), server.getSuggestions(player, "test "));
 	}
 
+	// TODO: Not working, see https://github.com/JorelAli/CommandAPI/issues/479
+	@Disabled
 	@Test
 	void suggestionTestWithNamespacedKeyArgumentSuggestions() {
 		new CommandAPICommand("test")

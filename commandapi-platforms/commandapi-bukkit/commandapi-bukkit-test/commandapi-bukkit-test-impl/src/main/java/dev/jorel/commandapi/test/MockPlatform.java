@@ -1,5 +1,23 @@
 package dev.jorel.commandapi.test;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,30 +29,7 @@ import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
-
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
-
 public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
-
 	/*****************
 	 * Instantiation *
 	 *****************/
@@ -63,6 +58,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 ************************************/
 
 	private CommandDispatcher<CLW> dispatcher = null;
+	private CommandDispatcher<CLW> resourcesDispatcher = null;
 
 	@Override
 	public final CommandDispatcher<CLW> getBrigadierDispatcher() {
@@ -73,20 +69,16 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	@Override
-	public final BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CLW> cmdCtx, boolean forceNative) {
-		return getCommandSenderFromCommandSource(cmdCtx.getSource());
+	public CommandDispatcher<CLW> getResourcesDispatcher() {
+		if (this.resourcesDispatcher == null) {
+			this.resourcesDispatcher = new CommandDispatcher<>();
+		}
+		return this.resourcesDispatcher;
 	}
 
 	@Override
-	public final void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		// We don't want to call the NMS implementation of addToHelpMap because
-		// that uses reflection to access SimpleHelpMap. Luckily for us, the
-		// HelpMapMock's addTopic implementation is exactly what we want! - it
-		// uses Map#put() with no restrictions, whereas SimpleHelpMap#addTopic
-		// only adds the help topic if the topic name doesn't already exist
-		for(HelpTopic topic : helpTopicsToAdd.values()) {
-			Bukkit.getServer().getHelpMap().addTopic(topic);
-		}
+	public final BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CLW> cmdCtx, boolean forceNative) {
+		return getCommandSenderFromCommandSource(cmdCtx.getSource());
 	}
 
 	@Override
@@ -110,11 +102,6 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	@Override
-	public final boolean isVanillaCommandWrapper(Command command) {
-		throw new UnimplementedError();
-	}
-
-	@Override
 	public final void reloadDataPacks() {
 		assert true; // Nothing to do here
 	}
@@ -124,8 +111,12 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 ******************/
 
 	public static Object getField(Class<?> className, String fieldName, Object instance) {
+		return getField(className, fieldName, fieldName, instance);
+	}
+
+	public static Object getField(Class<?> className, String fieldName, String mojangMappedName, Object instance) {
 		try {
-			Field field = className.getDeclaredField(fieldName);
+			Field field = className.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : fieldName);
 			field.setAccessible(true);
 			return field.get(instance);
 		} catch (ReflectiveOperationException e) {
@@ -134,8 +125,12 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	public static void setField(Class<?> className, String fieldName, Object instance, Object value) {
+		setField(className, fieldName, fieldName, instance, value);
+	}
+
+	public static void setField(Class<?> className, String fieldName, String mojangMappedName, Object instance, Object value) {
 		try {
-			Field field = className.getDeclaredField(fieldName);
+			Field field = className.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : fieldName);
 			field.setAccessible(true);
 			field.set(instance, value);
 		} catch (ReflectiveOperationException e) {
@@ -144,15 +139,19 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	}
 
 	public static <T> T getFieldAs(Class<?> className, String fieldName, Object instance, Class<T> asType) {
+		return getFieldAs(className, fieldName, fieldName, instance, asType);
+	}
+
+	public static <T> T getFieldAs(Class<?> className, String fieldName, String mojangMappedName, Object instance, Class<T> asType) {
 		try {
-			Field field = className.getDeclaredField(fieldName);
+			Field field = className.getDeclaredField(SafeVarHandle.USING_MOJANG_MAPPINGS ? mojangMappedName : fieldName);
 			field.setAccessible(true);
 			return asType.cast(field.get(instance));
 		} catch (ReflectiveOperationException e) {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T> T forceGetArgument(CommandContext cmdCtx, String key) {
 		ParsedArgument result = (ParsedArgument) getFieldAs(CommandContext.class, "arguments", cmdCtx, Map.class).get(key);
@@ -169,6 +168,8 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	
 	public abstract void addFunction(NamespacedKey key, List<String> commands);
 	public abstract void addTag(NamespacedKey key, List<List<String>> commands);
+
+	public abstract Class<? extends Player> getCraftPlayerClass();
 
 	/**
 	 * Converts 1.16.5 and below potion effect names to NamespacedKey names. For

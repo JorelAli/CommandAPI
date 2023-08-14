@@ -7,25 +7,22 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.io.File;
 import java.io.IOException;
 import java.security.CodeSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import be.seeseemelk.mockbukkit.help.HelpMapMock;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.jorel.commandapi.SafeVarHandle;
+import net.minecraft.commands.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_18_R1.CraftParticle;
@@ -95,6 +92,8 @@ import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType;
 
 public class MockNMS extends Enums {
+	private static final SafeVarHandle<HelpMapMock, Map<String, HelpTopic>> helpMapTopics =
+		SafeVarHandle.ofOrNull(HelpMapMock.class, "topics", "topics", Map.class);
 
 	static {
 		CodeSource src = PotionEffectType.class.getProtectionDomain().getCodeSource();
@@ -120,7 +119,7 @@ public class MockNMS extends Enums {
 		super(baseNMS);
 
 		// Stub in our getMinecraftServer implementation
-		CommandAPIBukkit<?> nms = Mockito.spy(super.baseNMS);
+		CommandAPIBukkit<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		super.baseNMS = nms;
 
@@ -146,6 +145,18 @@ public class MockNMS extends Enums {
 		this.recipeManager = new RecipeManager();
 		this.functions = new HashMap<>();
 		registerDefaultRecipes();
+
+		// Set up playerListMock
+		playerListMock = Mockito.mock(PlayerList.class);
+		Mockito.when(playerListMock.getPlayerByName(anyString())).thenAnswer(invocation -> {
+			String playerName = invocation.getArgument(0);
+			for (ServerPlayer onlinePlayer : players) {
+				if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+					return onlinePlayer;
+				}
+			}
+			return null;
+		});
 	}
 
 	/*************************
@@ -261,6 +272,21 @@ public class MockNMS extends Enums {
 		return ((ServerMock) Bukkit.getServer()).getCommandMap();
 	}
 
+	@Override
+	public boolean isVanillaCommandWrapper(Command command) {
+		return baseNMS.isVanillaCommandWrapper(command);
+	}
+
+	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+		return baseNMS.wrapToVanillaCommandWrapper(node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return baseNMS.isBukkitCommandWrapper(node);
+	}
+
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
@@ -286,24 +312,16 @@ public class MockNMS extends Enums {
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				ServerPlayer entityPlayerMock = Mockito.mock(ServerPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
-				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
-				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
-				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
-				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new TextComponent(onlinePlayer.getName())); // ChatArgument, AdventureChatArgument
-				players.add(entityPlayerMock);
-			}
 
-			if (playerListMock == null) {
-				playerListMock = Mockito.mock(PlayerList.class);
-				Mockito.when(playerListMock.getPlayerByName(anyString())).thenAnswer(invocation -> {
-					String playerName = invocation.getArgument(0);
-					for (ServerPlayer onlinePlayer : players) {
-						if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-							return onlinePlayer;
-						}
-					}
-					return null;
-				});
+				// Extract these variables first in case the onlinePlayer is a Mockito object itself
+				String name = onlinePlayer.getName();
+				UUID uuid = onlinePlayer.getUniqueId();
+
+				Mockito.when(craftPlayerMock.getName()).thenReturn(name);
+				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(uuid);
+				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
+				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new TextComponent(name)); // ChatArgument, AdventureChatArgument
+				players.add(entityPlayerMock);
 			}
 
 			// CommandSourceStack#levels
@@ -517,6 +535,11 @@ public class MockNMS extends Enums {
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
 		Mockito.when(minecraftServerMock.getProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
 
+		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
+		Commands commands = new Commands();
+		MockPlatform.setField(commands.getClass(), "g", "dispatcher", commands, getBrigadierDispatcher());
+		minecraftServerMock.vanillaCommandDispatcher = commands;
+
 		return (T) minecraftServerMock;
 	}
 
@@ -550,6 +573,11 @@ public class MockNMS extends Enums {
 			tagFunctions.add(CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
 		}
 		this.tags.put(resourceLocation, tagFunctions);
+	}
+
+	@Override
+	public Class<? extends Player> getCraftPlayerClass() {
+		return CraftPlayer.class;
 	}
 
 	@Override
@@ -604,4 +632,8 @@ public class MockNMS extends Enums {
 		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
+	@Override
+	public Map<String, HelpTopic> getHelpMap() {
+		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
+	}
 }

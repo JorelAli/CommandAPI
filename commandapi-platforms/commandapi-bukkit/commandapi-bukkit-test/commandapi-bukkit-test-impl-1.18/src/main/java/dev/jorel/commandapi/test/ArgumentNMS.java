@@ -54,10 +54,10 @@ import net.minecraft.commands.CommandSourceStack;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
-	CommandAPIBukkit<?> baseNMS;
+	CommandAPIBukkit<CommandSourceStack> baseNMS;
 
 	protected ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
-		this.baseNMS = baseNMS;
+		this.baseNMS = (CommandAPIBukkit<CommandSourceStack>) baseNMS;
 	}
 
 	@Override
