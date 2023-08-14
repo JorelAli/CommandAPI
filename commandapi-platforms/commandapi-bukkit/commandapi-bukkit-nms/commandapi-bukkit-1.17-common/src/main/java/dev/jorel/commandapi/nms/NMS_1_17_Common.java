@@ -698,9 +698,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		//  which has a repeated structure that holds the translation key
 		// It might work for other exception sources ¯\_(ツ)_/¯
 		Message message = exception.getRawMessage();
-		if(!(message instanceof TranslatableComponent chat)) return null;
-
-		return chat.getKey();
+		return (message instanceof TranslatableComponent chat) ? chat.getKey() : null;
 	}
 
 	@SuppressWarnings("unchecked")

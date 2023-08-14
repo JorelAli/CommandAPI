@@ -916,12 +916,16 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 		//  which has a repeated structure that holds the translation key
 		// It might work for other exception sources ¯\_(ツ)_/¯
 		Message message = exception.getRawMessage();
-		if(!(message instanceof MutableComponent component)) return null;
 
-		ComponentContents contents = component.getContents();
-		if(!(contents instanceof TranslatableContents translatableContents)) return null;
+		if (message instanceof MutableComponent component) {
+			ComponentContents contents = component.getContents();
 
-		return translatableContents.getKey();
+			if (contents instanceof TranslatableContents translatableContents) {
+				return translatableContents.getKey();
+			}
+		}
+
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

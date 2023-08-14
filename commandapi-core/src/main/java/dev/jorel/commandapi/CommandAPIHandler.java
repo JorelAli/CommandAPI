@@ -821,13 +821,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			return wrapArgumentType(((WrapperArgument<Argument>) argument).getBaseArgument(), rawType);
 		}
 
-		if (!(argument instanceof InitialParseExceptionArgument)) return rawType;
+		if (argument instanceof InitialParseExceptionArgument) {
+			InitialParseExceptionArgument<T, EI, ?> iPEA = (InitialParseExceptionArgument<T, EI, ?>) argument.instance();
+			Optional<InitialParseExceptionHandler<T, EI>> handler = iPEA.getInitialParseExceptionHandler();
 
-		InitialParseExceptionArgument<T, EI, ?> iPEA = (InitialParseExceptionArgument<T, EI, ?>) argument.instance();
+			if (handler.isPresent()) {
+				return new ExceptionHandlingArgumentType<>(rawType, handler.get(), iPEA::parseInitialParseException);
+			}
+		}
 
-		Optional<InitialParseExceptionHandler<T, EI>> handler = iPEA.getInitialParseExceptionHandler();
-		if (handler.isEmpty()) return rawType;
-		return new ExceptionHandlingArgumentType<>(rawType, handler.get(), iPEA::parseInitialParseException);
+		return rawType;
 	}
 
 	CommandArguments generatePreviousArguments(CommandContext<Source> context, Argument[] args, String nodeName)

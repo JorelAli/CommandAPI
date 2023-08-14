@@ -1002,8 +1002,6 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		//  which has a repeated structure that holds the translation key
 		// It might work for other exception sources ¯\_(ツ)_/¯
 		Message message = exception.getRawMessage();
-		if(!(message instanceof ChatMessage chat)) return null;
-
-		return chat.getKey();
+		return (message instanceof ChatMessage chat) ? chat.getKey() : null;
 	}
 }
