@@ -26,6 +26,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import java.util.Map;
+
 /**
  * An argument that represents primitive Java longs
  * 
@@ -61,7 +63,7 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long>
 	 */
 	public LongArgument(String nodeName, long min, long max) {
 		super(nodeName, LongArgumentType.longArg(min, max), String::valueOf);
-		if(max < min) {
+		if (max < min) {
 			throw new InvalidRangeException();
 		}
 	}
@@ -82,6 +84,18 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long>
 	}
 
 	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.long.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.long.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.long.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.long.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
 	@Override
 	public Long getMinimum() {
 		return ((LongArgumentType) getRawType()).getMinimum();
@@ -90,16 +104,6 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long>
 	@Override
 	public Long getMaximum() {
 		return ((LongArgumentType) getRawType()).getMaximum();
-	}
-
-	@Override
-	public String getParsingName() {
-		return "long";
-	}
-
-	@Override
-	public String getSizingName() {
-		return "long";
 	}
 
 	@Override

@@ -10,7 +10,8 @@ import dev.jorel.commandapi.wrappers.WrapperStringReader;
  * @param <N> The type of number returned by this Argument.
  */
 public interface InitialParseExceptionNumberArgument<N extends Number>
-        extends InitialParseExceptionArgument<N, InitialParseExceptionNumberArgument.ExceptionInformation<N>, Argument<N>> {
+        extends InitialParseExceptionArgument<N, InitialParseExceptionNumberArgument.ExceptionInformation<N>, Argument<N>>,
+        InitialParseExceptionTranslationKeyExtractor<InitialParseExceptionNumberArgument.ExceptionInformation.Exceptions> {
     /**
      * Information why a {@link IntegerArgument} failed to parse.
      *
@@ -82,65 +83,53 @@ public interface InitialParseExceptionNumberArgument<N extends Number>
 
     @Override
     default ExceptionInformation<N> parseInitialParseException(CommandSyntaxException exception, StringReader reader) {
-        String key = CommandAPIBukkit.get().extractTranslationKey(exception);
-        if (key == null) {
-            throw new IllegalStateException("Unexpected null translation key for IntegerArgument initial parse", exception);
-        }
-
         N min = getMinimum();
         N max = getMaximum();
 
-        // We expect translation keys in the form (parsing/argument).(name of this number).(expected/invalid/low/big)
-        String[] keyParts = key.split("\\.");
-        if (keyParts.length == 3) {
-            String type = keyParts[0];
-            if(type.equals("parsing")) {
-                if(keyParts[1].equals(getParsingName())) {
-                    String subType = keyParts[2];
-                    if(subType.equals("expected")) {
-                        return new ExceptionInformation<>(
-                                ExceptionInformation.Exceptions.EXPECTED_NUMBER,
-                                "", getZero(), min, max
-                        );
-                    } else if(subType.equals("invalid")) {
-                        return new ExceptionInformation<>(
-                                ExceptionInformation.Exceptions.INVALID_NUMBER,
-                                getRawNumberInput(reader), getZero(), min, max
-                        );
-                    }
-                }
-            } else if(type.equals("argument")) {
-                if(keyParts[1].equals(getSizingName())) {
-                    String subType = keyParts[2];
-                    if(subType.equals("low")) {
-                        String rawInput = getRawNumberInput(reader);
-                        return new ExceptionInformation<>(
-                                ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
-                                rawInput, parseNumber(rawInput), min, max
-                        );
-                    } else if(subType.equals("big")) {
-                        String rawInput = getRawNumberInput(reader);
-                        return new ExceptionInformation<>(
-                                ExceptionInformation.Exceptions.NUMBER_TOO_HIGH,
-                                rawInput, parseNumber(rawInput), min, max
-                        );
-                    }
-                }
+        return switch (getExceptionType(exception)) {
+            case EXPECTED_NUMBER -> new ExceptionInformation<>(
+                    ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+                    "", getZero(), min, max
+            );
+            case INVALID_NUMBER -> new ExceptionInformation<>(
+                    ExceptionInformation.Exceptions.INVALID_NUMBER,
+                    getRawNumberInput(reader), getZero(), min, max
+            );
+            case NUMBER_TOO_LOW -> {
+                String rawInput = getRawNumberInput(reader);
+                yield new ExceptionInformation<>(
+                        ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+                        rawInput, parseNumber(rawInput), min, max
+                );
             }
-        }
-
-        throw new IllegalStateException("Unexpected translation key for " + getClass().getSimpleName() + " initial parse: " + key, exception);
+            case NUMBER_TOO_HIGH -> {
+                String rawInput = getRawNumberInput(reader);
+                yield new ExceptionInformation<>(
+                        ExceptionInformation.Exceptions.NUMBER_TOO_HIGH,
+                        rawInput, parseNumber(rawInput), min, max
+                );
+            }
+        };
     }
 
+    /**
+     * @return The minimum value assigned for this Argument
+     */
     N getMinimum();
 
+    /**
+     * @return The maximum value assigned for this Argument
+     */
     N getMaximum();
 
-    String getParsingName();
-
-    String getSizingName();
-
+    /**
+     * @return The constant 0 in the class handled by this Argument
+     */
     N getZero();
 
+    /**
+     * @param s The String to parse
+     * @return The number represented by the given string as the class handled by this Argument
+     */
     N parseNumber(String s);
 }

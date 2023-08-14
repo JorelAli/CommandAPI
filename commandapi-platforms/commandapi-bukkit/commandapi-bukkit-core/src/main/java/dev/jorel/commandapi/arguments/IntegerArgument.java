@@ -26,6 +26,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import java.util.Map;
+
 /**
  * An argument that represents primitive Java ints
  * 
@@ -82,6 +84,18 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer>
 	}
 
 	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.int.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.int.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.integer.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.integer.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
 	@Override
 	public Integer getMinimum() {
 		return ((IntegerArgumentType) getRawType()).getMinimum();
@@ -90,16 +104,6 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer>
 	@Override
 	public Integer getMaximum() {
 		return ((IntegerArgumentType) getRawType()).getMaximum();
-	}
-
-	@Override
-	public String getParsingName() {
-		return "int";
-	}
-
-	@Override
-	public String getSizingName() {
-		return "integer";
 	}
 
 	@Override

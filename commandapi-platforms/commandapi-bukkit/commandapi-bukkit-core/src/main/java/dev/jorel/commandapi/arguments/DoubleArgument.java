@@ -26,6 +26,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import java.util.Map;
+
 /**
  * An argument that represents primitive Java doubles
  * 
@@ -84,6 +86,18 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double>
 	}
 
 	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.double.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.double.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.double.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.double.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
 	@Override
 	public Double getMinimum() {
 		return ((DoubleArgumentType) getRawType()).getMinimum();
@@ -92,16 +106,6 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double>
 	@Override
 	public Double getMaximum() {
 		return ((DoubleArgumentType) getRawType()).getMaximum();
-	}
-
-	@Override
-	public String getParsingName() {
-		return "int";
-	}
-
-	@Override
-	public String getSizingName() {
-		return "integer";
 	}
 
 	@Override

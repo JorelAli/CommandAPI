@@ -26,6 +26,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
+import java.util.Map;
+
 /**
  * An argument that represents primitive Java floats
  * 
@@ -82,6 +84,18 @@ public class FloatArgument extends SafeOverrideableArgument<Float, Float>
 	}
 
 	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.float.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.float.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.float.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.float.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
 	@Override
 	public Float getMinimum() {
 		return ((FloatArgumentType) getRawType()).getMinimum();
@@ -90,16 +104,6 @@ public class FloatArgument extends SafeOverrideableArgument<Float, Float>
 	@Override
 	public Float getMaximum() {
 		return ((FloatArgumentType) getRawType()).getMaximum();
-	}
-
-	@Override
-	public String getParsingName() {
-		return "float";
-	}
-
-	@Override
-	public String getSizingName() {
-		return "float";
 	}
 
 	@Override
