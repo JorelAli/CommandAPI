@@ -31,7 +31,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * 
  * @since 1.1
  */
-public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
+public class FloatArgument extends SafeOverrideableArgument<Float, Float> 
+		implements InitialParseExceptionNumberArgument<Float> {
 	/**
 	 * A float argument
 	 *
@@ -78,5 +79,36 @@ public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
 	@Override
 	public <Source> Float parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	// InitialParseExceptionNumberArgument methods
+	@Override
+	public Float getMinimum() {
+		return ((FloatArgumentType) getRawType()).getMinimum();
+	}
+
+	@Override
+	public Float getMaximum() {
+		return ((FloatArgumentType) getRawType()).getMaximum();
+	}
+
+	@Override
+	public String getParsingName() {
+		return "float";
+	}
+
+	@Override
+	public String getSizingName() {
+		return "float";
+	}
+
+	@Override
+	public Float getZero() {
+		return 0.0F;
+	}
+
+	@Override
+	public Float parseNumber(String s) {
+		return Float.parseFloat(s);
 	}
 }

@@ -33,7 +33,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * 
  * @apiNote Returns a {@link double}
  */
-public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
+public class DoubleArgument extends SafeOverrideableArgument<Double, Double>
+		implements InitialParseExceptionNumberArgument<Double> {
 	/**
 	 * A double argument
 	 *
@@ -80,5 +81,36 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 	@Override
 	public <Source> Double parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	// InitialParseExceptionNumberArgument methods
+	@Override
+	public Double getMinimum() {
+		return ((DoubleArgumentType) getRawType()).getMinimum();
+	}
+
+	@Override
+	public Double getMaximum() {
+		return ((DoubleArgumentType) getRawType()).getMaximum();
+	}
+
+	@Override
+	public String getParsingName() {
+		return "int";
+	}
+
+	@Override
+	public String getSizingName() {
+		return "integer";
+	}
+
+	@Override
+	public Double getZero() {
+		return 0.0;
+	}
+
+	@Override
+	public Double parseNumber(String s) {
+		return Double.parseDouble(s);
 	}
 }

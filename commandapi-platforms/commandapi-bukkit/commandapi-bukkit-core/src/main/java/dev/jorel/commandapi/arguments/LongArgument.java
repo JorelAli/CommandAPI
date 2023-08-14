@@ -31,7 +31,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * 
  * @since 3.0
  */
-public class LongArgument extends SafeOverrideableArgument<Long, Long> {
+public class LongArgument extends SafeOverrideableArgument<Long, Long> 
+		implements InitialParseExceptionNumberArgument<Long> {
 	/**
 	 * A long argument
 	 *
@@ -78,5 +79,36 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	@Override
 	public <Source> Long parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	// InitialParseExceptionNumberArgument methods
+	@Override
+	public Long getMinimum() {
+		return ((LongArgumentType) getRawType()).getMinimum();
+	}
+
+	@Override
+	public Long getMaximum() {
+		return ((LongArgumentType) getRawType()).getMaximum();
+	}
+
+	@Override
+	public String getParsingName() {
+		return "long";
+	}
+
+	@Override
+	public String getSizingName() {
+		return "long";
+	}
+
+	@Override
+	public Long getZero() {
+		return 0L;
+	}
+
+	@Override
+	public Long parseNumber(String s) {
+		return Long.parseLong(s);
 	}
 }

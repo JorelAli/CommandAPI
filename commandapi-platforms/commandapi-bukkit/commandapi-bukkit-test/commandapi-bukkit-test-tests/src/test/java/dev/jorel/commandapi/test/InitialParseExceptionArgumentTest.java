@@ -41,9 +41,9 @@ class InitialParseExceptionArgumentTest extends TestBase {
 								.withInitialParseExceptionHandler(context ->
 										switch (context.exceptionInformation().type()) {
 											// Integer too low, move to 0
-											case INTEGER_TOO_LOW -> context.exceptionInformation().minimum();
+											case NUMBER_TOO_LOW -> context.exceptionInformation().minimum();
 											// Integer too high, cap to 10
-											case INTEGER_TOO_HIGH -> context.exceptionInformation().maximum();
+											case NUMBER_TOO_HIGH -> context.exceptionInformation().maximum();
 											// Integer wasn't entered, use original exception
 											default -> throw context.exception();
 										}),
