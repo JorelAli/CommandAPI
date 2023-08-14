@@ -43,8 +43,8 @@ public class InitialParseExceptionHandlingArgumentInfo_1_19_4<T, EI>
     }
 
     @Override
-    public Template unpack(InitialParseExceptionHandlingArgumentType<T, EI> InitialParseExceptionHandlingArgumentType) {
-        ArgumentType<T> baseType = InitialParseExceptionHandlingArgumentType.baseType();
+    public Template unpack(InitialParseExceptionHandlingArgumentType<T, EI> initialParseExceptionHandlingArgumentType) {
+        ArgumentType<T> baseType = initialParseExceptionHandlingArgumentType.baseType();
         return new Template(baseType);
     }
 
