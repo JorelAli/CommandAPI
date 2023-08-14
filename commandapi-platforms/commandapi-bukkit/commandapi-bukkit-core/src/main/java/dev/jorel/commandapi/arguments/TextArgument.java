@@ -23,6 +23,7 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionTextArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 
 /**
@@ -30,7 +31,7 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * 
  * @since 1.2
  */
-public class TextArgument extends Argument<String> {
+public class TextArgument extends Argument<String> implements InitialParseExceptionTextArgument<Argument<String>> {
 	/**
 	 * A string argument for one word, or multiple words encased in quotes
 	 *
