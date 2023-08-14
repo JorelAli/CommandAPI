@@ -4,33 +4,33 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.CommandAPIPlatform;
-import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
 import io.netty.buffer.ByteBuf;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 /**
- * An abstract class that handles common logic for serializing an {@link ExceptionHandlingArgumentType} in Minecraft
+ * An abstract class that handles common logic for serializing an {@link InternalParseExceptionHandlingArgumentType} in Minecraft
  * versions 1.15 to 1.18. For context, see <a href="https://wiki.vg/index.php?title=Command_Data&oldid=17429#Node_Format">
  * Command Data: Node Format (pre 1.19)</a>.
  *
- * @param <T> The same type parameter T for {@link ExceptionHandlingArgumentType}. This fixes a silly generics issue.
- * @param <EI> The same type parameter as ExceptionInformation in {@link ExceptionHandlingArgumentType}. This fixes a silly generics issue.
+ * @param <T> The same type parameter T for {@link InternalParseExceptionHandlingArgumentType}. This fixes a silly generics issue.
+ * @param <EI> The same type parameter as ExceptionInformation in {@link InternalParseExceptionHandlingArgumentType}. This fixes a silly generics issue.
  * @param <WRITER> The netty {@link ByteBuf} subclass used to write packets in the version of Minecraft this is being used for.
  */
-public abstract class ExceptionHandlingArgumentSerializer_Common<T, EI, WRITER extends ByteBuf> {
+public abstract class InitialParseExceptionHandlingArgumentSerializer_Common<T, EI, WRITER extends ByteBuf> {
     /**
      * This method is expected to write the properties section for an argument node that uses the
-     * {@link ExceptionHandlingArgumentType}, so that the argument can be reconstructed when received by a client.
-     * However, we can't add {@link ExceptionHandlingArgumentType} to the client, so if it actually received a node
+     * {@link InternalParseExceptionHandlingArgumentType}, so that the argument can be reconstructed when received by a client.
+     * However, we can't add {@link InternalParseExceptionHandlingArgumentType} to the client, so if it actually received a node
      * with that type it would freak out and disconnect. Instead, this method removes its own identifier and writes
-     * the identifier and properties for the {@link ExceptionHandlingArgumentType#baseType()} instead.
+     * the identifier and properties for the {@link InternalParseExceptionHandlingArgumentType#baseType()} instead.
      *
-     * @param argument The {@link ExceptionHandlingArgumentType} to serialize
+     * @param argument The {@link InternalParseExceptionHandlingArgumentType} to serialize
      * @param packetWriter The netty {@link ByteBuf} that contains the data
      */
-    protected void commonSerializeToNetwork(ExceptionHandlingArgumentType<T, EI> argument, WRITER packetWriter) {
+    protected void commonSerializeToNetwork(InternalParseExceptionHandlingArgumentType<T, EI> argument, WRITER packetWriter) {
         // REMOVE MY KEY FROM THE PACKET
         Object myInfo = getArgumentTypeInformation(argument);
 
@@ -53,14 +53,14 @@ public abstract class ExceptionHandlingArgumentSerializer_Common<T, EI, WRITER e
     }
 
     /**
-     * Adds the properties of an {@link ExceptionHandlingArgumentType} node to a {@link JsonObject}. This is used when
+     * Adds the properties of an {@link InternalParseExceptionHandlingArgumentType} node to a {@link JsonObject}. This is used when
      * generating a json representation for a Brigadier {@link CommandDispatcher}, like when
      * {@link CommandAPIPlatform#createDispatcherFile(File, CommandDispatcher)} is called.
      *
-     * @param argument The {@link ExceptionHandlingArgumentType} to serialize
+     * @param argument The {@link InternalParseExceptionHandlingArgumentType} to serialize
      * @param properties The {@link JsonObject} to put the properties in
      */
-    protected void commonSerializeToJson(ExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
+    protected void commonSerializeToJson(InternalParseExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
         ArgumentType<T> baseType = argument.baseType();
 
         Object baseInfo = getArgumentTypeInformation(baseType);
@@ -94,7 +94,7 @@ public abstract class ExceptionHandlingArgumentSerializer_Common<T, EI, WRITER e
     protected abstract String getSerializationKey(Object info);
 
     /**
-     * Serializes the properties for the base type of {@link ExceptionHandlingArgumentType} into a packet.
+     * Serializes the properties for the base type of {@link InternalParseExceptionHandlingArgumentType} into a packet.
      *
      * @param baseType The base {@link ArgumentType} that needs its properties serialized
      * @param baseInfo The serialization information object for the given {@link ArgumentType}
@@ -103,7 +103,7 @@ public abstract class ExceptionHandlingArgumentSerializer_Common<T, EI, WRITER e
     protected abstract void serializeBaseTypeToNetwork(ArgumentType<T> baseType, Object baseInfo, WRITER packetWriter);
 
     /**
-     * Serializes the properties for the base type of {@link ExceptionHandlingArgumentType} into json format.
+     * Serializes the properties for the base type of {@link InternalParseExceptionHandlingArgumentType} into json format.
      *
      * @param baseType The base {@link ArgumentType} that needs its properties serialized
      * @param baseInfo The serialization information object for the given {@link ArgumentType}

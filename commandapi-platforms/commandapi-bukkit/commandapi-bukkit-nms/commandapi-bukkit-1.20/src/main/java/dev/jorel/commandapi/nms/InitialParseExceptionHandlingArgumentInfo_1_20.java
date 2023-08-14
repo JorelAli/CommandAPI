@@ -2,19 +2,16 @@ package dev.jorel.commandapi.nms;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
-import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
-import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
-@Differs(from = {"1.19", "1.19.1", "1.19.2"},
-        by = "Registry.COMMAND_ARGUMENT_TYPE -> BuiltInRegistries.COMMAND_ARGUMENT_TYPE")
-public class ExceptionHandlingArgumentInfo_1_19_3<T, EI>
-	implements ArgumentTypeInfo<ExceptionHandlingArgumentType<T, EI>,
-        ExceptionHandlingArgumentInfo_1_19_3<T, EI>.Template> {
+public class InitialParseExceptionHandlingArgumentInfo_1_20<T, EI>
+	implements ArgumentTypeInfo<InternalParseExceptionHandlingArgumentType<T, EI>,
+        InitialParseExceptionHandlingArgumentInfo_1_20<T, EI>.Template> {
     @Override
     public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {
         ArgumentType<T> baseType = template.baseType;
@@ -46,8 +43,8 @@ public class ExceptionHandlingArgumentInfo_1_19_3<T, EI>
     }
 
     @Override
-    public Template unpack(ExceptionHandlingArgumentType<T, EI> exceptionHandlingArgumentType) {
-        ArgumentType<T> baseType = exceptionHandlingArgumentType.baseType();
+    public Template unpack(InternalParseExceptionHandlingArgumentType<T, EI> internalParseExceptionHandlingArgumentType) {
+        ArgumentType<T> baseType = internalParseExceptionHandlingArgumentType.baseType();
         return new Template(baseType);
     }
 
@@ -58,12 +55,13 @@ public class ExceptionHandlingArgumentInfo_1_19_3<T, EI>
         // be called to deserialize the ArgumentType info that wasn't put into the packet
         // anyway. Also, the server shouldn't ever deserialize a *ClientBound*CommandPacket
         // either. If this method ever gets called, either you or I are doing something very wrong!
-        throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_1_19_3#deserializeFromNetwork for more information");
+        throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms" +
+                ".InitialParseExceptionHandlingArgumentInfo_1_20#deserializeFromNetwork for more information");
         // Including a mini-stacktrace here in case this exception shows up
         // on a client-disconnected screen, which is not very helpful
     }
 
-    public final class Template implements ArgumentTypeInfo.Template<ExceptionHandlingArgumentType<T, EI>> {
+    public final class Template implements ArgumentTypeInfo.Template<InternalParseExceptionHandlingArgumentType<T, EI>> {
         final ArgumentType<T> baseType;
 
         public Template(ArgumentType<T> baseType) {
@@ -71,16 +69,17 @@ public class ExceptionHandlingArgumentInfo_1_19_3<T, EI>
         }
 
         @Override
-        public ArgumentTypeInfo<ExceptionHandlingArgumentType<T, EI>, ?> type() {
-            return ExceptionHandlingArgumentInfo_1_19_3.this;
+        public ArgumentTypeInfo<InternalParseExceptionHandlingArgumentType<T, EI>, ?> type() {
+            return InitialParseExceptionHandlingArgumentInfo_1_20.this;
         }
 
         @Override
-        public ExceptionHandlingArgumentType<T, EI> instantiate(CommandBuildContext commandBuildContext) {
-            // Same as ExceptionHandlingArgumentInfo_1_19_3#deserializeFromNetwork.
+        public InternalParseExceptionHandlingArgumentType<T, EI> instantiate(CommandBuildContext commandBuildContext) {
+            // Same as InitialParseExceptionHandlingArgumentInfo_1_20#deserializeFromNetwork.
             // An ExceptionHandlingArgumentType should never be built from a packet,
             // so this method shouldn't be used
-            throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentInfo_1_19_3.Template#instantiate for more information");
+            throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms" +
+                    ".InitialParseExceptionHandlingArgumentInfo_1_20.Template#instantiate for more information");
             // Including a mini-stacktrace here in case this exception shows up
             // on a client-disconnected screen, which is not very helpful
         }

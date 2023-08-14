@@ -4,18 +4,15 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.SafeStaticOneParameterMethodHandle;
 import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.arguments.ExceptionHandlingArgumentType;
-import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-@Differs(from = {"1.15", "1.16", "1.17", "1.18", "1.18.1"},
-        by = "ArgumentTypes.Entry.c -> ArgumentTypes.Entry.b, ArgumentTypes.Entry.b -> ArgumentTypes.Entry.a")
-public class ExceptionHandlingArgumentSerializer_1_18_R2<T, EI>
-	extends ExceptionHandlingArgumentSerializer_Common<T, EI, FriendlyByteBuf>
-	implements ArgumentSerializer<ExceptionHandlingArgumentType<T, EI>> {
+public class InitialParseExceptionHandlingArgumentSerializer_1_17_Common<T, EI>
+	extends InitialParseExceptionHandlingArgumentSerializer_Common<T, EI, FriendlyByteBuf>
+	implements ArgumentSerializer<InternalParseExceptionHandlingArgumentType<T, EI>> {
     // All the ? here should actually be ArgumentTypes.Entry, but that is a private inner class. That makes everything really annoying.
     // TODO: We want to check this reflection, but we can't give ArgumentTypes.Entry to the @RequireField annotation
     //  Hopefully something works out, but the preprocessor needs to be expanded first
@@ -37,8 +34,8 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T, EI>
         }
 
         getArgumentTypeInformation = SafeStaticOneParameterMethodHandle.ofOrNull(ArgumentTypes.class, "b", "get", entryClass, ArgumentType.class);
-        serializationKey = SafeVarHandle.ofOrNull(entryClass, "b", "name", ResourceLocation.class);
-        serializer = SafeVarHandle.ofOrNull(entryClass, "a", "serializer", ArgumentSerializer.class);
+        serializationKey = SafeVarHandle.ofOrNull(entryClass, "c", "name", ResourceLocation.class);
+        serializer = SafeVarHandle.ofOrNull(entryClass, "b", "serializer", ArgumentSerializer.class);
     }
 
     // Serializer_Common methods
@@ -64,23 +61,24 @@ public class ExceptionHandlingArgumentSerializer_1_18_R2<T, EI>
 
     // ArgumentSerializer methods
     @Override
-    public void serializeToNetwork(ExceptionHandlingArgumentType<T, EI> argument, FriendlyByteBuf friendlyByteBuf) {
+    public void serializeToNetwork(InternalParseExceptionHandlingArgumentType<T, EI> argument, FriendlyByteBuf friendlyByteBuf) {
         commonSerializeToNetwork(argument, friendlyByteBuf);
     }
 
     @Override
-    public void serializeToJson(ExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
+    public void serializeToJson(InternalParseExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
         commonSerializeToJson(argument, properties);
     }
 
     @Override
-    public ExceptionHandlingArgumentType<T, EI> deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
+    public InternalParseExceptionHandlingArgumentType<T, EI> deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
         // Since this class overrides its ArgumentRegistry key with the baseType's,
         // this class's key should never show up in a packet and this method should never
         // be called to deserialize the ArgumentType info that wasn't put into the packet
         // anyway. Also, the server shouldn't ever deserialize a PacketPlay*Out*Commands
         // either. If this method ever gets called, either you or I are doing something very wrong!
-        throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms.ExceptionHandlingArgumentSerializer_1_18_R2#deserializeFromNetwork for more information");
+        throw new IllegalStateException("This shouldn't happen! See dev.jorel.commandapi.nms" +
+                ".InitialParseExceptionHandlingArgumentSerializer_1_17_Common#deserializeFromNetwork for more information");
         // Including a mini-stacktrace here in case this exception shows up
         // on a client-disconnected screen, which is not very helpful
     }
