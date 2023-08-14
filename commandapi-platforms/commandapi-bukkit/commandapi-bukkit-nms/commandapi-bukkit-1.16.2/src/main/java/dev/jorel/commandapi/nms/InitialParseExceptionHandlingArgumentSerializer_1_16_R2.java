@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.SafeStaticOneParameterMethodHandle;
 import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import net.minecraft.server.v1_16_R2.ArgumentRegistry;
 import net.minecraft.server.v1_16_R2.ArgumentSerializer;
@@ -14,7 +14,7 @@ import net.minecraft.server.v1_16_R2.PacketDataSerializer;
 @Differs(from = {"1.15", "1.16.1"}, by = "Renamed ArgumentRegistry#a(ArgumentType) to ArgumentRegistry#b(ArgumentType)")
 public class InitialParseExceptionHandlingArgumentSerializer_1_16_R2<T, EI>
 	extends InitialParseExceptionHandlingArgumentSerializer_Common<T, EI, PacketDataSerializer>
-	implements ArgumentSerializer<InternalParseExceptionHandlingArgumentType<T, EI>> {
+	implements ArgumentSerializer<InitialParseExceptionHandlingArgumentType<T, EI>> {
     // All the ? here should actually be ArgumentRegistry.a, but that is a private inner class. That makes everything really annoying.
     // TODO: We want to check this reflection, but we can't give ArgumentRegistry.a to the @RequireField annotation
     //  Hopefully something works out, but the preprocessor needs to be expanded first
@@ -62,19 +62,19 @@ public class InitialParseExceptionHandlingArgumentSerializer_1_16_R2<T, EI>
     // ArgumentSerializer methods
     @Override
     // serializeToNetwork
-    public void a(InternalParseExceptionHandlingArgumentType<T, EI> argument, PacketDataSerializer packetDataSerializer) {
+    public void a(InitialParseExceptionHandlingArgumentType<T, EI> argument, PacketDataSerializer packetDataSerializer) {
         commonSerializeToNetwork(argument, packetDataSerializer);
     }
 
     @Override
     // serializeToJson
-    public void a(InternalParseExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
+    public void a(InitialParseExceptionHandlingArgumentType<T, EI> argument, JsonObject properties) {
         commonSerializeToJson(argument, properties);
     }
 
     @Override
     // deserializeFromNetwork
-    public InternalParseExceptionHandlingArgumentType<T, EI> b(PacketDataSerializer packetDataSerializer) {
+    public InitialParseExceptionHandlingArgumentType<T, EI> b(PacketDataSerializer packetDataSerializer) {
         // Since this class overrides its ArgumentRegistry key with the baseType's,
         // this class's key should never show up in a packet and this method should never
         // be called to deserialize the ArgumentType info that wasn't put into the packet

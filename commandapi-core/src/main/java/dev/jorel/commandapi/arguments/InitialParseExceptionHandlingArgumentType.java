@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
  * @param <T> The object returned when the wrapped {@link ArgumentType} is parsed.
  * @param <ExceptionInformation> The class that holds information about the exception.
  */
-public record InternalParseExceptionHandlingArgumentType<T, ExceptionInformation>(
+public record InitialParseExceptionHandlingArgumentType<T, ExceptionInformation>(
         /**
          * @param baseType The {@link ArgumentType} this object is wrapping
          */

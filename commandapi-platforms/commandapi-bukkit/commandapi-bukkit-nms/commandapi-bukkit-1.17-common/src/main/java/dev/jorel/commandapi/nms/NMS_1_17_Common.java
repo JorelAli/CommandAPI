@@ -88,7 +88,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -684,7 +684,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 
 	@Override
 	public void registerCustomArgumentType() {
-		ArgumentTypes.register("commandapi:exception_handler", InternalParseExceptionHandlingArgumentType.class,
+		ArgumentTypes.register("commandapi:exception_handler", InitialParseExceptionHandlingArgumentType.class,
 				new InitialParseExceptionHandlingArgumentSerializer_1_17_Common());
 	}
 

@@ -36,7 +36,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -529,7 +529,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public void registerCustomArgumentType() {
-		if(!ArgumentTypeInfos.isClassRecognized(InternalParseExceptionHandlingArgumentType.class)) {
+		if(!ArgumentTypeInfos.isClassRecognized(InitialParseExceptionHandlingArgumentType.class)) {
 			baseNMS.registerCustomArgumentType();
 		}
 	}

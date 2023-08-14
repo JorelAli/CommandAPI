@@ -98,7 +98,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -978,7 +978,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 
 	@Override
 	public void registerCustomArgumentType() {
-		ArgumentRegistry.a("commandapi:exception_handler", InternalParseExceptionHandlingArgumentType.class,
+		ArgumentRegistry.a("commandapi:exception_handler", InitialParseExceptionHandlingArgumentType.class,
 				new InitialParseExceptionHandlingArgumentSerializer_1_16_4_R3());
 	}
 

@@ -2,7 +2,7 @@ package dev.jorel.commandapi.nms;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
-import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -13,7 +13,7 @@ import net.minecraft.network.FriendlyByteBuf;
 @Differs(from = {"1.19", "1.19.1", "1.19.2"},
         by = "Registry.COMMAND_ARGUMENT_TYPE -> BuiltInRegistries.COMMAND_ARGUMENT_TYPE")
 public class InitialParseExceptionHandlingArgumentInfo_1_19_3<T, EI>
-	implements ArgumentTypeInfo<InternalParseExceptionHandlingArgumentType<T, EI>,
+	implements ArgumentTypeInfo<InitialParseExceptionHandlingArgumentType<T, EI>,
         InitialParseExceptionHandlingArgumentInfo_1_19_3<T, EI>.Template> {
     @Override
     public void serializeToNetwork(Template template, FriendlyByteBuf friendlyByteBuf) {
@@ -46,8 +46,8 @@ public class InitialParseExceptionHandlingArgumentInfo_1_19_3<T, EI>
     }
 
     @Override
-    public Template unpack(InternalParseExceptionHandlingArgumentType<T, EI> internalParseExceptionHandlingArgumentType) {
-        ArgumentType<T> baseType = internalParseExceptionHandlingArgumentType.baseType();
+    public Template unpack(InitialParseExceptionHandlingArgumentType<T, EI> InitialParseExceptionHandlingArgumentType) {
+        ArgumentType<T> baseType = InitialParseExceptionHandlingArgumentType.baseType();
         return new Template(baseType);
     }
 
@@ -64,7 +64,7 @@ public class InitialParseExceptionHandlingArgumentInfo_1_19_3<T, EI>
         // on a client-disconnected screen, which is not very helpful
     }
 
-    public final class Template implements ArgumentTypeInfo.Template<InternalParseExceptionHandlingArgumentType<T, EI>> {
+    public final class Template implements ArgumentTypeInfo.Template<InitialParseExceptionHandlingArgumentType<T, EI>> {
         final ArgumentType<T> baseType;
 
         public Template(ArgumentType<T> baseType) {
@@ -72,12 +72,12 @@ public class InitialParseExceptionHandlingArgumentInfo_1_19_3<T, EI>
         }
 
         @Override
-        public ArgumentTypeInfo<InternalParseExceptionHandlingArgumentType<T, EI>, ?> type() {
+        public ArgumentTypeInfo<InitialParseExceptionHandlingArgumentType<T, EI>, ?> type() {
             return InitialParseExceptionHandlingArgumentInfo_1_19_3.this;
         }
 
         @Override
-        public InternalParseExceptionHandlingArgumentType<T, EI> instantiate(CommandBuildContext commandBuildContext) {
+        public InitialParseExceptionHandlingArgumentType<T, EI> instantiate(CommandBuildContext commandBuildContext) {
             // Same as InitialParseExceptionHandlingArgumentInfo_1_19_3#deserializeFromNetwork.
             // An ExceptionHandlingArgumentType should never be built from a packet,
             // so this method shouldn't be used

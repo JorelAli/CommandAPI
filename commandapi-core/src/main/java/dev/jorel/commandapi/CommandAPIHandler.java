@@ -826,7 +826,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			Optional<InitialParseExceptionHandler<T, EI>> handler = iPEA.getInitialParseExceptionHandler();
 
 			if (handler.isPresent()) {
-				return new InternalParseExceptionHandlingArgumentType<>(
+				return new InitialParseExceptionHandlingArgumentType<>(
 						rawType, handler.get(), iPEA::parseInitialParseException
 				);
 			}

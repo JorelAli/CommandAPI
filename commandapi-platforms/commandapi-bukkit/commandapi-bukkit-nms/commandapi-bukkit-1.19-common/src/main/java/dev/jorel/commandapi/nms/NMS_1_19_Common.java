@@ -38,7 +38,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.InternalParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -896,7 +896,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 			registerArgument.setAccessible(true);
 
 			registerArgument.invoke(null, commandArgumentTypeRegistry, "commandapi:exception_handler",
-					InternalParseExceptionHandlingArgumentType.class, new InitialParseExceptionHandlingArgumentInfo_1_19_Common<>());
+					InitialParseExceptionHandlingArgumentType.class, new InitialParseExceptionHandlingArgumentInfo_1_19_Common<>());
 
 			// Refreeze registry
 			registryIsFrozen.set(commandArgumentTypeRegistry, true);
