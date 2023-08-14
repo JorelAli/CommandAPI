@@ -2,7 +2,7 @@ package dev.jorel.commandapi.nms;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
-import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionHandlingArgumentType;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;

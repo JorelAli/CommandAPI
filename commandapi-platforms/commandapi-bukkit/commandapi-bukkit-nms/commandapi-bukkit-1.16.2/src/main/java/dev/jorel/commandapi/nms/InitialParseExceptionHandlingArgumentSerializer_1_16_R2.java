@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.SafeStaticOneParameterMethodHandle;
 import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.preprocessor.Differs;
 import net.minecraft.server.v1_16_R2.ArgumentRegistry;
 import net.minecraft.server.v1_16_R2.ArgumentSerializer;

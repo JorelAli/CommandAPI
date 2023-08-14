@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.arguments.parseexceptions;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;

@@ -1,9 +1,10 @@
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.arguments.parseexceptions;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.ChainableBuilder;
+import dev.jorel.commandapi.arguments.AbstractArgument;
 
 import java.util.HashMap;
 import java.util.Map;

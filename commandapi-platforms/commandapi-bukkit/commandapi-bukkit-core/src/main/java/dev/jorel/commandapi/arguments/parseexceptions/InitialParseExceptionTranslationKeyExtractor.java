@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.arguments.parseexceptions;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.CommandAPIPlatform;
-import dev.jorel.commandapi.arguments.InitialParseExceptionHandlingArgumentType;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionHandlingArgumentType;
 import io.netty.buffer.ByteBuf;
 
 import java.io.File;

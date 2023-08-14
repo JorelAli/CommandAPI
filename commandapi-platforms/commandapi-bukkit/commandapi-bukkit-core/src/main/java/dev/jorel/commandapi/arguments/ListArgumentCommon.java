@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import dev.jorel.commandapi.arguments.parseexceptions.ArgumentParseExceptionArgument;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -33,7 +34,7 @@ import dev.jorel.commandapi.executors.CommandArguments;
  */
 @SuppressWarnings("rawtypes")
 public class ListArgumentCommon<T> extends Argument<List> implements
-	ArgumentParseExceptionArgument<T, String, ListArgumentCommon.ArgumentParseExceptionInformation<T>, Argument<List>, CommandSender> {
+		ArgumentParseExceptionArgument<T, String, ListArgumentCommon.ArgumentParseExceptionInformation<T>, Argument<List>, CommandSender> {
 	private final String delimiter;
 	private final boolean allowDuplicates;
 	private final Function<SuggestionInfo<CommandSender>, Collection<T>> supplier;

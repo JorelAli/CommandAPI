@@ -1,8 +1,9 @@
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.arguments.parseexceptions;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.wrappers.WrapperStringReader;
 
 /**
