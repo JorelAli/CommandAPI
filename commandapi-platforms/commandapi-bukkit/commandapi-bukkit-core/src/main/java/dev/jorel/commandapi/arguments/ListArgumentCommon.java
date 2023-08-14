@@ -126,8 +126,11 @@ public class ListArgumentCommon<T> extends Argument<List> implements
 	 *
 	 * @param type        The type of exception that happened.
 	 * @param listSoFar   The current list of items when the exception happened.
-	 * @param currentItem The String that was being parsed when the exception happened.
-	 * @param <T>         the type that this list argument generates a list of.
+	 * @param rawItem     The String that was being parsed when the exception happened.
+	 * @param currentItem The item that was going to be added when the exception happened. Defaults to null if the
+	 *                    exception type was {@link Exceptions#INVALID_ITEM} since the {@code rawItem} could not be
+	 *                    converted to an item in the list.
+	 * @param <T>         The type that this list argument generates a list of.
 	 */
 	public record ArgumentParseExceptionInformation<T>(
 			/**
@@ -139,9 +142,15 @@ public class ListArgumentCommon<T> extends Argument<List> implements
 			 */
 			List<T> listSoFar,
 			/**
-			 * @param currentItem The String that was being parsed when the exception happened.
+			 * @param rawItem The String that was being parsed when the exception happened.
 			 */
-			String currentItem
+			String rawItem,
+			/**
+			 * @param currentItem The item that was going to be added when the exception happened. Defaults to null if the
+			 *                       exception type was {@link Exceptions#INVALID_ITEM} since the {@code rawItem} could not
+			 *                       be converted to an item in the list.
+			 */
+			T currentItem
 	) {
 		/**
 		 * Types of exceptions that might be thrown when the CommandAPI parses a list argument.
@@ -186,7 +195,8 @@ public class ListArgumentCommon<T> extends Argument<List> implements
 											"Duplicate arguments are not allowed"
 									)).createWithContext(context),
 									new ArgumentParseExceptionInformation<>(
-											ArgumentParseExceptionInformation.Exceptions.DUPLICATES_NOT_ALLOWED, list, str
+											ArgumentParseExceptionInformation.Exceptions.DUPLICATES_NOT_ALLOWED,
+											list, str, entry.getValue()
 									)
 							));
 						}
@@ -201,7 +211,8 @@ public class ListArgumentCommon<T> extends Argument<List> implements
 								"Item is not allowed in list"
 						)).createWithContext(context),
 						new ArgumentParseExceptionInformation<>(
-								ArgumentParseExceptionInformation.Exceptions.INVALID_ITEM, list, str
+								ArgumentParseExceptionInformation.Exceptions.INVALID_ITEM,
+								list, str, null
 						)
 				));
 			}
