@@ -3,7 +3,6 @@ package dev.jorel.commandapi.arguments.parseexceptions;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.wrappers.WrapperStringReader;
 
 /**
@@ -14,7 +13,7 @@ public interface InitialParseExceptionNumberArgument<N extends Number>
         extends InitialParseExceptionArgument<N, InitialParseExceptionNumberArgument.ExceptionInformation<N>, Argument<N>>,
         InitialParseExceptionTranslationKeyExtractor<InitialParseExceptionNumberArgument.ExceptionInformation.Exceptions> {
     /**
-     * Information why a {@link IntegerArgument} failed to parse.
+     * Information why an Argument that returns a number failed to parse.
      *
      * @param type     The type of exception that happened.
      * @param rawInput The String that was being parsed.
