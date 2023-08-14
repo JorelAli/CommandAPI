@@ -42,6 +42,7 @@ public record InitialParseExceptionHandlingArgumentType<T, ExceptionInformation>
 
     @Override
     public T parse(StringReader stringReader) throws CommandSyntaxException {
+        int start = stringReader.getCursor();
         try {
             return baseType.parse(stringReader);
         } catch (CommandSyntaxException original) {
@@ -49,7 +50,8 @@ public record InitialParseExceptionHandlingArgumentType<T, ExceptionInformation>
                 return exceptionHandler.handleException(new InitialParseExceptionContext<>(
                         new WrapperCommandSyntaxException(original),
 						exceptionParser.parse(original, stringReader),
-                        new WrapperStringReader(stringReader)
+                        new WrapperStringReader(stringReader),
+                        start
                 ));
             } catch (WrapperCommandSyntaxException newException) {
                 throw newException.getException();

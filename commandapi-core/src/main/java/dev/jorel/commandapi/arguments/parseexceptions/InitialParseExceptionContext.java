@@ -16,6 +16,7 @@ import dev.jorel.commandapi.wrappers.WrapperStringReader;
  *
  * @param stringReader The {@link StringReader} used for reading in the command.
  *                     The cursor will be at the beginning of the argument.
+ * @param cursorStart The location the {@link StringReader}'s cursor was at when the ArgumentType started its parse.
  */
 public record InitialParseExceptionContext<ExceptionInformation>(
         /**
@@ -30,5 +31,9 @@ public record InitialParseExceptionContext<ExceptionInformation>(
          * @param stringReader The {@link StringReader} used for reading in the command.
          *                     The cursor will be at the beginning of the argument.
          */
-        WrapperStringReader stringReader) {
+        WrapperStringReader stringReader,
+		/**
+		 * @param cursorStart The location the {@link StringReader}'s cursor was at when the ArgumentType started its parse.
+		 */
+		int cursorStart) {
 }
