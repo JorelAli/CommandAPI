@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for the {@link FloatArgument}
  */
-public class ArgumentFloatTests extends InitialParseExceptionNumberArgumentTestBase<Float> {
+class ArgumentFloatTests extends InitialParseExceptionNumberArgumentTestBase<Float> {
 
     /*********
      * Setup *

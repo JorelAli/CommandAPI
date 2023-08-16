@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests for the {@link BooleanArgument}
  */
-public class ArgumentBooleanTests extends TestBase {
+class ArgumentBooleanTests extends TestBase {
 
     /*********
      * Setup *

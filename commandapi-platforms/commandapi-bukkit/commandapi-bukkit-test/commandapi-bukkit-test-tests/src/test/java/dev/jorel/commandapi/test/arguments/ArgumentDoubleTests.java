@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for the {@link DoubleArgument}
  */
-public class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Double> {
+class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Double> {
 
     /*********
      * Setup *

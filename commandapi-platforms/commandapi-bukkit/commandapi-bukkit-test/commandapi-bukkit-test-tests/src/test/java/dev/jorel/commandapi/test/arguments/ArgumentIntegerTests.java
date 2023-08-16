@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for the {@link IntegerArgument}
  */
-public class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<Integer> {
+class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<Integer> {
 
     /*********
      * Setup *

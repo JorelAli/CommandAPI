@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for the {@link LongArgument}
  */
-public class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long> {
+class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long> {
 
     /*********
      * Setup *
