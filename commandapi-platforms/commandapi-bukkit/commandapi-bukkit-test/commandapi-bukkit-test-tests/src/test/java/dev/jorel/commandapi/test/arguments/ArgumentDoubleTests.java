@@ -6,7 +6,8 @@ import dev.jorel.commandapi.arguments.DoubleArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.test.Mut;
-import dev.jorel.commandapi.test.arguments.parseexceptions.InitialParseExceptionNumberArgumentTestBase;
+import dev.jorel.commandapi.test.TestBase;
+import dev.jorel.commandapi.test.arguments.parseexceptions.InitialParseExceptionNumberArgumentVerifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for the {@link DoubleArgument}
  */
-class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Double> {
+class ArgumentDoubleTests extends TestBase {
 
     /*********
      * Setup *
@@ -125,9 +126,10 @@ class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Do
     @Test
     void initialParseExceptionTestWithDoubleArgument() {
         PlayerMock player = server.addPlayer();
+        InitialParseExceptionNumberArgumentVerifier<Double> verifier = new InitialParseExceptionNumberArgumentVerifier<>(this);
 
         DoubleArgument argument = new DoubleArgument("double");
-        argument.withInitialParseExceptionHandler(CONTEXT_VERIFIER);
+        argument.withInitialParseExceptionHandler(verifier.getExceptionHandler());
 
         new CommandAPICommand("test")
                 .withArguments(new StringArgument("buffer"), argument)
@@ -135,12 +137,12 @@ class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Do
                 .register();
 
         // Test EXPECTED_NUMBER cases: Invalid characters given for argument (not 0-9, `-` or `.`)
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123 abcde",
                 "Expected double at position 10: test b123 <--[HERE]",
                 10, argument
         );
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123 +1",
                 "Expected double at position 10: test b123 <--[HERE]",
                 10, argument
@@ -149,35 +151,35 @@ class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Do
 
         // Test INVALID_NUMBER cases: Characters given for the argument do not represent a valid double
         // Nonsense number format
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 .0..0",
                 "Invalid double '.0..0' at position 10: test b123 <--[HERE]",
                 10, ".0..0", argument
         );
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 1-",
                 "Invalid double '1-' at position 10: test b123 <--[HERE]",
                 10, "1-", argument
         );
 
         // Increasing characters in buffer argument increases cursor start
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b12345 abcde",
                 "Expected double at position 12: ...st b12345 <--[HERE]",
                 12, argument
         );
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123456789012345 abcde",
                 "Expected double at position 22: ...789012345 <--[HERE]",
                 22, argument
         );
 
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b12345 1-",
                 "Invalid double '1-' at position 12: ...st b12345 <--[HERE]",
                 12, "1-", argument
         );
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123456789012345 1-",
                 "Invalid double '1-' at position 22: ...789012345 <--[HERE]",
                 22, "1-", argument
@@ -187,9 +189,10 @@ class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Do
     @Test
     void initialParseExceptionTestWithBoundedDoubleArgument() {
         PlayerMock player = server.addPlayer();
+        InitialParseExceptionNumberArgumentVerifier<Double> verifier = new InitialParseExceptionNumberArgumentVerifier<>(this);
 
         DoubleArgument argument = new DoubleArgument("double", 0, 10);
-        argument.withInitialParseExceptionHandler(CONTEXT_VERIFIER);
+        argument.withInitialParseExceptionHandler(verifier.getExceptionHandler());
 
         new CommandAPICommand("test")
                 .withArguments(new StringArgument("buffer"), argument)
@@ -197,12 +200,12 @@ class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Do
                 .register();
 
         // Test NUMBER_TOO_LOW cases: Given double is below the defined bound (0)
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123 -1",
                 "Double must not be less than 0.0, found -1.0 at position 10: test b123 <--[HERE]",
                 10, "-1", -1.0, argument
         );
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123 -10",
                 "Double must not be less than 0.0, found -10.0 at position 10: test b123 <--[HERE]",
                 10, "-10", -10.0, argument
@@ -210,12 +213,12 @@ class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Do
 
 
         // Test NUMBER_TOO_HIGH cases: Given double is above the defined bound (10)
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123 11",
                 "Double must not be more than 10.0, found 11.0 at position 10: test b123 <--[HERE]",
                 10, "11", 11.0, argument
         );
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123 100",
                 "Double must not be more than 10.0, found 100.0 at position 10: test b123 <--[HERE]",
                 10, "100", 100.0, argument
@@ -223,23 +226,23 @@ class ArgumentDoubleTests extends InitialParseExceptionNumberArgumentTestBase<Do
 
 
         // Increasing characters in buffer argument increases cursor start
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b12345 -1",
                 "Double must not be less than 0.0, found -1.0 at position 12: ...st b12345 <--[HERE]",
                 12, "-1", -1.0, argument
         );
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123456789012345 -1",
                 "Double must not be less than 0.0, found -1.0 at position 22: ...789012345 <--[HERE]",
                 22, "-1", -1.0, argument
         );
 
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b12345 11",
                 "Double must not be more than 10.0, found 11.0 at position 12: ...st b12345 <--[HERE]",
                 12, "11", 11.0, argument
         );
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123456789012345 11",
                 "Double must not be more than 10.0, found 11.0 at position 22: ...789012345 <--[HERE]",
                 22, "11", 11.0, argument

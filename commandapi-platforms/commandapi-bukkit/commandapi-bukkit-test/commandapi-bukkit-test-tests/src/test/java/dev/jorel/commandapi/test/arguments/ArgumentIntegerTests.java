@@ -6,7 +6,8 @@ import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.test.Mut;
-import dev.jorel.commandapi.test.arguments.parseexceptions.InitialParseExceptionNumberArgumentTestBase;
+import dev.jorel.commandapi.test.TestBase;
+import dev.jorel.commandapi.test.arguments.parseexceptions.InitialParseExceptionNumberArgumentVerifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for the {@link IntegerArgument}
  */
-class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<Integer> {
+class ArgumentIntegerTests extends TestBase {
 
     /*********
      * Setup *
@@ -152,9 +153,10 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
     @Test
     void initialParseExceptionTestWithIntegerArgument() {
         PlayerMock player = server.addPlayer();
+        InitialParseExceptionNumberArgumentVerifier<Integer> verifier = new InitialParseExceptionNumberArgumentVerifier<>(this);
 
         IntegerArgument argument = new IntegerArgument("int");
-        argument.withInitialParseExceptionHandler(CONTEXT_VERIFIER);
+        argument.withInitialParseExceptionHandler(verifier.getExceptionHandler());
 
         new CommandAPICommand("test")
                 .withArguments(new StringArgument("buffer"), argument)
@@ -162,12 +164,12 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
                 .register();
 
         // Test EXPECTED_NUMBER cases: Invalid characters given for argument (not 0-9, `-` or `.`)
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123 abcde",
                 "Expected integer at position 10: test b123 <--[HERE]",
                 10, argument
         );
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123 +1",
                 "Expected integer at position 10: test b123 <--[HERE]",
                 10, argument
@@ -176,31 +178,31 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
 
         // Test INVALID_NUMBER cases: Characters given for the argument do not represent a valid int
         // Nonsense number format
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 .0..0",
                 "Invalid integer '.0..0' at position 10: test b123 <--[HERE]",
                 10, ".0..0", argument
         );
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 1-",
                 "Invalid integer '1-' at position 10: test b123 <--[HERE]",
                 10, "1-", argument
         );
 
         // Floats are not integers
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 1.5",
                 "Invalid integer '1.5' at position 10: test b123 <--[HERE]",
                 10, "1.5", argument
         );
 
         // Number out of bounds of int
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 " + ((long) Integer.MAX_VALUE + 1),
                 "Invalid integer '2147483648' at position 10: test b123 <--[HERE]",
                 10, "2147483648", argument
         );
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 " + ((long) Integer.MIN_VALUE - 1),
                 "Invalid integer '-2147483649' at position 10: test b123 <--[HERE]",
                 10, "-2147483649", argument
@@ -208,23 +210,23 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
 
 
         // Increasing characters in buffer argument increases cursor start
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b12345 abcde",
                 "Expected integer at position 12: ...st b12345 <--[HERE]",
                 12, argument
         );
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123456789012345 abcde",
                 "Expected integer at position 22: ...789012345 <--[HERE]",
                 22, argument
         );
 
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b12345 1.5",
                 "Invalid integer '1.5' at position 12: ...st b12345 <--[HERE]",
                 12, "1.5", argument
         );
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123456789012345 1.5",
                 "Invalid integer '1.5' at position 22: ...789012345 <--[HERE]",
                 22, "1.5", argument
@@ -234,9 +236,10 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
     @Test
     void initialParseExceptionTestWithBoundedIntegerArgument() {
         PlayerMock player = server.addPlayer();
+        InitialParseExceptionNumberArgumentVerifier<Integer> verifier = new InitialParseExceptionNumberArgumentVerifier<>(this);
 
         IntegerArgument argument = new IntegerArgument("int", 0, 10);
-        argument.withInitialParseExceptionHandler(CONTEXT_VERIFIER);
+        argument.withInitialParseExceptionHandler(verifier.getExceptionHandler());
 
         new CommandAPICommand("test")
                 .withArguments(new StringArgument("buffer"), argument)
@@ -244,12 +247,12 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
                 .register();
 
         // Test NUMBER_TOO_LOW cases: Given int is below the defined bound (0)
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123 -1",
                 "Integer must not be less than 0, found -1 at position 10: test b123 <--[HERE]",
                 10, "-1", -1, argument
         );
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123 -10",
                 "Integer must not be less than 0, found -10 at position 10: test b123 <--[HERE]",
                 10, "-10", -10, argument
@@ -257,12 +260,12 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
 
 
         // Test NUMBER_TOO_HIGH cases: Given int is above the defined bound (10)
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123 11",
                 "Integer must not be more than 10, found 11 at position 10: test b123 <--[HERE]",
                 10, "11", 11, argument
         );
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123 100",
                 "Integer must not be more than 10, found 100 at position 10: test b123 <--[HERE]",
                 10, "100", 100, argument
@@ -270,23 +273,23 @@ class ArgumentIntegerTests extends InitialParseExceptionNumberArgumentTestBase<I
 
 
         // Increasing characters in buffer argument increases cursor start
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b12345 -1",
                 "Integer must not be less than 0, found -1 at position 12: ...st b12345 <--[HERE]",
                 12, "-1", -1, argument
         );
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123456789012345 -1",
                 "Integer must not be less than 0, found -1 at position 22: ...789012345 <--[HERE]",
                 22, "-1", -1, argument
         );
 
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b12345 11",
                 "Integer must not be more than 10, found 11 at position 12: ...st b12345 <--[HERE]",
                 12, "11", 11, argument
         );
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123456789012345 11",
                 "Integer must not be more than 10, found 11 at position 22: ...789012345 <--[HERE]",
                 22, "11", 11, argument

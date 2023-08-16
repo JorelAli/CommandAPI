@@ -6,7 +6,8 @@ import dev.jorel.commandapi.arguments.LongArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.test.Mut;
-import dev.jorel.commandapi.test.arguments.parseexceptions.InitialParseExceptionNumberArgumentTestBase;
+import dev.jorel.commandapi.test.TestBase;
+import dev.jorel.commandapi.test.arguments.parseexceptions.InitialParseExceptionNumberArgumentVerifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for the {@link LongArgument}
  */
-class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long> {
+class ArgumentLongTests extends TestBase {
 
     /*********
      * Setup *
@@ -152,9 +153,10 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
     @Test
     void initialParseExceptionTestWithLongArgument() {
         PlayerMock player = server.addPlayer();
+        InitialParseExceptionNumberArgumentVerifier<Long> verifier = new InitialParseExceptionNumberArgumentVerifier<>(this);
 
         LongArgument argument = new LongArgument("long");
-        argument.withInitialParseExceptionHandler(CONTEXT_VERIFIER);
+        argument.withInitialParseExceptionHandler(verifier.getExceptionHandler());
 
         new CommandAPICommand("test")
                 .withArguments(new StringArgument("buffer"), argument)
@@ -162,12 +164,12 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
                 .register();
 
         // Test EXPECTED_NUMBER cases: Invalid characters given for argument (not 0-9, `-` or `.`)
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123 abcde",
                 "Expected long at position 10: test b123 <--[HERE]",
                 10, argument
         );
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123 +1",
                 "Expected long at position 10: test b123 <--[HERE]",
                 10, argument
@@ -176,19 +178,19 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
 
         // Test INVALID_NUMBER cases: Characters given for the argument do not represent a valid long
         // Nonsense number format
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 .0..0",
                 "Invalid long '.0..0' at position 10: test b123 <--[HERE]",
                 10, ".0..0", argument
         );
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 1-",
                 "Invalid long '1-' at position 10: test b123 <--[HERE]",
                 10, "1-", argument
         );
 
         // Floats are not longs
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 1.5",
                 "Invalid long '1.5' at position 10: test b123 <--[HERE]",
                 10, "1.5", argument
@@ -196,13 +198,13 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
 
         // Number out of bounds of long
         // Long.MAX_VALUE + 1 = 9,223,372,036,854,775,807
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 9223372036854775808",
                 "Invalid long '9223372036854775808' at position 10: test b123 <--[HERE]",
                 10, "9223372036854775808", argument
         );
         // Long.MIN_VALUE - 1 = -9,223,372,036,854,775,809
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123 -9223372036854775809",
                 "Invalid long '-9223372036854775809' at position 10: test b123 <--[HERE]",
                 10, "-9223372036854775809", argument
@@ -210,23 +212,23 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
 
 
         // Increasing characters in buffer argument increases cursor start
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b12345 abcde",
                 "Expected long at position 12: ...st b12345 <--[HERE]",
                 12, argument
         );
-        testExpectedNumberCase(
+        verifier.testExpectedNumberCase(
                 player, "test b123456789012345 abcde",
                 "Expected long at position 22: ...789012345 <--[HERE]",
                 22, argument
         );
 
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b12345 1.5",
                 "Invalid long '1.5' at position 12: ...st b12345 <--[HERE]",
                 12, "1.5", argument
         );
-        testInvalidNumberCase(
+        verifier.testInvalidNumberCase(
                 player, "test b123456789012345 1.5",
                 "Invalid long '1.5' at position 22: ...789012345 <--[HERE]",
                 22, "1.5", argument
@@ -236,9 +238,10 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
     @Test
     void initialParseExceptionTestWithBoundedLongArgument() {
         PlayerMock player = server.addPlayer();
+        InitialParseExceptionNumberArgumentVerifier<Long> verifier = new InitialParseExceptionNumberArgumentVerifier<>(this);
 
         LongArgument argument = new LongArgument("long", 0, 10);
-        argument.withInitialParseExceptionHandler(CONTEXT_VERIFIER);
+        argument.withInitialParseExceptionHandler(verifier.getExceptionHandler());
 
         new CommandAPICommand("test")
                 .withArguments(new StringArgument("buffer"), argument)
@@ -246,12 +249,12 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
                 .register();
 
         // Test NUMBER_TOO_LOW cases: Given long is below the defined bound (0)
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123 -1",
                 "Long must not be less than 0, found -1 at position 10: test b123 <--[HERE]",
                 10, "-1", -1L, argument
         );
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123 -10",
                 "Long must not be less than 0, found -10 at position 10: test b123 <--[HERE]",
                 10, "-10", -10L, argument
@@ -259,12 +262,12 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
 
 
         // Test NUMBER_TOO_HIGH cases: Given long is above the defined bound (10)
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123 11",
                 "Long must not be more than 10, found 11 at position 10: test b123 <--[HERE]",
                 10, "11", 11L, argument
         );
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123 100",
                 "Long must not be more than 10, found 100 at position 10: test b123 <--[HERE]",
                 10, "100", 100L, argument
@@ -272,23 +275,23 @@ class ArgumentLongTests extends InitialParseExceptionNumberArgumentTestBase<Long
 
 
         // Increasing characters in buffer argument increases cursor start
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b12345 -1",
                 "Long must not be less than 0, found -1 at position 12: ...st b12345 <--[HERE]",
                 12, "-1", -1L, argument
         );
-        testNumberTooLowCase(
+        verifier.testNumberTooLowCase(
                 player, "test b123456789012345 -1",
                 "Long must not be less than 0, found -1 at position 22: ...789012345 <--[HERE]",
                 22, "-1", -1L, argument
         );
 
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b12345 11",
                 "Long must not be more than 10, found 11 at position 12: ...st b12345 <--[HERE]",
                 12, "11", 11L, argument
         );
-        testNumberTooHighCase(
+        verifier.testNumberTooHighCase(
                 player, "test b123456789012345 11",
                 "Long must not be more than 10, found 11 at position 22: ...789012345 <--[HERE]",
                 22, "11", 11L, argument
