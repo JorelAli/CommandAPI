@@ -36,9 +36,11 @@ var interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s =
     [ "_ArgumentVec3", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#abb4a2ff5dc410c4adbca8cae634b8851", null ],
     [ "compatibleVersions", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a496e1bb1ce16d141e9200cde895f8021", null ],
     [ "getBrigadierDispatcher", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#acd3ee418eb2d537f4678f8633f04aa5a", null ],
+    [ "getResourcesDispatcher", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a722caafd3328814e1092961a42cff32b", null ],
     [ "getSimpleCommandMap", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#af38561d456f27ae3b16efd0a17e7ba72", null ],
     [ "getSuggestionProvider", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#af60a01d239fe326d586c77174f7a4806", null ],
+    [ "isBukkitCommandWrapper", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a70b957771cfdd427c4534537cbdf48be", null ],
     [ "isVanillaCommandWrapper", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#ae273287c5957463fc074e17440a12335", null ],
     [ "reloadDataPacks", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#aacaa37985c089d499b101a946a4f983b", null ],
-    [ "resendPackets", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a4b96bc4059e654a0bbf7d81cbef5ceec", null ]
+    [ "wrapToVanillaCommandWrapper", "interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#ac828baf9f1b937742ff4583a106faaff", null ]
 ];

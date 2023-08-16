@@ -1,6 +1,5 @@
 var namespacedev_1_1jorel_1_1commandapi_1_1executors =
 [
-    [ "CommandArguments", "classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html", "classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments" ],
     [ "CommandBlockCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor" ],
     [ "CommandBlockExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info" ],
     [ "CommandBlockResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor" ],
@@ -34,5 +33,6 @@ var namespacedev_1_1jorel_1_1commandapi_1_1executors =
     [ "ResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor" ],
     [ "ResultingExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor" ],
     [ "TypedExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_typed_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_typed_executor" ],
-    [ "BukkitExecutionInfo< Sender >", "namespacedev_1_1jorel_1_1commandapi_1_1executors.html#a1e2197588313f7bf7b956d8a69239f1e", null ]
+    [ "BukkitExecutionInfo< Sender >", "namespacedev_1_1jorel_1_1commandapi_1_1executors.html#a1e2197588313f7bf7b956d8a69239f1e", null ],
+    [ "CommandArguments", "namespacedev_1_1jorel_1_1commandapi_1_1executors.html#ab43bf79e95c1f58aa8357aa5bf687a08", null ]
 ];

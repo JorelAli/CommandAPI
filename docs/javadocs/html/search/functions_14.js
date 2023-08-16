@@ -25,5 +25,6 @@ var searchData=
   ['word_22',['word',['../classcom_1_1mojang_1_1brigadier_1_1arguments_1_1_string_argument_type.html#a5a0c815c677e9cdd1f4e840ccb1832c1',1,'com::mojang::brigadier::arguments::StringArgumentType']]],
   ['worldargument_23',['WorldArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_world_argument.html#a19fb1fc8aa090de5836a864a4c429bc4',1,'dev::jorel::commandapi::arguments::WorldArgument']]],
   ['wrapcommandsender_24',['wrapCommandSender',['../interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a1e7d67f21471285883d28642927e1831',1,'dev::jorel::commandapi::CommandAPIPlatform']]],
-  ['wrappercommandsyntaxexception_25',['WrapperCommandSyntaxException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2',1,'dev::jorel::commandapi::exceptions::WrapperCommandSyntaxException']]]
+  ['wrappercommandsyntaxexception_25',['WrapperCommandSyntaxException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2',1,'dev::jorel::commandapi::exceptions::WrapperCommandSyntaxException']]],
+  ['wraptovanillacommandwrapper_26',['wrapToVanillaCommandWrapper',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#ac828baf9f1b937742ff4583a106faaff',1,'dev::jorel::commandapi::nms::NMS']]]
 ];

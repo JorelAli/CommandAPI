@@ -3,6 +3,7 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument" ],
     [ "AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument" ],
     [ "AdventureChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument" ],
+    [ "AdventureChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_color_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_color_argument" ],
     [ "AdventureChatComponentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument" ],
     [ "AngleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_angle_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_angle_argument" ],
     [ "Argument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument" ],

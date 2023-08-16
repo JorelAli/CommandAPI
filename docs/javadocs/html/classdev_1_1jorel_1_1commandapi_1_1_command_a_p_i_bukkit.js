@@ -38,9 +38,12 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit =
     [ "failWithAdventureComponent", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a7fdc8a325dc34e99c97dc5ac68c6feb4", null ],
     [ "failWithBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a0c07184d06a8e32ec0870ebb42a63d09", null ],
     [ "getBrigadierDispatcher", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#af28e96bdcc858ba0b0125f59ae1150e7", null ],
+    [ "getResourcesDispatcher", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a722caafd3328814e1092961a42cff32b", null ],
     [ "getSimpleCommandMap", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#af38561d456f27ae3b16efd0a17e7ba72", null ],
     [ "getSuggestionProvider", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#ad40f5c7efcbbde3768bbf3cf237e17bb", null ],
+    [ "isBukkitCommandWrapper", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a70b957771cfdd427c4534537cbdf48be", null ],
     [ "isVanillaCommandWrapper", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#ae273287c5957463fc074e17440a12335", null ],
     [ "reloadDataPacks", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a66536bf65fd8b2639771cfaa258464d9", null ],
-    [ "resendPackets", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a4b96bc4059e654a0bbf7d81cbef5ceec", null ]
+    [ "unregister", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a82a0f65013c334091b71ef086ced95af", null ],
+    [ "wrapToVanillaCommandWrapper", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#ac828baf9f1b937742ff4583a106faaff", null ]
 ];

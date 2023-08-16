@@ -113,6 +113,8 @@ div.contents ul {
 
 #projectlogo > img {
     padding-left: 20px;
+    height: 80px;
+    width: 80px;
 }
 
 /***********************************/
