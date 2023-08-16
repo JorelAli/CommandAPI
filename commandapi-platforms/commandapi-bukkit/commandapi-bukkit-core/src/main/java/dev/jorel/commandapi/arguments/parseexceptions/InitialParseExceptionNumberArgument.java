@@ -17,7 +17,7 @@ public interface InitialParseExceptionNumberArgument<N extends Number>
      *
      * @param type     The type of exception that happened.
      * @param rawInput The String that was being parsed.
-     * @param input    The integer that was input. Defaults to 0 if the exception type was
+     * @param input    The number that was input. Defaults to 0 if the exception type was
      *                 {@link Exceptions#EXPECTED_NUMBER} or {@link Exceptions#INVALID_NUMBER} since a number was not read.
      * @param minimum  The minimum value set for this Argument.
      * @param maximum  The maximum value set for this Argument.
@@ -46,27 +46,29 @@ public interface InitialParseExceptionNumberArgument<N extends Number>
             N maximum
     ) {
         /**
-         * Types of exceptions that might be thrown during the initial Brigadier parse of an int
+         * Types of exceptions that might be thrown during the initial Brigadier parse of a number
          */
         public enum Exceptions {
             /**
-             * Thrown when there are no characters left in the command to be read for this int.
+             * Thrown when the first character read for this Argument is not a digit ({@code 0 to 9}), decimal point
+             * ({@code '.'}), or negative sign ({@code '-'}), which are the only characters allowed in numbers. The
+             * {@link WrapperStringReader} will be placed just before that first character.
              */
             EXPECTED_NUMBER,
             /**
-             * Thrown when the String read from the command cannot be parsed into an int by
-             * {@link Integer#parseInt(String)}. The {@link WrapperStringReader} will be placed at the end of the
-             * invalid input.
+             * Thrown when the String read from the command cannot be parsed into a number by
+             * {@link InitialParseExceptionNumberArgument#parseNumber(String)}. The {@link WrapperStringReader} will be
+             * placed at the end of the invalid input String.
              */
             INVALID_NUMBER,
             /**
-             * Thrown when the given int is below the minimum value set for this argument. The
-             * {@link WrapperStringReader} will be placed at the end of the invalid int.
+             * Thrown when the given number is below the minimum value set for this argument. The
+             * {@link WrapperStringReader} will be placed at the end of the invalid number.
              */
             NUMBER_TOO_LOW,
             /**
-             * Thrown when the given int is above the maximum value set for this argument. The
-             * {@link WrapperStringReader} will be placed at the end of the invalid int.
+             * Thrown when the given number is above the maximum value set for this argument. The
+             * {@link WrapperStringReader} will be placed at the end of the invalid number.
              */
             NUMBER_TOO_HIGH
         }
