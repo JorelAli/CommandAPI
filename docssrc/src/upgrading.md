@@ -1,10 +1,10 @@
 # Upgrading guide
 
-## From 9.0.3 to 9.0.4
+## From 9.0.3 to 9.1.0
 
 ### MultiLiteralArgument changes
 
-All `MultiLiteralArgument` constructors have been deprecated in 9.0.4! Instead the new `MultiLiteralArgument` constructor should be used:
+All `MultiLiteralArgument` constructors have been deprecated in 9.1.0! Instead the new `MultiLiteralArgument` constructor should be used:
 
 <div class="multi-pre">
 
@@ -18,7 +18,7 @@ $$\downarrow$$
 
 <div class="multi-pre">
 
-```java,9.0.4
+```java,9.1.0
 withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
 ```
 
@@ -26,7 +26,9 @@ withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adv
 
 ### CommandArguments changes
 
-For 9.0.4 all deprecated methods are no longer deprecated. To learn about all the methods now available, refer to the [CommandArguments](./commandarguments.md) page.
+For 9.1.0 all deprecated methods are no longer deprecated. To learn about all the methods now available, refer to the [CommandArguments](./commandarguments.md) page.
+
+-----
 
 ## From 9.0.1 to 9.0.2
 
@@ -62,6 +64,8 @@ Now, the `LiteralArgument` class contains two possible constructors:
 public LiteralArgument(String literal) // Recommended if the literal is not listed
 public LiteralArgument(String nodeName, String literal)
 ```
+
+-----
 
 ## From 9.0.0 to 9.0.1
 

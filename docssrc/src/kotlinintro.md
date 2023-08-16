@@ -19,7 +19,7 @@ To install the DSL, you need to add the `commandapi-kotlin` dependency into your
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-kotlin</artifactId>
-        <version>9.0.4-SNAPSHOT</version>
+        <version>9.1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -29,7 +29,7 @@ To install the DSL, you need to add the `commandapi-kotlin` dependency into your
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-velocity-kotlin</artifactId>
-        <version>9.0.4-SNAPSHOT</version>
+        <version>9.1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -107,25 +107,25 @@ Next, you need to add the dependency:
 
 ```groovy,Bukkit_build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-kotlin:9.0.4-SNAPSHOT"
+    implementation "dev.jorel:commandapi-bukkit-kotlin:9.1.0"
 }
 ```
 
 ```kotlin,Bukkit_build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-kotlin:9.0.4-SNAPSHOT")
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.1.0")
 }
 ```
 
 ```groovy,Velocity_build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-velocity-kotlin:9.0.4-SNAPSHOT"
+    implementation "dev.jorel:commandapi-velocity-kotlin:9.1.0"
 }
 ```
 
 ```kotlin,Velocity_build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-velocity-kotlin:9.0.4-SNAPSHOT")
+    implementation("dev.jorel:commandapi-velocity-kotlin:9.1.0")
 }
 ```
 
