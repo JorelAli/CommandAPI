@@ -6,6 +6,7 @@ import dev.jorel.commandapi.network.packets.UpdateRequirementsPacket;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class UpdateRequirementsPacketTests extends NetworkTestBase {
 
@@ -29,7 +30,12 @@ class UpdateRequirementsPacketTests extends NetworkTestBase {
 
 	@Test
 	void sendReceiveTestWithUpdateRequirementsPacket() {
-		PlayerMock player = server.addPlayer(); // Protocol version currently 0
+		PlayerMock player = Mockito.spy(new PlayerMock(server, "player"));
+		// Interrupt normal calls to updateCommands, because MockPlayer throws an UnimplementedOperationException
+		Mockito.doNothing().when(player).updateCommands();
+		server.addPlayer(player);
+
+		// Protocol version currently 0
 
 		// Error when sending packet to target that has not declared they understand CommandAPI plugin messages
 		assertThrowsWithMessage(
@@ -47,5 +53,8 @@ class UpdateRequirementsPacketTests extends NetworkTestBase {
 			new UpdateRequirementsPacket(),
 			new byte[]{0}
 		);
+
+		// Update commands should have been called for this player
+		Mockito.verify(player, Mockito.times(1)).updateCommands();
 	}
 }
