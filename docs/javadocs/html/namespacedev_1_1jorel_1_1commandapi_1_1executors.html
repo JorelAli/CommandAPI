@@ -25,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.3</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.1.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -97,9 +97,6 @@ $(document).ready(function(){initNavTree('namespacedev_1_1jorel_1_1commandapi_1_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html">CommandArguments</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class stores the arguments for this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html">CommandBlockCommandExecutor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A normal command executor for a BlockCommandSender.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -188,7 +185,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1e2197588313f7bf7b956d8a69239f1e"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html#a1e2197588313f7bf7b956d8a69239f1e">BukkitExecutionInfo&lt; Sender &gt;</a> (Sender sender, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html">BukkitCommandSender</a>&lt;? extends Sender &gt; senderWrapper, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html">CommandArguments</a> args) implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; Sender</td></tr>
+<tr class="memitem:ab43bf79e95c1f58aa8357aa5bf687a08"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html#ab43bf79e95c1f58aa8357aa5bf687a08">CommandArguments</a> (Object[] args, Map&lt; String, Object &gt; argsMap, String[] rawArgs, Map&lt; String, String &gt; rawArgsMap, String fullInput)</td></tr>
+<tr class="memdesc:ab43bf79e95c1f58aa8357aa5bf687a08"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class stores the arguments for this command.  <a href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html#ab43bf79e95c1f58aa8357aa5bf687a08">More...</a><br /></td></tr>
+<tr class="separator:ab43bf79e95c1f58aa8357aa5bf687a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e2197588313f7bf7b956d8a69239f1e"><td class="memItemLeft" align="right" valign="top">record&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html#a1e2197588313f7bf7b956d8a69239f1e">BukkitExecutionInfo&lt; Sender &gt;</a> (Sender sender, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html">BukkitCommandSender</a>&lt;? extends Sender &gt; senderWrapper, <a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html#ab43bf79e95c1f58aa8357aa5bf687a08">CommandArguments</a> args) implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html">ExecutionInfo</a>&lt; Sender</td></tr>
 <tr class="memdesc:a1e2197588313f7bf7b956d8a69239f1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This record represents a BukkitExecutionInfo for a command.  <a href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html#a1e2197588313f7bf7b956d8a69239f1e">More...</a><br /></td></tr>
 <tr class="separator:a1e2197588313f7bf7b956d8a69239f1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -216,7 +216,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html">CommandArguments</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html#ab43bf79e95c1f58aa8357aa5bf687a08">CommandArguments</a>&#160;</td>
           <td class="paramname"><em>args</em>&#160;</td>
         </tr>
         <tr>
@@ -259,6 +259,319 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ab43bf79e95c1f58aa8357aa5bf687a08" name="ab43bf79e95c1f58aa8357aa5bf687a08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab43bf79e95c1f58aa8357aa5bf687a08">&#9670;&nbsp;</a></span>CommandArguments()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">record dev.jorel.commandapi.executors.CommandArguments </td>
+          <td>(</td>
+          <td class="paramtype">Object[]&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Map&lt; String, Object &gt;&#160;</td>
+          <td class="paramname"><em>argsMap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String[]&#160;</td>
+          <td class="paramname"><em>rawArgs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Map&lt; String, String &gt;&#160;</td>
+          <td class="paramname"><em>rawArgsMap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>fullInput</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This class stores the arguments for this command. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td>The arguments for this command </td></tr>
+    <tr><td class="paramname">argsMap</td><td>The arguments for this command mapped to their node names. This is an ordered map </td></tr>
+    <tr><td class="paramname">rawArgs</td><td>The raw arguments for this command. </td></tr>
+    <tr><td class="paramname">rawArgsMap</td><td>The raw arguments for this command mapped to their node names. This is an ordered map </td></tr>
+    <tr><td class="paramname">fullInput</td><td>The command string a player has entered (including the /) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An unmodifiable clone of the mapping of node names to argument values</dd>
+<dd>
+An unmodifiable clone of the mapping of node names to raw arguments</dd></dl>
+<p>This returns the raw command string a player has entered</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>This method has been deprecated in favour of <code><a class="el" href="">CommandArguments#fullInput()</a></code> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The raw command string a player has entered</dd>
+<dd>
+The number of arguments for this command</dd></dl>
+<p>Returns an argument by its position</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or <code class="JavaDocCode">null</code> if the provided index does not point to an argument.</dd></dl>
+<p>Returns an argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which has the given node name. Can be <code class="JavaDocCode">null</code> if <code>nodeName</code> was not found.</dd></dl>
+<p>Returns an argument by its index</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument is not existent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or the provided default value</dd></dl>
+<p>Returns an argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument was not found. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument with the specified node name or the provided default value</dd></dl>
+<p>Returns an argument by its index</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument is not existent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or the provided default value</dd></dl>
+<p>Returns an argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument was not found. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument with the specified node name or the provided default value</dd></dl>
+<p>Returns an <code>Optional</code> holding the argument by its index</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the argument which is placed at the given index, or an empty optional if index is invalid</dd></dl>
+<p>Returns an argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the argument with the specified node name or an empty optional if the node name was not found</dd></dl>
+<p>Returns a raw argument by its position </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or <code class="JavaDocCode">null</code> if the provided index does not point to an argument.</dd></dl>
+<p>Returns a raw argument by its node name </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A raw argument which has the given node name. Can be <code class="JavaDocCode">null</code> if <code>nodeName</code> was not found.</dd></dl>
+<p>Returns a raw argument by its index </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The String returned if the raw argument is not existent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A raw argument which is placed at the given index, or the provided default value</dd></dl>
+<p>Returns a raw argument by its node name </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The String returned if the raw argument was not found. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A raw argument with the specified node name or the provided default value</dd></dl>
+<p>Returns a raw argument by its index </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The String returned if the raw argument is not existent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A raw argument which is placed at the given index, or the provided default value</dd></dl>
+<p>Returns a raw argument by its node name </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this raw argument. This was set when initializing an argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The String returned if the raw argument was not found. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A raw argument with the specified node name or the provided default value</dd></dl>
+<p>Returns an <code><a class="el" href="">Optional</a></code> holding the raw argument by its index </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the raw argument which is placed at the given index, or an empty optional if index is invalid</dd></dl>
+<p>Returns an <code><a class="el" href="">Optional</a></code> holding the raw argument by its node name </p>
+<p >A raw argument is the <code><a class="el" href="">String</a></code> form of an argument as written in a command. For example take this command: </p>
+<p ><code class="JavaDocCode">/mycommand @e 15.3</code> </p>
+<p >When using this method to access these arguments, <code class="JavaDocCode">@e</code> and <code class="JavaDocCode">15.3</code> will be available as <code><a class="el" href="">String</a></code>s and not as a <code><a class="el" href="">Collection</a></code> and <code><a class="el" href="">Double</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the argument with the specified node name or an empty optional if the node name was not found</dd></dl>
+<p>Unchecked methods. These are the same as the methods above, but use unchecked generics to conform to the type they are declared as. In Java, the normal methods (checked) require casting:</p>
+<p >CommandArguments args = ...; String myString = (String) args.get("target");</p>
+<p >However, these unchecked methods don't require casting:</p>
+<p >CommandArguments args = ...; String myString = args.getUnchecked("target");</p>
+<p >Returns an argument by its position</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or <code class="JavaDocCode">null</code> if the provided index does not point to an argument.</dd></dl>
+<p>Returns an argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which has the given node name. Can be null if <code>nodeName</code> was not found.</dd></dl>
+<p>Returns an argument by its index</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument is not existent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or the provided default value</dd></dl>
+<p>Returns an argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument was not found. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument with the specified node name or the provided default value</dd></dl>
+<p>Returns an argument by its index</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument is not existent </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An argument which is placed at the given index, or the provided default value</dd></dl>
+<p>Returns an argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The Object returned if the argument was not found. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument with the specified node name or the provided default value</dd></dl>
+<p>Returns an <code>Optional</code> holding the argument at its index</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The position of this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the argument at its index, or an empty optional if the index was invalid</dd></dl>
+<p>Returns an <code>Optional</code> holding the argument by its node name</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of this argument. This was set when initializing an argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional holding the argument with the specified node name, or an empty optional if the index was invalid</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td></td></tr>
+    <tr><td class="paramname">The</td><td>arguments for this command </td></tr>
+    <tr><td class="paramname">argsMap</td><td></td></tr>
+    <tr><td class="paramname">The</td><td>arguments for this command mapped to their node names. This is an ordered map </td></tr>
+    <tr><td class="paramname">rawArgs</td><td></td></tr>
+    <tr><td class="paramname">The</td><td>raw arguments for this command </td></tr>
+    <tr><td class="paramname">rawArgsMap</td><td></td></tr>
+    <tr><td class="paramname">The</td><td>raw arguments for this command mapped to their node names. This is an ordered map </td></tr>
+    <tr><td class="paramname">fullInput</td><td></td></tr>
+    <tr><td class="paramname">The</td><td>command string a player has entered (including the /) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
@@ -266,7 +579,7 @@ Functions</h2></td></tr>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html">executors</a></li>
 				<li class="footer">
-					Generated on Tue Jun 13 2023 20:20:34 for CommandAPI 9.0.3 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Wed Aug 16 2023 17:03:15 for CommandAPI 9.1.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

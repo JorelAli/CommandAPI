@@ -272,10 +272,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	@Override
 	public void register() {
-		if (!CommandAPI.canRegister()) {
-			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
-		}
-
 		@SuppressWarnings("unchecked")
 		Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 

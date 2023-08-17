@@ -26,15 +26,25 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_16_R3.help.SimpleHelpMap;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.server.v1_16_R3.ArgumentChat;
+import net.minecraft.server.v1_16_R3.ArgumentChatComponent;
+import net.minecraft.server.v1_16_R3.ArgumentChatFormat;
 import net.minecraft.server.v1_16_R3.ArgumentPredicateItemStack;
+import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 import net.minecraft.server.v1_16_R3.CustomFunctionManager;
 import net.minecraft.server.v1_16_R3.DataPackResources;
 import net.minecraft.server.v1_16_R3.EntitySelector;
 import net.minecraft.server.v1_16_R3.IBlockData;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_16_R3.IReloadableResourceManager;
 import net.minecraft.server.v1_16_R3.ItemStack;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
@@ -67,5 +77,21 @@ public class NMS_1_16_R3 extends NMS_1_16_4_R3 {
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.16.5" };
+	}
+
+	@Override
+	public final Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
+	}
+
+	@Override
+	public final NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		final Integer color = ArgumentChatFormat.a(cmdCtx, key).e();
+		return color == null ? NamedTextColor.WHITE : NamedTextColor.ofExact(color);
+	}
+
+	@Override
+	public final Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 }

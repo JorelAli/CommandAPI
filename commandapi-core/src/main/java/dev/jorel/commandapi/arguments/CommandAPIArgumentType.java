@@ -38,6 +38,11 @@ public enum CommandAPIArgumentType {
 	ADVENTURE_CHAT,
 
 	/**
+	 * The ChatColorArgument (with Paper Adventure backend)
+	 */
+	ADVENTURE_CHATCOLOR,
+
+	/**
 	 * The ChatComponentArgument (with Paper Adventure backend)
 	 */
 	ADVENTURE_CHAT_COMPONENT,

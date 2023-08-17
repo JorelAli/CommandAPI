@@ -21,7 +21,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.0.3</version>
+		<version>9.1.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -52,20 +52,21 @@
 		</dependency>
 
 		<!-- Libraries -->
+		
 		<dependency>
-			<groupId>io.papermc.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>${paper.version}</version>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-platform-bukkit</artifactId>
+			<version>4.3.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--
+		
+		<!-- Paper -->
 		<dependency>
 			<groupId>com.destroystokyo.paper</groupId>
 			<artifactId>paper-api</artifactId>
 			<version>1.16.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		-->
 
 		<!-- CommandAPI core -->
 		<dependency>

@@ -178,7 +178,7 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 
 		// /test {val:20000000000l}
 		server.dispatchCommand(player, "test {val:20000000000l}");
-		assertEquals(Long.valueOf(20000000000l), results.get().get("val"));
+		assertEquals(Long.valueOf(20000000000L), results.get().get("val"));
 
 		// /test {val:2.3f}
 		server.dispatchCommand(player, "test {val:2.3f}");
@@ -236,7 +236,7 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 
 		// /test {val:[3000000000l,4000000000l,5000000000l]}
 		server.dispatchCommand(player, "test {val:[3000000000l,4000000000l,5000000000l]}");
-		assertEquals(List.of(3000000000l, 4000000000l, 5000000000l), results.get().get("val"));
+		assertEquals(List.of(3000000000L, 4000000000L, 5000000000L), results.get().get("val"));
 
 		assertNoMoreResults(results);
 	}

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +21,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,10 +45,10 @@ import org.bukkit.craftbukkit.v1_16_R2.CraftParticle;
 import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R2.CraftSound;
 import org.bukkit.craftbukkit.v1_16_R2.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_16_R2.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R2.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R2.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R2.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_16_R2.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
@@ -94,6 +97,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -172,33 +176,41 @@ import net.minecraft.server.v1_16_R2.Vec3D;
  * NMS implementation for Minecraft 1.16.2 and 1.16.3
  */
 @NMSMeta(compatibleWith = { "1.16.2", "1.16.3" })
-@RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
-@RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
-@RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
-@RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
+@RequireField(in = EntitySelector.class, name = "checkPermissions", ofType = boolean.class)
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
+@RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
+@RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
+@RequireField(in = DataPackResources.class, name = "b", ofType = IReloadableResourceManager.class)
 public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 
-	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
+	private static final Field entitySelectorCheckPermissions;
 	private static final SafeVarHandle<ParticleParamBlock, IBlockData> particleParamBlockData;
 	private static final SafeVarHandle<ParticleParamItem, ItemStack> particleParamItemStack;
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
 	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
+	private static final SafeVarHandle<CraftSound, String> craftSoundMinecraftKey;
+	private static final Field customFunctionManagerBrigadierDispatcher;
+	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", "b", IReloadableResourceManager.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		entitySelectorCheckPermissions = CommandAPIHandler.getField(EntitySelector.class, "checkPermissions", "checkPermissions");
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
 		particleParamBlockData = SafeVarHandle.ofOrNull(ParticleParamBlock.class, "c", "c", IBlockData.class);
 		particleParamItemStack = SafeVarHandle.ofOrNull(ParticleParamItem.class, "c", "c", ItemStack.class);
 		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", "f", float.class);
 		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
+		craftSoundMinecraftKey = SafeVarHandle.ofOrNull(CraftSound.class, "minecraftKey", "minecraftKey", String.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		customFunctionManagerBrigadierDispatcher = CommandAPIHandler.getField(CustomFunctionManager.class, "h", "h");
+		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", "b", IReloadableResourceManager.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -394,10 +406,8 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
-		// because we're updating an existing help topic, not adding a new help topic
-		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
+	public Map<String, HelpTopic> getHelpMap() {
+		return helpMapTopics.get((SimpleHelpMap) Bukkit.getHelpMap());
 	}
 
 	@Override
@@ -452,18 +462,32 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	public org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
+	/*
+	 * ADVENTURE START
+	 * These methods use the Adventure API, but the Adventure API isn't present
+	 * in paper until Minecraft 1.16.5. We assume that the developer is shading
+	 * Adventure manually (or otherwise), using https://docs.advntr.dev/platform/bukkit.html
+	 */
 
 	@Override
 	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		String jsonString = ChatSerializer.a(ArgumentChat.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
+	}
+
+	@Override
+	public NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		final Integer color = ArgumentChatFormat.a(cmdCtx, key).e();
+		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
 	}
 
 	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		String jsonString = ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key));
-		return GsonComponentSerializer.gson().deserialize(jsonString);
+		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
+
+	/*
+	 * ADVENTURE END
+	 */
 
 	@Differs(from = "1.16.1", by = "Implements AngleArgument")
 	@Override
@@ -512,6 +536,11 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
+	public CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher() {
+		return this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a();
+	}
+
+	@Override
 	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
 	}
@@ -554,9 +583,9 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	public Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "checkPermissions", "checkPermissions").set(argument, false);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			entitySelectorCheckPermissions.set(argument, false);
+		} catch (IllegalAccessException e) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
 
 		return switch (subType) {
@@ -858,14 +887,8 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		return switch(subType) {
 			case SOUND_SOUND -> {
 				for (CraftSound sound : CraftSound.values()) {
-					try {
-						if (CommandAPIHandler.getField(CraftSound.class, "minecraftKey", "minecraftKey").get(sound)
-								.equals(soundResource.getKey())) {
-							yield Sound.valueOf(sound.name());
-						}
-					} catch (IllegalArgumentException | IllegalAccessException e1) {
-						e1.printStackTrace();
-						yield null;
+					if(craftSoundMinecraftKey.get(sound).equals(soundResource.getKey())) {
+						yield Sound.valueOf(sound.name());
 					}
 				}
 				yield null;
@@ -939,6 +962,16 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 	}
 
 	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandListenerWrapper> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
+	}
+
+	@Override
 	public void reloadDataPacks() {
 		CommandAPI.getLogger().info("Reloading datapacks...");
 
@@ -949,12 +982,11 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		DataPackResources datapackResources = this.<MinecraftServer>getMinecraftServer().dataPackResources;
 		datapackResources.commandDispatcher = this.<MinecraftServer>getMinecraftServer().getCommandDispatcher();
 
-		// Update the CustomFunctionManager for the datapackResources which now has the
-		// new commandDispatcher
+		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
 		try {
-			CommandAPIHandler.getField(CustomFunctionManager.class, "h", "h").set(datapackResources.a(), getBrigadierDispatcher());
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			customFunctionManagerBrigadierDispatcher.set(datapackResources.a(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
 
 		// Construct the new CompletableFuture that now uses our updated
@@ -987,11 +1019,6 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
 							+ stringWriter.toString());
 		}
-	}
-
-	@Override
-	public void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(((CraftPlayer) player).getHandle());
 	}
 
 	@Override

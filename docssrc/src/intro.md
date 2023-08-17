@@ -37,6 +37,13 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 9.0.3 \\(\rightarrow\\) 9.1.0
+
+- Updates [Multi literal arguments](./argument_multiliteral.md) page to mention new `MultiLiteralArgument` constructor
+- Adds [CommandArguments](./commandarguments.md) page to explain the `CommandArguments` class introduced in 9.0.0
+- Adds [Adventure chat color argument](./argument_chat_adventure.md) to the adventure chat arguments page.
+- Adds new [Command unregistration](./commandunregistration.md) page.
+
 ### Documentation changes 9.0.2 \\(\rightarrow\\) 9.0.3
 
 - Updates [Map arguments](./argument_map.md) page with new syntax

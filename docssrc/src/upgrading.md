@@ -1,10 +1,40 @@
 # Upgrading guide
 
+## From 9.0.3 to 9.1.0
+
+### MultiLiteralArgument changes
+
+All `MultiLiteralArgument` constructors have been deprecated in 9.1.0! Instead the new `MultiLiteralArgument` constructor should be used:
+
+<div class="multi-pre">
+
+```java,9.0.3
+withArguments(new MultiLiteralArgument("gamemodes", List.of("survival", "creative", "adventure", "spectator")))
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.1.0
+withArguments(new MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
+```
+
+</div>
+
+### CommandArguments changes
+
+For 9.1.0 all deprecated methods are no longer deprecated. To learn about all the methods now available, refer to the [CommandArguments](./commandarguments.md) page.
+
+-----
+
 ## From 9.0.1 to 9.0.2
 
 ### MultiLiteralArgument and LiteralArgument changes
 
-In previous versions, the ability has been introduced to access arguments by their node names. However, while this was possible for every other argument, it wasn't possible for `MultiLiteralArgument`s. This was now changed because the values from the `MultiLiteralArgument` are included in the `CommandArguments` of a command.
+In previous versions, the ability has been introduced to access arguments by their node names. However, while this was possible for every other argument, it wasn't possible for `MultiLiteralArgument`s. This was now changed because the values from the `MultiLiteralArgument` are included in the [`CommandArguments`](./commandarguments.md) of a command.
 
 Therefore, the current constructor has been deprecated and the new one should be used:
 
@@ -26,7 +56,7 @@ withArguments(new MultiLiteralArgument("gamemodes", List.of("survival", "creativ
 
 </div>
 
-Because it is possible to list `LiteralArgument`s in the `CommandArguments` of a command, there was also an additional constructor add to the `LiteralArgument` class. The other one is not deprecated.
+Because it is possible to list `LiteralArgument`s in the [`CommandArguments`](./commandarguments.md) of a command, there was also an additional constructor add to the `LiteralArgument` class. The other one is not deprecated.
 
 Now, the `LiteralArgument` class contains two possible constructors:
 
@@ -34,6 +64,8 @@ Now, the `LiteralArgument` class contains two possible constructors:
 public LiteralArgument(String literal) // Recommended if the literal is not listed
 public LiteralArgument(String nodeName, String literal)
 ```
+
+-----
 
 ## From 9.0.0 to 9.0.1
 

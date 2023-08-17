@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -26,10 +25,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
@@ -38,6 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,15 +54,19 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private PaperImplementations paper;
 
 	// Static VarHandles
-	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeChildren;
-	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeLiterals;
-	private static final SafeVarHandle<CommandNode<?>, Map<String, CommandNode<?>>> commandNodeArguments;
+	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
+	//  parameter Source. We still need to cast to that signature for map, so Map is raw.
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeChildren;
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeLiterals;
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeArguments;
+	private static final SafeVarHandle<SimpleCommandMap, Map<String, Command>> commandMapKnownCommands;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		commandNodeChildren = SafeVarHandle.ofOrNull(CommandNode.class, "children", "children", Map.class);
 		commandNodeLiterals = SafeVarHandle.ofOrNull(CommandNode.class, "literals", "literals", Map.class);
 		commandNodeArguments = SafeVarHandle.ofOrNull(CommandNode.class, "arguments", "arguments", Map.class);
+		commandMapKnownCommands = SafeVarHandle.ofOrNull(SimpleCommandMap.class, "knownCommands", "knownCommands", Map.class);
 	}
 
 	protected CommandAPIBukkit() {
@@ -141,7 +141,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		boolean isPaperPresent = false;
-		
+
 		try {
 			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
 			isPaperPresent = true;
@@ -152,18 +152,18 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				CommandAPI.logWarning("Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
 			}
 		}
-		
+
 		boolean isFoliaPresent = false;
-		
+
 		try {
-			Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler");
+			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
 			isFoliaPresent = true;
 			CommandAPI.logNormal("Hooked into Folia for folia-specific API implementations");
 			CommandAPI.logNormal("Folia support is still in development. Please report any issues to the CommandAPI developers!");
 		} catch (ClassNotFoundException e) {
 			isFoliaPresent = false;
 		}
-		
+
 		paper = new PaperImplementations(isPaperPresent, isFoliaPresent, this);
 	}
 
@@ -182,19 +182,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			} else {
 				reloadDataPacks();
 			}
-			updateHelpForCommands();
+			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
-
-		// (Re)send command graph packet to players when they join
-		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-
-			// For some reason, any other priority doesn't work
-			@EventHandler(priority = EventPriority.MONITOR)
-			public void onPlayerJoin(PlayerJoinEvent e) {
-				resendPackets(e.getPlayer());
-			}
-
-		}, plugin);
 
 		paper.registerReloadHandler(plugin);
 	}
@@ -258,9 +247,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
 		// Generate usages
-		List<String> usages = getUsageList(command);
+		String[] usages = getUsageList(command);
 
-		if (usages.isEmpty()) {
+		if (usages.length == 0) {
 			// Might happen if the developer calls `.withUsage()` with no parameters
 			// They didn't give any usage, so we won't put any there
 			return;
@@ -268,8 +257,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
 		// If 1 usage, put it on the same line, otherwise format like a list
-		if (usages.size() == 1) {
-			sb.append(usages.get(0));
+		if (usages.length == 1) {
+			sb.append(usages[0]);
 		} else {
 			for (String usage : usages) {
 				sb.append("\n- ").append(usage);
@@ -277,9 +266,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private List<String> getUsageList(RegisteredCommand currentCommand) {
+	private String[] getUsageList(RegisteredCommand currentCommand) {
 		List<RegisteredCommand> commandsWithIdenticalNames = new ArrayList<>();
-		List<String> usages;
 
 		// Collect every command with the same name
 		for (RegisteredCommand registeredCommand : CommandAPIHandler.getInstance().registeredCommands) {
@@ -289,27 +277,31 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		// Generate command usage or fill it with a user provided one
-		if (currentCommand.usageDescription().isPresent()) {
-			usages = new ArrayList<>(List.of(currentCommand.usageDescription().get()));
+		final String[] usages;
+		final Optional<String[]> usageDescription = currentCommand.usageDescription();
+		if (usageDescription.isPresent()) {
+			usages = usageDescription.get();
 		} else {
 			// TODO: Figure out if default usage generation should be updated
-			usages = new ArrayList<>();
-			for (RegisteredCommand command : commandsWithIdenticalNames) {
+			final int numCommandsWithIdenticalNames = commandsWithIdenticalNames.size();
+			usages = new String[numCommandsWithIdenticalNames];
+			for (int i = 0; i < numCommandsWithIdenticalNames; i++) {
+				final RegisteredCommand command = commandsWithIdenticalNames.get(i);
 				StringBuilder usageString = new StringBuilder();
 				usageString.append("/").append(command.commandName()).append(" ");
 				for (String arg : command.argsAsStr()) {
 					usageString.append("<").append(arg.split(":")[0]).append("> ");
 				}
-				usages.add(usageString.toString().trim());
+				usages[i] = usageString.toString().trim();
 			}
 		}
 		return usages;
 	}
 
-	void updateHelpForCommands() {
+	void updateHelpForCommands(List<RegisteredCommand> commands) {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 
-		for (RegisteredCommand command : CommandAPIHandler.getInstance().registeredCommands) {
+		for (RegisteredCommand command : commands) {
 			// Generate short description
 			final String shortDescription;
 			final Optional<String> shortDescriptionOptional = command.shortDescription();
@@ -363,7 +355,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 		}
 
-		addToHelpMap(helpTopicsToAdd);
+		// We have to use helpTopics.put (instead of .addTopic) because we're overwriting an existing help topic, not adding a new help topic
+		getHelpMap().putAll(helpTopicsToAdd);
 	}
 
 	@Override
@@ -433,8 +426,68 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-		// Nothing to do
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+		if(!CommandAPI.canRegister()) {
+			// Usually, when registering commands during server startup, we can just put our commands into the
+			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
+			// it and the CommandAPI do some extra stuff to make everything work, and we move on.
+			// So, if we want to register commands while the server is running, we need to do all that extra stuff, and
+			// that is what this code does.
+			// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
+			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
+
+			CommandMap map = paper.getCommandMap();
+			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
+			RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
+
+			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
+			// in `CraftServer#setVanillaCommands`
+			Command command = wrapToVanillaCommandWrapper(resultantNode);
+			map.register("minecraft", command);
+
+			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
+			command.setPermission(permNode);
+
+			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
+			root.addChild(resultantNode);
+			root.addChild(namespaceNode(resultantNode));
+
+			// Do the same for the aliases
+			for(LiteralCommandNode<Source> node: aliasNodes) {
+				command = wrapToVanillaCommandWrapper(node);
+				map.register("minecraft", command);
+
+				command.setPermission(permNode);
+
+				root.addChild(node);
+				root.addChild(namespaceNode(node));
+			}
+
+			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
+			updateHelpForCommands(List.of(registeredCommand));
+
+			// Sending command dispatcher packets usually happens when Players join the server
+			for(Player p: Bukkit.getOnlinePlayers()) {
+				p.updateCommands();
+			}
+		}
+	}
+
+	private LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original) {
+		// Adapted from a section of `CraftServer#syncCommands`
+		LiteralCommandNode<Source> clone = new LiteralCommandNode<>(
+			"minecraft:" + original.getLiteral(),
+			original.getCommand(),
+			original.getRequirement(),
+			original.getRedirect(),
+			original.getRedirectModifier(),
+			original.isFork()
+		);
+
+		for (CommandNode<Source> child : original.getChildren()) {
+			clone.addChild(child);
+		}
+		return clone;
 	}
 
 	@Override
@@ -443,27 +496,113 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void unregister(String commandName, boolean force) {
-		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			CommandAPI.logInfo("Unregistering command /" + commandName);
+	public void unregister(String commandName, boolean unregisterNamespaces) {
+		unregisterInternal(commandName, unregisterNamespaces, false);
+	}
+
+	/**
+	 * Unregisters a command from the CommandGraph, so it can't be run anymore. This Bukkit-specific unregister has an
+	 * additional parameter, {@code unregisterBukkit}, compared to {@link CommandAPI#unregister(String, boolean)}.
+	 *
+	 * @param commandName          the name of the command to unregister
+	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
+	 *                                command that start with a namespace. E.g. `minecraft:command`, `bukkit:command`,
+	 *                                or `plugin:command`. If true, these namespaced versions of a command are also
+	 *                                unregistered.
+	 * @param unregisterBukkit     whether the unregistration system should unregister Vanilla or Bukkit commands. If true,
+	 *                             only Bukkit commands are unregistered, otherwise only Vanilla commands are unregistered.
+	 *                             For the purposes of this parameter, commands registered using the CommandAPI are Vanilla
+	 *                             commands, and commands registered by other plugin using Bukkit API are Bukkit commands.
+	 */
+	public static void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
+		CommandAPIBukkit.get().unregisterInternal(commandName, unregisterNamespaces, unregisterBukkit);
+	}
+
+	private void unregisterInternal(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
+		CommandAPI.logInfo("Unregistering command /" + commandName);
+
+		if(!unregisterBukkit) {
+			// Remove nodes from the Vanilla dispatcher
+			// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
+			//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
+			removeBrigadierCommands(getBrigadierDispatcher(), commandName, unregisterNamespaces, c -> true);
+
+			// Update the dispatcher file
+			CommandAPIHandler.getInstance().writeDispatcherToFile();
 		}
 
-		// Get the child nodes from the loaded dispatcher class
-		Map<String, CommandNode<?>> children = commandNodeChildren.get(getBrigadierDispatcher().getRoot());
+		if(unregisterBukkit || !CommandAPI.canRegister()) {
+			// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
+			//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
+			//  moved the Vanilla command into the CommandMap
+			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 
-		if (force) {
-			// Remove them by force
-			for (String key : new HashSet<>(children.keySet())) {
-				if (key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName)) {
-					children.remove(key);
-				}
+			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
+			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
+			boolean isMainVanilla = isVanillaCommandWrapper(knownCommands.get(commandName));
+			if(unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
+
+			if(unregisterNamespaces) {
+				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper(c));
 			}
 		}
 
-		// Otherwise, just remove them normally
-		children.remove(commandName);
-		commandNodeLiterals.get(getBrigadierDispatcher().getRoot()).remove(commandName);
-		commandNodeArguments.get(getBrigadierDispatcher().getRoot()).remove(commandName);
+		if(!CommandAPI.canRegister()) {
+			// If the server is enabled, we have extra cleanup to do
+
+			// Remove commands from the resources dispatcher
+			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
+			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
+			removeBrigadierCommands(getResourcesDispatcher(), commandName, unregisterNamespaces,
+				c -> !unregisterBukkit ^ isBukkitCommandWrapper(c));
+
+			// Help topics (from Bukkit and CommandAPI) are only setup after plugins enable, so we only need to worry
+			//  about removing them once the server is loaded.
+			getHelpMap().remove("/" + commandName);
+
+			// Notify players
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				p.updateCommands();
+			}
+		}
+	}
+
+	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,
+										 boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
+		RootCommandNode<?> root = dispatcher.getRoot();
+		Map<String, CommandNode<Source>> children = (Map<String, CommandNode<Source>>) commandNodeChildren.get(root);
+		Map<String, CommandNode<Source>> literals = (Map<String, CommandNode<Source>>) commandNodeLiterals.get(root);
+		Map<String, CommandNode<Source>> arguments = (Map<String, CommandNode<Source>>) commandNodeArguments.get(root);
+
+		removeCommandFromMapIfCheckPasses(children, commandName, extraCheck);
+		removeCommandFromMapIfCheckPasses(literals, commandName, extraCheck);
+		// Commands should really only be represented as literals, but it is technically possible
+		// to put an ArgumentCommandNode in the root, so we'll check
+		removeCommandFromMapIfCheckPasses(arguments, commandName, extraCheck);
+
+		if (unregisterNamespaces) {
+			removeCommandNamespace(children, commandName, extraCheck);
+			removeCommandNamespace(literals, commandName, extraCheck);
+			removeCommandNamespace(arguments, commandName, extraCheck);
+		}
+	}
+
+	private static <T> void removeCommandNamespace(Map<String, T> map, String commandName, Predicate<T> extraCheck) {
+		for (String key : new HashSet<>(map.keySet())) {
+			if (!isThisTheCommandButNamespaced(commandName, key)) continue;
+
+			removeCommandFromMapIfCheckPasses(map, key, extraCheck);
+		}
+	}
+
+	private static <T> void removeCommandFromMapIfCheckPasses(Map<String, T> map, String key, Predicate<T> extraCheck) {
+		T element = map.get(key);
+		if (element == null) return;
+		if (extraCheck.test(map.get(key))) map.remove(key);
+	}
+
+	private static boolean isThisTheCommandButNamespaced(String commandName, String key) {
+		return key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName);
 	}
 
 	@Override
@@ -501,12 +640,12 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public void updateRequirements(AbstractPlayer<?> player) {
-		resendPackets((Player) player.getSource());
+		((Player) player.getSource()).updateCommands();
 	}
 
 	@Override
 	public Argument<String> newConcreteMultiLiteralArgument(String nodeName, String[] literals) {
-		return new MultiLiteralArgument(nodeName, List.of(literals));
+		return new MultiLiteralArgument(nodeName, literals);
 	}
 
 	@Override

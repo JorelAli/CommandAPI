@@ -48,11 +48,14 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.core.Holder;
@@ -68,10 +71,10 @@ import net.minecraft.resources.ResourceKey;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
-	CommandAPIBukkit<?> baseNMS;
+	CommandAPIBukkit<CommandSourceStack> baseNMS;
 
 	protected ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
-		this.baseNMS = baseNMS;
+		this.baseNMS = (CommandAPIBukkit<CommandSourceStack>) baseNMS;
 	}
 
 	@Override
@@ -86,12 +89,20 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockPredicate() {
-		return baseNMS._ArgumentBlockPredicate();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.BLOCK.asLookup()); // Registry.BLOCK
+		return BlockPredicateArgument.blockPredicate(buildContextMock);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockState() {
-		return baseNMS._ArgumentBlockState();
+		CommandBuildContext buildContextMock = Mockito.mock(CommandBuildContext.class);
+		Mockito
+			.when(buildContextMock.holderLookup(any(ResourceKey.class)))
+			.thenReturn(BuiltInRegistries.BLOCK.asLookup()); // Registry.BLOCK
+		return BlockStateArgument.block(buildContextMock);
 	}
 
 	@Override
@@ -325,6 +336,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	public Component getAdventureChat(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
 		return baseNMS.getAdventureChat(cmdCtx, key);
+	}
+
+	@Override
+	public NamedTextColor getAdventureChatColor(CommandContext cmdCtx, String key) {
+		return baseNMS.getAdventureChatColor(cmdCtx, key);
 	}
 
 	@Override

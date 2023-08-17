@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,6 +37,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -58,9 +61,9 @@ import org.bukkit.craftbukkit.v1_18_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_18_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_18_R1.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_18_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R1.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_18_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
@@ -99,12 +102,14 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -150,7 +155,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.gameevent.BlockPositionSource;
-import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -159,21 +163,26 @@ import net.minecraft.world.phys.Vec3;
  * NMS implementation for Minecraft 1.18 and 1.18.1
  */
 @NMSMeta(compatibleWith = { "1.18", "1.18.1" })
-@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-@RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
-@RequireField(in = EntityPositionSource.class, name = "sourceEntity", ofType = Optional.class)
+@RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
+@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 public class NMS_1_18_R1 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
+	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
+	private static final Field serverFunctionLibraryDispatcher;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector");
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -237,10 +246,8 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 	
 	@Override
-	public void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
-		// We have to use VarHandles to use helpTopics.put (instead of .addTopic)
-		// because we're updating an existing help topic, not adding a new help topic
-		helpMapTopics.get((SimpleHelpMap) Bukkit.getServer().getHelpMap()).putAll(helpTopicsToAdd);
+	public Map<String, HelpTopic> getHelpMap() {
+		return helpMapTopics.get((SimpleHelpMap) Bukkit.getHelpMap());
 	}
 
 	@Override
@@ -283,6 +290,12 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
+	public NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		final Integer color = ColorArgument.getColor(cmdCtx, key).getColor();
+		return color == null ? NamedTextColor.WHITE : NamedTextColor.ofExact(color);
+	}
+
+	@Override
 	public Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
@@ -316,8 +329,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+	@Differs(from = "1.17", by = "MinecraftServer#getCommands -> MinecraftServer#aA")
+	public CommandDispatcher<CommandSourceStack> getResourcesDispatcher() {
+		return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
 	}
 
 	@Override
@@ -345,9 +359,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector").set(argument, false);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			e1.printStackTrace();
+			entitySelectorUsesSelector.set(argument, false);
+		} catch (IllegalAccessException e) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
 
 		return switch (subType) {
@@ -645,6 +659,16 @@ public class NMS_1_18_R1 extends NMS_Common {
 	}
 
 	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return node.getCommand() instanceof BukkitCommandWrapper;
+	}
+
+	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
 
@@ -657,9 +681,9 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher").set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
+			serverFunctionLibraryDispatcher.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
 
 		// Construct the new CompletableFuture that now uses our updated serverResources
@@ -692,11 +716,6 @@ public class NMS_1_18_R1 extends NMS_Common {
 					"Failed to load datapacks, can't proceed with normal server load procedure. Try fixing your datapacks?\n"
 							+ stringWriter.toString());
 		}
-	}
-
-	@Override
-	public void resendPackets(Player player) {
-		this.<MinecraftServer>getMinecraftServer().getCommands().sendCommands(((CraftPlayer) player).getHandle());
 	}
 
 	@Override

@@ -98,10 +98,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Stuff to run after a command has been generated.
 	 *
-	 * @param resultantNode the node that was registered
-	 * @param aliasNodes    any alias nodes that were also registered as a part of this registration process
+	 * @param registeredCommand A {@link RegisteredCommand} instance that holds the CommandAPI information for the command
+	 * @param resultantNode     The node that was registered
+	 * @param aliasNodes        Any alias nodes that were also registered as a part of this registration process
 	 */
-	public abstract void postCommandRegistration(LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
 	 * Registers a Brigadier command node and returns the built node.
@@ -113,11 +114,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Unregisters a command from the CommandGraph so it can't be run anymore.
 	 *
 	 * @param commandName the name of the command to unregister
-	 * @param force       whether the unregistration system should attempt to remove
-	 *                    all instances of the command, regardless of whether they
-	 *                    have been registered by Minecraft, Bukkit or Spigot etc.
+	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
+	 *                                command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
+	 *                                or `plugin:command`
 	 */
-	public abstract void unregister(String commandName, boolean force);
+	public abstract void unregister(String commandName, boolean unregisterNamespaces);
 
 	/**
 	 * @return The Brigadier CommandDispatcher tree being used by the platform's server

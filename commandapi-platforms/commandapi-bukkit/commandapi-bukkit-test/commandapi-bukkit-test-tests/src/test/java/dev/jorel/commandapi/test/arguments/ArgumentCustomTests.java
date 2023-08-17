@@ -1,6 +1,8 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -9,6 +11,9 @@ import org.bukkit.World;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import com.mojang.brigadier.context.CommandContext;
 
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
@@ -18,9 +23,14 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
+import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 /**
  * Tests for the {@link CustomArgument}
@@ -129,6 +139,53 @@ class ArgumentCustomTests extends TestBase {
 		// /test
 		// We expect to see "world" because that's the default world
 		assertEquals(List.of("world", "world1", "world2", "world3"), server.getSuggestions(player, "test "));
+	}
+
+	/***********************
+	 * Instantiation tests *
+	 ***********************/
+	
+	@Test
+	void instantiationTestWithLiteralCustomArgument() {
+		// LiteralArgument
+		LiteralArgument literalArgument = new LiteralArgument("world");
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			new CustomArgument<>(literalArgument, info -> 1);
+		});
+		
+		// MultiLiteralArgument
+		MultiLiteralArgument multiLiteralArgument = new MultiLiteralArgument("node", List.of("hello", "world"));
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			new CustomArgument<>(multiLiteralArgument, info -> 1);
+		});
+	}
+	
+	@Test
+	void instantiationTestWithCustomArgumentException() {
+		final String result = "result";
+		@SuppressWarnings("unchecked")
+		final CommandContext<Object> context = Mockito.mock(CommandContext.class);
+		Mockito.when(context.getInput()).thenReturn("input");
+		
+		// String
+		assertDoesNotThrow(() -> CustomArgumentException.fromString("hello").toCommandSyntax(result, context));
+		
+		// BaseComponents
+		BaseComponent[] baseComponents = new ComponentBuilder("hello").create();
+		
+		assertDoesNotThrow(() -> CustomArgumentException.fromBaseComponents(baseComponents).toCommandSyntax(result, context));
+		
+		// Adventure Components
+		Component adventureComponent = Component.text("hello");
+		
+		assertDoesNotThrow(() -> CustomArgumentException.fromAdventureComponent(adventureComponent).toCommandSyntax(result, context));
+		
+		// Null values
+		assertThrows(IllegalStateException.class, () -> CustomArgumentException.fromString(null).toCommandSyntax(result, context));
+		assertThrows(IllegalStateException.class, () -> CustomArgumentException.fromBaseComponents(null).toCommandSyntax(result, context));
+		assertThrows(IllegalStateException.class, () -> CustomArgumentException.fromAdventureComponent(null).toCommandSyntax(result, context));
 	}
 
 }

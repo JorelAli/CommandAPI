@@ -18,6 +18,7 @@ import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
@@ -42,6 +43,7 @@ import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Objective
 import org.bukkit.scoreboard.Team
@@ -49,6 +51,7 @@ import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
+import java.util.function.Supplier
 import kotlin.collections.LinkedHashMap
 import kotlin.random.Random
 
@@ -60,8 +63,8 @@ CommandAPICommand("award")
     .withArguments(PlayerArgument("player"))
     .withArguments(AdvancementArgument("advancement"))
     .executes(CommandExecutor { _, args ->
-        val target = args[0] as Player
-        val advancement = args[1] as Advancement
+        val target = args["player"] as Player
+        val advancement = args["advancement"] as Advancement
 
         // Award all criteria for the advancement
         val progress = target.getAdvancementProgress(advancement)
@@ -101,7 +104,7 @@ CommandAPICommand("yaw")
     .withArguments(AngleArgument("amount"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val newLocation = player.location
-        newLocation.yaw = args[0] as Float
+        newLocation.yaw = args["amount"] as Float
         player.teleport(newLocation)
     })
     .register()
@@ -113,7 +116,7 @@ fun argument_biome() {
 CommandAPICommand("setbiome")
     .withArguments(BiomeArgument("biome"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val biome = args[0] as Biome
+        val biome = args["biome"] as Biome
 
         val chunk = player.location.chunk
         player.world.setBiome(chunk.x, player.location.blockY, chunk.z, biome)
@@ -137,9 +140,9 @@ CommandAPICommand("replace")
     .executesPlayer(PlayerCommandExecutor { player, args ->
 
         // Parse the arguments
-        val radius = args[0] as Int
-        val predicate = args[1] as Predicate<Block>
-        val blockData = args[2] as BlockData
+        val radius = args["radius"] as Int
+        val predicate = args["fromBlock"] as Predicate<Block>
+        val blockData = args["toBlock"] as BlockData
 
         // Find a (solid) sphere of blocks around the player with a given radius
         val center = player.location // for (i in 1 until 11) { }
@@ -168,7 +171,7 @@ fun argument_blockState() {
 CommandAPICommand("set")
     .withArguments(BlockStateArgument("block"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val blockdata = args[0] as BlockData
+        val blockdata = args["block"] as BlockData
         val targetBlock = player.getTargetBlockExact(256)
 
         // Set the block, along with its data
@@ -181,58 +184,66 @@ CommandAPICommand("set")
 
 fun argument_chatAdventure() {
 /* ANCHOR: argumentChatAdventure1 */
+CommandAPICommand("namecolor")
+    .withArguments(AdventureChatColorArgument("chatcolor"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val color = args["chatcolor"] as NamedTextColor
+        player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
+    })
+    .register()
+/* ANCHOR_END: argumentChatAdventure1 */
+
+/* ANCHOR: argumentChatAdventure2 */
 CommandAPICommand("showbook")
     .withArguments(PlayerArgument("target"))
     .withArguments(TextArgument("title"))
     .withArguments(StringArgument("author"))
     .withArguments(AdventureChatComponentArgument("contents"))
     .executes(CommandExecutor { _, args ->
-        val target = args[0] as Player
-        val title = args[1] as String
-        val author = args[2] as String
-        val content = args[3] as Component
+        val target = args["target"] as Player
+        val title = args["title"] as String
+        val author = args["author"] as String
+        val content = args["contents"] as Component
 
         // Create a book and show it to the user (Requires Paper)
         val mybook = Book.book(Component.text(title), Component.text(author), content)
         target.openBook(mybook)
     })
     .register()
-/* ANCHOR_END: argumentChatAdventure1 */
+/* ANCHOR_END: argumentChatAdventure2 */
 
-/* ANCHOR: argumentChatAdventure2 */
+/* ANCHOR: argumentChatAdventure3 */
 CommandAPICommand("pbroadcast")
     .withArguments(AdventureChatArgument("message"))
     .executes(CommandExecutor { _, args ->
-        val message = args[0] as Component
+        val message = args["message"] as Component
 
         // Broadcast the message to everyone with broadcast permissions.
         Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS)
         Bukkit.getServer().broadcast(message)
     })
     .register()
-/* ANCHOR_END: argumentChatAdventure2 */
-}
-
-fun argument_chats() {
-/* ANCHOR: argumentChats1 */
-CommandAPICommand("namecolor")
-    .withArguments(ChatColorArgument("chatcolor"))
-    .executesPlayer(PlayerCommandExecutor { player, args ->
-        val color = args[0] as ChatColor
-        player.setDisplayName("$color${player.name}")
-    })
-    .register()
-/* ANCHOR_END: argumentChats1 */
+/* ANCHOR_END: argumentChatAdventure3 */
 }
 
 fun argument_chatSpigot() {
 /* ANCHOR: argumentChatSpigot1 */
+CommandAPICommand("namecolor")
+    .withArguments(ChatColorArgument("chatColor"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val color = args["chatColor"] as ChatColor
+        player.setDisplayName("$color${player.name}")
+    })
+    .register()
+/* ANCHOR_END: argumentChatSpigot1 */
+
+/* ANCHOR: argumentChatSpigot2 */
 CommandAPICommand("makebook")
     .withArguments(PlayerArgument("player"))
     .withArguments(ChatComponentArgument("contents"))
     .executes(CommandExecutor { _, args ->
-        val player = args[0] as Player
-        val arr = args[1] as Array<BaseComponent>
+        val player = args["player"] as Player
+        val arr = args["contents"] as Array<BaseComponent>
 
         // Create book
         val item = ItemStack(Material.WRITTEN_BOOK)
@@ -246,19 +257,19 @@ CommandAPICommand("makebook")
         player.inventory.addItem(item)
     })
     .register()
-/* ANCHOR_END: argumentChatSpigot1 */
+/* ANCHOR_END: argumentChatSpigot2 */
 
-/* ANCHOR: argumentChatSpigot2 */
+/* ANCHOR: argumentChatSpigot3 */
 CommandAPICommand("pbroadcast")
     .withArguments(ChatArgument("message"))
     .executes(CommandExecutor { _, args ->
-        val message = args[0] as Array<BaseComponent>
+        val message = args["message"] as Array<BaseComponent>
 
         // Broadcast the message to everyone on the server
         Bukkit.getServer().spigot().broadcast(*message)
     })
     .register()
-/* ANCHOR_END: argumentChatSpigot2 */
+/* ANCHOR_END: argumentChatSpigot3 */
 }
 
 fun argument_command() {
@@ -267,8 +278,8 @@ CommandAPICommand("sudo")
     .withArguments(PlayerArgument("target"))
     .withArguments(CommandArgument("command"))
     .executes(CommandExecutor { _, args ->
-        val target = args[0] as Player
-        val command = args[1] as CommandResult
+        val target = args["target"] as Player
+        val command = args["command"] as CommandResult
 
         command.execute(target)
     })
@@ -353,7 +364,7 @@ fun argumentCustom2() {
 CommandAPICommand("tpworld")
     .withArguments(worldArgument("world"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        player.teleport((args[0] as World).spawnLocation)
+        player.teleport((args["world"] as World).spawnLocation)
     })
     .register()
 /* ANCHOR_END: argumentCustom2 */
@@ -366,8 +377,8 @@ CommandAPICommand("enchantitem")
     .withArguments(EnchantmentArgument("enchantment"))
     .withArguments(IntegerArgument("level", 1, 5))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val enchantment = args[0] as Enchantment
-        val level = args[1] as Int
+        val enchantment = args["enchantment"] as Enchantment
+        val level = args["level"] as Int
 
         // Add the enchantment
         player.inventory.itemInMainHand.addEnchantment(enchantment, level)
@@ -383,7 +394,7 @@ CommandAPICommand("remove")
     .withArguments(EntitySelectorArgument.ManyEntities("entities"))
     .executes(CommandExecutor { sender, args ->
         // Parse the argument as a collection of entities (as stated above in the documentation)
-        val entities = args[0] as Collection<Entity>
+        val entities = args["entities"] as Collection<Entity>
 
         sender.sendMessage("Removed ${entities.size} entities")
         for (e in entities) {
@@ -398,8 +409,8 @@ CommandAPICommand("spawnmob")
     .withArguments(EntityTypeArgument("entity"))
     .withArguments(IntegerArgument("amount", 1, 100)) // Prevent spawning too many entities
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        for (i in 0 until args[1] as Int) {
-            player.world.spawnEntity(player.location, args[0] as EntityType)
+        for (i in 0 until args["amount"] as Int) {
+            player.world.spawnEntity(player.location, args["entity"] as EntityType)
         }
     })
     .register()
@@ -411,7 +422,7 @@ fun argument_function() {
 CommandAPICommand("runfunction")
     .withArguments(FunctionArgument("function"))
     .executes(CommandExecutor { _, args ->
-        val functions = args[0] as Array<FunctionWrapper>
+        val functions = args["function"] as Array<FunctionWrapper>
 
         // Run all functions in our FunctionWrapper[]
         for (function in functions) {
@@ -425,9 +436,9 @@ CommandAPICommand("runfunction")
 fun argument_itemStack() {
 /* ANCHOR: argumentItemStack1 */
 CommandAPICommand("item")
-    .withArguments(ItemStackArgument("itemstack"))
+    .withArguments(ItemStackArgument("itemStack"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        player.inventory.addItem(args[0] as ItemStack)
+        player.inventory.addItem(args["itemStack"] as ItemStack)
     })
     .register()
 /* ANCHOR_END: argumentItemStack1 */
@@ -441,7 +452,7 @@ CommandAPICommand("rem")
     .executesPlayer(PlayerCommandExecutor { player, args ->
 
         // Get our predicate
-        val predicate = args[0] as Predicate<ItemStack>
+        val predicate = args["items"] as Predicate<ItemStack>
 
         for (item in player.inventory) {
             if (predicate.test(item)) {
@@ -463,8 +474,8 @@ CommandAPICommand("multigive")
         .buildGreedy()
     )
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val amount = args[0] as Int
-        val theList = args[1] as List<Material>
+        val amount = args["amount"] as Int
+        val theList = args["materials"] as List<Material>
 
         for (item in theList) {
             player.inventory.addItem(ItemStack(item, amount))
@@ -534,7 +545,7 @@ CommandAPICommand("break")
     // We want to target blocks in particular, so use BLOCK_POSITION
     .withArguments(LocationArgument("block", LocationType.BLOCK_POSITION))
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        (args[0] as Location).block.type = Material.AIR
+        (args["block"] as Location).block.type = Material.AIR
     })
     .register()
 /* ANCHOR_END: argumentLocations1 */
@@ -543,11 +554,11 @@ CommandAPICommand("break")
 fun argument_lootTable() {
 /* ANCHOR: argumentLootTable1 */
 CommandAPICommand("giveloottable")
-    .withArguments(LootTableArgument("loottable"))
+    .withArguments(LootTableArgument("lootTable"))
     .withArguments(LocationArgument("location", LocationType.BLOCK_POSITION))
     .executes(CommandExecutor { _, args ->
-        val lootTable = args[0] as LootTable
-        val location = args[1] as Location
+        val lootTable = args["lootTable"] as LootTable
+        val location = args["location"] as Location
 
         val state = location.block.state
 
@@ -605,9 +616,9 @@ CommandAPICommand("changelevel")
     .withArguments(MathOperationArgument("operation"))
     .withArguments(IntegerArgument("value"))
     .executes(CommandExecutor { _, args ->
-        val target = args[0] as Player
-        val op = args[1] as MathOperation
-        val value = args[2] as Int
+        val target = args["player"] as Player
+        val op = args["operation"] as MathOperation
+        val value = args["value"] as Int
 
         target.level = op.apply(target.level, value)
     })
@@ -618,10 +629,10 @@ CommandAPICommand("changelevel")
 fun argument_multiLiteral() {
 /* ANCHOR: argumentMultiLiteral1 */
 CommandAPICommand("gamemode")
-    .withArguments(MultiLiteralArgument("gamemodes", listOf("adventure", "creative", "spectator", "survival")))
+    .withArguments(MultiLiteralArgument("gamemodes", "adventure", "creative", "spectator", "survival"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         // The literal string that the player enters IS available in the args[]
-        when (args[0] as String) {
+        when (args["gamemodes"] as String) {
             "adventure" -> player.gameMode = GameMode.ADVENTURE
             "creative" -> player.gameMode = GameMode.CREATIVE
             "spectator" -> player.gameMode = GameMode.SPECTATOR
@@ -647,7 +658,7 @@ fun argument_nbt2() {
 CommandAPICommand("award")
     .withArguments(NBTCompoundArgument<NBTContainer>("nbt"))
     .executes(CommandExecutor { _, args ->
-        val nbt = args[0] as NBTContainer
+        val nbt = args["nbt"] as NBTContainer
 
         // Do something with "nbt" here...
     })
@@ -662,10 +673,10 @@ fun argument_objectives() {
 CommandAPICommand("sidebar")
     .withArguments(ObjectiveArgument("objective"))
     .executes(CommandExecutor { _, args ->
-        val objective = args[0] as Objective
+        val objective = args["objective"] as Objective
 
         // Set display slot
-        objective?.displaySlot = DisplaySlot.SIDEBAR
+        objective.displaySlot = DisplaySlot.SIDEBAR
     })
     .register()
 /* ANCHOR_END: argumentObjectives1 */
@@ -674,7 +685,7 @@ CommandAPICommand("sidebar")
 CommandAPICommand("unregisterall")
     .withArguments(ObjectiveCriteriaArgument("objective criteria"))
     .executes(CommandExecutor { _, args ->
-        val objectiveCriteria = args[0] as String
+        val objectiveCriteria = args["objective criteria"] as String
         val objectives = Bukkit.getScoreboardManager().mainScoreboard.getObjectivesByCriteria(objectiveCriteria)
 
         // Unregister the objectives
@@ -691,7 +702,7 @@ fun argument_particle() {
 CommandAPICommand("showparticle")
     .withArguments(ParticleArgument("particle"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val particleData = args[0] as ParticleData<Any>
+        val particleData = args["particle"] as ParticleData<Any>
         player.world.spawnParticle(particleData.particle(), player.location, 1)
     })
     .register()
@@ -701,7 +712,7 @@ CommandAPICommand("showparticle")
 CommandAPICommand("showparticle")
     .withArguments(ParticleArgument("particle"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val particleData = args[0] as ParticleData<Any>
+        val particleData = args["particle"] as ParticleData<Any>
         player.world.spawnParticle(particleData.particle(), player.location, 1, particleData.data())
     })
     .register()
@@ -716,10 +727,10 @@ CommandAPICommand("potion")
     .withArguments(TimeArgument("duration"))
     .withArguments(IntegerArgument("strength"))
     .executes(CommandExecutor { _, args ->
-        val target = args[0] as Player
-        val potion = args[1] as PotionEffectType
-        val duration = args[2] as Int
-        val strength = args[3] as Int
+        val target = args["target"] as Player
+        val potion = args["potion"] as PotionEffectType
+        val duration = args["duration"] as Int
+        val strength = args["strength"] as Int
 
         // Add the potion effect to the target player
         target.addPotionEffect(PotionEffect(potion, duration, strength))
@@ -739,7 +750,7 @@ CommandAPICommand("editconfig")
     .withArguments(BooleanArgument("value"))
     .executes(CommandExecutor { _, args ->
         // Update the config with the boolean argument
-        config.set(args[0] as String, args[1] as Boolean)
+        config.set(args["config-key"] as String, args["value"] as Boolean)
     })
     .register()
 /* ANCHOR_END: argumentPrimitives1 */
@@ -752,8 +763,8 @@ CommandAPICommand("searchrange")
     .withArguments(ItemStackArgument("item"))     // The item to search for
     .executesPlayer(PlayerCommandExecutor { player, args ->
         // Retrieve the range from the arguments
-        val range = args[0] as IntegerRange
-        val itemStack = args[1] as ItemStack
+        val range = args["range"] as IntegerRange
+        val itemStack = args["item"] as ItemStack
 
         // Store the locations of chests with certain items
         val locations = mutableListOf<Location>()
@@ -800,7 +811,7 @@ fun argument_recipe() {
 CommandAPICommand("giverecipe")
     .withArguments(RecipeArgument("recipe"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val recipe = args[0] as ComplexRecipe
+        val recipe = args["recipe"] as ComplexRecipe
         player.inventory.addItem(recipe.result)
     })
     .register()
@@ -811,8 +822,8 @@ CommandAPICommand("unlockrecipe")
     .withArguments(PlayerArgument("player"))
     .withArguments(RecipeArgument("recipe"))
     .executes(CommandExecutor { _, args ->
-        val target = args[0] as Player
-        val recipe = args[1] as ComplexRecipe
+        val target = args["player"] as Player
+        val recipe = args["recipe"] as ComplexRecipe
 
         target.discoverRecipe(recipe.key)
     })
@@ -826,8 +837,8 @@ CommandAPICommand("rotate")
     .withArguments(RotationArgument("rotation"))
     .withArguments(EntitySelectorArgument.OneEntity("target"))
     .executes(CommandExecutor { _, args ->
-        val rotation = args[0] as Rotation
-        val target = args[1] as Entity
+        val rotation = args["rotation"] as Rotation
+        val target = args["target"] as Entity
 
         if (target is ArmorStand) {
             target.headPose = EulerAngle(Math.toRadians(rotation.pitch.toDouble()), Math.toRadians(rotation.yaw.toDouble() - 90), 0.0)
@@ -844,7 +855,7 @@ CommandAPICommand("reward")
     .withArguments(ScoreHolderArgument.Multiple("players"))
     .executes(CommandExecutor { _, args ->
         // Get player names by casting to Collection<String>
-        val players = args[0] as Collection<String>
+        val players = args["players"] as Collection<String>
 
         for (playerName in players) {
             Bukkit.getPlayer(playerName)?.inventory!!.addItem(ItemStack(Material.DIAMOND, 3))
@@ -858,7 +869,7 @@ CommandAPICommand("clearobjectives")
     .withArguments(ScoreboardSlotArgument("slot"))
     .executes(CommandExecutor { _, args ->
         val scoreboard = Bukkit.getScoreboardManager().mainScoreboard
-        val slot = (args[0] as ScoreboardSlot).displaySlot
+        val slot = (args["slot"] as ScoreboardSlot).displaySlot
         scoreboard.clearSlot(slot)
     })
     .register()
@@ -870,7 +881,7 @@ fun argument_sound() {
 CommandAPICommand("sound")
     .withArguments(SoundArgument("sound"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        player.world.playSound(player.location, args[0] as Sound, 100.0f, 1.0f)
+        player.world.playSound(player.location, args["sound"] as Sound, 100.0f, 1.0f)
     })
     .register()
 /* ANCHOR_END: argumentSound1 */
@@ -879,7 +890,7 @@ CommandAPICommand("sound")
 CommandAPICommand("sound")
     .withArguments(SoundArgument.NamespacedKey("sound"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        player.world.playSound(player.location, (args[0] as NamespacedKey).asString(), 100.0f, 1.0f)
+        player.world.playSound(player.location, (args["sound"] as NamespacedKey).asString(), 100.0f, 1.0f)
     })
     .register()
 /* ANCHOR_END: argumentSound2 */
@@ -891,7 +902,7 @@ CommandAPICommand("message")
     .withArguments(PlayerArgument("target"))
     .withArguments(GreedyStringArgument("message"))
     .executes(CommandExecutor { _, args ->
-        (args[0] as Player).sendMessage(args[1] as String)
+        (args["target"] as Player).sendMessage(args["message"] as String)
     })
     .register()
 /* ANCHOR_END: argumentStrings1 */
@@ -902,7 +913,7 @@ fun argument_team() {
 CommandAPICommand("togglepvp")
     .withArguments(TeamArgument("team"))
     .executes(CommandExecutor { _, args ->
-        val team = args[0] as Team
+        val team = args["team"] as Team
 
         // Toggle pvp
         team.setAllowFriendlyFire(team.allowFriendlyFire())
@@ -918,8 +929,8 @@ CommandAPICommand("bigmsg")
     .withArguments(GreedyStringArgument("message"))
     .executes(CommandExecutor { _, args ->
         // Duration in ticks
-        val duration = args[0] as Int
-        val message = args[1] as String
+        val duration = args["duration"] as Int
+        val message = args["message"] as String
 
         for (player in Bukkit.getOnlinePlayers()) {
             // Display the message to all players, with the default fade in/out times (10 and 20).
@@ -935,7 +946,7 @@ fun argument_world() {
 CommandAPICommand("unloadworld")
     .withArguments(WorldArgument("world"))
     .executes(CommandExecutor { sender, args ->
-        val world = args[0] as World
+        val world = args["world"] as World
 
         // Unload the world (and save the world's chunks)
         Bukkit.getServer().unloadWorld(world, true)
@@ -983,9 +994,9 @@ val commandArguments = listOf(
 CommandAPICommand("cmd")
     .withArguments(commandArguments)
     .executes(CommandExecutor { _, args ->
-        val stringArg = args[0] as String
-        val potionArg = args[1] as PotionEffectType
-        val locationArg = args[2] as Location
+        val stringArg = args["arg0"] as String
+        val potionArg = args["arg1"] as PotionEffectType
+        val locationArg = args["arg2"] as Location
     })
     .register()
 /* ANCHOR_END: arguments4 */
@@ -1000,8 +1011,8 @@ CommandAPICommand("setconfig")
     } ))
     .withArguments(TextArgument("value"))
     .executes(CommandExecutor { _, args ->
-        val key = args[0] as String
-        val value = args[1] as String
+        val key = args["key"] as String
+        val value = args["value"] as String
         plugin.config.set(key, value)
     })
     .register()
@@ -1098,7 +1109,7 @@ val messageArgument = GreedyStringArgument("message")
 CommandAPICommand("emoji")
     .withArguments(messageArgument)
     .executes(CommandExecutor { _, args ->
-        Bukkit.broadcastMessage(args[0] as String)
+        Bukkit.broadcastMessage(args["message"] as String)
     })
     .register()
 /* ANCHOR_END: brigadierSuggestions1 */
@@ -1146,7 +1157,7 @@ CommandAPICommand("commandargument")
     .withArguments(GreedyStringArgument("command").replaceSuggestions(commandSuggestions))
     .executes(CommandExecutor { sender, args ->
         // Run the command using Bukkit.dispatchCommand()
-        Bukkit.dispatchCommand(sender, args[0] as String)
+        Bukkit.dispatchCommand(sender, args["command"] as String)
     })
     .register()
 /* ANCHOR_END: brigadierSuggestions3 */
@@ -1165,7 +1176,7 @@ CommandAPICommand("broadcast")
     .executesPlayer(PlayerCommandExecutor { _, args ->
         // The user still entered legacy text. We need to properly convert this
         // to a BaseComponent[] by converting to plain text then to BaseComponent[]
-        val plainText: String = BaseComponent.toPlainText(*args[0] as Array<BaseComponent>)
+        val plainText: String = BaseComponent.toPlainText(*args["message"] as Array<BaseComponent>)
         val baseComponents: Array<BaseComponent> = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
         Bukkit.spigot().broadcast(*baseComponents)
     })
@@ -1184,7 +1195,7 @@ CommandAPICommand("broadcast")
     .executesPlayer(PlayerCommandExecutor { _, args ->
         // The user still entered legacy text. We need to properly convert this
         // to a Component by converting to plain text then to Component
-        val plainText: String = PlainTextComponentSerializer.plainText().serialize(args[0] as Component)
+        val plainText: String = PlainTextComponentSerializer.plainText().serialize(args["message"] as Component)
         Bukkit.broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(plainText))
     })
     .register()
@@ -1200,7 +1211,7 @@ CommandAPICommand("broadcast")
         TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
     } )
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        Bukkit.spigot().broadcast(*args[0] as Array<BaseComponent>)
+        Bukkit.spigot().broadcast(*args["message"] as Array<BaseComponent>)
     })
     .register()
 /* ANCHOR_END: chatPreview3 */
@@ -1215,10 +1226,53 @@ CommandAPICommand("broadcast")
         LegacyComponentSerializer.legacyAmpersand().deserialize(plainText)
     } )
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        Bukkit.broadcast(args[0] as Component)
+        Bukkit.broadcast(args["message"] as Component)
     })
     .register()
 /* ANCHOR_END: chatPreview4 */
+}
+
+fun commandArguments() {
+/* ANCHOR: commandArguments1 */
+CommandAPICommand("mycommand")
+    .withArguments(StringArgument("name"))
+    .withArguments(IntegerArgument("amount"))
+    .withOptionalArguments(PlayerArgument("player"))
+    .withOptionalArguments(PlayerArgument("target"))
+    .withOptionalArguments(GreedyStringArgument("message"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val name = args[0] as String // Access arguments by index
+        val amount = args["amount"] as Int // Access arguments by node name
+        val p = args.getOrDefault("player", player) as Player // Access arguments using the getOrDefault(String, Object) method
+        val target = args.getOrDefault("target") { player } as Player // Access arguments using the getOrDefault(String, Supplier<?>) method
+        val message = args.getOptional("message").orElse("Hello!") as String // Access arguments using the getOptional(String) method
+
+        // Do whatever with these values
+    })
+    .register();
+/* ANCHOR_END: commandArguments1 */
+
+/* ANCHOR: commandArguments2 */
+CommandAPICommand("mycommand")
+    .withArguments(EntitySelectorArgument.ManyEntities("entities"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val entitySelector = args.getRaw("entities")!! // Access the raw argument with getRaw(String)
+
+        // Do whatever with the entity selector
+    })
+    .register();
+/* ANCHOR_END: commandArguments2 */
+
+/* ANCHOR: commandArguments3 */
+CommandAPICommand("mycommand")
+    .withArguments(PlayerArgument("player"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val p: Player = args.getUnchecked("player")!!
+
+        // Do whatever with the player
+    })
+    .register();
+/* ANCHOR_END: commandArguments3 */
 }
 
 fun commandFailures() {
@@ -1230,7 +1284,7 @@ val fruit = listOf<String>("banana", "apple", "orange")
 CommandAPICommand("getfruit")
     .withArguments(StringArgument("item").replaceSuggestions(ArgumentSuggestions.strings(fruit)))
     .executes(CommandExecutor { _, args ->
-        val inputFruit = args[0] as String
+        val inputFruit = args["item"] as String
 
         if(fruit.any { it == inputFruit }) {
             // Do something with inputFruit
@@ -1251,24 +1305,11 @@ CommandAPICommand("broadcastmsg")
     .withAliases("broadcast", "broadcastmessage")   // Command aliases
     .withPermission(CommandPermission.OP)           // Required permissions
     .executes(CommandExecutor { sender, args ->
-        val message = args[0] as String
+        val message = args["message"] as String
         Bukkit.getServer().broadcastMessage(message)
     })
     .register()
 /* ANCHOR_END: commandRegistration1 */
-
-/* ANCHOR: commandRegistration2 */
-// Unregister the gamemode command from the server (by force)
-CommandAPI.unregister("gamemode", true)
-
-// Register our new /gamemode, with survival, creative, adventure and spectator
-CommandAPICommand("gamemode")
-    .withArguments(MultiLiteralArgument("gamemodes", listOf("survival", "creative", "adventure", "spectator")))
-    .executes(CommandExecutor { sender, args ->
-        // Implementation of our /gamemode command
-    })
-    .register()
-/* ANCHOR_END: commandRegistration2 */
 }
 
 class commandTrees : JavaPlugin() {
@@ -1280,7 +1321,7 @@ CommandTree("sayhi")
     })
     .then(PlayerArgument("target")
         .executes(CommandExecutor { _, args ->
-            val target = args[0] as Player
+            val target = args["target"] as Player
             target.sendMessage("Hi")
         }))
     .register()
@@ -1294,8 +1335,8 @@ CommandTree("signedit")
                 .executesPlayer(PlayerCommandExecutor { player, args ->
                     // /signedit set <line_number> <text>
                     val sign: Sign = getTargetSign(player)
-                    val line_number = args[0] as Int
-                    val text = args[1] as String
+                    val line_number = args["line_number"] as Int
+                    val text = args["text"] as String
                     sign.setLine(line_number - 1, text)
                     sign.update(true)
                  }))))
@@ -1304,7 +1345,7 @@ CommandTree("signedit")
             .executesPlayer(PlayerCommandExecutor { player, args ->
                 // /signedit clear <line_number>
                 val sign: Sign = getTargetSign(player)
-                val line_number = args[0] as Int
+                val line_number = args["line_number"] as Int
                 sign.setLine(line_number - 1, "")
                 sign.update(true)
             })))
@@ -1313,7 +1354,7 @@ CommandTree("signedit")
             .executesPlayer(PlayerCommandExecutor { player, args ->
                 // /signedit copy <line_number>
                 val sign: Sign = getTargetSign(player)
-                val line_number = args[0] as Int
+                val line_number = args["line_number"] as Int
                 player.setMetadata("copied_sign_text", FixedMetadataValue(this, sign.getLine(line_number - 1)))
             })))
     .then(LiteralArgument("paste")
@@ -1321,7 +1362,7 @@ CommandTree("signedit")
             .executesPlayer(PlayerCommandExecutor { player, args ->
                 // /signedit copy <line_number>
                 val sign: Sign = getTargetSign(player)
-                val line_number = args[0] as Int
+                val line_number = args["line_number"] as Int
                 sign.setLine(line_number - 1, player.getMetadata("copied_sign_text")[0].asString())
                 sign.update(true)
             })))
@@ -1337,6 +1378,105 @@ fun getTargetSign(player: Player): Sign {
     } else {
         throw CommandAPI.failWithString("You're not looking at a sign!")
     }
+}
+}
+
+class CommandUnregistration {
+class UnregistrationBukkit : JavaPlugin() {
+/* ANCHOR: commandUnregistration1 */
+override fun onLoad() {
+    CommandAPIBukkit.unregister("version", false, true)
+}
+/* ANCHOR_END: commandUnregistration1 */
+}
+
+class UnregistrationVanilla : JavaPlugin() {
+/* ANCHOR: commandUnregistration2 */
+override fun onEnable() {
+    CommandAPI.unregister("gamemode")
+}
+/* ANCHOR_END: commandUnregistration2 */
+}
+
+class UnregistrationReplaceVanilla : JavaPlugin() {
+/* ANCHOR: commandUnregistration3 */
+override fun onEnable() {
+    CommandAPI.unregister("gamemode");
+
+    // Register our new /gamemode, with survival, creative, adventure and spectator
+    CommandAPICommand("gamemode")
+        .withArguments(MultiLiteralArgument("gamemodes", "survival", "creative", "adventure", "spectator"))
+        .executes(CommandExecutor { sender, args ->
+            // Implementation of our /gamemode command
+        })
+        .register()
+}
+/* ANCHOR_END: commandUnregistration3 */
+}
+
+class UnregistrationPlugin : JavaPlugin() {
+/* ANCHOR: commandUnregistration4 */
+override fun onEnable() {
+    CommandAPIBukkit.unregister("luckperms:luckperms", false, true)
+}
+/* ANCHOR_END: commandUnregistration4 */
+}
+
+class UnregistrationCommandAPI : JavaPlugin() {
+/* ANCHOR: commandUnregistration5 */
+override fun onEnable() {
+    CommandAPI.unregister("break")
+}
+/* ANCHOR_END: commandUnregistration5 */
+}
+
+class UnregistrationBukkitHelp : JavaPlugin() {
+/* ANCHOR: commandUnregistration6 */
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPIBukkit.unregister("help", false, true)
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration6 */
+}
+
+class UnregistrationOnlyVanillaNamespace : JavaPlugin() {
+/* ANCHOR: commandUnregistration7 */
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPI.unregister("minecraft:gamemode")
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration7 */
+}
+
+class UnregistrationDelayedVanillaBad : JavaPlugin() {
+/* ANCHOR: commandUnregistration8 */
+// NOT RECOMMENDED
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPI.unregister("gamemode")
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration8 */
+}
+
+class UnregistrationDelayedVanillaBetter : JavaPlugin() {
+/* ANCHOR: commandUnregistration9 */
+override fun onEnable() {
+    object : BukkitRunnable() {
+        override fun run() {
+            CommandAPI.unregister("gamemode", true)
+        }
+    }.runTaskLater(this, 0)
+}
+/* ANCHOR_END: commandUnregistration9 */
 }
 }
 
@@ -1364,13 +1504,13 @@ Converter.convert(essentials, "speed", PlayerArgument("target"))
 
 // /speed <walk/fly> <speed>
 Converter.convert(essentials, "speed",
-    MultiLiteralArgument("modes", listOf("walk", "fly")),
+    MultiLiteralArgument("modes", "walk", "fly"),
     IntegerArgument("speed", 0, 10)
 )
 
 // /speed <walk/fly> <speed> <target>
 Converter.convert(essentials, "speed",
-    MultiLiteralArgument("modes", listOf("walk", "fly")),
+    MultiLiteralArgument("modes", "walk", "fly"),
     IntegerArgument("speed", 0, 10),
     PlayerArgument("target")
 )
@@ -1406,7 +1546,7 @@ fun functionWrapper() {
 CommandAPICommand("runfunc")
     .withArguments(FunctionArgument("function"))
     .executes(CommandExecutor { _, args ->
-        val functions = args[0] as Array<FunctionWrapper>
+        val functions = args["function"] as Array<FunctionWrapper>
         for (function in functions) {
             function.run() // The command executor in this case is 'sender'
         }
@@ -1444,8 +1584,8 @@ CommandAPICommand("mycommand")
     .withArguments(GreedyStringArgument("message"))
     .executes(CommandExecutor { _, args ->
         // args == [player, message]
-        val player = args[0] as Player
-        val message = args[1] as String // Note that this is args[1] and NOT args[2]
+        val player = args["player"] as Player
+        val message = args["message"] as String // Note that the IntegerArgument is not available in the CommandArguments
         player.sendMessage(message)
     })
     .register()
@@ -1471,7 +1611,7 @@ CommandAPICommand("broadcastmsg")
     .withAliases("broadcast", "broadcastmessage")       // Command aliases
     .withPermission(CommandPermission.OP)               // Required permissions
     .executes(CommandExecutor { _, args ->
-        val message = args[0] as String
+        val message = args["message"] as String
         Bukkit.getServer().broadcastMessage(message)
     })
     .register()
@@ -1594,7 +1734,7 @@ CommandAPICommand("kill")
 CommandAPICommand("kill")
     .withArguments(PlayerArgument("target").withPermission(CommandPermission.OP))
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        (args[0] as Player).health = 0.0
+        (args["target"] as Player).health = 0.0
     })
     .register()
 /* ANCHOR_END: permissions4 */
@@ -1613,7 +1753,7 @@ CommandAPICommand("economy")
     .withPermission("economy.other") // The important part of this example
     .withArguments(PlayerArgument("target"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args[0] as Player
+        val target = args["target"] as Player
         // send the executor the targets balance here.
     })
     .register()
@@ -1624,8 +1764,8 @@ CommandAPICommand("economy")
     .withArguments(PlayerArgument("target"))
     .withArguments(DoubleArgument("amount"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args[0] as Player
-        val amount = args[1] as Double
+        val target = args["target"] as Player
+        val amount = args["amount"] as Double
         // update the targets balance here
     })
     .register()
@@ -1635,7 +1775,7 @@ CommandAPICommand("economy")
     .withPermission("economy.admin.reset") // The important part of this example
     .withArguments(PlayerArgument("target"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args[0] as Player
+        val target = args["target"] as Player
         // reset the targets balance here
     })
     .register()
@@ -1745,7 +1885,7 @@ CommandAPICommand("party")
     .executesPlayer(PlayerCommandExecutor { player, args ->
 
         // Get the name of the party to create
-        val partyName = args[0] as String
+        val partyName = args["partyName"] as String
 
         partyMembers[player.uniqueId] = partyName
     })
@@ -1792,7 +1932,7 @@ arguments.add(PlayerArgument("player")
 CommandAPICommand("party")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args[0] as Player
+        val target = args["player"] as Player
         player.teleport(target)
     })
     .register()
@@ -1804,7 +1944,7 @@ CommandAPICommand("party")
     .executesPlayer(PlayerCommandExecutor { player, args ->
 
         // Get the name of the party to create
-        val partyName = args[0] as String
+        val partyName = args["partyName"] as String
 
         partyMembers[player.uniqueId] = partyName
 
@@ -1848,7 +1988,7 @@ CommandAPICommand("randomnumber")
 CommandAPICommand("givereward")
     .withArguments(EntitySelectorArgument.OnePlayer("target"))
     .executes(CommandExecutor { _, args ->
-        val player = args[0] as Player
+        val player = args["target"] as Player
         player.inventory.addItem(ItemStack(Material.DIAMOND, 64))
         Bukkit.broadcastMessage("${player.name} won a rare 64 diamonds from a loot box!")
     })
@@ -1892,7 +2032,7 @@ val arguments = listOf<Argument<*>>(
 CommandAPICommand("giverecipe")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val recipe = args[0] as Recipe
+        val recipe = args["recipe"] as Recipe
         player.inventory.addItem(recipe.result)
     })
     .register()
@@ -1924,7 +2064,7 @@ val safeArguments = listOf<Argument<*>>(
 CommandAPICommand("spawnmob")
     .withArguments(safeArguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val entityType = args[0] as EntityType
+        val entityType = args["mob"] as EntityType
         player.world.spawnEntity(player.location, entityType)
     })
     .register()
@@ -1935,7 +2075,7 @@ val safeArgs = mutableListOf<Argument<*>>()
 safeArgs.add(EntitySelectorArgument.OnePlayer("target"))
 safeArgs.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest {
     info ->
-        val target = info.previousArgs()[0] as Player
+        val target = info.previousArgs()["target"] as Player
 
         // Convert PotionEffect[] into PotionEffectType[]
         target.activePotionEffects.map{ it.type }.toTypedArray()
@@ -1947,8 +2087,8 @@ safeArgs.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSug
 CommandAPICommand("removeeffect")
     .withArguments(safeArgs)
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        val target = args[0] as Player
-        val potionEffect = args[1] as PotionEffectType
+        val target = args["target"] as Player
+        val potionEffect = args["potioneffect"] as PotionEffectType
         target.removePotionEffect(potionEffect)
     })
     .register()
@@ -2004,7 +2144,7 @@ val arguments = listOf<Argument<*>>(
 CommandAPICommand("warp")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val warp = args[0] as String
+        val warp = args["world"] as String
         player.teleport(warps[warp]!!) // Look up the warp in a map, for example
     })
     .register()
@@ -2043,7 +2183,7 @@ val arguments = listOf<Argument<*>>(
 CommandAPICommand("friendtp")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val target = args[0] as Player
+        val target = args["friend"] as Player
         player.teleport(target)
     })
     .register()
@@ -2060,7 +2200,7 @@ commandArgs.add(IntegerArgument("radius"))
 commandArgs.add(PlayerArgument("target").replaceSuggestions(ArgumentSuggestions.strings { info: SuggestionInfo<CommandSender> ->
 
     // Cast the first argument (radius, which is an IntegerArgument) to get its value
-    val radius = (info.previousArgs()[0] as Int).toDouble()
+    val radius = (info.previousArgs()["radius"] as Int).toDouble()
 
     // Get nearby entities within the provided radius
     val player = info.sender() as Player
@@ -2078,8 +2218,8 @@ commandArgs.add(GreedyStringArgument("message"))
 CommandAPICommand("localmsg")
     .withArguments(*commandArgs.toTypedArray())
     .executesPlayer(PlayerCommandExecutor { _, args ->
-        val target = args[1] as Player
-        val message = args[2] as String
+        val target = args["target"] as Player
+        val message = args["message"] as String
         target.sendMessage(message)
     })
     .register()
@@ -2175,8 +2315,8 @@ arguments.add(PlayerArgument("target"))
 CommandAPICommand("emote")
     .withArguments(*arguments.toTypedArray())
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val emote = args[0] as String
-        val target = args[1] as Player
+        val emote = args["emote"] as String
+        val target = args["target"] as Player
 
         when (emote) {
             "wave" -> target.sendMessage("${player.name} waves at you!")
@@ -2215,7 +2355,7 @@ val customItems = arrayOf<CustomItem>(
 CommandAPICommand("giveitem")
     .withArguments(StringArgument("item").replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(*customItems))) // We use customItems[] as the input for our suggestions with tooltips
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        val itemName = args[0] as String
+        val itemName = args["item"] as String
 
         // Give them the item
         for (item in customItems) {
@@ -2247,7 +2387,7 @@ val arguments = listOf<Argument<*>>(
 CommandAPICommand("warp")
     .withArguments(arguments)
     .executesPlayer(PlayerCommandExecutor { player, args ->
-        player.teleport(args[0] as Location)
+        player.teleport(args["location"] as Location)
     })
     .register()
 /* ANCHOR_END: tooltips6 */

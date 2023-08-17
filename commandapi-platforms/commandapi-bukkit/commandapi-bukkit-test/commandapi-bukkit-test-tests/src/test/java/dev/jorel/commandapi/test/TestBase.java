@@ -106,7 +106,9 @@ public abstract class TestBase {
 		assertDoesNotThrow(() -> assertTrue(
 			server.dispatchThrowableCommand(sender, command),
 			"Expected command dispatch to return true, but it gave false"));
-		assertEquals(expected, queue.get());
+		assertEquals(expected,
+			assertDoesNotThrow(queue::get, "Expected to find <" + expected + "> in queue, but nothing was present")
+		);
 	}
 
 	@Deprecated

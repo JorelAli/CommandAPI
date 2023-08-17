@@ -174,7 +174,6 @@ public class Annotations extends AbstractProcessor {
 		for (Element methodElement : classElement.getEnclosedElements()) {
 			if (methodElement.getAnnotation(Subcommand.class) != null) {
 				imports.add(MultiLiteralArgument.class.getCanonicalName());
-				imports.add(List.class.getCanonicalName());
 			}
 			if (methodElement.getAnnotation(NeedsOp.class) != null) {
 				imports.add(CommandPermission.class.getCanonicalName());
@@ -196,9 +195,6 @@ public class Annotations extends AbstractProcessor {
 						
 						if(argument instanceof ALocationArgument || argument instanceof ALocation2DArgument) {
 							imports.add(LocationType.class.getCanonicalName());
-						}
-						if (argument instanceof AMultiLiteralArgument) {
-							imports.add(List.class.getCanonicalName());
 						}
 					}
 					
@@ -259,8 +255,8 @@ public class Annotations extends AbstractProcessor {
 			}
 			
 			// @Subcommand (name)
-			out.print("List.of(" + Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
-				.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")) + ")");
+			out.print(Arrays.stream(methodElement.getAnnotation(Subcommand.class).value())
+				.map(x -> "\"" + x + "\"").collect(Collectors.joining(", ")));
 			
 			out.println(")");
 			indent++;
@@ -511,7 +507,7 @@ public class Annotations extends AbstractProcessor {
 		} else if(argumentAnnotation instanceof ALocationArgument argument) {
 			out.print(", " + LocationType.class.getSimpleName() + "." + argument.value().toString());
 		} else if(argumentAnnotation instanceof AMultiLiteralArgument argument) {
-			out.print(", List.of(" + Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")) + ")");
+			out.print(", " + Arrays.stream(argument.value()).map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
 		} else if(argumentAnnotation instanceof ALiteralArgument argument) {
 			out.print(", \"");
 			out.print(argument.value());

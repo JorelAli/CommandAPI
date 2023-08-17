@@ -142,6 +142,7 @@ var annotated_dup =
             [ "AbstractArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument" ],
             [ "AdvancementArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_advancement_argument" ],
             [ "AdventureChatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_argument" ],
+            [ "AdventureChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_color_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_color_argument" ],
             [ "AdventureChatComponentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_component_argument" ],
             [ "AngleArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_angle_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_angle_argument" ],
             [ "Argument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument" ],
@@ -247,7 +248,6 @@ var annotated_dup =
             [ "WrapperCommandSyntaxException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception" ]
           ] ],
           [ "executors", "namespacedev_1_1jorel_1_1commandapi_1_1executors.html", [
-            [ "CommandArguments", "classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html", "classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments" ],
             [ "CommandBlockCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_command_executor" ],
             [ "CommandBlockExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_execution_info" ],
             [ "CommandBlockResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_block_resulting_command_executor" ],

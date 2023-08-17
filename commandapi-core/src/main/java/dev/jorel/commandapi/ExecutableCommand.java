@@ -1,6 +1,5 @@
 package dev.jorel.commandapi;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 

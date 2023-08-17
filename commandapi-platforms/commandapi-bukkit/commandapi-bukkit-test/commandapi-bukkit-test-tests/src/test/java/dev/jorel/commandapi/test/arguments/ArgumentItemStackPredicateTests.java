@@ -1,7 +1,9 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.bukkit.Material;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
 
@@ -89,7 +92,28 @@ class ArgumentItemStackPredicateTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 		
-		// TODO: Literally the same as ItemStackTests
+		// Identical to the ItemStackArgument tests
+		
+		// /test
+		// All items should be suggested
+		assertEquals(MockPlatform.getInstance().getAllItemNames(), server.getSuggestions(player, "test "));
+	
+		// /test x
+		// All items starting with 'a' should be suggested, as well as items which
+		// are underscore-separated and start with 'a', such as 'wooden_axe'
+		assertEquals(MockPlatform.getInstance().getAllItemNames().stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
+		
+		// test dirt
+		// Completed item names should suggest open brackets
+		assertEquals(List.of("{"), server.getSuggestions(player, "test dirt"));
+		
+		// test dirt{
+		// NBT has no suggestions
+		assertEquals(List.of(), server.getSuggestions(player, "test dirt{"));
+		
+		// test dirt{}
+		// NBT has no suggestions
+		assertEquals(List.of(), server.getSuggestions(player, "test dirt{}"));
 	}
 
 }

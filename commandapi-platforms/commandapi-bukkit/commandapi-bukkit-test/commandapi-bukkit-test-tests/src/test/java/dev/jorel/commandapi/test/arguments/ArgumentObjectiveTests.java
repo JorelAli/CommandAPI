@@ -52,10 +52,9 @@ class ArgumentObjectiveTests extends TestBase {
 		Bukkit.getScoreboardManager().getMainScoreboard().registerNewObjective("test-objective", "dummy");
 		Objective testObjective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective("test-objective");
 
-		// TODO: This is failing but it shouldn't.
 		// /test test-objective
-		// server.dispatchCommand(player, "test test-objective");
-		// assertEquals(testObjective, results.get());
+		server.dispatchCommand(player, "test test-objective");
+		assertEquals(testObjective, results.get());
 
 		// /test my-objective
 		assertCommandFailsWith(player, "test my-objective", "Unknown scoreboard objective 'my-objective'");

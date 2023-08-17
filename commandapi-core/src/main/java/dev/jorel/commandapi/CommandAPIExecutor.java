@@ -83,7 +83,7 @@ extends AbstractCommandSender<? extends CommandSender>
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			} catch (Throwable ex) {
-				CommandAPI.getLogger().severe("Unhandled exception executing '" + info.args().getFullInput() + "'", ex);
+				CommandAPI.getLogger().severe("Unhandled exception executing '" + info.args().fullInput() + "'", ex);
 				if (ex instanceof Exception) {
 					throw ex;
 				} else {
@@ -97,7 +97,7 @@ extends AbstractCommandSender<? extends CommandSender>
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			} catch (Throwable ex) {
-				CommandAPI.getLogger().severe("Unhandled exception executing '" + info.args().getFullInput() + "'", ex);
+				CommandAPI.getLogger().severe("Unhandled exception executing '" + info.args().fullInput() + "'", ex);
 				if (ex instanceof Exception) {
 					throw ex;
 				} else {

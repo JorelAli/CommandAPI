@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender
 import java.util.function.Predicate
 
 inline fun commandTree(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
+@Deprecated("This method has been deprecated since version 9.1.0 as it is not needed anymore. See the documentation for more information", ReplaceWith(""), DeprecationLevel.WARNING)
 inline fun commandTree(name: String, predicate: Predicate<CommandSender>, tree: CommandTree.() -> Unit = {}) = CommandTree(name).withRequirement(predicate).apply(tree).register()
 
 // CommandTree start
@@ -45,6 +46,7 @@ inline fun CommandTree.axisArgument(nodeName: String, optional: Boolean = false,
 inline fun CommandTree.chatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.chatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.chatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ChatArgument(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.adventureChatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.adventureChatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.adventureChatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(AdventureChatArgument(nodeName).setOptional(optional).apply(block))
 
@@ -99,13 +101,15 @@ inline fun CommandTree.itemStackPredicateArgument(nodeName: String, optional: Bo
 inline fun <NBTContainer> CommandTree.nbtCompoundArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(NBTCompoundArgument<NBTContainer>(nodeName).setOptional(optional).apply(block))
 
 // Literal arguments
-inline fun CommandTree.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(LiteralArgument(literal).setOptional(optional).apply(block))
+inline fun CommandTree.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree= then(LiteralArgument.of(literal, literal).setOptional(optional).apply(block))
+inline fun CommandTree.literalArgument(nodeName: String, literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree= then(LiteralArgument.of(nodeName, literal).setOptional(optional).apply(block))
 
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun CommandTree.multiLiteralArgument(vararg literals: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(MultiLiteralArgument(literals).setOptional(optional).apply(block))
+@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, listOf(literals))", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
+inline fun CommandTree.multiLiteralArgument(vararg literals: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree= then(MultiLiteralArgument(literals).setOptional(optional).apply(block))
+@Deprecated("This method has been deprecated since version 9.1.0", ReplaceWith("multiLiteralArgument(nodeName, literals)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
+inline fun CommandTree.multiLiteralArgument(nodeName: String, literals: List<String>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree= then(MultiLiteralArgument(nodeName, literals).setOptional(optional).apply(block))
 
-inline fun CommandTree.literalArgument(nodeName: String, literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(LiteralArgument(nodeName, literal).setOptional(optional).apply(block))
-inline fun CommandTree.multiLiteralArgument(nodeName: String, literals: List<String>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(MultiLiteralArgument(nodeName, literals).setOptional(optional).apply(block))
+inline fun CommandTree.multiLiteralArgument(nodeName: String, vararg literals: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree= then(MultiLiteralArgument(nodeName, *literals).setOptional(optional).apply(block))
 
 // Function arguments
 inline fun CommandTree.functionArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(FunctionArgument(nodeName).setOptional(optional).apply(block))
@@ -147,6 +151,7 @@ inline fun Argument<*>.axisArgument(nodeName: String, optional: Boolean = false,
 inline fun Argument<*>.chatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.chatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.chatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ChatArgument(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.adventureChatColorArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatColorArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.adventureChatComponentArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatComponentArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.adventureChatArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AdventureChatArgument(nodeName).setOptional(optional).apply(block))
 
@@ -201,16 +206,20 @@ inline fun Argument<*>.itemStackPredicateArgument(nodeName: String, optional: Bo
 inline fun <NBTContainer> Argument<*>.nbtCompoundArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(NBTCompoundArgument<NBTContainer>(nodeName).setOptional(optional).apply(block))
 
 // Literal arguments
-inline fun Argument<*>.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument(literal).setOptional(optional).apply(block))
+inline fun Argument<*>.literalArgument(literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument.of(literal, literal).setOptional(optional).apply(block))
+inline fun Argument<*>.literalArgument(nodeName: String, literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument.of(nodeName, literal).setOptional(optional).apply(block))
 
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, literal)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
+@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, listOf(literals))", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun Argument<*>.multiLiteralArgument(vararg literals: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MultiLiteralArgument(literals).setOptional(optional).apply(block))
-
-inline fun Argument<*>.literalArgument(nodeName: String, literal: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument(nodeName, literal).setOptional(optional).apply(block))
+@Deprecated("This method has been deprecated since version 9.1.0", ReplaceWith("multiLiteralArgument(nodeName, literals)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun Argument<*>.multiLiteralArgument(nodeName: String, literals: List<String>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MultiLiteralArgument(nodeName, literals).setOptional(optional).apply(block))
+
+inline fun Argument<*>.multiLiteralArgument(nodeName: String, vararg literals: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MultiLiteralArgument(nodeName, *literals).setOptional(optional).apply(block))
 
 // Function arguments
 inline fun Argument<*>.functionArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(FunctionArgument(nodeName).setOptional(optional).apply(block))
 
+@Deprecated("This method has been deprecated since version 9.1.0 as it is not needed anymore. See the documentation for more information", ReplaceWith(""), DeprecationLevel.WARNING)
 inline fun CommandTree.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): CommandTree = then(base.withRequirement(predicate).apply(block))
+@Deprecated("This method has been deprecated since version 9.1.0 as it is not needed anymore. See the documentation for more information", ReplaceWith(""), DeprecationLevel.WARNING)
 inline fun Argument<*>.requirement(base: Argument<*>, predicate: Predicate<CommandSender>, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.withRequirement(predicate).apply(block))

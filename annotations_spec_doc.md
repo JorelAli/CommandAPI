@@ -68,6 +68,7 @@ Features that exist in the CommandAPI and haven't been implemented so far:
 ## Known changes from 9.0.0
 
 - TeamArgument, ObjectiveArgument class changes
+- Probably also the various other arguments that don't have annotations such as the list and map arguments
 
 -----
 

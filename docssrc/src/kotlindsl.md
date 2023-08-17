@@ -77,21 +77,21 @@ integerArgument("integer", 0, 10)
 
 **Developer's Note:**
 
-There are two arguments not having a method which directly corresponds to their respective argument.
+There are a few arguments not having a method which directly corresponds to their respective argument.
 
-These two arguments are the `CustomArgument` and the `ListArgument` as they require further implementation by the user.
+These arguments most likely use a builder pattern and because of that require further implementation by the user.
 
-To use these arguments, the DSL also provides the `argument()` method. This takes in any argument as parameter which is why you can also use this method when you need to replace suggestions of any argument or do something else with arguments.
+To use these arguments, the DSL also provides the `argument()` method which takes in any argument as a parameter.
 
 </div>
 
 -----
 
-## Requirements
+## Editing arguments
 
-When using the DSL, you might want to use requirements to restrict the use of certain arguments to specific players. However, implementing requirements with this DSL works a bit different from when using the "normal" command system.
+When using the DSL, you might want to modify the behaviour of certain arguments by adding requirements or suggestions to them.
 
-Below, the `sendMessageTo` command is adding a broadcast option which should only be executed by server operators.
+To give you a general idea how you could accomplish that, the `sendMessageTo` command is adding a broadcast option which should only be executed by server operators.
 
 <div class="multi-pre">
 
@@ -105,11 +105,15 @@ Below, the `sendMessageTo` command is adding a broadcast option which should onl
 
 </div>
 
+Notice how you can just add the requirement in a CommandTree by adding it to the argument block where you also define the next arguments and the executor.
+
+However, when modifying the behaviour of an argument in a CommandAPICommand you have to add an extra block where you can implement the additional behaviour.
+
 ### Adding requirements to commands
 
-Previously, we've taken a look at how to restrict arguments to certain players by using requirements.
+Expanding on the previous example where we added a requirement to a single argument, we now also want to add a requirement to a whole command.
 
-You can also restrict the use of a whole command by using requirements:
+This works similar to how argument behaviour is modified in a CommandTree:
 
 <div class="multi-pre">
 
@@ -166,7 +170,9 @@ We want to create a command with the following syntax to demonstrate replacing s
 /replaceSuggestions <strings>
 ```
 
-We make use of the `argument()` method to provide an argument implementation and use the `replaceSuggestions` method as normal to provide suggestions for the argument:
+Replacing suggestions works similar to how you would add a requirement to an argument as shown in [Editing arguments](#editing-arguments).
+
+You just have to use the `replaceSuggestions` method this time:
 
 <div class="multi-pre">
 

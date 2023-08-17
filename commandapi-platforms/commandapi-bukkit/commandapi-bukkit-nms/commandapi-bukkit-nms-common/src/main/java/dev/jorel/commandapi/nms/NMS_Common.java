@@ -20,33 +20,40 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.NAME_CHANGED;
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CRAFTBUKKIT;
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CSS;
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
-
-import org.bukkit.Axis;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.preprocessor.Differs;
+import dev.jorel.commandapi.preprocessor.Overridden;
+import dev.jorel.commandapi.preprocessor.Unimplemented;
+import dev.jorel.commandapi.wrappers.Rotation;
+import dev.jorel.commandapi.wrappers.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.commands.CommandFunction;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.*;
+import net.minecraft.commands.arguments.coordinates.*;
+import net.minecraft.commands.arguments.item.FunctionArgument;
+import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.phys.Vec2;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
@@ -63,65 +70,14 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.preprocessor.Differs;
-import dev.jorel.commandapi.preprocessor.Overridden;
-import dev.jorel.commandapi.preprocessor.Unimplemented;
-import dev.jorel.commandapi.wrappers.FloatRange;
-import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.IntegerRange;
-import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.MathOperation;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.Rotation;
-import dev.jorel.commandapi.wrappers.ScoreboardSlot;
-import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.commands.CommandFunction;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.AngleArgument;
-import net.minecraft.commands.arguments.ColorArgument;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.CompoundTagArgument;
-import net.minecraft.commands.arguments.DimensionArgument;
-import net.minecraft.commands.arguments.GameProfileArgument;
-import net.minecraft.commands.arguments.MessageArgument;
-import net.minecraft.commands.arguments.ObjectiveArgument;
-import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
-import net.minecraft.commands.arguments.OperationArgument;
-import net.minecraft.commands.arguments.RangeArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.ScoreHolderArgument;
-import net.minecraft.commands.arguments.ScoreboardSlotArgument;
-import net.minecraft.commands.arguments.TeamArgument;
-import net.minecraft.commands.arguments.TimeArgument;
-import net.minecraft.commands.arguments.UuidArgument;
-import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
-import net.minecraft.commands.arguments.coordinates.RotationArgument;
-import net.minecraft.commands.arguments.coordinates.SwizzleArgument;
-import net.minecraft.commands.arguments.coordinates.Vec2Argument;
-import net.minecraft.commands.arguments.coordinates.Vec3Argument;
-import net.minecraft.commands.arguments.item.FunctionArgument;
-import net.minecraft.network.chat.Component.Serializer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.phys.Vec2;
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 
 /**
  * Common NMS code To ensure that this code actually works across all versions
@@ -319,7 +275,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "SimpleHelpMap")
-	public abstract void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
+	public abstract Map<String, HelpTopic> getHelpMap();
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
@@ -377,6 +333,10 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, from = "ofExact", to = "namedColor", in = "NamedTextColor", introducedIn = "Adventure 4.10.0", info = "1.18 uses Adventure 4.9.3. 1.18.2 uses Adventure 4.11.0")
+	public abstract NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key);
+
+	@Override
 	public final float getAngle(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return AngleArgument.getAngle(cmdCtx, key);
 	}
@@ -404,11 +364,14 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftBlockData")
 	public abstract BlockData getBlockState(CommandContext<CommandSourceStack> cmdCtx, String key);
 
-	@SuppressWarnings("resource")
 	@Override
-	public CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
+	public final CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
 		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
 	}
+
+	@Override
+	@Unimplemented(because = NAME_CHANGED, info = "MinecraftServer#getCommands() obfuscated differently across multiple versions")
+	public abstract CommandDispatcher<CommandSourceStack> getResourcesDispatcher();
 
 	@Override
 	public final BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
@@ -548,7 +511,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final Objective getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
+	@Overridden(in = "1.17 common", because = "The Objective.getName() method mangles itself sometimes and I don't know why. Seems to be looking for Objective.b() or something")
+	public Objective getObjective(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException {
 		String objectiveName = ObjectiveArgument.getObjective(cmdCtx, key).getName();
 		return Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
@@ -675,10 +639,14 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract boolean isVanillaCommandWrapper(Command command);
 
 	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
-	public abstract void reloadDataPacks();
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
+	public abstract Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node);
 
 	@Override
-	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftPlayer")
-	public abstract void resendPackets(Player player);
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
+	public abstract boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node);
+
+	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
+	public abstract void reloadDataPacks();
 }

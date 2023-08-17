@@ -104,7 +104,7 @@ This won't work, because we make use of a redirect:
 
 \\(\texttt{/execute run} \xrightarrow{redirect} \texttt{mycommand arg1 arg2 arg3}\\)
 
-It is not possible to access the `CommandArguments` of previously declared arguments. **If a command occurs via a redirect, the `CommandArguments` of previously declared arguments will be null**.
+It is not possible to access the [`CommandArguments`](./commandarguments.md) of previously declared arguments. **If a command occurs via a redirect, the [`CommandArguments`](./commandarguments.md) of previously declared arguments will be null**.
 
 </div>
 

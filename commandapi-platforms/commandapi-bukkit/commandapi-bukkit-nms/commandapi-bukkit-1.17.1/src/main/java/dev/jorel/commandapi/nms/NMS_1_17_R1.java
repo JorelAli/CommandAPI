@@ -22,15 +22,18 @@ package dev.jorel.commandapi.nms;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import com.mojang.brigadier.CommandDispatcher;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.preprocessor.RequireField;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Recipe;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
@@ -42,14 +45,23 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
  * NMS implementation for Minecraft 1.17.1
  */
 @NMSMeta(compatibleWith = { "1.17.1" })
+@RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 public class NMS_1_17_R1 extends NMS_1_17_Common {
+
+	private static final Field serverFunctionLibraryDispatcher;
+
+	// Compute all var handles all in one go so we don't do this during main server
+	// runtime
+	static {
+		// For some reason, MethodHandles fails for this field, but Field works okay
+		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
+	}
 
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.17.1" };
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
@@ -63,10 +75,9 @@ public class NMS_1_17_R1 extends NMS_1_17_Common {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher")
-				.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
+			serverFunctionLibraryDispatcher.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
+		} catch (IllegalAccessException ignored) {
+			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
 
 		// Construct the new CompletableFuture that now uses our updated serverResources
