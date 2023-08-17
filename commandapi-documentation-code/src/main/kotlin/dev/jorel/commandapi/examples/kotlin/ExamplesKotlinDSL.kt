@@ -1,10 +1,7 @@
 package dev.jorel.commandapi.examples.kotlin
 
 import de.tr7zw.changeme.nbtapi.NBTContainer
-import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
-import dev.jorel.commandapi.arguments.LiteralArgument.of
-import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.kotlindsl.*
 import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
