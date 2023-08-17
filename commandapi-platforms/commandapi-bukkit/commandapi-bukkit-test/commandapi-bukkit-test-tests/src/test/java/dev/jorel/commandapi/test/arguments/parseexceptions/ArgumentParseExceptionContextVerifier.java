@@ -6,8 +6,10 @@ import dev.jorel.commandapi.arguments.parseexceptions.ArgumentParseExceptionHand
 import dev.jorel.commandapi.test.TestBase;
 import org.bukkit.command.CommandSender;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
@@ -76,5 +78,27 @@ public class ArgumentParseExceptionContextVerifier<T, Raw, ExceptionInformation>
 
             throw temp;
         }
+    }
+
+    /**
+     * Asserts that the given {@code actual} context has all the given expected attributes
+     *
+     * @param exceptionMessage The message of the initial parse exception.
+     * @param sender           The {@link CommandSender} who sent the command.
+     * @param input            The {@code Raw} object returned by the initial parse for this argument.
+     * @param previousArgsMap  A {@link Map} from String to Object that represents the previously parsed arguments.
+     * @param actual           The actual {@link ArgumentParseExceptionContext} generated.
+     */
+    public void assertCorrectContext(
+            String exceptionMessage, CommandSender sender, Raw input, Map<String, Object> previousArgsMap,
+            ArgumentParseExceptionContext<Raw, ExceptionInformation, CommandSender> actual
+    ) {
+        assertEquals(exceptionMessage, actual.exception().getMessage());
+
+        assertEquals(sender, actual.sender());
+
+        assertEquals(input, actual.input());
+
+        assertEquals(previousArgsMap, actual.previousArguments().argsMap());
     }
 }

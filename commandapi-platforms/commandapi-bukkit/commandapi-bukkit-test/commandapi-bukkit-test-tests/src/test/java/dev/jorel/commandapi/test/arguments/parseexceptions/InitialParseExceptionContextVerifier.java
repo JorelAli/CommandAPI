@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.function.Consumer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
@@ -75,5 +76,26 @@ public class InitialParseExceptionContextVerifier<T, ExceptionInformation> {
 
             throw temp;
         }
+    }
+
+    /**
+     * Asserts that the given {@code actual} context has all the given expected attributes
+     *
+     * @param exceptionMessage The message of the initial parse exception.
+     * @param readerString     The command string being parsed.
+     * @param cursorStart      The place where the StringReader started parsing the ArgumentType.
+     * @param readerCursor     The place where the StringReader ended when the exception was handled.
+     * @param actual           The actual {@link InitialParseExceptionContext} generated.
+     */
+    public void assertCorrectContext(
+            String exceptionMessage, String readerString, int cursorStart, int readerCursor,
+            InitialParseExceptionContext<ExceptionInformation> actual
+    ) {
+        assertEquals(exceptionMessage, actual.exception().getMessage());
+
+        assertEquals(readerString, actual.stringReader().getString());
+        assertEquals(readerCursor, actual.stringReader().getCursor());
+
+        assertEquals(cursorStart, actual.cursorStart());
     }
 }

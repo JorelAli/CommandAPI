@@ -25,7 +25,7 @@ public class InitialParseExceptionNumberArgumentVerifier<N extends Number>
     }
 
     /**
-     * Asserts that the given {@code actual} context has all the given attributes
+     * Asserts that the given {@code actual} context has all the given expected attributes
      *
      * @param exceptionMessage The message of the initial parse exception.
      * @param readerString     The command string being parsed.
@@ -44,18 +44,14 @@ public class InitialParseExceptionNumberArgumentVerifier<N extends Number>
             String rawInput, N input, N minimum, N maximum,
             InitialParseExceptionContext<InitialParseExceptionNumberArgument.ExceptionInformation<N>> actual
     ) {
-        assertEquals(exceptionMessage, actual.exception().getMessage());
+        super.assertCorrectContext(exceptionMessage, readerString, cursorStart, readerCursor, actual);
 
-        assertEquals(readerString, actual.stringReader().getString());
-        assertEquals(readerCursor, actual.stringReader().getCursor());
-
-        assertEquals(cursorStart, actual.cursorStart());
-
-        assertEquals(exceptionType, actual.exceptionInformation().type());
-        assertEquals(rawInput, actual.exceptionInformation().rawInput());
-        assertEquals(input, actual.exceptionInformation().input());
-        assertEquals(minimum, actual.exceptionInformation().minimum());
-        assertEquals(maximum, actual.exceptionInformation().maximum());
+        InitialParseExceptionNumberArgument.ExceptionInformation<N> exceptionInformation = actual.exceptionInformation();
+        assertEquals(exceptionType, exceptionInformation.type());
+        assertEquals(rawInput, exceptionInformation.rawInput());
+        assertEquals(input, exceptionInformation.input());
+        assertEquals(minimum, exceptionInformation.minimum());
+        assertEquals(maximum, exceptionInformation.maximum());
     }
 
     /**
