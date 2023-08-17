@@ -3,15 +3,20 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
+import java.util.Map;
 
+import dev.jorel.commandapi.arguments.ListArgumentCommon;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.parseexceptions.ArgumentParseExceptionContext;
+import dev.jorel.commandapi.test.arguments.parseexceptions.ArgumentParseExceptionContextVerifier;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.ListArgument;
 import dev.jorel.commandapi.arguments.ListArgumentBuilder;
 import dev.jorel.commandapi.test.Mut;
@@ -427,6 +432,135 @@ class ArgumentListTests extends TestBase {
 		assertCommandFailsWith(player, "list axolotl wolf chicken cat", "Item is not allowed in list at position 13: ...lotl wolf <--[HERE]");
 		
 		assertNoMoreResults(results);
+	}
+
+	/*************************
+	 * Parse exception tests *
+	 *************************/
+
+	public static class ArgumentParseExceptionListArgumentVerifier<T>
+			extends ArgumentParseExceptionContextVerifier<T, String, ListArgumentCommon.ArgumentParseExceptionInformation<T>> {
+		public ArgumentParseExceptionListArgumentVerifier(TestBase testBase) {
+			super(testBase);
+		}
+
+		public void assertCorrectContext(
+				String exceptionMessage, CommandSender sender, String input, Map<String, Object> previousArgsMap,
+				ListArgumentCommon.ArgumentParseExceptionInformation.Exceptions type,
+				List<T> listSoFar, String rawItem, T currentItem,
+				ArgumentParseExceptionContext<String, ListArgumentCommon.ArgumentParseExceptionInformation<T>, CommandSender> actual
+		) {
+			super.assertCorrectContext(exceptionMessage, sender, input, previousArgsMap, actual);
+
+			ListArgumentCommon.ArgumentParseExceptionInformation<T> exceptionInformation = actual.exceptionInformation();
+			assertEquals(type, exceptionInformation.type());
+			assertEquals(listSoFar, exceptionInformation.listSoFar());
+			assertEquals(rawItem, exceptionInformation.rawItem());
+			assertEquals(currentItem, exceptionInformation.currentItem());
+		}
+
+		// Tests a case where the exception type is DUPLICATES_NOT_ALLOWED, when a duplicate item shows up and allow
+		//  duplicates is false.
+		void testDuplicatesNotAllowedCase(
+			CommandSender sender, String command, String exceptionMessage,
+			String input, Map<String, Object> previousArgsMap,
+			List<T> listSoFar, String rawItem, T currentItem
+		) {
+			verifyGeneratedContext(
+				sender, command, exceptionMessage,
+				context -> assertCorrectContext(
+					exceptionMessage, sender, input, previousArgsMap,
+					ListArgumentCommon.ArgumentParseExceptionInformation.Exceptions.DUPLICATES_NOT_ALLOWED,
+					listSoFar, rawItem, currentItem,
+					context
+				)
+			);
+		}
+
+		// Tests a case where the exception type is INVALID_ITEM, where an item is given that is not found in the list.
+		// currentItem should always be null here.
+		void testInvalidItemCase(
+			CommandSender sender, String command, String exceptionMessage,
+			String input, Map<String, Object> previousArgsMap,
+			List<T> listSoFar, String rawItem
+		) {
+			verifyGeneratedContext(
+				sender, command, exceptionMessage,
+				context -> assertCorrectContext(
+					exceptionMessage, sender, input, previousArgsMap,
+					ListArgumentCommon.ArgumentParseExceptionInformation.Exceptions.INVALID_ITEM,
+					listSoFar, rawItem, null,
+					context
+				)
+			);
+		}
+	}
+
+	@Test
+	void argumentParseExceptionTestWithListArgument() {
+		PlayerMock player = server.addPlayer();
+		ArgumentParseExceptionListArgumentVerifier<Integer> verifier = new ArgumentParseExceptionListArgumentVerifier<>(this);
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new StringArgument("buffer"),
+				new ListArgumentBuilder<Integer>("list")
+					.withList(1, 2, 3, 4, 5)
+					.withStringMapper()
+					.buildGreedy()
+					.withArgumentParseExceptionHandler(verifier.getExceptionHandler())
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		// Test DUPLICATES_NOT_ALLOWED cases: Duplicate item given when that isn't allowed
+		verifier.testDuplicatesNotAllowedCase(
+			player, "test b123 1 1",
+			"Duplicate arguments are not allowed at position 2: 1 <--[HERE]",
+			"1 1", Map.of("buffer", "b123"), List.of(1), "1", 1
+		);
+		verifier.testDuplicatesNotAllowedCase(
+			player, "test b123 1 2 3 3 5",
+			"Duplicate arguments are not allowed at position 6: 1 2 3 <--[HERE]",
+			"1 2 3 3 5", Map.of("buffer", "b123"), List.of(1, 2, 3), "3", 3
+		);
+
+
+		// Test INVALID_ITEM cases: Item given that is not in the defined list
+		verifier.testInvalidItemCase(
+			player, "test b123 1 10",
+			"Item is not allowed in list at position 2: 1 <--[HERE]",
+			"1 10", Map.of("buffer", "b123"), List.of(1), "10"
+		);
+		verifier.testInvalidItemCase(
+			player, "test b123 1 2 3 a 5",
+			"Item is not allowed in list at position 6: 1 2 3 <--[HERE]",
+			"1 2 3 a 5", Map.of("buffer", "b123"), List.of(1, 2, 3), "a"
+		);
+
+
+		// Changing contents of buffer argument should update the previousArgs map
+		verifier.testDuplicatesNotAllowedCase(
+			player, "test b12345 1 1",
+			"Duplicate arguments are not allowed at position 2: 1 <--[HERE]",
+			"1 1", Map.of("buffer", "b12345"), List.of(1), "1", 1
+		);
+		verifier.testDuplicatesNotAllowedCase(
+			player, "test b123456789012345 1 1",
+			"Duplicate arguments are not allowed at position 2: 1 <--[HERE]",
+			"1 1", Map.of("buffer", "b123456789012345"), List.of(1), "1", 1
+		);
+
+		verifier.testInvalidItemCase(
+			player, "test b12345 1 2 3 a 5",
+			"Item is not allowed in list at position 6: 1 2 3 <--[HERE]",
+			"1 2 3 a 5", Map.of("buffer", "b12345"), List.of(1, 2, 3), "a"
+		);
+		verifier.testInvalidItemCase(
+			player, "test b123456789012345 1 2 3 a 5",
+			"Item is not allowed in list at position 6: 1 2 3 <--[HERE]",
+			"1 2 3 a 5", Map.of("buffer", "b123456789012345"), List.of(1, 2, 3), "a"
+		);
 	}
 	
 	/********************
