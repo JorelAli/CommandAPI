@@ -10,7 +10,7 @@ Key points:
   <dependency>
       <groupId>dev.jorel</groupId>
       <artifactId>commandapi-velocity-shade</artifactId>
-      <version>9.1.0</version>
+      <version>9.2.0-SNAPSHOT</version>
   </dependency>
   ```
 
