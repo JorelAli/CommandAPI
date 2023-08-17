@@ -16,7 +16,7 @@ public class InitialParseExceptionNumberArgumentVerifier<N extends Number>
         extends InitialParseExceptionContextVerifier<N, InitialParseExceptionNumberArgument.ExceptionInformation<N>> {
 
     /**
-     * Creates a new {@link InitialParseExceptionContextVerifier}.
+     * Creates a new {@link InitialParseExceptionNumberArgumentVerifier}.
      *
      * @param testBase The {@link TestBase} object running the test.
      */

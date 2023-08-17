@@ -9,6 +9,7 @@ import dev.jorel.commandapi.arguments.ListArgumentCommon;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.parseexceptions.ArgumentParseExceptionContext;
 import dev.jorel.commandapi.test.arguments.parseexceptions.ArgumentParseExceptionContextVerifier;
+import dev.jorel.commandapi.test.arguments.parseexceptions.InitialParseExceptionTextArgumentVerifier;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.AfterEach;
@@ -445,10 +446,10 @@ class ArgumentListTests extends TestBase {
 		}
 
 		public void assertCorrectContext(
-				String exceptionMessage, CommandSender sender, String input, Map<String, Object> previousArgsMap,
-				ListArgumentCommon.ArgumentParseExceptionInformation.Exceptions type,
-				List<T> listSoFar, String rawItem, T currentItem,
-				ArgumentParseExceptionContext<String, ListArgumentCommon.ArgumentParseExceptionInformation<T>, CommandSender> actual
+			String exceptionMessage, CommandSender sender, String input, Map<String, Object> previousArgsMap,
+			ListArgumentCommon.ArgumentParseExceptionInformation.Exceptions type,
+			List<T> listSoFar, String rawItem, T currentItem,
+			ArgumentParseExceptionContext<String, ListArgumentCommon.ArgumentParseExceptionInformation<T>, CommandSender> actual
 		) {
 			super.assertCorrectContext(exceptionMessage, sender, input, previousArgsMap, actual);
 
@@ -562,7 +563,97 @@ class ArgumentListTests extends TestBase {
 			"1 2 3 a 5", Map.of("buffer", "b123456789012345"), List.of(1, 2, 3), "a"
 		);
 	}
-	
+
+	@Test
+	void initialParseExceptionTestWithListTextArgument() {
+		PlayerMock player = server.addPlayer();
+		InitialParseExceptionTextArgumentVerifier verifier = new InitialParseExceptionTextArgumentVerifier(this);
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new StringArgument("buffer"),
+				new ListArgumentBuilder<Integer>("list")
+					.withList(1, 2, 3, 4, 5)
+					.withStringMapper()
+					.buildText()
+					.withInitialParseExceptionHandler(verifier.getExceptionHandler())
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		// Test INVALID_ESCAPE cases: Backslash not followed by backslash or the same quote that started argument
+		verifier.testInvalidEscapeCase(
+			player, "test b123 \"\\abc\"",
+			"Invalid escape sequence '\\a' in quoted string at position 12: ...st b123 \"\\<--[HERE]",
+			10, 12
+		);
+		verifier.testInvalidEscapeCase(
+			player, "test b123 \"ab\\c\"",
+			"Invalid escape sequence '\\c' in quoted string at position 14: ... b123 \"ab\\<--[HERE]",
+			10, 14
+		);
+
+		verifier.testInvalidEscapeCase(
+			player, "test b123 \"\\'bc\"",
+			"Invalid escape sequence '\\'' in quoted string at position 12: ...st b123 \"\\<--[HERE]",
+			10, 12
+		);
+		verifier.testInvalidEscapeCase(
+			player, "test b123 '\\\"bc'",
+			"Invalid escape sequence '\\\"' in quoted string at position 12: ...st b123 '\\<--[HERE]",
+			10, 12
+		);
+
+
+		// Test EXPECTED_QUOTE_END cases: Quoted string never ended by same quote that started argument
+		verifier.testExpectedQuoteEndCase(
+			player, "test b123 \"abc",
+			"Unclosed quoted string at position 14: ... b123 \"abc<--[HERE]",
+			10
+		);
+		verifier.testExpectedQuoteEndCase(
+			player, "test b123 'abcde",
+			"Unclosed quoted string at position 16: ...123 'abcde<--[HERE]",
+			10
+		);
+
+		verifier.testExpectedQuoteEndCase(
+			player, "test b123 \"abc'",
+			"Unclosed quoted string at position 15: ...b123 \"abc'<--[HERE]",
+			10
+		);
+		verifier.testExpectedQuoteEndCase(
+			player, "test b123 'abcde\"",
+			"Unclosed quoted string at position 17: ...23 'abcde\"<--[HERE]",
+			10
+		);
+
+
+		// Increasing characters in buffer argument increases cursor start
+		verifier.testInvalidEscapeCase(
+			player, "test b12345 '\\\"bc'",
+			"Invalid escape sequence '\\\"' in quoted string at position 14: ... b12345 '\\<--[HERE]",
+			12, 14
+		);
+		verifier.testInvalidEscapeCase(
+			player, "test b123456789012345 '\\\"bc'",
+			"Invalid escape sequence '\\\"' in quoted string at position 24: ...9012345 '\\<--[HERE]",
+			22, 24
+		);
+
+		verifier.testExpectedQuoteEndCase(
+			player, "test b12345 \"abc'",
+			"Unclosed quoted string at position 17: ...2345 \"abc'<--[HERE]",
+			12
+		);
+
+		verifier.testExpectedQuoteEndCase(
+			player, "test b123456789012345 \"abc'",
+			"Unclosed quoted string at position 27: ...2345 \"abc'<--[HERE]",
+			22
+		);
+	}
+
 	/********************
 	 * Suggestion tests *
 	 ********************/

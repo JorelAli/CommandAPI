@@ -81,7 +81,7 @@ public class ArgumentParseExceptionContextVerifier<T, Raw, ExceptionInformation>
     }
 
     /**
-     * Asserts that the given {@code actual} context has all the given expected attributes
+     * Asserts that the given {@code actual} context has all the given expected attributes.
      *
      * @param exceptionMessage The message of the initial parse exception.
      * @param sender           The {@link CommandSender} who sent the command.

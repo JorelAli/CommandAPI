@@ -79,7 +79,7 @@ public class InitialParseExceptionContextVerifier<T, ExceptionInformation> {
     }
 
     /**
-     * Asserts that the given {@code actual} context has all the given expected attributes
+     * Asserts that the given {@code actual} context has all the given expected attributes.
      *
      * @param exceptionMessage The message of the initial parse exception.
      * @param readerString     The command string being parsed.
