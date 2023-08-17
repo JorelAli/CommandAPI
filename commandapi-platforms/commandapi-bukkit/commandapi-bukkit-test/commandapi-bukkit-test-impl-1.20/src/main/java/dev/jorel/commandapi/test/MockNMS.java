@@ -1,58 +1,18 @@
 package dev.jorel.commandapi.test;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-
-import java.io.File;
-import java.io.IOException;
-import java.security.CodeSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemFactory;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopic;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.mockito.Mockito;
-
-import com.google.common.collect.Streams;
-import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.CommandDispatcher;
-
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
+import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
+import com.google.common.collect.Streams;
+import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
@@ -60,18 +20,14 @@ import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.Bootstrap;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.server.ServerFunctionLibrary;
-import net.minecraft.server.ServerFunctionManager;
-import net.minecraft.server.ServerScoreboard;
+import net.minecraft.server.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
@@ -90,8 +46,37 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType;
+import org.bukkit.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemFactory;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.help.HelpTopic;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.mockito.Mockito;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.CodeSource;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.mockito.ArgumentMatchers.*;
 
 public class MockNMS extends Enums {
+	private static final SafeVarHandle<HelpMapMock, Map<String, HelpTopic>> helpMapTopics =
+		SafeVarHandle.ofOrNull(HelpMapMock.class, "topics", "topics", Map.class);
 
 	static {
 		CodeSource src = PotionEffectType.class.getProtectionDomain().getCodeSource();
@@ -113,7 +98,7 @@ public class MockNMS extends Enums {
 		super(baseNMS);
 
 		// Stub in our getMinecraftServer implementation
-		CommandAPIBukkit<?> nms = Mockito.spy(super.baseNMS);
+		CommandAPIBukkit<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		super.baseNMS = nms;
 
@@ -140,6 +125,18 @@ public class MockNMS extends Enums {
 		this.recipeManager = new RecipeManager();
 		this.functions = new HashMap<>();
 		registerDefaultRecipes();
+
+		// Setup playerListMock
+		playerListMock = Mockito.mock(PlayerList.class);
+		Mockito.when(playerListMock.getPlayerByName(anyString())).thenAnswer(invocation -> {
+			String playerName = invocation.getArgument(0);
+			for (ServerPlayer onlinePlayer : players) {
+				if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
+					return onlinePlayer;
+				}
+			}
+			return null;
+		});
 	}
 
 	/*************************
@@ -256,6 +253,21 @@ public class MockNMS extends Enums {
 		return ((ServerMock) Bukkit.getServer()).getCommandMap();
 	}
 
+	@Override
+	public boolean isVanillaCommandWrapper(Command command) {
+		return baseNMS.isVanillaCommandWrapper(command);
+	}
+
+	@Override
+	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+		return baseNMS.wrapToVanillaCommandWrapper(node);
+	}
+
+	@Override
+	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
+		return baseNMS.isBukkitCommandWrapper(node);
+	}
+
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
@@ -292,26 +304,17 @@ public class MockNMS extends Enums {
 			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 				ServerPlayer entityPlayerMock = Mockito.mock(ServerPlayer.class);
 				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
-				Mockito.when(craftPlayerMock.getName()).thenReturn(onlinePlayer.getName());
-				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(onlinePlayer.getUniqueId());
+
+				// Extract these variables first in case the onlinePlayer is a Mockito object itself
+				String name = onlinePlayer.getName();
+				UUID uuid = onlinePlayer.getUniqueId();
+
+				Mockito.when(craftPlayerMock.getName()).thenReturn(name);
+				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(uuid);
 				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
-				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(net.minecraft.network.chat.Component.literal(onlinePlayer.getName())); // ChatArgument,
-																																					// AdventureChatArgument
+				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(net.minecraft.network.chat.Component.literal(name)); // ChatArgument, AdventureChatArgument
 				Mockito.when(entityPlayerMock.getType()).thenReturn((net.minecraft.world.entity.EntityType) net.minecraft.world.entity.EntityType.PLAYER); // EntitySelectorArgument
 				players.add(entityPlayerMock);
-			}
-
-			if (playerListMock == null) {
-				playerListMock = Mockito.mock(PlayerList.class);
-				Mockito.when(playerListMock.getPlayerByName(anyString())).thenAnswer(invocation -> {
-					String playerName = invocation.getArgument(0);
-					for (ServerPlayer onlinePlayer : players) {
-						if (onlinePlayer.getBukkitEntity().getName().equals(playerName)) {
-							return onlinePlayer;
-						}
-					}
-					return null;
-				});
 			}
 
 			// CommandSourceStack#levels
@@ -533,6 +536,11 @@ public class MockNMS extends Enums {
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
 		Mockito.when(minecraftServerMock.getProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
 
+		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
+		Commands commands = new Commands();
+		MockPlatform.setField(commands.getClass(), "g", "dispatcher", commands, getBrigadierDispatcher());
+		minecraftServerMock.vanillaCommandDispatcher = commands;
+
 		return (T) minecraftServerMock;
 	}
 
@@ -566,6 +574,11 @@ public class MockNMS extends Enums {
 			tagFunctions.add(CommandFunction.fromLines(resourceLocation, Brigadier.getCommandDispatcher(), css, functionCommands));
 		}
 		this.tags.put(resourceLocation, tagFunctions);
+	}
+
+	@Override
+	public Class<? extends Player> getCraftPlayerClass() {
+		return CraftPlayer.class;
 	}
 
 	@Override
@@ -808,4 +821,8 @@ public class MockNMS extends Enums {
 		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
+	@Override
+	public Map<String, HelpTopic> getHelpMap() {
+		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
+	}
 }

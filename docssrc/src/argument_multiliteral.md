@@ -10,7 +10,7 @@ The multi literal argument has all of the same benefits of a regular literal arg
 
 **Developer's Note:**
 
-For 9.0.4, all previously existing `MultiLiteralArgument` constructors have been deprecated! They will be removed in a future version.
+For 9.1.0, all previously existing `MultiLiteralArgument` constructors have been deprecated! They will be removed in a future version.
 
 The new constructor looks like this:
 

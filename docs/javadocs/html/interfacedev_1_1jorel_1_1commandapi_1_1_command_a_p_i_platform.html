@@ -25,9 +25,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="logo-small-512.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.0.3</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.1.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -126,16 +126,16 @@ abstract <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1suggestion_1
 <tr class="memitem:aa7326e92cf6d46b17947ef15492bac23"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#aa7326e92cf6d46b17947ef15492bac23">preCommandRegistration</a> (String commandName)</td></tr>
 <tr class="memdesc:aa7326e92cf6d46b17947ef15492bac23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stuff to run before a command is generated.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#aa7326e92cf6d46b17947ef15492bac23">More...</a><br /></td></tr>
 <tr class="separator:aa7326e92cf6d46b17947ef15492bac23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02f129e0a6727b3378b5e98e670c65cf"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a02f129e0a6727b3378b5e98e670c65cf">postCommandRegistration</a> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html">LiteralCommandNode</a>&lt; Source &gt; resultantNode, List&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html">LiteralCommandNode</a>&lt; Source &gt; &gt; aliasNodes)</td></tr>
-<tr class="memdesc:a02f129e0a6727b3378b5e98e670c65cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stuff to run after a command has been generated.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a02f129e0a6727b3378b5e98e670c65cf">More...</a><br /></td></tr>
-<tr class="separator:a02f129e0a6727b3378b5e98e670c65cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabe6fc4d27981f82db9c3c46ce0f2794"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#aabe6fc4d27981f82db9c3c46ce0f2794">postCommandRegistration</a> (RegisteredCommand registeredCommand, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html">LiteralCommandNode</a>&lt; Source &gt; resultantNode, List&lt; <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html">LiteralCommandNode</a>&lt; Source &gt; &gt; aliasNodes)</td></tr>
+<tr class="memdesc:aabe6fc4d27981f82db9c3c46ce0f2794"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stuff to run after a command has been generated.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#aabe6fc4d27981f82db9c3c46ce0f2794">More...</a><br /></td></tr>
+<tr class="separator:aabe6fc4d27981f82db9c3c46ce0f2794"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a495d5c42f42d215f17685dd46d054e"><td class="memItemLeft" align="right" valign="top"><a id="a6a495d5c42f42d215f17685dd46d054e" name="a6a495d5c42f42d215f17685dd46d054e"></a>
 abstract <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html">LiteralCommandNode</a>&lt; Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>registerCommandNode</b> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html">LiteralArgumentBuilder</a>&lt; Source &gt; node)</td></tr>
 <tr class="memdesc:a6a495d5c42f42d215f17685dd46d054e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> command node and returns the built node. <br /></td></tr>
 <tr class="separator:a6a495d5c42f42d215f17685dd46d054e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a994322962bfbb4c5b4fed5c7c4c71dc9"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a994322962bfbb4c5b4fed5c7c4c71dc9">unregister</a> (String commandName, boolean force)</td></tr>
-<tr class="memdesc:a994322962bfbb4c5b4fed5c7c4c71dc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregisters a command from the CommandGraph so it can't be run anymore.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a994322962bfbb4c5b4fed5c7c4c71dc9">More...</a><br /></td></tr>
-<tr class="separator:a994322962bfbb4c5b4fed5c7c4c71dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3603c2e996b6d921ca16376edbdbbe8"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#af3603c2e996b6d921ca16376edbdbbe8">unregister</a> (String commandName, boolean unregisterNamespaces)</td></tr>
+<tr class="memdesc:af3603c2e996b6d921ca16376edbdbbe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregisters a command from the CommandGraph so it can't be run anymore.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#af3603c2e996b6d921ca16376edbdbbe8">More...</a><br /></td></tr>
+<tr class="separator:af3603c2e996b6d921ca16376edbdbbe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03a26f7c9661e177bca81ec80bff8064"><td class="memItemLeft" align="right" valign="top">abstract <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a03a26f7c9661e177bca81ec80bff8064">getBrigadierDispatcher</a> ()</td></tr>
 <tr class="separator:a03a26f7c9661e177bca81ec80bff8064"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0194cab52dbe7f07704fe03a57486dfd"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a0194cab52dbe7f07704fe03a57486dfd">createDispatcherFile</a> (File file, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; Source &gt; dispatcher)  throws IOException</td></tr>
@@ -415,8 +415,8 @@ abstract <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_ar
 
 </div>
 </div>
-<a id="a02f129e0a6727b3378b5e98e670c65cf" name="a02f129e0a6727b3378b5e98e670c65cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02f129e0a6727b3378b5e98e670c65cf">&#9670;&nbsp;</a></span>postCommandRegistration()</h2>
+<a id="aabe6fc4d27981f82db9c3c46ce0f2794" name="aabe6fc4d27981f82db9c3c46ce0f2794"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabe6fc4d27981f82db9c3c46ce0f2794">&#9670;&nbsp;</a></span>postCommandRegistration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -427,6 +427,12 @@ abstract <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_ar
         <tr>
           <td class="memname">abstract void <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html">dev.jorel.commandapi.CommandAPIPlatform</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;.postCommandRegistration </td>
           <td>(</td>
+          <td class="paramtype">RegisteredCommand&#160;</td>
+          <td class="paramname"><em>registeredCommand</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html">LiteralCommandNode</a>&lt; Source &gt;&#160;</td>
           <td class="paramname"><em>resultantNode</em>, </td>
         </tr>
@@ -452,8 +458,9 @@ abstract <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_ar
 <p>Stuff to run after a command has been generated. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">resultantNode</td><td>the node that was registered </td></tr>
-    <tr><td class="paramname">aliasNodes</td><td>any alias nodes that were also registered as a part of this registration process </td></tr>
+    <tr><td class="paramname">registeredCommand</td><td>A <code><a class="el" href="">RegisteredCommand</a></code> instance that holds the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> information for the command </td></tr>
+    <tr><td class="paramname">resultantNode</td><td>The node that was registered </td></tr>
+    <tr><td class="paramname">aliasNodes</td><td>Any alias nodes that were also registered as a part of this registration process </td></tr>
   </table>
   </dd>
 </dl>
@@ -495,8 +502,8 @@ abstract <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_ar
 
 </div>
 </div>
-<a id="a994322962bfbb4c5b4fed5c7c4c71dc9" name="a994322962bfbb4c5b4fed5c7c4c71dc9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a994322962bfbb4c5b4fed5c7c4c71dc9">&#9670;&nbsp;</a></span>unregister()</h2>
+<a id="af3603c2e996b6d921ca16376edbdbbe8" name="af3603c2e996b6d921ca16376edbdbbe8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3603c2e996b6d921ca16376edbdbbe8">&#9670;&nbsp;</a></span>unregister()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -514,7 +521,7 @@ abstract <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_ar
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">boolean&#160;</td>
-          <td class="paramname"><em>force</em>&#160;</td>
+          <td class="paramname"><em>unregisterNamespaces</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -533,7 +540,7 @@ abstract <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_ar
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">commandName</td><td>the name of the command to unregister </td></tr>
-    <tr><td class="paramname">force</td><td>whether the unregistration system should attempt to remove all instances of the command, regardless of whether they have been registered by Minecraft, Bukkit or Spigot etc. </td></tr>
+    <tr><td class="paramname">unregisterNamespaces</td><td>whether the unregistration system should attempt to remove versions of the command that start with a namespace. Eg. <code>minecraft:command</code>, <code>bukkit:command</code>, or <code>plugin:command</code> </td></tr>
   </table>
   </dd>
 </dl>
@@ -616,7 +623,7 @@ abstract <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_ar
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html">CommandAPIPlatform</a></li>
 				<li class="footer">
-					Generated on Tue Jun 13 2023 20:20:33 for CommandAPI 9.0.3 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Wed Aug 16 2023 17:03:15 for CommandAPI 9.1.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

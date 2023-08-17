@@ -4,6 +4,7 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type 
     [ "ADVANCEMENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac779834aaa36e23794202e1790bd4753", null ],
     [ "ADVENTURE_CHAT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aedd43293095ddfddac4e6a02dfe78242", null ],
     [ "ADVENTURE_CHAT_COMPONENT", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#ac3dec5562c05503064fdc3d53a0e8aa5", null ],
+    [ "ADVENTURE_CHATCOLOR", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a20e7b984307af0c3488f72abbe411107", null ],
     [ "ANGLE", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a57cc405825c9932b24f3f6d4facb2b29", null ],
     [ "AXIS", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#aebca6750f8f79f80ea7acab2aecc8b01", null ],
     [ "BIOME", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_command_a_p_i_argument_type.html#a8e136cd4c078dc87cc936147943cba96", null ],

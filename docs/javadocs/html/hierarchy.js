@@ -225,7 +225,6 @@ var hierarchy =
       [ "dev.jorel.commandapi.CommandAPIBukkit< Source >", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html", null ]
     ] ],
     [ "dev.jorel.commandapi.CommandAPIPlatform< dev.jorel.commandapi.arguments.Argument, CommandSender, Source >", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html", null ],
-    [ "dev.jorel.commandapi.executors.CommandArguments", "classdev_1_1jorel_1_1commandapi_1_1executors_1_1_command_arguments.html", null ],
     [ "com.mojang.brigadier.context.CommandContext< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html", null ],
     [ "com.mojang.brigadier.context.CommandContextBuilder< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html", null ],
     [ "com.mojang.brigadier.CommandDispatcher< S >", "classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html", null ],
@@ -480,6 +479,9 @@ var hierarchy =
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< MathOperation, MathOperation >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.MathOperationArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_math_operation_argument.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< NamedTextColor, NamedTextColor >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
+      [ "dev.jorel.commandapi.arguments.AdventureChatColorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_adventure_chat_color_argument.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< NamespacedKey, NamespacedKey >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.NamespacedKeyArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_namespaced_key_argument.html", null ]
     ] ],
@@ -532,7 +534,8 @@ var hierarchy =
     [ "dev.jorel.commandapi.arguments.SafeSuggestions< S, CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_suggestions.html", null ],
     [ "dev.jorel.commandapi.SafeVarHandle< Type, FieldType >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
     [ "dev.jorel.commandapi.SafeVarHandle< com.mojang.brigadier.context.CommandContext<?>, Map< String, com.mojang.brigadier.context.ParsedArgument<?, ?> > >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
-    [ "dev.jorel.commandapi.SafeVarHandle< com.mojang.brigadier.tree.CommandNode<?>, Map< String, com.mojang.brigadier.tree.CommandNode<?> > >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
+    [ "dev.jorel.commandapi.SafeVarHandle< com.mojang.brigadier.tree.CommandNode<?>, Map >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
+    [ "dev.jorel.commandapi.SafeVarHandle< SimpleCommandMap, Map< String, com.mojang.brigadier.Command > >", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
     [ "dev.jorel.commandapi.Schedulers", "classdev_1_1jorel_1_1commandapi_1_1_schedulers.html", null ],
     [ "dev.jorel.commandapi.arguments.ScoreHolderArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument.html", null ],
     [ "dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument.Single", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_score_holder_argument_1_1_single.html", null ],

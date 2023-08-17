@@ -955,7 +955,9 @@ commandTree("sendMessageTo") {
             }
         }
     }
-    requirement(of("broadcast"), { sender: CommandSender -> sender.isOp }) { // Define a new LiteralArgument("broadcast") that requires the CommandSender to be a player who is a server operator
+    literalArgument("broadcast") {
+        withRequirement { sender: CommandSender -> sender.isOp } // Applies the requirement to the broadcast literal argument
+        /* add more methods here that modify argument behaviour */
         greedyStringArgument("msg") {
             playerExecutor { _, args ->
                 val message: String = args["msg"] as String
@@ -978,7 +980,10 @@ commandAPICommand("sendMessageTo") {
 }
 
 commandAPICommand("sendMessageTo") {
-    requirement(of("broadcast"), { sender: CommandSender -> sender.isOp }) // Define a new LiteralArgument("broadcast") that requires the CommandSender to be a player who is a server operator
+    literalArgument("broadcast") {
+        withRequirement { sender: CommandSender -> sender.isOp } // Applies the requirement to the broadcast literal argument
+        /* add more methods here that modify argument behaviour */
+    }
     greedyStringArgument("msg")
     playerExecutor { _, args ->
         val message: String = args["msg"] as String
@@ -988,7 +993,8 @@ commandAPICommand("sendMessageTo") {
 /* ANCHOR_END: kotlindsl4 */
 
 /* ANCHOR: kotlindsl5 */
-commandTree("commandRequirement", {sender: CommandSender -> sender.isOp}) {
+commandTree("commandRequirement") {
+    withRequirement { sender: CommandSender -> sender.isOp}
     playerExecutor { player, _ ->
         player.sendMessage("This command can only be executed by players who are server operators.")
     }
@@ -996,7 +1002,8 @@ commandTree("commandRequirement", {sender: CommandSender -> sender.isOp}) {
 /* ANCHOR_END: kotlindsl5 */
 
 /* ANCHOR: kotlindsl6 */
-commandAPICommand("commandRequirement", {sender: CommandSender -> sender.isOp}) {
+commandAPICommand("commandRequirement") {
+    withRequirement { sender: CommandSender -> sender.isOp}
     playerExecutor { player, _ ->
         player.sendMessage("This command can only be executed by players who are server operators.")
     }
@@ -1042,7 +1049,8 @@ commandAPICommand("optionalArgument") {
 
 /* ANCHOR: kotlindsl9 */
 commandTree("replaceSuggestions") {
-    argument(StringArgument("strings").replaceSuggestions(ArgumentSuggestions.strings("one", "two", "three"))) { // Implement an argument that has suggestions
+    stringArgument("strings") {
+        replaceSuggestions(ArgumentSuggestions.strings("one", "two", "three")) // Replaces the suggestions for the "strings" StringArgument
         playerExecutor { player, args ->
             player.sendMessage("You chose option ${args["strings"] as String}!")
         }
@@ -1052,7 +1060,9 @@ commandTree("replaceSuggestions") {
 
 /* ANCHOR: kotlindsl10 */
 commandAPICommand("replaceSuggestions") {
-    argument(StringArgument("strings").replaceSuggestions(ArgumentSuggestions.strings("one", "two", "three"))) // Implement an argument that has suggestions
+    stringArgument("strings") {
+        replaceSuggestions(ArgumentSuggestions.strings("one", "two", "three")) // Replaces the suggestions for the "strings" StringArgument
+    }
     playerExecutor { player, args ->
         player.sendMessage("You chose option ${args["strings"] as String}!")
     }
