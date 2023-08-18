@@ -31,7 +31,7 @@ class ProtocolVersionTooOldPacketTests  extends NetworkTestBase {
 
 	@Test
 	void sendTestWithProtocolVersionTooOldPacket() {
-		PlayerMock player = server.addPlayer();
+		PlayerMock player = getPluginMessagingPlayer("player");
 
 		// Packet is encoded as id, VarInt protocol version, then String for the reason inside
 		assertArrayEquals(

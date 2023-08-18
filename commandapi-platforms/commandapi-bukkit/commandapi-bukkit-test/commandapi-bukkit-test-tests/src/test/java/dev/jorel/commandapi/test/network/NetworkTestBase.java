@@ -1,17 +1,20 @@
 package dev.jorel.commandapi.test.network;
 
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.network.*;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.TestBase;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.messaging.StandardMessenger;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 public class NetworkTestBase extends TestBase {
 
@@ -61,6 +64,23 @@ public class NetworkTestBase extends TestBase {
 	/***************************************************
 	 * Utility methods for sending and receiving bytes *
 	 ***************************************************/
+
+	public PlayerMock getPluginMessagingPlayer(String name) {
+		PlayerMock player = spy(new PlayerMock(server, name));
+
+		// PlayerMock#sendPluginMessage is not implemented on versions 1.16 or 1.17
+		//  Easiest to always override the call
+		doAnswer(invocation -> {
+			Plugin source = invocation.getArgument(0);
+			String channel = invocation.getArgument(1);
+			byte[] message = invocation.getArgument(2);
+			StandardMessenger.validatePluginMessage(server.getMessenger(), source, channel, message);
+			return null;
+		}).when(player).sendPluginMessage(any(), any(), any());
+
+		return player;
+	}
+
 	public byte[] getSentBytes(Player target, CommandAPIPacket packet) {
 		CommandAPIBukkit.get().getMessenger().sendPacket(target, packet);
 		try {

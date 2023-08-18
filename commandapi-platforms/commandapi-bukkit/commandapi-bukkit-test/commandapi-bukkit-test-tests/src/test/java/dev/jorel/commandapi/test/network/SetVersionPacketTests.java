@@ -39,7 +39,7 @@ class SetVersionPacketTests extends NetworkTestBase {
 
 	@Test
 	void sendReceiveTestWithSetVersionPacket() {
-		PlayerMock player = server.addPlayer(); // Protocol version currently 0
+		PlayerMock player = getPluginMessagingPlayer("player"); // Protocol version currently 0
 
 		assertEquals(0, getProtocolVersion(player));
 

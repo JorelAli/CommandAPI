@@ -30,10 +30,10 @@ class UpdateRequirementsPacketTests extends NetworkTestBase {
 
 	@Test
 	void sendReceiveTestWithUpdateRequirementsPacket() {
-		PlayerMock player = Mockito.spy(new PlayerMock(server, "player"));
+		PlayerMock player = getPluginMessagingPlayer("player");
 		// Interrupt normal calls to updateCommands, because MockPlayer throws an UnimplementedOperationException
+		//  getPluginMessagingPlayer already returns a mocked spy, so we don't have to spy ourselves
 		Mockito.doNothing().when(player).updateCommands();
-		server.addPlayer(player);
 
 		// Protocol version currently 0
 
