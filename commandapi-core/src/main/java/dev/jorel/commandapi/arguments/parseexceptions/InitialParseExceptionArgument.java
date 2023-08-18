@@ -6,9 +6,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.ChainableBuilder;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.WeakHashMap;
 
 /**
  * An interface that indicates an argument can have an {@link InitialParseExceptionHandler} attached to it.
@@ -27,10 +27,7 @@ public interface InitialParseExceptionArgument<T, ExceptionInformation, Impl ext
      * overall avoiding the code duplication that comes from implementing these
      * methods in the inheriting classes.
      */
-    // TODO: Maybe this can be a WeakHashMap, so once the Argument objects aren't being used anywhere else we can forget about
-    //  them and not store them anymore. I'm not entirely sure that is what WeakHashMap does though. Are Arguments ever GC'd
-    //  anyway, or do they stick around somewhere?
-    Map<InitialParseExceptionArgument<?, ?, ?>, InitialParseExceptionHandler<?, ?>> exceptionHandlers = new HashMap<>();
+    Map<InitialParseExceptionArgument<?, ?, ?>, InitialParseExceptionHandler<?, ?>> exceptionHandlers = new WeakHashMap<>();
 
     /**
      * Sets the {@link InitialParseExceptionHandler} this Argument should

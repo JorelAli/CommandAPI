@@ -8,9 +8,9 @@ import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.WeakHashMap;
 
 /**
  * An interface that indicates an argument can have an {@link ArgumentParseExceptionHandler} attached to it.
@@ -30,10 +30,7 @@ public interface ArgumentParseExceptionArgument<T, Raw, ExceptionInformation, Im
      * overall avoiding the code duplication that comes from implementing these
      * methods in the inheriting classes.
      */
-	// TODO: Maybe this can be a WeakHashMap, so once the Argument objects aren't being used anywhere else we can forget
-	//  about them and not store them anymore. I'm not entirely sure that is what WeakHashMap does though. Are Arguments
-	//  ever GC'd anyway, or do they stick around somewhere?
-    Map<ArgumentParseExceptionArgument<?, ?, ?, ?, ?>, ArgumentParseExceptionHandler<?, ?, ?, ?>> exceptionHandlers = new HashMap<>();
+    Map<ArgumentParseExceptionArgument<?, ?, ?, ?, ?>, ArgumentParseExceptionHandler<?, ?, ?, ?>> exceptionHandlers = new WeakHashMap<>();
 
     /**
      * Sets the {@link ArgumentParseExceptionHandler} this Argument should use when it fails to parse.
