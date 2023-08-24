@@ -1,10 +1,10 @@
 package dev.jorel.commandapi.test.dsltests
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock
-import dev.jorel.commandapi.executors.CommandArguments
 import dev.jorel.commandapi.kotlindsl.*
 import dev.jorel.commandapi.test.Mut
 import dev.jorel.commandapi.test.TestBase
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.lang.NullPointerException
 
 class DelegationTests : TestBase() {
 
@@ -53,19 +52,24 @@ class DelegationTests : TestBase() {
 
 		// This should throw an exception because the 'Player1' is assigned
 		// to a variable that does not match the node name
-		assertThrows<NullPointerException> {
+		val exception = assertThrows<NullPointerException> {
 			server.dispatchCommand(player, "test testString Player1")
 		}
+		assertEquals("null cannot be cast to non-null type org.bukkit.entity.Player", exception.message)
 	}
 
 	@Test
 	fun passingDelegationTestWithKotlinDSL() {
+		val results: Mut<Any> = Mut.of()
+
 		commandAPICommand("test") {
 			stringArgument("string")
 			playerArgument("target")
 			playerExecutor { _, args ->
 				val string: String by args
 				val target: Player by args
+				results.set(string)
+				results.set(target)
 			}
 		}
 
@@ -74,6 +78,11 @@ class DelegationTests : TestBase() {
 		assertDoesNotThrow {
 			server.dispatchCommand(player, "test testString Player1")
 		}
+
+		assertEquals("testString", results.get())
+		assertEquals(player, results.get())
+
+		assertNoMoreResults(results)
 	}
 
 }
