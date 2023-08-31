@@ -2,6 +2,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.SpongeExecutable;
+import org.spongepowered.api.command.CommandCause;
 
 /**
  * The core abstract class for Command API arguments
@@ -9,7 +10,7 @@ import dev.jorel.commandapi.SpongeExecutable;
  * @param <T> The type of the underlying object that this argument casts to
  */
 // TODO: Replace CommandSource with the class Sponge uses to send commands
-public abstract class Argument<T> extends AbstractArgument<T, Argument<T>, Argument<?>, CommandSource> implements SpongeExecutable<Argument<T>> {
+public abstract class Argument<T> extends AbstractArgument<T, Argument<T>, Argument<?>, CommandCause> implements SpongeExecutable<Argument<T>> {
 	/**
 	 * Constructs an argument with a given NMS/brigadier type.
 	 *

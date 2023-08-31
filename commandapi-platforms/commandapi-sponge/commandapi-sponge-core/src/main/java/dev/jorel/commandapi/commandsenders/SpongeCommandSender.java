@@ -1,4 +1,6 @@
 package dev.jorel.commandapi.commandsenders;
 
-public interface SpongeCommandSender<Source extends Object> extends AbstractCommandSender<Source> {
+import org.spongepowered.api.command.CommandCause;
+
+public interface SpongeCommandSender<Source extends CommandCause> extends AbstractCommandSender<Source> {
 }

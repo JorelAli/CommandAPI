@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.velocitypowered.api.command.CommandSource;
+import org.spongepowered.api.command.CommandCause;
 
 import java.util.function.Function;
 
@@ -13,7 +13,7 @@ import java.util.function.Function;
  *            a {@link StringArgument} will have a custom type
  *            <code>String</code>
  */
-public abstract class SafeOverrideableArgument<T, S> extends Argument<T> implements SafeOverrideable<T, S, Argument<T>, Argument<?>, CommandSource> {
+public abstract class SafeOverrideableArgument<T, S> extends Argument<T> implements SafeOverrideable<T, S, Argument<T>, Argument<?>, CommandCause> {
 	private final Function<S, String> mapper;
 
 	/**

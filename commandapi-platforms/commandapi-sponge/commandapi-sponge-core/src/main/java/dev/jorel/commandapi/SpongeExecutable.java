@@ -1,12 +1,11 @@
 package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.executors.CommandExecutor;
-import dev.jorel.commandapi.executors.ExecutorType;
-import dev.jorel.commandapi.executors.ResultingCommandExecutor;
+import dev.jorel.commandapi.executors.*;
+import org.spongepowered.api.command.CommandCause;
 
 // TODO: Replace CommandSource with the class Sponge uses to send commands
-public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends PlatformExecutable<Impl, CommandSource> {
+public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends PlatformExecutable<Impl, CommandCause> {
 	// Regular command executor
 
 	/**
@@ -24,8 +23,8 @@ public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends P
 				getExecutor().addNormalExecutor(new CommandExecutor() {
 
 					@Override
-					public void run(CommandSource sender, Object[] args) throws WrapperCommandSyntaxException {
-						executor.executeWith(CommandAPISponge.get().wrapCommandSender(sender), args);
+					public void run(CommandCause sender, CommandArguments args) throws WrapperCommandSyntaxException {
+						executor.executeWith(new SpongeExecutionInfo<>(sender, CommandAPISponge.get().wrapCommandSender(sender), args));
 					}
 
 					@Override
@@ -53,8 +52,8 @@ public interface SpongeExecutable<Impl extends SpongeExecutable<Impl>> extends P
 				getExecutor().addResultingExecutor(new ResultingCommandExecutor() {
 
 					@Override
-					public int run(CommandSource sender, Object[] args) throws WrapperCommandSyntaxException {
-						return executor.executeWith(CommandAPISponge.get().wrapCommandSender(sender), args);
+					public int run(CommandCause sender, CommandArguments args) throws WrapperCommandSyntaxException {
+						return executor.executeWith(new SpongeExecutionInfo<>(sender, CommandAPISponge.get().wrapCommandSender(sender), args));
 					}
 
 					@Override

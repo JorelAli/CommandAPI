@@ -1,0 +1,39 @@
+{
+  "loader": {
+    "name": "java_plain",
+    "version": "1.0"
+  },
+  "license": "All-Rights-Reserved",
+  "plugins": [
+    {
+      "id": "commandapi",
+      "name": "CommandAPI",
+      "version": "${project.version}",
+      "entrypoint": "dev.jorel.commandapi.CommandAPIMain",
+        "description": "",
+        "branding": {},
+      "links": {
+        "homepage": "https://www.jorel.dev/CommandAPI/"
+      },
+      "contributors": [
+		  {
+			  "name": "Skepter"
+		  },
+		  {
+			  "name": "DerEchtePilz"
+		  },
+		  {
+			  "name": "Will Kroboth"
+		  }
+      ],
+      "dependencies": [
+        {
+          "id": "spongeapi",
+          "version": "8.0.0",
+          "load-order": "after",
+          "optional": false
+        }
+      ]
+    }
+  ]
+}

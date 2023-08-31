@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -11,18 +12,25 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.AbstractPlayer;
+import dev.jorel.commandapi.commandsenders.SpongeCommandSender;
+import dev.jorel.commandapi.commandsenders.SpongePlayer;
+import org.apache.logging.log4j.LogManager;
+import org.spongepowered.api.command.CommandCause;
 import org.spongepowered.api.command.manager.CommandManager;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
 // See https://docs.spongepowered.org/stable/en/plugin/migrating-from-7-to-8.html#command-creation-and-registration
 
 // TODO: How does Sponge send commands and interact with Brigadier?
-public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Object> {
+public class CommandAPISponge implements CommandAPIPlatform<Argument<?>, CommandCause, CommandCause> {
 	private CommandManager commandManager;
+	private CommandDispatcher<CommandCause> dispatcher;
+
 	private static CommandAPISponge instance;
 	private static InternalSpongeConfig config;
 
@@ -77,24 +85,23 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public CommandDispatcher<Object> getBrigadierDispatcher() {
-		// TODO: How do we get this? Do we need access to sponge internals?
+	public CommandDispatcher<CommandCause> getBrigadierDispatcher() {
 		return null;
 	}
 
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher<Object> brigadierDispatcher) throws IOException {
+	public void createDispatcherFile(File file, CommandDispatcher<CommandCause> brigadierDispatcher) throws IOException {
 		// TODO: Implement, probably similar to Velocity unless there is a Sponge method to do this like in Bukkit.
 	}
 
 	@Override
 	public CommandAPILogger getLogger() {
 		// TODO: Make a default Logger
-		return super.getLogger();
+		return CommandAPILogger.fromApacheLog4jLogger(LogManager.getLogger("[CommandAPI]"));
 	}
 
 	@Override
-	public AbstractCommandSender<? extends Object> getSenderForCommand(CommandContext<Object> cmdCtx,
+	public AbstractCommandSender<? extends CommandCause> getSenderForCommand(CommandContext<CommandCause> cmdCtx,
 			boolean forceNative) {
 		// TODO: Do something with this?
 		cmdCtx.getSource();
@@ -102,20 +109,18 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public Object getBrigadierSourceFromCommandSender(AbstractCommandSender<?> sender) {
-		return (Object) sender.getSource();
+	public CommandCause getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandCause> sender) {
+		return sender.getSource();
 	}
 
 	@Override
-	public AbstractCommandSender<?> wrapCommandSender(Object o) {
-		// TODO Auto-generated method stub
-		return null;
+	public SpongeCommandSender<? extends CommandCause> wrapCommandSender(CommandCause cause) {
+		return getCommandSenderFromCommandSource(cause);
 	}
 
 	@Override
-	public SuggestionProvider<Object> getSuggestionProvider(SuggestionProviders suggestionProvider) {
-		// TODO Auto-generated method stub
-		return null;
+	public SuggestionProvider<CommandCause> getSuggestionProvider(SuggestionProviders suggestionProvider) {
+		return (context, builder) -> Suggestions.empty();
 	}
 
 	@Override
@@ -124,19 +129,18 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Object> resultantNode, List<LiteralCommandNode<Object>> aliasNodes) {
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<CommandCause> resultantNode, List<LiteralCommandNode<CommandCause>> aliasNodes) {
 		// Nothing to do?
 	}
 
 	@Override
-	public LiteralCommandNode<Object> registerCommandNode(LiteralArgumentBuilder<Object> node) {
-		return null;
+	public LiteralCommandNode<CommandCause> registerCommandNode(LiteralArgumentBuilder<CommandCause> node) {
+		return getBrigadierDispatcher().register(node);
 	}
 
 	@Override
-	public AbstractCommandSender<?> getCommandSenderFromCommandSource(Object cs) {
-		// TODO Auto-generated method stub
-		return null;
+	public SpongeCommandSender<? extends CommandCause> getCommandSenderFromCommandSource(CommandCause cs) {
+		return new SpongePlayer(CommandCause.create());
 	}
 
 	@Override
@@ -151,7 +155,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<Object> meta) {
+	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandCause> meta) {
 		return new CommandAPICommand(meta);
 	}
 

@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import org.spongepowered.api.Server;
+import org.spongepowered.plugin.PluginContainer;
 
 /**
  * Configuration wrapper class for Sponge. The config.yml file used by the CommandAPI is

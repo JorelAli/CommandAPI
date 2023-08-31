@@ -1,20 +1,29 @@
 package dev.jorel.commandapi.executors;
 
-import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.commandsenders.VelocityCommandSender;
+import dev.jorel.commandapi.commandsenders.SpongeCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import org.spongepowered.api.command.CommandCause;
 
 @FunctionalInterface
-public interface CommandExecutor extends NormalExecutor<CommandSource, VelocityCommandSender<? extends CommandSource>> {
+public interface CommandExecutor extends NormalExecutor<CommandCause, SpongeCommandSender<? extends CommandCause>> {
 	/**
 	 * Executes the command.
 	 *
-	 * @param commandSource the CommandSource for this command
+	 * @param commandCause the CommandCause for this command
 	 * @param args          the arguments provided to this command
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
+	void run(CommandCause commandCause, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param info The ExecutionInfo for this command
+	 */
 	@Override
-	void run(CommandSource commandSource, Object[] args) throws WrapperCommandSyntaxException;
+	default void run(ExecutionInfo<CommandCause, SpongeCommandSender<? extends CommandCause>> info) throws WrapperCommandSyntaxException {
+		this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

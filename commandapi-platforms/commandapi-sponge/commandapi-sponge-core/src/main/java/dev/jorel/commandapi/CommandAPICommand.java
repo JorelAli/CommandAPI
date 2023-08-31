@@ -1,8 +1,9 @@
 package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.Argument;
+import org.spongepowered.api.command.CommandCause;
 
-public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPICommand, Argument<?>, CommandSource> implements SpongeExecutable<CommandAPICommand> {
+public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPICommand, Argument<?>, CommandCause> implements SpongeExecutable<CommandAPICommand> {
 	/**
 	 * Creates a new command builder
 	 *
@@ -17,12 +18,12 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	 *
 	 * @param metaData The metadata of the command to create
 	 */
-	protected CommandAPICommand(CommandMetaData<CommandSource> metaData) {
+	protected CommandAPICommand(CommandMetaData<CommandCause> metaData) {
 		super(metaData);
 	}
 
 	@Override
-	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSource> meta) {
+	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandCause> meta) {
 		return new CommandAPICommand(meta);
 	}
 

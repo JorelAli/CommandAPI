@@ -1,11 +1,11 @@
 package dev.jorel.commandapi.executors;
 
-import com.velocitypowered.api.command.CommandSource;
-import dev.jorel.commandapi.commandsenders.VelocityCommandSender;
+import dev.jorel.commandapi.commandsenders.SpongeCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import org.spongepowered.api.command.CommandCause;
 
 @FunctionalInterface
-public interface ResultingCommandExecutor extends ResultingExecutor<CommandSource, VelocityCommandSender<? extends CommandSource>> {
+public interface ResultingCommandExecutor extends ResultingExecutor<CommandCause, SpongeCommandSender<? extends CommandCause>> {
 	/**
 	 * Executes the command.
 	 *
@@ -14,8 +14,19 @@ public interface ResultingCommandExecutor extends ResultingExecutor<CommandSourc
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
+	int run(CommandCause commandSource, CommandArguments args) throws WrapperCommandSyntaxException;
+
+	/**
+	 * The code to run when this command is performed
+	 *
+	 * @param info The ExecutionInfo for this command
+	 * @return the result of this command
+	 * @throws WrapperCommandSyntaxException
+	 */
 	@Override
-	int run(CommandSource commandSource, Object[] args) throws WrapperCommandSyntaxException;
+	default int run(ExecutionInfo<CommandCause, SpongeCommandSender<? extends CommandCause>> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
+	}
 
 	/**
 	 * Returns the type of the sender of the current executor.

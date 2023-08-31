@@ -1,25 +1,35 @@
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
-import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import com.google.inject.Inject;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 // TODO: Add plugin meta data, see: https://docs.spongepowered.org/stable/en/plugin/plugin-meta.html
 /**
  * Main CommandAPI plugin entrypoint
  */
-@Plugin("CommandAPI")
+@Plugin("commandapi")
 public class CommandAPIMain {
 
-	@Inject
-	private Logger logger;
+	private final Logger logger;
 	private Server server;
+	private final PluginContainer pluginContainer;
+
+	@Inject
+	CommandAPIMain(final PluginContainer container, final Logger logger) {
+		this.pluginContainer = container;
+		this.logger = logger;
+	}
 
 	@Listener
 	public void onServerStarting(final StartingEngineEvent<Server> event) {

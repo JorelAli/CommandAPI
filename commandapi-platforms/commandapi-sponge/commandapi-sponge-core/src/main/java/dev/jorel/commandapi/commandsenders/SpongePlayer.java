@@ -1,11 +1,12 @@
 package dev.jorel.commandapi.commandsenders;
+import org.spongepowered.api.command.CommandCause;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
-public class SpongePlayer extends AbstractPlayer<ServerPlayer> implements SpongeCommandSender<ServerPlayer> {
+public class SpongePlayer implements AbstractPlayer<CommandCause>, SpongeCommandSender<CommandCause> {
 
-	private final ServerPlayer player;
+	private final CommandCause player;
 	
-	public SpongePlayer(ServerPlayer player) {
+	public SpongePlayer(CommandCause player) {
 		this.player = player;
 	}
 	
@@ -22,7 +23,7 @@ public class SpongePlayer extends AbstractPlayer<ServerPlayer> implements Sponge
 	}
 
 	@Override
-	public ServerPlayer getSource() {
+	public CommandCause getSource() {
 		return this.player;
 	}
 	
