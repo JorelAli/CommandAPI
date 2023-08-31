@@ -3,7 +3,7 @@
     "name": "java_plain",
     "version": "1.0"
   },
-  "license": "All-Rights-Reserved",
+  "license": "MIT",
   "plugins": [
     {
       "id": "commandapi",
