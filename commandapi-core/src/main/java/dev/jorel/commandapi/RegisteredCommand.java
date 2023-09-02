@@ -1,9 +1,6 @@
 package dev.jorel.commandapi;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Class to store a registered command which has its command name and a list of
@@ -53,6 +50,30 @@ public record RegisteredCommand(
 	 * @return The {@link CommandPermission} required to run this command
 	 */
 	CommandPermission permission) {
+	public static List<RegisteredCommand> fromExecutableCommand(ExecutableCommand<?, ?> command) {
+		// Unpack command parameters
+		String commandName = command.getName();
+		List<List<String>> argumentsAsStrings = command.getArgumentsAsStrings();
+
+		Optional<String> shortDescription = Optional.ofNullable(command.getShortDescription());
+		Optional<String> fullDescription = Optional.ofNullable(command.getFullDescription());
+		Optional<String[]> usageDescription = Optional.ofNullable(command.getUsage());
+
+		String[] aliases = command.getAliases();
+		CommandPermission permission = command.getPermission();
+
+		List<RegisteredCommand> result = new ArrayList<>(argumentsAsStrings.size());
+		for (List<String> argumentString : argumentsAsStrings) {
+			result.add(new RegisteredCommand(
+				commandName, argumentString,
+				shortDescription, fullDescription, usageDescription,
+				aliases, permission
+			));
+		}
+
+		return result;
+	}
+
 	// As https://stackoverflow.com/a/32083420 mentions, Optional's hashCode, equals, and toString method don't work if the
 	//  Optional wraps an array, like `Optional<String[]> usageDescription`, so we have to use the Arrays methods ourselves
 
@@ -86,5 +107,4 @@ public record RegisteredCommand(
 			+ ", usageDescription=" + (usageDescription.isPresent() ? "Optional[" + Arrays.toString(usageDescription.get()) + "]" : "Optional.empty")
 			+ ", aliases=" + Arrays.toString(aliases) + ", permission=" + permission + "]";
 	}
-
 }

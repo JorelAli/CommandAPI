@@ -22,28 +22,42 @@ package dev.jorel.commandapi.exceptions;
 
 import dev.jorel.commandapi.arguments.AbstractArgument;
 
+import java.util.List;
+
 /**
- * An exception caused when a greedy argument is not declared at the end of a
- * List
+ * An exception caused when a greedy argument is not declared at the end of a List.
  */
-@SuppressWarnings("serial")
-public class GreedyArgumentException extends RuntimeException {
+public class GreedyArgumentException extends CommandRegistrationException {
 	/**
 	 * Creates a GreedyArgumentException
-	 * 
-	 * @param arguments the list of arguments that have been used for this command
-	 *                  (including the greedy string argument)
+	 *
+	 * @param previousArguments The arguments that came before the greedy argument
+	 * @param argument          The greedy argument that is in an invalid spot
+	 * @param followingBranches The branches following the greedy argument that weren't supposed to be there
+	 * @param <Argument>        The Argument class being used
 	 */
-	public GreedyArgumentException(AbstractArgument<?, ?, ?, ?>[] arguments) {
-		super("Only one GreedyStringArgument or ChatArgument can be declared, at the end of a List. Found arguments: "
-				+ buildArgsStr(arguments));
+	public <Argument extends AbstractArgument<?, ?, ?, ?>> GreedyArgumentException(
+		List<Argument> previousArguments, Argument argument, List<List<Argument>> followingBranches) {
+		super(buildMessage(previousArguments, argument, followingBranches));
 	}
 
-	private static String buildArgsStr(AbstractArgument<?, ?, ?, ?>[] arguments) {
+	private static <Argument extends AbstractArgument<?, ?, ?, ?>> String buildMessage(
+		List<Argument> previousArguments, Argument argument, List<List<Argument>> followingBranches) {
 		StringBuilder builder = new StringBuilder();
-		for (AbstractArgument<?, ?, ?, ?> arg : arguments) {
-			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
+
+		builder.append("A greedy argument must be declared at the end of a command. Going down the ");
+		addArgumentList(builder, previousArguments);
+		builder.append(" branch, found ");
+		addArgument(builder, argument);
+		builder.append(" followed by ");
+
+		for (List<Argument> branch : followingBranches) {
+			addArgumentList(builder, branch);
+			builder.append(" and ");
 		}
+
+		builder.setLength(builder.length() - 5);
+
 		return builder.toString();
 	}
 }

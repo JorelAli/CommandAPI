@@ -20,25 +20,23 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.FlattenableArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.executors.CommandArguments;
+import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.executors.NativeCommandExecutor;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * 'Simple' conversion of Plugin commands
@@ -128,24 +126,18 @@ public final class Converter {
 		CommandAPI.logInfo("Converting command /" + commandName);
 
 		// No arguments
-		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
-			Bukkit.dispatchCommand(mergeProxySender(sender), commandName);
-			return;
-		}).register();
+		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE)
+			.executesNative((sender, args) -> Bukkit.dispatchCommand(mergeProxySender(sender), commandName) ? 1 : 0).register();
 
 		// Multiple arguments
-		CommandAPICommand multiArgs = new CommandAPICommand(commandName).withPermission(CommandPermission.NONE)
-				.withArguments(arguments).executesNative((sender, args) -> {
-					// We know the args are a String[] because that's how converted things are
-					// handled in generateCommand()
-					CommandSender proxiedSender = mergeProxySender(sender);
-					Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", (String[]) args.args()));
-				});
-
-		multiArgs.setConverted(true);
-		multiArgs.register();
+		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE)
+			.withArguments(arguments).executesNative((sender, args) -> {
+				CommandSender proxiedSender = mergeProxySender(sender);
+				return flattenArguments(args, arguments,
+					flattened -> Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", flattened)));
+			}).register();
 	}
-	
+
 	private static String[] unpackAliases(Object aliasObj) {
 		if (aliasObj == null) {
 			return new String[0];
@@ -191,23 +183,23 @@ public final class Converter {
 			CommandAPI.logInfo("Permission for command /" + commandName + " found. Using " + permission);
 			permissionNode = CommandPermission.fromString(permission);
 		}
-		
-		NativeCommandExecutor executor = (sender, args) -> {
+
+		NativeResultingCommandExecutor executor = (sender, args) -> {
 			org.bukkit.command.Command command = plugin.getCommand(commandName);
-			
+
 			if (command == null) {
-				command = CommandAPIBukkit.get().getSimpleCommandMap()
-						.getCommand(commandName);
+				command = CommandAPIBukkit.get().getSimpleCommandMap().getCommand(commandName);
 			}
 
 			CommandSender proxiedSender = CommandAPI.getConfiguration().shouldSkipSenderProxy(plugin.getName())
 					? sender.getCallee()
 					: mergeProxySender(sender);
 
-			if (args.args() instanceof String[] argsArr) {
-				command.execute(proxiedSender, commandName, argsArr);
+			if (args.count() != 0) {
+				org.bukkit.command.Command finalCommand = command;
+				return flattenArguments(args, arguments, flattened -> finalCommand.execute(proxiedSender, commandName, flattened));
 			} else {
-				command.execute(proxiedSender, commandName, new String[0]);
+				return command.execute(proxiedSender, commandName, new String[0]) ? 1 : 0;
 			}
 		};
 
@@ -226,8 +218,39 @@ public final class Converter {
 			.withArguments(arguments)
 			.withFullDescription(fullDescription)
 			.executesNative(executor)
-			.setConverted(true)
 			.register();
+	}
+
+	private static int flattenArguments(CommandArguments argumentInfo, List<Argument<?>> commandAPIArguments, Function<String[], Boolean> argumentConsumer) {
+		// Most arguments stay the same, just pass through the raw input as given
+		String[] rawArguments = argumentInfo.rawArgs();
+		return flattenArguments(argumentInfo, commandAPIArguments, argumentConsumer, rawArguments, 0);
+	}
+
+	private static int flattenArguments(CommandArguments argumentInfo, List<Argument<?>> commandAPIArguments, Function<String[], Boolean> argumentConsumer,
+										String[] rawArguments, int argumentIndex) {
+		if (argumentIndex > commandAPIArguments.size()) {
+			// Processed all the arguments, use it now
+			return argumentConsumer.apply(rawArguments) ? 1 : 0;
+		}
+
+		Argument<?> argument = commandAPIArguments.get(argumentIndex);
+
+		if (argument instanceof FlattenableArgument flattenable) {
+			// This argument wants to be flattened into its possibilities
+			List<String> possibilities = flattenable.flatten(argumentInfo.get(argumentIndex));
+			int successCount = 0;
+			for (String item : possibilities) {
+				rawArguments[argumentIndex] = item;
+				successCount += flattenArguments(argumentInfo, commandAPIArguments, argumentConsumer,
+					rawArguments, argumentIndex + 1);
+			}
+			return successCount;
+		} else {
+			// No processing needed for this argument, move to the next
+			return flattenArguments(argumentInfo, commandAPIArguments, argumentConsumer,
+				rawArguments, argumentIndex + 1);
+		}
 	}
 
 	/*
@@ -272,5 +295,4 @@ public final class Converter {
 
 		return (CommandSender) Proxy.newProxyInstance(CommandSender.class.getClassLoader(), calleeInterfaces, handler);
 	}
-
 }

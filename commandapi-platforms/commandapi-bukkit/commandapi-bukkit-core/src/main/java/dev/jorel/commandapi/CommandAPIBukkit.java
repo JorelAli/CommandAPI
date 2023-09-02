@@ -35,7 +35,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -68,6 +67,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private static CommandAPIBukkit<?> instance;
 	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
+
+	// We need to "fix permissions" on Bukkit and link Bukkit's generated VanillaCommandWrappers to the permission
+	//  we actually want. This map keeps track of the permissions we need to update.
+	private final TreeMap<String, CommandPermission> permissionsToFix = new TreeMap<>();
 
 	// Static VarHandles
 	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
@@ -215,12 +218,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	 * Makes permission checks more "Bukkit" like and less "Vanilla Minecraft" like
 	 */
 	private void fixPermissions() {
-		// Get the command map to find registered commands
-		CommandMap map = paper.getCommandMap();
-		final Map<String, CommandPermission> permissionsToFix = CommandAPIHandler.getInstance().registeredPermissions;
-
 		if (!permissionsToFix.isEmpty()) {
 			CommandAPI.logInfo("Linking permissions to commands:");
+
+			// Get the command map to find registered commands
+			CommandMap map = paper.getCommandMap();
 
 			for (Map.Entry<String, CommandPermission> entry : permissionsToFix.entrySet()) {
 				String cmdName = entry.getKey();
@@ -432,15 +434,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void registerPermission(String string) {
-		try {
-			Bukkit.getPluginManager().addPermission(new Permission(string));
-		} catch (IllegalArgumentException e) {
-			assert true; // nop, not an error.
-		}
-	}
-
-	@Override
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
@@ -465,7 +458,22 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+	public void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+		// Using registeredCommands.get(0) as representation for the permission here.
+		//  This is fine, because the only difference between the commands in the list is their argument strings.
+		CommandPermission permission = registeredCommands.get(0).permission();
+
+		// Register the command's permission node to Bukkit's manager, if it exists
+		Optional<String> wrappedPermissionString = permission.getPermission();
+		if(wrappedPermissionString.isPresent()) {
+			try {
+				Bukkit.getPluginManager().addPermission(new Permission(wrappedPermissionString.get()));
+			} catch (IllegalArgumentException ignored) {
+				// Exception is thrown if we attempt to register a permission that already exists
+				//  If it already exists, that's totally fine, so just ignore the exception
+			}
+		}
+
 		if(!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
 			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
@@ -476,7 +484,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
 
 			CommandMap map = paper.getCommandMap();
-			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
+			String permNode = unpackInternalPermissionNodeString(permission);
 			RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
 
 			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
@@ -503,12 +511,17 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
-			updateHelpForCommands(List.of(registeredCommand));
+			updateHelpForCommands(registeredCommands);
 
 			// Sending command dispatcher packets usually happens when Players join the server
 			for(Player p: Bukkit.getOnlinePlayers()) {
 				p.updateCommands();
 			}
+		} else {
+			// Since the VanillaCommandWrappers aren't created yet, we need to remember for fix those permissions once the server is enabled
+			//  We'll only fix the very first permission associated with this command
+			String commandName = registeredCommands.get(0).commandName();
+			permissionsToFix.putIfAbsent(commandName.toLowerCase(), permission);
 		}
 	}
 
@@ -530,8 +543,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node) {
-		return getBrigadierDispatcher().register(node);
+	public void registerCommandNode(LiteralCommandNode<Source> node) {
+		getBrigadierDispatcher().getRoot().addChild(node);
 	}
 
 	@Override
@@ -693,11 +706,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	@Override
 	public Argument<String> newConcreteLiteralArgument(String nodeName, String literal) {
 		return new LiteralArgument(nodeName, literal);
-	}
-
-	@Override
-	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta) {
-		return new CommandAPICommand(meta);
 	}
 
 	/**

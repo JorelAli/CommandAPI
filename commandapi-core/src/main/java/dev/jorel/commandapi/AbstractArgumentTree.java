@@ -1,6 +1,10 @@
 package dev.jorel.commandapi;
 
+import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.GreedyArgument;
+import dev.jorel.commandapi.exceptions.GreedyArgumentException;
+import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +34,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	@SuppressWarnings("unchecked")
 	protected AbstractArgumentTree() {
-		if (this instanceof AbstractArgument<?, ?, Argument, CommandSender>) {
+		if (this instanceof AbstractArgument<?, ?, ?, ?>) {
 			this.argument = (Argument) this;
 		} else {
-			throw new IllegalArgumentException("Implicit inherited constructor must be from Argument");
+			throw new IllegalArgumentException("Implicit inherited constructor must be from AbstractArgument");
 		}
 	}
 
@@ -60,19 +64,73 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		return instance();
 	}
 
-	List<Execution<CommandSender, Argument>> getExecutions() {
-		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
-		// If this is executable, add its execution
-		if (this.executor.hasAnyExecutors()) {
-			executions.add(new Execution<>(List.of(this.argument), this.executor));
+	/**
+	 * Builds the Brigadier {@link CommandNode} structure for this argument tree.
+	 *
+	 * @param previousNode                    The {@link CommandNode} to add this argument tree onto.
+	 * @param previousArguments               A List of CommandAPI arguments that came before this argument tree.
+	 * @param previousNonLiteralArgumentNames A List of Strings containing the node names that came before this argument.
+	 * @param <Source>                        The Brigadier Source object for running commands.
+	 */
+	public <Source> void buildBrigadierNode(CommandNode<Source> previousNode, List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames) {
+		// Check preconditions
+		if (argument instanceof GreedyArgument && !arguments.isEmpty()) {
+			throw new GreedyArgumentException(previousArguments, argument, getBranchesAsList());
 		}
-		// Add all executions from all arguments
-		for (AbstractArgumentTree<?, Argument, CommandSender> tree : arguments) {
-			for (Execution<CommandSender, Argument> execution : tree.getExecutions()) {
-				// Prepend this argument to the arguments of the executions
-				executions.add(execution.prependedBy(this.argument));
+		if (!executor.hasAnyExecutors() && arguments.isEmpty()) {
+			throw new MissingCommandExecutorException(previousArguments, argument);
+		}
+
+		// Create node for this argument
+		CommandNode<Source> rootNode = argument.addArgumentNodes(previousNode, previousArguments, previousNonLiteralArgumentNames, executor);
+
+		// Add our branches as children to the node
+		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
+			// We need a new list for each branch of the tree
+			List<Argument> newPreviousArguments = new ArrayList<>(previousArguments);
+			List<String> newPreviousArgumentNames = new ArrayList<>(previousNonLiteralArgumentNames);
+
+			child.buildBrigadierNode(rootNode, newPreviousArguments, newPreviousArgumentNames);
+		}
+	}
+
+	/**
+	 * @return A list of paths that represent the possible branches of this argument tree as Strings, starting with the
+	 * base argument held by this tree.
+	 */
+	public List<List<String>> getBranchesAsStrings() {
+		List<List<String>> baseArgumentPaths = new ArrayList<>();
+		baseArgumentPaths.add(new ArrayList<>());
+		argument.appendToCommandPaths(baseArgumentPaths);
+
+		List<List<String>> argumentStrings = new ArrayList<>();
+		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
+			for (List<String> subArgs : child.getBranchesAsStrings()) {
+				for (List<String> basePath : baseArgumentPaths) {
+					List<String> mergedPaths = new ArrayList<>();
+					mergedPaths.addAll(basePath);
+					mergedPaths.addAll(subArgs);
+					argumentStrings.add(mergedPaths);
+				}
 			}
 		}
-		return executions;
+
+		return argumentStrings;
+	}
+
+	/**
+	 * @return A list of paths that represent the possible branches of this argument tree as Argument objects.
+	 */
+	protected List<List<Argument>> getBranchesAsList() {
+		List<List<Argument>> branchesList = new ArrayList<>();
+		for (AbstractArgumentTree<?, Argument, CommandSender> branch : arguments) {
+			for (List<Argument> subBranchList : branch.getBranchesAsList()) {
+				List<Argument> newBranchList = new ArrayList<>();
+				newBranchList.add(branch.argument);
+				newBranchList.addAll(subBranchList);
+				branchesList.add(newBranchList);
+			}
+		}
+		return branchesList;
 	}
 }

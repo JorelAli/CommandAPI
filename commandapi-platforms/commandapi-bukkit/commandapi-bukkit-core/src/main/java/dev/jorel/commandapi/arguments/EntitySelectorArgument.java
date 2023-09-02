@@ -47,7 +47,7 @@ public class EntitySelectorArgument {
 	 *
 	 * @apiNote Returns an {@link Entity} object
 	 */
-	public static class OneEntity extends Argument<Entity> {
+	public static class OneEntity extends Argument<Entity> implements FlattenableArgument {
 
 		/**
 		 * An argument that represents a single entity
@@ -73,7 +73,7 @@ public class EntitySelectorArgument {
 		}
 
 		@Override
-		public List<String> getEntityNames(Object argument) {
+		public List<String> flatten(Object argument) {
 			return List.of(((Entity) argument).getName());
 		}
 
@@ -84,7 +84,7 @@ public class EntitySelectorArgument {
 	 *
 	 * @apiNote Returns a {@link Player} object
 	 */
-	public static class OnePlayer extends Argument<Player> {
+	public static class OnePlayer extends Argument<Player> implements FlattenableArgument {
 
 		/**
 		 * An argument that represents a single player
@@ -110,7 +110,7 @@ public class EntitySelectorArgument {
 		}
 
 		@Override
-		public List<String> getEntityNames(Object argument) {
+		public List<String> flatten(Object argument) {
 			return List.of(((Player) argument).getName());
 		}
 
@@ -122,7 +122,7 @@ public class EntitySelectorArgument {
 	 * @apiNote Returns a {@link Collection}{@code <}{@link Entity}{@code >} object
 	 */
 	@SuppressWarnings("rawtypes")
-	public static class ManyEntities extends Argument<Collection> {
+	public static class ManyEntities extends Argument<Collection> implements FlattenableArgument {
 
 		/**
 		 * An argument that represents many entities
@@ -150,7 +150,7 @@ public class EntitySelectorArgument {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public List<String> getEntityNames(Object argument) {
+		public List<String> flatten(Object argument) {
 			List<String> entityNames = new ArrayList<>();
 			for (Entity entity : (List<Entity>) argument) {
 				entityNames.add(entity.getName());
@@ -166,7 +166,7 @@ public class EntitySelectorArgument {
 	 * @apiNote Returns a {@link Collection}{@code <}{@link Player}{@code >} object
 	 */
 	@SuppressWarnings("rawtypes")
-	public static class ManyPlayers extends Argument<Collection> {
+	public static class ManyPlayers extends Argument<Collection> implements FlattenableArgument {
 
 		/**
 		 * An argument that represents many players
@@ -194,7 +194,7 @@ public class EntitySelectorArgument {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public List<String> getEntityNames(Object argument) {
+		public List<String> flatten(Object argument) {
 			List<String> playerNames = new ArrayList<>();
 			for (Player entity : (List<Player>) argument) {
 				playerNames.add(entity.getName());
