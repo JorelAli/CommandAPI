@@ -80,10 +80,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	public abstract AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender);
 
-	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
-	// before they can be used.
-	public abstract void registerPermission(String string);
-
 	// Some commands have existing suggestion providers
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
@@ -98,25 +94,41 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Stuff to run after a command has been generated.
 	 *
-	 * @param registeredCommand A {@link RegisteredCommand} instance that holds the CommandAPI information for the command
-	 * @param resultantNode     The node that was registered
-	 * @param aliasNodes        Any alias nodes that were also registered as a part of this registration process
+	 * @param registeredCommands A List of {@link RegisteredCommand} objects that holds the CommandAPI information for each branch of the registered command
+	 * @param resultantNode      The node that was registered
+	 * @param aliasNodes         Any alias nodes that were also registered as a part of this registration process
 	 */
-	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
-	 * Registers a Brigadier command node and returns the built node.
+	 * Builds and registers a Brigadier command node.
+	 * 
+	 * @param node The Brigadier {@link LiteralArgumentBuilder} to build and register.
+	 * @param namespace The namespace to register the command with.
+	 * @return The built node.
 	 */
-	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace);
+	default LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
+		LiteralCommandNode<Source> built = node.build();
+		registerCommandNode(built, namespace);
+		return built;
+	}
+
+	/**
+	 * Registers a Brigadier command node.
+	 * 
+	 * @param node The Brigadier {@link LiteralArgumentBuilder} to register.
+	 * @param namespace The namespace to register the command with.
+	 */
+	public abstract void registerCommandNode(LiteralCommandNode<Source> node, String namespace);
 
 
 	/**
 	 * Unregisters a command from the CommandGraph so it can't be run anymore.
 	 *
-	 * @param commandName the name of the command to unregister
+	 * @param commandName          the name of the command to unregister
 	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
-	 *                                command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
-	 *                                or `plugin:command`
+	 *                             command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
+	 *                             or `plugin:command`
 	 */
 	public abstract void unregister(String commandName, boolean unregisterNamespaces);
 
@@ -179,9 +191,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param player the player to update
 	 */
 	public abstract void updateRequirements(AbstractPlayer<?> player);
-
-	// Create the concrete instances of objects implemented by the platform
-	public abstract AbstractCommandAPICommand<?, Argument, CommandSender> newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta);
 
 	public abstract Argument newConcreteMultiLiteralArgument(String nodeName, String[] literals);
 

@@ -20,17 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Predicate;
-
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.GreedyArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -51,7 +52,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	protected List<Argument> arguments = new ArrayList<>();
 	protected List<Impl> subcommands = new ArrayList<>();
-	protected boolean isConverted;
 
 	/**
 	 * Creates a new command builder
@@ -60,17 +60,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	protected AbstractCommandAPICommand(String commandName) {
 		super(commandName);
-		this.isConverted = false;
-	}
-
-	/**
-	 * Creates a new Command builder
-	 *
-	 * @param metaData The metadata of the command to create
-	 */
-	protected AbstractCommandAPICommand(CommandMetaData<CommandSender> metaData) {
-		super(metaData);
-		this.isConverted = false;
 	}
 
 	/**
@@ -148,7 +137,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
-	public Impl withSubcommands(@SuppressWarnings("unchecked") Impl... subcommands) {
+	@SafeVarargs
+	public final Impl withSubcommands(Impl... subcommands) {
 		this.subcommands.addAll(Arrays.asList(subcommands));
 		return instance();
 	}
@@ -189,197 +179,151 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		this.subcommands = subcommands;
 	}
 
-	/**
-	 * Returns whether this command is an automatically converted command
-	 *
-	 * @return whether this command is an automatically converted command
-	 */
-	public boolean isConverted() {
-		return isConverted;
-	}
-
-	/**
-	 * Sets a command as "converted". This tells the CommandAPI that this command
-	 * was converted by the CommandAPI's Converter. This should not be used outside
-	 * of the CommandAPI's internal API
-	 *
-	 * @param isConverted whether this command is converted or not
-	 * @return this command builder
-	 */
-	Impl setConverted(boolean isConverted) {
-		this.isConverted = isConverted;
-		return instance();
-	}
-
-	// Expands subcommands into arguments. This method should be static (it
-	// shouldn't be accessing/depending on any of the contents of the current class instance)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static <Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>, Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender>
-	void flatten(Impl rootCommand, List<Argument> prevArguments, Impl subcommand, String namespace) {
-		// Get the list of literals represented by the current subcommand. This
-		// includes the subcommand's name and any aliases for this subcommand
-		String[] literals = new String[subcommand.meta.aliases.length + 1];
-		literals[0] = subcommand.meta.commandName;
-		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
-
-		// Create a MultiLiteralArgument using the subcommand information
-		Argument literal = (Argument) CommandAPIHandler.getInstance().getPlatform().newConcreteMultiLiteralArgument(subcommand.meta.commandName, literals);
-
-		literal.withPermission(subcommand.meta.permission)
-			.withRequirement((Predicate) subcommand.meta.requirements)
-			.setListed(false);
-
-		prevArguments.add(literal);
-
-		if (subcommand.executor.hasAnyExecutors()) {
-			// Create the new command. The new command:
-			// - starts at the root command node
-			// - has all of the previously declared arguments (i.e. not itself)
-			// - uses the subcommand's executor
-			// - has no subcommands(?)
-			// Honestly, if you're asking how or why any of this works, I don't
-			// know because I just trialled random code until it started working
-			rootCommand.arguments = prevArguments;
-			rootCommand.withArguments(subcommand.arguments);
-			rootCommand.executor = subcommand.executor;
-			rootCommand.subcommands = new ArrayList<>();
-			rootCommand.register(namespace);
+	@Override
+	public List<List<String>> getArgumentsAsStrings() {
+		// Return an empty list if we have no arguments
+		if (arguments.isEmpty() && subcommands.isEmpty()) {
+			// Note: the inner list needs to be mutable in the case that this is a subcommand/sub-subcommand...
+			//  In that case, the parent subcommands will be built backwards inside this list
+			return List.of(new ArrayList<>());
 		}
 
-		for (Impl subsubcommand : subcommand.getSubcommands()) {
-			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand, namespace);
+		List<List<String>> argumentStrings = new ArrayList<>();
+
+		if (!arguments.isEmpty()) {
+			// Build main path
+			List<List<String>> currentPaths = new ArrayList<>();
+			currentPaths.add(new ArrayList<>());
+			boolean foundOptional = arguments.get(0).isOptional();
+			for (int i = 0; i < arguments.size(); i++) {
+				Argument argument = arguments.get(i);
+				argument.appendToCommandPaths(currentPaths);
+
+				// Non-optional argument after an optional argument
+				//  This state is invalid, so we cannot continue
+				boolean nextIsOptional = i == arguments.size() - 1 || arguments.get(i + 1).isOptional();
+				if (foundOptional && !nextIsOptional)
+					throw new OptionalArgumentException(name, arguments.subList(0, i), argument);
+				foundOptional = nextIsOptional;
+
+				// If this is the last argument, or the next argument is optional, then the current path should be included by itself
+				if (nextIsOptional) argumentStrings.addAll(currentPaths);
+			}
 		}
+
+		// Add subcommands
+		for (Impl subCommand : subcommands) {
+			String subCommandArgument = subCommand.name + ":LiteralArgument";
+			for (List<String> subArgs : subCommand.getArgumentsAsStrings()) {
+				subArgs.add(0, subCommandArgument);
+				argumentStrings.add(subArgs);
+			}
+		}
+
+		return argumentStrings;
 	}
-	
-	boolean hasAnyExecutors() {
-		if (this.executor.hasAnyExecutors()) {
-			return true;
-		} else {
-			for(Impl subcommand : this.subcommands) {
-				if (subcommand.hasAnyExecutors()) {
-					return true;
+
+	@Override
+	<Source> Nodes<Source> createCommandNodes() {
+		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
+
+		// Check preconditions
+		if (!executor.hasAnyExecutors() && (subcommands.isEmpty() || !arguments.isEmpty())) {
+			// If we don't have any executors then:
+			//  No subcommands is bad because this path can't be run at all
+			//  Having arguments is bad because developer intended this path to be executable with arguments
+			throw new MissingCommandExecutorException(name);
+		}
+
+		// Create node
+		LiteralArgumentBuilder<Source> rootBuilder = LiteralArgumentBuilder.literal(name);
+
+		// Add permission and requirements
+		rootBuilder.requires(handler.generateBrigadierRequirements(permission, requirements));
+
+		// Add our executor if this is the last node, or the next argument is optional
+		if ((arguments.isEmpty() || arguments.get(0).isOptional()) && executor.hasAnyExecutors()) {
+			rootBuilder.executes(handler.generateBrigadierCommand(List.of(), executor));
+		}
+
+		// Register main node
+		LiteralCommandNode<Source> rootNode = rootBuilder.build();
+
+		// Create arguments
+		if (!arguments.isEmpty()) {
+			CommandNode<Source> previousNode = rootNode;
+			List<Argument> previousArguments = new ArrayList<>();
+			List<String> previousArgumentNames = new ArrayList<>();
+
+			// The previous arguments include an unlisted MultiLiteral representing the command name and aliases
+			//  This doesn't affect how the command acts, but it helps represent the command path in exceptions
+			String[] literals = new String[aliases.length + 1];
+			literals[0] = name;
+			System.arraycopy(aliases, 0, literals, 1, aliases.length);
+			Argument commandNames = handler.getPlatform().newConcreteMultiLiteralArgument(name, literals);
+			commandNames.setListed(false);
+
+			previousArguments.add(commandNames);
+
+			boolean foundOptional = arguments.get(0).isOptional();
+			for (int i = 0; i < arguments.size(); i++) {
+				Argument argument = arguments.get(i);
+
+				boolean nextIsOptional = i == arguments.size() - 1 || arguments.get(i + 1).isOptional();
+				// Non-optional argument after an optional argument
+				//  This state is invalid, so we cannot continue
+				if (foundOptional && !nextIsOptional) throw new OptionalArgumentException(previousArguments, argument);
+				foundOptional = nextIsOptional;
+
+				previousNode = argument.addArgumentNodes(previousNode, previousArguments, previousArgumentNames,
+					// If this is the last argument, or the next argument is optional, add the executor
+					nextIsOptional ? executor : null);
+			}
+
+			// Check greedy argument constraint
+			//  We need to check it down here so that all the combined arguments are properly considered after unpacking
+			for (int i = 0; i < previousArguments.size() - 1 /* Minus one since we don't need to check last argument */; i++) {
+				Argument argument = previousArguments.get(i);
+				if (argument instanceof GreedyArgument) {
+					throw new GreedyArgumentException(
+						previousArguments.subList(0, i), // Arguments before this
+						argument,
+						List.of(previousArguments.subList(i + 1, previousArguments.size())) // Arguments after this
+					);
 				}
 			}
 		}
-		return false;
-	}
-	
-	private void checkHasExecutors() {
-		if(!hasAnyExecutors()) {
-			throw new MissingCommandExecutorException(this.meta.commandName);
-		}
-	}
 
-	/**
-	 * Registers the command with a given namespace
-	 *
-	 * @param namespace The namespace of this command. This cannot be null
-	 * @throws NullPointerException if the namespace is null
-	 */
-	@Override
-	public void register(String namespace) {
-		if (namespace == null) {
-			// Only reachable through Velocity
-			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + this.meta.commandName + "!");
-		}
-		@SuppressWarnings("unchecked")
-		Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
-
-		// Check GreedyArgument constraints
-		checkGreedyArgumentConstraints(argumentsArray);
-		checkHasExecutors();
-
-		// Assign the command's permissions to arguments if the arguments don't already
-		// have one
-		for (Argument argument : argumentsArray) {
-			if (argument.getArgumentPermission() == null) {
-				argument.withPermission(meta.permission);
+		// Add subcommands
+		for (Impl subCommand : subcommands) {
+			Nodes<Source> nodes = subCommand.createCommandNodes();
+			rootNode.addChild(nodes.rootNode());
+			for (LiteralCommandNode<Source> aliasNode : nodes.aliasNodes()) {
+				rootNode.addChild(aliasNode);
 			}
 		}
 
-		if (executor.hasAnyExecutors()) {
-			// Need to cast handler to the right CommandSender type so that argumentsArray and executor are accepted
-			@SuppressWarnings("unchecked")
-			CommandAPIHandler<Argument, CommandSender, ?> handler = (CommandAPIHandler<Argument, CommandSender, ?>) CommandAPIHandler.getInstance();
+		// Generate alias nodes
+		List<LiteralCommandNode<Source>> aliasNodes = new ArrayList<>();
+		for (String alias : aliases) {
+			// Create node
+			LiteralArgumentBuilder<Source> aliasBuilder = LiteralArgumentBuilder.literal(alias);
 
-			// Create a List<Argument[]> that is used to register optional arguments
-			for (Argument[] args : getArgumentsToRegister(argumentsArray)) {
-				handler.register(meta, args, executor, isConverted, namespace);
+			// Add permission and requirements
+			aliasBuilder.requires(handler.generateBrigadierRequirements(permission, requirements));
+
+			// Add our executor
+			if ((arguments.isEmpty() || arguments.get(0).isOptional()) && executor.hasAnyExecutors()) {
+				aliasBuilder.executes(handler.generateBrigadierCommand(List.of(), executor));
 			}
+
+			// Redirect to rootNode so all its arguments come after this node
+			aliasBuilder.redirect(rootNode);
+
+			// Register alias node
+			aliasNodes.add(aliasBuilder.build());
 		}
 
-		// Convert subcommands into multiliteral arguments
-		for (Impl subcommand : this.subcommands) {
-			flatten(this.copy(), new ArrayList<>(), subcommand, namespace);
-		}
-	}
-
-	// Checks that greedy arguments don't have any other arguments at the end,
-	// and only zero or one greedy argument is present in an array of arguments
-	private void checkGreedyArgumentConstraints(Argument[] argumentsArray) {
-		for (int i = 0; i < argumentsArray.length; i++) {
-			// If we've seen a greedy argument that isn't at the end, then that
-			// also covers the case of seeing more than one greedy argument, as
-			// if there are more than one greedy arguments, one of them must not
-			// be at the end!
-			if (argumentsArray[i] instanceof GreedyArgument && i != argumentsArray.length - 1) {
-				throw new GreedyArgumentException(argumentsArray);
-			}
-		}
-	}
-
-	public Impl copy() {
-		Impl command = newConcreteCommandAPICommand(new CommandMetaData<>(this.meta));
-		command.arguments = new ArrayList<>(this.arguments);
-		command.subcommands = new ArrayList<>(this.subcommands);
-		command.isConverted = this.isConverted;
-		return command;
-	}
-
-	protected abstract Impl newConcreteCommandAPICommand(CommandMetaData<CommandSender> metaData);
-
-	private List<Argument[]> getArgumentsToRegister(Argument[] argumentsArray) {
-		List<Argument[]> argumentsToRegister = new ArrayList<>();
-		List<Argument> currentCommand = new ArrayList<>();
-
-		Iterator<Argument> argumentIterator = List.of(argumentsArray).iterator();
-
-		// Collect all required arguments, adding them as a command once finding the first optional
-		while(argumentIterator.hasNext()) {
-			Argument next = argumentIterator.next();
-			if(next.isOptional()) {
-				argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
-				currentCommand.addAll(unpackCombinedArguments(next));
-				break;
-			}
-			currentCommand.addAll(unpackCombinedArguments(next));
-		}
-
-		// Collect the optional arguments, adding each one as a valid command
-		while (argumentIterator.hasNext()) {
-			Argument next = argumentIterator.next();
-			if(!next.isOptional()) {
-				throw new OptionalArgumentException(meta.commandName); // non-optional argument after optional
-			}
-			argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
-			currentCommand.addAll(unpackCombinedArguments(next));
-		}
-
-		// All the arguments expanded, also handles when there are no optional arguments
-		argumentsToRegister.add((Argument[]) currentCommand.toArray(new AbstractArgument[0]));
-		return argumentsToRegister;
-	}
-
-	private List<Argument> unpackCombinedArguments(Argument argument) {
-		if (!argument.hasCombinedArguments()) {
-			return List.of(argument);
-		}
-		List<Argument> combinedArguments = new ArrayList<>();
-		combinedArguments.add(argument);
-		for (Argument subArgument : argument.getCombinedArguments()) {
-			subArgument.copyPermissionsAndRequirements(argument);
-			combinedArguments.addAll(unpackCombinedArguments(subArgument));
-		}
-		return combinedArguments;
+		return new Nodes<>(rootNode, aliasNodes);
 	}
 }

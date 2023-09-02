@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.AbstractArgument;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -49,8 +50,10 @@ public record RegisteredCommand(
 	 * @return An {@link Optional} containing this command's help's
 	 *          usage
 	 */
-	Optional<String[]> usageDescription,
-	
+	Optional<String[]> usageDescription,	
+
+	// TODO: Bukkit specific fields probably should not be in platform agnostic classes
+	//  Either make HelpTopic platform agnostic or move this field into bukkit-core
 	/**
 	 * @return An {@link Optional} containing this command's help topic (for Bukkit)
 	 */
@@ -70,6 +73,31 @@ public record RegisteredCommand(
 	 * @return The namespace for this command
 	 */
 	String namespace) {
+	public static List<RegisteredCommand> fromExecutableCommand(ExecutableCommand<?, ?> command, String namespace) {
+		// Unpack command parameters
+		String commandName = command.getName();
+		List<List<String>> argumentsAsStrings = command.getArgumentsAsStrings();
+
+		Optional<String> shortDescription = Optional.ofNullable(command.getShortDescription());
+		Optional<String> fullDescription = Optional.ofNullable(command.getFullDescription());
+		Optional<String[]> usageDescription = Optional.ofNullable(command.getUsage());
+		Optional<Object> helpTopic = Optional.ofNullable(command.getHelpTopic());
+
+		String[] aliases = command.getAliases();
+		CommandPermission permission = command.getPermission();
+
+		List<RegisteredCommand> result = new ArrayList<>(argumentsAsStrings.size());
+		for (List<String> argumentString : argumentsAsStrings) {
+			result.add(new RegisteredCommand(
+				commandName, argumentString, null, // TODO: Need to fix this. Trying to rebase changes from https://github.com/JorelAli/CommandAPI/pull/537 into `dev/command-build-rewrite`
+				shortDescription, fullDescription, usageDescription,
+				helpTopic, aliases, permission, namespace
+			));
+		}
+
+		return result;
+	}
+
 	// As https://stackoverflow.com/a/32083420 mentions, Optional's hashCode, equals, and toString method don't work if the
 	//  Optional wraps an array, like `Optional<String[]> usageDescription`, so we have to use the Arrays methods ourselves
 
@@ -104,5 +132,4 @@ public record RegisteredCommand(
 			+ ", usageDescription=" + (usageDescription.isPresent() ? "Optional[" + Arrays.toString(usageDescription.get()) + "]" : "Optional.empty")
 			+ ", aliases=" + Arrays.toString(aliases) + ", permission=" + permission + ", namespace=" + namespace + ", helpTopic=" + helpTopic + "]";
 	}
-
 }

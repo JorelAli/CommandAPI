@@ -20,15 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.executors.CommandArguments;
+
+import java.util.List;
 
 /**
  * A pseudo-argument representing a single literal string
  */
-public class LiteralArgument extends Argument<String> implements Literal<Argument<String>> {
+public class LiteralArgument extends Argument<String> implements Literal<Argument<?>, CommandSource> {
 
 	private final String literal;
 
@@ -118,11 +122,6 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 		return String.class;
 	}
 
-	/**
-	 * Returns the literal string represented by this argument
-	 *
-	 * @return the literal string represented by this argument
-	 */
 	@Override
 	public String getLiteral() {
 		return literal;
@@ -141,5 +140,21 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	@Override
 	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return literal;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Literal interface overrides                                                                                    //
+	// When a method in a parent class and interface have the same signature, Java will call the class version of the //
+	//  method by default. However, we want to use the implementations found in the Literal interface.                //
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public void checkPreconditions(List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames) {
+		super.checkPreconditions(previousArguments, previousNonLiteralArgumentNames);
+	}
+
+	@Override
+	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames) {
+		return Literal.super.createArgumentBuilder(previousArguments, previousNonLiteralArgumentNames);
 	}
 }

@@ -41,7 +41,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -421,15 +420,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void registerPermission(String string) {
-		try {
-			Bukkit.getPluginManager().addPermission(new Permission(string));
-		} catch (IllegalArgumentException e) {
-			assert true; // nop, not an error.
-		}
-	}
-
-	@Override
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
@@ -454,12 +444,28 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-		commandRegistrationStrategy.postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
+	public void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+		commandRegistrationStrategy.postCommandRegistration(registeredCommands, resultantNode, aliasNodes);
+
+		// Using registeredCommands.get(0) as representation for most command features.
+		//  This is fine, because the only difference between the commands in the list is their argument strings.
+		RegisteredCommand commonCommandInformation = registeredCommands.get(0);
+
+		// Register the command's permission node to Bukkit's manager, if it exists
+		CommandPermission permission = commonCommandInformation.permission();
+		Optional<String> wrappedPermissionString = permission.getPermission();
+		if (wrappedPermissionString.isPresent()) {
+			try {
+				Bukkit.getPluginManager().addPermission(new Permission(wrappedPermissionString.get()));
+			} catch (IllegalArgumentException ignored) {
+				// Exception is thrown if we attempt to register a permission that already exists
+				//  If it already exists, that's totally fine, so just ignore the exception
+			}
+		}
 
 		if (!CommandAPI.canRegister()) {
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
-			updateHelpForCommands(List.of(registeredCommand));
+			updateHelpForCommands(registeredCommands);
 
 			// Sending command dispatcher packets usually happens when Players join the server
 			for (Player p : Bukkit.getOnlinePlayers()) {
@@ -469,8 +475,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
-		return commandRegistrationStrategy.registerCommandNode(node, namespace);
+	public void registerCommandNode(LiteralCommandNode<Source> node, String namespace) {
+		commandRegistrationStrategy.registerCommandNode(node, namespace);
 	}
 
 	@Override
@@ -560,11 +566,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	@Override
 	public Argument<String> newConcreteLiteralArgument(String nodeName, String literal) {
 		return new LiteralArgument(nodeName, literal);
-	}
-
-	@Override
-	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta) {
-		return new CommandAPICommand(meta);
 	}
 
 	/**

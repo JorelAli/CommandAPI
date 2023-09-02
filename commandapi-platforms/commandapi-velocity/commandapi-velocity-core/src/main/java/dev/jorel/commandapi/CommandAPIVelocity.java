@@ -6,7 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -96,11 +95,6 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	@Override
 	public void onDisable() {
 		// Nothing to do
-	}
-
-	@Override
-	public void registerPermission(String string) {
-		// Unsurprisingly, Velocity doesn't have a dumb permission system!
 	}
 
 	@Override
@@ -210,18 +204,21 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<CommandSource> resultantNode, List<LiteralCommandNode<CommandSource>> aliasNodes) {
+	public void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<CommandSource> resultantNode, List<LiteralCommandNode<CommandSource>> aliasNodes) {
 		// Nothing to do
 	}
 
 	@Override
-	public LiteralCommandNode<CommandSource> registerCommandNode(LiteralArgumentBuilder<CommandSource> node, String namespace) {
-		LiteralCommandNode<CommandSource> builtNode = getBrigadierDispatcher().register(node);
+	public void registerCommandNode(LiteralCommandNode<CommandSource> node, String namespace) {
+		// Register the main node
+		getBrigadierDispatcher().getRoot().addChild(node);
+
+		// Register the namespaced node if it is not empty
 		if (!namespace.isEmpty()) {
-			getBrigadierDispatcher().getRoot().addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace));
+			getBrigadierDispatcher().getRoot().addChild(
+				CommandAPIHandler.<Argument<?>, CommandSource, CommandSource>getInstance().namespaceNode(node, namespace)
+			);
 		}
-		// We're done. The command already is registered
-		return builtNode;
 	}
 
 	@Override
@@ -242,10 +239,5 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	@Override
 	public Argument<String> newConcreteLiteralArgument(String nodeName, String literal) {
 		return new LiteralArgument(nodeName, literal);
-	}
-
-	@Override
-	public AbstractCommandAPICommand<?, Argument<?>, CommandSource> newConcreteCommandAPICommand(CommandMetaData<CommandSource> meta) {
-		return new CommandAPICommand(meta);
 	}
 }
