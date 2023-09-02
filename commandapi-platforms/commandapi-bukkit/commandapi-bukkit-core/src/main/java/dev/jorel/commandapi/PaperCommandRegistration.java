@@ -1,7 +1,6 @@
 package dev.jorel.commandapi;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -50,23 +49,24 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+	public void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		// Nothing to do
 	}
 
 	@Override
-	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
-		LiteralCommandNode<Source> commandNode = getBrigadierDispatcher.get().register(node);
-		LiteralCommandNode<Source> namespacedCommandNode = CommandAPIHandler.getInstance().namespaceNode(commandNode, namespace);
-
-		// Add to registered command nodes
-		registeredNodes.addChild(commandNode);
-		registeredNodes.addChild(namespacedCommandNode);
-
+	public void registerCommandNode(LiteralCommandNode<Source> node, String namespace) {
 		// Namespace is not empty on Bukkit forks
-		getBrigadierDispatcher.get().getRoot().addChild(namespacedCommandNode);
+		CommandAPIHandler<?, ?, Source> commandAPIHandler = CommandAPIHandler.getInstance();
+		LiteralCommandNode<Source> namespacedCommandNode = commandAPIHandler.namespaceNode(node, namespace);
 
-		return commandNode;
+		// Register nodes
+		RootCommandNode<Source> dispatcherRoot = getBrigadierDispatcher.get().getRoot();
+		dispatcherRoot.addChild(node);
+		dispatcherRoot.addChild(namespacedCommandNode);
+
+		// Track registered command nodes for reloads
+		registeredNodes.addChild(node);
+		registeredNodes.addChild(namespacedCommandNode);
 	}
 
 	@Override

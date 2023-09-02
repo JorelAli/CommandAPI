@@ -1,7 +1,6 @@
 package dev.jorel.commandapi;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -76,9 +75,9 @@ public abstract class CommandRegistrationStrategy<Source> {
 
 	public abstract void runTasksAfterServerStart();
 
-	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
-	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace);
+	public abstract void registerCommandNode(LiteralCommandNode<Source> node, String namespace);
 
 	public abstract void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit);
 

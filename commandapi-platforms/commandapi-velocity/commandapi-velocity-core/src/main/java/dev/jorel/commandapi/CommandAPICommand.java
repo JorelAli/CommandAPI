@@ -18,20 +18,6 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	}
 
 	/**
-	 * Creates a new Command builder
-	 *
-	 * @param metaData The metadata of the command to create
-	 */
-	protected CommandAPICommand(CommandMetaData<CommandSource> metaData) {
-		super(metaData);
-	}
-
-	@Override
-	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSource> metaData) {
-		return new CommandAPICommand(metaData);
-	}
-
-	/**
 	 * Registers the command with a given namespace
 	 *
 	 * @param namespace The namespace of this command. This cannot be null or empty

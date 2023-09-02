@@ -9,18 +9,13 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPICommand, Argument<?>, CommandSender> implements BukkitExecutable<CommandAPICommand> {
-	
-	public CommandAPICommand(CommandMetaData<CommandSender> meta) {
-		super(meta);
-	}
-	
+	/**
+	 * Creates a new command builder
+	 *
+	 * @param commandName The name of the command to create
+	 */
 	public CommandAPICommand(String commandName) {
 		super(commandName);
-	}
-
-	@Override
-	protected CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> metaData) {
-		return new CommandAPICommand(metaData);
 	}
 
 	@Override
@@ -42,18 +37,18 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	 * @return this command builder
 	 */
 	public CommandAPICommand withHelp(HelpTopic helpTopic) {
-		this.meta.helpTopic = Optional.of(helpTopic);
+		this.helpTopic = Optional.of(helpTopic);
 		return instance();
 	}
 
 	/**
-	 * Registers the command with a given namespace
+	 * Registers the command with a given namespace.
 	 *
-	 * @param namespace The namespace of this command. This cannot be null or empty
+	 * @param namespace The namespace of this command. This cannot be null or empty.
 	 *
 	 */
 	public void register(String namespace) {
-		if (CommandAPIBukkit.get().isInvalidNamespace(this.meta.commandName, namespace)) {
+		if (CommandAPIBukkit.get().isInvalidNamespace(this.name, namespace)) {
 			super.register();
 			return;
 		}
