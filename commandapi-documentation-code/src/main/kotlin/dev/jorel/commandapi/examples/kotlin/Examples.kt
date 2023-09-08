@@ -549,6 +549,14 @@ CommandAPICommand("break")
     })
     .register()
 /* ANCHOR_END: argumentLocations1 */
+	
+/* ANCHOR: argumentLocationsTrue */
+LocationArgument("location", LocationType.PRECISE_POSITION, true)
+/* ANCHOR_END: argumentLocationsTrue */
+
+/* ANCHOR: argumentLocationsFalse */
+LocationArgument("location", LocationType.PRECISE_POSITION, false)
+/* ANCHOR_END: argumentLocationsFalse */
 }
 
 fun argument_lootTable() {

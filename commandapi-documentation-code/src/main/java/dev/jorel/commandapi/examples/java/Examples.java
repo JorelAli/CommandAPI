@@ -606,6 +606,14 @@ new CommandAPICommand("break")
     })
     .register();
 /* ANCHOR_END: argumentLocations1 */
+
+/* ANCHOR: argumentLocationsTrue */
+new LocationArgument("location", LocationType.PRECISE_POSITION, true);
+/* ANCHOR_END: argumentLocationsTrue */
+
+/* ANCHOR: argumentLocationsFalse */
+new LocationArgument("location", LocationType.PRECISE_POSITION, false);
+/* ANCHOR_END: argumentLocationsFalse */
 }
 
 void argument_lootTable() {
