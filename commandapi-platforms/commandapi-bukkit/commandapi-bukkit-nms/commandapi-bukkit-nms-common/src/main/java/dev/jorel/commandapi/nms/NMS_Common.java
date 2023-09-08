@@ -264,13 +264,13 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentVec2() {
-		return Vec2Argument.vec2();
+	public final ArgumentType<?> _ArgumentVec2(boolean centerPosition) {
+		return Vec2Argument.vec2(centerPosition);
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentVec3() {
-		return Vec3Argument.vec3();
+	public final ArgumentType<?> _ArgumentVec3(boolean centerPosition) {
+		return Vec3Argument.vec3(centerPosition);
 	}
 
 	@Override

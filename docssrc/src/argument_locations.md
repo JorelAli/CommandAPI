@@ -26,6 +26,10 @@ The `LocationArgument` constructor requires a `LocationType`, which specifies th
 
 If no `LocationType` is provided, **the `LocationArgument` will use `PRECISE_POSITION` by default**.
 
+The `LocationArgument` constructor can also accept a `boolean centerPosition`. If set to `true`, when using `LocationType.PRECISE_POSITION`, if an integer is provided in the value, it will add 0.5 to the result to center the position within a block. If set to `false`, the integer value will be provided as is.
+
+If no `centerPosition` parameter is provided, **the `LocationArgument` will use `centerPosition = true` by default**.
+
 -----
 
 <div class="example">
