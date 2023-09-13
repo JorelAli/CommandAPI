@@ -231,7 +231,7 @@ public final class Converter {
 	}
 
 	/*
-	 * https://www.jorel.dev/blog/Simplifying-Bukkit-CommandSenders/
+	 * https://www.jorel.dev/blog/posts/Simplifying-Bukkit-CommandSenders/
 	 */
 	private static CommandSender mergeProxySender(NativeProxyCommandSender proxySender) {
 		// Add all interfaces
