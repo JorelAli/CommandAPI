@@ -376,6 +376,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top">
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/487 Added support for disabling integer centering for location arguments</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/488 Fixed calling CommandAPI commands with <code>Bukkit.createCommandSender()</code> not working on paper</li>
                 </ul>
             </td>
         </tr>
