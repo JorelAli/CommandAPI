@@ -376,6 +376,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top">
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/487 Added support for disabling integer centering for location arguments</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/482 Adds Kotlin DSL support for delegations</li>
                 </ul>
             </td>
         </tr>
