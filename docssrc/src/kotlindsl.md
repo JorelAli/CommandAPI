@@ -134,7 +134,6 @@ The Kotlin DSL offers an additional way to access arguments: delegations. With d
 1. `commandapi-core-kotlin`
 
    Support for delegations in the Kotlin DSL has been added to the `commandapi-core-kotlin` module. If you want to use delegations, you need to add this dependency.
-   
 
 2. `commandapi-bukkit-kotlin`
 
