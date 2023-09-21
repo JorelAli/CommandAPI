@@ -37,8 +37,8 @@ inline fun CommandTree.textArgument(nodeName: String, optional: Boolean = false,
 inline fun CommandTree.greedyStringArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(GreedyStringArgument(nodeName).setOptional(optional).apply(block))
 
 // Positional arguments
-inline fun CommandTree.locationArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName, locationType).setOptional(optional).apply(block))
-inline fun CommandTree.location2DArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(Location2DArgument(nodeName, locationType).setOptional(optional).apply(block))
+inline fun CommandTree.locationArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, centerPosition: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(LocationArgument(nodeName, locationType, centerPosition).setOptional(optional).apply(block))
+inline fun CommandTree.location2DArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, centerPosition: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(Location2DArgument(nodeName, locationType, centerPosition).setOptional(optional).apply(block))
 inline fun CommandTree.rotationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(RotationArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.axisArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(AxisArgument(nodeName).setOptional(optional).apply(block))
 
@@ -142,8 +142,8 @@ inline fun Argument<*>.textArgument(nodeName: String, optional: Boolean = false,
 inline fun Argument<*>.greedyStringArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(GreedyStringArgument(nodeName).setOptional(optional).apply(block))
 
 // Positional arguments
-inline fun Argument<*>.locationArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LocationArgument(nodeName, locationType).setOptional(optional).apply(block))
-inline fun Argument<*>.location2DArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(Location2DArgument(nodeName, locationType).setOptional(optional).apply(block))
+inline fun Argument<*>.locationArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, centerPosition: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LocationArgument(nodeName, locationType, centerPosition).setOptional(optional).apply(block))
+inline fun Argument<*>.location2DArgument(nodeName: String, locationType: LocationType = LocationType.PRECISE_POSITION, centerPosition: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(Location2DArgument(nodeName, locationType, centerPosition).setOptional(optional).apply(block))
 inline fun Argument<*>.rotationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(RotationArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.axisArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(AxisArgument(nodeName).setOptional(optional).apply(block))
 

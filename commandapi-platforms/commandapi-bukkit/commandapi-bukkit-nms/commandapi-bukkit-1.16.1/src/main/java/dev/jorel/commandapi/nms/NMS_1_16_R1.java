@@ -397,13 +397,13 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentVec2() {
-		return ArgumentVec2.a();
+	public ArgumentType<?> _ArgumentVec2(boolean centerPosition) {
+		return new ArgumentVec2(centerPosition);
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentVec3() {
-		return ArgumentVec3.a();
+	public ArgumentType<?> _ArgumentVec3(boolean centerPosition) {
+		return ArgumentVec3.a(centerPosition);
 	}
 
 	@Override

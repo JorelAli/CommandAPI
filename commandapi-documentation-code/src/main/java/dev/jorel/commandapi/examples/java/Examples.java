@@ -597,6 +597,14 @@ for(Entry<String, GameMode> entry : gamemodes.entrySet()) {
 
 void argument_locations() {
 /* ANCHOR: argumentLocations1 */
+new LocationArgument("location", LocationType.PRECISE_POSITION, true);
+/* ANCHOR_END: argumentLocations1 */
+
+/* ANCHOR: argumentLocations2 */
+new LocationArgument("location", LocationType.PRECISE_POSITION, false);
+/* ANCHOR_END: argumentLocations2 */
+
+/* ANCHOR: argumentLocations3 */
 new CommandAPICommand("break")
     // We want to target blocks in particular, so use BLOCK_POSITION
     .withArguments(new LocationArgument("block", LocationType.BLOCK_POSITION))
@@ -605,7 +613,7 @@ new CommandAPICommand("break")
         location.getBlock().setType(Material.AIR);
     })
     .register();
-/* ANCHOR_END: argumentLocations1 */
+/* ANCHOR_END: argumentLocations3 */
 }
 
 void argument_lootTable() {
