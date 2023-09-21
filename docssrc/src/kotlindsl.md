@@ -152,6 +152,12 @@ To be able to access arguments by using delegations, your variable name needs to
 
 </div>
 
+> **Developer's Note:**
+> 
+> Because delegations target the way you can access arguments, you can also use delegations when using Kotlin, but not the Kotlin DSL to create your commands.
+>
+> Just keep in mind that you need to at least add `commandapi-core-kotlin` as a dependency.
+
 -----
 
 ## More examples
