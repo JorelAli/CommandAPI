@@ -1008,6 +1008,18 @@ commandAPICommand("commandRequirement") {
 /* ANCHOR_END: kotlindsl6 */
 
 /* ANCHOR: kotlindsl7 */
+commandAPICommand("mycommand") {
+    stringArgument("string")
+    playerArgument("target")
+    playerExecutor { player, args ->
+        val string: String by args
+        val target: Player by args
+        // Implementation...
+    }
+}
+/* ANCHOR_END: kotlindsl7 */
+
+/* ANCHOR: kotlindsl8 */
 commandTree("optionalArgument") {
     literalArgument("give") {
         itemStackArgument("item") {
@@ -1025,9 +1037,9 @@ commandTree("optionalArgument") {
         }
     }
 }
-/* ANCHOR_END: kotlindsl7 */
+/* ANCHOR_END: kotlindsl8 */
 
-/* ANCHOR: kotlindsl8 */
+/* ANCHOR: kotlindsl9 */
 commandAPICommand("optionalArgument") {
     literalArgument("give")
     itemStackArgument("item")
@@ -1042,9 +1054,9 @@ commandAPICommand("optionalArgument") {
         player.inventory.addItem(itemStack)
     }
 }
-/* ANCHOR_END: kotlindsl8 */
+/* ANCHOR_END: kotlindsl9 */
 
-/* ANCHOR: kotlindsl9 */
+/* ANCHOR: kotlindsl10 */
 commandTree("replaceSuggestions") {
     stringArgument("strings") {
         replaceSuggestions(ArgumentSuggestions.strings("one", "two", "three")) // Replaces the suggestions for the "strings" StringArgument
@@ -1053,9 +1065,9 @@ commandTree("replaceSuggestions") {
         }
     }
 }
-/* ANCHOR_END: kotlindsl9 */
+/* ANCHOR_END: kotlindsl10 */
 
-/* ANCHOR: kotlindsl10 */
+/* ANCHOR: kotlindsl11 */
 commandAPICommand("replaceSuggestions") {
     stringArgument("strings") {
         replaceSuggestions(ArgumentSuggestions.strings("one", "two", "three")) // Replaces the suggestions for the "strings" StringArgument
@@ -1064,7 +1076,7 @@ commandAPICommand("replaceSuggestions") {
         player.sendMessage("You chose option ${args["strings"] as String}!")
     }
 }
-/* ANCHOR_END: kotlindsl10 */
+/* ANCHOR_END: kotlindsl11 */
 }
 
 fun native() {

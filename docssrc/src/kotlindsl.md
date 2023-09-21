@@ -127,6 +127,31 @@ This works similar to how argument behaviour is modified in a CommandTree:
 
 </div>
 
+## Delegations
+
+The Kotlin DSL offers an additional way to access arguments: delegations. With delegations, there are two possible dependencies you can use:
+
+1. `commandapi-core-kotlin`
+
+   Support for delegations in the Kotlin DSL has been added to the `commandapi-core-kotlin` module. If you want to use delegations, you need to add this dependency.
+   
+
+2. `commandapi-bukkit-kotlin`
+
+   If you are already using the Kotlin DSL to create your commands, you can already use delegations. `commandapi-core-kotlin` is included in `commandapi-bukkit-kotlin`.
+
+### Access arguments using delegations
+
+To be able to access arguments by using delegations, your variable name needs to match the node name of the argument. This could look like this:
+
+<div class="multi-pre">
+
+```kotlin,Delegation_example
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl7}}
+```
+
+</div>
+
 -----
 
 ## More examples
@@ -149,11 +174,11 @@ To declare an argument as optional you need to set the `optional` value to `true
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl7}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl8}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl8}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl9}}
 ```
 
 </div>
@@ -177,11 +202,11 @@ You just have to use the `replaceSuggestions` method this time:
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl9}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl10}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl10}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl11}}
 ```
 
 </div>
