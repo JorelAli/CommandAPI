@@ -121,6 +121,8 @@ extends AbstractCommandSender<? extends CommandSender>
 			return execute(executors, info, ExecutorType.BLOCK);
 		} else if (info.senderWrapper() instanceof AbstractProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
 			return execute(executors, info, ExecutorType.PROXY);
+		} else if (info.senderWrapper() instanceof AbstractCommandSender && matches(executors, ExecutorType.FEEDBACK_FORWARDING)) {
+			return execute(executors, info, ExecutorType.FEEDBACK_FORWARDING);
 		} else if (matches(executors, ExecutorType.ALL)) {
 			return execute(executors, info, ExecutorType.ALL);
 		} else {

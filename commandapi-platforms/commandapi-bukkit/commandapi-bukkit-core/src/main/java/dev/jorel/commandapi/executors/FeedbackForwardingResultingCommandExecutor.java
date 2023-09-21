@@ -20,48 +20,46 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
+import org.bukkit.command.CommandSender;
+
+import dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+
 /**
- * An enum representing the type of an executor
+ * A resulting command executor for a BlockCommandSender
  */
-public enum ExecutorType {
+@FunctionalInterface
+public interface FeedbackForwardingResultingCommandExecutor extends ResultingExecutor<CommandSender, BukkitFeedbackForwardingCommandSender<CommandSender>> {
 
 	/**
-	 * An executor where the CommandSender is a Player
+	 * The code to run when this command is performed
+	 * 
+	 * @param sender The sender of this command (a player, the console etc.)
+	 * @param args The arguments given to this command.
+	 *            
+	 * @return the result of this command
 	 */
-	PLAYER,
+	int run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException;
 
 	/**
-	 * An executor where the CommandSender is an Entity
+	 * The code to run when this command is performed
+	 *
+	 * @param info The ExecutionInfo for this command
+	 *
+	 * @return the result of this command
 	 */
-	ENTITY, 
-	
+	@Override
+	default int run(ExecutionInfo<CommandSender, BukkitFeedbackForwardingCommandSender<CommandSender>> info) throws WrapperCommandSyntaxException {
+		return this.run(info.sender(), info.args());
+	}
+
 	/**
-	 * An executor where the CommandSender is a ConsoleCommandSender
+	 * Returns the type of the sender of the current executor.
+	 * @return the type of the sender of the current executor
 	 */
-	CONSOLE, 
+	@Override
+	default ExecutorType getType() {
+		return ExecutorType.FEEDBACK_FORWARDING	;
+	}
 	
-	/**
-	 * An executor where the CommandSender is a BlockCommandSender
-	 */
-	BLOCK, 
-	
-	/**
-	 * An executor where the CommandSender is any CommandSender
-	 */
-	ALL, 
-	
-	/**
-	 * An executor where the CommandSender is a NativeProxyCommandSender
-	 */
-	PROXY,
-	
-	/**
-	 * An executor where the CommandSender is (always) a NativeProxyCommandSender
-	 */
-	NATIVE,
-	
-	/**
-	 * An executor where the CommandSender is a {@code io.papermc.paper.commands.FeedbackForwardingSender}
-	 */
-	FEEDBACK_FORWARDING;
 }

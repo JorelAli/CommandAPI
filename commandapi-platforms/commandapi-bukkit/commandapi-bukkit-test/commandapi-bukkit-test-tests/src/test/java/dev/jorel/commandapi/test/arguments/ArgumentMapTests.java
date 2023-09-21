@@ -1,27 +1,29 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.arguments.StringParser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.MapArgument;
 import dev.jorel.commandapi.arguments.MapArgumentBuilder;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.StringParser;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-import io.netty.util.internal.ThreadLocalRandom;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the {@link MapArgument}
