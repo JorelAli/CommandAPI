@@ -610,6 +610,8 @@ public class MockNMS extends Enums {
 	public org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
 		final Advancement advancement = new Advancement(Optional.empty(), Optional.empty(), null, new HashMap<>(), null, false);
 		
+		// Redeclare as a new map to prevent immutability issues with Map.of() definition
+		advancementDataWorld.advancements = new HashMap<>(advancementDataWorld.advancements);
 		advancementDataWorld.advancements.put(new ResourceLocation(key.toString()), new AdvancementHolder(new ResourceLocation(key.toString()), advancement));
 		return new org.bukkit.advancement.Advancement() {
 
