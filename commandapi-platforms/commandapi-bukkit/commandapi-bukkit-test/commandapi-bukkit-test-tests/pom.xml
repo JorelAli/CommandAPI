@@ -168,6 +168,9 @@
 	<profiles>
 		<profile>
 			<id>Minecraft_1_20_2</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
@@ -282,9 +285,6 @@
 		</profile>
 		<profile>
 			<id>Minecraft_1_19_4</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<dependencies>
 				<dependency>
 					<!-- Needed for 1.19.4 Brigadier logging. This is also present in

@@ -64,6 +64,7 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -85,7 +86,6 @@ import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.util.profiling.metrics.profiling.InactiveMetricsRecorder;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -241,12 +241,13 @@ public class MockNMS extends Enums {
 	}
 
 	private void registerDefaultRecipes() {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		List<Recipe<?>> recipes = (List) getRecipes(MinecraftServer.class)
-			.stream()
-			.map(p -> RecipeManager.fromJson(new ResourceLocation(p.first()), p.second()))
-			.toList();
-		recipeManager.replaceRecipes(recipes);
+		// TODO: Come back to this in a bit
+//		@SuppressWarnings({ "unchecked", "rawtypes" })
+//		List<Recipe<?>> recipes = (List) getRecipes(MinecraftServer.class)
+//			.stream()
+//			.map(p -> RecipeManager.fromJson(new ResourceLocation(p.first()), p.second()))
+//			.toList();
+//		recipeManager.replaceRecipes(recipes);
 	}
 
 	/**************************
@@ -607,8 +608,9 @@ public class MockNMS extends Enums {
 
 	@Override
 	public org.bukkit.advancement.Advancement addAdvancement(NamespacedKey key) {
-		advancementDataWorld.advancements.advancements.put(new ResourceLocation(key.toString()),
-			new Advancement(new ResourceLocation(key.toString()), null, null, null, new HashMap<>(), null, false));
+		final Advancement advancement = new Advancement(Optional.empty(), Optional.empty(), null, new HashMap<>(), null, false);
+		
+		advancementDataWorld.advancements.put(new ResourceLocation(key.toString()), new AdvancementHolder(new ResourceLocation(key.toString()), advancement));
 		return new org.bukkit.advancement.Advancement() {
 
 			@Override
