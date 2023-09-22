@@ -140,21 +140,22 @@ new CommandAPICommand("enchantitem")
 List<Argument<?>> arguments = new ArrayList<>();
 arguments.add(new EntitySelectorArgument.OnePlayer("target"));
 arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(info -> {
-	Player target = (Player) info.previousArgs().get("target");
+    Player target = (Player) info.previousArgs().get("target");
 
-	return target.getActivePotionEffects().stream()
-			.map(PotionEffect::getType)
-			.toList().toArray(new PotionEffectType[0]);
+	//Convert PotionEffect[] into PotionEffectType[]
+    return target.getActivePotionEffects().stream()
+            .map(PotionEffect::getType)
+            .toList().toArray(new PotionEffectType[0]);
 })));
 
 new CommandAPICommand("removeeffect")
-	.withArguments(arguments)
-	.executesPlayer((sender, args) -> {
-		Player player = (Player) args.get("target");
-		PotionEffectType effect = (PotionEffectType) args.get("potioneffect");
-		player.removePotionEffect(effect);
-	})
-	.register();
+    .withArguments(arguments)
+    .executesPlayer((sender, args) -> {
+        Player player = (Player) args.get("target");
+        PotionEffectType effect = (PotionEffectType) args.get("potioneffect");
+        player.removePotionEffect(effect);
+    })
+    .register();
 ```
 
 </details>
