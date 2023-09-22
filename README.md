@@ -142,7 +142,7 @@ arguments.add(new EntitySelectorArgument.OnePlayer("target"));
 arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(info -> {
     Player target = (Player) info.previousArgs().get("target");
 
-	//Convert PotionEffect[] into PotionEffectType[]
+    //Convert PotionEffect[] into PotionEffectType[]
     return target.getActivePotionEffects().stream()
             .map(PotionEffect::getType)
             .toList().toArray(new PotionEffectType[0]);
@@ -254,6 +254,50 @@ public class WarpCommand {
     
 }
 ```
+
+</details>
+
+<details>
+    <summary><b>Kotlin DSL</b></summary>
+
+<details>
+    <summary><b>CommandAPICommand</b></summary>
+
+```kotlin
+commandAPICommand("mute") {
+    playerArgument("target")
+    integerArgument("duration")
+    playerExecutor { player, args ->
+        val target: Player = args["target"]!!
+        val duration: Int = args["duration"]!!
+        // Implementation...
+    }
+}
+```
+
+</details>
+
+<details>
+    <summary><b>CommandTree</b></summary>
+
+```kotlin
+commandTree("mute") {
+    playerArgument("target") {
+        integerArgument("duration") {
+            playerExecutor { player, args ->
+                val target: Player = args["target"]!!
+                val duration: Int = args["duration"]!!
+            }
+        }
+        playerExecutor { player, args -> 
+            val target: Player = args["target"]!!
+            // Some default duration
+            // Implementation...
+        }
+    }
+}
+```
+</details>
 
 </details>
 
