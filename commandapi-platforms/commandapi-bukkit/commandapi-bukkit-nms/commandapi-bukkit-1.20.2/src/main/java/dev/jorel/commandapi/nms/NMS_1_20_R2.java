@@ -35,6 +35,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.wrappers.*;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.commands.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -46,6 +49,7 @@ import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.World;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -95,12 +99,6 @@ import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
-import dev.jorel.commandapi.wrappers.FunctionWrapper;
-import dev.jorel.commandapi.wrappers.Location2D;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -110,13 +108,6 @@ import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ColorArgument;
-import net.minecraft.commands.arguments.ComponentArgument;
-import net.minecraft.commands.arguments.DimensionArgument;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ParticleArgument;
-import net.minecraft.commands.arguments.ResourceArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -301,6 +292,11 @@ public class NMS_1_20_R2 extends NMS_Common {
 	}
 
 	@Override
+	public Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return ResourceLocationArgument.getAdvancement(cmdCtx, key).toBukkit();
+	}
+
+	@Override
 	public NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		final Integer color = ColorArgument.getColor(cmdCtx, key).getColor();
 		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
@@ -412,6 +408,16 @@ public class NMS_1_20_R2 extends NMS_Common {
 	}
 
 	@Override
+	public FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		MinMaxBounds.Doubles range = RangeArgument.Floats.getRange(cmdCtx, key);
+		final Double lowBoxed = range.min().orElse(null);
+		final Double highBoxed = range.max().orElse(null);
+		final double low = lowBoxed == null ? -Float.MAX_VALUE : lowBoxed;
+		final double high = highBoxed == null ? Float.MAX_VALUE : highBoxed;
+		return new FloatRange((float) low, (float) high);
+	}
+
+	@Override
 	public final FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		List<FunctionWrapper> result = new ArrayList<>();
 		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
@@ -421,6 +427,16 @@ public class NMS_1_20_R2 extends NMS_Common {
 				entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())));
 		}
 		return result.toArray(new FunctionWrapper[0]);
+	}
+
+	@Override
+	public IntegerRange getIntRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		MinMaxBounds.Ints range = RangeArgument.Ints.getRange(cmdCtx, key);
+		final Integer lowBoxed = range.min().orElse(null);
+		final Integer highBoxed = range.max().orElse(null);
+		final int low = lowBoxed == null ? Integer.MIN_VALUE : lowBoxed;
+		final int high = highBoxed == null ? Integer.MAX_VALUE : highBoxed;
+		return new IntegerRange(low, high);
 	}
 
 	@Override
@@ -559,6 +575,11 @@ public class NMS_1_20_R2 extends NMS_Common {
 	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		RecipeHolder<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
 		return new ComplexRecipeImpl(fromResourceLocation(recipe.id()), recipe.toBukkitRecipe());
+	}
+
+	@Override
+	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return ScoreboardSlot.ofMinecraft(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key).id());
 	}
 
 	@Override
