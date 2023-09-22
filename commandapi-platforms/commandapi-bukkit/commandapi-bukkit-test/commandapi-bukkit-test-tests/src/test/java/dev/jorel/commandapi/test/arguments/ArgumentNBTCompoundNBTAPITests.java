@@ -46,6 +46,7 @@ class ArgumentNBTCompoundNBTAPITests extends TestBase {
 			case V1_19_2 -> MinecraftVersion.MC1_19_R1;
 			case V1_19_4 -> MinecraftVersion.MC1_19_R3;
 			case V1_20 -> MinecraftVersion.MC1_20_R1;
+			case V1_20_2 -> MinecraftVersion.MC1_20_R2;
 			default -> throw new IllegalArgumentException("Unexpected value: " + version);
 		};
 		MockPlatform.setField(MinecraftVersion.class, "version", null, currentNBTAPIMinecraftVersion);
