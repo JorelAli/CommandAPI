@@ -1533,15 +1533,15 @@ Converter.convert(essentials, "speed",
 
 fun delegatedProperties() {
 /* ANCHOR: delegatedProperties1 */
-commandAPICommand("mycommand") {
-    stringArgument("string")
-    playerArgument("target")
-    playerExecutor { player, args ->
+CommandAPICommand("mycommand")
+    .withArguments(StringArgument("string"))
+    .withArguments(PlayerArgument("target"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
         val string: String by args
         val target: Player by args
         // Implementation...
-    }
-}
+    })
+    .register()
 /* ANCHOR_END: delegatedProperties1 */
 }
 
