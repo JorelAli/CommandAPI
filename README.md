@@ -122,8 +122,8 @@ new CommandAPICommand("enchantitem")
     .withArguments(new EnchantmentArgument("enchantment"))
     .withArguments(new IntegerArgument("level", 1, 5))
     .executesPlayer((player, args) -> {
-        Enchantment enchantment = (Enchantment) args[0];
-        int level = (int) args[1];
+        Enchantment enchantment = (Enchantment) args.get("enchantment");
+        int level = (int) args.get("level");
         
         //Add the enchantment
         player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
@@ -137,26 +137,24 @@ new CommandAPICommand("enchantitem")
     <summary><b>Potion removing, suggesting potions that a player has currently</b></summary>
 
 ```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
-arguments.add(new PotionEffectArgument("potioneffect").safeOverrideSuggestions(
-    (sender, prevArgs) -> {
-        Player target = (Player) prevArgs[0];
-        
-        //Convert PotionEffect[] into PotionEffectType[]
-        return target.getActivePotionEffects().stream()
-            .map(PotionEffect::getType)
-            .toArray(PotionEffectType[]::new);
-    })
-);
+List<Argument<?>> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument.OnePlayer("target"));
+arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(info -> {
+	Player target = (Player) info.previousArgs().get("target");
+
+	return target.getActivePotionEffects().stream()
+			.map(PotionEffect::getType)
+			.toList().toArray(new PotionEffectType[0]);
+})));
 
 new CommandAPICommand("removeeffect")
-    .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        EntityType entityType = (EntityType) args[0];
-        player.getWorld().spawnEntity(player.getLocation(), entityType);
-    })
-    .register();
+	.withArguments(arguments)
+	.executesPlayer((sender, args) -> {
+		Player player = (Player) args.get("target");
+		PotionEffectType effect = (PotionEffectType) args.get("potioneffect");
+		player.removePotionEffect(effect);
+	})
+	.register();
 ```
 
 </details>
