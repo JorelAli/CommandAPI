@@ -59,7 +59,7 @@ class ArgumentScoreboardSlotTests extends TestBase {
 		if (version.lessThan(MCVersion.V1_20_2)) {
 			// /test belowName
 			server.dispatchCommand(player, "test belowName");
-			assertEquals(ScoreboardSlot.LEGACY_BELOW_NAME, results.get());
+			assertEquals(ScoreboardSlot.BELOW_NAME, results.get());
 		} else {
 			// /test below_name
 			server.dispatchCommand(player, "test below_name");
