@@ -43,7 +43,7 @@ Next, you need to add Kotlin to your project. For this, you first need to add th
     <dependency>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-stdlib</artifactId>
-        <version>1.8.20</version>
+        <version>1.9.0</version>
     </dependency>
 </dependencies>
 ```
@@ -56,7 +56,7 @@ Finally, you need to add the `kotlin-maven-plugin`:
         <plugin>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-maven-plugin</artifactId>
-            <version>1.8.20</version>
+            <version>1.9.0</version>
             <executions>
                 <execution>
                     <id>compile</id>
@@ -137,13 +137,13 @@ You also need to add Kotlin to your project. For this, you first need to add the
 
 ```groovy,build.gradle
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.8.20"
+    id "org.jetbrains.kotlin.jvm" version "1.9.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.9.0"
 }
 ```
 

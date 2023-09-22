@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -14,6 +15,7 @@ public class PaperImplementations {
 	private final boolean isPaperPresent;
 	private final boolean isFoliaPresent;
 	private final NMS<?> nmsInstance;
+	private final Class<? extends CommandSender> feedbackForwardingCommandSender;
 
 	/**
 	 * Constructs a PaperImplementations object
@@ -22,10 +24,20 @@ public class PaperImplementations {
 	 * @param isFoliaPresent Whether this is a Folia server or not
 	 * @param nmsInstance    The instance of NMS
 	 */
+	@SuppressWarnings("unchecked")
 	public PaperImplementations(boolean isPaperPresent, boolean isFoliaPresent, NMS<?> nmsInstance) {
 		this.isPaperPresent = isPaperPresent;
 		this.isFoliaPresent = isFoliaPresent;
 		this.nmsInstance = nmsInstance;
+		
+		Class<? extends CommandSender> tempFeedbackForwardingCommandSender = null;
+		try {
+			tempFeedbackForwardingCommandSender = (Class<? extends CommandSender>) Class.forName("io.papermc.paper.commands.FeedbackForwardingSender");
+		} catch (ClassNotFoundException e) {
+			// uhh...
+		}
+		
+		this.feedbackForwardingCommandSender = tempFeedbackForwardingCommandSender;
 	}
 
 	/**
@@ -76,5 +88,13 @@ public class PaperImplementations {
 	public boolean isFoliaPresent() {
 		return this.isFoliaPresent;
 	}
+	
+	/**
+	 * @return a class reference pointing to {@code io.papermc.paper.commands.FeedbackForwardingSender}
+	 */
+	public Class<? extends CommandSender> getFeedbackForwardingCommandSender() {
+		return this.feedbackForwardingCommandSender;
+	}
+	
 
 }

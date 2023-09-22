@@ -49,8 +49,18 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 */
 	public Location2DArgument(String nodeName, LocationType type) {
+		this(nodeName, type, true);
+	}
+
+	/**
+	 * A Location argument. Represents Minecraft locations in 2D space
+	 * @param nodeName the name of the node for this argument
+	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
+	 * @param centerPosition whether LocationType.PRECISE_POSITION should center the position of the location within a block
+	 */
+	public Location2DArgument(String nodeName, LocationType type, boolean centerPosition) {
 		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIBukkit.get()._ArgumentPosition2D()
-				: CommandAPIBukkit.get()._ArgumentVec2(),
+				: CommandAPIBukkit.get()._ArgumentVec2(centerPosition),
 				type == LocationType.BLOCK_POSITION ? (Location2D l) -> l.getBlockX() + " " + l.getBlockZ()
 						: (Location2D l) -> l.getX() + " " + l.getZ());
 		isPrecise = type == LocationType.PRECISE_POSITION;

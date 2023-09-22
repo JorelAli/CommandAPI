@@ -48,8 +48,18 @@ public class LocationArgument extends SafeOverrideableArgument<Location, Locatio
 	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
 	 */
 	public LocationArgument(String nodeName, LocationType type) {
+		this(nodeName, type, true);
+	}
+	
+	/**
+	 * A Location argument. Represents Minecraft locations
+	 * @param nodeName the name of the node for this argument
+	 * @param type the location type of this location, either {@link LocationType#BLOCK_POSITION} or {@link LocationType#PRECISE_POSITION}
+	 * @param centerPosition whether LocationType.PRECISE_POSITION should center the position of the location within a block
+	 */
+	public LocationArgument(String nodeName, LocationType type, boolean centerPosition) {
 		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIBukkit.get()._ArgumentPosition()
-				: CommandAPIBukkit.get()._ArgumentVec3(),
+				: CommandAPIBukkit.get()._ArgumentVec3(centerPosition),
 				type == LocationType.BLOCK_POSITION
 						? (Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ()
 						: (Location l) -> l.getX() + " " + l.getY() + " " + l.getZ());

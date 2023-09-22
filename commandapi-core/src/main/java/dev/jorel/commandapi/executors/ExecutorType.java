@@ -58,5 +58,10 @@ public enum ExecutorType {
 	/**
 	 * An executor where the CommandSender is (always) a NativeProxyCommandSender
 	 */
-	NATIVE;
+	NATIVE,
+	
+	/**
+	 * An executor where the CommandSender is a {@code io.papermc.paper.commands.FeedbackForwardingSender}
+	 */
+	FEEDBACK_FORWARDING;
 }

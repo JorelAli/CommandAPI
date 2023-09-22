@@ -48,23 +48,24 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.1.0 | 9.1.0                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.1.0 | 9.1.0                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.1.0 | 9.1.0                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.1.0 | 9.1.0                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.1.0 | 9.1.0                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.1.0 | 9.1.0                        | 16                                                        |
-| **1.17**           | 6.0.x - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.19**           | 8.3.0 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.19.2**         | 8.5.1 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.19.3**         | 8.7.0 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.19.4**         | 8.8.0 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.20**           | 9.0.2 - 9.1.0               | 9.1.0                        | 16                                                        |
-| **1.20.1**         | 9.0.3 - 9.1.0               | 9.1.0                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.2.0 | 9.2.0                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.2.0 | 9.2.0                        | 16                                                        |
+| **1.17**           | 6.0.x - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.19**           | 8.3.0 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.19.3**         | 8.7.0 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.19.4**         | 8.8.0 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.20**           | 9.0.2 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.20.1**         | 9.0.3 - 9.2.0               | 9.2.0                        | 16                                                        |
+| **1.20.2**         | 9.2.0                       | 9.2.0                        | 16                                                        |
 
 -----
 
@@ -121,8 +122,8 @@ new CommandAPICommand("enchantitem")
     .withArguments(new EnchantmentArgument("enchantment"))
     .withArguments(new IntegerArgument("level", 1, 5))
     .executesPlayer((player, args) -> {
-        Enchantment enchantment = (Enchantment) args[0];
-        int level = (int) args[1];
+        Enchantment enchantment = (Enchantment) args.get("enchantment");
+        int level = (int) args.get("level");
         
         //Add the enchantment
         player.getInventory().getItemInMainHand().addEnchantment(enchantment, level);
@@ -136,24 +137,23 @@ new CommandAPICommand("enchantitem")
     <summary><b>Potion removing, suggesting potions that a player has currently</b></summary>
 
 ```java
-List<Argument> arguments = new ArrayList<>();
-arguments.add(new EntitySelectorArgument("target", EntitySelector.ONE_PLAYER));
-arguments.add(new PotionEffectArgument("potioneffect").safeOverrideSuggestions(
-    (sender, prevArgs) -> {
-        Player target = (Player) prevArgs[0];
-        
-        //Convert PotionEffect[] into PotionEffectType[]
-        return target.getActivePotionEffects().stream()
+List<Argument<?>> arguments = new ArrayList<>();
+arguments.add(new EntitySelectorArgument.OnePlayer("target"));
+arguments.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(info -> {
+    Player target = (Player) info.previousArgs().get("target");
+
+    //Convert PotionEffect[] into PotionEffectType[]
+    return target.getActivePotionEffects().stream()
             .map(PotionEffect::getType)
-            .toArray(PotionEffectType[]::new);
-    })
-);
+            .toList().toArray(new PotionEffectType[0]);
+})));
 
 new CommandAPICommand("removeeffect")
     .withArguments(arguments)
-    .executesPlayer((player, args) -> {
-        EntityType entityType = (EntityType) args[0];
-        player.getWorld().spawnEntity(player.getLocation(), entityType);
+    .executesPlayer((sender, args) -> {
+        Player player = (Player) args.get("target");
+        PotionEffectType effect = (PotionEffectType) args.get("potioneffect");
+        player.removePotionEffect(effect);
     })
     .register();
 ```
@@ -254,6 +254,50 @@ public class WarpCommand {
     
 }
 ```
+
+</details>
+
+<details>
+    <summary><b>Kotlin DSL</b></summary>
+
+<details>
+    <summary><b>CommandAPICommand</b></summary>
+
+```kotlin
+commandAPICommand("mute") {
+    playerArgument("target")
+    integerArgument("duration")
+    playerExecutor { player, args ->
+        val target: Player = args["target"]!!
+        val duration: Int = args["duration"]!!
+        // Implementation...
+    }
+}
+```
+
+</details>
+
+<details>
+    <summary><b>CommandTree</b></summary>
+
+```kotlin
+commandTree("mute") {
+    playerArgument("target") {
+        integerArgument("duration") {
+            playerExecutor { player, args ->
+                val target: Player = args["target"]!!
+                val duration: Int = args["duration"]!!
+            }
+        }
+        playerExecutor { player, args -> 
+            val target: Player = args["target"]!!
+            // Some default duration
+            // Implementation...
+        }
+    }
+}
+```
+</details>
 
 </details>
 
@@ -374,6 +418,16 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top">?????????????????????????????</td>
             <td valign="top">
                 <b>⚠️ This version is incompatible with any plugin that used component-related arguments in 9.x.x and below. (See documentation for more information)</b><br>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><b>9.2.0</b></td>
+            <td valign="top">??? 2023</td>
+            <td valign="top">
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/487 Added support for disabling integer centering for location arguments</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/488 Fixed calling CommandAPI commands with <code>Bukkit.createCommandSender()</code> not working on paper</li>
+                </ul>
             </td>
         </tr>
         <tr>

@@ -552,6 +552,14 @@ for ((key, _) in gamemodes) {
 
 fun argument_locations() {
 /* ANCHOR: argumentLocations1 */
+LocationArgument("location", LocationType.PRECISE_POSITION, true)
+/* ANCHOR_END: argumentLocations1 */
+
+/* ANCHOR: argumentLocations2 */
+LocationArgument("location", LocationType.PRECISE_POSITION, false)
+/* ANCHOR_END: argumentLocations2 */
+
+/* ANCHOR: argumentLocations3 */
 CommandAPICommand("break")
     // We want to target blocks in particular, so use BLOCK_POSITION
     .withArguments(LocationArgument("block", LocationType.BLOCK_POSITION))
@@ -559,7 +567,7 @@ CommandAPICommand("break")
         (args["block"] as Location).block.type = Material.AIR
     })
     .register()
-/* ANCHOR_END: argumentLocations1 */
+/* ANCHOR_END: argumentLocations3 */
 }
 
 fun argument_lootTable() {

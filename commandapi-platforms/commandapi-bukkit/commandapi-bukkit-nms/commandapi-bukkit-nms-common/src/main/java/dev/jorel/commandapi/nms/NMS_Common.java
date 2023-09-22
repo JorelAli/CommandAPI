@@ -264,13 +264,13 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentVec2() {
-		return Vec2Argument.vec2();
+	public final ArgumentType<?> _ArgumentVec2(boolean centerPosition) {
+		return Vec2Argument.vec2(centerPosition);
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentVec3() {
-		return Vec3Argument.vec3();
+	public final ArgumentType<?> _ArgumentVec3(boolean centerPosition) {
+		return Vec3Argument.vec3(centerPosition);
 	}
 
 	@Override
@@ -322,10 +322,9 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		String permission);
 
 	@Override
-	public final org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key)
-		throws CommandSyntaxException {
-		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.20.2")
+	public abstract org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key)
+		throws CommandSyntaxException;
 
 	@Override
 	public final Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
@@ -413,14 +412,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract EntityType getEntityType(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
-	public final FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		MinMaxBounds.Doubles range = RangeArgument.Floats.getRange(cmdCtx, key);
-		final Double lowBoxed = range.getMin();
-		final Double highBoxed = range.getMax();
-		final double low = lowBoxed == null ? -Float.MAX_VALUE : lowBoxed;
-		final double high = highBoxed == null ? Float.MAX_VALUE : highBoxed;
-		return new FloatRange((float) low, (float) high);
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.20.2")
+	public abstract FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftEntity")
@@ -451,14 +444,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final IntegerRange getIntRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		MinMaxBounds.Ints range = RangeArgument.Ints.getRange(cmdCtx, key);
-		final Integer lowBoxed = range.getMin();
-		final Integer highBoxed = range.getMax();
-		final int low = lowBoxed == null ? Integer.MIN_VALUE : lowBoxed;
-		final int high = highBoxed == null ? Integer.MAX_VALUE : highBoxed;
-		return new IntegerRange(low, high);
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.20.2")
+	public abstract IntegerRange getIntRange(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftItemStack")
@@ -562,9 +549,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return ScoreboardSlot.ofMinecraft(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.20.2")
+	public abstract ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
 	public final Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)

@@ -33,7 +33,8 @@ public enum ScoreboardSlot implements Keyed {
 
 	PLAYER_LIST("list", 0x0),
 	SIDEBAR("sidebar", 0x1),
-	BELOW_NAME("belowName", 0x2),
+	LEGACY_BELOW_NAME("belowName", 0x2), // Was replaced with below_name in 1.20.2
+	BELOW_NAME("below_name", 0x2),
 	SIDEBAR_TEAM_BLACK("sidebar.team.black", 0x0, ChatColor.BLACK),
 	SIDEBAR_TEAM_DARK_BLUE("sidebar.team.dark_blue", 0x1, ChatColor.DARK_BLUE),
 	SIDEBAR_TEAM_DARK_GREEN("sidebar.team.dark_green", 0x2, ChatColor.DARK_GREEN),

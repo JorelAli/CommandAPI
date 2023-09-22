@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
@@ -29,6 +30,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link ItemStackArgument}
  */
+@Disabled("Disabled due to MockBukkit 1.20 issue. See https://github.com/MockBukkit/MockBukkit/issues/862 for more information")
 class ArgumentItemStackTests extends TestBase {
 
 	/*********

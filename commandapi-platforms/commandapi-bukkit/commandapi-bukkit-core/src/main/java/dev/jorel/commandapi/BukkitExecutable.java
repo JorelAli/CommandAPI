@@ -406,4 +406,50 @@ extends BukkitExecutable<Impl>
 		getExecutor().addResultingExecutor(info);
 		return instance();
 	}
+	
+	// Feedback-forwarding command executor
+	
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param executor A lambda of type <code>(FeedbackForwardingCommandExecutor, CommandArguments) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesFeedbackForwarding(FeedbackForwardingCommandExecutor executor) {
+		getExecutor().addNormalExecutor(executor);
+		return instance();
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesFeedbackForwarding(FeedbackForwardingExecutionInfo info) {
+		getExecutor().addNormalExecutor(info);
+		return instance();
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param executor A lambda of type <code>(FeedbackForwardingCommandExecutor, CommandArguments) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesFeedbackForwarding(FeedbackForwardingResultingCommandExecutor executor) {
+		getExecutor().addResultingExecutor(executor);
+		return instance();
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesFeedbackForwarding(FeedbackForwardingResultingExecutionInfo info) {
+		getExecutor().addResultingExecutor(info);
+		return instance();
+	}
 }

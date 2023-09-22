@@ -32,6 +32,7 @@
 		<!-- Test MockNMS implementations -->
 		<module>commandapi-bukkit-test-impl</module>
 
+		<module>commandapi-bukkit-test-impl-1.20.2</module>
 		<module>commandapi-bukkit-test-impl-1.20</module>
 		<module>commandapi-bukkit-test-impl-1.19.4</module>
 		<module>commandapi-bukkit-test-impl-1.19.2</module>

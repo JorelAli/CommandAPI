@@ -246,12 +246,12 @@ public interface NMS<CommandListenerWrapper> {
 	/**
 	 * @return Location 2D argument (precise position) (minecraft:vec2)
 	 */
-	ArgumentType<?> _ArgumentVec2();
+	ArgumentType<?> _ArgumentVec2(boolean centerPosition);
 
 	/**
 	 * @return Location argument (precise position) (minecraft:vec3)
 	 */
-	ArgumentType<?> _ArgumentVec3();
+	ArgumentType<?> _ArgumentVec3(boolean centerPosition);
 
 	/*
 	 * Synthetic arguments - arguments that don't actually exist, but have
