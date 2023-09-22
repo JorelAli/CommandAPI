@@ -15,7 +15,9 @@
 	ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 	DEALINGS IN THE SOFTWARE. -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>commandapi-bukkit-nms</artifactId>
 		<groupId>dev.jorel</groupId>
@@ -23,11 +25,11 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-bukkit-nms-common</artifactId>
+	<artifactId>commandapi-bukkit-1.20.2</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.20.2-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.20.2-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
@@ -47,21 +49,21 @@
 
 	<dependencies>
 		<!-- Spigot testing (for reflection checks) -->
-		<!-- <dependency>
+		
+		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 		<!-- Spigot compilation -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
-			<scope>provided</scope>
 			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
 		</dependency>
-
 		<!-- Libraries -->
 		<dependency>
 			<groupId>io.papermc.paper</groupId>
@@ -77,10 +79,19 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-nms-common</artifactId>
+			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<!-- Generate Mojang mapped jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -96,10 +107,11 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Generate Spigot mapped jar -->
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>
-				<version>1.2.4</version>
+				<version>1.2.5</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -129,96 +141,26 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Allow code coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>Spigot_1_20_2_R2</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.20.2-R0.1-SNAPSHOT</version>
-					<classifier>remapped-mojang</classifier>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Spigot_1_20_R1</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.20-R0.1-SNAPSHOT</version>
-					<classifier>remapped-mojang</classifier>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Spigot_1_19_3_R2</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.19.3-R0.1-SNAPSHOT</version>
-					<classifier>remapped-mojang</classifier>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Spigot_1_19_R1</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.19-R0.1-SNAPSHOT</version>
-					<classifier>remapped-mojang</classifier>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Spigot_1_18_2_R2</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.18.2-R0.1-SNAPSHOT</version>
-					<classifier>remapped-mojang</classifier>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Spigot_1_18_R1</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.18-R0.1-SNAPSHOT</version>
-					<classifier>remapped-mojang</classifier>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>Spigot_1_17_R1</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>spigot</artifactId>
-					<version>1.17-R0.1-SNAPSHOT</version>
-					<classifier>remapped-mojang</classifier>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 </project>

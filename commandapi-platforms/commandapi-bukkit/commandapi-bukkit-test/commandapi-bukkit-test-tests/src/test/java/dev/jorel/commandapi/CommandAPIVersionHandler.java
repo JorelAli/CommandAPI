@@ -6,6 +6,7 @@ import dev.jorel.commandapi.nms.NMS_1_18_R1;
 import dev.jorel.commandapi.nms.NMS_1_19_1_R1;
 import dev.jorel.commandapi.nms.NMS_1_19_4_R3;
 import dev.jorel.commandapi.nms.NMS_1_20_R1;
+import dev.jorel.commandapi.nms.NMS_1_20_R2;
 import dev.jorel.commandapi.test.MockNMS;
 
 /**
@@ -46,6 +47,7 @@ public interface CommandAPIVersionHandler {
 			return new MockNMS(new NMS_1_19_4_R3());
 		} else {
 			return new MockNMS(switch(profileId) {
+				case "Minecraft_1_20_2" -> new NMS_1_20_R2();
 				case "Minecraft_1_20" -> new NMS_1_20_R1();
 				case "Minecraft_1_19_4" -> new NMS_1_19_4_R3();
 				case "Minecraft_1_19_2" -> new NMS_1_19_1_R1();
@@ -63,6 +65,7 @@ public interface CommandAPIVersionHandler {
 			return MCVersion.V1_19_4;
 		} else {
 			return switch(profileId) {
+				case "Minecraft_1_20_2" -> MCVersion.V1_20_2;
 				case "Minecraft_1_20" -> MCVersion.V1_20;
 				case "Minecraft_1_19_4" -> MCVersion.V1_19_4;
 				case "Minecraft_1_19_2" -> MCVersion.V1_19_2;

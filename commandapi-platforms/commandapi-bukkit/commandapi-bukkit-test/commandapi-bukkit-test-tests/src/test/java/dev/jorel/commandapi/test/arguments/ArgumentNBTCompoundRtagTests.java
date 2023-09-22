@@ -20,6 +20,7 @@ import com.saicone.rtag.tag.TagCompound;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -38,6 +39,9 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 	public void setUp() {
 		// Rtag can't run via Mojang Mappings
 		assumeTrue(!CommandAPIVersionHandler.IS_MOJANG_MAPPED);
+		
+		// TODO: Rtag doesn't support 1.20.2 yet
+		assumeTrue(version.lessThan(MCVersion.V1_20_2));
 		
 		// There are lots of ways to use Rtag!
 		

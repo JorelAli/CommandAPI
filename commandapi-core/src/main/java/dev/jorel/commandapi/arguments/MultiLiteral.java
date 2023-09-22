@@ -2,6 +2,9 @@ package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.ChainableBuilder;
 
+/**
+ * An interface representing arguments with multiple literal string definitions
+ */
 public interface MultiLiteral<Impl
 /// @cond DOX
 extends AbstractArgument<String, ?, ?, ?>
