@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -54,9 +55,16 @@ class ArgumentScoreboardSlotTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// /test belowName
-		server.dispatchCommand(player, "test belowName");
-		assertEquals(ScoreboardSlot.BELOW_NAME, results.get());
+		// belowName was replaced with below_name in 1.20.2
+		if (version.lessThan(MCVersion.V1_20_2)) {
+			// /test belowName
+			server.dispatchCommand(player, "test belowName");
+			assertEquals(ScoreboardSlot.LEGACY_BELOW_NAME, results.get());
+		} else {
+			// /test below_name
+			server.dispatchCommand(player, "test below_name");
+			assertEquals(ScoreboardSlot.BELOW_NAME, results.get());
+		}
 
 		// /test list
 		server.dispatchCommand(player, "test list");
@@ -107,12 +115,23 @@ class ArgumentScoreboardSlotTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		List<String> expectedSuggestions = Stream.concat(
-			Arrays.stream(ChatColor.values())
-				.filter(ChatColor::isColor)
-				.map(c -> "sidebar.team." + c.name().toLowerCase()),
-			List.of("belowName", "list", "sidebar").stream()).sorted().toList();
-
+		List<String> expectedSuggestions;
+		
+		// belowName was replaced with below_name in 1.20.2
+		if (version.lessThan(MCVersion.V1_20_2)) {
+			expectedSuggestions = Stream.concat(
+					Arrays.stream(ChatColor.values())
+					.filter(ChatColor::isColor)
+					.map(c -> "sidebar.team." + c.name().toLowerCase()),
+				List.of("belowName", "list", "sidebar").stream()).sorted().toList();
+		} else {
+			expectedSuggestions = Stream.concat(
+					Arrays.stream(ChatColor.values())
+					.filter(ChatColor::isColor)
+					.map(c -> "sidebar.team." + c.name().toLowerCase()),
+				List.of("below_name", "list", "sidebar").stream()).sorted().toList();
+		}
+		
 		// /test
 		assertEquals(expectedSuggestions, server.getSuggestions(player, "test "));
 	}
