@@ -127,36 +127,6 @@ This works similar to how argument behaviour is modified in a CommandTree:
 
 </div>
 
-## Delegations
-
-The Kotlin DSL offers an additional way to access arguments: [delegated properties](https://kotlinlang.org/docs/delegated-properties.html). With delegated properties, there are two possible dependencies you can use:
-
-1. `commandapi-core-kotlin`
-
-   Support for delegated properties in the Kotlin DSL has been added to the `commandapi-core-kotlin` module. If you want to use delegated properties, you need to add this dependency.
-
-2. `commandapi-bukkit-kotlin`
-
-   If you are already using the Kotlin DSL to create your commands, you can already use delegated properties. `commandapi-core-kotlin` is included in `commandapi-bukkit-kotlin`.
-
-### Access arguments using delegated properties
-
-To be able to access arguments by using delegated properties, your variable name needs to match the node name of the argument. This could look like this:
-
-<div class="multi-pre">
-
-```kotlin,Delegated_properties_example
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl7}}
-```
-
-</div>
-
-> **Developer's Note:**
->
-> Because delegated properties target the way you can access arguments, you can also use delegated properties when using Kotlin, but not the Kotlin DSL to create your commands.
->
-> Just keep in mind that you need to at least add `commandapi-core-kotlin` as a dependency.
-
 -----
 
 ## More examples
@@ -179,11 +149,11 @@ To declare an argument as optional you need to set the `optional` value to `true
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl8}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl7}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl9}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl8}}
 ```
 
 </div>
@@ -207,11 +177,11 @@ You just have to use the `replaceSuggestions` method this time:
 <div class="multi-pre">
 
 ```kotlin,CommandTree
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl10}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl9}}
 ```
 
 ```kotlin,CommandAPICommand
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl11}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:kotlindsl10}}
 ```
 
 </div>
