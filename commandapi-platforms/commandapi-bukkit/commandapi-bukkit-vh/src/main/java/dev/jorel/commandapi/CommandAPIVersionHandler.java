@@ -52,8 +52,7 @@ public interface CommandAPIVersionHandler {
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
 			return new NMS_1_20_R2();
 		} else {
-			String bukkit = Bukkit.getServer().toString();
-			String version = bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1);
+			String version = Bukkit.getBukkitVersion().split("-")[0];
 			return switch (version) {
 				case "1.15", "1.15.1", "1.15.2" -> new NMS_1_15();
 				case "1.16.1" -> new NMS_1_16_R1();
