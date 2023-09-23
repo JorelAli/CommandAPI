@@ -6,12 +6,11 @@
 
 	<parent>
 		<groupId>dev.jorel</groupId>
-		<artifactId>commandapi-velocity</artifactId>
+		<artifactId>commandapi-kotlin</artifactId>
 		<version>9.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>commandapi-velocity-kotlin</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>commandapi-core-kotlin</artifactId>
 
 	<build>
 		<sourceDirectory>src/main/kotlin</sourceDirectory>
@@ -40,34 +39,27 @@
 					<jvmTarget>16</jvmTarget>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>empty-javadoc-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>javadoc</classifier>
+							<classesDirectory>${basedir}/javadoc</classesDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>papermc-repo</id>
-			<url>https://repo.papermc.io/repository/maven-public/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
-		<!--- Velocity dependency -->
-		<dependency>
-			<groupId>com.velocitypowered</groupId>
-			<artifactId>velocity-api</artifactId>
-			<version>3.1.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!--- CommandAPI velocity core dependency -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-velocity-core</artifactId>
-			<version>9.2.0-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!--- Kotlin dependencies -->
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib</artifactId>
@@ -75,10 +67,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-test</artifactId>
-			<version>${kotlin.version}</version>
-			<scope>test</scope>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-core</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

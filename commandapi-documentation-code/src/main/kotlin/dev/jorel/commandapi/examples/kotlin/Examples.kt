@@ -14,6 +14,11 @@ import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
 import dev.jorel.commandapi.executors.*
+import dev.jorel.commandapi.kotlindsl.commandAPICommand
+import dev.jorel.commandapi.kotlindsl.getValue
+import dev.jorel.commandapi.kotlindsl.playerArgument
+import dev.jorel.commandapi.kotlindsl.playerExecutor
+import dev.jorel.commandapi.kotlindsl.stringArgument
 import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
 import net.kyori.adventure.inventory.Book
@@ -1524,6 +1529,20 @@ Converter.convert(essentials, "speed",
 )
 /* ANCHOR_END: conversion2 */
 }
+}
+
+fun delegatedProperties() {
+/* ANCHOR: delegatedProperties1 */
+CommandAPICommand("mycommand")
+    .withArguments(StringArgument("string"))
+    .withArguments(PlayerArgument("target"))
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val string: String by args
+        val target: Player by args
+        // Implementation...
+    })
+    .register()
+/* ANCHOR_END: delegatedProperties1 */
 }
 
 class functions {

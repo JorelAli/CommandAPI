@@ -109,6 +109,7 @@
 
 - [Kotlin-based commands](./kotlinintro.md)
 - [Using the DSL](./kotlindsl.md)
+- [Delegated properties](./delegated_properties.md)
 
 # CommandAPI Utilities
 

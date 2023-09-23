@@ -1,10 +1,7 @@
 package dev.jorel.commandapi.examples.kotlin
 
 import de.tr7zw.changeme.nbtapi.NBTContainer
-import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
-import dev.jorel.commandapi.arguments.LiteralArgument.of
-import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.kotlindsl.*
 import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
@@ -893,6 +890,20 @@ commandAPICommand("cmd") {
     }
 }
 /* ANCHOR_END: arguments4 */
+}
+
+fun delegatedProperties() {
+/* ANCHOR: delegatedProperties1 */
+commandAPICommand("mycommand") {
+    stringArgument("string")
+    playerArgument("target")
+    playerExecutor { player, args ->
+        val string: String by args
+        val target: Player by args
+        // Implementation...
+    }
+}
+/* ANCHOR_END: delegatedProperties1 */
 }
 
 fun help() {
