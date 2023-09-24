@@ -6,7 +6,7 @@
 >
 > For Spigot, you need to import the `dev.jorel.commandapi.arguments.spigot` version!
 >
-> If you are using the Kotlin DSL, you need to import the `dev.jorel.commandapi.kotlindsl.spigot` version! 
+> If you are using the Kotlin DSL, you need to import the `dev.jorel.commandapi.kotlindsl.spigot` version!
 
 ## Chat color argument
 
