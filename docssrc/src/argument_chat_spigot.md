@@ -3,7 +3,7 @@
 > **Developer's Note:**
 >
 > The three following classes, `ChatColorArgument`, `ChatComponentArgument` and `ChatArgument` depend on a [Spigot](https://www.spigotmc.org/) based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
-> 
+>
 > For Spigot, you need to import the `dev.jorel.commandapi.arguments.spigot` version!
 
 ## Chat color argument
@@ -27,11 +27,11 @@ We then use the `ChatColorArgument` to change the player's name color:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatSpigot1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/SpigotExamples.java:argumentChatSpigot1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatSpigot1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamples.kt:argumentChatSpigot1}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -122,11 +122,11 @@ Now we can create our book command. We use the player as the main target by usin
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatSpigot2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/SpigotExamples.java:argumentChatSpigot2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatSpigot2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamples.kt:argumentChatSpigot2}}
 ```
 
 ```kotlin,Kotlin_DSL
@@ -168,11 +168,11 @@ _Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatSpigot3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/SpigotExamples.java:argumentChatSpigot3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatSpigot3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamples.kt:argumentChatSpigot3}}
 ```
 
 ```kotlin,Kotlin_DSL

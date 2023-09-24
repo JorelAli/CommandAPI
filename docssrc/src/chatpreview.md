@@ -110,19 +110,19 @@ For execution, we do the same procedure, because the text that the user enters s
 <div class="multi-pre">
 
 ```java,Spigot_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/SpigotExamples.java:chatPreview1}}
 ```
 
 ```java,Paper_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/PaperExamples.java:chatPreview1}}
 ```
 
 ```kotlin,Spigot_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamples.kt:chatPreview1}}
 ```
 
 ```kotlin,Paper_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/PaperExamples.kt:chatPreview1}}
 ```
 
 </div>
@@ -144,19 +144,19 @@ By using `.usePreview(true)`, we don't have to re-translate `&` formatting codes
 <div class="multi-pre">
 
 ```java,Spigot_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview3}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/SpigotExamples.java:chatPreview2}}
 ```
 
 ```java,Paper_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview4}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/PaperExamples.java:chatPreview2}}
 ```
 
 ```kotlin,Spigot_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamples.kt:chatPreview2}}
 ```
 
 ```kotlin,Paper_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview4}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/PaperExamples.kt:chatPreview2}}
 ```
 
 </div>
