@@ -30,6 +30,32 @@ For 10.0.0, changes have been made to component-related arguments like the `Chat
 + dev.jorel.commandapi.arguments.adventure.ChatComponentArgument
 ```
 
+Similar changes have also been made for the component-related argument methods in the Kotlin DSL:
+
+- Spigot-related argument changes
+
+```patch
+- dev.jorel.commandapi.kotlindsl.chatArgument
+- dev.jorel.commandapi.kotlindsl.chatColorArgument
+- dev.jorel.commandapi.kotlindsl.chatComponentArgument
+
++ dev.jorel.commandapi.kotlindsl.spigot.chatArgument
++ dev.jorel.commandapi.kotlindsl.spigot.chatColorArgument
++ dev.jorel.commandapi.kotlindsl.spigot.chatComponentArgument
+```
+
+- Adventure-related argument changes:
+
+```patch
+- dev.jorel.commandapi.kotlindsl.adventureChatArgument
+- dev.jorel.commandapi.kotlindsl.adventureChatColorArgument
+- dev.jorel.commandapi.kotlindsl.adventureChatComponentArgument
+
++ dev.jorel.commandapi.kotlindsl.adventure.chatArgument
++ dev.jorel.commandapi.kotlindsl.adventure.chatColorArgument
++ dev.jorel.commandapi.kotlindsl.adventure.chatComponentArgument
+```
+
 ## From 9.0.3 to 9.1.0
 
 ### MultiLiteralArgument changes
