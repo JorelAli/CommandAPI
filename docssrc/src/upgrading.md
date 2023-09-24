@@ -56,6 +56,8 @@ Similar changes have also been made for the component-related argument methods i
 + dev.jorel.commandapi.kotlindsl.adventure.chatComponentArgument
 ```
 
+-----
+
 ## From 9.0.3 to 9.1.0
 
 ### MultiLiteralArgument changes
