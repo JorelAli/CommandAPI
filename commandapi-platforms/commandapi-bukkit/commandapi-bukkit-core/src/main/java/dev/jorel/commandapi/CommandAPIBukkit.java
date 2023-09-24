@@ -643,7 +643,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	private static boolean isThisTheCommandButNamespaced(String commandName, String key) {
-		return key.contains(":") && key.split(":")[1].equalsIgnoreCase(commandName);
+		if(!key.contains(":")) return false;
+		String[] split = key.split(":");
+		if(split.length < 2) return false;
+		return split[1].equalsIgnoreCase(commandName);
 	}
 
 	@Override

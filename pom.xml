@@ -63,6 +63,7 @@
 
 		<!-- Platform implementations -->
 		<module>commandapi-platforms</module>
+		<module>commandapi-kotlin</module>
 
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>

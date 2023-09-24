@@ -19,6 +19,8 @@
 			<id>Platform.Bukkit</id>
 			<modules>
 				<module>commandapi-bukkit</module>
+				<module>../commandapi-kotlin/commandapi-core-kotlin</module>
+				<module>../commandapi-kotlin/commandapi-bukkit-kotlin</module>
 			</modules>
 		</profile>
 		<profile>
@@ -31,6 +33,8 @@
 			<id>Platform.Velocity</id>
 			<modules>
 				<module>commandapi-velocity</module>
+				<module>../commandapi-kotlin/commandapi-core-kotlin</module>
+				<module>../commandapi-kotlin/commandapi-velocity-kotlin</module>
 			</modules>
 		</profile>
 	</profiles>
