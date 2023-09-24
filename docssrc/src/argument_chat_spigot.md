@@ -3,7 +3,8 @@
 > **Developer's Note:**
 >
 > The three following classes, `ChatColorArgument`, `ChatComponentArgument` and `ChatArgument` depend on a [Spigot](https://www.spigotmc.org/) based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
->
+> 
+> For Spigot, you need to import the `dev.jorel.commandapi.arguments.spigot` version!
 
 ## Chat color argument
 

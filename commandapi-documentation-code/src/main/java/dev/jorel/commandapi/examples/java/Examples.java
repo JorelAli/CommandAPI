@@ -33,6 +33,9 @@ import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
+import dev.jorel.commandapi.arguments.adventure.ChatArgument;
+import dev.jorel.commandapi.arguments.adventure.ChatColorArgument;
+import dev.jorel.commandapi.arguments.adventure.ChatComponentArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutorType;
@@ -236,9 +239,7 @@ new CommandAPICommand("set")
 void argument_chatAdventure() {
 /* ANCHOR: argumentChatAdventure1 */
 new CommandAPICommand("namecolor")
-    // When using this argument in an environment that is compiled against Paper only,
-    // the package identifier can be omitted
-    .withArguments(new dev.jorel.commandapi.arguments.adventure.ChatColorArgument("chatcolor"))
+    .withArguments(new ChatColorArgument("chatcolor"))
     .executesPlayer((player, args) -> {
         NamedTextColor color = (NamedTextColor) args.get("chatcolor");
         player.displayName(Component.text().color(color).append(Component.text(player.getName())).build());
@@ -251,9 +252,7 @@ new CommandAPICommand("showbook")
     .withArguments(new PlayerArgument("target"))
     .withArguments(new TextArgument("title"))
     .withArguments(new StringArgument("author"))
-    // When using this argument in an environment that is compiled against Paper only,
-    // the package identifier can be omitted
-    .withArguments(new dev.jorel.commandapi.arguments.adventure.ChatComponentArgument("contents"))
+    .withArguments(new ChatComponentArgument("contents"))
     .executes((sender, args) -> {
         Player target = (Player) args.get("target");
         String title = (String) args.get("title");
@@ -269,9 +268,7 @@ new CommandAPICommand("showbook")
 
 /* ANCHOR: argumentChatAdventure3 */
 new CommandAPICommand("pbroadcast")
-    // When using this argument in an environment that is compiled against Paper only,
-    // the package identifier can be omitted
-    .withArguments(new dev.jorel.commandapi.arguments.adventure.ChatArgument("message"))
+    .withArguments(new ChatArgument("message"))
     .executes((sender, args) -> {
         Component message = (Component) args.get("message");
         
@@ -286,9 +283,7 @@ new CommandAPICommand("pbroadcast")
 void argument_chatSpigot() {
 /* ANCHOR: argumentChatSpigot1 */
 new CommandAPICommand("namecolor")
-    // When using this argument in an environment that is compiled against Spigot only,
-    // the package identifier can be omitted
-    .withArguments(new dev.jorel.commandapi.arguments.spigot.ChatColorArgument("chatcolor"))
+    .withArguments(new ChatColorArgument("chatcolor"))
     .executesPlayer((player, args) -> {
         ChatColor color = (ChatColor) args.get("chatcolor");
         player.setDisplayName(color + player.getName());
@@ -299,9 +294,7 @@ new CommandAPICommand("namecolor")
 /* ANCHOR: argumentChatSpigot2 */
 new CommandAPICommand("makebook")
     .withArguments(new PlayerArgument("player"))
-    // When using this argument in an environment that is compiled against Spigot only,
-    // the package identifier can be omitted
-    .withArguments(new dev.jorel.commandapi.arguments.spigot.ChatComponentArgument("contents"))
+    .withArguments(new ChatComponentArgument("contents"))
     .executes((sender, args) -> {
         Player player = (Player) args.get("player");
         BaseComponent[] arr = (BaseComponent[]) args.get("contents");
@@ -322,9 +315,7 @@ new CommandAPICommand("makebook")
 
 /* ANCHOR: argumentChatSpigot3 */
 new CommandAPICommand("pbroadcast")
-    // When using this argument in an environment that is compiled against Spigot only,
-    // the package identifier can be omitted
-    .withArguments(new dev.jorel.commandapi.arguments.spigot.ChatArgument("message"))
+    .withArguments(new ChatArgument("message"))
     .executes((sender, args) -> {
         BaseComponent[] message = (BaseComponent[]) args.get("message");
     

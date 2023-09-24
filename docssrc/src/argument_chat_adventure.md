@@ -3,6 +3,8 @@
 > **Developer's Note:**
 >
 > The three following classes, `ChatColorArgument`, `ChatComponentArgument` and `ChatArgument` depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a `PaperAdventureNotFoundException`
+> 
+> For Adventure, you need to import the `dev.jorel.commandapi.arguments.adventure` version!
 
 From Paper 1.16.5 build #473 onwards, Paper now includes [Kyori's Adventure API](https://github.com/KyoriPowered/adventure-platform). This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found [here](https://docs.adventure.kyori.net/index.html).
 

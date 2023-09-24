@@ -12,6 +12,9 @@ import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
+import dev.jorel.commandapi.arguments.adventure.ChatArgument
+import dev.jorel.commandapi.arguments.adventure.ChatColorArgument
+import dev.jorel.commandapi.arguments.adventure.ChatComponentArgument
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
 import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
@@ -189,9 +192,7 @@ CommandAPICommand("set")
 fun argument_chatAdventure() {
 /* ANCHOR: argumentChatAdventure1 */
 CommandAPICommand("namecolor")
-    // When using this argument in an environment that is compiled against Paper only,
-    // the package identifier can be omitted
-    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatColorArgument("chatcolor"))
+    .withArguments(ChatColorArgument("chatcolor"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val color = args["chatcolor"] as NamedTextColor
         player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
@@ -204,9 +205,7 @@ CommandAPICommand("showbook")
     .withArguments(PlayerArgument("target"))
     .withArguments(TextArgument("title"))
     .withArguments(StringArgument("author"))
-    // When using this argument in an environment that is compiled against Paper only,
-    // the package identifier can be omitted
-    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatComponentArgument("contents"))
+    .withArguments(ChatComponentArgument("contents"))
     .executes(CommandExecutor { _, args ->
         val target = args["target"] as Player
         val title = args["title"] as String
@@ -222,9 +221,7 @@ CommandAPICommand("showbook")
 
 /* ANCHOR: argumentChatAdventure3 */
 CommandAPICommand("pbroadcast")
-    // When using this argument in an environment that is compiled against Paper only,
-    // the package identifier can be omitted
-    .withArguments(dev.jorel.commandapi.arguments.adventure.ChatArgument("message"))
+    .withArguments(ChatArgument("message"))
     .executes(CommandExecutor { _, args ->
         val message = args["message"] as Component
 
@@ -239,9 +236,7 @@ CommandAPICommand("pbroadcast")
 fun argument_chatSpigot() {
 /* ANCHOR: argumentChatSpigot1 */
 CommandAPICommand("namecolor")
-    // When using this argument in an environment that is compiled against Spigot only,
-    // the package identifier can be omitted
-    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatColorArgument("chatColor"))
+    .withArguments(ChatColorArgument("chatColor"))
     .executesPlayer(PlayerCommandExecutor { player, args ->
         val color = args["chatColor"] as ChatColor
         player.setDisplayName("$color${player.name}")
@@ -252,9 +247,7 @@ CommandAPICommand("namecolor")
 /* ANCHOR: argumentChatSpigot2 */
 CommandAPICommand("makebook")
     .withArguments(PlayerArgument("player"))
-    // When using this argument in an environment that is compiled against Spigot only,
-    // the package identifier can be omitted
-    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatComponentArgument("contents"))
+    .withArguments(ChatComponentArgument("contents"))
     .executes(CommandExecutor { _, args ->
         val player = args["player"] as Player
         val arr = args["contents"] as Array<BaseComponent>
@@ -275,9 +268,7 @@ CommandAPICommand("makebook")
 
 /* ANCHOR: argumentChatSpigot3 */
 CommandAPICommand("pbroadcast")
-    // When using this argument in an environment that is compiled against Spigot only,
-    // the package identifier can be omitted
-    .withArguments(dev.jorel.commandapi.arguments.spigot.ChatArgument("message"))
+    .withArguments(ChatArgument("message"))
     .executes(CommandExecutor { _, args ->
         val message = args["message"] as Array<BaseComponent>
 
