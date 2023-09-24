@@ -2,7 +2,7 @@
 
 ![Chat preview](./images/chatpreview.gif)
 
-Chat preview is a feature introduced in Minecraft 1.19 that allows the server to display a preview of a chat message to the client before the client sends their message to the server. This chat preview feature is also compatible with `/say` and `/msg`, as well as the `ChatArgument` and `AdventureChatArgument` classes.
+Chat preview is a feature introduced in Minecraft 1.19 that allows the server to display a preview of a chat message to the client before the client sends their message to the server. This chat preview feature is also compatible with `/say` and `/msg`, as well as the `ChatArgument` for both platforms, Spigot and Adventure.
 
 -----
 
@@ -22,13 +22,13 @@ For players that want to use chat preview, they must have `Chat Preview` enabled
 
 ## Specifying a chat preview function
 
-The `ChatArgument` and `AdventureChatArgument` classes include a method, `withPreview`:
+The `ChatArgument` classes include a method, `withPreview`:
 
 ```java
 public T withPreview(PreviewableFunction preview);
 ```
 
-The method `withPreview(PreviewableFunction preview)` lets you generate a preview to send to the client. This method takes in the `PreviewableFunction` functional interface, which is a function that takes in a `PreviewInfo` and returns either a `BaseComponent[]` (for `ChatArgument`) or a `Component` (for `AdventureChatArgument`):
+The method `withPreview(PreviewableFunction preview)` lets you generate a preview to send to the client. This method takes in the `PreviewableFunction` functional interface, which is a function that takes in a `PreviewInfo` and returns either a `BaseComponent[]` (for the Spigot-based `ChatArgument`) or a `Component` (for the Adventure-based`ChatArgument`):
 
 ```java
 public T generatePreview(PreviewInfo info) throws WrapperCommandSyntaxException;
@@ -59,7 +59,7 @@ Player player();
 String input();
 ```
 
-`input()` is the current input for the current `ChatArgument` or `AdventureChatArgument`. If a user is typing `/mycommand hellowor¦` and the command syntax is `/mycommand <ChatArgument>`, the result of `input()` would be `"hellowor"`.
+`input()` is the current input for the current `ChatArgument`. If a user is typing `/mycommand hellowor¦` and the command syntax is `/mycommand <ChatArgument>`, the result of `input()` would be `"hellowor"`.
 
 -----
 
@@ -75,13 +75,13 @@ String fullInput();
 T parsedInput();
 ```
 
-`parsedInput()` is similar to `input()`, except it has been parsed by the CommandAPI's argument parser. This is a representation of what the argument in the executor would look like. For a `ChatArgument` the return type is `BaseComponent[]`, and for `AdventureChatArgument` the return type is `Component`.
+`parsedInput()` is similar to `input()`, except it has been parsed by the CommandAPI's argument parser. This is a representation of what the argument in the executor would look like. For the Spigot-based `ChatArgument` the return type is `BaseComponent[]`, and for the Adventure-based`ChatArgument` the return type is `Component`.
 
 -----
 
 ## Using the chat preview function as the argument's value
 
-The `ChatArgument` and `AdventureChatArgument` classes also include a method, `usePreview`:
+The `ChatArgument` classes also include a method, `usePreview`:
 
 ```java
 public T usePreview(boolean usePreview);
@@ -103,7 +103,7 @@ Say we wanted to make our own `/broadcast` command that allowed the user to use 
 /broadcast <message>
 ```
 
-Because the `ChatArgument` and `AdventureChatArgument` can support entity selectors (such as `@p`), it's best to use the `info.parsedInput()` method to handle parsed entity selectors. In our code, we use the `.withPreview()` method and take the parsed input and convert it to plain text. We then convert the plain text with `&` characters into component text to be displayed to the user.
+Because the `ChatArgument` can support entity selectors (such as `@p`), it's best to use the `info.parsedInput()` method to handle parsed entity selectors. In our code, we use the `.withPreview()` method and take the parsed input and convert it to plain text. We then convert the plain text with `&` characters into component text to be displayed to the user.
 
 For execution, we do the same procedure, because the text that the user enters still has `&` characters that need to be converted into a component.
 
