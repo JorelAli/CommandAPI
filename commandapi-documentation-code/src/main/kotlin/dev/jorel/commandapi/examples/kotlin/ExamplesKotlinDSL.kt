@@ -5,10 +5,6 @@ import dev.jorel.commandapi.arguments.*
 import dev.jorel.commandapi.kotlindsl.*
 import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
-import net.kyori.adventure.inventory.Book
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.*
 import org.bukkit.advancement.Advancement
 import org.bukkit.block.*
@@ -18,7 +14,6 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
 import org.bukkit.inventory.ComplexRecipe
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.loot.LootTable
 import org.bukkit.loot.Lootable
 import org.bukkit.plugin.java.JavaPlugin
@@ -152,96 +147,6 @@ commandAPICommand("set") {
     }
 }
 /* ANCHOR_END: argumentBlockState1 */
-}
-
-fun argument_chatAdventure() {
-/* ANCHOR: argumentChatAdventure1 */
-commandAPICommand("namecolor") {
-    adventureChatColorArgument("chatcolor")
-    playerExecutor { player, args ->
-        val color = args["chatcolor"] as NamedTextColor
-        player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
-    }
-}
-/* ANCHOR_END: argumentChatAdventure1 */
-
-/* ANCHOR: argumentChatAdventure2 */
-commandAPICommand("showbook") {
-    playerArgument("target")
-    textArgument("title")
-    stringArgument("author")
-    adventureChatComponentArgument("contents")
-    anyExecutor { _, args ->
-        val target = args["target"] as Player
-        val title = args["title"] as String
-        val author = args["author"] as String
-        val content = args["contents"] as Component
-
-        // Create a book and show it to the user (Requires Paper)
-        val mybook = Book.book(Component.text(title), Component.text(author), content)
-        target.openBook(mybook)
-    }
-}
-/* ANCHOR_END: argumentChatAdventure2 */
-
-/* ANCHOR: argumentChatAdventure3 */
-commandAPICommand("pbroadcast") {
-    adventureChatArgument("message")
-    anyExecutor { _, args ->
-        val message = args["message"] as Component
-
-        // Broadcast the message to everyone with broadcast permissions.
-        Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS)
-        Bukkit.getServer().broadcast(message)
-    }
-}
-/* ANCHOR_END: argumentChatAdventure3 */
-}
-
-fun argument_chatSpigot() {
-/* ANCHOR: argumentChatSpigot1 */
-commandAPICommand("namecolor") {
-    chatColorArgument("chatcolor")
-    playerExecutor { player, args ->
-        val color = args["chatcolor"] as ChatColor
-        player.setDisplayName("$color${player.name}")
-    }
-}
-/* ANCHOR_END: argumentChatSpigot1 */
-
-/* ANCHOR: argumentChatSpigot2 */
-commandAPICommand("makebook") {
-    playerArgument("player")
-    chatComponentArgument("contents")
-    anyExecutor { _, args ->
-        val player = args["player"] as Player
-        val array = args["contents"] as Array<BaseComponent>
-
-        // Create book
-        val item = ItemStack(Material.WRITTEN_BOOK)
-        val meta = item.itemMeta as BookMeta
-        meta.title = "Custom Book"
-        meta.author = player.name
-        meta.spigot().setPages(array)
-        item.itemMeta = meta
-
-        // Give player the book
-        player.inventory.addItem(item)
-    }
-}
-/* ANCHOR_END: argumentChatSpigot2 */
-
-/* ANCHOR: argumentChatSpigot3 */
-commandAPICommand("pbroadcast") {
-    chatArgument("message")
-    anyExecutor { _, args ->
-        val message = args["message"] as Array<BaseComponent>
-
-        // Broadcast the message to everyone on the server
-        Bukkit.getServer().spigot().broadcast(*message)
-    }
-}
-/* ANCHOR_END: argumentChatSpigot3 */
 }
 
 fun argument_command() {

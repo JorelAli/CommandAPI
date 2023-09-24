@@ -5,6 +5,8 @@
 > The three following classes, `ChatColorArgument`, `ChatComponentArgument` and `ChatArgument` depend on a [Spigot](https://www.spigotmc.org/) based server. This means that these arguments will not work on a non-Spigot based server, such as CraftBukkit. If you use this class on a non-Spigot based server, it will throw a `SpigotNotFoundException`
 >
 > For Spigot, you need to import the `dev.jorel.commandapi.arguments.spigot` version!
+>
+> If you are using the Kotlin DSL, you need to import the `dev.jorel.commandapi.kotlindsl.spigot` version! 
 
 ## Chat color argument
 
@@ -35,7 +37,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatSpigot1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamplesKotlinDSL.kt:argumentChatSpigot1}}
 ```
 
 </div>
@@ -130,7 +132,7 @@ Now we can create our book command. We use the player as the main target by usin
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatSpigot2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamplesKotlinDSL.kt:argumentChatSpigot2}}
 ```
 
 </div>
@@ -176,7 +178,7 @@ _Bob_ would receive the message "Hello Bob", whereas _Michael_ would receive the
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatSpigot3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/SpigotExamplesKotlinDSL.kt:argumentChatSpigot3}}
 ```
 
 </div>

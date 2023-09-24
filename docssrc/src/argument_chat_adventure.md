@@ -41,7 +41,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/PaperExamplesKotlinDSL.kt:argumentChatAdventure1}}
 ```
 
 </div>
@@ -77,7 +77,7 @@ We can construct a book using the Adventure API's `Book.book(Component, Componen
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/PaperExamplesKotlinDSL.kt:argumentChatAdventure2}}
 ```
 
 </div>
@@ -113,7 +113,7 @@ In order to broadcast an Adventure `Component` to all players on the server, we 
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure3}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/PaperExamplesKotlinDSL.kt:argumentChatAdventure3}}
 ```
 
 </div>
