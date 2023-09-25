@@ -28,7 +28,7 @@ The `ChatArgument` classes include a method, `withPreview`:
 public T withPreview(PreviewableFunction preview);
 ```
 
-The method `withPreview(PreviewableFunction preview)` lets you generate a preview to send to the client. This method takes in the `PreviewableFunction` functional interface, which is a function that takes in a `PreviewInfo` and returns either a `BaseComponent[]` (for the Spigot-based `ChatArgument`) or a `Component` (for the Adventure-based`ChatArgument`):
+The method `withPreview(PreviewableFunction preview)` lets you generate a preview to send to the client. This method takes in the `PreviewableFunction` functional interface, which is a function that takes in a `PreviewInfo` and returns either a `BaseComponent[]` (for the Spigot-based `ChatArgument`) or a `Component` (for the Adventure-based `ChatArgument`):
 
 ```java
 public T generatePreview(PreviewInfo info) throws WrapperCommandSyntaxException;
@@ -75,7 +75,7 @@ String fullInput();
 T parsedInput();
 ```
 
-`parsedInput()` is similar to `input()`, except it has been parsed by the CommandAPI's argument parser. This is a representation of what the argument in the executor would look like. For the Spigot-based `ChatArgument` the return type is `BaseComponent[]`, and for the Adventure-based`ChatArgument` the return type is `Component`.
+`parsedInput()` is similar to `input()`, except it has been parsed by the CommandAPI's argument parser. This is a representation of what the argument in the executor would look like. For the Spigot-based `ChatArgument` the return type is `BaseComponent[]`, and for the Adventure-based `ChatArgument` the return type is `Component`.
 
 -----
 

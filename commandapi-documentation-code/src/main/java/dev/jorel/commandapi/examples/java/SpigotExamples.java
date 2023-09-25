@@ -51,7 +51,7 @@ new CommandAPICommand("makebook")
 
 /* ANCHOR: argumentChatSpigot3 */
 new CommandAPICommand("pbroadcast")
-    .withArguments(new dev.jorel.commandapi.arguments.adventure.ChatArgument("message"))
+    .withArguments(new ChatArgument("message"))
     .executes((sender, args) -> {
         BaseComponent[] message = (BaseComponent[]) args.get("message");
 
