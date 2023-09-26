@@ -41,7 +41,7 @@ class ArgumentBlockStateTests extends TestBase {
 	 * Tests *
 	 *********/
 	
-	// Block states can be looked up here: https://minecraft.fandom.com/wiki/Block_states
+	// Block states can be looked up here: https://minecraft.wiki/w/Block_states
 
 	@Test
 	void executionTestWithBlockStateArgument() {

@@ -74,7 +74,7 @@ class ArgumentItemStackTests extends TestBase {
 		// Dev note: To make these tests work, we have to overwrite MockBukkit's
 		// ItemFactory with our own, see CommandAPIServerMock#getItemFactory()
 		
-		// NBT examples from https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags#Items
+		// NBT examples from https://minecraft.wiki/w/Tutorials/Command_NBT_tags#Items
 		
 		// /test minecraft:stone{Count:3b}
 		{

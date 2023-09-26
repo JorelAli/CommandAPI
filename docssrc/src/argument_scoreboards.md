@@ -2,8 +2,8 @@
 
 The CommandAPI uses two classes to provide information about a scoreboard:
 
-- The `ScoreHolderArgument` class represents **score holder** - a player's name or an entity's UUID that has scores in an objective. This is described in more detail [on the Minecraft Wiki](https://minecraft.gamepedia.com/Scoreboard#Objectives).
-- The `ScoreboardSlotArgument` class represents a **display slot** (sidebar, list or belowName) as well as the team color if the display is the sidebar. This is described in more detail [on the Minecraft Wiki](https://minecraft.gamepedia.com/Scoreboard#Display_slots).
+- The `ScoreHolderArgument` class represents **score holder** - a player's name or an entity's UUID that has scores in an objective. This is described in more detail [on the Minecraft Wiki](https://minecraft.wiki/w/Scoreboard#Objectives).
+- The `ScoreboardSlotArgument` class represents a **display slot** (sidebar, list or belowName) as well as the team color if the display is the sidebar. This is described in more detail [on the Minecraft Wiki](https://minecraft.wiki/w/Scoreboard#Display_slots).
 
 -----
 

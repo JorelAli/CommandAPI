@@ -96,7 +96,7 @@ class ArgumentLocationTests extends TestBase {
 			server.dispatchCommand(player, "test ^ ^ ^5");
 			assertLocationEquals(new Location(null, 2.0, 2.0, 7.0), results.get());
 			
-			// As defined in https://minecraft.fandom.com/wiki/Coordinates#Local_coordinates:
+			// As defined in https://minecraft.wiki/w/Coordinates#Local_coordinates:
 			// For example, /tp ^ ^ ^5 teleports the player 5 blocks forward. If they turn
 			// around and repeat the command, they are teleported back to where they
 			// started.
@@ -170,7 +170,7 @@ class ArgumentLocationTests extends TestBase {
 			server.dispatchCommand(player, "test ^ ^ ^5");
 			assertLocationEquals(new Location(null, 2, 2, 7), results.get());
 			
-			// As defined in https://minecraft.fandom.com/wiki/Coordinates#Local_coordinates:
+			// As defined in https://minecraft.wiki/w/Coordinates#Local_coordinates:
 			// For example, /tp ^ ^ ^5 teleports the player 5 blocks forward. If they turn
 			// around and repeat the command, they are teleported back to where they
 			// started.
