@@ -40,7 +40,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 9.1.0 \\(\rightarrow\\) 9.2.0
 
 - Updates [Location arguments](./argument_locations.md) page to mention the new `centerPosition` argument to center the position of integer values for location arguments.
-- Updates [Kotlin documentation](./kotlindsl.md) page to mention the added support of delegations.
+- Added [Delegated properties](./delegated_properties.md) page to mention the added support of delegations.
 
 ### Documentation changes 9.0.3 \\(\rightarrow\\) 9.1.0
 
