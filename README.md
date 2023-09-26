@@ -415,12 +415,13 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     <tbody>
         <tr>
             <td valign="top"><b>9.2.0</b></td>
-            <td valign="top">??? 2023</td>
+            <td valign="top">September 2023</td>
             <td valign="top">
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/487 Added support for disabling integer centering for location arguments</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/488 Fixed calling CommandAPI commands with <code>Bukkit.createCommandSender()</code> not working on paper</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/482 Adds Kotlin DSL support for delegations</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/482 Adds Kotlin DSL support for delegated properties</li>
+                    <li>Fixed a bug where the CommandAPI would throw errors when unregistering commands when a command exists with a <code>:</code> at the end of its name</li>
                 </ul>
             </td>
         </tr>
