@@ -1,6 +1,6 @@
 # Block predicate arguments
 
-The `BlockPredicateArgument` is used to represent a "test" for Minecraft blocks. This can consist of tags, such as the ones listed [here on the MinecraftWiki](https://minecraft.gamepedia.com/Tag#Blocks), or individual blocks. If a block matches the tag or block, then the predicate is satisfied.
+The `BlockPredicateArgument` is used to represent a "test" for Minecraft blocks. This can consist of tags, such as the ones listed [here on the MinecraftWiki](https://minecraft.wiki/w/Tag#Blocks), or individual blocks. If a block matches the tag or block, then the predicate is satisfied.
 
 For example, if we were to use the predicate `#leaves`, then the following blocks will be satisfied by that predicate: `jungle_leaves`, `oak_leaves`, `spruce_leaves`, `dark_oak_leaves`, `acacia_leaves`, `birch_leaves`.
 

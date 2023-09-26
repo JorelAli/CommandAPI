@@ -19,7 +19,7 @@ The `T data` can be used in Bukkit's `World.spawnParticle(Particle particle, Loc
 
 ## Particle data
 
-The particle argument requires additional data for a particle depending on what the particle is. Information about this can be found [on the Argument types page on the MinecraftWiki](https://minecraft.fandom.com/wiki/Argument_types#particle). The following particles have additional data required to display them:
+The particle argument requires additional data for a particle depending on what the particle is. Information about this can be found [on the Argument types page on the MinecraftWiki](https://minecraft.wiki/w/Argument_types#particle). The following particles have additional data required to display them:
 
 | Bukkit Particle         | Minecraft particle      | Arguments                                                             |
 |-------------------------|-------------------------|-----------------------------------------------------------------------|

@@ -4,7 +4,7 @@
 
 ![An image of an entity selector argument with a list of suggestions including entity selectors and a player name](./images/arguments/entityselector.png)
 
-Minecraft's [target selectors](https://minecraft.gamepedia.com/Commands#Target_selectors) (e.g. `@a` or `@e`) are implemented using the subclasses of the `EntitySelectorArgument` class. This allows you to select specific entities based on certain attributes.
+Minecraft's [target selectors](https://minecraft.wiki/w/Commands#Target_selectors) (e.g. `@a` or `@e`) are implemented using the subclasses of the `EntitySelectorArgument` class. This allows you to select specific entities based on certain attributes.
 
 There are four `EntitySelectorArgument` subclasses that determine what type of data to return:
 

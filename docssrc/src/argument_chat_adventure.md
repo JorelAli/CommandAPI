@@ -50,7 +50,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 
 ## Adventure chat component argument
 
-The `AdventureChatComponentArgument` class accepts raw chat-based JSON as valid input, as declared [here](https://minecraft.gamepedia.com/Raw_JSON_text_format). This is converted into Adventure's `Component` class.
+The `AdventureChatComponentArgument` class accepts raw chat-based JSON as valid input, as declared [here](https://minecraft.wiki/w/Raw_JSON_text_format). This is converted into Adventure's `Component` class.
 
 <div class="example">
 

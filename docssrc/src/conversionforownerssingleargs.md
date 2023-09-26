@@ -138,7 +138,7 @@ To declare a value \\(x\\) that can take any range of values and is a decimal nu
 
 ## List of all supported argument types
 
-The list of types are based on [the list of argument types from the Minecraft Wiki](https://minecraft.gamepedia.com/Argument_types), with a few changes. The complete list that the CommandAPI supports is as follows:
+The list of types are based on [the list of argument types from the Minecraft Wiki](https://minecraft.wiki/w/Argument_types), with a few changes. The complete list that the CommandAPI supports is as follows:
 
 | Type                           | Description                                                  |
 | ------------------------------ | ------------------------------------------------------------ |
