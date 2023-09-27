@@ -45,7 +45,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 
 ## Chat component argument
 
-The `ChatComponentArgument` class accepts raw chat-based JSON as valid input. Despite being regular JSON, it _must_ conform to the standard declared [here](https://minecraft.gamepedia.com/Raw_JSON_text_format), which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key `text`, but not one that has the key `blah`).
+The `ChatComponentArgument` class accepts raw chat-based JSON as valid input. Despite being regular JSON, it _must_ conform to the standard declared [here](https://minecraft.wiki/w/Raw_JSON_text_format), which consists of JSON that has a limited subset of specific keys (In other words, you can have a JSON object that has the key `text`, but not one that has the key `blah`).
 
 This is converted into Spigot's `BaseComponent[]`, which can be used for the following:
 

@@ -8,33 +8,19 @@ This DSL provides many methods to easily add arguments to your command structure
 
 ## Installing the DSL
 
-To install the DSL, you need to add the `commandapi-kotlin` dependency into your `pom.xml` or your `build.gradle`, making sure to specify the server flavor you are developing for:
+To install the DSL, you need to add the `commandapi-bukkit-kotlin` dependency into your `pom.xml` or your `build.gradle`, making sure to specify the server flavor you are developing for:
 
 ### Adding the dependency with Maven
 
-<div class="linked-multi-pre">
-
-```xml,Bukkit
+```xml
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-kotlin</artifactId>
-        <version>9.1.0</version>
+        <version>9.2.0</version>
     </dependency>
 </dependencies>
 ```
-
-```xml,Velocity
-<dependencies>
-    <dependency>
-        <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-velocity-kotlin</artifactId>
-        <version>9.1.0</version>
-    </dependency>
-</dependencies>
-```
-
-</div>
 
 Next, you need to add Kotlin to your project. For this, you first need to add the dependency:
 
@@ -43,7 +29,7 @@ Next, you need to add Kotlin to your project. For this, you first need to add th
     <dependency>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-stdlib</artifactId>
-        <version>1.8.20</version>
+        <version>1.9.0</version>
     </dependency>
 </dependencies>
 ```
@@ -56,7 +42,7 @@ Finally, you need to add the `kotlin-maven-plugin`:
         <plugin>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-maven-plugin</artifactId>
-            <version>1.8.20</version>
+            <version>1.9.0</version>
             <executions>
                 <execution>
                     <id>compile</id>
@@ -105,27 +91,15 @@ Next, you need to add the dependency:
 
 <div class="multi-pre">
 
-```groovy,Bukkit_build.gradle
+```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-kotlin:9.1.0"
+    implementation "dev.jorel:commandapi-bukkit-kotlin:9.2.0"
 }
 ```
 
-```kotlin,Bukkit_build.gradle.kts
+```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-kotlin:9.1.0")
-}
-```
-
-```groovy,Velocity_build.gradle
-dependencies {
-    implementation "dev.jorel:commandapi-velocity-kotlin:9.1.0"
-}
-```
-
-```kotlin,Velocity_build.gradle.kts
-dependencies {
-    implementation("dev.jorel:commandapi-velocity-kotlin:9.1.0")
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.2.0")
 }
 ```
 
@@ -137,13 +111,13 @@ You also need to add Kotlin to your project. For this, you first need to add the
 
 ```groovy,build.gradle
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.8.20"
+    id "org.jetbrains.kotlin.jvm" version "1.9.0"
 }
 ```
 
 ```kotlin,build.gradle.kts
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.9.0"
 }
 ```
 

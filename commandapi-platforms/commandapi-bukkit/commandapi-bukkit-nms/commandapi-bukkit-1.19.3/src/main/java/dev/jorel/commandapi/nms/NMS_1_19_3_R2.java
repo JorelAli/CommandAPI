@@ -48,6 +48,7 @@ import dev.jorel.commandapi.wrappers.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
@@ -102,6 +103,7 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -270,6 +272,11 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
+	public Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
+	}
+
+	@Override
 	public NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		final Integer color = ColorArgument.getColor(cmdCtx, key).getColor();
 		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
@@ -386,6 +393,16 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	}
 
 	@Override
+	public FloatRange getFloatRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		MinMaxBounds.Doubles range = RangeArgument.Floats.getRange(cmdCtx, key);
+		final Double lowBoxed = range.getMin();
+		final Double highBoxed = range.getMax();
+		final double low = lowBoxed == null ? -Float.MAX_VALUE : lowBoxed;
+		final double high = highBoxed == null ? Float.MAX_VALUE : highBoxed;
+		return new FloatRange((float) low, (float) high);
+	}
+
+	@Override
 	public final FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		List<FunctionWrapper> result = new ArrayList<>();
 		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
@@ -395,6 +412,16 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 				entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())));
 		}
 		return result.toArray(new FunctionWrapper[0]);
+	}
+
+	@Override
+	public IntegerRange getIntRange(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		MinMaxBounds.Ints range = RangeArgument.Ints.getRange(cmdCtx, key);
+		final Integer lowBoxed = range.getMin();
+		final Integer highBoxed = range.getMax();
+		final int low = lowBoxed == null ? Integer.MIN_VALUE : lowBoxed;
+		final int high = highBoxed == null ? Integer.MAX_VALUE : highBoxed;
+		return new IntegerRange(low, high);
 	}
 
 	@Override
@@ -532,6 +559,11 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		net.minecraft.world.item.crafting.Recipe<?> recipe = ResourceLocationArgument.getRecipe(cmdCtx, key);
 		return new ComplexRecipeImpl(fromResourceLocation(recipe.getId()), recipe.toBukkitRecipe());
+	}
+
+	@Override
+	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return ScoreboardSlot.ofMinecraft(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key));
 	}
 
 	@Override

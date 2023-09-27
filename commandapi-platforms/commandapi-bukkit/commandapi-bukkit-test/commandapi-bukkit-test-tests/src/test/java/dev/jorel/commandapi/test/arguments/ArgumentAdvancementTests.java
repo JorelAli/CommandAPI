@@ -73,7 +73,7 @@ class ArgumentAdvancementTests extends TestBase {
 	 ********************/
 
 	@Test
-	void suggestionTestWithAxisArgument() {
+	void suggestionTestWithAdvancementArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new AdvancementArgument("advancement"))
 			.executesPlayer(P_EXEC)

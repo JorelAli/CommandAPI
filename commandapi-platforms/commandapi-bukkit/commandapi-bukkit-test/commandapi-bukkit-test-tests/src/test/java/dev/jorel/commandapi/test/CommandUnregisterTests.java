@@ -9,9 +9,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -329,5 +331,25 @@ class CommandUnregisterTests extends TestBase {
 
 		assertNoMoreResults(vanillaResults);
 		assertNoMoreResults(bukkitResults);
+	}
+
+	@Test
+	void testUnregisterWithHangingColons() {
+		commandMap.registerAll("plugin", List.of(
+			new Command(":command") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
+			},
+			new Command("namespace:") {
+				@Override
+				public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+					return true;
+				}
+			}
+		));
+
+		testUnregisterBukkitBoth();
 	}
 }

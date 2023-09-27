@@ -106,8 +106,8 @@ public class Preprocessor extends AbstractProcessor {
 		
 		if(in == null || type == null) {
 			String message = String.format("Failed to initialize field %s %s.%s for @RequireField check. Somehow one of these is null? ",
-				field.ofType(),
-				field.in(),
+				type,
+				in,
 				field.name());
 			super.processingEnv.getMessager().printMessage(Kind.ERROR, message);
 			return;

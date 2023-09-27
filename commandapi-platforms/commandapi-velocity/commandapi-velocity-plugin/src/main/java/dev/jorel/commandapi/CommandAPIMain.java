@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 @Plugin(
 	id = "commandapi",
 	name = "CommandAPI",
-	version = "${project.version}", // Hopefully Maven is smart enough to substitute this
+	version = "${project.version}", // Hopefully Maven is smart enough to substitute this TODO: Maven is not that smart
 	url = "https://commandapi.jorel.dev",
 	description = "An API to use Minecraft 1.13s new command UI",
 	authors = {"Skepter"}
@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 public class CommandAPIMain {
 	@Inject
 	public CommandAPIMain(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
+		// Try to find the config file
 		Path configFile = dataDirectory.resolve("config.yml");
 
 		// If the config doesn't exist, load it from the resources
@@ -47,6 +48,8 @@ public class CommandAPIMain {
 				throw new RuntimeException(e);
 			}
 		}
+
+		// Load the file as a yaml node
 		ConfigurationNode configYAML;
 		try {
 			configYAML = YAMLConfigurationLoader.builder().setPath(configFile).build().load();
@@ -54,12 +57,14 @@ public class CommandAPIMain {
 			throw new RuntimeException(e);
 		}
 
+		// Configure the CommandAPI
 		CommandAPIVelocityConfig config = new CommandAPIVelocityConfig(server)
 			.verboseOutput(configYAML.getNode("verbose-outputs").getBoolean())
 			.silentLogs(configYAML.getNode("silent-logs").getBoolean())
 			.missingExecutorImplementationMessage(configYAML.getNode("messages", "missing-executor-implementation").getString())
-			.dispatcherFile(configYAML.getNode("create-dispactcher-json").getBoolean() ? new File(dataDirectory.toFile(), "command_registration.json") : null);
+			.dispatcherFile(configYAML.getNode("create-dispatcher-json").getBoolean() ? new File(dataDirectory.toFile(), "command_registration.json") : null);
 
+		// Load
 		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(logger));
 		CommandAPI.onLoad(config);
 	}

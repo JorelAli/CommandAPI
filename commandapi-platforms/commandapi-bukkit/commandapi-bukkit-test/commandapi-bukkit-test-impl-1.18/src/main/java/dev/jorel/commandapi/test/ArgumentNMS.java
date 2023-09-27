@@ -226,13 +226,13 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentVec2() {
-		return baseNMS._ArgumentVec2();
+	public ArgumentType<?> _ArgumentVec2(boolean centerPosition) {
+		return baseNMS._ArgumentVec2(centerPosition);
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentVec3() {
-		return baseNMS._ArgumentVec3();
+	public ArgumentType<?> _ArgumentVec3(boolean centerPosition) {
+		return baseNMS._ArgumentVec3(centerPosition);
 	}
 
 	@Override

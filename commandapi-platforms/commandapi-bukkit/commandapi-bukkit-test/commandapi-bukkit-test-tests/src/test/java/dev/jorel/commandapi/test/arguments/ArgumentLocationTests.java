@@ -63,7 +63,7 @@ class ArgumentLocationTests extends TestBase {
 		
 		// /test 1 10 15
 		server.dispatchCommand(player, "test 1 10 15");
-		assertLocationEquals(new Location(null, 1.5, 10.0, 15.5), results.get()); // TODO: This looks sus. Why does it add .5 to the x and z?
+		assertLocationEquals(new Location(null, 1.5, 10.0, 15.5), results.get());
 		
 		// /test 1 10 15
 		server.dispatchCommand(player, "test 1.0 10.0 15.0");
@@ -96,7 +96,7 @@ class ArgumentLocationTests extends TestBase {
 			server.dispatchCommand(player, "test ^ ^ ^5");
 			assertLocationEquals(new Location(null, 2.0, 2.0, 7.0), results.get());
 			
-			// As defined in https://minecraft.fandom.com/wiki/Coordinates#Local_coordinates:
+			// As defined in https://minecraft.wiki/w/Coordinates#Local_coordinates:
 			// For example, /tp ^ ^ ^5 teleports the player 5 blocks forward. If they turn
 			// around and repeat the command, they are teleported back to where they
 			// started.
@@ -128,6 +128,40 @@ class ArgumentLocationTests extends TestBase {
 //		assertEquals("2.0, 7.0, 2.0", player.nextMessage());
 //		assertEquals("2.0, 7.0", player.nextMessage());
 //		assertEquals("2.0, 7.0", player.nextMessage());
+	}
+	
+	@Test
+	void executionTestWithLocationArgumentPrecisePositionNoCentering() {
+		// With no centering (LocationArgument(nodeName, LocationType.PRECISE_POSITION, false)),
+		// we don't add the +0.5 to each thing if the location is integral
+		Mut<Location> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new LocationArgument("location", LocationType.PRECISE_POSITION, false))
+			.executesPlayer((player, args) -> {
+				results.set((Location) args.get(0));
+			})
+			.register();
+	
+		PlayerMock player = server.addPlayer();
+		
+		// /test 1 10 15
+		server.dispatchCommand(player, "test 1 10 15");
+		assertLocationEquals(new Location(null, 1, 10, 15), results.get());
+		
+		// /test 1 10 15
+		server.dispatchCommand(player, "test 1.0 10.0 15.0");
+		assertLocationEquals(new Location(null, 1, 10, 15), results.get());
+		
+		// /test 1.2 10.2 15.2
+		server.dispatchCommand(player, "test 1.2 10.2 15.2");
+		assertLocationEquals(new Location(null, 1.2, 10.2, 15.2), results.get());
+		
+		// test ~ ~5 ~
+		// Where the player's position is (2, 2, 2)
+		player.setLocation(new Location(player.getWorld(), 2, 2.5, 2));
+		server.dispatchCommand(player, "test ~ ~5 ~");
+		assertLocationEquals(new Location(null, 2.0, 7.5, 2.0), results.get());
 	}
 	
 	@Test
@@ -170,7 +204,7 @@ class ArgumentLocationTests extends TestBase {
 			server.dispatchCommand(player, "test ^ ^ ^5");
 			assertLocationEquals(new Location(null, 2, 2, 7), results.get());
 			
-			// As defined in https://minecraft.fandom.com/wiki/Coordinates#Local_coordinates:
+			// As defined in https://minecraft.wiki/w/Coordinates#Local_coordinates:
 			// For example, /tp ^ ^ ^5 teleports the player 5 blocks forward. If they turn
 			// around and repeat the command, they are teleported back to where they
 			// started.

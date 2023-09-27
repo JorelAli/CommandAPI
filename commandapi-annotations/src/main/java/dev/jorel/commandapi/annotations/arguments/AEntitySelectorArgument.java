@@ -27,6 +27,9 @@ import java.lang.annotation.Target;
 
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 
+/**
+ * Annotation equivalent of the {@link EntitySelectorArgument}
+ */
 public interface AEntitySelectorArgument {
 
 	/**

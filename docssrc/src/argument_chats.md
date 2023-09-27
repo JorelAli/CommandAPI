@@ -4,7 +4,7 @@ The CommandAPI provides a number of ways to interact with chat formatting in Min
 
 - **ChatColor**: The color of text rendered in Minecraft
 - **Chat**: Text which is said in chat. This also includes entity selectors such as `@a` and `@r`
-- **ChatComponent**: Minecraft's [Raw JSON text format](https://minecraft.gamepedia.com/Raw_JSON_text_format)
+- **ChatComponent**: Minecraft's [Raw JSON text format](https://minecraft.wiki/w/Raw_JSON_text_format)
 
 The CommandAPI implements **ChatColor**, **Chat** and **ChatComponent** in two separate ways: [Spigot-compatible](./argument_chat_spigot.md) and [Adventure-compatible](./argument_chat_adventure.md). The differences between these and how to use them are described in their own relevant pages.
 

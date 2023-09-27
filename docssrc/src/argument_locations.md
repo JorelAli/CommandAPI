@@ -26,6 +26,88 @@ The `LocationArgument` constructor requires a `LocationType`, which specifies th
 
 If no `LocationType` is provided, **the `LocationArgument` will use `PRECISE_POSITION` by default**.
 
+The `LocationArgument` constructor can also accept a `boolean centerPosition`. If set to `true`, when using `LocationType.PRECISE_POSITION`, if an integer is provided in the value, it will add 0.5 to the x and z coordinates to center the position within a block. If set to `false`, the integer value will be provided as is.
+
+If no `centerPosition` parameter is provided, **the `LocationArgument` will use `centerPosition = true` by default**.
+
+<div class="example">
+
+### Example - LocationArgument precise position centering
+
+Say you use the following constructor, which sets `centerPosition` to `true`:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLocations1}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLocations1}}
+```
+
+</div>
+
+**Integer positions are centered**
+
+Let's also say you use the following location using this location argument in a command:
+
+```text
+10 20 30
+```
+
+The resulting location will be the following, which centers the position of the x and z coordinates. This does not change the y coordinate:
+
+```text
+10.5 20 30.5
+```
+
+**Non-integer positions remain as normal**
+
+If you use the following location using this location argument in a command:
+
+```text
+10.2 20.2 30.2
+```
+
+The resulting location will be the following, which does not change the x and z coordinates, because the positions are not integers:
+
+```text
+10.2 20.2 30.2
+```
+
+-----
+
+Say you use the following constructor, which sets `centerPosition` to `false`:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLocations2}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLocations2}}
+```
+
+</div>
+
+**Integer positions are not centered**
+
+Let's also say you use the following location using this location argument in a command:
+
+```text
+10 20 30
+```
+
+The resulting location will be the following, which does not modify the position of the x and z coordinates:
+
+```text
+10 20 30
+```
+
+</div>
+
 -----
 
 <div class="example">
@@ -43,11 +125,11 @@ Simply put, given the coordinates provided to the command, "break" the block by 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLocations1}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentLocations3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLocations1}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentLocations3}}
 ```
 
 ```kotlin,Kotlin_DSL

@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
@@ -29,6 +30,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link ItemStackArgument}
  */
+@Disabled("Disabled due to MockBukkit 1.20 issue. See https://github.com/MockBukkit/MockBukkit/issues/862 for more information")
 class ArgumentItemStackTests extends TestBase {
 
 	/*********
@@ -74,7 +76,7 @@ class ArgumentItemStackTests extends TestBase {
 		// Dev note: To make these tests work, we have to overwrite MockBukkit's
 		// ItemFactory with our own, see CommandAPIServerMock#getItemFactory()
 		
-		// NBT examples from https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags#Items
+		// NBT examples from https://minecraft.wiki/w/Tutorials/Command_NBT_tags#Items
 		
 		// /test minecraft:stone{Count:3b}
 		{
