@@ -30,6 +30,9 @@ var hierarchy =
       [ "dev.jorel.commandapi.commandsenders.AbstractProxiedCommandSender< Source >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_proxied_command_sender.html", null ],
       [ "dev.jorel.commandapi.commandsenders.BukkitCommandSender< Source extends CommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.commandsenders.AbstractCommandSender< FeedbackForwardingSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_command_sender.html", [
+      [ "dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender< FeedbackForwardingSender extends CommandSender >", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_feedback_forwarding_command_sender.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.AbstractCommandTree< CommandTree, Argument<?>, CommandSender >", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html", [
       [ "dev.jorel.commandapi.CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", null ]
     ] ],
@@ -179,6 +182,9 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.commandsenders.BukkitCommandSender< Entity >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitEntity", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_entity.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.commandsenders.BukkitCommandSender< FeedbackForwardingSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", [
+      [ "dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender< FeedbackForwardingSender extends CommandSender >", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_feedback_forwarding_command_sender.html", null ]
     ] ],
     [ "dev.jorel.commandapi.commandsenders.BukkitCommandSender< NativeProxyCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", [
       [ "dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_native_proxy_command_sender.html", null ]
@@ -332,6 +338,10 @@ var hierarchy =
       [ "dev.jorel.commandapi.executors.CommandExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_execution_info.html", null ],
       [ "dev.jorel.commandapi.executors.CommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.executors.NormalExecutor< CommandSender, BukkitFeedbackForwardingCommandSender< CommandSender > >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
+      [ "dev.jorel.commandapi.executors.FeedbackForwardingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.FeedbackForwardingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_execution_info.html", null ]
+    ] ],
     [ "dev.jorel.commandapi.executors.NormalExecutor< ConsoleCommandSender, BukkitConsoleCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_normal_executor.html", [
       [ "dev.jorel.commandapi.executors.ConsoleCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_command_executor.html", null ],
       [ "dev.jorel.commandapi.executors.ConsoleExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_execution_info.html", null ]
@@ -381,6 +391,10 @@ var hierarchy =
     [ "dev.jorel.commandapi.executors.ResultingExecutor< CommandSender, BukkitCommandSender<? extends CommandSender > >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
       [ "dev.jorel.commandapi.executors.ResultingCommandExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_execution_info.html", null ],
       [ "dev.jorel.commandapi.executors.ResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_command_executor.html", null ]
+    ] ],
+    [ "dev.jorel.commandapi.executors.ResultingExecutor< CommandSender, BukkitFeedbackForwardingCommandSender< CommandSender > >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
+      [ "dev.jorel.commandapi.executors.FeedbackForwardingResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_resulting_command_executor.html", null ],
+      [ "dev.jorel.commandapi.executors.FeedbackForwardingResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_resulting_execution_info.html", null ]
     ] ],
     [ "dev.jorel.commandapi.executors.ResultingExecutor< ConsoleCommandSender, BukkitConsoleCommandSender >", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html", [
       [ "dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_console_resulting_command_executor.html", null ],
