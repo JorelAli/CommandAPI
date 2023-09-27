@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.1.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.2.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -115,6 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adb3137bcb667a707eee0f28da4c55233"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html#adb3137bcb667a707eee0f28da4c55233">Location2DArgument</a> (String nodeName, <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html">LocationType</a> type)</td></tr>
 <tr class="memdesc:adb3137bcb667a707eee0f28da4c55233"><td class="mdescLeft">&#160;</td><td class="mdescRight">A Location argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html#adb3137bcb667a707eee0f28da4c55233">More...</a><br /></td></tr>
 <tr class="separator:adb3137bcb667a707eee0f28da4c55233"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb5022acb409e2727ba3f59365bc6421"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html#aeb5022acb409e2727ba3f59365bc6421">Location2DArgument</a> (String nodeName, <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html">LocationType</a> type, boolean centerPosition)</td></tr>
+<tr class="memdesc:aeb5022acb409e2727ba3f59365bc6421"><td class="mdescLeft">&#160;</td><td class="mdescRight">A Location argument.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html#aeb5022acb409e2727ba3f59365bc6421">More...</a><br /></td></tr>
+<tr class="separator:aeb5022acb409e2727ba3f59365bc6421"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7638e02a072c284ec0033478313ade6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html">LocationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html#a7638e02a072c284ec0033478313ade6e">getLocationType</a> ()</td></tr>
 <tr class="memdesc:a7638e02a072c284ec0033478313ade6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this argument is <code><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#afe38324954beae934d93a42dc93704c7">LocationType#BLOCK_POSITION</a></code> or <code><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e">LocationType#PRECISE_POSITION</a></code>.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html#a7638e02a072c284ec0033478313ade6e">More...</a><br /></td></tr>
 <tr class="separator:a7638e02a072c284ec0033478313ade6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,7 +141,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="section since"><dt>Since</dt><dd>3.0 @apiNote Returns a <code><a class="el" href="">Location2D</a></code> object </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac8cd5592fe37350b3dac8c33e1405aa9" name="ac8cd5592fe37350b3dac8c33e1405aa9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8cd5592fe37350b3dac8c33e1405aa9">&#9670;&nbsp;</a></span>Location2DArgument() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8cd5592fe37350b3dac8c33e1405aa9">&#9670;&nbsp;</a></span>Location2DArgument() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,7 +167,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="adb3137bcb667a707eee0f28da4c55233" name="adb3137bcb667a707eee0f28da4c55233"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb3137bcb667a707eee0f28da4c55233">&#9670;&nbsp;</a></span>Location2DArgument() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adb3137bcb667a707eee0f28da4c55233">&#9670;&nbsp;</a></span>Location2DArgument() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,6 +197,50 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">nodeName</td><td>the name of the node for this argument </td></tr>
     <tr><td class="paramname">type</td><td>the location type of this location, either <code><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#afe38324954beae934d93a42dc93704c7">LocationType#BLOCK_POSITION</a></code> or <code><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e">LocationType#PRECISE_POSITION</a></code> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aeb5022acb409e2727ba3f59365bc6421" name="aeb5022acb409e2727ba3f59365bc6421"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb5022acb409e2727ba3f59365bc6421">&#9670;&nbsp;</a></span>Location2DArgument() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dev.jorel.commandapi.arguments.Location2DArgument.Location2DArgument </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>nodeName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html">LocationType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>centerPosition</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A Location argument. </p>
+<p >Represents Minecraft locations in 2D space </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>the name of the node for this argument </td></tr>
+    <tr><td class="paramname">type</td><td>the location type of this location, either <code><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#afe38324954beae934d93a42dc93704c7">LocationType#BLOCK_POSITION</a></code> or <code><a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e">LocationType#PRECISE_POSITION</a></code> </td></tr>
+    <tr><td class="paramname">centerPosition</td><td>whether <a class="el" href="enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_type.html#ab0a982eafd756b64ffd940da6b306a4e" title="Represents the exact coordinates of a position, for example: (10.24, 70.00, -18.79) or (24....">LocationType.PRECISE_POSITION</a> should center the position of the location within a block </td></tr>
   </table>
   </dd>
 </dl>
@@ -262,7 +309,7 @@ Static Public Member Functions</h2></td></tr>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html">Location2DArgument</a></li>
 				<li class="footer">
-					Generated on Wed Aug 16 2023 17:03:15 for CommandAPI 9.1.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Wed Sep 27 2023 11:43:30 for CommandAPI 9.2.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

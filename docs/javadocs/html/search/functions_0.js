@@ -32,6 +32,6 @@ var searchData=
   ['_5fargumenttag_29',['_ArgumentTag',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a37e156fb8930979b50d4a3bc73d50727',1,'dev::jorel::commandapi::nms::NMS']]],
   ['_5fargumenttime_30',['_ArgumentTime',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a0318ff265016df050d005fb31f3eb9ff',1,'dev::jorel::commandapi::nms::NMS']]],
   ['_5fargumentuuid_31',['_ArgumentUUID',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a0747ca8e9b915cceb7b86d6aae86b6c1',1,'dev::jorel::commandapi::nms::NMS']]],
-  ['_5fargumentvec2_32',['_ArgumentVec2',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a9995202bc032e15109b51d743e3ee887',1,'dev::jorel::commandapi::nms::NMS']]],
-  ['_5fargumentvec3_33',['_ArgumentVec3',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#abb4a2ff5dc410c4adbca8cae634b8851',1,'dev::jorel::commandapi::nms::NMS']]]
+  ['_5fargumentvec2_32',['_ArgumentVec2',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a8c190015d8316f1c10a1cd1619b1f858',1,'dev::jorel::commandapi::nms::NMS']]],
+  ['_5fargumentvec3_33',['_ArgumentVec3',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a8f4f10614673b73fb2efdeb645da52bf',1,'dev::jorel::commandapi::nms::NMS']]]
 ];

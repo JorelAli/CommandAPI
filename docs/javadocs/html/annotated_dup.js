@@ -68,7 +68,7 @@ var annotated_dup =
       [ "jorel", null, [
         [ "commandapi", null, [
           [ "annotations", "namespacedev_1_1jorel_1_1commandapi_1_1annotations.html", [
-            [ "arguments", null, [
+            [ "arguments", "namespacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments.html", [
               [ "AAdvancementArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_advancement_argument.html", null ],
               [ "AAdventureChatArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_adventure_chat_argument.html", null ],
               [ "AAdventureChatComponentArgument", "interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments_1_1_a_adventure_chat_component_argument.html", null ],
@@ -228,6 +228,7 @@ var annotated_dup =
             [ "BukkitCommandSender", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender" ],
             [ "BukkitConsoleCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_console_command_sender.html", null ],
             [ "BukkitEntity", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_entity.html", null ],
+            [ "BukkitFeedbackForwardingCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_feedback_forwarding_command_sender.html", null ],
             [ "BukkitNativeProxyCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_native_proxy_command_sender.html", null ],
             [ "BukkitPlayer", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_player.html", null ],
             [ "BukkitProxiedCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_proxied_command_sender.html", null ]
@@ -264,6 +265,10 @@ var annotated_dup =
             [ "EntityResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_execution_info.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_entity_resulting_execution_info" ],
             [ "ExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_execution_info" ],
             [ "ExecutorType", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type" ],
+            [ "FeedbackForwardingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_command_executor" ],
+            [ "FeedbackForwardingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_execution_info.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_execution_info" ],
+            [ "FeedbackForwardingResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_resulting_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_resulting_command_executor" ],
+            [ "FeedbackForwardingResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_resulting_execution_info.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_feedback_forwarding_resulting_execution_info" ],
             [ "NativeCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor" ],
             [ "NativeExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_execution_info.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_execution_info" ],
             [ "NativeResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor.html", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_resulting_command_executor" ],

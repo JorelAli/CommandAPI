@@ -1,7 +1,7 @@
 var searchData=
 [
   ['annotations_0',['annotations',['../namespacedev_1_1jorel_1_1commandapi_1_1annotations.html',1,'dev::jorel::commandapi']]],
-  ['arguments_1',['arguments',['../namespacedev_1_1jorel_1_1commandapi_1_1arguments.html',1,'dev::jorel::commandapi']]],
+  ['arguments_1',['arguments',['../namespacedev_1_1jorel_1_1commandapi_1_1annotations_1_1arguments.html',1,'dev.jorel.commandapi.annotations.arguments'],['../namespacedev_1_1jorel_1_1commandapi_1_1arguments.html',1,'dev.jorel.commandapi.arguments']]],
   ['days_2',['days',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_time.html#ac67f5845e8d7cd343d7a7e503a0efd5e',1,'dev::jorel::commandapi::wrappers::Time']]],
   ['default_3',['Default',['../interfacedev_1_1jorel_1_1commandapi_1_1annotations_1_1_default.html',1,'dev::jorel::commandapi::annotations']]],
   ['deprecated_20list_4',['Deprecated List',['../deprecated.html',1,'']]],

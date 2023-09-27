@@ -1,6 +1,6 @@
 # ItemStack predicate arguments
 
-Similar to the `BlockPredicateArgument`, the `ItemStackPredicateArgument` is a way of performing predicate checks on `ItemStack` objects. These can represent tags, such as the ones declared [here on the MinecraftWiki](https://minecraft.gamepedia.com/Tag#Items), or individual items. The cast type for this argument is `Predicate<ItemStack>`.
+Similar to the `BlockPredicateArgument`, the `ItemStackPredicateArgument` is a way of performing predicate checks on `ItemStack` objects. These can represent tags, such as the ones declared [here on the MinecraftWiki](https://minecraft.wiki/w/Tag#Items), or individual items. The cast type for this argument is `Predicate<ItemStack>`.
 
 <div class="example">
 

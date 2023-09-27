@@ -81,6 +81,7 @@ var namespaces_dup =
             [ "BukkitCommandSender", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender.html", "interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_command_sender" ],
             [ "BukkitConsoleCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_console_command_sender.html", null ],
             [ "BukkitEntity", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_entity.html", null ],
+            [ "BukkitFeedbackForwardingCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_feedback_forwarding_command_sender.html", null ],
             [ "BukkitNativeProxyCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_native_proxy_command_sender.html", null ],
             [ "BukkitPlayer", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_player.html", null ],
             [ "BukkitProxiedCommandSender", "classdev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_bukkit_proxied_command_sender.html", null ]
