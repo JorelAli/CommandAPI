@@ -185,7 +185,7 @@ public class NMS_1_20_R2 extends NMS_Common {
 	// runtime
 	static {
 		if (Bukkit.getServer() instanceof CraftServer server) {
-			COMMAND_BUILD_CONTEXT = CommandBuildContext.configurable(server.getServer().registryAccess(), server.getServer().getWorldData().getDataConfiguration().enabledFeatures());
+			COMMAND_BUILD_CONTEXT = CommandBuildContext.configurable(server.getServer().registries().compositeAccess(), server.getServer().getWorldData().getDataConfiguration().enabledFeatures());
 		} else {
 			COMMAND_BUILD_CONTEXT = null;
 		}
