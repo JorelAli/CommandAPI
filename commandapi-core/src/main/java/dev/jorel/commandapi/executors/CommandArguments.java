@@ -78,17 +78,6 @@ public record CommandArguments(
 	}
 
 	/**
-	 * This returns the raw command string a player has entered
-	 *
-	 * @deprecated This method has been deprecated in favour of {@link CommandArguments#fullInput()}
-	 * @return The raw command string a player has entered
-	 */
-	@Deprecated(since = "9.1.0", forRemoval = true)
-	public String getFullInput() {
-		return fullInput;
-	}
-
-	/**
 	 * @return The number of arguments for this command
 	 */
 	public int count() {

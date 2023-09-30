@@ -124,12 +124,6 @@ public abstract class TestBase {
 		);
 	}
 
-	@Deprecated
-	public void assertInvalidSyntax(CommandSender sender, String command) {
-		// XXX: Bogus code, do not use. Use assertCommandFailsWith instead.
-		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(sender, command)));
-	}
-
 	public <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String message, Executable executable) {
 		T thrown = assertThrows(expectedType, executable);
 		assertEquals(message, thrown.getMessage());

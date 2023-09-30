@@ -235,42 +235,6 @@ public class CustomArgument<T, B> extends Argument<T> {
 		 * 
 		 * @param errorMessage the error message to display to the user when this
 		 *                     exception is thrown
-		 * @deprecated Use {@link CustomArgumentException#fromBaseComponents(BaseComponent...)} instead
-		 */
-		@Deprecated(since = "9.0.1", forRemoval = true)
-		public CustomArgumentException(BaseComponent[] errorMessage) {
-			this.errorBaseComponent = errorMessage;
-		}
-
-		/**
-		 * Constructs a CustomArgumentException with a given error message
-		 * 
-		 * @param errorMessage the error message to display to the user when this
-		 *                     exception is thrown
-		 * @deprecated Use {@link CustomArgumentException#fromString(String)} instead
-		 */
-		@Deprecated(since = "9.0.1", forRemoval = true)
-		public CustomArgumentException(String errorMessage) {
-			this.errorMessage = errorMessage;
-		}
-
-		/**
-		 * Constructs a CustomArgumentException with a given error message
-		 * 
-		 * @param errorMessage the error message to display to the user when this
-		 *                     exception is thrown
-		 * @deprecated Use {@link CustomArgumentException#fromMessageBuilder(MessageBuilder)} instead
-		 */
-		@Deprecated(since = "9.0.1", forRemoval = true)
-		public CustomArgumentException(MessageBuilder errorMessage) {
-			this.errorMessageBuilder = errorMessage;
-		}
-
-		/**
-		 * Constructs a CustomArgumentException with a given error message
-		 * 
-		 * @param errorMessage the error message to display to the user when this
-		 *                     exception is thrown
 		 */
 		public static CustomArgumentException fromBaseComponents(BaseComponent[] errorMessage) {
 			CustomArgumentException exception = new CustomArgumentException();

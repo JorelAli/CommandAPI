@@ -51,28 +51,6 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 		this.literals = literals;
 	}
 
-	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
-	 * @deprecated Use {@link MultiLiteralArgument#MultiLiteralArgument(String, String...)} instead
-	 */
-	@Deprecated(since = "9.0.2", forRemoval = true)
-	public MultiLiteralArgument(final String[] literals) {
-		this(null, literals);
-	}
-
-	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 *
-	 * @param nodeName the node name for this argument
-	 * @param literals the literals that this argument represents
-	 * @deprecated Use {@link MultiLiteralArgument#MultiLiteralArgument(String, String...)} instead
-	 */
-	@Deprecated(since = "9.1.0", forRemoval = true)
-	public MultiLiteralArgument(String nodeName, final List<String> literals) {
-		this(nodeName, literals.toArray(new String[0]));
-	}
-
 	@Override
 	public Class<String> getPrimitiveType() {
 		return String.class;
