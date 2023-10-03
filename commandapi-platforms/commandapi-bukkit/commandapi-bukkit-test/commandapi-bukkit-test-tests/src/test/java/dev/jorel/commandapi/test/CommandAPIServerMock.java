@@ -59,15 +59,15 @@ public class CommandAPIServerMock extends ServerMock {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public boolean dispatchBrigadierCommand(CommandSender sender, String commandLine) {
+	public int dispatchBrigadierCommand(CommandSender sender, String commandLine) {
 		try {
 			@SuppressWarnings("rawtypes")
 			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
 			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
-			return dispatcher.execute(commandLine, css) != 0;
+			return dispatcher.execute(commandLine, css);
 		} catch (CommandSyntaxException e) {
 			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableCommand() instead.", e);
-			return false;
+			return 0;
 		}
 	}
 
