@@ -65,7 +65,8 @@ class ExecutorTests : TestBase() {
 
 		val player = server.addPlayer()
 
-		server.dispatchCommand(player, "test hello")
+		val result = server.dispatchBrigadierCommand(player, "test hello")
+		assertEquals(5, result)
 		assertEquals("hello", results.get())
 
 		assertNoMoreResults(results)
@@ -104,7 +105,8 @@ class ExecutorTests : TestBase() {
 
 		val player = server.addPlayer()
 
-		server.dispatchCommand(player, "test hello")
+		val result = server.dispatchBrigadierCommand(player, "test hello")
+		assertEquals(5, result)
 		assertEquals("hello", results.get())
 
 		assertNoMoreResults(results)
