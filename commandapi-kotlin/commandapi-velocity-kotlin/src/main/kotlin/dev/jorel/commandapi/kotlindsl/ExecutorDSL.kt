@@ -46,12 +46,12 @@ inline fun VelocityExecutable<*>.consoleExecutionInfo(crossinline executor: (Exe
 
 // ExecutionInfo resulting executors
 
-inline fun VelocityExecutable<*>.anyResultingExecutionInfo(crossinline executor: (ExecutionInfo<CommandSource, VelocityCommandSender<out CommandSource>>) -> Int): VelocityExecutable<*> = executes(CommandExecutionInfo { info ->
+inline fun VelocityExecutable<*>.anyResultingExecutionInfo(crossinline executor: (ExecutionInfo<CommandSource, VelocityCommandSender<out CommandSource>>) -> Int): VelocityExecutable<*> = executes(ResultingCommandExecutionInfo { info ->
 	executor(info)
 })
-inline fun VelocityExecutable<*>.playerResultingExecutionInfo(crossinline executor: (ExecutionInfo<Player, VelocityPlayer>) -> Int): VelocityExecutable<*> = executesPlayer(PlayerExecutionInfo { info ->
+inline fun VelocityExecutable<*>.playerResultingExecutionInfo(crossinline executor: (ExecutionInfo<Player, VelocityPlayer>) -> Int): VelocityExecutable<*> = executesPlayer(PlayerResultingExecutionInfo { info ->
 	executor(info)
 })
-inline fun VelocityExecutable<*>.consoleResultingExecutionInfo(crossinline executor: (ExecutionInfo<ConsoleCommandSource, VelocityConsoleCommandSender>) -> Int): VelocityExecutable<*> = executesConsole(ConsoleExecutionInfo { info ->
+inline fun VelocityExecutable<*>.consoleResultingExecutionInfo(crossinline executor: (ExecutionInfo<ConsoleCommandSource, VelocityConsoleCommandSender>) -> Int): VelocityExecutable<*> = executesConsole(ConsoleResultingExecutionInfo { info ->
 	executor(info)
 })

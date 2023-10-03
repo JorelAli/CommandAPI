@@ -39,7 +39,7 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 	/**
 	 * Adds an executor to the current command builder
 	 *
-	 * @param executor A lambda of type <code>(CommandSource, CommandArguments) -&gt; ()</code> that will be executed when the command is run
+	 * @param executor A lambda of type <code>(ExecutionInfo&lt;CommandSender, BukkitCommandSender&lt;? extends CommandSender&gt;&gt;) -&gt; ()</code> that will be executed when the command is run
 	 * @param types    A list of executor types to use this executes method for.
 	 * @return this command builder
 	 */
@@ -82,6 +82,35 @@ public interface VelocityExecutable<Impl extends VelocityExecutable<Impl>> exten
 					@Override
 					public int run(CommandSource sender, CommandArguments args) throws WrapperCommandSyntaxException {
 						return executor.executeWith(new VelocityExecutionInfo<>(sender, CommandAPIVelocity.get().wrapCommandSender(sender), args));
+					}
+
+					@Override
+					public ExecutorType getType() {
+						return type;
+					}
+				});
+			}
+		}
+		return instance();
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param executor A lambda of type <code>(ExecutionInfo&lt;CommandSender, VelocityCommandSender&lt;? extends CommandSender&gt;&gt;) -&gt; ()</code> that will be executed when the command is run
+	 * @param types    A list of executor types to use this executes method for.
+	 * @return this command builder
+	 */
+	default Impl executes(ResultingCommandExecutionInfo executor, ExecutorType... types) {
+		if (types == null || types.length == 0) {
+			getExecutor().addResultingExecutor(executor);
+		} else {
+			for (ExecutorType type : types) {
+				getExecutor().addResultingExecutor(new ResultingCommandExecutionInfo() {
+
+					@Override
+					public int run(ExecutionInfo<CommandSource, VelocityCommandSender<? extends CommandSource>> info) throws WrapperCommandSyntaxException {
+						return executor.executeWith(info);
 					}
 
 					@Override
