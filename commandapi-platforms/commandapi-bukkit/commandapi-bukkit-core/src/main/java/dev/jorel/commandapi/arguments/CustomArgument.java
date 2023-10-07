@@ -22,6 +22,7 @@ package dev.jorel.commandapi.arguments;
 
 import java.io.Serializable;
 
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -344,7 +345,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 
 			if (errorMessage != null) {
 				// Deal with String
-				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
+				return CommandAPIBukkit.get().getPaper().getExceptionFromLegacyString(errorMessage).getException();
 			}
 
 			throw new IllegalStateException("No error component, error message creator or error message specified");

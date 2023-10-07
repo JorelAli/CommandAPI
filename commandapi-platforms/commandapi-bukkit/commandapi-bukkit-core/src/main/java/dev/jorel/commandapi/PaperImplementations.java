@@ -1,14 +1,17 @@
 package dev.jorel.commandapi;
 
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.nms.NMS;
+import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-
-import dev.jorel.commandapi.nms.NMS;
-import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 
 public class PaperImplementations {
 
@@ -94,6 +97,20 @@ public class PaperImplementations {
 	 */
 	public Class<? extends CommandSender> getFeedbackForwardingCommandSender() {
 		return this.feedbackForwardingCommandSender;
+	}
+
+	/**
+	 * Builds a {@link WrapperCommandSyntaxException} from a legacy message
+	 *
+	 * @param message
+	 * @return
+	 */
+	public WrapperCommandSyntaxException getExceptionFromLegacyString(String message) {
+		if (isPaperPresent) {
+			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromAdventureComponent(LegacyComponentSerializer.legacySection().deserialize(message))).create());
+		} else {
+			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromBaseComponents(TextComponent.fromLegacyText(message))).create());
+		}
 	}
 	
 
