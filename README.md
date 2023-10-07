@@ -421,6 +421,15 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             </td>
         </tr>
         <tr>
+            <td valign="top"><b>9.3.0</b></td>
+            <td valign="top">???</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds <code>ExecutionInfo</code> executors for the Kotlin DSL</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.2.0</b></td>
             <td valign="top">September 2023</td>
             <td valign="top">

@@ -1,6 +1,13 @@
 package dev.jorel.commandapi.kotlindsl
 
 import dev.jorel.commandapi.BukkitExecutable
+import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender
+import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender
+import dev.jorel.commandapi.commandsenders.BukkitEntity
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender
+import dev.jorel.commandapi.commandsenders.BukkitPlayer
+import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender
 import dev.jorel.commandapi.executors.*
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender
 import org.bukkit.command.BlockCommandSender
@@ -33,6 +40,8 @@ inline fun BukkitExecutable<*>.nativeExecutor(crossinline executor: (NativeProxy
 	executor(sender, args)
 })
 
+// Resulting executors
+
 inline fun BukkitExecutable<*>.anyResultingExecutor(crossinline executor: (CommandSender, CommandArguments) -> Int): BukkitExecutable<*> = executes(ResultingCommandExecutor { sender, args ->
 	executor(sender, args)
 })
@@ -53,4 +62,52 @@ inline fun BukkitExecutable<*>.proxyResultingExecutor(crossinline executor: (Pro
 })
 inline fun BukkitExecutable<*>.nativeResultingExecutor(crossinline executor: (NativeProxyCommandSender, CommandArguments) -> Int): BukkitExecutable<*> = executesNative(NativeResultingCommandExecutor { sender, args ->
 	executor(sender, args)
+})
+
+// ExecutionInfo normal executors
+
+inline fun BukkitExecutable<*>.anyExecutionInfo(crossinline executor: (ExecutionInfo<CommandSender, BukkitCommandSender<out CommandSender>>) -> Unit): BukkitExecutable<*> = executes(CommandExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.playerExecutionInfo(crossinline executor: (ExecutionInfo<Player, BukkitPlayer>) -> Unit): BukkitExecutable<*> = executesPlayer(PlayerExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.entityExecutionInfo(crossinline executor: (ExecutionInfo<Entity, BukkitEntity>) -> Unit): BukkitExecutable<*> = executesEntity(EntityExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.consoleExecutionInfo(crossinline executor: (ExecutionInfo<ConsoleCommandSender, BukkitConsoleCommandSender>) -> Unit): BukkitExecutable<*> = executesConsole(ConsoleExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.commandBlockExecutionInfo(crossinline executor: (ExecutionInfo<BlockCommandSender, BukkitBlockCommandSender>) -> Unit): BukkitExecutable<*> = executesCommandBlock(CommandBlockExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.proxyExecutionInfo(crossinline executor: (ExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender>) -> Unit): BukkitExecutable<*> = executesProxy(ProxyExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.nativeExecutionInfo(crossinline executor: (ExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender>) -> Unit): BukkitExecutable<*> = executesNative(NativeExecutionInfo { info ->
+	executor(info)
+})
+
+// ExecutionInfo resulting executors
+
+inline fun BukkitExecutable<*>.anyResultingExecutionInfo(crossinline executor: (ExecutionInfo<CommandSender, BukkitCommandSender<out CommandSender>>) -> Int): BukkitExecutable<*> = executes(ResultingCommandExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.playerResultingExecutionInfo(crossinline executor: (ExecutionInfo<Player, BukkitPlayer>) -> Int): BukkitExecutable<*> = executesPlayer(PlayerResultingExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.entityResultingExecutionInfo(crossinline executor: (ExecutionInfo<Entity, BukkitEntity>) -> Int): BukkitExecutable<*> = executesEntity(EntityResultingExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.consoleResultingExecutionInfo(crossinline executor: (ExecutionInfo<ConsoleCommandSender, BukkitConsoleCommandSender>) -> Int): BukkitExecutable<*> = executesConsole(ConsoleResultingExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.commandBlockResultingExecutionInfo(crossinline executor: (ExecutionInfo<BlockCommandSender, BukkitBlockCommandSender>) -> Int): BukkitExecutable<*> = executesCommandBlock(CommandBlockResultingExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.proxyResultingExecutionInfo(crossinline executor: (ExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender>) -> Int): BukkitExecutable<*> = executesProxy(ProxyResultingExecutionInfo { info ->
+	executor(info)
+})
+inline fun BukkitExecutable<*>.nativeResultingExecutionInfo(crossinline executor: (ExecutionInfo<NativeProxyCommandSender, BukkitNativeProxyCommandSender>) -> Int): BukkitExecutable<*> = executesNative(NativeResultingExecutionInfo { info ->
+	executor(info)
 })

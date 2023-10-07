@@ -31,6 +31,10 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
@@ -199,10 +203,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	public void onEnable() {
 		JavaPlugin plugin = config.getPlugin();
 
-		// Prevent command registration after server has loaded
 		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
-			CommandAPI.stopCommandRegistration();
-
 			// Sort out permissions after the server has finished registering them all
 			fixPermissions();
 			if (paper.isFoliaPresent()) {
@@ -212,6 +213,16 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
+
+		// Prevent command registration after server has loaded
+		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+			// We want the lowest priority so that we always get to this first, in case a dependent plugin is using
+			//  CommandAPI features in their own ServerLoadEvent listener for some reason
+			@EventHandler(priority = EventPriority.LOWEST)
+			public void onServerLoad(ServerLoadEvent event) {
+				CommandAPI.stopCommandRegistration();
+			}
+		}, getConfiguration().getPlugin());
 
 		paper.registerReloadHandler(plugin);
 	}
