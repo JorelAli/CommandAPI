@@ -419,6 +419,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top">
                 <ul>
                     <li>Adds <code>ExecutionInfo</code> executors for the Kotlin DSL</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/497 Adds support for <code>RemoteConsoleCommandSender</code></li>
                 </ul>
             </td>
         </tr>
