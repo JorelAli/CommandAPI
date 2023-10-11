@@ -37,10 +37,10 @@ jobs:
 
       - name: Get mvnd
         run: |
-            curl -LJO https://downloads.apache.org/maven/mvnd/1.0-m7/maven-mvnd-1.0-m7-m40-linux-amd64.zip
-            unzip -qq maven-mvnd-1.0-m7-m40-linux-amd64.zip
-            chmod a+x maven-mvnd-1.0-m7-m40-linux-amd64/bin/mvnd
-            echo "$PWD/maven-mvnd-1.0-m7-m40-linux-amd64/bin" >> $GITHUB_PATH
+            curl -LJO https://downloads.apache.org/maven/mvnd/1.0-m6/maven-mvnd-1.0-m6-m39-linux-amd64.zip
+            unzip -qq maven-mvnd-1.0-m6-m39-linux-amd64.zip
+            chmod a+x maven-mvnd-1.0-m6-m39-linux-amd64/bin/mvnd
+            echo "$PWD/maven-mvnd-1.0-m6-m39-linux-amd64/bin" >> $GITHUB_PATH
             mvn -v
 
       ### Compilation ###
