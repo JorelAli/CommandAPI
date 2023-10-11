@@ -39,9 +39,9 @@ jobs:
         run: |
             curl -LJO https://downloads.apache.org/maven/mvnd/1.0-m7/maven-mvnd-1.0-m7-m40-linux-amd64.zip
             unzip -qq maven-mvnd-1.0-m7-m40-linux-amd64.zip
-            export PATH="$PWD/maven-mvnd-1.0-m7-m40-linux-amd64/bin:$PATH"
             chmod a+x maven-mvnd-1.0-m7-m40-linux-amd64/bin/mvnd
-            mvnd -v
+            echo "$PWD/maven-mvnd-1.0-m7-m40-linux-amd64/bin" >> $GITHUB_PATH
+            mvn -v
 
       ### Compilation ###
 
