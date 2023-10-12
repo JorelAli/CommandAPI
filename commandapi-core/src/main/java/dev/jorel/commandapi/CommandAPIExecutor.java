@@ -118,7 +118,7 @@ extends AbstractCommandSender<? extends CommandSender>
 			return execute(executors, info, ExecutorType.PROXY);
 		} else if (info.senderWrapper() instanceof AbstractRemoteConsoleCommandSender && matches(executors, ExecutorType.REMOTE)) {
 			return execute(executors, info, ExecutorType.REMOTE);
-		} else if (info.senderWrapper() instanceof AbstractCommandSender && matches(executors, ExecutorType.FEEDBACK_FORWARDING)) {
+		} else if (info.senderWrapper() instanceof AbstractFeedbackForwardingCommandSender && matches(executors, ExecutorType.FEEDBACK_FORWARDING)) {
 			return execute(executors, info, ExecutorType.FEEDBACK_FORWARDING);
 		} else if (matches(executors, ExecutorType.ALL)) {
 			return execute(executors, info, ExecutorType.ALL);
