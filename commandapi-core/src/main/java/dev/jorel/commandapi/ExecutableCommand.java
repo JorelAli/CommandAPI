@@ -1,9 +1,11 @@
 package dev.jorel.commandapi;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -327,8 +329,57 @@ extends ExecutableCommand<Impl, CommandSender>
 		((CommandAPIHandler<?, CommandSender, ?>) CommandAPIHandler.getInstance()).registerCommand(this, namespace);
 	}
 
-	abstract <Source> Nodes<Source> createCommandNodes();
-
 	record Nodes<Source>(LiteralCommandNode<Source> rootNode, List<LiteralCommandNode<Source>> aliasNodes) {
 	}
+
+	<Source> Nodes<Source> createCommandNodes() {
+		checkPreconditions();
+
+		LiteralCommandNode<Source> rootNode = this.<Source>createCommandNodeBuilder(name).build();
+
+		createArgumentNodes(rootNode);
+
+		List<LiteralCommandNode<Source>> aliasNodes = createAliasNodes(rootNode);
+
+		return new Nodes<>(rootNode, aliasNodes);
+	}
+
+	protected <Source> LiteralArgumentBuilder<Source> createCommandNodeBuilder(String nodeName) {
+		CommandAPIHandler<?, CommandSender, Source> handler = CommandAPIHandler.getInstance();
+
+		// Create node
+		LiteralArgumentBuilder<Source> rootBuilder = LiteralArgumentBuilder.literal(nodeName);
+
+		// Add permission and requirements
+		rootBuilder.requires(handler.generateBrigadierRequirements(permission, requirements));
+
+		// Add the executor
+		if (isRootExecutable()) {
+			rootBuilder.executes(handler.generateBrigadierCommand(List.of(), executor));
+		}
+
+		return rootBuilder;
+	}
+
+	protected <Source> List<LiteralCommandNode<Source>> createAliasNodes(LiteralCommandNode<Source> rootNode) {
+		List<LiteralCommandNode<Source>> aliasNodes = new ArrayList<>();
+		for (String alias : aliases) {
+			// Create node
+			LiteralArgumentBuilder<Source> aliasBuilder = createCommandNodeBuilder(alias);
+
+			// Redirect to rootNode so all its arguments come after this node
+			aliasBuilder.redirect(rootNode);
+
+			// Register alias node
+			aliasNodes.add(aliasBuilder.build());
+		}
+
+		return aliasNodes;
+	}
+
+	protected abstract void checkPreconditions();
+
+	protected abstract boolean isRootExecutable();
+
+	protected abstract <Source> void createArgumentNodes(LiteralCommandNode<Source> rootNode);
 }
