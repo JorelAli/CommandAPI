@@ -1,8 +1,4 @@
-package dev.jorel.commandapi.test.arguments;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+package dev.jorel.commandapi.test;
 
 import dev.jorel.commandapi.arguments.DoubleArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
@@ -14,13 +10,13 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
-import dev.jorel.commandapi.test.Mut;
-import dev.jorel.commandapi.test.TestBase;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests for optional arguments
+ * Tests for using optional arguments in CommandAPICommands
  */
-class OptionalArgumentTests extends TestBase {
+class CommandAPICommandOptionalArgumentTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -111,18 +107,22 @@ class OptionalArgumentTests extends TestBase {
 
 	@Test()
 	public void testOptionalArgumentException() {
-		Mut<String> type = Mut.of();
-
 		// An optional argument followed by a required argument should throw
 		// an OptionalArgumentException
 		assertThrows(OptionalArgumentException.class, () -> {
 			new CommandAPICommand("test")
 				.withOptionalArguments(new StringArgument("string1"))
 				.withArguments(new StringArgument("string2"))
-				.executesPlayer((player, args) -> {
-					type.set((String) args.get("string1"));
-					type.set((String) args.get("string2"));
-				})
+				.executesPlayer(P_EXEC)
+				.register();
+		});
+
+		// No need to worry: since we didn't actually add any arguments in `withArguments`, this is fine
+		assertDoesNotThrow(() -> {
+			new CommandAPICommand("test")
+				.withOptionalArguments(new StringArgument("string"))
+				.withArguments()
+				.executesPlayer(P_EXEC)
 				.register();
 		});
 

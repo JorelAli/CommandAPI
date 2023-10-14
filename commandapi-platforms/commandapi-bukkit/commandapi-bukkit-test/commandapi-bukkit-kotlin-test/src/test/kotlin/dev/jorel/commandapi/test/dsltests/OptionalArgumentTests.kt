@@ -72,27 +72,6 @@ class OptionalArgumentTests: TestBase() {
 		}
 	}
 
-	// TODO: This test currently fails - The optionality of an argument in a CommandTree is currently ignored
-	//  Note: I'm not sure if optional arguments in command trees make sense
-	//  For example, consider this CommandTree (excuse my Java)
-	//   new CommandTree("command")
-	//   	.then(new StringArgument("string").setOptional(true)
-	//   		.then(new LiteralArgument("a").executes((sender, args) -> {
-	//   			sender.sendMessage("You ran the A path");
-	//   		}))
-	//   		.then(new LiteralArgument("b").executes((sender, args) -> {
-	//   			sender.sendMessage("You ran the B path");
-	//   		}))
-	//   	)
-	//   	.register();
-	//  The `string` argument is optional, which theoretically defines the following commands:
-	//    /command <string> a
-	//    /command <string> b
-	//    /command
-	//  The problem is: What is `/command` supposed to execute? `A path`, `B path`, something else? This works fine for
-	//  a CommandAPICommand since there can only be one executor defined, but I don't think anything makes sense for a
-	//  CommandTree.
-	@Disabled
 	@Test
 	fun executionTestWithCommandTreeAndOptionalArgumentMethod() {
 		val results: Mut<String> = Mut.of()
@@ -102,10 +81,9 @@ class OptionalArgumentTests: TestBase() {
 		// because everything can be achieved by using the normal CommandTree DSL syntax and
 		// the argument() method
 		commandTree("test") {
-			stringArgument("value", optional = true) {
-				playerExecutor { player, args ->
-					results.set(args.getOptional("value").orElse("DefaultValue") as String)
-				}
+			stringArgument("value", optional = true)
+			playerExecutor { player, args ->
+				results.set(args.getOptional("value").orElse("DefaultValue") as String)
 			}
 		}
 

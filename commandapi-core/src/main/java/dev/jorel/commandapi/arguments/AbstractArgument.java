@@ -273,29 +273,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/////////////////
 	// Optionality //
 	/////////////////
-
-	private boolean isOptional = false;
 	private final List<Argument> combinedArguments = new ArrayList<>();
-
-	/**
-	 * Returns true if this argument will be optional when executing the command this argument is included in
-	 *
-	 * @return true if this argument will be optional when executing the command this argument is included in
-	 */
-	public boolean isOptional() {
-		return isOptional;
-	}
-
-	/**
-	 * Sets whether this argument will be optional when executing the command this argument is included in
-	 *
-	 * @param optional if true, this argument will be optional when executing the command this argument is included in
-	 * @return this current argument
-	 */
-	public Impl setOptional(boolean optional) {
-		this.isOptional = optional;
-		return instance();
-	}
 
 	/**
 	 * Returns a list of arguments linked to this argument.
@@ -316,11 +294,22 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Adds combined arguments to this argument. Combined arguments are used to have required arguments after optional arguments
-	 * by ignoring they exist until they are added to the arguments array for registration.
-	 * <p>
-	 * This method also causes permissions and requirements from this argument to be copied over to the arguments you want to combine
-	 * this argument with. Their permissions and requirements will be ignored.
+	 * Adds combined arguments to this argument. Combined arguments are used to have required arguments after optional
+	 * arguments. If this argument is optional and the user includes it in their command, any arguments combined with
+	 * this argument will be required to execute the command.
+	 *
+	 * @param combinedArguments The arguments to combine to this argument
+	 * @return this current argument
+	 */
+	public Impl combineWith(List<Argument> combinedArguments) {
+		this.combinedArguments.addAll(combinedArguments);
+		return instance();
+	}
+
+	/**
+	 * Adds combined arguments to this argument. Combined arguments are used to have required arguments after optional
+	 * arguments. If this argument is optional and the user includes it in their command, any arguments combined with
+	 * this argument will be required to execute the command.
 	 *
 	 * @param combinedArguments The arguments to combine to this argument
 	 * @return this current argument
@@ -346,8 +335,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	/**
 	 * Adds this argument to the end of the all the current possible paths given. The added entry is built as {code nodeName:argumentClass}.
+	 * Any arguments combined with this one are also added.
 	 *
-	 * @param argumentStrings A list of possible paths to this argument so far.
+	 * @param argumentStrings A list of possible paths up to this argument so far.
 	 */
 	public void appendToCommandPaths(List<List<String>> argumentStrings) {
 		// Create paths for this argument
@@ -359,6 +349,23 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Add combined arguments
 		for (Argument subArgument : combinedArguments) {
 			subArgument.appendToCommandPaths(argumentStrings);
+		}
+	}
+
+	/**
+	 * Adds this argument to the end of all the current possible paths given. Any arguments combined with this one are also added.
+	 *
+	 * @param previousArguments A list of possible paths up to this argument so far.
+	 */
+	public void unpackCombinedArguments(List<List<Argument>> previousArguments) {
+		// Add this argument
+		for(List<Argument> path : previousArguments) {
+			path.add((Argument) this);
+		}
+
+		// Add combined arguments
+		for (Argument subArgument : combinedArguments) {
+			subArgument.unpackCombinedArguments(previousArguments);
 		}
 	}
 

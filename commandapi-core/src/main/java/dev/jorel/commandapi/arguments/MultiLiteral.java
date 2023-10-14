@@ -75,6 +75,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		Iterator<String> literals = Arrays.asList(getLiterals()).iterator();
 		String firstLiteralArgumentString = literals.next() + ":LiteralArgument";
 
+		// Copy each path for the other literals
 		List<List<String>> newPaths = new ArrayList<>();
 		while (literals.hasNext()) {
 			String literalArgumentString = literals.next() + ":LiteralArgument";
@@ -85,6 +86,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			}
 		}
 
+		// Add first literal to the original paths
 		for (List<String> path : argumentStrings) {
 			path.add(firstLiteralArgumentString);
 		}

@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
@@ -50,8 +49,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 /// @endcond
 , CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
-	protected List<Argument> arguments = new ArrayList<>();
-	protected List<Impl> subcommands = new ArrayList<>();
+	private List<Argument> requiredArguments = new ArrayList<>();
+	private List<Argument> optionalArguments = new ArrayList<>();
+	private List<Impl> subcommands = new ArrayList<>();
 
 	/**
 	 * Creates a new command builder
@@ -62,15 +62,27 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		super(commandName);
 	}
 
+	/////////////////////
+	// Builder methods //
+	/////////////////////
+
 	/**
 	 * Appends the arguments to the current command builder
 	 *
 	 * @param args A <code>List</code> that represents the arguments that this
 	 *             command can accept
 	 * @return this command builder
+	 * @throws OptionalArgumentException If this method is used to add required arguments after optional arguments.
 	 */
 	public Impl withArguments(List<Argument> args) {
-		this.arguments.addAll(args);
+		if (!args.isEmpty() && !this.optionalArguments.isEmpty()) {
+			// Tried to add required arguments after optional arguments
+			List<Argument> previousArguments = new ArrayList<>();
+			previousArguments.addAll(this.requiredArguments);
+			previousArguments.addAll(this.optionalArguments);
+			throw new OptionalArgumentException(name, previousArguments, args.get(0));
+		}
+		this.requiredArguments.addAll(args);
 		return instance();
 	}
 
@@ -79,45 +91,34 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
+	 * @throws OptionalArgumentException If this method is used to add required arguments after optional arguments.
 	 */
 	@SafeVarargs
 	public final Impl withArguments(Argument... args) {
-		this.arguments.addAll(Arrays.asList(args));
-		return instance();
+		return this.withArguments(Arrays.asList(args));
 	}
 
 	/**
 	 * Appends the optional arguments to the current command builder.
-	 * <p>
-	 * This also calls {@link AbstractArgument#setOptional(boolean)} on each argument to make sure they are optional
 	 *
 	 * @param args A <code>List</code> that represents the arguments that this
 	 *             command can accept
 	 * @return this command builder
 	 */
 	public Impl withOptionalArguments(List<Argument> args) {
-		for (Argument argument : args) {
-			argument.setOptional(true);
-			this.arguments.add(argument);
-		}
+		this.optionalArguments.addAll(args);
 		return instance();
 	}
 
 	/**
 	 * Appends the optional arguments to the current command builder.
-	 * <p>
-	 * This also calls {@link AbstractArgument#setOptional(boolean)} on each argument to make sure they are optional
 	 *
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
 	 */
 	@SafeVarargs
 	public final Impl withOptionalArguments(Argument... args) {
-		for (Argument argument : args) {
-			argument.setOptional(true);
-			this.arguments.add(argument);
-		}
-		return instance();
+		return this.withOptionalArguments(Arrays.asList(args));
 	}
 
 	/**
@@ -137,11 +138,25 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param subcommands the subcommands to add as children of this command
 	 * @return this command builder
 	 */
-	@SafeVarargs
-	public final Impl withSubcommands(Impl... subcommands) {
-		this.subcommands.addAll(Arrays.asList(subcommands));
+	public Impl withSubcommands(List<Impl> subcommands) {
+		this.subcommands.addAll(subcommands);
 		return instance();
 	}
+
+	/**
+	 * Adds subcommands to this command builder
+	 *
+	 * @param subcommands the subcommands to add as children of this command
+	 * @return this command builder
+	 */
+	@SafeVarargs
+	public final Impl withSubcommands(Impl... subcommands) {
+		return this.withSubcommands(Arrays.asList(subcommands));
+	}
+
+	/////////////////////////
+	// Getters and setters //
+	/////////////////////////
 
 	/**
 	 * Returns the list of arguments that this command has
@@ -149,7 +164,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return the list of arguments that this command has
 	 */
 	public List<Argument> getArguments() {
-		return arguments;
+		return requiredArguments;
 	}
 
 	/**
@@ -158,7 +173,32 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param args the arguments that this command has
 	 */
 	public void setArguments(List<Argument> args) {
-		this.arguments = args;
+		this.requiredArguments = args;
+	}
+
+	/**
+	 * Returns the list of optional arguments that this command has
+	 *
+	 * @return the list of optional arguments that this command has
+	 */
+	public List<Argument> getOptionalArguments() {
+		return optionalArguments;
+	}
+
+	/**
+	 * Sets the optional arguments that this command has
+	 *
+	 * @param args the optional arguments that this command has
+	 */
+	public void setOptionalArguments(List<Argument> args) {
+		this.optionalArguments = args;
+	}
+
+	/**
+	 * @return True if this command has any required or optional arguments.
+	 */
+	public boolean hasAnyArguments() {
+		return !requiredArguments.isEmpty() || !optionalArguments.isEmpty();
 	}
 
 	/**
@@ -179,44 +219,62 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		this.subcommands = subcommands;
 	}
 
+	//////////////////
+	// Registration //
+	//////////////////
+
 	@Override
 	public List<List<String>> getArgumentsAsStrings() {
 		// Return an empty list if we have no arguments
-		if (arguments.isEmpty() && subcommands.isEmpty()) {
-			// Note: the inner list needs to be mutable in the case that this is a subcommand/sub-subcommand...
-			//  In that case, the parent subcommands will be built backwards inside this list
-			return List.of(new ArrayList<>());
+		if (subcommands.isEmpty() && !hasAnyArguments()) {
+			return List.of(List.of());
 		}
 
 		List<List<String>> argumentStrings = new ArrayList<>();
 
-		if (!arguments.isEmpty()) {
-			// Build main path
-			List<List<String>> currentPaths = new ArrayList<>();
-			currentPaths.add(new ArrayList<>());
-			boolean foundOptional = arguments.get(0).isOptional();
-			for (int i = 0; i < arguments.size(); i++) {
-				Argument argument = arguments.get(i);
-				argument.appendToCommandPaths(currentPaths);
+		// Build main path, if it is executable
+		if (executor.hasAnyExecutors()) {
+			// Required arguments represent one path
+			List<List<String>> mainPath = new ArrayList<>();
+			mainPath.add(new ArrayList<>());
+			for (Argument argument : requiredArguments) {
+				argument.appendToCommandPaths(mainPath);
+			}
 
-				// Non-optional argument after an optional argument
-				//  This state is invalid, so we cannot continue
-				boolean nextIsOptional = i == arguments.size() - 1 || arguments.get(i + 1).isOptional();
-				if (foundOptional && !nextIsOptional)
-					throw new OptionalArgumentException(name, arguments.subList(0, i), argument);
-				foundOptional = nextIsOptional;
+			List<Integer> slicePositions = new ArrayList<>();
+			// Note: Assumption that all paths are the same length
+			slicePositions.add(mainPath.get(0).size());
 
-				// If this is the last argument, or the next argument is optional, then the current path should be included by itself
-				if (nextIsOptional) argumentStrings.addAll(currentPaths);
+			// Each optional argument is a potential stopping point
+			for (Argument argument : optionalArguments) {
+				argument.appendToCommandPaths(mainPath);
+				slicePositions.add(mainPath.get(0).size());
+			}
+
+			// Return each path as sublists of the main path
+			for (List<String> path : mainPath) {
+				for (int slicePos : slicePositions) {
+					argumentStrings.add(path.subList(0, slicePos));
+				}
 			}
 		}
 
-		// Add subcommands
+		// Build subcommand paths
 		for (Impl subCommand : subcommands) {
-			String subCommandArgument = subCommand.name + ":LiteralArgument";
+			String[] subCommandArguments = new String[subCommand.aliases.length + 1];
+			subCommandArguments[0] = subCommand.name;
+			System.arraycopy(subCommand.aliases, 0, subCommandArguments, 1, subCommand.aliases.length);
+			for (int i = 0; i < subCommandArguments.length; i++) {
+				subCommandArguments[i] += ":LiteralArgument";
+			}
+
 			for (List<String> subArgs : subCommand.getArgumentsAsStrings()) {
-				subArgs.add(0, subCommandArgument);
-				argumentStrings.add(subArgs);
+				for (String subCommandArgument : subCommandArguments) {
+					List<String> newPath = new ArrayList<>();
+					newPath.add(subCommandArgument);
+					newPath.addAll(subArgs);
+					argumentStrings.add(newPath);
+				}
 			}
 		}
 
@@ -224,33 +282,26 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	@Override
-	<Source> Nodes<Source> createCommandNodes() {
-		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
-
-		// Check preconditions
-		if (!executor.hasAnyExecutors() && (subcommands.isEmpty() || !arguments.isEmpty())) {
+	protected void checkPreconditions() {
+		if (!executor.hasAnyExecutors() && (subcommands.isEmpty() || hasAnyArguments())) {
 			// If we don't have any executors then:
 			//  No subcommands is bad because this path can't be run at all
 			//  Having arguments is bad because developer intended this path to be executable with arguments
 			throw new MissingCommandExecutorException(name);
 		}
+	}
 
-		// Create node
-		LiteralArgumentBuilder<Source> rootBuilder = LiteralArgumentBuilder.literal(name);
+	@Override
+	protected boolean isRootExecutable() {
+		return executor.hasAnyExecutors() && requiredArguments.isEmpty();
+	}
 
-		// Add permission and requirements
-		rootBuilder.requires(handler.generateBrigadierRequirements(permission, requirements));
-
-		// Add our executor if this is the last node, or the next argument is optional
-		if ((arguments.isEmpty() || arguments.get(0).isOptional()) && executor.hasAnyExecutors()) {
-			rootBuilder.executes(handler.generateBrigadierCommand(List.of(), executor));
-		}
-
-		// Register main node
-		LiteralCommandNode<Source> rootNode = rootBuilder.build();
+	@Override
+	protected <Source> void createArgumentNodes(LiteralCommandNode<Source> rootNode) {
+		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
 
 		// Create arguments
-		if (!arguments.isEmpty()) {
+		if (hasAnyArguments()) {
 			CommandNode<Source> previousNode = rootNode;
 			List<Argument> previousArguments = new ArrayList<>();
 			List<String> previousArgumentNames = new ArrayList<>();
@@ -265,19 +316,18 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			previousArguments.add(commandNames);
 
-			boolean foundOptional = arguments.get(0).isOptional();
-			for (int i = 0; i < arguments.size(); i++) {
-				Argument argument = arguments.get(i);
-
-				boolean nextIsOptional = i == arguments.size() - 1 || arguments.get(i + 1).isOptional();
-				// Non-optional argument after an optional argument
-				//  This state is invalid, so we cannot continue
-				if (foundOptional && !nextIsOptional) throw new OptionalArgumentException(previousArguments, argument);
-				foundOptional = nextIsOptional;
-
+			// Add required arguments
+			for (int i = 0; i < requiredArguments.size(); i++) {
+				Argument argument = requiredArguments.get(i);
 				previousNode = argument.addArgumentNodes(previousNode, previousArguments, previousArgumentNames,
-					// If this is the last argument, or the next argument is optional, add the executor
-					nextIsOptional ? executor : null);
+					// Only the last required argument is executable
+					i == requiredArguments.size() - 1 ? executor : null);
+			}
+
+			// Add optional arguments
+			for (Argument argument : optionalArguments) {
+				// All optional arguments are executable
+				previousNode = argument.addArgumentNodes(previousNode, previousArguments, previousArgumentNames, executor);
 			}
 
 			// Check greedy argument constraint
@@ -302,28 +352,5 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				rootNode.addChild(aliasNode);
 			}
 		}
-
-		// Generate alias nodes
-		List<LiteralCommandNode<Source>> aliasNodes = new ArrayList<>();
-		for (String alias : aliases) {
-			// Create node
-			LiteralArgumentBuilder<Source> aliasBuilder = LiteralArgumentBuilder.literal(alias);
-
-			// Add permission and requirements
-			aliasBuilder.requires(handler.generateBrigadierRequirements(permission, requirements));
-
-			// Add our executor
-			if ((arguments.isEmpty() || arguments.get(0).isOptional()) && executor.hasAnyExecutors()) {
-				aliasBuilder.executes(handler.generateBrigadierCommand(List.of(), executor));
-			}
-
-			// Redirect to rootNode so all its arguments come after this node
-			aliasBuilder.redirect(rootNode);
-
-			// Register alias node
-			aliasNodes.add(aliasBuilder.build());
-		}
-
-		return new Nodes<>(rootNode, aliasNodes);
 	}
 }
