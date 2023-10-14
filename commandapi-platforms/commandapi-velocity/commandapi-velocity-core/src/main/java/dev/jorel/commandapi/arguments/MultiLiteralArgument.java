@@ -106,7 +106,7 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 
 	@Override
 	public void checkPreconditions(List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames) {
-		super.checkPreconditions(previousArguments, previousNonLiteralArgumentNames);
+		MultiLiteral.super.checkPreconditions(previousArguments, previousNonLiteralArgumentNames);
 	}
 
 	@Override
