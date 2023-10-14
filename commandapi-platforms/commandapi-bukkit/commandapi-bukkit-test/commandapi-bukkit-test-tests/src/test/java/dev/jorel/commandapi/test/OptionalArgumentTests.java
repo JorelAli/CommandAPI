@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests for using optional arguments in CommandAPICommands
  */
-class CommandAPICommandOptionalArgumentTests extends TestBase {
+class OptionalArgumentTests extends TestBase {
 
 	/*********
 	 * Setup *
