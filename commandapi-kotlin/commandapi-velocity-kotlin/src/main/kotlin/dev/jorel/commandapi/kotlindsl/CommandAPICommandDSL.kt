@@ -22,7 +22,7 @@ inline fun subcommand(name: String, command: CommandAPICommand.() -> Unit = {}):
 inline fun CommandAPICommand.subcommand(command: CommandAPICommand): CommandAPICommand = withSubcommand(command)
 inline fun CommandAPICommand.subcommand(name: String, command: CommandAPICommand.() -> Unit = {}): CommandAPICommand = withSubcommand(CommandAPICommand(name).apply(command))
 
-inline fun CommandAPICommand.addArgument(argument: Argument<*>, optional: Boolean, block: Argument<*>.() -> Unit): CommandAPICommand = if (optional) { optionalArgument(argument, block) } else { argument(argument, block) }
+inline fun CommandAPICommand.addArgument(argument: Argument<*>, optional: Boolean, block: Argument<*>.() -> Unit): CommandAPICommand = if (optional) optionalArgument(argument, block) else argument(argument, block)
 
 // Integer arguments
 inline fun CommandAPICommand.integerArgument(nodeName: String, min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = addArgument(IntegerArgument(nodeName, min, max), optional, block)
