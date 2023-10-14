@@ -353,23 +353,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Adds this argument to the end of all the current possible paths given. Any arguments combined with this one are also added.
-	 *
-	 * @param previousArguments A list of possible paths up to this argument so far.
-	 */
-	public void unpackCombinedArguments(List<List<Argument>> previousArguments) {
-		// Add this argument
-		for(List<Argument> path : previousArguments) {
-			path.add((Argument) this);
-		}
-
-		// Add combined arguments
-		for (Argument subArgument : combinedArguments) {
-			subArgument.unpackCombinedArguments(previousArguments);
-		}
-	}
-
-	/**
 	 * Builds the Brigadier {@link CommandNode} structure for this argument. Note that the Brigadier node structure may
 	 * contain multiple nodes, for example if {@link #combineWith(AbstractArgument[])} was called for this argument to
 	 * merge it with other arguments.
