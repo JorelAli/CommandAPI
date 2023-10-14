@@ -2,6 +2,7 @@ package dev.jorel.commandapi.examples.kotlin
 
 import de.tr7zw.changeme.nbtapi.NBTContainer
 import dev.jorel.commandapi.arguments.*
+import dev.jorel.commandapi.executors.CommandArguments
 import dev.jorel.commandapi.kotlindsl.*
 import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
@@ -1041,19 +1042,22 @@ commandAPICommand("commandRequirement") {
 /* ANCHOR_END: kotlindsl6 */
 
 /* ANCHOR: kotlindsl7 */
+fun giveOptionalAmount(player: Player, args: CommandArguments) {
+    // This command will let you execute:
+    // "/optionalArgument give minecraft:stick"
+    // "/optionalArgument give minecraft:stick 5"
+    val itemStack: ItemStack = args["item"] as ItemStack
+    val amount: Int = args.getOptional("amount").orElse(1) as Int
+    itemStack.amount = amount
+    player.inventory.addItem(itemStack)
+}
+
 commandTree("optionalArgument") {
     literalArgument("give") {
         itemStackArgument("item") {
-            integerArgument("amount", optional = true) {
-                playerExecutor { player, args ->
-                    // This command will let you execute:
-                    // "/optionalArgument give minecraft:stick"
-                    // "/optionalArgument give minecraft:stick 5"
-                    val itemStack: ItemStack = args["item"] as ItemStack
-                    val amount: Int = args.getOptional("amount").orElse(1) as Int
-                    itemStack.amount = amount
-                    player.inventory.addItem(itemStack)
-                }
+            playerExecutor(::giveOptionalAmount)
+            integerArgument("amount") {
+                playerExecutor(::giveOptionalAmount)
             }
         }
     }
