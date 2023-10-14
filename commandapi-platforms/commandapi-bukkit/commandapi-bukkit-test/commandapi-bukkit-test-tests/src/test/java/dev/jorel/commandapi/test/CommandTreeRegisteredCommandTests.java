@@ -229,63 +229,21 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 	}
 
 	@Test
-	void testRegisterOneOptionalArgument() {
-		new CommandTree("command")
-			.withOptionalArguments(new StringArgument("string"))
-			.executesPlayer(P_EXEC)
-			.register();
-
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument"))
-		);
-	}
-
-	@Test
-	void testRegisterTwoOptionalArguments() {
-		new CommandTree("command")
-			.withOptionalArguments(
-				new StringArgument("string"),
-				new IntegerArgument("integer")
-			)
-			.executesPlayer(P_EXEC)
-			.register();
-
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument", "integer:IntegerArgument"))
-		);
-	}
-
-	@Test
-	void testRegisterCombinedOptionalArguments() {
-		new CommandTree("command")
-			.withOptionalArguments(
-				new LiteralArgument("1").combineWith(new LiteralArgument("2")),
-				new LiteralArgument("3").combineWith(new LiteralArgument("4"))
-			)
-			.executesPlayer(P_EXEC)
-			.register();
-
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("1:LiteralArgument", "2:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument"))
-		);
-	}
-
-	@Test
-	void testRegisterCombinedRequiredAndOptionalArguments() {
+	void testRegisterCombinedArguments() {
 		new CommandTree("command")
 			.then(
 				new LiteralArgument("1").combineWith(new LiteralArgument("2"))
 					.then(
 						new LiteralArgument("3").combineWith(new LiteralArgument("4"))
-							.withOptionalArguments(
-								new LiteralArgument("5").combineWith(new LiteralArgument("6")),
-								new LiteralArgument("7").combineWith(new LiteralArgument("8"))
-							).executesPlayer(P_EXEC)
+							.executesPlayer(P_EXEC)
+							.then(
+								new LiteralArgument("5").combineWith(new LiteralArgument("6"))
+									.executesPlayer(P_EXEC)
+									.then(
+										new LiteralArgument("7").combineWith(new LiteralArgument("8"))
+											.executesPlayer(P_EXEC)
+									)
+							)
 					)
 			)
 			.register();
@@ -350,57 +308,28 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 	}
 
 	@Test
-	void testRegisterBranchesWithOptionalArguments() {
-		new CommandTree("command")
-			.then(
-				new LiteralArgument("subcommand1")
-					.withOptionalArguments(
-						new LiteralArgument("a"),
-						new LiteralArgument("b")
-					)
-					.executesPlayer(P_EXEC)
-			)
-			.then(
-				new LiteralArgument("subcommand2")
-					.withOptionalArguments(
-						new LiteralArgument("c"),
-						new LiteralArgument("d")
-					)
-					.executesPlayer(P_EXEC)
-			)
-			.register();
-
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "a:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "a:LiteralArgument", "b:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "c:LiteralArgument", "d:LiteralArgument"))
-		);
-	}
-
-	@Test
-	void testRegisterBranchesWithCombinedRequiredAndOptionalArguments() {
+	void testRegisterBranchesWithCombinedArguments() {
 		new CommandTree("command")
 			.then(
 				new LiteralArgument("subcommand1")
 					.then(
 						new LiteralArgument("1a").combineWith(new LiteralArgument("1b"))
-							.withOptionalArguments(
-								new LiteralArgument("1c").combineWith(new LiteralArgument("1d"))
-							)
 							.executesPlayer(P_EXEC)
+							.then(
+								new LiteralArgument("1c").combineWith(new LiteralArgument("1d"))
+									.executesPlayer(P_EXEC)
+							)
 					)
 			)
 			.then(
 				new LiteralArgument("subcommand2")
 					.then(
 						new LiteralArgument("2a").combineWith(new LiteralArgument("2b"))
-							.withOptionalArguments(
-								new LiteralArgument("2c").combineWith(new LiteralArgument("2d"))
-							)
 							.executesPlayer(P_EXEC)
+							.then(
+								new LiteralArgument("2c").combineWith(new LiteralArgument("2d"))
+									.executesPlayer(P_EXEC)
+							)
 					)
 			)
 			.register();

@@ -7,7 +7,6 @@ import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,8 +26,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 , CommandSender> extends Executable<Impl, CommandSender> {
 
 	private final Argument argument;
-	private List<AbstractArgumentTree<?, Argument, CommandSender>> branches = new ArrayList<>();
-	private List<Argument> optionalArguments = new ArrayList<>();
+	private List<AbstractArgumentTree<?, Argument, CommandSender>> arguments = new ArrayList<>();
 
 	/**
 	 * Instantiates an {@link AbstractArgumentTree}. This can only be called if the class
@@ -66,30 +64,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return this tree node
 	 */
 	public Impl then(final AbstractArgumentTree<?, Argument, CommandSender> tree) {
-		this.branches.add(tree);
+		this.arguments.add(tree);
 		return instance();
-	}
-
-	/**
-	 * Adds optional arguments onto this node.
-	 *
-	 * @param optionalArguments A List of Arguments to add as optional arguments at this node.
-	 * @return this command builder
-	 */
-	public Impl withOptionalArguments(List<Argument> optionalArguments) {
-		this.optionalArguments.addAll(optionalArguments);
-		return instance();
-	}
-
-	/**
-	 * Adds optional arguments onto this node.
-	 *
-	 * @param optionalArguments The Arguments to add as optional arguments at this node.
-	 * @return this command builder
-	 */
-	@SafeVarargs
-	public final Impl withOptionalArguments(Argument... optionalArguments) {
-		return this.withOptionalArguments(Arrays.asList(optionalArguments));
 	}
 
 	/////////////////////////
@@ -100,7 +76,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return The child branches added to this tree by {@link #then(AbstractArgumentTree)}.
 	 */
 	public List<AbstractArgumentTree<?, Argument, CommandSender>> getArguments() {
-		return branches;
+		return arguments;
 	}
 
 	/**
@@ -109,23 +85,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param arguments A new list of branches for this node
 	 */
 	public void setArguments(List<AbstractArgumentTree<?, Argument, CommandSender>> arguments) {
-		this.branches = arguments;
-	}
-
-	/**
-	 * @return The optional arguments added to this tree by {@link #withOptionalArguments(List)}.
-	 */
-	public List<Argument> getOptionalArguments() {
-		return optionalArguments;
-	}
-
-	/**
-	 * Sets the optional arguments that this node has
-	 *
-	 * @param optionalArguments A new list of optional arguments for this node
-	 */
-	public void setOptionalArguments(List<Argument> optionalArguments) {
-		this.optionalArguments = optionalArguments;
+		this.arguments = arguments;
 	}
 
 	//////////////////
@@ -144,31 +104,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		baseArgumentPaths.add(new ArrayList<>());
 		argument.appendToCommandPaths(baseArgumentPaths);
 
-		// Build optional argument paths, if it is executable
-		if (executor.hasAnyExecutors()) {
-			// Just the argument is a valid path
-			List<Integer> slicePositions = new ArrayList<>();
-			// Note: Assumption that all paths are the same length
-			//  E.g. One `Argument argument : optionalArguments` won't expand to [arg1] and [arg1, arg2]
-			//  Either ([arg1] and [arg2]) or ([arg1, part2] and [arg2, part2]) etc.
-			slicePositions.add(baseArgumentPaths.get(0).size());
-
-			// Each optional argument is a potential stopping point
-			for (Argument argument : optionalArguments) {
-				argument.appendToCommandPaths(baseArgumentPaths);
-				slicePositions.add(baseArgumentPaths.get(0).size());
-			}
-
-			// Return each path as sublists of the main path
-			for (List<String> path : baseArgumentPaths) {
-				for (int slicePos : slicePositions) {
-					argumentStrings.add(path.subList(0, slicePos));
-				}
-			}
-		}
+		// If this node is executable, add it as a valid path
+		if (this.executor.hasAnyExecutors()) argumentStrings.addAll(baseArgumentPaths);
 
 		// Add paths for the branches
-		for (AbstractArgumentTree<?, Argument, CommandSender> child : branches) {
+		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
 			for (List<String> subArgs : child.getBranchesAsStrings()) {
 				for (List<String> basePath : baseArgumentPaths) {
 					List<String> mergedPaths = new ArrayList<>();
@@ -192,14 +132,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	public <Source> void buildBrigadierNode(CommandNode<Source> previousNode, List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames) {
 		// Check preconditions
-		if (argument instanceof GreedyArgument && (!branches.isEmpty() || !optionalArguments.isEmpty())) {
+		if (argument instanceof GreedyArgument && !arguments.isEmpty()) {
 			// Argument is followed by at least some arguments
 			throw new GreedyArgumentException(previousArguments, argument, getBranchesAsList());
 		}
-		if (!executor.hasAnyExecutors() && (branches.isEmpty() || !optionalArguments.isEmpty())) {
-			// If we don't have any executors then:
-			//  No branches is bad because this path can't be run at all
-			//  Having arguments is bad because developer intended this path to be executable with arguments
+		if (!executor.hasAnyExecutors() && arguments.isEmpty()) {
+			// If we don't have any executors then no branches is bad because this path can't be run at all
 			throw new MissingCommandExecutorException(previousArguments, argument);
 		}
 
@@ -207,21 +145,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		CommandNode<Source> rootNode = argument.addArgumentNodes(previousNode, previousArguments, previousNonLiteralArgumentNames, executor);
 
 		// Add our branches as children to the node
-		for (AbstractArgumentTree<?, Argument, CommandSender> child : branches) {
+		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
 			// We need a new list for each branch of the tree
 			List<Argument> newPreviousArguments = new ArrayList<>(previousArguments);
 			List<String> newPreviousArgumentNames = new ArrayList<>(previousNonLiteralArgumentNames);
 
 			child.buildBrigadierNode(rootNode, newPreviousArguments, newPreviousArgumentNames);
-		}
-
-		// Build optional argument paths
-		if (!optionalArguments.isEmpty()) {
-			previousNode = rootNode;
-			for (Argument argument : optionalArguments) {
-				// All optional arguments are executable
-				previousNode = argument.addArgumentNodes(previousNode, previousArguments, previousNonLiteralArgumentNames, executor);
-			}
 		}
 	}
 
@@ -230,34 +159,13 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	protected List<List<Argument>> getBranchesAsList() {
 		List<List<Argument>> branchesList = new ArrayList<>();
-		// Add branches
-		for (AbstractArgumentTree<?, Argument, CommandSender> branch : branches) {
+
+		for (AbstractArgumentTree<?, Argument, CommandSender> branch : arguments) {
 			for (List<Argument> subBranchList : branch.getBranchesAsList()) {
 				List<Argument> newBranchList = new ArrayList<>();
 				newBranchList.add(branch.argument);
 				newBranchList.addAll(subBranchList);
 				branchesList.add(newBranchList);
-			}
-		}
-		// Add optional arguments
-		if (!optionalArguments.isEmpty()) {
-			List<List<Argument>> optionalPaths = new ArrayList<>();
-			List<Integer> slicePositions = new ArrayList<>();
-			// Note: Assumption that all paths are the same length
-			//  E.g. One `Argument argument : optionalArguments` won't expand to [arg1] and [arg1, arg2]
-			//  Either ([arg1] and [arg2]) or ([arg1, part2] and [arg2, part2]) etc.
-
-			// Each optional argument is a potential stopping point
-			for (Argument argument : optionalArguments) {
-				argument.unpackCombinedArguments(optionalPaths);
-				slicePositions.add(optionalPaths.get(0).size());
-			}
-
-			// Return each path as sublists of the main path
-			for (List<Argument> path : optionalPaths) {
-				for (int slicePos : slicePositions) {
-					branchesList.add(path.subList(0, slicePos));
-				}
 			}
 		}
 
