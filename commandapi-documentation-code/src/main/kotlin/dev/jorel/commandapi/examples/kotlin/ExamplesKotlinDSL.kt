@@ -1138,7 +1138,7 @@ commandAPICommand("sayhi") {
 
 /* ANCHOR: optionalArguments3 */
 commandAPICommand("rate") {
-    argument(StringArgument("topic").setOptional(true).combineWith(IntegerArgument("rating", 0, 10)))
+    optionalArgument(StringArgument("topic").combineWith(IntegerArgument("rating", 0, 10)))
     playerArgument("target", optional = true)
     anyExecutor { sender, args ->
         val topic: String? = args["topic"] as String?
