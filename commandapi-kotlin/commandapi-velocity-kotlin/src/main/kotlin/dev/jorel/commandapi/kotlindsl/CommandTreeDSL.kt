@@ -15,7 +15,7 @@ inline fun CommandTree.argument(base: Argument<*>, block: Argument<*>.() -> Unit
 
 inline fun CommandTree.optionalArgument(base: Argument<*>, block: Argument<*>.() -> Unit = {}): CommandTree = withOptionalArguments(base.apply(block))
 
-inline fun CommandTree.addArgument(base: Argument<*>, optional: Boolean, block: Argument<*>.() -> Unit): CommandTree = if(optional) { optionalArgument(base, block) } else { argument(base, block) }
+inline fun CommandTree.addArgument(base: Argument<*>, optional: Boolean, block: Argument<*>.() -> Unit): CommandTree = if(optional) optionalArgument(base, block) else argument(base, block)
 
 // Integer arguments
 inline fun CommandTree.integerArgument(nodeName: String, min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = addArgument(IntegerArgument(nodeName, min, max), optional, block)
@@ -54,7 +54,7 @@ inline fun Argument<*>.argument(base: Argument<*>, block: Argument<*>.() -> Unit
 
 inline fun Argument<*>.optionalArgument(base: Argument<*>, block: Argument<*>.() -> Unit = {}): Argument<*> = withOptionalArguments(base.apply(block))
 
-inline fun Argument<*>.addArgument(base: Argument<*>, optional: Boolean, block: Argument<*>.() -> Unit): Argument<*> = if (optional) { optionalArgument(base, block) } else { argument(base, block) }
+inline fun Argument<*>.addArgument(base: Argument<*>, optional: Boolean, block: Argument<*>.() -> Unit): Argument<*> = if (optional) optionalArgument(base, block) else argument(base, block)
 
 // Integer arguments
 inline fun Argument<*>.integerArgument(nodeName: String, min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = addArgument(IntegerArgument(nodeName, min, max), optional, block)
