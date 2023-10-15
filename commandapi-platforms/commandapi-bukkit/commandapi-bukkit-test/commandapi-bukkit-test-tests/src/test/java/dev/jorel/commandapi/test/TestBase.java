@@ -26,6 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.function.Executable;
 import org.opentest4j.AssertionFailedError;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -115,6 +116,12 @@ public abstract class TestBase {
 	public void assertInvalidSyntax(CommandSender sender, String command) {
 		// XXX: Bogus code, do not use. Use assertCommandFailsWith instead.
 		assertThrows(CommandSyntaxException.class, () -> assertTrue(server.dispatchThrowableCommand(sender, command)));
+	}
+
+	public <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String message, Executable executable) {
+		T thrown = assertThrows(expectedType, executable);
+		assertEquals(message, thrown.getMessage());
+		return thrown;
 	}
 	
 	public void assertCommandFailsWith(CommandSender sender, String command, String message) {
