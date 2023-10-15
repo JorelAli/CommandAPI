@@ -45,7 +45,7 @@ public class GreedyArgumentException extends CommandRegistrationException {
 		List<Argument> previousArguments, Argument argument, List<List<Argument>> followingBranches) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("A greedy argument must be declared at the end of a command. Going down the ");
+		builder.append("A greedy argument can only be declared at the end of a command. Going down the ");
 		addArgumentList(builder, previousArguments);
 		builder.append(" branch, found ");
 		addArgument(builder, argument);
