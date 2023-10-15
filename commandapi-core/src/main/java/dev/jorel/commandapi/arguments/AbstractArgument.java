@@ -25,8 +25,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.AbstractArgumentTree;
 import dev.jorel.commandapi.CommandAPIExecutor;
@@ -40,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 /**
@@ -429,39 +426,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		RequiredArgumentBuilder<Source, ?> rootBuilder = RequiredArgumentBuilder.argument(nodeName, rawType);
 
 		// Add suggestions
-		if (replaceSuggestions != null) {
-			// Overridden suggestions take precedence
-			rootBuilder.suggests(handler.generateBrigadierSuggestions(previousArguments, replaceSuggestions));
-		} else if (includedSuggestions != null) {
-			// Insert additional defined suggestions
-			SuggestionProvider<Source> defaultSuggestions;
-			if (this instanceof CustomProvidedArgument cPA) {
-				defaultSuggestions = handler.getPlatform().getSuggestionProvider(cPA.getSuggestionProvider());
-			} else {
-				defaultSuggestions = rawType::listSuggestions;
-			}
-
-			SuggestionProvider<Source> includedSuggestions = handler.generateBrigadierSuggestions(previousArguments, this.includedSuggestions);
-
-			rootBuilder.suggests((cmdCtx, builder) -> {
-				// Heavily inspired by CommandDispatcher#getCompletionSuggestions, with combining
-				// multiple CompletableFuture<Suggestions> into one.
-				CompletableFuture<Suggestions> defaultSuggestionsFuture = defaultSuggestions.getSuggestions(cmdCtx, builder);
-				CompletableFuture<Suggestions> includedSuggestionsFuture = includedSuggestions.getSuggestions(cmdCtx, builder);
-
-				CompletableFuture<Suggestions> result = new CompletableFuture<>();
-				CompletableFuture.allOf(defaultSuggestionsFuture, includedSuggestionsFuture).thenRun(() -> {
-					List<Suggestions> suggestions = new ArrayList<>();
-					suggestions.add(defaultSuggestionsFuture.join());
-					suggestions.add(includedSuggestionsFuture.join());
-					result.complete(Suggestions.merge(cmdCtx.getInput(), suggestions));
-				});
-				return result;
-			});
-		} else if (this instanceof CustomProvidedArgument cPA) {
-			// Handle arguments with built-in suggestion providers
-			rootBuilder.suggests(handler.getPlatform().getSuggestionProvider(cPA.getSuggestionProvider()));
-		}
+		rootBuilder.suggests(handler.generateBrigadierSuggestions(previousArguments, (Argument) this));
 
 		// Add argument to previousArgument lists
 		//  Note: this argument should not be in the previous arguments list when doing suggestions,

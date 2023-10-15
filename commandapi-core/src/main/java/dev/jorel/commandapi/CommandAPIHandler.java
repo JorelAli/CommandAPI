@@ -39,16 +39,16 @@ import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.PreviewInfo;
-import dev.jorel.commandapi.arguments.Previewable;
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The "brains" behind the CommandAPI.
@@ -299,6 +299,61 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			// Apply the executor
 			return executor.execute(executionInfo);
 		};
+	}
+
+	/**
+	 * Generates a Brigadier {@link SuggestionProvider} using the given CommandAPI objects.
+	 *
+	 * @param previousArguments A list of Arguments that came before the argument using these suggestions. These arguments
+	 *                             will be available in the {@link SuggestionInfo} when providing suggestions.
+	 * @param argument The argument to give suggestions for.
+	 * @return A Brigadier SuggestionProvider object that generates suggestions for the given argument with the previous
+	 * arguments as input, or null if there are no suggestions for the given argument.
+	 */
+	public SuggestionProvider<Source> generateBrigadierSuggestions(List<Argument> previousArguments, Argument argument) {
+		// Overriding suggestions take precedence
+		Optional<ArgumentSuggestions<CommandSender>> overriddenSuggestions = argument.getOverriddenSuggestions();
+		if (overriddenSuggestions.isPresent()) {
+			return generateBrigadierSuggestions(previousArguments, overriddenSuggestions.get());
+		}
+
+		// Included suggestions add on to whatever "default" suggestions exist
+		Optional<ArgumentSuggestions<CommandSender>> includedSuggestions = argument.getIncludedSuggestions();
+		if (includedSuggestions.isPresent()) {
+			// Insert additional defined suggestions
+			SuggestionProvider<Source> defaultSuggestions;
+			if (argument instanceof CustomProvidedArgument cPA) {
+				defaultSuggestions = platform.getSuggestionProvider(cPA.getSuggestionProvider());
+			} else {
+				defaultSuggestions = argument.getRawType()::listSuggestions;
+			}
+
+			SuggestionProvider<Source> suggestionsToAdd = generateBrigadierSuggestions(previousArguments, includedSuggestions.get());
+
+			return (cmdCtx, builder) -> {
+				// Heavily inspired by CommandDispatcher#getCompletionSuggestions, with combining
+				// multiple CompletableFuture<Suggestions> into one.
+				CompletableFuture<Suggestions> defaultSuggestionsFuture = defaultSuggestions.getSuggestions(cmdCtx, builder);
+				CompletableFuture<Suggestions> includedSuggestionsFuture = suggestionsToAdd.getSuggestions(cmdCtx, builder);
+
+				CompletableFuture<Suggestions> result = new CompletableFuture<>();
+				CompletableFuture.allOf(defaultSuggestionsFuture, includedSuggestionsFuture).thenRun(() -> {
+					List<Suggestions> suggestions = new ArrayList<>();
+					suggestions.add(defaultSuggestionsFuture.join());
+					suggestions.add(includedSuggestionsFuture.join());
+					result.complete(Suggestions.merge(cmdCtx.getInput(), suggestions));
+				});
+				return result;
+			};
+		}
+
+		// Custom provided arguments
+		if (argument instanceof CustomProvidedArgument cPA) {
+			return platform.getSuggestionProvider(cPA.getSuggestionProvider());
+		}
+
+		// Calling `RequiredArgumentBuilder.suggests(null)` makes it so no custom suggestions are given, so this makes sense
+		return null;
 	}
 
 	/**
