@@ -1,15 +1,15 @@
 package dev.jorel.commandapi.test;
 
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.DoubleArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.StringArgument;
-import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -109,32 +109,36 @@ class OptionalArgumentTests extends TestBase {
 	public void testOptionalArgumentException() {
 		// An optional argument followed by a required argument should throw
 		// an OptionalArgumentException
-		assertThrows(OptionalArgumentException.class, () -> {
-			new CommandAPICommand("test")
+		assertThrowsWithMessage(
+			OptionalArgumentException.class,
+			"Uncombined required arguments following optional arguments are not allowed! Going down the [test<LiteralArgument> string1<StringArgument>] branch, found a required argument string2<StringArgument> after an optional argument",
+			() -> new CommandAPICommand("test")
 				.withOptionalArguments(new StringArgument("string1"))
 				.withArguments(new StringArgument("string2"))
 				.executesPlayer(P_EXEC)
-				.register();
-		});
+				.register()
+		);
 
 		// No need to worry: since we didn't actually add any arguments in `withArguments`, this is fine
-		assertDoesNotThrow(() -> {
-			new CommandAPICommand("test")
+		assertDoesNotThrow(
+			() -> new CommandAPICommand("test")
 				.withOptionalArguments(new StringArgument("string"))
 				.withArguments()
 				.executesPlayer(P_EXEC)
-				.register();
-		});
+				.register()
+		);
 
 		// A required argument following a required argument that is linked
 		// to an optional argument should throw an OptionalArgumentException
-		assertThrows(OptionalArgumentException.class, () -> {
-			new CommandAPICommand("test")
+		assertThrowsWithMessage(
+			OptionalArgumentException.class,
+			"Uncombined required arguments following optional arguments are not allowed! Going down the [test<LiteralArgument> string1<StringArgument>] branch, found a required argument string3<StringArgument> after an optional argument",
+			() -> new CommandAPICommand("test")
 				.withOptionalArguments(new StringArgument("string1").combineWith(new StringArgument("string2")))
 				.withArguments(new StringArgument("string3"))
 				.executesPlayer(P_EXEC)
-				.register();
-		});
+				.register()
+		);
 	}
 
 	@Test
@@ -254,4 +258,51 @@ class OptionalArgumentTests extends TestBase {
 		assertNoMoreResults(results);
 	}
 
+	@Test
+	void testDoubleCombinedRequiredAndOptionalArguments() {
+		Mut<Object[]> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new LiteralArgument("1").setListed(true).combineWith(
+					new LiteralArgument("2").setListed(true),
+					new LiteralArgument("3").setListed(true)
+				)
+			)
+			.withOptionalArguments(
+				new LiteralArgument("4").setListed(true).combineWith(
+					new LiteralArgument("5").setListed(true),
+					new LiteralArgument("6").setListed(true)
+				),
+				new LiteralArgument("7").setListed(true).combineWith(
+					new LiteralArgument("8").setListed(true),
+					new LiteralArgument("9").setListed(true)
+				)
+			)
+			.executesPlayer(info -> {
+				results.set(info.args().args());
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Required arguments
+		assertCommandFailsWith(player, "test 1", "Unknown or incomplete command, see below for error at position 6: test 1<--[HERE]");
+		assertCommandFailsWith(player, "test 1 2", "Unknown or incomplete command, see below for error at position 8: test 1 2<--[HERE]");
+
+		assertStoresArrayResult(player, "test 1 2 3", results, "1", "2", "3");
+
+		// First optional argument
+		assertCommandFailsWith(player, "test 1 2 3 4", "Unknown or incomplete command, see below for error at position 12: ...st 1 2 3 4<--[HERE]");
+		assertCommandFailsWith(player, "test 1 2 3 4 5", "Unknown or incomplete command, see below for error at position 14: ... 1 2 3 4 5<--[HERE]");
+
+		assertStoresArrayResult(player, "test 1 2 3 4 5 6", results, "1", "2", "3", "4", "5", "6");
+
+		// Second optional argument
+		assertCommandFailsWith(player, "test 1 2 3 4 5 6 7", "Unknown or incomplete command, see below for error at position 18: ... 3 4 5 6 7<--[HERE]");
+		assertCommandFailsWith(player, "test 1 2 3 4 5 6 7 8", "Unknown or incomplete command, see below for error at position 20: ... 4 5 6 7 8<--[HERE]");
+
+		assertStoresArrayResult(player, "test 1 2 3 4 5 6 7 8 9", results, "1", "2", "3", "4", "5", "6", "7", "8", "9");
+
+	}
 }

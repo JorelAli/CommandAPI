@@ -170,6 +170,21 @@ class CommandRegistrationTests extends TestBase {
 			);
 
 		assertDoesNotThrow(() -> commandWithEventuallyRunnableSubcommand.register());
+
+		// This command is not okay, because the presence of arguments on
+		//  the root indicate the root path was meant to be executed
+		CommandAPICommand commandWithNotExecutableRootArgument = new CommandAPICommand("test")
+			.withArguments(new StringArgument("arg1"))
+			.withSubcommand(
+				new CommandAPICommand("sub")
+					.executesPlayer(P_EXEC)
+			);
+
+		assertThrowsWithMessage(
+			MissingCommandExecutorException.class,
+			"The command path test<LiteralArgument> is not executable!",
+			commandWithNotExecutableRootArgument::register
+		);
 	}
 
 	@Test
@@ -247,7 +262,7 @@ class CommandRegistrationTests extends TestBase {
 			)
 			.executesPlayer(P_EXEC);
 
-		assertDoesNotThrow(commandWithDuplicateLiteralArgumentNames::register);
+		assertDoesNotThrow(() -> commandWithDuplicateLiteralArgumentNames.register());
 
 		// This command is okay because MultiLiteralArguments are exempt from the duplicate name rule
 		CommandAPICommand commandWithDuplicateMultiLiteralArgumentNames = new CommandAPICommand("test")
@@ -258,7 +273,7 @@ class CommandRegistrationTests extends TestBase {
 			)
 			.executesPlayer(P_EXEC);
 
-		assertDoesNotThrow(commandWithDuplicateMultiLiteralArgumentNames::register);
+		assertDoesNotThrow(() -> commandWithDuplicateMultiLiteralArgumentNames.register());
 	}
 
 	@Test
@@ -291,7 +306,7 @@ class CommandRegistrationTests extends TestBase {
 				)
 			);
 
-		assertDoesNotThrow(commandWithDuplicateLiteralArgumentNames::register);
+		assertDoesNotThrow(() -> commandWithDuplicateLiteralArgumentNames.register());
 
 		// This command is okay because MultiLiteralArguments are exempt from the duplicate name rule
 		CommandTree commandWithDuplicateMultiLiteralArgumentNames = new CommandTree("test")
@@ -304,7 +319,7 @@ class CommandRegistrationTests extends TestBase {
 				)
 			);
 
-		assertDoesNotThrow(commandWithDuplicateMultiLiteralArgumentNames::register);
+		assertDoesNotThrow(() -> commandWithDuplicateMultiLiteralArgumentNames.register());
 
 		// This command is okay because the duplicate names are on different paths
 		CommandTree commandWithDuplicateNamesSeparated = new CommandTree("test")
@@ -313,6 +328,6 @@ class CommandRegistrationTests extends TestBase {
 			.then(new LiteralArgument("path3").then(new StringArgument("alice").executesPlayer(P_EXEC)))
 			.then(new LiteralArgument("path4").then(new StringArgument("alice").executesPlayer(P_EXEC)));
 
-		assertDoesNotThrow(commandWithDuplicateNamesSeparated::register);
+		assertDoesNotThrow(() -> commandWithDuplicateNamesSeparated.register());
 	}
 }

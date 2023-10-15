@@ -42,7 +42,7 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 		return new RegisteredCommand(name, argsAsStr,
 			Optional.empty(), Optional.empty(), Optional.empty(),
 			aliases,
-			CommandPermission.NONE
+			CommandPermission.NONE, "minecraft"
 		);
 	}
 
@@ -127,7 +127,7 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			new RegisteredCommand(
 				"command", List.of(),
 				Optional.of("short description"), Optional.of("full description"), Optional.of(new String[]{"usage 1", "usage 2", "usage 3"}),
-				new String[0], CommandPermission.NONE
+				new String[0], CommandPermission.NONE, "minecraft"
 			)
 		);
 	}
@@ -143,7 +143,7 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			new RegisteredCommand(
 				"command", List.of(),
 				Optional.empty(), Optional.empty(), Optional.empty(),
-				new String[0], CommandPermission.OP
+				new String[0], CommandPermission.OP, "minecraft"
 			)
 		);
 	}
@@ -159,7 +159,7 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			new RegisteredCommand(
 				"command", List.of(),
 				Optional.empty(), Optional.empty(), Optional.empty(),
-				new String[0], CommandPermission.fromString("permission")
+				new String[0], CommandPermission.fromString("permission"), "minecraft"
 			)
 		);
 	}

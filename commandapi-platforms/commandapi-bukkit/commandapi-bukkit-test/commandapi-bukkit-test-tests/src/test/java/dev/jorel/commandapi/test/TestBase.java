@@ -1,12 +1,5 @@
 package dev.jorel.commandapi.test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,6 +36,8 @@ import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.PaperImplementations;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TestBase {
 
@@ -121,6 +116,16 @@ public abstract class TestBase {
 			"Expected command dispatch to return true, but it gave false"));
 		assertEquals(expected,
 			assertDoesNotThrow(queue::get, "Expected to find <" + expected + "> in queue, but nothing was present")
+		);
+	}
+
+	@SafeVarargs
+	public final <T> void assertStoresArrayResult(CommandSender sender, String command, Mut<T[]> queue, T... expected) {
+		assertDoesNotThrow(() -> assertTrue(
+			server.dispatchThrowableCommand(sender, command),
+			"Expected command dispatch to return true, but it gave false"));
+		assertArrayEquals(expected,
+			assertDoesNotThrow(queue::get, "Expected to find <" + Arrays.toString(expected) + "> in queue, but nothing was present")
 		);
 	}
 
