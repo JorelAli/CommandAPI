@@ -1,22 +1,20 @@
 package dev.jorel.commandapi.test;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.exceptions.DuplicateNodeNameException;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for the semantics of registering commands
@@ -59,7 +57,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			GreedyArgumentException.class,
-			"Only one GreedyStringArgument or ChatArgument can be declared, at the end of a List. Found arguments: arg1<GreedyStringArgument> arg2<StringArgument> ",
+			"A greedy argument can only be declared at the end of a command. Going down the [test<MultiLiteralArgument>] branch, found arg1<GreedyStringArgument> followed by [arg2<StringArgument>]",
 			invalidGreedyCommand::register
 		);
 	}
@@ -90,7 +88,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			GreedyArgumentException.class,
-			"Only one GreedyStringArgument or ChatArgument can be declared, at the end of a List. Found arguments: arg1<GreedyStringArgument> arg2<StringArgument> ",
+			"A greedy argument can only be declared at the end of a command. Going down the [test<MultiLiteralArgument>] branch, found arg1<GreedyStringArgument> followed by [arg2<StringArgument>]",
 			invalidGreedyCommand::register
 		);
 	}
@@ -100,7 +98,7 @@ class CommandRegistrationTests extends TestBase {
 		assertThrowsWithMessage(
 			InvalidCommandNameException.class,
 			"Invalid command with name 'null' cannot be registered!",
-			() -> new CommandAPICommand((String) null)
+			() -> new CommandAPICommand(null)
 		);
 
 		assertThrowsWithMessage(
@@ -145,7 +143,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			MissingCommandExecutorException.class,
-			"/test does not declare any executors or executable subcommands!",
+			"The command path test<LiteralArgument> is not executable!",
 			commandWithNoExecutors::register
 		);
 
@@ -155,7 +153,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			MissingCommandExecutorException.class,
-			"/test does not declare any executors or executable subcommands!",
+			"The command path sub<LiteralArgument> is not executable!",
 			commandWithNoRunnableSubcommands::register
 		);
 
@@ -174,10 +172,6 @@ class CommandRegistrationTests extends TestBase {
 		assertDoesNotThrow(() -> commandWithEventuallyRunnableSubcommand.register());
 	}
 
-	// TODO: This test does not succeed
-	//  Calling `register` on CommandTree without any `executes` defined simply does not create any commands
-	//  These cases should throw MissingCommandExecutorExceptions
-	@Disabled
 	@Test
 	void testCommandTreeMissingCommandExecutorException() {
 		// This command has no executor, should complain because this isn't runnable
@@ -185,7 +179,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			MissingCommandExecutorException.class,
-			"",
+			"The command path test<LiteralArgument> is not executable!",
 			commandWithNoExecutors::register
 		);
 
@@ -195,7 +189,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			MissingCommandExecutorException.class,
-			"",
+			"The command path [test<MultiLiteralArgument>] ending with sub<LiteralArgument> is not executable!",
 			commandWithNoRunnableSubcommands::register
 		);
 
@@ -222,16 +216,13 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			MissingCommandExecutorException.class,
-			"",
+			"The command path [test<MultiLiteralArgument> notExecutable1<LiteralArgument>] ending with sub<LiteralArgument> is not executable!",
 			commandTreeWithSomeNotExecutablePaths::register
 		);
 	}
 
 	@Test
 	void testCommandAPICommandDuplicateNodeNameException() {
-		// Make sure dispatcher is cleared from any previous tests
-		CommandAPIHandler.getInstance().writeDispatcherToFile();
-
 		// This command is not okay because it has duplicate names for Arguments 1 and 3
 		CommandAPICommand commandWithDuplicateArgumentNames = new CommandAPICommand("test")
 			.withArguments(
@@ -241,12 +232,11 @@ class CommandRegistrationTests extends TestBase {
 			)
 			.executesPlayer(P_EXEC);
 
-		commandWithDuplicateArgumentNames.register();
-		// No commands in tree
-		assertEquals("""
-			{
-			  "type": "root"
-			}""", getDispatcherString());
+		assertThrowsWithMessage(
+			DuplicateNodeNameException.class,
+			"Duplicate node names for non-literal arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<StringArgument> bob<StringArgument>] branch, found alice<StringArgument>, which had a duplicate node name",
+			commandWithDuplicateArgumentNames::register
+		);
 
 		// This command is okay because LiteralArguments are exempt from the duplicate name rule
 		CommandAPICommand commandWithDuplicateLiteralArgumentNames = new CommandAPICommand("test")
@@ -257,35 +247,7 @@ class CommandRegistrationTests extends TestBase {
 			)
 			.executesPlayer(P_EXEC);
 
-		commandWithDuplicateLiteralArgumentNames.register();
-		// Command added to tree
-		assertEquals("""
-				{
-				  "type": "root",
-				  "children": {
-				    "test": {
-				      "type": "literal",
-				      "children": {
-				        "alice": {
-				          "type": "literal",
-				          "children": {
-				            "bob": {
-				              "type": "literal",
-				              "children": {
-				                "alice": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        }
-				      }
-				    }
-				  }
-				}""",
-			getDispatcherString()
-		);
+		assertDoesNotThrow(commandWithDuplicateLiteralArgumentNames::register);
 
 		// This command is okay because MultiLiteralArguments are exempt from the duplicate name rule
 		CommandAPICommand commandWithDuplicateMultiLiteralArgumentNames = new CommandAPICommand("test")
@@ -296,104 +258,11 @@ class CommandRegistrationTests extends TestBase {
 			)
 			.executesPlayer(P_EXEC);
 
-		commandWithDuplicateMultiLiteralArgumentNames.register();
-		// Command added to tree
-		assertEquals("""
-				{
-				  "type": "root",
-				  "children": {
-				    "test": {
-				      "type": "literal",
-				      "children": {
-				        "alice": {
-				          "type": "literal",
-				          "children": {
-				            "bob": {
-				              "type": "literal",
-				              "children": {
-				                "alice": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        },
-				        "option1": {
-				          "type": "literal",
-				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        },
-				        "option2": {
-				          "type": "literal",
-				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        }
-				      }
-				    }
-				  }
-				}""",
-			getDispatcherString()
-		);
+		assertDoesNotThrow(commandWithDuplicateMultiLiteralArgumentNames::register);
 	}
 
 	@Test
 	void testCommandTreeDuplicateNodeNameException() {
-		// Make sure dispatcher is cleared from any previous tests
-		CommandAPIHandler.getInstance().writeDispatcherToFile();
-
 		// This command is not okay because it has duplicate names for Arguments 1 and 3
 		CommandTree commandWithDuplicateArgumentNames = new CommandTree("test")
 			.then(
@@ -405,12 +274,11 @@ class CommandRegistrationTests extends TestBase {
 				)
 			);
 
-		commandWithDuplicateArgumentNames.register();
-		// No commands in tree
-		assertEquals("""
-			{
-			  "type": "root"
-			}""", getDispatcherString());
+		assertThrowsWithMessage(
+			DuplicateNodeNameException.class,
+			"Duplicate node names for non-literal arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<StringArgument> bob<StringArgument>] branch, found alice<StringArgument>, which had a duplicate node name",
+			commandWithDuplicateArgumentNames::register
+		);
 
 		// This command is okay because LiteralArguments are exempt from the duplicate name rule
 		CommandTree commandWithDuplicateLiteralArgumentNames = new CommandTree("test")
@@ -423,35 +291,7 @@ class CommandRegistrationTests extends TestBase {
 				)
 			);
 
-		commandWithDuplicateLiteralArgumentNames.register();
-		// Command added to tree
-		assertEquals("""
-				{
-				  "type": "root",
-				  "children": {
-				    "test": {
-				      "type": "literal",
-				      "children": {
-				        "alice": {
-				          "type": "literal",
-				          "children": {
-				            "bob": {
-				              "type": "literal",
-				              "children": {
-				                "alice": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        }
-				      }
-				    }
-				  }
-				}""",
-			getDispatcherString()
-		);
+		assertDoesNotThrow(commandWithDuplicateLiteralArgumentNames::register);
 
 		// This command is okay because MultiLiteralArguments are exempt from the duplicate name rule
 		CommandTree commandWithDuplicateMultiLiteralArgumentNames = new CommandTree("test")
@@ -464,97 +304,7 @@ class CommandRegistrationTests extends TestBase {
 				)
 			);
 
-		commandWithDuplicateMultiLiteralArgumentNames.register();
-		// Command added to tree
-		assertEquals("""
-				{
-				  "type": "root",
-				  "children": {
-				    "test": {
-				      "type": "literal",
-				      "children": {
-				        "alice": {
-				          "type": "literal",
-				          "children": {
-				            "bob": {
-				              "type": "literal",
-				              "children": {
-				                "alice": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        },
-				        "option1": {
-				          "type": "literal",
-				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        },
-				        "option2": {
-				          "type": "literal",
-				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        }
-				      }
-				    }
-				  }
-				}""",
-			getDispatcherString()
-		);
+		assertDoesNotThrow(commandWithDuplicateMultiLiteralArgumentNames::register);
 
 		// This command is okay because the duplicate names are on different paths
 		CommandTree commandWithDuplicateNamesSeparated = new CommandTree("test")
@@ -563,148 +313,6 @@ class CommandRegistrationTests extends TestBase {
 			.then(new LiteralArgument("path3").then(new StringArgument("alice").executesPlayer(P_EXEC)))
 			.then(new LiteralArgument("path4").then(new StringArgument("alice").executesPlayer(P_EXEC)));
 
-		commandWithDuplicateNamesSeparated.register();
-		// Command added to tree
-		assertEquals("""
-				{
-				  "type": "root",
-				  "children": {
-				    "test": {
-				      "type": "literal",
-				      "children": {
-				        "alice": {
-				          "type": "literal",
-				          "children": {
-				            "bob": {
-				              "type": "literal",
-				              "children": {
-				                "alice": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        },
-				        "option1": {
-				          "type": "literal",
-				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        },
-				        "option2": {
-				          "type": "literal",
-				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
-				          }
-				        },
-				        "path1": {
-				          "type": "literal",
-				          "children": {
-				            "alice": {
-				              "type": "argument",
-				              "parser": "brigadier:string",
-				              "properties": {
-				                "type": "word"
-				              },
-				              "executable": true
-				            }
-				          }
-				        },
-				        "path2": {
-				          "type": "literal",
-				          "children": {
-				            "alice": {
-				              "type": "argument",
-				              "parser": "brigadier:string",
-				              "properties": {
-				                "type": "word"
-				              },
-				              "executable": true
-				            }
-				          }
-				        },
-				        "path3": {
-				          "type": "literal",
-				          "children": {
-				            "alice": {
-				              "type": "argument",
-				              "parser": "brigadier:string",
-				              "properties": {
-				                "type": "word"
-				              },
-				              "executable": true
-				            }
-				          }
-				        },
-				        "path4": {
-				          "type": "literal",
-				          "children": {
-				            "alice": {
-				              "type": "argument",
-				              "parser": "brigadier:string",
-				              "properties": {
-				                "type": "word"
-				              },
-				              "executable": true
-				            }
-				          }
-				        }
-				      }
-				    }
-				  }
-				}""",
-			getDispatcherString()
-		);
+		assertDoesNotThrow(commandWithDuplicateNamesSeparated::register);
 	}
 }

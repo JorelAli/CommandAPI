@@ -158,6 +158,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return A list of paths that represent the possible branches of this argument tree as Argument objects.
 	 */
 	protected List<List<Argument>> getBranchesAsList() {
+		if (arguments.isEmpty()) return List.of(List.of());
+
 		List<List<Argument>> branchesList = new ArrayList<>();
 
 		for (AbstractArgumentTree<?, Argument, CommandSender> branch : arguments) {
