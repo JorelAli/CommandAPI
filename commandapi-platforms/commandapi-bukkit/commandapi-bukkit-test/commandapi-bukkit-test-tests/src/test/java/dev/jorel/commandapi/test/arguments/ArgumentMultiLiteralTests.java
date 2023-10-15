@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test.arguments;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.ItemStackArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -39,9 +40,306 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	/*********
 	 * Tests *
 	 *********/
+	@Test
+	void commandBuildingTestWithMultiLiteralArgument() {
+		// 2 MultiLiterals in a row should unpack into 9 commands
+		new CommandAPICommand("command1")
+			.withArguments(
+				new MultiLiteralArgument("literal1", "option1", "option2", "option3"),
+				new MultiLiteralArgument("literal2", "option1", "option2", "option3")
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		new CommandTree("command2")
+			.then(
+				new MultiLiteralArgument("literal1", "option1", "option2", "option3").then(
+					new MultiLiteralArgument("literal2", "option1", "option2", "option3")
+						.executesPlayer(P_EXEC)
+				)
+			)
+			.register();
+
+		// Combining arguments shouldn't affect unpacking
+		new CommandAPICommand("command3")
+			.withArguments(
+				new MultiLiteralArgument("literal1", "option1", "option2").combineWith(
+					new MultiLiteralArgument("literal2", "option1", "option2"),
+					new MultiLiteralArgument("literal3", "option1", "option2")
+				)
+			)
+			.executesPlayer(P_EXEC)
+			.register();
+
+		new CommandTree("command4")
+			.then(
+				new MultiLiteralArgument("literal1", "option1", "option2").combineWith(
+						new MultiLiteralArgument("literal2", "option1", "option2"),
+						new MultiLiteralArgument("literal3", "option1", "option2")
+					)
+					.executesPlayer(P_EXEC)
+			)
+			.register();
+
+		// Make sure all the commands were set up in the tree correctly
+		assertEquals("""
+				{
+				  "type": "root",
+				  "children": {
+				    "command1": {
+				      "type": "literal",
+				      "children": {
+				        "option1": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option3": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        }
+				      }
+				    },
+				    "command2": {
+				      "type": "literal",
+				      "children": {
+				        "option1": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option3": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        }
+				      }
+				    },
+				    "command3": {
+				      "type": "literal",
+				      "children": {
+				        "option1": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            }
+				          }
+				        }
+				      }
+				    },
+				    "command4": {
+				      "type": "literal",
+				      "children": {
+				        "option1": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            }
+				          }
+				        }
+				      }
+				    }
+				  }
+				}""",
+			getDispatcherString()
+		);
+	}
 
 	@Test
-	public void executionTestWithMultiLiteralArgument() {
+	void executionTestWithMultiLiteralArgument() {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -68,7 +366,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithMultiLiteralArgumentNodeName() {
+	void executionTestWithMultiLiteralArgumentNodeName() {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -92,7 +390,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithMultipleMultiLiteralArguments() {
+	void executionTestWithMultipleMultiLiteralArguments() {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -130,7 +428,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithSubcommands() {
+	void executionTestWithSubcommands() {
 		// Doing these because subcommands are converted into MultiLiteralArguments
 		Mut<Object> results = Mut.of();
 
@@ -162,7 +460,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	}
 
 	@Test
-	public void executionTestWithArrayConstructor() {
+	void executionTestWithArrayConstructor() {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -191,7 +489,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 	 ********************/
 
 	@Test
-	public void suggestionTestWithMultiLiteralArgument() {
+	void suggestionTestWithMultiLiteralArgument() {
 		new CommandAPICommand("test")
 			.withArguments(new MultiLiteralArgument("literals", "literal", "literal1", "literal2"))
 			.executesPlayer(P_EXEC)
@@ -201,5 +499,4 @@ public class ArgumentMultiLiteralTests extends TestBase {
 
 		assertEquals(List.of("literal", "literal1", "literal2"), server.getSuggestions(player, "test "));
 	}
-
 }
