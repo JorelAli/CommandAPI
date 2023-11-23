@@ -109,6 +109,11 @@ public class PaperImplementations {
 	 */
 	public WrapperCommandSyntaxException getExceptionFromString(String message) {
 		if (isPaperPresent) {
+			// I don't know why, but if you set this to an Object first, then cast it to a Component,
+			// running this code is totally fine on a Spigot server. If you don't do this (e.g. set
+			// it to a Component or inline this), for some reason Java throws a stronk at runtime.
+			// For your sanity and the sanity of whoever has to maintain this in the future, please
+			// DO NOT try to simplify this statement:
 			final Object adventureComponent = LegacyComponentSerializer.legacySection().deserialize(message);
 			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromAdventureComponent((Component) adventureComponent)).create());
 		} else {
