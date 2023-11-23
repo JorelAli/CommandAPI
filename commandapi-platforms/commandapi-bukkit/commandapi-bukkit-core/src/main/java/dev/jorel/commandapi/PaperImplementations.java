@@ -4,6 +4,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -107,11 +108,11 @@ public class PaperImplementations {
 	 */
 	public WrapperCommandSyntaxException getExceptionFromLegacyString(String message) {
 		if (isPaperPresent) {
-			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromAdventureComponent(LegacyComponentSerializer.legacySection().deserialize(message))).create());
+			final Object adventureComponent = LegacyComponentSerializer.legacySection().deserialize(message);
+			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromAdventureComponent((Component) adventureComponent)).create());
 		} else {
 			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromBaseComponents(TextComponent.fromLegacyText(message))).create());
 		}
-	}
-	
+	}	
 
 }
