@@ -107,7 +107,7 @@ public class PaperImplementations {
 	 * @param message the error message to be displayed
 	 * @return A {@link WrapperCommandSyntaxException} with the given message as error message
 	 */
-	public WrapperCommandSyntaxException getExceptionFromLegacyString(String message) {
+	public WrapperCommandSyntaxException getExceptionFromString(String message) {
 		if (isPaperPresent) {
 			final Object adventureComponent = LegacyComponentSerializer.legacySection().deserialize(message);
 			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromAdventureComponent((Component) adventureComponent)).create());
