@@ -265,7 +265,7 @@ public class NMS_1_20_R2 extends NMS_Common {
 
 	@Override
 	public final String convert(ParticleData<?> particle) {
-		return CraftParticle.toNMS(particle.particle(), particle.data()).writeToString();
+		return CraftParticle.createParticleParam(particle.particle(), particle.data()).writeToString();
 	}
 
 	// Converts NMS function to SimpleFunctionWrapper
