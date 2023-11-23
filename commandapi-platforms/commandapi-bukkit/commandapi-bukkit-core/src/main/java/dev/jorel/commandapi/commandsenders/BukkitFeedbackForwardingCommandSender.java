@@ -1,7 +1,8 @@
 package dev.jorel.commandapi.commandsenders;
+
 import org.bukkit.command.CommandSender;
 
-public class BukkitFeedbackForwardingCommandSender<FeedbackForwardingSender extends CommandSender> implements AbstractCommandSender<FeedbackForwardingSender>, BukkitCommandSender<FeedbackForwardingSender> {
+public class BukkitFeedbackForwardingCommandSender<FeedbackForwardingSender extends CommandSender> implements AbstractFeedbackForwardingCommandSender<FeedbackForwardingSender>, BukkitCommandSender<FeedbackForwardingSender> {
 
 	private final FeedbackForwardingSender sender;
 	

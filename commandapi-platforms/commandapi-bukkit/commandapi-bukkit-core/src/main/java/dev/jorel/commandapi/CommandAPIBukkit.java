@@ -19,18 +19,16 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import dev.jorel.commandapi.commandsenders.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
@@ -49,16 +47,6 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitEntity;
-import dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -199,10 +187,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	public void onEnable() {
 		JavaPlugin plugin = config.getPlugin();
 
-		// Prevent command registration after server has loaded
 		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
-			CommandAPI.stopCommandRegistration();
-
 			// Sort out permissions after the server has finished registering them all
 			fixPermissions();
 			if (paper.isFoliaPresent()) {
@@ -212,6 +197,16 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
+
+		// Prevent command registration after server has loaded
+		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+			// We want the lowest priority so that we always get to this first, in case a dependent plugin is using
+			//  CommandAPI features in their own ServerLoadEvent listener for some reason
+			@EventHandler(priority = EventPriority.LOWEST)
+			public void onServerLoad(ServerLoadEvent event) {
+				CommandAPI.stopCommandRegistration();
+			}
+		}, getConfiguration().getPlugin());
 
 		paper.registerReloadHandler(plugin);
 	}
@@ -422,6 +417,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 		if (sender instanceof ProxiedCommandSender proxy) {
 			return new BukkitProxiedCommandSender(proxy);	
+		}
+		if (sender instanceof RemoteConsoleCommandSender remote) {
+			return new BukkitRemoteConsoleCommandSender(remote);
 		}
 		if (paper.isPaperPresent()) {
 			final Class<? extends CommandSender> FeedbackForwardingSender = paper.getFeedbackForwardingCommandSender();
