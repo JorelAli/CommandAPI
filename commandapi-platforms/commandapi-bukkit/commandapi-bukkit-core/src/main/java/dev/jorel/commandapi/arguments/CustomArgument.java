@@ -22,7 +22,6 @@ package dev.jorel.commandapi.arguments;
 
 import java.io.Serializable;
 
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
