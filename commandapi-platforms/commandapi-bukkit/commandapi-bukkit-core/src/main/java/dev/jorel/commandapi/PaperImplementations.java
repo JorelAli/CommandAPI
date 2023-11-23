@@ -1,14 +1,19 @@
 package dev.jorel.commandapi;
 
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.nms.NMS;
+import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-
-import dev.jorel.commandapi.nms.NMS;
-import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 
 public class PaperImplementations {
 
@@ -95,6 +100,25 @@ public class PaperImplementations {
 	public Class<? extends CommandSender> getFeedbackForwardingCommandSender() {
 		return this.feedbackForwardingCommandSender;
 	}
-	
+
+	/**
+	 * Builds a {@link WrapperCommandSyntaxException} from a message with colour codes like {@link ChatColor} or using the § symbol.
+	 *
+	 * @param message the error message to be displayed
+	 * @return A {@link WrapperCommandSyntaxException} with the given message as error message
+	 */
+	public WrapperCommandSyntaxException getExceptionFromString(String message) {
+		if (isPaperPresent) {
+			// I don't know why, but if you set this to an Object first, then cast it to a Component,
+			// running this code is totally fine on a Spigot server. If you don't do this (e.g. set
+			// it to a Component or inline this), for some reason Java throws a stronk at runtime.
+			// For your sanity and the sanity of whoever has to maintain this in the future, please
+			// DO NOT try to simplify this statement:
+			final Object adventureComponent = LegacyComponentSerializer.legacySection().deserialize(message);
+			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromAdventureComponent((Component) adventureComponent)).create());
+		} else {
+			return new WrapperCommandSyntaxException(new SimpleCommandExceptionType(BukkitTooltip.messageFromBaseComponents(TextComponent.fromLegacyText(message))).create());
+		}
+	}	
 
 }
