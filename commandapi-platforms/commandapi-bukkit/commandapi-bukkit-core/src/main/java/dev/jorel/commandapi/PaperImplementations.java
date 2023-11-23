@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
@@ -101,10 +102,10 @@ public class PaperImplementations {
 	}
 
 	/**
-	 * Builds a {@link WrapperCommandSyntaxException} from a legacy message
+	 * Builds a {@link WrapperCommandSyntaxException} from a message with colour codes like {@link ChatColor} or using the § symbol.
 	 *
-	 * @param message
-	 * @return
+	 * @param message the error message to be displayed
+	 * @return A {@link WrapperCommandSyntaxException} with the given message as error message
 	 */
 	public WrapperCommandSyntaxException getExceptionFromLegacyString(String message) {
 		if (isPaperPresent) {
