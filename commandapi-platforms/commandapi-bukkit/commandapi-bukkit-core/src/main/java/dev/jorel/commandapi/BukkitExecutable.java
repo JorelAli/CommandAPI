@@ -406,7 +406,53 @@ extends BukkitExecutable<Impl>
 		getExecutor().addResultingExecutor(info);
 		return instance();
 	}
-	
+
+	// RemoteConsole command executor
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param executor A lambda of type <code>(RemoteConsoleCommandExecutor, CommandArguments) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesRemoteConsole(RemoteConsoleCommandExecutor executor) {
+		getExecutor().addNormalExecutor(executor);
+		return instance();
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesRemoteConsole(RemoteConsoleExecutionInfo info) {
+		getExecutor().addNormalExecutor(info);
+		return instance();
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param executor A lambda of type <code>(RemoteConsoleResultingCommandExecutor, CommandArguments) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesRemoteConsole(RemoteConsoleResultingCommandExecutor executor) {
+		getExecutor().addResultingExecutor(executor);
+		return instance();
+	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 *
+	 * @param info A lambda of type <code>(ExecutionInfo) -&gt; int</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	default Impl executesRemoteConsole(RemoteConsoleResultingExecutionInfo info) {
+		getExecutor().addResultingExecutor(info);
+		return instance();
+	}
+
 	// Feedback-forwarding command executor
 	
 	/**

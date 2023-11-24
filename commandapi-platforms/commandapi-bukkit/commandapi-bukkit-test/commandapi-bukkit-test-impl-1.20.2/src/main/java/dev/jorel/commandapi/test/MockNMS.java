@@ -409,8 +409,7 @@ public class MockNMS extends Enums {
 		// change your mind, here's how to access it via the registry. This doesn't
 		// scale well for pre 1.19 versions though!
 		// BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.toNMS(particle).getType()).toString();
-		CraftParticle craftParticle = CraftParticle.valueOf(particle.name());
-		return MockPlatform.getFieldAs(CraftParticle.class, "minecraftKey", craftParticle, ResourceLocation.class).toString();
+		return particle.getKey().toString();
 	}
 
 	@Override

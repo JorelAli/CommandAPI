@@ -426,6 +426,9 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
             <td valign="top">
                 <ul>
                     <li>Adds <code>ExecutionInfo</code> executors for the Kotlin DSL</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/497 Adds support for <code>RemoteConsoleCommandSender</code></li>
+                    <li>Fixed <code>executesFeedbackForwarding()</code> not checking for a <code>FeedbackForwardingCommandSender</code> correctly thus allowing every executor to execute the command</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/473 Fix RGB colors in <code>CustomArgument.CustomArgumentException#fromString</code> creating the wrong colors</li>
                 </ul>
             </td>
         </tr>

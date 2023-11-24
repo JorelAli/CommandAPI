@@ -344,7 +344,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 
 			if (errorMessage != null) {
 				// Deal with String
-				return new SimpleCommandExceptionType(new LiteralMessage(errorMessage)).create();
+				return CommandAPIBukkit.get().getPaper().getExceptionFromString(errorMessage).getException();
 			}
 
 			throw new IllegalStateException("No error component, error message creator or error message specified");

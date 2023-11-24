@@ -28,12 +28,7 @@ import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
-import dev.jorel.commandapi.commandsenders.AbstractBlockCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractConsoleCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractEntity;
-import dev.jorel.commandapi.commandsenders.AbstractPlayer;
-import dev.jorel.commandapi.commandsenders.AbstractProxiedCommandSender;
+import dev.jorel.commandapi.commandsenders.*;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.executors.ExecutorType;
@@ -121,7 +116,9 @@ extends AbstractCommandSender<? extends CommandSender>
 			return execute(executors, info, ExecutorType.BLOCK);
 		} else if (info.senderWrapper() instanceof AbstractProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
 			return execute(executors, info, ExecutorType.PROXY);
-		} else if (info.senderWrapper() instanceof AbstractCommandSender && matches(executors, ExecutorType.FEEDBACK_FORWARDING)) {
+		} else if (info.senderWrapper() instanceof AbstractRemoteConsoleCommandSender && matches(executors, ExecutorType.REMOTE)) {
+			return execute(executors, info, ExecutorType.REMOTE);
+		} else if (info.senderWrapper() instanceof AbstractFeedbackForwardingCommandSender && matches(executors, ExecutorType.FEEDBACK_FORWARDING)) {
 			return execute(executors, info, ExecutorType.FEEDBACK_FORWARDING);
 		} else if (matches(executors, ExecutorType.ALL)) {
 			return execute(executors, info, ExecutorType.ALL);

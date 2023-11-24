@@ -18,7 +18,7 @@ I think the easiest way to explain it is with an example:
 
 - First, we create a new `CommandAPICommand`, with the name of the command that the sender must enter to run it.
 
-- When, we create an argument to add to the command using `withArguments`. This is described in more detail in [the section on arguments](./arguments.html).
+- Then, we create an argument to add to the command using `withArguments`. This is described in more detail in [the section on arguments](./arguments.html).
 
 - In this example, we add an alias, "broadcast", to the command. This allows the sender to use either `/broadcastmsg <message>` or `/broadcast <message>`.
 
