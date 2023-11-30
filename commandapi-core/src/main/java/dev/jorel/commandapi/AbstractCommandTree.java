@@ -1,7 +1,6 @@
 package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.AbstractArgument;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +44,23 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Registers the command
+	 * Registers the command with the minecraft: namespace
 	 */
 	public void register() {
 		register("minecraft");
 	}
 
+	/**
+	 * Registers the command with a given namespace
+	 *
+	 * @param namespace The namespace of this command. This cannot be null
+	 * @throws NullPointerException if the namespace is null
+	 */
 	@Override
-	public void register(@NotNull String namespace) {
+	public void register(String namespace) {
+		if (namespace == null) {
+			throw new NullPointerException("Parameter 'namespace' was null when registering a CommandTree!");
+		}
 		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
 		if (this.executor.hasAnyExecutors()) {
 			executions.add(new Execution<>(List.<Argument>of(), this.executor));
@@ -61,7 +69,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			executions.addAll(tree.getExecutions());
 		}
 		for (Execution<CommandSender, Argument> execution : executions) {
-			execution.register(this.meta);
+			execution.register(this.meta, namespace);
 		}
 	}
 }

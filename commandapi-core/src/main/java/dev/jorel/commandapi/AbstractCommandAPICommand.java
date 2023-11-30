@@ -31,7 +31,8 @@ import dev.jorel.commandapi.arguments.GreedyArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
-import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -271,13 +272,25 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 	}
 
+	/**
+	 * Registers the command with the minecraft: namespace
+	 */
 	@Override
 	public void register() {
 		register("minecraft");
 	}
 
+	/**
+	 * Registers the command with a given namespace
+	 *
+	 * @param namespace The namespace of this command. This cannot be null
+	 * @throws NullPointerException if the namespace is null
+	 */
 	@Override
-	public void register(@NotNull String namespace) {
+	public void register(String namespace) {
+		if (namespace == null) {
+			throw new NullPointerException("Parameter 'namespace' was null when registering a CommandAPICommand!");
+		}
 		@SuppressWarnings("unchecked")
 		Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
 
