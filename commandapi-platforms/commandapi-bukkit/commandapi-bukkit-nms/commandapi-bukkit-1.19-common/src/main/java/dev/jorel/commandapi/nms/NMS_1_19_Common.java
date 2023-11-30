@@ -933,4 +933,9 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 			return null;
 		}
 	}
+
+	@Override
+	public void syncCommands() {
+		((CraftServer) Bukkit.getServer()).syncCommands();
+	}
 }

@@ -52,7 +52,12 @@ public record RegisteredCommand(
 	/**
 	 * @return The {@link CommandPermission} required to run this command
 	 */
-	CommandPermission permission) {
+	CommandPermission permission,
+
+	/**
+	 * @return The namespace for this command
+	 */
+	String namespace) {
 	// As https://stackoverflow.com/a/32083420 mentions, Optional's hashCode, equals, and toString method don't work if the
 	//  Optional wraps an array, like `Optional<String[]> usageDescription`, so we have to use the Arrays methods ourselves
 
@@ -62,7 +67,7 @@ public record RegisteredCommand(
 		int result = 1;
 		result = prime * result + Arrays.hashCode(aliases);
 		result = prime * result + Arrays.hashCode(usageDescription.orElse(null));
-		result = prime * result + Objects.hash(argsAsStr, commandName, fullDescription, permission, shortDescription);
+		result = prime * result + Objects.hash(argsAsStr, commandName, fullDescription, permission, shortDescription, namespace);
 		return result;
 	}
 
@@ -76,7 +81,7 @@ public record RegisteredCommand(
 		}
 		RegisteredCommand other = (RegisteredCommand) obj;
 		return Arrays.equals(aliases, other.aliases) && Objects.equals(argsAsStr, other.argsAsStr) && Objects.equals(commandName, other.commandName)
-			&& Arrays.equals(usageDescription.orElse(null), other.usageDescription.orElse(null))
+			&& Objects.equals(namespace, other.namespace) && Arrays.equals(usageDescription.orElse(null), other.usageDescription.orElse(null))
 			&& Objects.equals(fullDescription, other.fullDescription) && Objects.equals(permission, other.permission) && Objects.equals(shortDescription, other.shortDescription);
 	}
 
@@ -84,7 +89,7 @@ public record RegisteredCommand(
 	public String toString() {
 		return "RegisteredCommand [commandName=" + commandName + ", argsAsStr=" + argsAsStr + ", shortDescription=" + shortDescription + ", fullDescription=" + fullDescription
 			+ ", usageDescription=" + (usageDescription.isPresent() ? "Optional[" + Arrays.toString(usageDescription.get()) + "]" : "Optional.empty")
-			+ ", aliases=" + Arrays.toString(aliases) + ", permission=" + permission + "]";
+			+ ", aliases=" + Arrays.toString(aliases) + ", permission=" + permission + ", namespace=" + namespace + "]";
 	}
 
 }

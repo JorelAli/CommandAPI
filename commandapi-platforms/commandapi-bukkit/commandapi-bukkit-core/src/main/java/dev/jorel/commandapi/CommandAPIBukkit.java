@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
@@ -200,6 +201,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			} else {
 				reloadDataPacks();
 			}
+			setupNamespaces();
 			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
 
@@ -210,6 +212,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			@EventHandler(priority = EventPriority.LOWEST)
 			public void onServerLoad(ServerLoadEvent event) {
 				CommandAPI.stopCommandRegistration();
+			}
+			@EventHandler
+			public void onJoin(PlayerJoinEvent e) {
+				updateRequirements(new BukkitPlayer(e.getPlayer()));
 			}
 		}, getConfiguration().getPlugin());
 
@@ -385,6 +391,34 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 		// We have to use helpTopics.put (instead of .addTopic) because we're overwriting an existing help topic, not adding a new help topic
 		getHelpMap().putAll(helpTopicsToAdd);
+	}
+
+	private void setupNamespaces() {
+		Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
+		List<String> commandsToRemove = new ArrayList<>();
+		Map<String, Command> commandsToAdd = new HashMap<>();
+		Map<String, String> commandsWithPrefix = new HashMap<>();
+		for (RegisteredCommand command : CommandAPI.getRegisteredCommands()) {
+			for (String key : knownCommands.keySet()) {
+				String commandName = (key.contains(":")) ? key.split(":")[1] : key;
+				if (commandName.equals(command.commandName()) || Arrays.asList(command.aliases()).contains(commandName)) {
+					Command registeredCommand = knownCommands.get(commandName);
+					commandsToAdd.put(commandName, registeredCommand);
+					commandsWithPrefix.put(commandName, command.namespace());
+					commandsToRemove.add(key);
+				}
+			}
+		}
+		for (String command : commandsToRemove) {
+			knownCommands.remove(command);
+		}
+		for (String command : commandsToAdd.keySet()) {
+			Command bukkitCommand = commandsToAdd.get(command);
+			knownCommands.put(command, bukkitCommand);
+			knownCommands.put(commandsWithPrefix.get(command) + ":" + command, knownCommands.get(command));
+		}
+		syncCommands();
+		CommandAPIHandler.getInstance().writeDispatcherToFile();
 	}
 
 	@Override
@@ -610,6 +644,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 		}
 	}
+
+	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
+	public abstract void syncCommands();
 
 	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,
 										 boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {

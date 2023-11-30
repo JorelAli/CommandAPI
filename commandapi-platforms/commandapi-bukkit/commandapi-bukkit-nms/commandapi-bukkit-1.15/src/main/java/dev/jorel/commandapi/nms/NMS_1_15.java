@@ -3,6 +3,8 @@ package dev.jorel.commandapi.nms;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -990,4 +992,17 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		}
 	}
 
+	@Override
+	public void syncCommands() {
+		// For some reason, 1.15 is being stupid and has a private syncCommands method
+		// Reflection it is!
+		try {
+			Method syncCommands = Class.forName("org.bukkit.craftbukkit.v1_15_R1.CraftServer").getDeclaredMethod("syncCommands");
+			syncCommands.setAccessible(true);
+			syncCommands.invoke(Bukkit.getServer());
+		} catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+			// Uhh...
+			// I'll just leave this to whoever decides to review this
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.AbstractArgument;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Registers the command
 	 */
 	public void register() {
+		register("minecraft");
+	}
+
+	@Override
+	public void register(@NotNull String namespace) {
 		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
 		if (this.executor.hasAnyExecutors()) {
 			executions.add(new Execution<>(List.<Argument>of(), this.executor));

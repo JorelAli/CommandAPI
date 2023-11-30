@@ -1052,4 +1052,8 @@ public class NMS_1_16_R2 extends NMSWrapper_1_16_R2 {
 		}
 	}
 
+	@Override
+	public void syncCommands() {
+		((CraftServer) Bukkit.getServer()).syncCommands();
+	}
 }

@@ -166,6 +166,11 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
+	public void syncCommands() {
+
+	}
+
+	@Override
 	public CommandAPILogger getLogger() {
 		return CommandAPILogger.fromApacheLog4jLogger(LogManager.getLogger("CommandAPI"));
 	}

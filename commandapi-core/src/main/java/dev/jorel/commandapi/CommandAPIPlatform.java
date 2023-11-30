@@ -120,6 +120,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	public abstract void unregister(String commandName, boolean unregisterNamespaces);
 
+	void syncCommands();
+
 	/**
 	 * @return The Brigadier CommandDispatcher tree being used by the platform's server
 	 */

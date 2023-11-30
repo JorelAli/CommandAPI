@@ -408,7 +408,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean expandMultiLiterals(CommandMetaData<CommandSender> meta, final Argument[] args,
-			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted, String namespace) {
 
 		// "Expands" our MultiLiterals into Literals
 		for (int index = 0; index < args.length; index++) {
@@ -432,7 +432,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 					// Reconstruct the list of arguments and place in the new literals
 					Argument[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
-					register(meta, newArgs, executor, converted);
+					register(meta, newArgs, executor, converted, namespace);
 				}
 				return true;
 			}
@@ -568,10 +568,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	// Builds a command then registers it
 	void register(CommandMetaData<CommandSender> meta, final Argument[] args,
-			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
-
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted, String namespace) {
 		// "Expands" our MultiLiterals into Literals
-		if (expandMultiLiterals(meta, args, executor, converted)) {
+		if (expandMultiLiterals(meta, args, executor, converted, namespace)) {
 			return;
 		}
 
@@ -615,7 +614,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 		}
 		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, shortDescription,
-			fullDescription, usageDescription, aliases, permission);
+			fullDescription, usageDescription, aliases, permission, namespace);
 		registeredCommands.add(registeredCommandInformation);
 
 		// Handle previewable arguments
@@ -639,24 +638,24 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		if (args.length == 0) {
 			// Link command name to the executor
 			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
-					.requires(generatePermissions(commandName, permission, requirements)).executes(command));
+				.requires(generatePermissions(commandName, permission, requirements)).executes(command));
 
 			// Register aliases
 			for (String alias : aliases) {
 				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permission, requirements)).executes(command)));
+					.requires(generatePermissions(alias, permission, requirements)).executes(command)));
 			}
 		} else {
 
 			// Generate all of the arguments, following each other and finally linking to
 			// the executor
 			ArgumentBuilder<Source, ?> commandArguments = generateOuterArguments(
-					generateInnerArgument(command, args), args);
+				generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
 			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
-					.requires(generatePermissions(commandName, permission, requirements)).then(commandArguments));
+				.requires(generatePermissions(commandName, permission, requirements)).then(commandArguments));
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -665,7 +664,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				}
 
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permission, requirements)).then(commandArguments)));
+					.requires(generatePermissions(alias, permission, requirements)).then(commandArguments)));
 			}
 		}
 
@@ -685,7 +684,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes);
 	}
-	
+
 	/**
 	 * Checks for duplicate argument node names and logs them as errors in the
 	 * console

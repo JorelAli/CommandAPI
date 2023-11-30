@@ -1,5 +1,7 @@
 package dev.jorel.commandapi;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -230,7 +232,13 @@ extends ExecutableCommand<Impl, CommandSender>
 	}
 
 	/**
-	 * Registers this command
+	 * Registers this command with the minecraft: namespace
 	 */
 	public abstract void register();
+
+	/**
+	 * Registers this command with a custom {@link String} namespace
+	 */
+	public abstract void register(@NotNull String namespace);
+
 }
