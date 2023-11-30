@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
@@ -132,14 +129,6 @@ public class CommandAPIMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		new CommandAPICommand("test")
-			.withAliases("alpha", "beta")
-			.withArguments(new LiteralArgument("abc"))
-			.executes(info -> {
-				info.sender().sendMessage(Component.text().content("This works!"));
-			})
-			.register("mycoolnamespacewhichworks");
-
 		CommandAPI.onEnable();
 	}
 }

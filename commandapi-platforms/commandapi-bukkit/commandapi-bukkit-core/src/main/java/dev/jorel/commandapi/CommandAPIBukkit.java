@@ -213,10 +213,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			public void onServerLoad(ServerLoadEvent event) {
 				CommandAPI.stopCommandRegistration();
 			}
-			@EventHandler
+			/*@EventHandler
 			public void onJoin(PlayerJoinEvent e) {
 				updateRequirements(new BukkitPlayer(e.getPlayer()));
-			}
+			}*/
 		}, getConfiguration().getPlugin());
 
 		paper.registerReloadHandler(plugin);
