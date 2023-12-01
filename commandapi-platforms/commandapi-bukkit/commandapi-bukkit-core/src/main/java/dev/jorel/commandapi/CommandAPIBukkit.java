@@ -196,12 +196,12 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
 			// Sort out permissions after the server has finished registering them all
 			fixPermissions();
+			setupNamespaces();
 			if (paper.isFoliaPresent()) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
 				reloadDataPacks();
 			}
-			setupNamespaces();
 			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
 
@@ -213,10 +213,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			public void onServerLoad(ServerLoadEvent event) {
 				CommandAPI.stopCommandRegistration();
 			}
-			/*@EventHandler
-			public void onJoin(PlayerJoinEvent e) {
-				updateRequirements(new BukkitPlayer(e.getPlayer()));
-			}*/
 		}, getConfiguration().getPlugin());
 
 		paper.registerReloadHandler(plugin);

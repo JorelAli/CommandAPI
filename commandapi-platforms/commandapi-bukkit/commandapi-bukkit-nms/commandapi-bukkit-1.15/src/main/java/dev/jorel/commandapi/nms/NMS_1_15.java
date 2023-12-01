@@ -1000,7 +1000,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 			Method syncCommands = Class.forName("org.bukkit.craftbukkit.v1_15_R1.CraftServer").getDeclaredMethod("syncCommands");
 			syncCommands.setAccessible(true);
 			syncCommands.invoke(Bukkit.getServer());
-		} catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+		} catch (ReflectiveOperationException e) {
 			// Uhh...
 			// I'll just leave this to whoever decides to review this
 		}
