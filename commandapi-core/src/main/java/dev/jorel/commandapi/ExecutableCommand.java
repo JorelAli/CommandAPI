@@ -9,7 +9,7 @@ import java.util.function.Predicate;
  * @param <Impl> The class extending this class, used as the return type for chain calls
  * @param <CommandSender> The CommandSender class used by the class extending this class
  */
-abstract class ExecutableCommand<Impl
+public abstract class ExecutableCommand<Impl
 /// @cond DOX
 extends ExecutableCommand<Impl, CommandSender>
 /// @endcond
