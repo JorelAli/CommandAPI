@@ -57,6 +57,15 @@
 			<version>${paper.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Included in Spigot jars, used for ExceptionHandlingArgumentSerializer_Common serialization logic -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-buffer</artifactId>
+			<version>4.1.82.Final</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- CommandAPI core -->
 		<dependency>
 			<groupId>dev.jorel</groupId>

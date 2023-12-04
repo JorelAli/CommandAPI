@@ -15,7 +15,7 @@ public class SafeVarHandle<Type, FieldType> {
 
 	public static boolean USING_MOJANG_MAPPINGS = false; // This should only be set to true in testing.
 
-	private VarHandle handle;
+	private final VarHandle handle;
 
 	private SafeVarHandle(VarHandle handle) {
 		this.handle = handle;
@@ -37,6 +37,10 @@ public class SafeVarHandle<Type, FieldType> {
 	}
 
 	public FieldType get(Type instance) {
+		return (FieldType) handle.get(instance);
+	}
+
+	public FieldType getUnknownInstanceType(Object instance) {
 		return (FieldType) handle.get(instance);
 	}
 

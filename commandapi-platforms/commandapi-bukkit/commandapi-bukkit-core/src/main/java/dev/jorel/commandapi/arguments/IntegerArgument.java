@@ -23,15 +23,19 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionNumberArgument;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
+
+import java.util.Map;
 
 /**
  * An argument that represents primitive Java ints
  * 
  * @since 1.1
  */
-public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> {
+public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer>
+		implements InitialParseExceptionNumberArgument<Integer> {
 	/**
 	 * An integer argument
 	 *
@@ -78,5 +82,38 @@ public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> 
 	@Override
 	public <Source> Integer parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.int.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.int.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.integer.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.integer.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
+	@Override
+	public Integer getMinimum() {
+		return ((IntegerArgumentType) getRawType()).getMinimum();
+	}
+
+	@Override
+	public Integer getMaximum() {
+		return ((IntegerArgumentType) getRawType()).getMaximum();
+	}
+
+	@Override
+	public Integer getZero() {
+		return 0;
+	}
+
+	@Override
+	public Integer parseNumber(String s) {
+		return Integer.parseInt(s);
 	}
 }

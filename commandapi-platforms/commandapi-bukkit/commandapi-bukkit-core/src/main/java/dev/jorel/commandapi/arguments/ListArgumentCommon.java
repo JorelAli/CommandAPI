@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import dev.jorel.commandapi.arguments.parseexceptions.ArgumentParseExceptionArgument;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -32,7 +33,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ListArgumentCommon<T> extends Argument<List> {
+public class ListArgumentCommon<T> extends Argument<List> implements
+		ArgumentParseExceptionArgument<T, String, ListArgumentCommon.ArgumentParseExceptionInformation<T>, Argument<List>, CommandSender> {
 	private final String delimiter;
 	private final boolean allowDuplicates;
 	private final Function<SuggestionInfo<CommandSender>, Collection<T>> supplier;
@@ -53,7 +55,7 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	private void applySuggestions() {
 		this.replaceSuggestions((info, builder) -> {
 			String currentArg = info.currentArg();
-			if(text && currentArg.startsWith("\"")) {
+			if (text && currentArg.startsWith("\"")) {
 				// Ignore initial " when suggesting for TextArgument
 				currentArg = currentArg.substring(1);
 				builder = builder.createOffset(builder.getStart() + 1);
@@ -119,11 +121,51 @@ public class ListArgumentCommon<T> extends Argument<List> {
 		return CommandAPIArgumentType.LIST;
 	}
 
+	/**
+	 * Information about why a list argument failed to parse.
+	 *
+	 * @param type        The type of exception that happened.
+	 * @param listSoFar   The current list of items when the exception happened.
+	 * @param rawItem     The String that was being parsed when the exception happened.
+	 * @param currentItem The item that was going to be added when the exception happened. Defaults to null if the
+	 *                    exception type was {@link Exceptions#INVALID_ITEM} since the {@code rawItem} could not be
+	 *                    converted to an item in the list.
+	 * @param <T>         The type that this list argument generates a list of.
+	 */
+	public record ArgumentParseExceptionInformation<T>(
+			/**
+			 * @param type The type of exception that happened.
+			 */
+			Exceptions type,
+			/**
+			 * @param listSoFar The current list of items when the exception happened.
+			 */
+			List<T> listSoFar,
+			/**
+			 * @param rawItem The String that was being parsed when the exception happened.
+			 */
+			String rawItem,
+			/**
+			 * @param currentItem The item that was going to be added when the exception happened. Defaults to null if the
+			 *                       exception type was {@link Exceptions#INVALID_ITEM} since the {@code rawItem} could not
+			 *                       be converted to an item in the list.
+			 */
+			T currentItem
+	) {
+		/**
+		 * Types of exceptions that might be thrown when the CommandAPI parses a list argument.
+		 */
+		public enum Exceptions {
+			DUPLICATES_NOT_ALLOWED,
+			INVALID_ITEM
+		}
+	}
+
 	@Override
 	public <CommandSourceStack> List<T> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		final CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		final SuggestionInfo<CommandSender> currentInfo = new SuggestionInfo<>(sender, previousArgs, cmdCtx.getInput(), cmdCtx.getArgument(key, String.class));
-		
+
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
 		for (T object : supplier.apply(currentInfo)) {
@@ -148,15 +190,31 @@ public class ListArgumentCommon<T> extends Argument<List> {
 							list.add(entry.getValue());
 						} else {
 							context.setCursor(cursor);
-							throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
+							list.add(handleArgumentParseException(cmdCtx, key, previousArgs,
+									new SimpleCommandExceptionType(new LiteralMessage(
+											"Duplicate arguments are not allowed"
+									)).createWithContext(context),
+									new ArgumentParseExceptionInformation<>(
+											ArgumentParseExceptionInformation.Exceptions.DUPLICATES_NOT_ALLOWED,
+											list, str, entry.getValue()
+									)
+							));
 						}
 					}
 					addedItem = true;
 				}
 			}
-			if(!addedItem) {
+			if (!addedItem) {
 				context.setCursor(cursor);
-				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
+				list.add(handleArgumentParseException(cmdCtx, key, previousArgs,
+						new SimpleCommandExceptionType(new LiteralMessage(
+								"Item is not allowed in list"
+						)).createWithContext(context),
+						new ArgumentParseExceptionInformation<>(
+								ArgumentParseExceptionInformation.Exceptions.INVALID_ITEM,
+								list, str, null
+						)
+				));
 			}
 			cursor += str.length() + delimiter.length();
 		}

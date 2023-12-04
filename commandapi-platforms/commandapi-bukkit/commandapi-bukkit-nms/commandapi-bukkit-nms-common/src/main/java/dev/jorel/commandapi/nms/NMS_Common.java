@@ -635,4 +635,14 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
 	public abstract void reloadDataPacks();
+
+	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19",
+			info = "Using ArgumentTypeInfos and Registry.COMMAND_ARGUMENT_TYPE instead of ArgumentRegistry")
+	public abstract void registerCustomArgumentType();
+
+	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19",
+			info = "Translation is wrapped in a MutableComponent instead of just a TranslatableComponent")
+	public abstract String extractTranslationKey(CommandSyntaxException exception);
 }

@@ -38,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -50,13 +51,10 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.CustomProvidedArgument;
-import dev.jorel.commandapi.arguments.Literal;
-import dev.jorel.commandapi.arguments.MultiLiteral;
-import dev.jorel.commandapi.arguments.PreviewInfo;
-import dev.jorel.commandapi.arguments.Previewable;
+import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionArgument;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionHandler;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
@@ -162,9 +160,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		CommandAPIHandler.instance = null;
 	}
 
-	public static CommandAPIHandler<?, ?, ?> getInstance() {
+	public static <Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source>
+	CommandAPIHandler<Argument, CommandSender, Source> getInstance() {
 		if(CommandAPIHandler.instance != null) {
-			return CommandAPIHandler.instance;
+			return (CommandAPIHandler<Argument, CommandSender, Source>) CommandAPIHandler.instance;
 		} else {
 			throw new IllegalStateException("Tried to access CommandAPIHandler instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
 		}
@@ -813,10 +812,30 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		RequiredArgumentBuilder<Source, ?> requiredArgumentBuilder = RequiredArgumentBuilder
-				.argument(argument.getNodeName(), argument.getRawType());
+				.argument(argument.getNodeName(), wrapArgumentType(argument, argument.getRawType()));
 
 		return requiredArgumentBuilder.requires(css -> permissionCheck(platform.getCommandSenderFromCommandSource(css),
 				argument.getArgumentPermission(), argument.getRequirements())).suggests(newSuggestionsProvider);
+	}
+
+	<T, EI> ArgumentType<T> wrapArgumentType(Argument argument, ArgumentType<T> rawType) {
+		if (argument instanceof WrapperArgument) {
+			// A WrapperArgument should set its raw type to baseArgument's raw type, so that is already correct
+			return wrapArgumentType(((WrapperArgument<Argument>) argument).getBaseArgument(), rawType);
+		}
+
+		if (argument instanceof InitialParseExceptionArgument) {
+			InitialParseExceptionArgument<T, EI, ?> iPEA = (InitialParseExceptionArgument<T, EI, ?>) argument.instance();
+			Optional<InitialParseExceptionHandler<T, EI>> handler = iPEA.getInitialParseExceptionHandler();
+
+			if (handler.isPresent()) {
+				return new InitialParseExceptionHandlingArgumentType<>(
+						rawType, handler.get(), iPEA::parseInitialParseException
+				);
+			}
+		}
+
+		return rawType;
 	}
 
 	CommandArguments generatePreviousArguments(CommandContext<Source> context, Argument[] args, String nodeName)

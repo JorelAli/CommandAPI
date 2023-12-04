@@ -33,6 +33,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionHandlingArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -47,6 +48,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
+import net.minecraft.server.v1_16_R3.ArgumentRegistry;
 
 /**
  * Argument related method implementations
@@ -494,4 +496,10 @@ public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 		return baseNMS.getUUID(cmdCtx, key);
 	}
 
+	@Override
+	public void registerCustomArgumentType() {
+		if(!ArgumentRegistry.a(new InitialParseExceptionHandlingArgumentType<>(null, null, null))) {
+			baseNMS.registerCustomArgumentType();
+		}
+	}
 }

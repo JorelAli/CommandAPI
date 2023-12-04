@@ -20,17 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi.preprocessor;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Literally just a fancy comment that I can put next to stuff to know how it
- * differs from previous versions
+ * differs from previous versions. Retention Policy is source, so it doesn't get
+ * carried over to the compiled code. Again, literally just a fancy comment.
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
+@Repeatable(DiffersRepeatable.class)
 public @interface Differs {
 	
 	/**

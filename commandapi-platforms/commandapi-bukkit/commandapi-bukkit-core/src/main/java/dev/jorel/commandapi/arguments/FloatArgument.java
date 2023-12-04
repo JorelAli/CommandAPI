@@ -23,15 +23,19 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionNumberArgument;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
+
+import java.util.Map;
 
 /**
  * An argument that represents primitive Java floats
  * 
  * @since 1.1
  */
-public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
+public class FloatArgument extends SafeOverrideableArgument<Float, Float> 
+		implements InitialParseExceptionNumberArgument<Float> {
 	/**
 	 * A float argument
 	 *
@@ -78,5 +82,38 @@ public class FloatArgument extends SafeOverrideableArgument<Float, Float> {
 	@Override
 	public <Source> Float parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.float.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.float.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.float.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.float.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
+	@Override
+	public Float getMinimum() {
+		return ((FloatArgumentType) getRawType()).getMinimum();
+	}
+
+	@Override
+	public Float getMaximum() {
+		return ((FloatArgumentType) getRawType()).getMaximum();
+	}
+
+	@Override
+	public Float getZero() {
+		return 0.0F;
+	}
+
+	@Override
+	public Float parseNumber(String s) {
+		return Float.parseFloat(s);
 	}
 }

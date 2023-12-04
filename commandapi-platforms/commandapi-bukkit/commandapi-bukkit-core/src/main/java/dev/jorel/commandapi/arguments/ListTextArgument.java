@@ -21,12 +21,14 @@
 package dev.jorel.commandapi.arguments;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
 
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionTextArgument;
 
 /**
  * An argument that accepts a list of objects
@@ -35,7 +37,8 @@ import dev.jorel.commandapi.SuggestionInfo;
  * 
  * @param <T> the type that this list argument generates a list of.
  */
-public class ListTextArgument<T> extends ListArgumentCommon<T> {
+@SuppressWarnings("rawtypes")
+public class ListTextArgument<T> extends ListArgumentCommon<T> implements InitialParseExceptionTextArgument<Argument<List>> {
 	ListTextArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, true);
 	}

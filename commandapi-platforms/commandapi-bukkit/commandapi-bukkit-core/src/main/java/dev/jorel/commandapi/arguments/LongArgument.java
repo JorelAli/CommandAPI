@@ -23,15 +23,19 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionNumberArgument;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
+
+import java.util.Map;
 
 /**
  * An argument that represents primitive Java longs
  * 
  * @since 3.0
  */
-public class LongArgument extends SafeOverrideableArgument<Long, Long> {
+public class LongArgument extends SafeOverrideableArgument<Long, Long> 
+		implements InitialParseExceptionNumberArgument<Long> {
 	/**
 	 * A long argument
 	 *
@@ -60,7 +64,7 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	 */
 	public LongArgument(String nodeName, long min, long max) {
 		super(nodeName, LongArgumentType.longArg(min, max), String::valueOf);
-		if(max < min) {
+		if (max < min) {
 			throw new InvalidRangeException();
 		}
 	}
@@ -78,5 +82,38 @@ public class LongArgument extends SafeOverrideableArgument<Long, Long> {
 	@Override
 	public <Source> Long parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.long.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.long.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.long.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.long.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
+	@Override
+	public Long getMinimum() {
+		return ((LongArgumentType) getRawType()).getMinimum();
+	}
+
+	@Override
+	public Long getMaximum() {
+		return ((LongArgumentType) getRawType()).getMaximum();
+	}
+
+	@Override
+	public Long getZero() {
+		return 0L;
+	}
+
+	@Override
+	public Long parseNumber(String s) {
+		return Long.parseLong(s);
 	}
 }

@@ -23,8 +23,11 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.arguments.parseexceptions.InitialParseExceptionNumberArgument;
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
 import dev.jorel.commandapi.executors.CommandArguments;
+
+import java.util.Map;
 
 /**
  * An argument that represents primitive Java doubles
@@ -33,7 +36,8 @@ import dev.jorel.commandapi.executors.CommandArguments;
  * 
  * @apiNote Returns a {@link double}
  */
-public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
+public class DoubleArgument extends SafeOverrideableArgument<Double, Double>
+		implements InitialParseExceptionNumberArgument<Double> {
 	/**
 	 * A double argument
 	 *
@@ -80,5 +84,38 @@ public class DoubleArgument extends SafeOverrideableArgument<Double, Double> {
 	@Override
 	public <Source> Double parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
+	}
+
+	// InitialParseExceptionNumberArgument methods
+	private static final Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap = Map.of(
+			"parsing.double.expected", ExceptionInformation.Exceptions.EXPECTED_NUMBER,
+			"parsing.double.invalid", ExceptionInformation.Exceptions.INVALID_NUMBER,
+			"argument.double.low", ExceptionInformation.Exceptions.NUMBER_TOO_LOW,
+			"argument.double.big", ExceptionInformation.Exceptions.NUMBER_TOO_HIGH
+	);
+
+	@Override
+	public Map<String, ExceptionInformation.Exceptions> keyToExceptionTypeMap() {
+		return keyToExceptionTypeMap;
+	}
+
+	@Override
+	public Double getMinimum() {
+		return ((DoubleArgumentType) getRawType()).getMinimum();
+	}
+
+	@Override
+	public Double getMaximum() {
+		return ((DoubleArgumentType) getRawType()).getMaximum();
+	}
+
+	@Override
+	public Double getZero() {
+		return 0.0;
+	}
+
+	@Override
+	public Double parseNumber(String s) {
+		return Double.parseDouble(s);
 	}
 }

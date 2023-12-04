@@ -40,6 +40,7 @@ import org.mockito.Mockito;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
@@ -600,5 +601,10 @@ public class MockNMS extends Enums {
 	@Override
 	public Map<String, HelpTopic> getHelpMap() {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
+	}
+
+	@Override
+	public String extractTranslationKey(CommandSyntaxException exception) {
+		return baseNMS.extractTranslationKey(exception);
 	}
 }
