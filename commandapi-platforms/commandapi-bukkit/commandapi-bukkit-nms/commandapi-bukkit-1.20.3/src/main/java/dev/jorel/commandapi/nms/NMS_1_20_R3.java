@@ -28,16 +28,16 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import dev.jorel.commandapi.wrappers.*;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.commands.arguments.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -56,17 +56,17 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.v1_20_R2.CraftLootTable;
-import org.bukkit.craftbukkit.v1_20_R2.CraftParticle;
-import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_20_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_20_R2.command.BukkitCommandWrapper;
-import org.bukkit.craftbukkit.v1_20_R2.command.VanillaCommandWrapper;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R2.help.CustomHelpTopic;
-import org.bukkit.craftbukkit.v1_20_R2.help.SimpleHelpMap;
-import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.CraftLootTable;
+import org.bukkit.craftbukkit.v1_20_R3.CraftParticle;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftSound;
+import org.bukkit.craftbukkit.v1_20_R3.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_20_R3.command.BukkitCommandWrapper;
+import org.bukkit.craftbukkit.v1_20_R3.command.VanillaCommandWrapper;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.help.CustomHelpTopic;
+import org.bukkit.craftbukkit.v1_20_R3.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -99,15 +99,33 @@ import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
+import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.FunctionWrapper;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.Location2D;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
+import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.CommandFunction;
-import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.CommandFunction.Entry;
+import net.minecraft.commands.arguments.ColorArgument;
+import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.DimensionArgument;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ParticleArgument;
+import net.minecraft.commands.arguments.RangeArgument;
+import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.ScoreboardSlotArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -119,6 +137,10 @@ import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.execution.UnboundEntryAction;
+import net.minecraft.commands.functions.CommandFunction;
+import net.minecraft.commands.functions.InstantiatedFunction;
+import net.minecraft.commands.functions.PlainTextFunction;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess.Frozen;
@@ -166,12 +188,12 @@ import net.minecraft.world.phys.Vec3;
 /**
  * NMS implementation for Minecraft 1.20.2
  */
-@NMSMeta(compatibleWith = { "1.20.2" })
+@NMSMeta(compatibleWith = { "1.20.3" })
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
+public class NMS_1_20_R3 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -255,7 +277,7 @@ public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.20.2" };
+		return new String[] { "1.20.3" };
 	};
 
 	@Override
@@ -269,8 +291,12 @@ public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
 	}
 
 	// Converts NMS function to SimpleFunctionWrapper
-	private final SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions().execute(commandFunction, css);
+	private final SimpleFunctionWrapper convertFunction(CommandFunction<CommandSourceStack> commandFunction) {
+		
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> {
+			
+			this.<MinecraftServer>getMinecraftServer().getFunctions().execute(commandFunction, css);
+		}
 
 		Entry[] cArr = commandFunction.getEntries();
 		String[] result = new String[cArr.length];
@@ -278,6 +304,15 @@ public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
 			result[i] = cArr[i].toString();
 		}
 		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.getId()), appliedObj, result);
+		
+		
+		
+		
+		
+		
+		
+		// TODO: Obviously, implement this!
+		throw new IllegalStateException("(Unimplemented in 1.20.3)");
 	}
 
 	@Override
@@ -422,11 +457,33 @@ public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
 		List<FunctionWrapper> result = new ArrayList<>();
 		CommandSourceStack css = cmdCtx.getSource().withSuppressedOutput().withMaximumPermission(2);
 
-		for (CommandFunction commandFunction : FunctionArgument.getFunctions(cmdCtx, key)) {
+		for (CommandFunction<CommandSourceStack> commandFunction : FunctionArgument.getFunctions(cmdCtx, key)) {
 			result.add(FunctionWrapper.fromSimpleFunctionWrapper(convertFunction(commandFunction), css,
 				entity -> cmdCtx.getSource().withEntity(((CraftEntity) entity).getHandle())));
 		}
 		return result.toArray(new FunctionWrapper[0]);
+	}
+
+	@Override
+	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
+		Optional<CommandFunction<CommandSourceStack>> commandFunctionOptional = this.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
+		if(commandFunctionOptional.isPresent()) {
+			return convertFunction(commandFunctionOptional.get());
+		} else {
+			throw new IllegalStateException("Failed to get defined function " + key
+				+ "! This should never happen - please report this to the CommandAPI"
+				+ "developers, we'd love to know how you got this error message!");
+		}
+	}
+
+	@Override
+	public Set<NamespacedKey> getFunctions() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
 	}
 
 	@Override
@@ -662,8 +719,8 @@ public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
 
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		Collection<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
-		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
+		// TODO: Obviously, implement this!
+		throw new IllegalStateException("(Unimplemented in 1.20.3)");
 	}
 	
 	@Override
