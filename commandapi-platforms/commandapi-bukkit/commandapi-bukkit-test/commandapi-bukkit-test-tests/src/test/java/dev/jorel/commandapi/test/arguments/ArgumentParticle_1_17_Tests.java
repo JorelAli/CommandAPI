@@ -35,6 +35,8 @@ class ArgumentParticle_1_17_Tests extends TestBase {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
+
+		assumeTrue(version.lessThan(MCVersion.V1_20_3));
 	}
 
 	@AfterEach

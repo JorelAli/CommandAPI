@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test.wrappers;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.TestBase;
@@ -27,6 +29,8 @@ class SimpleFunctionWrapperTests extends TestBase {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
+
+		assumeTrue(version.lessThan(MCVersion.V1_20_3));
 
 		new CommandAPICommand("mysay")
 			.withArguments(new GreedyStringArgument("message"))
