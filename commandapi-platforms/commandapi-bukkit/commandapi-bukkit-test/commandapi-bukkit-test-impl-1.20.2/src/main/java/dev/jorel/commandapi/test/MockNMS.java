@@ -853,8 +853,4 @@ public class MockNMS extends Enums {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
 	}
 
-	@Override
-	public void syncCommands() {
-		// Do we need this? For testing purposes ingame, this will stay unimplemented for now
-	}
 }

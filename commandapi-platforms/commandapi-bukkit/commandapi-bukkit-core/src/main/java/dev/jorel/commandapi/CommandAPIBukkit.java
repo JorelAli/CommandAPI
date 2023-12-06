@@ -29,7 +29,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
@@ -70,6 +69,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private static CommandAPIBukkit<?> instance;
 	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
+
+	private final List<String> namespacesToFix = new ArrayList<>();
 
 	// Static VarHandles
 	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
@@ -196,7 +197,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
 			// Sort out permissions after the server has finished registering them all
 			fixPermissions();
-			setupNamespaces();
+			fixNamespaces();
 			if (paper.isFoliaPresent()) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
@@ -389,31 +390,13 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		getHelpMap().putAll(helpTopicsToAdd);
 	}
 
-	private void setupNamespaces() {
+	private void fixNamespaces() {
 		Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
-		List<String> commandsToRemove = new ArrayList<>();
-		Map<String, Command> commandsToAdd = new HashMap<>();
-		Map<String, String> commandsWithPrefix = new HashMap<>();
-		for (RegisteredCommand command : CommandAPI.getRegisteredCommands()) {
-			for (String key : knownCommands.keySet()) {
-				String commandName = (key.contains(":")) ? key.split(":")[1] : key;
-				if (commandName.equals(command.commandName()) || Arrays.asList(command.aliases()).contains(commandName)) {
-					Command registeredCommand = knownCommands.get(commandName);
-					commandsToAdd.put(commandName, registeredCommand);
-					commandsWithPrefix.put(commandName, command.namespace());
-					commandsToRemove.add(key);
-				}
-			}
-		}
-		for (String command : commandsToRemove) {
+		CommandDispatcher<Source> resourcesDispatcher = getResourcesDispatcher();
+		for (String command : namespacesToFix) {
 			knownCommands.remove(command);
+			removeBrigadierCommands(resourcesDispatcher, command, false, c -> true);
 		}
-		for (String command : commandsToAdd.keySet()) {
-			Command bukkitCommand = commandsToAdd.get(command);
-			knownCommands.put(command, bukkitCommand);
-			knownCommands.put(commandsWithPrefix.get(command) + ":" + command, knownCommands.get(command));
-		}
-		syncCommands();
 		CommandAPIHandler.getInstance().writeDispatcherToFile();
 	}
 
@@ -565,8 +548,21 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node) {
-		return getBrigadierDispatcher().register(node);
+	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
+		LiteralCommandNode<Source> builtNode = getBrigadierDispatcher().register(node);
+		if(!namespace.equals("minecraft")) {
+			String name = node.getLiteral();
+			String namespacedName = namespace + ":" + name;
+			getBrigadierDispatcher().register(LiteralArgumentBuilder.<Source>literal(namespacedName)
+				.redirect(builtNode)
+				.requires(node.getRequirement())
+				.executes(builtNode.getCommand())
+			);
+
+			namespacesToFix.add("minecraft:" + name);
+			namespacesToFix.add("minecraft:" + namespacedName);
+		}
+		return builtNode;
 	}
 
 	@Override
@@ -640,10 +636,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 		}
 	}
-
-	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
-	public abstract void syncCommands();
 
 	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,
 										 boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {

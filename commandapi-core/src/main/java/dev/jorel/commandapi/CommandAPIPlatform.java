@@ -107,7 +107,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Registers a Brigadier command node and returns the built node.
 	 */
-	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node);
+	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace);
 
 
 	/**
@@ -119,8 +119,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *                                or `plugin:command`
 	 */
 	public abstract void unregister(String commandName, boolean unregisterNamespaces);
-
-	void syncCommands();
 
 	/**
 	 * @return The Brigadier CommandDispatcher tree being used by the platform's server

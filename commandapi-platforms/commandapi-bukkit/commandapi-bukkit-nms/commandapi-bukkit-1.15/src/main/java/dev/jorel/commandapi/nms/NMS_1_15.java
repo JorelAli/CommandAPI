@@ -991,18 +991,4 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 			return null;
 		}
 	}
-
-	@Override
-	public void syncCommands() {
-		// For some reason, 1.15 is being stupid and has a private syncCommands method
-		// Reflection it is!
-		try {
-			Method syncCommands = Class.forName("org.bukkit.craftbukkit.v1_15_R1.CraftServer").getDeclaredMethod("syncCommands");
-			syncCommands.setAccessible(true);
-			syncCommands.invoke(Bukkit.getServer());
-		} catch (ReflectiveOperationException e) {
-			// Uhh...
-			// I'll just leave this to whoever decides to review this
-		}
-	}
 }

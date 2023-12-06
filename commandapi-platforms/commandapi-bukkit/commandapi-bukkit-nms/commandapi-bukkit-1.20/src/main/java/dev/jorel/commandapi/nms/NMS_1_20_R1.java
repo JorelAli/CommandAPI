@@ -827,8 +827,4 @@ public class NMS_1_20_R1 extends NMS_CommonWithFunctions {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
 	}
 
-	@Override
-	public void syncCommands() {
-		((CraftServer) Bukkit.getServer()).syncCommands();
-	}
 }

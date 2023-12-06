@@ -728,8 +728,4 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		}
 	}
 
-	@Override
-	public void syncCommands() {
-		((CraftServer) Bukkit.getServer()).syncCommands();
-	}
 }
