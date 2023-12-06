@@ -166,11 +166,6 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
-	public void syncCommands() {
-
-	}
-
-	@Override
 	public CommandAPILogger getLogger() {
 		return CommandAPILogger.fromApacheLog4jLogger(LogManager.getLogger("CommandAPI"));
 	}
@@ -221,7 +216,13 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 
 	@Override
 	public LiteralCommandNode<CommandSource> registerCommandNode(LiteralArgumentBuilder<CommandSource> node, String namespace) {
-		return getBrigadierDispatcher().register(node);
+		LiteralCommandNode<CommandSource> builtNode = getBrigadierDispatcher().register(node);
+		getBrigadierDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal(namespace + ":" + node.getLiteral())
+			.redirect(builtNode)
+			.requires(node.getRequirement())
+			.executes(builtNode.getCommand())
+		);
+		return builtNode;
 	}
 
 	@Override
