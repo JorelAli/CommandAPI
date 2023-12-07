@@ -521,13 +521,15 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public final Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)
+	// TODO: Overridden in 1.20.3 because this now returns a Collection<ScoreHolder>
+	public Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException {
 		return ScoreHolderArgument.getNames(cmdCtx, key);
 	}
 
 	@Override
-	public final String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	// TODO: Overridden in 1.20.3 because this now returns a ScoreHolder
+	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return ScoreHolderArgument.getName(cmdCtx, key);
 	}
 

@@ -36,7 +36,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -124,6 +123,7 @@ import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.ScoreHolderArgument;
 import net.minecraft.commands.arguments.ScoreboardSlotArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -136,10 +136,7 @@ import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.commands.execution.UnboundEntryAction;
 import net.minecraft.commands.functions.CommandFunction;
-import net.minecraft.commands.functions.InstantiatedFunction;
-import net.minecraft.commands.functions.PlainTextFunction;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess.Frozen;
@@ -182,6 +179,7 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.ScoreHolder;
 
 // Mojang-Mapped reflection
 /**
@@ -637,6 +635,23 @@ public class NMS_1_20_R3 extends NMS_Common {
 	@Override
 	public ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return ScoreboardSlot.ofMinecraft(ScoreboardSlotArgument.getDisplaySlot(cmdCtx, key).id());
+	}
+
+	@Differs(from = "1.20.2", by = "Needs to return a Collection<String> instead of a Collection<ScoreHolder> for now")
+	@Override
+	public Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		final Collection<ScoreHolder> scoreHolders = ScoreHolderArgument.getNames(cmdCtx, key);
+		Set<String> scoreHolderNames = new HashSet<>();
+		for (ScoreHolder scoreHolder : scoreHolders) {
+			scoreHolderNames.add(scoreHolder.getDisplayName().getString());
+		}
+		return scoreHolderNames;
+	}
+
+	@Differs(from = "1.20.2", by = "Needs to return a String instead of a ScoreHolder for now")
+	@Override
+	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return ScoreHolderArgument.getName(cmdCtx, key).getDisplayName().getString();
 	}
 
 	@Override
