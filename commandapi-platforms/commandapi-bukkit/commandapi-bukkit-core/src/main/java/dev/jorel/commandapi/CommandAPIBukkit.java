@@ -483,7 +483,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes, String namespace) {
 		if(!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
 			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
@@ -500,24 +500,24 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
 			// in `CraftServer#setVanillaCommands`
 			Command command = wrapToVanillaCommandWrapper(resultantNode);
-			map.register("minecraft", command);
+			map.register(namespace, command);
 
 			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
 			command.setPermission(permNode);
 
 			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
 			root.addChild(resultantNode);
-			root.addChild(namespaceNode(resultantNode));
+			root.addChild(namespaceNode(resultantNode, namespace));
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
 				command = wrapToVanillaCommandWrapper(node);
-				map.register("minecraft", command);
+				map.register(namespace, command);
 
 				command.setPermission(permNode);
 
 				root.addChild(node);
-				root.addChild(namespaceNode(node));
+				root.addChild(namespaceNode(node, namespace));
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
@@ -530,10 +530,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original) {
+	private LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original, String namespace) {
 		// Adapted from a section of `CraftServer#syncCommands`
 		LiteralCommandNode<Source> clone = new LiteralCommandNode<>(
-			"minecraft:" + original.getLiteral(),
+			namespace + ":" + original.getLiteral(),
 			original.getCommand(),
 			original.getRequirement(),
 			original.getRedirect(),

@@ -682,7 +682,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// partial) command registration. Generate the dispatcher file!
 		writeDispatcherToFile();
 
-		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes);
+		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes, namespace);
 	}
 
 	/**
