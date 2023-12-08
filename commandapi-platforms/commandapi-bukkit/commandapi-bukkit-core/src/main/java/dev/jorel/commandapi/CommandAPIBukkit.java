@@ -483,7 +483,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes, String namespace) {
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		if(!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
 			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
@@ -500,24 +500,24 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
 			// in `CraftServer#setVanillaCommands`
 			Command command = wrapToVanillaCommandWrapper(resultantNode);
-			map.register(namespace, command);
+			map.register(registeredCommand.namespace(), command);
 
 			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
 			command.setPermission(permNode);
 
 			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
 			root.addChild(resultantNode);
-			root.addChild(namespaceNode(resultantNode, namespace));
+			root.addChild(namespaceNode(resultantNode, registeredCommand.namespace()));
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
 				command = wrapToVanillaCommandWrapper(node);
-				map.register(namespace, command);
+				map.register(registeredCommand.namespace(), command);
 
 				command.setPermission(permNode);
 
 				root.addChild(node);
-				root.addChild(namespaceNode(node, namespace));
+				root.addChild(namespaceNode(node, registeredCommand.namespace()));
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`

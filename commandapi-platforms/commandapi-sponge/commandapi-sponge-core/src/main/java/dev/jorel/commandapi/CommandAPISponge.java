@@ -77,11 +77,6 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public void syncCommands() {
-
-	}
-
-	@Override
 	public CommandDispatcher<Object> getBrigadierDispatcher() {
 		// TODO: How do we get this? Do we need access to sponge internals?
 		return null;
@@ -129,7 +124,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Object> resultantNode, List<LiteralCommandNode<Object>> aliasNodes, String namespace) {
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Object> resultantNode, List<LiteralCommandNode<Object>> aliasNodes) {
 		// Nothing to do?
 	}
 

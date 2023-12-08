@@ -4,8 +4,6 @@ import dev.jorel.commandapi.arguments.Argument;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Locale;
-
 public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPICommand, Argument<?>, CommandSender> implements BukkitExecutable<CommandAPICommand> {
 	
 	public CommandAPICommand(CommandMetaData<CommandSender> meta) {

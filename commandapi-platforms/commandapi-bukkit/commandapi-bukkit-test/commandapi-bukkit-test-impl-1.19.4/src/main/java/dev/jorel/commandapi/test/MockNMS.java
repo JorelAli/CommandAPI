@@ -827,5 +827,4 @@ public class MockNMS extends Enums {
 	public Map<String, HelpTopic> getHelpMap() {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
 	}
-
 }

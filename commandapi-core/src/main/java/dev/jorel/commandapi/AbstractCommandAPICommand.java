@@ -32,8 +32,6 @@ import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
-import javax.annotation.Nonnull;
-
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  *

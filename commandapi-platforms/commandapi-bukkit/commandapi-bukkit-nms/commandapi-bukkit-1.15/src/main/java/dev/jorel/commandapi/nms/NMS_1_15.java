@@ -3,8 +3,6 @@ package dev.jorel.commandapi.nms;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -991,4 +989,5 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 			return null;
 		}
 	}
+
 }
