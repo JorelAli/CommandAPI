@@ -31,4 +31,12 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	public CommandAPICommand instance() {
 		return this;
 	}
+
+	/**
+	 * Registers this command with the default command namespace
+	 */
+	@Override
+	public void register() {
+		super.register(CommandAPIVelocity.getConfiguration().getNamespace());
+	}
 }

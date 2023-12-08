@@ -271,12 +271,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Registers the command with the minecraft: namespace
+	 * Registers the command with the default namespace
 	 */
 	@Override
-	public void register() {
-		register("minecraft");
-	}
+	public abstract void register();
 
 	/**
 	 * Registers the command with a given namespace

@@ -217,6 +217,10 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	@Override
 	public LiteralCommandNode<CommandSource> registerCommandNode(LiteralArgumentBuilder<CommandSource> node, String namespace) {
 		LiteralCommandNode<CommandSource> builtNode = getBrigadierDispatcher().register(node);
+		if (namespace.isEmpty()) {
+			// We're done. The command already is registered
+			return builtNode;
+		}
 		getBrigadierDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal(namespace + ":" + node.getLiteral())
 			.redirect(builtNode)
 			.requires(node.getRequirement())

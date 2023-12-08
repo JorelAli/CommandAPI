@@ -13,6 +13,14 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 		super(commandName);
 	}
 
+	/**
+	 * Registers this command with the default command namespace
+	 */
+	@Override
+	public void register() {
+		super.register(CommandAPIVelocity.getConfiguration().getNamespace());
+	}
+
 	@Override
 	public CommandTree instance() {
 		return this;

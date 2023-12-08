@@ -41,7 +41,7 @@ public class InternalConfig {
 	private final boolean useLatestNMSVersion;
 
 	// The message to display when an executor implementation is missing
-	private final String message_missingExecutorImplementation;
+	private final String messageMissingExecutorImplementation;
 
 	// Create a command_registration.json file
 	private final File dispatcherFile;
@@ -62,7 +62,7 @@ public class InternalConfig {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
-		this.message_missingExecutorImplementation = config.missingExecutorImplementationMessage;
+		this.messageMissingExecutorImplementation = config.missingExecutorImplementationMessage;
 		this.dispatcherFile = config.dispatcherFile;
 		this.skipSenderProxy = config.skipSenderProxy;
 		this.nbtContainerClass = config.nbtContainerClass;
@@ -95,7 +95,7 @@ public class InternalConfig {
 	 *         implementation for a given type
 	 */
 	public String getMissingImplementationMessage() {
-		return this.message_missingExecutorImplementation;
+		return this.messageMissingExecutorImplementation;
 	}
 
 	/**

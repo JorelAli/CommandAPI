@@ -552,17 +552,27 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		LiteralCommandNode<Source> builtNode = getBrigadierDispatcher().register(node);
 		if(!namespace.equals("minecraft")) {
 			String name = node.getLiteral();
-			String namespacedName = namespace + ":" + name;
+			String namespacedName = (!namespace.isEmpty()) ? namespace + ":" + name : name;
+			if (name.equals(namespacedName)) {
+				// We're done. The command already is registered
+				fillNamespacesToFix(name);
+				return builtNode;
+			}
 			getBrigadierDispatcher().register(LiteralArgumentBuilder.<Source>literal(namespacedName)
 				.redirect(builtNode)
 				.requires(node.getRequirement())
 				.executes(builtNode.getCommand())
 			);
 
-			namespacesToFix.add("minecraft:" + name);
-			namespacesToFix.add("minecraft:" + namespacedName);
+			fillNamespacesToFix(name, namespacedName);
 		}
 		return builtNode;
+	}
+
+	private void fillNamespacesToFix(String... namespacedCommands) {
+		for (String namespacedCommand : namespacedCommands) {
+			namespacesToFix.add("minecraft:" + namespacedCommand);
+		}
 	}
 
 	@Override

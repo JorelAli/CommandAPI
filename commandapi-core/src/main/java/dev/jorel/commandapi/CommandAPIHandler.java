@@ -622,7 +622,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		platform.preCommandRegistration(commandName);
 
-		CommandAPI.logInfo("Registering command /" + namespace + ":" + commandName + " " + humanReadableCommandArgSyntax);
+		String namespacedCommandName = (!namespace.isEmpty()) ? namespace + ":" + commandName : commandName;
+		CommandAPI.logInfo("Registering command /" + namespacedCommandName + " " + humanReadableCommandArgSyntax);
 
 		// Generate the actual command
 		Command<Source> command = generateCommand(args, executor, converted);

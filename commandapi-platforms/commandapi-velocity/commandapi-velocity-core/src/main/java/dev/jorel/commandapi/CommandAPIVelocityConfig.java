@@ -8,6 +8,8 @@ import com.velocitypowered.api.proxy.ProxyServer;
 public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocityConfig> {
 	ProxyServer server;
 
+	String namespace = "";
+
 	/**
 	 * Creates a new CommandAPIVelocityConfig object. Variables in this
 	 * constructor are required to load the CommandAPI on Velocity properly.
@@ -16,6 +18,19 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 	 */
 	public CommandAPIVelocityConfig(ProxyServer server) {
 		this.server = server;
+	}
+
+	/**
+	 * Configures the default namespace for commands registered with the CommandAPI
+	 * <p>
+	 * This defaults to an empty namespace if not set
+	 *
+	 * @param namespace The namespace to use for commands
+	 * @return this CommandAPIVelocityConfig
+	 */
+	public CommandAPIVelocityConfig setNamespace(String namespace) {
+		this.namespace = namespace;
+		return instance();
 	}
 
 	@Override

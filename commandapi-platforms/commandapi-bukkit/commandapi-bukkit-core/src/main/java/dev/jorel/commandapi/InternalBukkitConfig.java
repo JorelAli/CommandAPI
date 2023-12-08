@@ -15,6 +15,9 @@ public class InternalBukkitConfig extends InternalConfig {
 	// Whether to hook into paper's reload event to reload datapacks when /minecraft:reload is run
 	private final boolean shouldHookPaperReload;
 
+	// The default command namespace
+	private final String namespace;
+
 	/**
 	 * Creates an {@link InternalBukkitConfig} from a {@link CommandAPIBukkitConfig}
 	 *
@@ -24,6 +27,7 @@ public class InternalBukkitConfig extends InternalConfig {
 		super(config);
 		this.plugin = config.plugin;
 		this.shouldHookPaperReload = config.shouldHookPaperReload;
+		this.namespace = config.namespace;
 	}
 
 	/**
@@ -41,4 +45,12 @@ public class InternalBukkitConfig extends InternalConfig {
 	public boolean shouldHookPaperReload() {
 		return shouldHookPaperReload;
 	}
+
+	/**
+	 * @return the default namespace used to register commands
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
+
 }
