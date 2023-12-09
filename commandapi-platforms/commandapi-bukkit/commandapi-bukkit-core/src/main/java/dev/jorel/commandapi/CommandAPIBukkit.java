@@ -500,27 +500,14 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			String namespace = registeredCommand.namespace();
 			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
 
-			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
-			// in `CraftServer#setVanillaCommands`
-			Command command = wrapToVanillaCommandWrapper(resultantNode);
-			knownCommands.put(name, command);
-
-			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
-			command.setPermission(permNode);
-
-			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
-			root.addChild(resultantNode);
-
-			// Do the same for the namespace, if it exists
-			if (!namespace.isEmpty()) {
-				knownCommands.put(namespace + ":" + name, command);
-				root.addChild(namespaceNode(resultantNode, namespace));
-			}
+			registerCommand(knownCommands, root, name, permNode, namespace, resultantNode);
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
+				registerCommand(knownCommands, root, node.getLiteral(), permNode, namespace, node);
+				/*
 				command = wrapToVanillaCommandWrapper(node);
-				knownCommands.put(name, command);
+				knownCommands.put(node.getLiteral(), command);
 
 				command.setPermission(permNode);
 
@@ -528,8 +515,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 				if (!namespace.isEmpty()) {
 					knownCommands.put(namespace + ":" + name, command);
-					root.addChild(namespaceNode(node, registeredCommand.namespace()));
-				}
+					root.addChild(namespaceNode(node, namespace));
+				}*/
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
@@ -539,6 +526,25 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			for(Player p: Bukkit.getOnlinePlayers()) {
 				p.updateCommands();
 			}
+		}
+	}
+
+	private void registerCommand(Map<String, Command> knownCommands, RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
+		// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
+		// in `CraftServer#setVanillaCommands`
+		Command command = wrapToVanillaCommandWrapper(resultantNode);
+		knownCommands.put(name, command);
+
+		// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
+		command.setPermission(permNode);
+
+		// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
+		root.addChild(resultantNode);
+
+		// Do the same for the namespace, if it exists
+		if (!namespace.isEmpty()) {
+			knownCommands.put(namespace + ":" + name, command);
+			root.addChild(namespaceNode(resultantNode, namespace));
 		}
 	}
 
