@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -568,7 +569,7 @@ public class MockNMS extends Enums {
 
 		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
 		Commands commands = new Commands();
-		MockPlatform.setField(commands.getClass(), "g", "dispatcher", commands, getBrigadierDispatcher());
+		MockPlatform.setField(commands.getClass(), "h", "dispatcher", commands, getBrigadierDispatcher());
 		minecraftServerMock.vanillaCommandDispatcher = commands;
 
 		return (T) minecraftServerMock;
