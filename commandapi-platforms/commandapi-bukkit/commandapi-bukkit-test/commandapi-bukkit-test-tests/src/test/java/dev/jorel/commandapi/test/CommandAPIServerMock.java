@@ -122,25 +122,28 @@ public class CommandAPIServerMock extends ServerMock {
 
 //	@Override
 	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
-		if (tClass.equals(Enchantment.class)) {
+//		if (tClass.equals(Enchantment.class)) {
 			return new Registry() {
 				@Nullable
 				public T get(@NotNull NamespacedKey var1) {
-					throw new RuntimeException("hi");
+					System.out.println("Accessing " + tClass + ":" + var1);
+					return null;
 				}
 				
 				@NotNull
 				public Stream<T> stream() {
-					return null;
+					List<T> list = List.of();
+					return list.stream();
 				}
 
-		        public Iterator<T> iterator() {
-		            return null;
-		        }
+				public Iterator<T> iterator() {
+					List<T> list = List.of();
+					return list.iterator();
+				}
 			};
-		} else {
-			return null;
-		}
+//		} else {
+//			return null;
+//		}
 	}
 	
 	static class CustomWorldMock extends WorldMock {
