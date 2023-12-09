@@ -194,6 +194,10 @@
 					<artifactId>spigot</artifactId>
 					<version>1.20.3-R0.1-SNAPSHOT</version>
 				</dependency>
+				<!-- Ideally we'd include paper here, but this
+				causes MockBukkit to fall apart because it then
+				tries to register potion effects when the server
+				is null and I CBA to sort that out right now -->
 				<!-- <dependency>
 					<groupId>io.papermc.paper</groupId>
 					<artifactId>paper-api</artifactId>

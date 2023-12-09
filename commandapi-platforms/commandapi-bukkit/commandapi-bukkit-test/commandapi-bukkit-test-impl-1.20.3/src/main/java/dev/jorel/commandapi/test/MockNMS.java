@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +25,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemFactory;
 import org.bukkit.enchantments.Enchantment;
@@ -56,6 +53,7 @@ import com.mojang.serialization.JsonOps;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
@@ -237,8 +235,8 @@ public class MockNMS extends Enums {
 	private void registerDefaultEnchantments() {
 		for (Enchantment enchantment : getEnchantments()) {
 			if (Enchantment.getByKey(enchantment.getKey()) == null) {
-				//Registry.ENCHANTMENT.get(null);
-				// Enchantment.registerEnchantment(new EnchantmentMock(enchantment.getKey(), enchantment.getKey().getKey()));
+				Enchantment enchantmentToRegister = new EnchantmentMock(enchantment.getKey(), enchantment.getKey().getKey());
+				MockPlatform.getInstance().addToRegistry(Enchantment.class, enchantment.getKey(), enchantmentToRegister);
 			}
 		}
 	}

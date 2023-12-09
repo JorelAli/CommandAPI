@@ -119,32 +119,37 @@ public class CommandAPIServerMock extends ServerMock {
 	public boolean shouldSendChatPreviews() {
 		return true;
 	}
+	
+	// Registries
 
 //	@Override
 	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
+		return MockPlatform.getInstance().getRegistry(tClass);
 //		if (tClass.equals(Enchantment.class)) {
-			return new Registry() {
-				@Nullable
-				public T get(@NotNull NamespacedKey var1) {
-					System.out.println("Accessing " + tClass + ":" + var1);
-					return null;
-				}
-				
-				@NotNull
-				public Stream<T> stream() {
-					List<T> list = List.of();
-					return list.stream();
-				}
-
-				public Iterator<T> iterator() {
-					List<T> list = List.of();
-					return list.iterator();
-				}
-			};
+//			return new Registry() {
+//				@Nullable
+//				public T get(@NotNull NamespacedKey var1) {
+//					System.out.println("Accessing " + tClass + ":" + var1);
+//					return null;
+//				}
+//				
+//				@NotNull
+//				public Stream<T> stream() {
+//					List<T> list = List.of();
+//					return list.stream();
+//				}
+//
+//				public Iterator<T> iterator() {
+//					List<T> list = List.of();
+//					return list.iterator();
+//				}
+//			};
 //		} else {
 //			return null;
 //		}
 	}
+	
+	// World mocking
 	
 	static class CustomWorldMock extends WorldMock {
 		

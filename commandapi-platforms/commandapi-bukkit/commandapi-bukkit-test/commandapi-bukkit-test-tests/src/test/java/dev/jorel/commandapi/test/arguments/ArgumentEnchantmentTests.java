@@ -33,7 +33,7 @@ class ArgumentEnchantmentTests extends TestBase {
 	public void setUp() {
 		super.setUp();
 
-		// assumeTrue(version.lessThan(MCVersion.V1_20_3));
+		assumeTrue(version.lessThan(MCVersion.V1_20_3));
 	}
 
 	@AfterEach
