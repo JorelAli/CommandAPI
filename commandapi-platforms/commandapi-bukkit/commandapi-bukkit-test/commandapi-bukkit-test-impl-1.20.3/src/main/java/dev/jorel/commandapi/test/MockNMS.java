@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -33,7 +32,6 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemFactory;
-import org.bukkit.craftbukkit.v1_20_R3.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,16 +44,16 @@ import org.jetbrains.annotations.Nullable;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Streams;
+import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.serialization.JsonOps;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
-import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
-import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SafeVarHandle;
@@ -78,8 +76,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.server.ServerFunctionLibrary;
-import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -87,6 +83,8 @@ import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.util.profiling.metrics.profiling.InactiveMetricsRecorder;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -242,13 +240,16 @@ public class MockNMS extends Enums {
 	}
 
 	private void registerDefaultRecipes() {
-		// TODO: Come back to this in a bit
-//		@SuppressWarnings({ "unchecked", "rawtypes" })
-//		List<Recipe<?>> recipes = (List) getRecipes(MinecraftServer.class)
-//			.stream()
-//			.map(p -> RecipeManager.fromJson(new ResourceLocation(p.first()), p.second()))
-//			.toList();
-//		recipeManager.replaceRecipes(recipes);
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		List<RecipeHolder<?>> recipes = (List) getRecipes(MinecraftServer.class)
+			.stream()
+			.map(p -> {
+				// From RecipeManager#fromJson which isn't accessible
+				final Recipe recipe = net.minecraft.Util.getOrThrow(Recipe.CODEC.parse(JsonOps.INSTANCE, p.second()), JsonParseException::new);
+				return new RecipeHolder(new ResourceLocation(p.first()), recipe);
+			})
+			.toList();
+		recipeManager.replaceRecipes(recipes);
 	}
 
 	/**************************
