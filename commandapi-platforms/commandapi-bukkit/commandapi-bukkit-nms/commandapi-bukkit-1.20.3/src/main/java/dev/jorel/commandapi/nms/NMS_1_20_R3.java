@@ -183,7 +183,7 @@ import net.minecraft.world.scores.ScoreHolder;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.20.3 and 1.20.3
+ * NMS implementation for Minecraft 1.20.3 and 1.20.4
  */
 @NMSMeta(compatibleWith = { "1.20.3", "1.20.4" })
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
@@ -643,7 +643,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 		final Collection<ScoreHolder> scoreHolders = ScoreHolderArgument.getNames(cmdCtx, key);
 		Set<String> scoreHolderNames = new HashSet<>();
 		for (ScoreHolder scoreHolder : scoreHolders) {
-			scoreHolderNames.add(scoreHolder.getDisplayName().getString());
+			scoreHolderNames.add(scoreHolder.getScoreboardName());
 		}
 		return scoreHolderNames;
 	}
@@ -651,7 +651,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 	@Differs(from = "1.20.2", by = "Needs to return a String instead of a ScoreHolder for now")
 	@Override
 	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return ScoreHolderArgument.getName(cmdCtx, key).getDisplayName().getString();
+		return ScoreHolderArgument.getName(cmdCtx, key).getScoreboardName();
 	}
 
 	@Override
