@@ -183,9 +183,9 @@ import net.minecraft.world.scores.ScoreHolder;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.20.3
+ * NMS implementation for Minecraft 1.20.3 and 1.20.3
  */
-@NMSMeta(compatibleWith = { "1.20.3" })
+@NMSMeta(compatibleWith = { "1.20.3", "1.20.4" })
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
@@ -275,7 +275,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.20.3" };
+		return new String[] { "1.20.3", "1.20.4" };
 	};
 
 	@Override
@@ -291,7 +291,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 	// Converts NMS function to SimpleFunctionWrapper
 	private final SimpleFunctionWrapper convertFunction(CommandFunction<CommandSourceStack> commandFunction) {
 		// TODO: Obviously, implement this!
-		throw new IllegalStateException("(Unimplemented in 1.20.3)");
+		throw new IllegalStateException("(Unimplemented in 1.20.3 and 1.20.4)");
 	}
 
 	@Override
@@ -740,7 +740,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		// TODO: Obviously, implement this!
-		throw new IllegalStateException("(Unimplemented in 1.20.3)");
+		throw new IllegalStateException("(Unimplemented in 1.20.3 and 1.20.4)");
 	}
 
 	@Override
