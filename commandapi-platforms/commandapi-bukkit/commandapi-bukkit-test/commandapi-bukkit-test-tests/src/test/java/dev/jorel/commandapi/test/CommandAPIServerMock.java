@@ -7,7 +7,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -120,7 +122,25 @@ public class CommandAPIServerMock extends ServerMock {
 
 //	@Override
 	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
-		return null;
+		if (tClass.equals(Enchantment.class)) {
+			return new Registry() {
+				@Nullable
+				public T get(@NotNull NamespacedKey var1) {
+					throw new RuntimeException("hi");
+				}
+				
+				@NotNull
+				public Stream<T> stream() {
+					return null;
+				}
+
+		        public Iterator<T> iterator() {
+		            return null;
+		        }
+			};
+		} else {
+			return null;
+		}
 	}
 	
 	static class CustomWorldMock extends WorldMock {

@@ -25,11 +25,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemFactory;
 import org.bukkit.enchantments.Enchantment;
@@ -234,6 +236,7 @@ public class MockNMS extends Enums {
 	private void registerDefaultEnchantments() {
 		for (Enchantment enchantment : getEnchantments()) {
 			if (Enchantment.getByKey(enchantment.getKey()) == null) {
+				//Registry.ENCHANTMENT.get(null);
 				// Enchantment.registerEnchantment(new EnchantmentMock(enchantment.getKey(), enchantment.getKey().getKey()));
 			}
 		}

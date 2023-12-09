@@ -42,6 +42,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Registry;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration;
@@ -378,7 +379,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 	@Override
 	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key)
 			throws CommandSyntaxException {
-		return Enchantment.getByKey(fromResourceLocation(
+		return Registry.ENCHANTMENT.get(fromResourceLocation(
 				BuiltInRegistries.ENCHANTMENT.getKey(ResourceArgument.getEnchantment(cmdCtx, key).value())));
 	}
 
