@@ -505,18 +505,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
 				registerCommand(knownCommands, root, node.getLiteral(), permNode, namespace, node);
-				/*
-				command = wrapToVanillaCommandWrapper(node);
-				knownCommands.put(node.getLiteral(), command);
-
-				command.setPermission(permNode);
-
-				root.addChild(node);
-
-				if (!namespace.isEmpty()) {
-					knownCommands.put(namespace + ":" + name, command);
-					root.addChild(namespaceNode(node, namespace));
-				}*/
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
