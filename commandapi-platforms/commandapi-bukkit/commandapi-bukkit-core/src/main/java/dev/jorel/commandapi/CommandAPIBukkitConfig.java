@@ -14,8 +14,6 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	boolean shouldHookPaperReload = true;
 	boolean shouldUseMojangMappings = false;
 
-	String namespace = "minecraft";
-
 	/**
 	 * Creates a new CommandAPIBukkitConfig object. Variables in this
 	 * constructor are required to load the CommandAPI on Bukkit properly.
@@ -25,6 +23,7 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	 */
 	public CommandAPIBukkitConfig(JavaPlugin plugin) {
 		this.plugin = plugin;
+		super.setNamespace("minecraft");
 	}
 
 	/**
@@ -50,19 +49,6 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	public CommandAPIBukkitConfig useMojangMappings(boolean useMojangMappings) {
 		this.shouldUseMojangMappings = useMojangMappings;
 		return this;
-	}
-
-	/**
-	 * Configures the default namespace for commands registered with the CommandAPI
-	 * <p>
-	 * This defaults to <code>minecraft</code> if not set
-	 *
-	 * @param namespace The namespace to use for commands
-	 * @return this CommandAPIBukkitConfig
-	 */
-	public CommandAPIBukkitConfig setNamespace(String namespace) {
-		this.namespace = namespace;
-		return instance();
 	}
 
 	@Override

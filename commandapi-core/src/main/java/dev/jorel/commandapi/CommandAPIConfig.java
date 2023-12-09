@@ -49,6 +49,8 @@ extends CommandAPIConfig<Impl>
 	Class<?> nbtContainerClass = null;
 	Function<Object, ?> nbtContainerConstructor = null;
 
+	String namespace = null;
+
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
 	 *
@@ -149,4 +151,16 @@ extends CommandAPIConfig<Impl>
 		this.nbtContainerConstructor = nbtContainerConstructor;
 		return instance();
 	}
+
+	/**
+	 * Sets the default namespace to use when register commands
+	 *
+	 * @param namespace the namespace to use when register commands
+	 * @return this CommandAPIConfig
+	 */
+	public Impl setNamespace(String namespace) {
+		this.namespace = namespace;
+		return instance();
+	}
+
 }

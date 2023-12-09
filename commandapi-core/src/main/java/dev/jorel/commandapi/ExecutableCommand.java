@@ -230,7 +230,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	}
 
 	/**
-	 * Registers this command with the minecraft: namespace
+	 * Registers this command with the default namespace
 	 */
 	public abstract void register();
 

@@ -8,8 +8,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocityConfig> {
 	ProxyServer server;
 
-	String namespace = "";
-
 	/**
 	 * Creates a new CommandAPIVelocityConfig object. Variables in this
 	 * constructor are required to load the CommandAPI on Velocity properly.
@@ -18,6 +16,7 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 	 */
 	public CommandAPIVelocityConfig(ProxyServer server) {
 		this.server = server;
+		super.setNamespace("");
 	}
 
 	/**

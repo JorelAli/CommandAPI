@@ -53,6 +53,9 @@ public class InternalConfig {
 	private Class<?> nbtContainerClass;
 	private Function<Object, ?> nbtContainerConstructor;
 
+	// The default command namespace
+	private final String namespace;
+
 	/**
 	 * Creates an {@link InternalConfig} from a {@link CommandAPIConfig}
 	 * 
@@ -67,6 +70,7 @@ public class InternalConfig {
 		this.skipSenderProxy = config.skipSenderProxy;
 		this.nbtContainerClass = config.nbtContainerClass;
 		this.nbtContainerConstructor = config.nbtContainerConstructor;
+		this.namespace = config.namespace;
 	}
 
 	/**
@@ -134,4 +138,10 @@ public class InternalConfig {
 		this.nbtContainerConstructor = nbtContainerConstructor;
 	}
 
+	/**
+	 * @return The default namespace used to register commands
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
 }

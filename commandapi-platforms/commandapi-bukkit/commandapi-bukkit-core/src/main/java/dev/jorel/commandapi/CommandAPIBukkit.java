@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -70,7 +71,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
 
-	private final List<String> namespacesToFix = new ArrayList<>();
+	private final Set<String> namespacesToFix = new HashSet<>();
 
 	// Static VarHandles
 	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
@@ -397,7 +398,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			knownCommands.remove(command);
 			removeBrigadierCommands(resourcesDispatcher, command, false, c -> true);
 		}
-		CommandAPIHandler.getInstance().writeDispatcherToFile();
 	}
 
 	@Override
@@ -493,31 +493,43 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
 			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
 
-			CommandMap map = paper.getCommandMap();
-			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
+			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 			RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
+
+			String name = resultantNode.getLiteral();
+			String namespace = registeredCommand.namespace();
+			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
 
 			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
 			// in `CraftServer#setVanillaCommands`
 			Command command = wrapToVanillaCommandWrapper(resultantNode);
-			map.register(registeredCommand.namespace(), command);
+			knownCommands.put(name, command);
 
 			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
 			command.setPermission(permNode);
 
 			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
 			root.addChild(resultantNode);
-			root.addChild(namespaceNode(resultantNode, registeredCommand.namespace()));
+
+			// Do the same for the namespace, if it exists
+			if (!namespace.isEmpty()) {
+				knownCommands.put(namespace + ":" + name, command);
+				root.addChild(namespaceNode(resultantNode, namespace));
+			}
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
 				command = wrapToVanillaCommandWrapper(node);
-				map.register(registeredCommand.namespace(), command);
+				knownCommands.put(name, command);
 
 				command.setPermission(permNode);
 
 				root.addChild(node);
-				root.addChild(namespaceNode(node, registeredCommand.namespace()));
+
+				if (!namespace.isEmpty()) {
+					knownCommands.put(namespace + ":" + name, command);
+					root.addChild(namespaceNode(node, registeredCommand.namespace()));
+				}
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
@@ -550,14 +562,15 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
 		LiteralCommandNode<Source> builtNode = getBrigadierDispatcher().register(node);
+		if (namespace.isEmpty()) {
+			// Bukkit will automatically create `minecraft:command`
+			// We want to remove that so there is no namespace
+			fillNamespacesToFix(node.getLiteral());
+			return builtNode;
+		}
 		if(!namespace.equals("minecraft")) {
 			String name = node.getLiteral();
-			String namespacedName = (!namespace.isEmpty()) ? namespace + ":" + name : name;
-			if (name.equals(namespacedName)) {
-				// We're done. The command already is registered
-				fillNamespacesToFix(name);
-				return builtNode;
-			}
+			String namespacedName = namespace + ":" + name;
 			getBrigadierDispatcher().register(LiteralArgumentBuilder.<Source>literal(namespacedName)
 				.redirect(builtNode)
 				.requires(node.getRequirement())

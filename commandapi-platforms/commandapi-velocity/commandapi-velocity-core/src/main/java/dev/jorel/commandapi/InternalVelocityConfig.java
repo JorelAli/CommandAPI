@@ -11,9 +11,6 @@ public class InternalVelocityConfig extends InternalConfig {
 	// The server that the CommandAPI is running on
 	private final ProxyServer server;
 
-	// The default command namespace
-	private final String namespace;
-
 	/**
 	 * Creates an {@link InternalVelocityConfig} from a {@link CommandAPIVelocityConfig}
 	 *
@@ -22,7 +19,6 @@ public class InternalVelocityConfig extends InternalConfig {
 	public InternalVelocityConfig(CommandAPIVelocityConfig config) {
 		super(config);
 		this.server = config.server;
-		this.namespace = config.namespace;
 	}
 
 	/**
@@ -32,10 +28,4 @@ public class InternalVelocityConfig extends InternalConfig {
 		return server;
 	}
 
-	/**
-	 * @return the default namespace used to register commands
-	 */
-	public String getNamespace() {
-		return namespace;
-	}
 }

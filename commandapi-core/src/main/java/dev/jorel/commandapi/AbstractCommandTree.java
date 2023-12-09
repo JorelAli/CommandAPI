@@ -46,7 +46,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Registers the command with the default namespace
 	 */
-	public abstract void register();
+	public void register() {
+		register(CommandAPI.getConfiguration().getNamespace());
+	}
 
 	/**
 	 * Registers the command with a given namespace

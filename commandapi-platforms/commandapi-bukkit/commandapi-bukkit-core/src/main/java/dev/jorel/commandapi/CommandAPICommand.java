@@ -25,14 +25,6 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	}
 
 	/**
-	 * Registers the command with the default command namespace
-	 */
-	@Override
-	public void register() {
-		super.register(CommandAPIBukkit.getConfiguration().getNamespace());
-	}
-
-	/**
 	 * Registers this command with a given {@link JavaPlugin} instance
 	 *
 	 * @param plugin The plugin instance used to determine this command's namespace
