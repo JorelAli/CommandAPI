@@ -1,5 +1,8 @@
 package dev.jorel.commandapi.test;
 
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandTree;
@@ -10,6 +13,8 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
+import org.bukkit.Bukkit;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -17,6 +22,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for the semantics of registering commands
@@ -707,4 +714,197 @@ class CommandRegistrationTests extends TestBase {
 			getDispatcherString()
 		);
 	}
+
+	@Test
+	public void registerCommandsWithOtherNamespacesTests() {
+		Mut<String> results = Mut.of();
+
+		disablePaperImplementations();
+		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
+		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
+
+		assertFalse(CommandAPI.canRegister());
+
+		PlayerMock player = server.addPlayer();
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Make sure the default registration with the minecraft: namespace still works
+		command.register();
+
+		server.dispatchCommand(player, "test alpha");
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "minecraft:alpha");
+		assertEquals("alpha", results.get());
+		assertNoMoreResults(results);
+
+		CommandAPI.unregister("test", true);
+
+		// Test registering the command with a custom namespace
+		command.register("commandtest");
+
+		server.dispatchCommand(player, "test alpha");
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "commandtest:alpha");
+		assertEquals("alpha", results.get());
+
+		// Running the command with the minecraft: namespace should fail
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test alpha"));
+		assertNoMoreResults(results);
+
+		CommandAPI.unregister("test", true);
+
+		// Test registering the command with a plugin instance
+		command.register(Main.getPlugin(Main.class));
+
+		server.dispatchCommand(player, "test alpha");
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "commandapitest:alpha");
+		assertEquals("alpha", results.get());
+
+		// Running the command with the minecraft: namespace should fail
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test alpha"));
+		assertNoMoreResults(results);
+
+		CommandAPI.unregister("test", true);
+
+		command = new CommandAPICommand("test")
+			.withAliases("alpha", "beta")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Test aliases with the default namespace
+		command.register();
+
+		server.dispatchCommand(player, "alpha discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "beta discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "minecraft:alpha discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "minecraft:beta discord");
+		assertEquals("discord", results.get());
+
+		assertNoMoreResults(results);
+
+		CommandAPI.unregister("test", true);
+		CommandAPI.unregister("alpha", true);
+		CommandAPI.unregister("beta", true);
+
+		// Test aliases with a custom namespace
+		command.register("commandtest");
+
+		server.dispatchCommand(player, "alpha discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "beta discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "commandtest:alpha discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "commandtest:beta discord");
+		assertEquals("discord", results.get());
+
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:alpha discord"));
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:beta discord"));
+
+		assertNoMoreResults(results);
+
+		CommandAPI.unregister("test", true);
+		CommandAPI.unregister("alpha", true);
+		CommandAPI.unregister("beta", true);
+
+		// Test aliases with a plugin instance
+		command.register(Main.getPlugin(Main.class));
+
+		server.dispatchCommand(player, "alpha discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "beta discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "commandapitest:alpha discord");
+		assertEquals("discord", results.get());
+
+		server.dispatchCommand(player, "commandapitest:beta discord");
+		assertEquals("discord", results.get());
+
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:alpha discord"));
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:beta discord"));
+
+		assertNoMoreResults(results);
+
+		CommandAPI.unregister("test", true);
+		CommandAPI.unregister("alpha", true);
+		CommandAPI.unregister("beta", true);
+
+		// Test same command name and argument setup but different namespace
+		CommandAPICommand a = new CommandAPICommand("test")
+			.withArguments(LiteralArgument.of("forced"))
+			.executesPlayer(info -> {
+				results.set("forced");
+			});
+
+		CommandAPICommand b = new CommandAPICommand("test")
+			.withArguments(LiteralArgument.of("notforced"))
+			.executesPlayer(info -> {
+				results.set("notforced");
+			});
+
+		a.register("a");
+		b.register("b");
+
+		server.dispatchCommand(player, "test forced");
+		assertEquals("forced", results.get());
+
+		server.dispatchCommand(player, "a:test forced");
+		assertEquals("forced", results.get());
+
+		server.dispatchCommand(player ,"test notforced");
+		assertEquals("notforced", results.get());
+
+		server.dispatchCommand(player, "b:test notforced");
+		assertEquals("notforced", results.get());
+
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "a:test notforced"));
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "b:test forced"));
+
+		assertNoMoreResults(results);
+
+		CommandAPI.unregister("a", true);
+		CommandAPI.unregister("b", true);
+
+		// Special case: Registering a command without a namespace
+		command = new CommandAPICommand("test")
+			.executesPlayer(info -> {
+				results.set("success");
+			});
+
+		command.register("");
+
+		server.dispatchCommand(player, "test");
+		assertEquals("success", results.get());
+
+		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test"));
+
+		CommandAPI.unregister("test", true);
+
+		// Registering a command using null should fail
+		String namespace = null;
+		assertThrows(NullPointerException.class, () -> new CommandAPICommand("test").executesPlayer(info -> {}).register(namespace));
+	}
+
 }
