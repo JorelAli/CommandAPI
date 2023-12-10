@@ -221,12 +221,25 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 			// We're done. The command already is registered
 			return builtNode;
 		}
-		getBrigadierDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal(namespace + ":" + node.getLiteral())
-			.redirect(builtNode)
-			.requires(node.getRequirement())
-			.executes(builtNode.getCommand())
-		);
+		getBrigadierDispatcher().getRoot().addChild(namespaceNode(builtNode, namespace));
 		return builtNode;
+	}
+
+	private LiteralCommandNode<CommandSource> namespaceNode(LiteralCommandNode<CommandSource> original, String namespace) {
+		// Adapted from a section of `CraftServer#syncCommands`
+		LiteralCommandNode<CommandSource> clone = new LiteralCommandNode<>(
+			namespace + ":" + original.getLiteral(),
+			original.getCommand(),
+			original.getRequirement(),
+			original.getRedirect(),
+			original.getRedirectModifier(),
+			original.isFork()
+		);
+
+		for (CommandNode<CommandSource> child : original.getChildren()) {
+			clone.addChild(child);
+		}
+		return clone;
 	}
 
 	@Override
