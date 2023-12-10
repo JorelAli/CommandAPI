@@ -415,9 +415,10 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     <tbody>
         <tr>
             <td valign="top"><b>9.3.0</b></td>
-            <td valign="top">???</td>
+            <td valign="top">December 2023</td>
             <td valign="top">
                 <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/499 Fix typo in Adventure methods for tooltips</li>
                     <li>Adds <code>ExecutionInfo</code> executors for the Kotlin DSL</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/497 Adds support for <code>RemoteConsoleCommandSender</code></li>
                     <li>Fixed <code>executesFeedbackForwarding()</code> not checking for a <code>FeedbackForwardingCommandSender</code> correctly thus allowing every executor to execute the command</li>
