@@ -72,7 +72,7 @@ new CommandAPICommand("mycommand")
 
 No. That message is handled client-side and isn't controlled by the CommandAPI.
 
-## My suggestions on my arguments are empty or don't update. Why?
+## My suggestions on my arguments are empty or don't update. How do I make dynamic suggestions?
 
 Arguments with suggestions provided using `ArgumentSuggestions.strings(String...)` are calculated _when the command is registered_. In order to have argument suggestions calculated _when the command is being typed_, you need to use the lambda-variant of the `ArgumentSuggestions.strings(Function<SuggestionInfo, String[]> suggestions)` method instead. More information about the different methods can be found [here](./argumentsuggestions.md#the-argumentsuggestions-interface). 
 
