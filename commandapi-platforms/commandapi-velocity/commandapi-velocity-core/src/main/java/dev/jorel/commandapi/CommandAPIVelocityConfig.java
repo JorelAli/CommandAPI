@@ -19,19 +19,6 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 		super.setNamespace("");
 	}
 
-	/**
-	 * Configures the default namespace for commands registered with the CommandAPI
-	 * <p>
-	 * This defaults to an empty namespace if not set
-	 *
-	 * @param namespace The namespace to use for commands
-	 * @return this CommandAPIVelocityConfig
-	 */
-	public CommandAPIVelocityConfig setNamespace(String namespace) {
-		this.namespace = namespace;
-		return instance();
-	}
-
 	@Override
 	public CommandAPIVelocityConfig instance() {
 		return this;

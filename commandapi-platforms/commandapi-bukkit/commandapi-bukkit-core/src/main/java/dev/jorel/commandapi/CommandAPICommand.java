@@ -32,5 +32,4 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	public void register(JavaPlugin plugin) {
 		super.register(plugin.getName().toLowerCase());
 	}
-
 }
