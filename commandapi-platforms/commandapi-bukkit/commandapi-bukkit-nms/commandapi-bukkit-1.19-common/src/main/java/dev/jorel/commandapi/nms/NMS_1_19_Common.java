@@ -756,7 +756,12 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		Collection<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
-		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
+		SimpleFunctionWrapper[] convertedCustomFunctions = new SimpleFunctionWrapper[customFunctions.size()];
+		int index = 0;
+		for (CommandFunction customFunction : customFunctions) {
+			convertedCustomFunctions[index++] = convertFunction(customFunction);
+		}
+		return convertedCustomFunctions;
 	}
 	
 	@Override

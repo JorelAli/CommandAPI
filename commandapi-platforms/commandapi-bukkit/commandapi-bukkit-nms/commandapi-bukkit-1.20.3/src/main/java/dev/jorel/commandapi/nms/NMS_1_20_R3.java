@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -116,6 +117,7 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
@@ -291,8 +293,12 @@ public class NMS_1_20_R3 extends NMS_Common {
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private final SimpleFunctionWrapper convertFunction(CommandFunction<CommandSourceStack> commandFunction) {
-		// TODO: Obviously, implement this!
-		throw new IllegalStateException("(Unimplemented in 1.20.3 and 1.20.4)");
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> {
+			this.<MinecraftServer>getMinecraftServer().getFunctions().execute(commandFunction, css);
+			return 1;
+		};
+
+		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.id()), appliedObj, new String[0]);
 	}
 
 	@Override
@@ -740,8 +746,13 @@ public class NMS_1_20_R3 extends NMS_Common {
 
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		// TODO: Obviously, implement this!
-		throw new IllegalStateException("(Unimplemented in 1.20.3 and 1.20.4)");
+		Collection<CommandFunction<CommandSourceStack>> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
+		SimpleFunctionWrapper[] convertedCustomFunctions = new SimpleFunctionWrapper[customFunctions.size()];
+		int index = 0;
+		for (CommandFunction<CommandSourceStack> customFunction : customFunctions) {
+			convertedCustomFunctions[index++] = convertFunction(customFunction);
+		}
+		return convertedCustomFunctions;
 	}
 
 	@Override
