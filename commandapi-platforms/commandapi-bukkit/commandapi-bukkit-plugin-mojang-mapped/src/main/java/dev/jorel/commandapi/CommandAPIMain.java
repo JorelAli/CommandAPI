@@ -44,9 +44,6 @@ public class CommandAPIMain extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
-		// The dirtiest way to do things, but it should work :)
-		SafeVarHandle.USING_MOJANG_MAPPINGS = true;
-
 		// Read config file
 		saveDefaultConfig();
 		FileConfiguration fileConfig = getConfig();
@@ -57,7 +54,8 @@ public class CommandAPIMain extends JavaPlugin {
 			.missingExecutorImplementationMessage(fileConfig.getString("messages.missing-executor-implementation"))
 			.dispatcherFile(fileConfig.getBoolean("create-dispatcher-json") ? new File(getDataFolder(), "command_registration.json") : null)
 			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
-			.shouldHookPaperReload(fileConfig.getBoolean("hook-paper-reload"));
+			.shouldHookPaperReload(fileConfig.getBoolean("hook-paper-reload"))
+			.useMojangMappings(true);
 
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
 			if (Bukkit.getPluginManager().getPlugin(pluginName) != null) {
