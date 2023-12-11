@@ -415,6 +415,15 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.4.0</b></td>
+            <td valign="top">???</td>
+            <td valign="top">
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/495 Adds a parameter to `EntitySelectorArgument` to allow failure when no entity lists are empty</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.3.0</b></td>
             <td valign="top">December 2023</td>
             <td valign="top">
