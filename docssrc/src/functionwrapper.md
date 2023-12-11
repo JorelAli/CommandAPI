@@ -32,7 +32,7 @@ These methods allow you to interact with the Minecraft function that this class 
 
 <div class="warning">
 
-## FunctionArguments and 1.20.3+
+### FunctionArguments and 1.20.3+
 
 As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling `run()` will always return a value of `1`, regardless of whether the command succeeds, fails, or returns a result.
 
@@ -56,7 +56,7 @@ The `run()` method runs the function. The command executor that runs this functi
 
 <div class="warning">
 
-## FunctionArguments and 1.20.3+
+### FunctionArguments and 1.20.3+
 
 As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling `runAs(Entity)` will always return a value of `1`, regardless of whether the command succeeds, fails, or returns a result.
 

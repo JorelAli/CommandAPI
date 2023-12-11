@@ -7769,11 +7769,15 @@ say Killed all living entities on the server
 <p>The methods <code>getFunctions()</code> and <code>getTags()</code> simply return a set of <code>NamespacedKey</code> objects which are the names of functions or tags that have been declared by all datapacks on the server.</p>
 <h3 id="runcommandsender"><a class="header" href="#runcommandsender">run(CommandSender)</a></h3>
 <div class="warning">
-<h2 id="functionarguments-and-1203"><a class="header" href="#functionarguments-and-1203">FunctionArguments and 1.20.3+</a></h2>
+<h3 id="functionarguments-and-1203"><a class="header" href="#functionarguments-and-1203">FunctionArguments and 1.20.3+</a></h3>
 <p>As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling <code>run(CommandSender)</code> will always return a value of <code>1</code>, regardless of whether the command succeeds, fails, or returns a result.</p>
 </div>
 <p>This method simply runs the current <code>SimpleFunctionWrapper</code> as the provided command sender. The method will return a numerical result value, stating whether it succeeds or returns a result. This is documented in more detail <a href="./normalexecutors.html">here</a> and <a href="./resultingcommandexecutors.html">here</a>. For example:</p>
 <h3 id="getcommands"><a class="header" href="#getcommands">getCommands()</a></h3>
+<div class="warning">
+<h3 id="functionarguments-and-1203-1"><a class="header" href="#functionarguments-and-1203-1">FunctionArguments and 1.20.3+</a></h3>
+<p>As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling <code>getCommands()</code> will always return an empty <code>String[]</code>. At the time of writing, it is not possible to extract the function command list in 1.20.3+.</p>
+</div>
 <p>The <code>getCommands()</code> method returns a <code>String[]</code> that contains the list of commands that the Minecraft function &quot;holds&quot;. In other words, running this Minecraft function is as simple as iterating through its commands and running them in order. The commands that this <code>String[]</code> holds are the raw strings that this function represents - in other words, it can include things such as <code>@p</code> and <code>~ ~ ~</code> instead of &quot;filled in&quot; values.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="the-functionwrapper"><a class="header" href="#the-functionwrapper">The FunctionWrapper</a></h1>
 <p>The CommandAPI includes the <code>FunctionWrapper</code> class which is a wrapper for Minecraft's functions. It allows you to execute the commands that are represented by the respective <code>.mcfunction</code> file.</p>
@@ -7799,7 +7803,7 @@ say Killed all living entities on the server
 <p>These methods allow you to interact with the Minecraft function that this class wraps.</p>
 <h3 id="run"><a class="header" href="#run"><code>run()</code></a></h3>
 <div class="warning">
-<h2 id="functionarguments-and-1203-1"><a class="header" href="#functionarguments-and-1203-1">FunctionArguments and 1.20.3+</a></h2>
+<h3 id="functionarguments-and-1203-2"><a class="header" href="#functionarguments-and-1203-2">FunctionArguments and 1.20.3+</a></h3>
 <p>As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling <code>run()</code> will always return a value of <code>1</code>, regardless of whether the command succeeds, fails, or returns a result.</p>
 </div>
 <p>The <code>run()</code> method runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for <code>@p</code> and the player's location would be used for things such as <code>~ ~ ~</code>:</p>
@@ -7827,7 +7831,7 @@ say Killed all living entities on the server
 </div>
 <h3 id="runasentity"><a class="header" href="#runasentity"><code>runAs(Entity)</code></a></h3>
 <div class="warning">
-<h2 id="functionarguments-and-1203-2"><a class="header" href="#functionarguments-and-1203-2">FunctionArguments and 1.20.3+</a></h2>
+<h3 id="functionarguments-and-1203-3"><a class="header" href="#functionarguments-and-1203-3">FunctionArguments and 1.20.3+</a></h3>
 <p>As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling <code>runAs(Entity)</code> will always return a value of <code>1</code>, regardless of whether the command succeeds, fails, or returns a result.</p>
 </div>
 <p>The <code>runAs(Entity)</code> is the same as the <code>run()</code> method, but it allows you to change the command executor to another entity.</p>
@@ -11317,7 +11321,7 @@ arguments.add(new RecipeArgument(&quot;recipe&quot;).replaceSafeSuggestions(Safe
 <h3 id="chatargument"><a class="header" href="#chatargument">ChatArgument</a></h3>
 <p>Incompatible with Minecraft version <strong>1.16.1</strong> (Works on 1.16.2)</p>
 <h2 id="functionargument"><a class="header" href="#functionargument">FunctionArgument</a></h2>
-<p>Running functions generated via the <code>FunctionArgument</code> on Minecraft version <strong>1.20.3</strong> and <strong>1.20.4</strong> will always return a value of 1, regardless of whether the command succeeds, fails, or returns a result. (Works normally on 1.20.2 and below)</p>
+<p>Running functions generated via the <code>FunctionArgument</code> on Minecraft version <strong>1.20.3</strong> and <strong>1.20.4</strong> will always return a value of 1, regardless of whether the command succeeds, fails, or returns a result. (Works normally on 1.20.2 and below). Trying to retrieve the list of commands in a function on Minecraft version <strong>1.20.3</strong> and <strong>1.20.4</strong> will always return an empty array.</p>
 <h3 id="uuidargument"><a class="header" href="#uuidargument">UUIDArgument</a></h3>
 <p>Incompatible with Minecraft versions <strong>less than 1.16</strong> <em>(1.15.x)</em></p>
 <hr />
