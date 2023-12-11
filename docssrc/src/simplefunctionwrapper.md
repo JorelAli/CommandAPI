@@ -44,7 +44,7 @@ The methods `getFunctions()` and `getTags()` simply return a set of `NamespacedK
 
 <div class="warning">
 
-### FunctionArguments and 1.20.3+
+### run(CommandSender) support in 1.20.3+
 
 As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling `run(CommandSender)` will always return a value of `1`, regardless of whether the command succeeds, fails, or returns a result.
 
@@ -56,7 +56,7 @@ This method simply runs the current `SimpleFunctionWrapper` as the provided comm
 
 <div class="warning">
 
-### FunctionArguments and 1.20.3+
+### getCommands() support in 1.20.3+
 
 As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling `getCommands()` will always return an empty `String[]`. At the time of writing, it is not possible to extract the function command list in 1.20.3+.
 
