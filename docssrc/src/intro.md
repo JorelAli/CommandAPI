@@ -37,6 +37,11 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 9.2.0 \\(\rightarrow\\) 9.3.0
+
+- Updates [Incompatible version information](./incompatibleversions.md) page and `FunctionArgument` pages that functions made with the `FunctionArgument` will always return 1 when running on 1.20.3 and 1.20.4.
+- Updates [Kotlin DSL](./kotlindsl.md) page to mention every possible executor method.
+
 ### Documentation changes 9.1.0 \\(\rightarrow\\) 9.2.0
 
 - Updates [Location arguments](./argument_locations.md) page to mention the new `centerPosition` argument to center the position of integer values for location arguments.

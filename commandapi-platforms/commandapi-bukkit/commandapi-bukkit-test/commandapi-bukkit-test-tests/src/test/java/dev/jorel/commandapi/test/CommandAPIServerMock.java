@@ -7,7 +7,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -59,15 +61,15 @@ public class CommandAPIServerMock extends ServerMock {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public boolean dispatchBrigadierCommand(CommandSender sender, String commandLine) {
+	public int dispatchBrigadierCommand(CommandSender sender, String commandLine) {
 		try {
 			@SuppressWarnings("rawtypes")
 			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
 			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
-			return dispatcher.execute(commandLine, css) != 0;
+			return dispatcher.execute(commandLine, css);
 		} catch (CommandSyntaxException e) {
 			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableCommand() instead.", e);
-			return false;
+			return 0;
 		}
 	}
 
@@ -117,11 +119,37 @@ public class CommandAPIServerMock extends ServerMock {
 	public boolean shouldSendChatPreviews() {
 		return true;
 	}
+	
+	// Registries
 
 //	@Override
 	public <T extends Keyed> @Nullable Registry<T> getRegistry(@NotNull Class<T> tClass) {
-		return null;
+		return MockPlatform.getInstance().getRegistry(tClass);
+//		if (tClass.equals(Enchantment.class)) {
+//			return new Registry() {
+//				@Nullable
+//				public T get(@NotNull NamespacedKey var1) {
+//					System.out.println("Accessing " + tClass + ":" + var1);
+//					return null;
+//				}
+//				
+//				@NotNull
+//				public Stream<T> stream() {
+//					List<T> list = List.of();
+//					return list.stream();
+//				}
+//
+//				public Iterator<T> iterator() {
+//					List<T> list = List.of();
+//					return list.iterator();
+//				}
+//			};
+//		} else {
+//			return null;
+//		}
 	}
+	
+	// World mocking
 	
 	static class CustomWorldMock extends WorldMock {
 		

@@ -24,7 +24,6 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 /**
  * Tests for the {@link FunctionArgument}
  */
-@SuppressWarnings("deprecation")
 class ArgumentFunctionTests extends TestBase {
 
 	/*********
@@ -34,6 +33,8 @@ class ArgumentFunctionTests extends TestBase {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
+
+		assumeTrue(version.lessThan(MCVersion.V1_20_3));
 	}
 
 	@AfterEach

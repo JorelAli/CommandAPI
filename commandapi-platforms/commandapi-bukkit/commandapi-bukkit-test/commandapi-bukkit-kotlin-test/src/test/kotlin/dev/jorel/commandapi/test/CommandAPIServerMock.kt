@@ -27,7 +27,16 @@ class CommandAPIServerMock : ServerMock() {
 		}
 	}
 
-
+	fun dispatchBrigadierCommand(sender: CommandSender, commandLine: String): Int {
+		return try {
+			val dispatcher = Brigadier.getCommandDispatcher()
+			val css = Brigadier.getBrigadierSourceFromCommandSender(sender)
+			dispatcher.execute(commandLine, css)
+		} catch (e: CommandSyntaxException) {
+			Assertions.fail<Any>("Command '/$commandLine' failed. If you expected this to fail, use dispatchThrowableCommand() instead.", e)
+			0
+		}
+	}
 
 	override fun dispatchCommand(sender: CommandSender, commandLine: String): Boolean {
 		return try {

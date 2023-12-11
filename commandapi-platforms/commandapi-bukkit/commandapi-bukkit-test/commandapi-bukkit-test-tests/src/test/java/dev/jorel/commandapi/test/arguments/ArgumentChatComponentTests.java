@@ -89,16 +89,22 @@ class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
-		if(version.lessThan(MCVersion.V1_18)) {
+		if (version.lessThan(MCVersion.V1_18)) {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: empty at position 8: test []<--[HERE]");
+		} else if(version.greaterThanOrEqualTo(MCVersion.V1_20_3)) {
+			assertCommandFailsWith(player, "test []", "Invalid chat component: Not a JSON object: [] at position 8: test []<--[HERE]");
 		} else {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");	
 		}
 		
 		// /test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]
 		// Fails due to inner quotes not being escaped with a \ character
-		assertCommandFailsWith(player, "test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]", "Invalid chat component: Unterminated array at line 1 column 6 path $[1] at position 5: test <--[HERE]");
-
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_3)) {
+			assertCommandFailsWith(player, "test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]", "Invalid chat component: Unterminated array at line 1 column 6 path $[1] at position 11: ...est [\"[\"\",<--[HERE]");
+		} else {
+			assertCommandFailsWith(player, "test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]", "Invalid chat component: Unterminated array at line 1 column 6 path $[1] at position 5: test <--[HERE]");
+		}
+		
 		assertNoMoreResults(results);
 	}
 
@@ -122,15 +128,21 @@ class ArgumentChatComponentTests extends TestBase {
 		
 		// /test []
 		// Fails due to invalid JSON for a chat component
-		if(version.lessThan(MCVersion.V1_18)) {
+		if (version.lessThan(MCVersion.V1_18)) {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: empty at position 8: test []<--[HERE]");
+		} else if(version.greaterThanOrEqualTo(MCVersion.V1_20_3)) {
+			assertCommandFailsWith(player, "test []", "Invalid chat component: Not a JSON object: [] at position 8: test []<--[HERE]");
 		} else {
 			assertCommandFailsWith(player, "test []", "Invalid chat component: Invalid chat component: empty at position 8: test []<--[HERE] at position 8: test []<--[HERE]");	
 		}
 		
 		// /test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]
 		// Fails due to inner quotes not being escaped with a \ character
-		assertCommandFailsWith(player, "test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]", "Invalid chat component: Unterminated array at line 1 column 6 path $[1] at position 5: test <--[HERE]");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_3)) {
+			assertCommandFailsWith(player, "test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]", "Invalid chat component: Unterminated array at line 1 column 6 path $[1] at position 11: ...est [\"[\"\",<--[HERE]");
+		} else {
+			assertCommandFailsWith(player, "test [\"[\"\",{\"text\":\"Some text with bad quote escaping\"}\"]", "Invalid chat component: Unterminated array at line 1 column 6 path $[1] at position 5: test <--[HERE]");
+		}
 
 		assertNoMoreResults(results);
 	}

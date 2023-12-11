@@ -35,6 +35,23 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
 
+      ### Documentation ###
+
+      # Build the documentation first. Building the CommandAPI takes some time and nobody wants to wait until the whole
+      # CommandAPI has been built to realize that someone left a trailing space in one Markdown file in the documentation!
+      - name: Run markdownlint on all documentation Markdown documents
+        uses: DavidAnson/markdownlint-cli2-action@v8
+        with:
+          globs: 'docssrc/src/*.md'
+
+      - name: Build the documentation with mdBook
+        continue-on-error: true # If link checking fails with 403, that's probably just a timing/automated-related issue. We can ignore those - forcing the whole build to fail for this is not ideal.
+        run: |
+          cd docssrc
+          curl -LJO https://github.com/JorelAli/mdBook/releases/download/v0.4.21-fa6/mdbook-fa6 && chmod +x mdbook-fa6
+          mkdir -p mdbook-linkcheck && cd "$_" && curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && unzip "$_" && chmod +x mdbook-linkcheck && export PATH=$PWD:$PATH && cd ..
+          ./mdbook-fa6 build
+
       ### Compilation ###
 
       - name: Build the CommandAPI (Bukkit+Velocity) using maven
@@ -49,6 +66,8 @@ jobs:
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_19_3_R2
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_20_R1
             mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_20_2_R2;
+      # Not Spigot_1_20_4_R3. This isn't compatible with NMS_CommonWithFunctions
+      # mvn clean package -pl :commandapi-bukkit-nms-common -P Platform.Bukkit,Spigot_1_20_4_R3;
 
       # - name: validate version-specific dependencies (nms-common)
       #   run: |
@@ -71,6 +90,10 @@ jobs:
       ### Bukkit tests across all NMS versions ###
       # Dev note: Yes, I know I could put this under one run section, but it's a million times easier
       # to see which version failed when it's got the version name and subsection in GitHub Actions
+
+      - name: Run Bukkit unit tests across all versions (1.20.3 - 1.20.4)
+        continue-on-error: true
+        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_3
 
       - name: Run Bukkit unit tests across all versions (1.20.2)
         continue-on-error: true
@@ -131,20 +154,6 @@ jobs:
 
       - name: Build CommandAPI example plugins in examples/ folder
         run: cd ./examples; ./build.sh;
-
-      ### Documentation ###
-
-      - name: Run markdownlint on all documentation Markdown documents
-        uses: DavidAnson/markdownlint-cli2-action@v8
-        with:
-          globs: 'docssrc/src/*.md'
-
-      - name: Build the documentation with mdBook
-        run: |
-          cd docssrc
-          curl -LJO https://github.com/JorelAli/mdBook/releases/download/v0.4.21-fa6/mdbook-fa6 && chmod +x mdbook-fa6
-          mkdir -p mdbook-linkcheck && cd "$_" && curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && unzip "$_" && chmod +x mdbook-linkcheck && export PATH=$PWD:$PATH && cd ..
-          ./mdbook-fa6 build
 
       ### Save PR information for 'SonarAnalyze'
       - name: Save PR number to file

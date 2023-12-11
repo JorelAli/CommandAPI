@@ -1,33 +1,42 @@
 package dev.jorel.commandapi.test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.wrappers.ParticleData;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.bukkit.Keyed;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Registry;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedArgument;
+
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.wrappers.ParticleData;
 
 public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	/*****************
@@ -260,5 +269,45 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	public abstract List<String> getAllItemNames();
 	
 	public abstract List<NamespacedKey> getAllRecipes();
+	
+	/**********
+	 * Runtime object registries (enchantments, potions etc.)
+	 ********/
+	
+	public Map<Class<?>, Map<NamespacedKey, Object>> registry = null;
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public <T extends Keyed> void addToRegistry(Class<T> className, NamespacedKey key, T object) {
+		if (registry == null) {
+			registry = new HashMap<>();
+		}
+		
+		if (registry.containsKey(className)) {
+			registry.get(className).put(key, object);
+		} else {
+			Map<NamespacedKey, T> registryMap = new HashMap<>();
+			registryMap.put(key, object);
+			registry.put(className, (Map) registryMap);
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public <T extends Keyed> Registry<T> getRegistry(Class<T> className) {
+		return new Registry() {
+			@Nullable
+			public T get(@NotNull NamespacedKey key) {
+				return (T) registry.get(className).get(key);
+			}
+			
+			@NotNull
+			public Stream<T> stream() {
+				return (Stream) registry.get(className).values().stream();
+			}
+
+			public Iterator<T> iterator() {
+				return (Iterator) registry.get(className).values().iterator();
+			}
+		};
+	}
 
 }

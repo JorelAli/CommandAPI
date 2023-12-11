@@ -71,3 +71,19 @@ new CommandAPICommand("mycommand")
 ## Can I change the message that is sent to the user when an argument isn't valid?
 
 No. That message is handled client-side and isn't controlled by the CommandAPI.
+
+## My suggestions on my arguments are empty or don't update. How do I make dynamic suggestions?
+
+Arguments with suggestions provided using `ArgumentSuggestions.strings(String...)` are calculated _when the command is registered_. In order to have argument suggestions calculated _when the command is being typed_, you need to use the lambda-variant of the `ArgumentSuggestions.strings(Function<SuggestionInfo, String[]> suggestions)` method instead. More information about the different methods can be found [here](./argumentsuggestions.md#the-argumentsuggestions-interface).
+
+The easiest way to do this is to add `info ->` at the start of your array:
+
+```java
+ArgumentSuggestions.strings(SomeClass.someArray);
+```
+
+$$\downarrow$$
+
+```java
+ArgumentSuggestions.strings(info -> SomeClass.someArray);
+```

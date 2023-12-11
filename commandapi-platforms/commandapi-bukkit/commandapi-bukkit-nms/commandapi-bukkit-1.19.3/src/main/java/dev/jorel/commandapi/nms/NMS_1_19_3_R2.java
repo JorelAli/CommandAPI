@@ -149,7 +149,7 @@ import java.util.function.ToIntFunction;
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @Differs(from = "1.19.2", by = "Chat preview removed")
-public class NMS_1_19_3_R2 extends NMS_Common {
+public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -646,7 +646,12 @@ public class NMS_1_19_3_R2 extends NMS_Common {
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		Collection<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
-		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
+		SimpleFunctionWrapper[] convertedCustomFunctions = new SimpleFunctionWrapper[customFunctions.size()];
+		int index = 0;
+		for (CommandFunction customFunction : customFunctions) {
+			convertedCustomFunctions[index++] = convertFunction(customFunction);
+		}
+		return convertedCustomFunctions;
 	}
 	
 	@Override

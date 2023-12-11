@@ -43,15 +43,16 @@ The Kotlin DSL also provides executors to execute your command. You've seen the 
 
 To find out, which DSL executor corresponds to "normal" executors, you can refer to the table below:
 
-| DSL Executor             | "normal" Executor        |
-|--------------------------|--------------------------|
-| `anyExecutor()`          | `executes()`             |
-| `playerExecutor()`       | `executesPlayer()`       |
-| `entityExecutor()`       | `executesEntity()`       |
-| `consoleExecutor()`      | `executesConsole()`      |
-| `commandBlockExecutor()` | `executesCommandBlock()` |
-| `proxyExecutor()`        | `executesProxy()`        |
-| `nativeExecutor()`       | `executesNative()`       |
+| DSL normal executor       | DSL resulting executor             | DSL normal execution info      | DSL resulting execution info            | "normal" Executor         |
+|---------------------------|------------------------------------|--------------------------------|-----------------------------------------|---------------------------|
+| `anyExecutor()`           | `anyResultingExecutor()`           | `anyExecutionInfo()`           | `anyResultingExecutionInfo`             | `executes()`              |
+| `playerExecutor()`        | `playerResultingExecutor()`        | `playerExecutionInfo()`        | `playerResultingExecutionInfo()`        | `executesPlayer()`        |
+| `entityExecutor()`        | `entityResultingExecutor()`        | `entityExecutionInfo()`        | `entityResultingExecutionInfo()`        | `executesEntity()`        |
+| `consoleExecutor()`       | `consoleResultingExecutor()`       | `consoleExecutionInfo()`       | `consoleResultingExecutionInfo()`       | `executesConsole()`       |
+| `commandBlockExecutor()`  | `commandBlockResultingExecutor()`  | `commandBlockExecutionInfo()`  | `commandBlockResultingExecutionInfo()`  | `executesCommandBlock()`  |
+| `proxyExecutor()`         | `proxyResultingExecutor()`         | `proxyExecutionInfo()`         | `proxyResultingExecutionInfo()`         | `executesProxy()`         |
+| `nativeExecutor()`        | `nativeResultingExecutor()`        | `nativeExecutionInfo()`        | `nativeResultingExecutionInfo()`        | `executesNative()`        |
+| `remoteConsoleExecutor()` | `remoteConsoleResultingExecutor()` | `remoteConsoleExecutionInfo()` | `remoteConsoleResultingExecutionInfo()` | `executesRemoteConsole()` |
 
 -----
 

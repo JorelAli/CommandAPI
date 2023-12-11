@@ -8,35 +8,23 @@ There are a few arguments that are incompatible with various versions of Minecra
 
 ### AngleArgument
 
-Incompatible with Minecraft versions **less than 1.16.2** (1.13.x, 1.14.x, 1.15.x, 1.16, 1.16.1)
+Incompatible with Minecraft versions **less than 1.16.2** _(1.15.x, 1.16, 1.16.1)_
 
 ### BiomeArgument
 
-Incompatible with Minecraft versions **less than 1.16** _(1.13.x, 1.14.x, 1.15.x)_
+Incompatible with Minecraft versions **less than 1.16** _(1.15.x)_
 
 ### ChatArgument
 
 Incompatible with Minecraft version **1.16.1** (Works on 1.16.2)
 
-### EnvironmentArgument
+## FunctionArgument
 
-Incompatible with Minecraft version **1.13** (Works on 1.13.1 and 1.13.2)
-
-### LocationArgument2D
-
-If you're using LocationArgument2D with `LocationType.PRECISE_POSITION`, then it is incompatible with Minecraft version **1.13** (Works on 1.13.1 and 1.13.2)
-
-### RecipeArgument
-
-If you use Minecraft versions **less than 1.15**, this argument will return a `Recipe`. If you are using Minecraft version 1.15 or greater, this argument will return a `ComplexRecipe` (which is a subclass of `Recipe`).
-
-### TimeArgument
-
-Incompatible with Minecraft versions **less than 1.14** _(1.13.x)_
+Running functions generated via the `FunctionArgument` on Minecraft version **1.20.3** and **1.20.4** will always return a value of 1, regardless of whether the command succeeds, fails, or returns a result. (Works normally on 1.20.2 and below). Trying to retrieve the list of commands in a function on Minecraft version **1.20.3** and **1.20.4** will always return an empty array.
 
 ### UUIDArgument
 
-Incompatible with Minecraft versions **less than 1.16** _(1.13.x, 1.14.x, 1.15.x)_
+Incompatible with Minecraft versions **less than 1.16** _(1.15.x)_
 
 -----
 

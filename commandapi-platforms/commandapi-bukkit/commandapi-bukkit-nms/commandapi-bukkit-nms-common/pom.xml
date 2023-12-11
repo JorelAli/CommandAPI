@@ -19,7 +19,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.2.0</version>
+		<version>9.3.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -133,6 +133,18 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<id>Spigot_1_20_4_R3</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.20.4-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 		<profile>
 			<id>Spigot_1_20_2_R2</id>
 			<dependencies>

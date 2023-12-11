@@ -19,7 +19,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.2.0</version>
+		<version>9.3.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -48,6 +48,12 @@
 		</dependency>
 
 		<!-- NMS-specific implementations -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-1.20.3</artifactId>
+			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
+		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-1.20.2</artifactId>

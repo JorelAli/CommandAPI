@@ -21,7 +21,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.2.0</version>
+		<version>9.3.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -30,6 +30,7 @@
 	<properties>
 		<minecraft.mappings>1.19.4-R0.1-SNAPSHOT</minecraft.mappings>
 		<spigot.version>1.19.4-R0.1-SNAPSHOT</spigot.version>
+		<paper.version>1.19.4-R0.1-SNAPSHOT</paper.version>
 	</properties>
 
 	<repositories>

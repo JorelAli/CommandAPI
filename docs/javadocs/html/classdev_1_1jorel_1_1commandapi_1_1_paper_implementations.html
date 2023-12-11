@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.2.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -108,6 +108,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a117d3e91a256f5330d48b92f2c1390a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ea78340cc0d2319b1b93cd8917a0fd5"><td class="memItemLeft" align="right" valign="top">Class&lt;? extends CommandSender &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#a0ea78340cc0d2319b1b93cd8917a0fd5">getFeedbackForwardingCommandSender</a> ()</td></tr>
 <tr class="separator:a0ea78340cc0d2319b1b93cd8917a0fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee68de813f96bebc380a5845d2306efc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html">WrapperCommandSyntaxException</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#aee68de813f96bebc380a5845d2306efc">getExceptionFromString</a> (String message)</td></tr>
+<tr class="memdesc:aee68de813f96bebc380a5845d2306efc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a <code><a class="el" href="">WrapperCommandSyntaxException</a></code> from a message with colour codes like <code><a class="el" href="">ChatColor</a></code> or using the § symbol.  <a href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#aee68de813f96bebc380a5845d2306efc">More...</a><br /></td></tr>
+<tr class="separator:aee68de813f96bebc380a5845d2306efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2f032cf6b53d414bd5f6bd6700cf674e" name="a2f032cf6b53d414bd5f6bd6700cf674e"></a>
@@ -170,6 +173,33 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>Bukkit's <code><a class="el" href="">CommandMap</a></code> </dd></dl>
+
+</div>
+</div>
+<a id="aee68de813f96bebc380a5845d2306efc" name="aee68de813f96bebc380a5845d2306efc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee68de813f96bebc380a5845d2306efc">&#9670;&nbsp;</a></span>getExceptionFromString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html">WrapperCommandSyntaxException</a> dev.jorel.commandapi.PaperImplementations.getExceptionFromString </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Builds a <code><a class="el" href="">WrapperCommandSyntaxException</a></code> from a message with colour codes like <code><a class="el" href="">ChatColor</a></code> or using the § symbol. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>the error message to be displayed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A <code><a class="el" href="">WrapperCommandSyntaxException</a></code> with the given message as error message </dd></dl>
 
 </div>
 </div>
@@ -260,7 +290,7 @@ Public Member Functions</h2></td></tr>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a></li>
 				<li class="footer">
-					Generated on Wed Sep 27 2023 11:43:30 for CommandAPI 9.2.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

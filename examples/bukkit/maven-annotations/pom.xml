@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-plugin</artifactId>
-			<version>9.2.0</version>
+			<version>9.3.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-annotations</artifactId>
-			<version>9.2.0</version>
+			<version>9.3.0</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -63,7 +63,7 @@
 						<path>
 							<groupId>dev.jorel</groupId>
 							<artifactId>commandapi-annotations</artifactId>
-							<version>9.2.0</version>
+							<version>9.3.0</version>
 						</path>
 					</annotationProcessorPaths>
 					<release>16</release>

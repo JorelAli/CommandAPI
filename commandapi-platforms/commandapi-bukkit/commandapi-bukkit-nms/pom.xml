@@ -26,7 +26,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.2.0</version>
+		<version>9.3.0</version>
 	</parent>
 
 	<artifactId>commandapi-bukkit-nms</artifactId>
@@ -35,6 +35,7 @@
 	<modules>
 		<!-- NMS versions -->
 		<module>commandapi-bukkit-nms-common</module>
+		<module>commandapi-bukkit-1.20.3</module>
 		<module>commandapi-bukkit-1.20.2</module>
 		<module>commandapi-bukkit-1.20</module>
 		<module>commandapi-bukkit-1.19.4</module>

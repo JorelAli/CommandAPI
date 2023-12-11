@@ -43,8 +43,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.*;
 import net.minecraft.commands.arguments.coordinates.*;
@@ -75,7 +73,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
 
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
 
@@ -299,19 +296,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		return sound.getKey().toString();
 	}
 
-	// Converts NMS function to SimpleFunctionWrapper
-	private SimpleFunctionWrapper convertFunction(CommandFunction commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> this.<MinecraftServer>getMinecraftServer().getFunctions()
-			.execute(commandFunction, css);
-
-		CommandFunction.Entry[] cArr = commandFunction.getEntries();
-		String[] result = new String[cArr.length];
-		for (int i = 0, size = cArr.length; i < size; i++) {
-			result[i] = cArr[i].toString();
-		}
-		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.getId()), appliedObj, result);
-	}
-
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19")
 	public abstract void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException;
@@ -420,28 +404,12 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract FunctionWrapper[] getFunction(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 
 	@Override
-	// TODO: This has its own implementation for 1.17, 1.18 and 1.18.2
-	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
-		Optional<CommandFunction> commandFunctionOptional = this.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
-		if(commandFunctionOptional.isPresent()) {
-			return convertFunction(commandFunctionOptional.get());
-		} else {
-			throw new IllegalStateException("Failed to get defined function " + key
-				+ "! This should never happen - please report this to the CommandAPI"
-				+ "developers, we'd love to know how you got this error message!");
-		}
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, in = "1.17, 1.18 and 1.18.2")
+	public abstract SimpleFunctionWrapper getFunction(NamespacedKey key);
 
 	@Override
-	// TODO: This has its own implementation for 1.17, 1.18 and 1.18.2
-	public Set<NamespacedKey> getFunctions() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getFunctionNames()) {
-			result.add(fromResourceLocation(resourceLocation));
-		}
-		return result;
-	}
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, in = "1.17, 1.18 and 1.18.2")
+	public abstract Set<NamespacedKey> getFunctions();
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.20.2")
@@ -553,13 +521,15 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract ScoreboardSlot getScoreboardSlot(CommandContext<CommandSourceStack> cmdCtx, String key);
 
 	@Override
-	public final Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)
+	// TODO: Overridden in 1.20.3 because this now returns a Collection<ScoreHolder>
+	public Collection<String> getScoreHolderMultiple(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException {
 		return ScoreHolderArgument.getNames(cmdCtx, key);
 	}
 
 	@Override
-	public final String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	// TODO: Overridden in 1.20.3 because this now returns a ScoreHolder
+	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return ScoreHolderArgument.getName(cmdCtx, key);
 	}
 

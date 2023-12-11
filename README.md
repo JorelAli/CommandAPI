@@ -48,24 +48,25 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.13.x**         | v1.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.1, 1.14.2** | v2.0 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
 | **1.14.3, 1.14.4** | v2.1 - 5.12, 8.3.0  - 8.8.0 | 8.8.0                        | 16                                                        |
-| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.2.0 | 9.2.0                        | 16                                                        |
-| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
-| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
-| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
-| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.2.0 | 9.2.0                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.2.0 | 9.2.0                        | 16                                                        |
-| **1.17**           | 6.0.x - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.19**           | 8.3.0 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.19.2**         | 8.5.1 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.19.3**         | 8.7.0 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.19.4**         | 8.8.0 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.20**           | 9.0.2 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.20.1**         | 9.0.3 - 9.2.0               | 9.2.0                        | 16                                                        |
-| **1.20.2**         | 9.2.0                       | 9.2.0                        | 16                                                        |
+| **1.15.x**         | v2.3a - 5.12, 8.3.0 - 9.3.0 | 9.3.0                        | 16                                                        |
+| **1.16.1**         | v3.0 - 5.12, 8.3.0  - 9.3.0 | 9.3.0                        | 16                                                        |
+| **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.3.0 | 9.3.0                        | 16                                                        |
+| **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.3.0 | 9.3.0                        | 16                                                        |
+| **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.3.0 | 9.3.0                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.3.0 | 9.3.0                        | 16                                                        |
+| **1.17**           | 6.0.x - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.19**           | 8.3.0 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.19.3**         | 8.7.0 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.19.4**         | 8.8.0 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.20**           | 9.0.2 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.20.1**         | 9.0.3 - 9.3.0               | 9.3.0                        | 16                                                        |
+| **1.20.2**         | 9.3.0                       | 9.3.0                        | 16                                                        |
+| **1.20.3, 1.20.4** | 9.3.0                       | 9.3.0                        | 16                                                        |
 
 -----
 
@@ -413,6 +414,22 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>9.3.0</b></td>
+            <td valign="top">December 2023</td>
+            <td valign="top">
+                <b>⚠️ This version has limited support for the <code>FunctionArgument</code>! (See documentation for more information)</b>
+                <ul>
+                    <li>Adds support for Minecraft 1.20.3 and 1.20.4</li>
+                    <li>Fixed bug where calling <code>SimpleFunctionWrapper.getTag()</code> on 1.19+ would throw an error</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/499 Fix typo in Adventure methods for tooltips</li>
+                    <li>Adds <code>ExecutionInfo</code> executors for the Kotlin DSL</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/497 Adds support for <code>RemoteConsoleCommandSender</code></li>
+                    <li>Fixed <code>executesFeedbackForwarding()</code> not checking for a <code>FeedbackForwardingCommandSender</code> correctly thus allowing every executor to execute the command</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/473 Fix RGB colors in <code>CustomArgument.CustomArgumentException#fromString</code> creating the wrong colors</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>9.2.0</b></td>
             <td valign="top">September 2023</td>
