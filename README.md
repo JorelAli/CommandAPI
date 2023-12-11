@@ -421,6 +421,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                 <b>⚠️ This version has limited support for the <code>FunctionArgument</code>! (See documentation for more information)</b>
                 <ul>
                     <li>Adds support for Minecraft 1.20.3 and 1.20.4</li>
+                    <li>Fixed bug where calling <code>SimpleFunctionWrapper.getTag()</code> on 1.19+ would throw an error</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/499 Fix typo in Adventure methods for tooltips</li>
                     <li>Adds <code>ExecutionInfo</code> executors for the Kotlin DSL</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/497 Adds support for <code>RemoteConsoleCommandSender</code></li>
