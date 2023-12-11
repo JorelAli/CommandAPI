@@ -32,5 +32,9 @@ var interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable =
     [ "executesProxy", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ad70b6ec3cc3f173ebb5f3cba8e6a5bf7", null ],
     [ "executesProxy", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#aabedb5e11a69a746d02b791dbe255eec", null ],
     [ "executesProxy", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ac16f2b03b0b4cb63c0464e54c89687ca", null ],
+    [ "executesRemoteConsole", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a8d58a318852ec1fdf2f476d0fca5598a", null ],
+    [ "executesRemoteConsole", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#ac8be35a627ef25dfc0b7542ec4a2620a", null ],
+    [ "executesRemoteConsole", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a86d0cd04c24a15a5fc582061daf3d794", null ],
+    [ "executesRemoteConsole", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#af451c1e6dd5feb6678d675710dea0f2e", null ],
     [ "instance", "interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a71d3ddced6c3f5f65cdf1a03ef8259cf", null ]
 ];

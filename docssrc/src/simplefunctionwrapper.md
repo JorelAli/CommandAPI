@@ -42,6 +42,14 @@ The methods `getFunctions()` and `getTags()` simply return a set of `NamespacedK
 
 ### run(CommandSender)
 
+<div class="warning">
+
+## FunctionArguments and 1.20.3+
+
+As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling `run(CommandSender)` will always return a value of `1`, regardless of whether the command succeeds, fails, or returns a result.
+
+</div>
+
 This method simply runs the current `SimpleFunctionWrapper` as the provided command sender. The method will return a numerical result value, stating whether it succeeds or returns a result. This is documented in more detail [here](./normalexecutors.md) and [here](./resultingcommandexecutors.md). For example:
 
 ### getCommands()

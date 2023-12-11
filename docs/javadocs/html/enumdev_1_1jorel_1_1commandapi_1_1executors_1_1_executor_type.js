@@ -7,5 +7,6 @@ var enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type =
     [ "FEEDBACK_FORWARDING", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#ac9c8e40ea459b6849529a59f20010387", null ],
     [ "NATIVE", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a76c88852963ead0914c7e942664a0a72", null ],
     [ "PLAYER", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a52ebde1677f2c3a109bc1aa2407ca1b3", null ],
-    [ "PROXY", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a3716b4662b5fdb66c4cd565a59ec7cba", null ]
+    [ "PROXY", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#a3716b4662b5fdb66c4cd565a59ec7cba", null ],
+    [ "REMOTE", "enumdev_1_1jorel_1_1commandapi_1_1executors_1_1_executor_type.html#ab0a06dbfbad65a2cb2ee45cb72b0993f", null ]
 ];

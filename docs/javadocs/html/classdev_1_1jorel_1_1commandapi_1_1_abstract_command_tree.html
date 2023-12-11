@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.2.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -96,17 +96,25 @@ $(document).ready(function(){initNavTree('classdev_1_1jorel_1_1commandapi_1_1_ab
 
 <p>This is the root node for creating a command as a tree.  
  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#details">More...</a></p>
-
-<p>Inherits dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.</p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for dev.jorel.commandapi.AbstractCommandTree&lt; Impl, Argument, CommandSender &gt;:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+ <div class="center">
+  <img src="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.png" usemap="#dev.jorel.commandapi.AbstractCommandTree_3C_20Impl_2C_20Argument_2C_20CommandSender_20_3E_map" alt=""/>
+  <map id="dev.jorel.commandapi.AbstractCommandTree_3C_20Impl_2C_20Argument_2C_20CommandSender_20_3E_map" name="dev.jorel.commandapi.AbstractCommandTree_3C_20Impl_2C_20Argument_2C_20CommandSender_20_3E_map">
+<area href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html" title="This is a base class for AbstractCommandAPICommand and AbstractCommandTree command definitions." alt="dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;" shape="rect" coords="0,0,482,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2b18f25a41e52e8a2c2e8583da231972"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972">then</a> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt; tree)</td></tr>
 <tr class="memdesc:a2b18f25a41e52e8a2c2e8583da231972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a child branch on the tree.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972">More...</a><br /></td></tr>
 <tr class="separator:a2b18f25a41e52e8a2c2e8583da231972"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="memItemLeft" align="right" valign="top"><a id="a08c8aea02a7dcf4011bcccbd6096f96b" name="a08c8aea02a7dcf4011bcccbd6096f96b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>register</b> ()</td></tr>
-<tr class="memdesc:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the command. <br /></td></tr>
+<tr class="memitem:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a08c8aea02a7dcf4011bcccbd6096f96b">register</a> ()</td></tr>
+<tr class="memdesc:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a08c8aea02a7dcf4011bcccbd6096f96b">More...</a><br /></td></tr>
 <tr class="separator:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6c03ba09615df46a946c8b915976dd1"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#af6c03ba09615df46a946c8b915976dd1">getName</a> ()</td></tr>
 <tr class="memdesc:af6c03ba09615df46a946c8b915976dd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#af6c03ba09615df46a946c8b915976dd1">More...</a><br /></td></tr>
@@ -285,7 +293,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">String[] dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.getAliases </td>
+          <td class="memname">String[] <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.getAliases </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -341,7 +349,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">String dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.getFullDescription </td>
+          <td class="memname">String <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.getFullDescription </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -369,7 +377,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">String dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.getName </td>
+          <td class="memname">String <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.getName </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -397,7 +405,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.getPermission </td>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a> <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.getPermission </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -425,7 +433,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Predicate&lt; CommandSender &gt; dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.getRequirements </td>
+          <td class="memname">Predicate&lt; CommandSender &gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.getRequirements </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -453,7 +461,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">String dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.getShortDescription </td>
+          <td class="memname">String <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.getShortDescription </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -481,7 +489,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">String[] dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.getUsage </td>
+          <td class="memname">String[] <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.getUsage </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -539,7 +547,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.override </td>
+          <td class="memname">void <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.override </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -557,6 +565,27 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
 
 </div>
 </div>
+<a id="a08c8aea02a7dcf4011bcccbd6096f96b" name="a08c8aea02a7dcf4011bcccbd6096f96b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08c8aea02a7dcf4011bcccbd6096f96b">&#9670;&nbsp;</a></span>register()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html">dev.jorel.commandapi.AbstractCommandTree</a>&lt; Impl, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt;.register </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers the command. </p>
+
+<p>Reimplemented from <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#aa2fc5eefd1535316ea2b2d1611c1b488">dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;</a>.</p>
+
+</div>
+</div>
 <a id="af0c88f393d0ed68227b6215797353c4f" name="af0c88f393d0ed68227b6215797353c4f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af0c88f393d0ed68227b6215797353c4f">&#9670;&nbsp;</a></span>setAliases()</h2>
 
@@ -567,7 +596,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.setAliases </td>
+          <td class="memname">void <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.setAliases </td>
           <td>(</td>
           <td class="paramtype">String[]&#160;</td>
           <td class="paramname"><em>aliases</em></td><td>)</td>
@@ -635,7 +664,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.setPermission </td>
+          <td class="memname">void <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.setPermission </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a>&#160;</td>
           <td class="paramname"><em>permission</em></td><td>)</td>
@@ -669,7 +698,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.setRequirements </td>
+          <td class="memname">void <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.setRequirements </td>
           <td>(</td>
           <td class="paramtype">Predicate&lt; CommandSender &gt;&#160;</td>
           <td class="paramname"><em>requirements</em></td><td>)</td>
@@ -730,7 +759,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withAliases </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withAliases </td>
           <td>(</td>
           <td class="paramtype">String...&#160;</td>
           <td class="paramname"><em>aliases</em></td><td>)</td>
@@ -765,7 +794,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withFullDescription </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withFullDescription </td>
           <td>(</td>
           <td class="paramtype">String&#160;</td>
           <td class="paramname"><em>description</em></td><td>)</td>
@@ -800,7 +829,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withHelp </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withHelp </td>
           <td>(</td>
           <td class="paramtype">String&#160;</td>
           <td class="paramname"><em>shortDescription</em>, </td>
@@ -825,7 +854,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
 </div><div class="memdoc">
 
 <p>Sets the short and full description for this command. </p>
-<p >This is a short-hand for the <code><a class="el" href="">ExecutableCommand#withShortDescription</a></code> and <code><a class="el" href="">ExecutableCommand#withFullDescription</a></code> methods. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >This is a short-hand for the <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#a13f6917a6e9e87616cd23b3484976ef1">ExecutableCommand#withShortDescription</a></code> and <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#a6e3ed81e60de88d282f5e929eedcdd77">ExecutableCommand#withFullDescription</a></code> methods. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">shortDescription</td><td>the short description for this command </td></tr>
     <tr><td class="paramname">fullDescription</td><td>the full description for this command </td></tr>
@@ -846,7 +875,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withoutPermission </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withoutPermission </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a>&#160;</td>
           <td class="paramname"><em>permission</em></td><td>)</td>
@@ -881,7 +910,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withoutPermission </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withoutPermission </td>
           <td>(</td>
           <td class="paramtype">String&#160;</td>
           <td class="paramname"><em>permission</em></td><td>)</td>
@@ -916,7 +945,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withPermission </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withPermission </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a>&#160;</td>
           <td class="paramname"><em>permission</em></td><td>)</td>
@@ -951,7 +980,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withPermission </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withPermission </td>
           <td>(</td>
           <td class="paramtype">String&#160;</td>
           <td class="paramname"><em>permission</em></td><td>)</td>
@@ -986,7 +1015,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withRequirement </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withRequirement </td>
           <td>(</td>
           <td class="paramtype">Predicate&lt; CommandSender &gt;&#160;</td>
           <td class="paramname"><em>requirement</em></td><td>)</td>
@@ -1022,7 +1051,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withShortDescription </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withShortDescription </td>
           <td>(</td>
           <td class="paramtype">String&#160;</td>
           <td class="paramname"><em>description</em></td><td>)</td>
@@ -1057,7 +1086,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Impl dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;.withUsage </td>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.withUsage </td>
           <td>(</td>
           <td class="paramtype">String...&#160;</td>
           <td class="paramname"><em>usage</em></td><td>)</td>
@@ -1089,7 +1118,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html">AbstractCommandTree</a></li>
 				<li class="footer">
-					Generated on Wed Sep 27 2023 11:43:29 for CommandAPI 9.2.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Mon Dec 11 2023 10:27:40 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

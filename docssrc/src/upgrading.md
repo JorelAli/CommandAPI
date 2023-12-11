@@ -22,6 +22,8 @@ BukkitTooltip.generateAdventureComponents()
 
 </div>
 
+-----
+
 ## From 9.0.3 to 9.1.0
 
 ### MultiLiteralArgument changes
