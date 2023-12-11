@@ -313,8 +313,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		return baseNMS.getEntitySelector(cmdCtx, key, subType);
+	public Object getEntitySelector(CommandContext cmdCtx, String key, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
+		return baseNMS.getEntitySelector(cmdCtx, key, subType, allowEmpty);
 	}
 
 	@Override
