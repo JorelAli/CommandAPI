@@ -143,8 +143,9 @@ class ArgumentFunctionTests extends TestBase {
 			
 			if (version.greaterThanOrEqualTo(MCVersion.V1_20_3)) {
 				assertEquals(1, MockNMS.getInstance().popFunctionCallbackResult());
+				assertEquals(1, MockNMS.getInstance().popFunctionCallbackResult());
 			} else {
-				assertEquals(1, functionResult);
+				assertEquals(2, functionResult);
 			}
 		}
 		

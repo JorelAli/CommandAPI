@@ -389,7 +389,6 @@ public class MockNMS extends Enums {
 			Mockito.when(css.withSuppressedOutput()).thenReturn(css);
 			Mockito.when(css.withMaximumPermission(anyInt())).thenReturn(css);
 			Mockito.when(css.callback()).thenReturn((success, result) -> {
-				System.out.println("Push " + success + "," + result);
 				functionCallbackResults.push(result);
 			});
 		}
@@ -675,7 +674,6 @@ public class MockNMS extends Enums {
 
 	@Override
 	public int popFunctionCallbackResult() {
-		System.out.println("pop!");
 		return functionCallbackResults.pop();
 	}
 
