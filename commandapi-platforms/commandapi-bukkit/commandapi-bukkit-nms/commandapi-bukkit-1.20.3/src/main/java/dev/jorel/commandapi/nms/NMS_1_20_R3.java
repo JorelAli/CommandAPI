@@ -319,7 +319,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 			});
 		} catch (FunctionInstantiationException functionInstantiationException) {
 			// We don't care if the function failed to instantiate
-			;
+			assert true;
 		} catch (Exception exception) {
 			LogUtils.getLogger().warn("Failed to execute function {}", commandFunction.id(), exception);
 		} finally {
@@ -332,7 +332,22 @@ public class NMS_1_20_R3 extends NMS_Common {
 	// Converts NMS function to SimpleFunctionWrapper
 	private final SimpleFunctionWrapper convertFunction(CommandFunction<CommandSourceStack> commandFunction) {
 		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> runCommandFunction(commandFunction, css);
-		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.id()), appliedObj, new String[0]);
+		
+		// Unpack the commands by instantiating the function with no CSS, then retrieving its entries
+		String[] commands = new String[0];
+		try {
+			final InstantiatedFunction<CommandSourceStack> instantiatedFunction = commandFunction.instantiate((CompoundTag) null, this.getBrigadierDispatcher(), null);
+
+			List<?> cArr = instantiatedFunction.entries();
+			commands = new String[cArr.size()];
+			for (int i = 0, size = cArr.size(); i < size; i++) {
+				commands[i] = cArr.get(i).toString();
+			}
+		} catch (FunctionInstantiationException functionInstantiationException) {
+			// We don't care if the function failed to instantiate
+			assert true;
+		}
+		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.id()), appliedObj, commands);
 	}
 
 	@Override

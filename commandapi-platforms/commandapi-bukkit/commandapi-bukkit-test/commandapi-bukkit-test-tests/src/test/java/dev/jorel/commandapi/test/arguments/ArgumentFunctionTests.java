@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -228,6 +229,49 @@ class ArgumentFunctionTests extends TestBase {
 		// /test
 		// Should suggest #namespace:myothertag, #ns:mytag, mynamespace:myotherfunc and ns:myfunc
 		assertEquals(List.of("#namespace:myothertag", "#ns:mytag", "mynamespace:myotherfunc", "ns:myfunc"), server.getSuggestions(player, "test "));
+	}
+	
+	/********************************
+	 * Function commands list tests *
+	 ********************************/
+
+	@Test
+	void commandListTestWithFunctionArgument() {
+		Mut<FunctionWrapper[]> results = Mut.of();
+		Mut<String> sayResults = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new FunctionArgument("function"))
+			.executesPlayer((player, args) -> {
+				results.set((FunctionWrapper[]) args.get("function"));
+			})
+			.register();
+
+		new CommandAPICommand("mysay")
+			.withArguments(new GreedyStringArgument("message"))
+			.executesPlayer((player, args) -> {
+				sayResults.set(args.getUnchecked("message"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// Declare our functions on the server
+		MockPlatform.getInstance().addFunction(new NamespacedKey("ns", "myfunc"), List.of("mysay hi", "mysay bye"));
+
+		// Run the /test command
+		server.dispatchCommand(player, "test ns:myfunc");
+
+		// Check that the FunctionArgument has one entry and it hasn't run the /mysay
+		// command
+		FunctionWrapper[] result = results.get();
+		assertEquals(1, result.length);
+		assertNoMoreResults(sayResults);
+		
+		assertArrayEquals(new String[] { "mysay hi", "mysay bye" }, result[0].getCommands());
+
+		assertNoMoreResults(results);
+		assertNoMoreResults(sayResults);
 	}
 
 }
