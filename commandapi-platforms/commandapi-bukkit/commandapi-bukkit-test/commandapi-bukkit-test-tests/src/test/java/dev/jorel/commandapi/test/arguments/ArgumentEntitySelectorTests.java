@@ -105,6 +105,26 @@ class ArgumentEntitySelectorTests extends TestBase {
 		
 		assertNoMoreResults(results);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	void executionTestWithEntitySelectorArgumentManyPlayersProhibitEmpty() {
+		Mut<Collection<Player>> results = Mut.of();
+		
+		new CommandAPICommand("test")
+			.withArguments(new EntitySelectorArgument.ManyPlayers("value", false))
+			.executesPlayer((player, args) -> {
+				results.set((Collection<Player>) args.get(0));
+			})
+			.register();
+		
+		PlayerMock player = server.addPlayer("APlayer");
+		
+		// /test @e[gamemode=creative]
+		assertCommandFailsWith(player, "test @e[gamemode=creative]", "No player was found");
+		
+		assertNoMoreResults(results);
+	}
 
 	@Test
 	void executionTestWithEntitySelectorArgumentOneEntity() {
@@ -172,6 +192,26 @@ class ArgumentEntitySelectorTests extends TestBase {
 		// /test @p
 		server.dispatchCommand(player, "test @p");
 		assertEquals(1, results.get().size());
+
+		assertNoMoreResults(results);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void executionTestWithEntitySelectorArgumentManyEntitiesProhibitEmpty() {
+		Mut<Collection<Entity>> results = Mut.of();
+		
+		new CommandAPICommand("test")
+			.withArguments(new EntitySelectorArgument.ManyEntities("value", false))
+			.executesPlayer((player, args) -> {
+				results.set((Collection<Entity>) args.get(0));
+			})
+			.register();
+		
+		PlayerMock player = server.addPlayer("APlayer");
+		
+		// /test @e[type=pig]
+		assertCommandFailsWith(player, "test @e[type=pig]", "No entity was found");
 
 		assertNoMoreResults(results);
 	}

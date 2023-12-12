@@ -99,6 +99,7 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
+import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
@@ -337,7 +338,7 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
+	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have level 2 permissions in order to use entity selectors. We're
@@ -357,9 +358,17 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 					for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
 						result.add(entity.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_ENTITIES_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<org.bukkit.entity.Entity>();
+					if (allowEmpty) {
+						yield new ArrayList<org.bukkit.entity.Entity>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_MANY_PLAYERS:
 				try {
@@ -367,9 +376,17 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 					for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
 						result.add(player.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_PLAYERS_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<Player>();
+					if (allowEmpty) {
+						yield new ArrayList<Player>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_ONE_ENTITY:
 				yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
