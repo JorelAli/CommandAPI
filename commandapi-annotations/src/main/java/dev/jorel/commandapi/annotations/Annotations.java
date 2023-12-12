@@ -305,8 +305,12 @@ public class Annotations extends AbstractProcessor {
 			
 			// Handle return types
 			Primitive primitive = getPrimitive(argumentAnnotation);
-			if(primitive.value().length == 1) {
-				argumentMapping.put(i - 1, primitive.value()[0]);
+			if (argumentAnnotation instanceof ANBTCompoundArgument) {
+				argumentMapping.put(i - 1, parameter.asType().toString());
+			} else {
+				if(primitive.value().length == 1) {
+					argumentMapping.put(i - 1, primitive.value()[0]);
+				}
 			}
 		}
 		
