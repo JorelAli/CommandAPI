@@ -30,7 +30,7 @@ import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 /**
  * Annotation equivalent of the {@link NBTCompoundArgument}
  */
-@Primitive("dev.jorel.commandapi.nbtapi.NBTContainer")
+@Primitive({})
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.PARAMETER)
 public @interface ANBTCompoundArgument {

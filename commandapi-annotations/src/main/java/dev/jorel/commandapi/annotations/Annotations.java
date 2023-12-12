@@ -183,7 +183,13 @@ public class Annotations extends AbstractProcessor {
 				for(VariableElement parameter : method.getParameters()) {
 					Annotation argument = getArgument(parameter);
 					if(argument != null) {
-						imports.addAll(Arrays.asList(getPrimitive(argument).value()));
+						
+						if (argument instanceof ANBTCompoundArgument) {
+							// Get NBTCompoundArgument type from type mirror
+							imports.add(parameter.asType().toString());
+						} else {
+							imports.addAll(Arrays.asList(getPrimitive(argument).value()));
+						}
 
 						if(argument.annotationType().getEnclosingClass() == null) {
 							// Normal arguments
