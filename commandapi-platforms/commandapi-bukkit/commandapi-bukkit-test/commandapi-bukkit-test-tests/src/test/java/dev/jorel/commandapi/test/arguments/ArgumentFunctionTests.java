@@ -16,6 +16,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.FunctionArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.test.MockNMS;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -33,8 +34,6 @@ class ArgumentFunctionTests extends TestBase {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
-
-		assumeTrue(version.lessThan(MCVersion.V1_20_3));
 	}
 
 	@AfterEach
@@ -80,7 +79,13 @@ class ArgumentFunctionTests extends TestBase {
 		assertNoMoreResults(sayResults);
 
 		// Run the function (which should run the /mysay command)
-		result[0].run();
+		int functionResult = result[0].run();
+		
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_3)) {
+			assertEquals(1, MockNMS.getInstance().popFunctionCallbackResult());
+		} else {
+			assertEquals(1, functionResult);
+		}
 		
 		// TODO: I can't figure out how to get commands to run on 1.16.5 and
 		// I don't think we really care. If you decide you want to care, feel
@@ -134,7 +139,13 @@ class ArgumentFunctionTests extends TestBase {
 
 		// Run the function (which should run the /mysay command)
 		for(FunctionWrapper wrapper : result) {
-			wrapper.run();
+			int functionResult = wrapper.run();
+			
+			if (version.greaterThanOrEqualTo(MCVersion.V1_20_3)) {
+				assertEquals(1, MockNMS.getInstance().popFunctionCallbackResult());
+			} else {
+				assertEquals(1, functionResult);
+			}
 		}
 		
 		// TODO: I can't figure out how to get commands to run on 1.16.5 and
