@@ -52,9 +52,9 @@ inline fun CommandTree.adventureChatArgument(nodeName: String, optional: Boolean
 
 // Entity & Player arguments
 inline fun CommandTree.entitySelectorArgumentOneEntity(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.OneEntity(nodeName).setOptional(optional).apply(block))
-inline fun CommandTree.entitySelectorArgumentManyEntities(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyEntities(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.entitySelectorArgumentManyEntities(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyEntities(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun CommandTree.entitySelectorArgumentOnePlayer(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.OnePlayer(nodeName).setOptional(optional).apply(block))
-inline fun CommandTree.entitySelectorArgumentManyPlayers(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyPlayers(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.entitySelectorArgumentManyPlayers(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyPlayers(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun CommandTree.playerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(PlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.offlinePlayerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(OfflinePlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.entityTypeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntityTypeArgument(nodeName).setOptional(optional).apply(block))
@@ -157,9 +157,9 @@ inline fun Argument<*>.adventureChatArgument(nodeName: String, optional: Boolean
 
 // Entity & Player arguments
 inline fun Argument<*>.entitySelectorArgumentOneEntity(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.OneEntity(nodeName).setOptional(optional).apply(block))
-inline fun Argument<*>.entitySelectorArgumentManyEntities(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyEntities(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.entitySelectorArgumentManyEntities(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyEntities(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun Argument<*>.entitySelectorArgumentOnePlayer(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.OnePlayer(nodeName).setOptional(optional).apply(block))
-inline fun Argument<*>.entitySelectorArgumentManyPlayers(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyPlayers(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.entitySelectorArgumentManyPlayers(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyPlayers(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun Argument<*>.playerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(PlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.offlinePlayerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(OfflinePlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.entityTypeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntityTypeArgument(nodeName).setOptional(optional).apply(block))
