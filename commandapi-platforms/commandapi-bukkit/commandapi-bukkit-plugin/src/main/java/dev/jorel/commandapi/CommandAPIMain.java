@@ -32,8 +32,6 @@ import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-
 /**
  * Main CommandAPI plugin entrypoint
  */
