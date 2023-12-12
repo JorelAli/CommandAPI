@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -139,12 +140,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		Class<?> nbtContainerClass = CommandAPI.getConfiguration().getNBTContainerClass();
 		if (nbtContainerClass != null && CommandAPI.getConfiguration().getNBTContainerConstructor() != null) {
 			CommandAPI.logNormal("Hooked into an NBT API with class " + nbtContainerClass.getName());
-		} else {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning(
-					"Could not hook into the NBT API for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
-			}
 		}
+		// We don't need to log if no NBT was found, constructing an NBTCompoundArgument without one will do that for us
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
@@ -730,6 +727,26 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
 	}
 	
+	/**
+	 * Initializes the CommandAPI's implementation of an NBT API. If you are shading
+	 * the CommandAPI, you should be using
+	 * {@link CommandAPIConfig#initializeNBTAPI(Class, Function)} in your
+	 * {@code onLoad} method instead of calling this method.
+	 *
+	 * @param <T>                     the type that the NBT compound container class
+	 *                                is
+	 * @param nbtContainerClass       the NBT compound container class. For example,
+	 *                                {@code NBTContainer.class}
+	 * @param nbtContainerConstructor a function that takes an Object (NMS
+	 *                                {@code NBTTagCompound}) and returns an
+	 *                                instance of the provided NBT compound
+	 *                                container. For example,
+	 *                                {@code NBTContainer::new}.
+	 */
+	public static <T> void initializeNBTAPI(Class<T> nbtContainerClass, Function<Object, T> nbtContainerConstructor) {
+		getConfiguration().lateInitializeNBT(nbtContainerClass, nbtContainerConstructor);
+	}
+	
 	protected void registerBukkitRecipesSafely(Iterator<Recipe> recipes) {
 		Recipe recipe;
 		while (recipes.hasNext()) {
@@ -741,6 +758,12 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 			} catch (IllegalStateException e) { // From CraftingManager - "Duplicate recipe ignored with ID %id%"
 				assert true; // Can't re-register registered recipes. Not an error.
+			} catch (Exception e) {
+				if (recipe instanceof Keyed keyedRecipe) {
+					CommandAPI.logError("Failed to register recipe " + keyedRecipe.getKey() + ": " + e.getMessage());
+				} else {
+					CommandAPI.logError("Failed to register recipe: " + e.getMessage());
+				}
 			}
 		}
 		

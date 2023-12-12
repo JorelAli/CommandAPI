@@ -32,9 +32,6 @@ import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-
 /**
  * Main CommandAPI plugin entrypoint
  */
@@ -53,7 +50,6 @@ public class CommandAPIMain extends JavaPlugin {
 			.useLatestNMSVersion(fileConfig.getBoolean("use-latest-nms-version"))
 			.missingExecutorImplementationMessage(fileConfig.getString("messages.missing-executor-implementation"))
 			.dispatcherFile(fileConfig.getBoolean("create-dispatcher-json") ? new File(getDataFolder(), "command_registration.json") : null)
-			.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
 			.shouldHookPaperReload(fileConfig.getBoolean("hook-paper-reload"))
 			.useMojangMappings(true);
 
@@ -69,13 +65,6 @@ public class CommandAPIMain extends JavaPlugin {
 		// Main CommandAPI loading
 		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(getLogger()));
 		CommandAPI.onLoad(config);
-
-		// Configure the NBT API - we're not allowing tracking at all, according
-		// to the CommandAPI's design principles. The CommandAPI isn't used very
-		// much, so this tiny proportion of servers makes very little impact to
-		// the NBT API's stats.
-		MinecraftVersion.disableBStats();
-		MinecraftVersion.disableUpdateCheck();
 
 		// Convert all plugins to be converted
 		if (!fileConfig.getList(PLUGINS_TO_CONVERT).isEmpty()
