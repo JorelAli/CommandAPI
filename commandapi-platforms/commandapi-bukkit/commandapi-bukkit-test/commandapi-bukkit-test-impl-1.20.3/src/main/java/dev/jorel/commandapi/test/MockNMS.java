@@ -49,7 +49,6 @@ import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.serialization.JsonOps;
 
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -292,7 +291,7 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
 		return baseNMS.wrapToVanillaCommandWrapper(node);
 	}
 

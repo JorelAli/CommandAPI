@@ -29,7 +29,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -436,7 +435,7 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param node The LiteralCommandNode to wrap
 	 * @return A VanillaCommandWrapper representing the given node
 	 */
-	Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node);
+	Command wrapToVanillaCommandWrapper(CommandNode<CommandListenerWrapper> node);
 
 	/**
 	 * Checks if a Brigadier command node is being handled by Bukkit's BukkitCommandWrapper

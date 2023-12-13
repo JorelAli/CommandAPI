@@ -72,6 +72,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private PaperImplementations paper;
 
 	private final Set<String> namespacesToFix = new HashSet<>();
+	private final RootCommandNode<Source> minecraftCommandNamespaces = new RootCommandNode<>();
 
 	// Static VarHandles
 	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
@@ -196,9 +197,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		JavaPlugin plugin = config.getPlugin();
 
 		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
+			// Fix namespaces first thing when starting the server
+			fixNamespaces();
 			// Sort out permissions after the server has finished registering them all
 			fixPermissions();
-			fixNamespaces();
 			if (paper.isFoliaPresent()) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
@@ -394,9 +396,17 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private void fixNamespaces() {
 		Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 		CommandDispatcher<Source> resourcesDispatcher = getResourcesDispatcher();
+		// Remove namespaces
 		for (String command : namespacesToFix) {
 			knownCommands.remove(command);
 			removeBrigadierCommands(resourcesDispatcher, command, false, c -> true);
+		}
+
+		// Add back certain minecraft: namespace commands
+		RootCommandNode<Source> rootNode = resourcesDispatcher.getRoot();
+		for (CommandNode<Source> node : minecraftCommandNamespaces.getChildren()) {
+			knownCommands.put(node.getName(), wrapToVanillaCommandWrapper(node));
+			rootNode.addChild(node);
 		}
 	}
 
@@ -555,25 +565,55 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
-		LiteralCommandNode<Source> builtNode = getBrigadierDispatcher().register(node);
-		if (namespace.isEmpty()) {
+		LiteralCommandNode<Source> builtNode = node.build();
+		LiteralCommandNode<Source> customNamespaceNode = null;
+
+		String name = node.getLiteral();
+		boolean namespaceEqualsMinecraft = namespace.equals("minecraft");
+		if (namespaceEqualsMinecraft && namespacesToFix.contains("minecraft:" + name)) {
+			// This command wants to exist as `minecraft:name`
+			// However, another command has requested that `minecraft:name` be removed
+			// We'll keep track of everything that should be `minecraft:name` in
+			//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
+			minecraftCommandNamespaces.addChild(namespaceNode(builtNode, "minecraft"));
+		} else if (namespace.isEmpty()) {
 			// Bukkit will automatically create `minecraft:command`
 			// We want to remove that so there is no namespace
-			fillNamespacesToFix(node.getLiteral());
-			return builtNode;
+			fillNamespacesToFix(name);
+		} else if (!namespaceEqualsMinecraft) {
+			// We should set up a custom namespace
+			customNamespaceNode = namespaceNode(builtNode, namespace);
+			// Make sure to remove the `minecraft:name` and
+			//  `minecraft:namespace:name` commands Bukkit will create
+			fillNamespacesToFix(name, namespace + ":" + name);
 		}
-		if(!namespace.equals("minecraft")) {
-			String name = node.getLiteral();
-			String namespacedName = namespace + ":" + name;
-			getBrigadierDispatcher().getRoot().addChild(namespaceNode(builtNode, namespace));
-			fillNamespacesToFix(name, namespacedName);
+
+		// Add the nodes to the main dispatcher
+		RootCommandNode<Source> rootNode = getBrigadierDispatcher().getRoot();
+		rootNode.addChild(builtNode);
+		if (customNamespaceNode != null) {
+			rootNode.addChild(customNamespaceNode);
 		}
 		return builtNode;
 	}
 
 	private void fillNamespacesToFix(String... namespacedCommands) {
 		for (String namespacedCommand : namespacedCommands) {
-			namespacesToFix.add("minecraft:" + namespacedCommand);
+			// We'll remove these commands later when fixNamespaces is called
+			if (!namespacesToFix.add("minecraft:" + namespacedCommand)) {
+				continue;
+			}
+
+			// If this is the first time considering this command for removal
+			// and there is already a command with this name in the dispatcher
+			// then, the command currently in the dispatcher is supposed to appear as `minecraft:command`
+			CommandNode<Source> currentNode = getBrigadierDispatcher().getRoot().getChild(namespacedCommand);
+			if(currentNode != null) {
+				// We'll keep track of everything that should be `minecraft:command` in
+				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
+				// TODO: Ideally, we should be working without this cast to LiteralCommandNode. I don't know if this can fail
+				minecraftCommandNamespaces.addChild(namespaceNode((LiteralCommandNode<Source>) currentNode, "minecraft"));
+			}
 		}
 	}
 
