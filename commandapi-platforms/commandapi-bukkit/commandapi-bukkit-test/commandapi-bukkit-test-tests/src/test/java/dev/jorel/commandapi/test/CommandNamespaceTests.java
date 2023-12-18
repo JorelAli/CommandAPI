@@ -2,26 +2,38 @@ package dev.jorel.commandapi.test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.RegisteredCommand;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for testing if namespaces work correctly
  */
 public class CommandNamespaceTests extends TestBase {
+
+	private static final SafeVarHandle<SimpleCommandMap, Map<String, Command>> commandMapKnownCommands = SafeVarHandle.ofOrNull(SimpleCommandMap.class, "knownCommands", "knownCommands", Map.class);
 
 	/*********
 	 * Setup *
@@ -37,6 +49,38 @@ public class CommandNamespaceTests extends TestBase {
 		super.tearDown();
 	}
 
+	void enableWithNamespaces() {
+		disablePaperImplementations();
+		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
+		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
+
+		assertFalse(CommandAPI.canRegister());
+
+		// Register minecraft: namespace. MockBukkit doesn't do this on their own
+		for (RegisteredCommand command : CommandAPI.getRegisteredCommands()) {
+			if (!command.namespace().equals("minecraft")) {
+				continue;
+			}
+			CommandNode<Object> node = MockPlatform.getInstance().getBrigadierDispatcher().getRoot().getChild(command.commandName());
+
+			LiteralCommandNode<Object> namespacedNode = new LiteralCommandNode<>("minecraft:" + command.commandName(),
+				node.getCommand(),
+				node.getRequirement(),
+				node.getRedirect(),
+				node.getRedirectModifier(),
+				node.isFork()
+			);
+			MockPlatform.getInstance().getBrigadierDispatcher().getRoot().addChild(namespacedNode);
+
+			Map<String, Command> knowCommands = commandMapKnownCommands.get(MockPlatform.getInstance().getSimpleCommandMap());
+			knowCommands.put(namespacedNode.getLiteral(), MockPlatform.getInstance().wrapToVanillaCommandWrapper(namespacedNode));
+		}
+		// Resend commands
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			player.updateCommands();
+		}
+	}
+
 	/*********
 	 * Tests *
 	 *********/
@@ -45,11 +89,7 @@ public class CommandNamespaceTests extends TestBase {
 	public void minecraftNamespaceTestsWhileServerIsEnabledWhenRegistering() {
 		Mut<String> results = Mut.of();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -83,19 +123,18 @@ public class CommandNamespaceTests extends TestBase {
 		// Make sure the default registration with the minecraft: namespace works
 		command.register();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
+
+        assertNotNull(MockPlatform.getInstance().getBrigadierDispatcher().getRoot().getChild("test"));
+		assertNotNull(MockPlatform.getInstance().getBrigadierDispatcher().getRoot().getChild("minecraft:test"));
 
 		server.dispatchCommand(player, "test alpha");
 		assertEquals("alpha", results.get());
 
-		//server.dispatchCommand(player, "minecraft:test alpha");
-		// assertEquals("alpha", results.get());
+		server.dispatchCommand(player, "minecraft:test alpha");
+		assertEquals("alpha", results.get());
 
 		assertNoMoreResults(results);
 	}
@@ -104,11 +143,7 @@ public class CommandNamespaceTests extends TestBase {
 	public void stringNamespaceTestWhileServerIsEnabledWhenRegistering() {
 		Mut<String> results = Mut.of();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -145,11 +180,7 @@ public class CommandNamespaceTests extends TestBase {
 		// Test registering the command with a custom namespace
 		command.register("commandtest");
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -168,11 +199,7 @@ public class CommandNamespaceTests extends TestBase {
 	public void pluginNamespaceTestWhileServerIsEnabledWhenRegistering() {
 		Mut<String> results = Mut.of();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -210,11 +237,7 @@ public class CommandNamespaceTests extends TestBase {
 		// Test registering the command with a plugin instance
 		command.register(Main.getPlugin(Main.class));
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -233,11 +256,7 @@ public class CommandNamespaceTests extends TestBase {
 	public void aliasesWithDefaultNamespaceTestWhileServerIsEnabledWhenRegistering() {
 		Mut<String> results = Mut.of();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -280,11 +299,7 @@ public class CommandNamespaceTests extends TestBase {
 		// Test aliases with the default namespace
 		command.register();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -294,11 +309,11 @@ public class CommandNamespaceTests extends TestBase {
 		server.dispatchCommand(player, "beta discord");
 		assertEquals("discord", results.get());
 
-		//server.dispatchCommand(player, "minecraft:alpha discord");
-		//assertEquals("discord", results.get());
+		server.dispatchCommand(player, "minecraft:alpha discord");
+		assertEquals("discord", results.get());
 
-		//server.dispatchCommand(player, "minecraft:beta discord");
-		//assertEquals("discord", results.get());
+		server.dispatchCommand(player, "minecraft:beta discord");
+		assertEquals("discord", results.get());
 
 		assertNoMoreResults(results);
 	}
@@ -307,11 +322,7 @@ public class CommandNamespaceTests extends TestBase {
 	public void aliasesWithCustomNamespacesTestWhileServerIsEnabledWhenRegistering() {
 		Mut<String> results = Mut.of();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -381,11 +392,7 @@ public class CommandNamespaceTests extends TestBase {
 		// Test aliases with a custom namespace
 		command.register("commandtest");
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -411,11 +418,7 @@ public class CommandNamespaceTests extends TestBase {
 	public void sameCommandNameButDifferentNamespaceTestWhileServerIsEnabledWhenRegistering() {
 		Mut<String> results = Mut.of();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -471,11 +474,7 @@ public class CommandNamespaceTests extends TestBase {
 		a.register("a");
 		b.register("b");
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -501,11 +500,7 @@ public class CommandNamespaceTests extends TestBase {
 	public void specialCasesTestWhileServerIsEnabledWhenRegistering() {
 		Mut<String> results = Mut.of();
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
@@ -535,11 +530,7 @@ public class CommandNamespaceTests extends TestBase {
 
 		command.register("");
 
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-
-		assertFalse(CommandAPI.canRegister());
+		enableWithNamespaces();
 
 		PlayerMock player = server.addPlayer();
 
