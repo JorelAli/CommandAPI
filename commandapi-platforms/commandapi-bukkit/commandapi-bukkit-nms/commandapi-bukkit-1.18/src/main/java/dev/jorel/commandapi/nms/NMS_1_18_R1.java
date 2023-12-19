@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
@@ -96,6 +97,9 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
+import dev.jorel.commandapi.paper.ForkJoinPoolCommandSendingInterceptor;
+import dev.jorel.commandapi.paper.ThreadPoolExecutorCommandSendingInterceptor;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -106,6 +110,7 @@ import net.minecraft.Util;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -156,12 +161,15 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
+// This class is Paper-specific, so we can't directly access it at all :(
+// @RequireField(in = MCUtil.class, name = "asyncExecutor", ofType = ThreadPoolExecutor.class)
 public class NMS_1_18_R1 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
+	// private static final SafeVarHandle<MCUtil, ThreadPoolExecutor> mCUtilAsyncExecutor;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -172,6 +180,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
+		// mCUtilAsyncExecutor = SafeVarHandle.ofOrNull(MCUtil.class, "asyncExecutor", "asyncExecutor", ThreadPoolExecutor.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -768,4 +777,19 @@ public class NMS_1_18_R1 extends NMS_Common {
 		}
 	}
 
+	@Override
+	public void setupPaperCommandDispatcherReadWriteManager(CommandDispatcherReadWriteManager commandDispatcherReadWriteManager) {
+		// Switching from build paper-1.18-30 to paper-1.18-31, Paper's implementation for sending command packets changed
+		// To deal with this, we'll just try to intercept the process at both locations
+		// This means we'll be doing a bit of unecessary work, but it's not too bad
+		new ForkJoinPoolCommandSendingInterceptor(commandDispatcherReadWriteManager, Commands.class);
+		Class<?> mCUtil;
+		try {
+			mCUtil = Class.forName("net.minecraft.server.MCUtil");
+		} catch(ClassNotFoundException ignored) {
+			throw new IllegalStateException("NMS#setupPaperCommandDispatcherReadWriteManager called, but the Paper class MCUtil was not found!");
+		}
+		SafeVarHandle<?, ThreadPoolExecutor> mCUtilAsyncExecutor = SafeVarHandle.ofOrNull(mCUtil, "asyncExecutor", "asyncExecutor", ThreadPoolExecutor.class);
+		new ThreadPoolExecutorCommandSendingInterceptor(commandDispatcherReadWriteManager, Commands.class, mCUtilAsyncExecutor);
+	}
 }

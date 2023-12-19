@@ -3,10 +3,14 @@ package dev.jorel.commandapi;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.chat.TextComponent;
+
+import java.util.function.Supplier;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
@@ -21,6 +25,7 @@ public class PaperImplementations {
 	private final boolean isFoliaPresent;
 	private final NMS<?> nmsInstance;
 	private final Class<? extends CommandSender> feedbackForwardingCommandSender;
+	private final CommandDispatcherReadWriteManager commandDispatcherReadWriteManager;
 
 	/**
 	 * Constructs a PaperImplementations object
@@ -41,8 +46,10 @@ public class PaperImplementations {
 		} catch (ClassNotFoundException e) {
 			// uhh...
 		}
-		
 		this.feedbackForwardingCommandSender = tempFeedbackForwardingCommandSender;
+
+		this.commandDispatcherReadWriteManager = new CommandDispatcherReadWriteManager();
+		if(isPaperPresent) nmsInstance.setupPaperCommandDispatcherReadWriteManager(this.commandDispatcherReadWriteManager);
 	}
 
 	/**
@@ -121,4 +128,33 @@ public class PaperImplementations {
 		}
 	}	
 
+	/**
+	 * Waits to make sure Paper is not reading from the Brigadier CommandDispatchers before running a task that
+	 * modifies those CommandDispatchers. This ensures that the command trees are not modified while Paper is 
+	 * building a Commands packet asynchronously, which may cause a ConcurrentModificationException.
+	 * <p>
+	 * If Paper isn't building Commands packets async (probably because we're on Spigot), 
+	 * the task is run immediately, since there isn't any chance of conflict anyway.
+	 *
+	 * @param modifyTask The task to run that modifies the command trees.
+	 */
+	public void modifyCommandTreesAndAvoidPaperCME(Runnable modifyTask) {
+		this.commandDispatcherReadWriteManager.runWriteTask(modifyTask);
+	}
+
+	/**
+	 * Waits to make sure Paper is not reading from the Brigadier CommandDispatchers before running a task that
+	 * modifies those CommandDispatchers. This ensures that the command trees are not modified while Paper is 
+	 * building a Commands packet asynchronously, which may cause a ConcurrentModificationException.
+	 * <p>
+	 * If Paper isn't building Commands packets async (probably because we're on Spigot), 
+	 * the task is run immediately, since there isn't any chance of conflict anyway.
+	 *
+	 * @param modifyTask The task to run that modifies the command trees.
+	 * @return The result of running the {@code modifyTask}.
+	 * @param <T> The class of the object returned by the {@code modifyTask}.
+	 */
+	public <T> T modifyCommandTreesAndAvoidPaperCME(Supplier<T> modifyTask) {
+		return this.commandDispatcherReadWriteManager.runWriteTask(modifyTask);
+    }
 }
