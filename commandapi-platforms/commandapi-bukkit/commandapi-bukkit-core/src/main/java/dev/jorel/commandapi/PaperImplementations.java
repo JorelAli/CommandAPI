@@ -21,25 +21,64 @@ import org.bukkit.plugin.Plugin;
 
 public class PaperImplementations {
 
+	private final NMS<?> nmsInstance;
+
 	private final boolean isPaperPresent;
 	private final boolean isFoliaPresent;
-	private final NMS<?> nmsInstance;
+
+	private final boolean canHookServerResourcesReloadedEvent;
 	private final Class<? extends CommandSender> feedbackForwardingCommandSender;
 	private final CommandDispatcherReadWriteManager commandDispatcherReadWriteManager;
 
 	/**
 	 * Constructs a PaperImplementations object
-	 * 
-	 * @param isPaperPresent Whether this is a Paper server or not
-	 * @param isFoliaPresent Whether this is a Folia server or not
-	 * @param nmsInstance    The instance of NMS
+	 *
+	 * @param nmsInstance The instance of NMS
 	 */
 	@SuppressWarnings("unchecked")
-	public PaperImplementations(boolean isPaperPresent, boolean isFoliaPresent, NMS<?> nmsInstance) {
-		this.isPaperPresent = isPaperPresent;
-		this.isFoliaPresent = isFoliaPresent;
+	public PaperImplementations(NMS<?> nmsInstance) {
 		this.nmsInstance = nmsInstance;
-		
+
+		// General check for Paper
+		boolean isPaperPresent;
+		try {
+			// This class has nothing to do with the CommandAPI, but it was added to Paper very early on
+			//  and still exists today, making it a good indicator of when we're on Paper no matter the version
+			//  other than that, it just happened to be the first thing I found :P
+			Class.forName("com.destroystokyo.paper.event.block.BeaconEffectEvent");
+			isPaperPresent = true;
+			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
+		} catch (ClassNotFoundException e) {
+			isPaperPresent = false;
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning("Could not hook into Paper for for paper-specific API implementations. Consider upgrading to Paper: https://papermc.io/");
+			}
+		}
+		this.isPaperPresent = isPaperPresent;
+
+		// General check for Folia
+		boolean isFoliaPresent;
+		try {
+			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
+			isFoliaPresent = true;
+			CommandAPI.logNormal("Hooked into Folia for folia-specific API implementations");
+			CommandAPI.logNormal("Folia support is still in development. Please report any issues to the CommandAPI developers!");
+		} catch (ClassNotFoundException e) {
+			isFoliaPresent = false;
+		}
+		this.isFoliaPresent = isFoliaPresent;
+
+		// Check for the ServerResourcesReloadedEvent
+		boolean canHookServerResourcesReloadedEvent;
+		try {
+			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
+			canHookServerResourcesReloadedEvent = true;
+		} catch (ClassNotFoundException e) {
+			canHookServerResourcesReloadedEvent = false;
+		}
+		this.canHookServerResourcesReloadedEvent = canHookServerResourcesReloadedEvent;
+
+		// Check for Paper's special CommandSender
 		Class<? extends CommandSender> tempFeedbackForwardingCommandSender = null;
 		try {
 			tempFeedbackForwardingCommandSender = (Class<? extends CommandSender>) Class.forName("io.papermc.paper.commands.FeedbackForwardingSender");
@@ -48,6 +87,7 @@ public class PaperImplementations {
 		}
 		this.feedbackForwardingCommandSender = tempFeedbackForwardingCommandSender;
 
+		// Catch Paper's async Commands packet building
 		this.commandDispatcherReadWriteManager = new CommandDispatcherReadWriteManager();
 		if(isPaperPresent) nmsInstance.setupPaperCommandDispatcherReadWriteManager(this.commandDispatcherReadWriteManager);
 	}
@@ -60,15 +100,13 @@ public class PaperImplementations {
 	 * @param plugin the plugin that the CommandAPI is being used from
 	 */
 	public void registerReloadHandler(Plugin plugin) {
-		if (isPaperPresent && CommandAPIBukkit.getConfiguration().shouldHookPaperReload()) {
+		if (canHookServerResourcesReloadedEvent && CommandAPIBukkit.getConfiguration().shouldHookPaperReload()) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-
 				@EventHandler
 				public void onServerReloadResources(ServerResourcesReloadedEvent event) {
 					CommandAPI.logNormal("/minecraft:reload detected. Reloading CommandAPI commands!");
 					nmsInstance.reloadDataPacks();
 				}
-
 			}, plugin);
 			CommandAPI.logNormal("Hooked into Paper ServerResourcesReloadedEvent");
 		} else {
