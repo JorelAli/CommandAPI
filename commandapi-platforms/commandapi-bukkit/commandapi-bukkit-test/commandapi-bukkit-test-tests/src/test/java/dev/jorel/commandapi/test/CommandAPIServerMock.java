@@ -59,18 +59,22 @@ public class CommandAPIServerMock extends ServerMock {
 			return false;
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public int dispatchBrigadierCommand(CommandSender sender, String commandLine) {
 		try {
-			@SuppressWarnings("rawtypes")
-			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
-			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
-			return dispatcher.execute(commandLine, css);
+			return dispatchThrowableBrigadierCommand(sender, commandLine);
 		} catch (CommandSyntaxException e) {
-			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableCommand() instead.", e);
+			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableBrigadierCommand() instead.", e);
 			return 0;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public int dispatchThrowableBrigadierCommand(CommandSender sender, String commandLine) throws CommandSyntaxException {
+		@SuppressWarnings("rawtypes")
+		CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
+		Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
+		return dispatcher.execute(commandLine, css);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -1,44 +1,35 @@
 package dev.jorel.commandapi.test;
 
-import be.seeseemelk.mockbukkit.command.MockCommandMap;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.RegisteredCommand;
-import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Tests for testing if namespaces work correctly
  */
 public class CommandNamespaceTests extends TestBase {
-
-	private static final SafeVarHandle<MockCommandMap, Map<String, Command>> commandMapKnownCommands = SafeVarHandle.ofOrNull(MockCommandMap.class, "knownCommands", "knownCommands", Map.class);
 
 	/*********
 	 * Setup *
@@ -55,47 +46,25 @@ public class CommandNamespaceTests extends TestBase {
 	}
 
 	Player enableWithNamespaces() {
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-
-		Map<String, Command> knowCommands = commandMapKnownCommands.get((MockCommandMap) MockPlatform.getInstance().getSimpleCommandMap());
-
 		// Register minecraft: namespace. MockBukkit doesn't do this on their own
-		for (RegisteredCommand command : CommandAPI.getRegisteredCommands()) {
-			if (!command.namespace().equals("minecraft")) {
-				continue;
-			}
-
-			CommandNode<Object> node = MockPlatform.getInstance().getBrigadierDispatcher().getRoot().getChild(command.commandName());
-
-			for (CommandNode<Object> child : node.getChildren()) {
-				// This is probably not really future-proof but it works for the tests if they only have one argument
-				LiteralCommandNode<Object> namespacedNode = LiteralArgumentBuilder.literal("minecraft:" + node.getName())
-					.requires(node.getRequirement())
-					.then(child)
-					.executes(child.getCommand()).build();
-				MockPlatform.getInstance().getBrigadierDispatcher().getRoot().addChild(namespacedNode);
-				knowCommands.put(namespacedNode.getLiteral(), MockPlatform.getInstance().wrapToVanillaCommandWrapper(namespacedNode));
-
-				// If the command has aliases, register their namespaced versions too
-				for (String alias : command.aliases()) {
-					LiteralCommandNode<Object> namespacedAlias = LiteralArgumentBuilder.literal("minecraft:" + alias)
-						.requires(node.getRequirement())
-						.then(child)
-						.executes(child.getCommand()).build();
-					MockPlatform.getInstance().getBrigadierDispatcher().getRoot().addChild(namespacedAlias);
-					knowCommands.put(namespacedAlias.getLiteral(), MockPlatform.getInstance().wrapToVanillaCommandWrapper(namespacedAlias));
-				}
-			}
+		// Simulate `CraftServer#setVanillaCommands`
+		MockPlatform<Object> mockPlatform = MockPlatform.getInstance();
+		SimpleCommandMap commandMap = mockPlatform.getSimpleCommandMap();
+		for (CommandNode<Object> node : mockPlatform.getBrigadierDispatcher().getRoot().getChildren()) {
+			commandMap.register("minecraft", mockPlatform.wrapToVanillaCommandWrapper(node));
 		}
 
+		// Run the CommandAPI's enable tasks, especially `fixNamespaces`
+		assertTrue(CommandAPI.canRegister()); // Make sure we weren't already enabled
+		disablePaperImplementations();
+		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
 		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
 		assertFalse(CommandAPI.canRegister());
 
 		// Get a CraftPlayer for running VanillaCommandWrapper commands
 		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());
 		// Give player permission to run command
-		Mockito.when(runCommandsPlayer.hasPermission(ArgumentMatchers.eq("permission"))).thenReturn(true);
+		Mockito.when(runCommandsPlayer.hasPermission(any(String.class))).thenReturn(true);
 		// Get location is used when creating the BrigadierSource in MockNMS
 		Mockito.when(runCommandsPlayer.getLocation()).thenReturn(new Location(null, 0, 0, 0));
 
@@ -117,441 +86,441 @@ public class CommandNamespaceTests extends TestBase {
 	 * Tests *
 	 *********/
 
-	@Test
-	public void minecraftNamespaceTestsWhileServerIsEnabledWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		Player player = enableWithNamespaces();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Make sure the default registration with the minecraft: namespace works
-		command.register();
-
-		server.dispatchCommand(player, "test alpha");
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "minecraft:test alpha");
-		assertEquals("alpha", results.get());
-		assertNoMoreResults(results);
-	}
+	// TODO: based on code coverage, we still need to test:
+	//  - Cases when CommandAPIBukkit#minecraftCommandNamespaces is used
+	//  - Registering CommandTrees with namespaces
 
 	@Test
-	public void minecraftNamespaceTestsWhileServerIsStartingWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Make sure the default registration with the minecraft: namespace works
-		command.register();
-
-		Player player = enableWithNamespaces();
-
-		assertNotNull(MockPlatform.getInstance().getBrigadierDispatcher().getRoot().getChild("test"));
-		assertNotNull(MockPlatform.getInstance().getBrigadierDispatcher().getRoot().getChild("minecraft:test"));
-
-		server.dispatchCommand(player, "test alpha");
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "minecraft:test alpha");
-		assertEquals("alpha", results.get());
-
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void stringNamespaceTestWhileServerIsEnabledWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		Player player = enableWithNamespaces();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test registering the command with a custom namespace
-		command.register("commandtest");
-
-		server.dispatchCommand(player, "test alpha");
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "commandtest:test alpha");
-		assertEquals("alpha", results.get());
-
-		// Running the command with the minecraft: namespace should fail
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test alpha"));
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void stringNamespaceTestWhileServerIsStartingWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test registering the command with a custom namespace
-		command.register("commandtest");
-
-		Player player = enableWithNamespaces();
-
-		server.dispatchCommand(player, "test alpha");
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "commandtest:test alpha");
-		assertEquals("alpha", results.get());
-
-		// Running the command with the minecraft: namespace should fail
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test alpha"));
-		assertNoMoreResults(results);
-	}
-
-	@Disabled
-	public void pluginNamespaceTestWhileServerIsEnabledWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		Player player = enableWithNamespaces();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test registering the command with a plugin instance
-		//TODO Apparently, registering this command using the plugin instance here fails
-		command.register(Main.getPlugin(Main.class));
-
-		server.dispatchCommand(player, "test alpha");
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "commandapitest:test alpha");
-		assertEquals("alpha", results.get());
-
-		// Running the command with the minecraft: namespace should fail
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test alpha"));
-		assertNoMoreResults(results);
-	}
-
-	@Disabled
-	public void pluginNamespaceTestWhileServerIsStartingWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test registering the command with a plugin instance
-		command.register(Main.getPlugin(Main.class));
-
-		Player player = enableWithNamespaces();
-
-		server.dispatchCommand(player, "test alpha");
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "commandapitest:test alpha");
-		assertEquals("alpha", results.get());
-
-		// Running the command with the minecraft: namespace should fail
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test alpha"));
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void aliasesWithDefaultNamespaceTestWhileServerIsEnabledWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		Player player = enableWithNamespaces();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withAliases("alpha", "beta")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test aliases with the default namespace
-		command.register();
-
-		server.dispatchCommand(player, "alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "beta discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "minecraft:alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "minecraft:beta discord");
-		assertEquals("discord", results.get());
-
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void aliasesWithDefaultNamespaceTestWhileServerIsStartingWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withAliases("alpha", "beta")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test aliases with the default namespace
-		command.register();
-
-		Player player = enableWithNamespaces();
-
-		server.dispatchCommand(player, "alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "beta discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "minecraft:alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "minecraft:beta discord");
-		assertEquals("discord", results.get());
-
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void aliasesWithCustomNamespacesTestWhileServerIsEnabledWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		Player player = enableWithNamespaces();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withAliases("alpha", "beta")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test aliases with a custom namespace
-		command.register("commandtest");
-
-		server.dispatchCommand(player, "alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "beta discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "commandtest:alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "commandtest:beta discord");
-		assertEquals("discord", results.get());
-
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:alpha discord"));
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:beta discord"));
-
-		assertNoMoreResults(results);
-
-		CommandAPI.unregister("test", true);
-		CommandAPI.unregister("alpha", true);
-		CommandAPI.unregister("beta", true);
-
-		// Test aliases with a plugin instance
-		// TODO: Apparently, this is failing now
-		/*command.register(Main.getPlugin(Main.class));
-
-		server.dispatchCommand(player, "alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "beta discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "commandapitest:alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "commandapitest:beta discord");
-		assertEquals("discord", results.get());
-
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:alpha discord"));
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:beta discord"));
-
-		assertNoMoreResults(results);*/
-	}
-
-	@Test
-	public void aliasesWithCustomNamespacesTestWhileServerIsStartingWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		CommandAPICommand command = new CommandAPICommand("test")
-			.withAliases("alpha", "beta")
-			.withArguments(new StringArgument("string"))
-			.executesPlayer(info -> {
-				results.set(info.args().getUnchecked("string"));
-			});
-
-		// Test aliases with a custom namespace
-		command.register("commandtest");
-
-		Player player = enableWithNamespaces();
-
-		server.dispatchCommand(player, "alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "beta discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "commandtest:alpha discord");
-		assertEquals("discord", results.get());
-
-		server.dispatchCommand(player, "commandtest:beta discord");
-		assertEquals("discord", results.get());
-
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:alpha discord"));
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:beta discord"));
-
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void sameCommandNameButDifferentNamespaceTestWhileServerIsEnabledWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		Player player = enableWithNamespaces();
-
-		CommandAPICommand a = new CommandAPICommand("test")
-			.withArguments(LiteralArgument.of("forced"))
-			.executesPlayer(info -> {
-				results.set("forced");
-			});
-
-		CommandAPICommand b = new CommandAPICommand("test")
-			.withArguments(LiteralArgument.of("notforced"))
-			.executesPlayer(info -> {
-				results.set("notforced");
-			});
-
-		a.register("a");
-		b.register("b");
-
-		server.dispatchCommand(player, "test forced");
-		assertEquals("forced", results.get());
-
-		server.dispatchCommand(player, "a:test forced");
-		assertEquals("forced", results.get());
-
-		server.dispatchCommand(player, "test notforced");
-		assertEquals("notforced", results.get());
-
-		server.dispatchCommand(player, "b:test notforced");
-		assertEquals("notforced", results.get());
-
-		// TODO: These two apparently fail now. I have no idea why
-		//assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "a:test notforced"));
-		//assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "b:test forced"));
-
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void sameCommandNameButDifferentNamespaceTestWhileServerIsStartingWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		CommandAPICommand a = new CommandAPICommand("test")
-			.withArguments(LiteralArgument.of("forced"))
-			.executesPlayer(info -> {
-				results.set("forced");
-			});
-
-		CommandAPICommand b = new CommandAPICommand("test")
-			.withArguments(LiteralArgument.of("notforced"))
-			.executesPlayer(info -> {
-				results.set("notforced");
-			});
-
-		a.register("a");
-		b.register("b");
-
-		Player player = enableWithNamespaces();
-
-		server.dispatchCommand(player, "test forced");
-		assertEquals("forced", results.get());
-
-		server.dispatchCommand(player, "a:test forced");
-		assertEquals("forced", results.get());
-
-		server.dispatchCommand(player, "test notforced");
-		assertEquals("notforced", results.get());
-
-		server.dispatchCommand(player, "b:test notforced");
-		assertEquals("notforced", results.get());
-
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "a:test notforced"));
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "b:test forced"));
-
-		assertNoMoreResults(results);
-	}
-
-	@Test
-	public void specialCasesTestWhileServerIsEnabledWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		Player player = enableWithNamespaces();
-
-		// Special case: Registering a command without a namespace
-		CommandAPICommand command = new CommandAPICommand("test")
-			.executesPlayer(info -> {
-				results.set("success");
-			});
-
-		command.register("");
-
-		server.dispatchCommand(player, "test");
-		assertEquals("success", results.get());
-
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test"));
-	}
-
-	@Test
-	public void noNamespaceTestWhileServerIsStartingWhenRegistering() {
-		Mut<String> results = Mut.of();
-
-		// Special case: Registering a command without a namespace
-		CommandAPICommand command = new CommandAPICommand("test")
-			.executesPlayer(info -> {
-				results.set("success");
-			});
-
-		command.register("");
-
-		Player player = enableWithNamespaces();
-
-		server.dispatchCommand(player, "test");
-		assertEquals("success", results.get());
-
-		assertThrows(CommandSyntaxException.class, () -> server.dispatchThrowableCommand(player, "minecraft:test"));
-	}
-
-	@Test
-	public void nullNamespaceTest() {
+	public void testNullNamespace() {
 		// Registering a command using null should fail
-		String namespace = null;
-		assertThrows(NullPointerException.class, () -> new CommandAPICommand("test").executesPlayer(info -> {
-		}).register(namespace));
+		CommandAPICommand command = new CommandAPICommand("test").executesPlayer(P_EXEC);
+		assertThrowsWithMessage(
+			NullPointerException.class,
+			"Parameter 'namespace' was null when registering a CommandAPICommand!",
+			() -> command.register((String) null)
+		);
 	}
 
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testDefaultMinecraftNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if(enableBeforeRegistering) player = enableWithNamespaces();
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Make sure the default registration with the minecraft: namespace works
+		command.register();
+
+		if(!enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Check contents of Brigadier CommandDispatcher
+		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(rootNode.getChild("test"));
+		// Unlike custom namespaces, the minecraft namespace should NOT appear in the Brigadier dispatcher
+		//  `minecraft:test` is only created when moved to Bukkit's CommandMap
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		// Check contents of Bukkit CommandMap
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNotNull(commandMap.getCommand("minecraft:test"));
+
+		// Commands should run
+		assertStoresResult(player, "test alpha", results, "alpha");
+		assertStoresResult(player, "minecraft:test alpha", results, "alpha");
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testStringNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if(enableBeforeRegistering) player = enableWithNamespaces();
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Test registering the command with a custom namespace
+		command.register("commandtest");
+
+		if(!enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Check contents of Brigadier CommandDispatcher
+		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(rootNode.getChild("test"));
+		assertNotNull(rootNode.getChild("commandtest:test"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		// Check contents of Bukkit CommandMap
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNotNull(commandMap.getCommand("commandtest:test"));
+		assertNull(commandMap.getCommand("minecraft:test"));
+
+		// Commands should run
+		assertStoresResult(player, "test alpha", results, "alpha");
+		assertStoresResult(player, "commandtest:test alpha", results, "alpha");
+
+		// Running the command with the minecraft: namespace should fail
+		assertCommandFailsWith(
+			player,
+			"minecraft:test alpha",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testPluginNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if(enableBeforeRegistering) player = enableWithNamespaces();
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Test registering the command with a plugin instance
+		command.register(MockPlatform.getConfiguration().getPlugin());
+
+		if(!enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Check contents of Brigadier CommandDispatcher
+		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(rootNode.getChild("test"));
+		assertNotNull(rootNode.getChild("commandapitest:test"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		// Check contents of Bukkit CommandMap
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNotNull(commandMap.getCommand("commandapitest:test"));
+		assertNull(commandMap.getCommand("minecraft:test"));
+
+		// Commands should run
+		assertStoresResult(player, "test alpha", results, "alpha");
+		assertStoresResult(player, "commandapitest:test alpha", results, "alpha");
+
+		// Running the command with the minecraft: namespace should fail
+		assertCommandFailsWith(
+			player,
+			"minecraft:test alpha",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testNoNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if(enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Special case: Registering a command without a namespace
+		CommandAPICommand command = new CommandAPICommand("test")
+			.executesPlayer(info -> {
+				results.set("success");
+			});
+
+		command.register("");
+
+		if(!enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Check contents of Brigadier CommandDispatcher
+		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(rootNode.getChild("test"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		// Check contents of Bukkit CommandMap
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNull(commandMap.getCommand("minecraft:test"));
+
+		assertStoresResult(player, "test", results, "success");
+
+		assertCommandFailsWith(
+			player,
+			"minecraft:test",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testAliasesWithDefaultNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if(enableBeforeRegistering) player = enableWithNamespaces();
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withAliases("alpha", "beta")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Test aliases with the default namespace
+		command.register();
+
+		if(!enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Check contents of Brigadier CommandDispatcher
+		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(rootNode.getChild("test"));
+		// `minecraft` namespace is only created in the CommandMap
+		assertNull(rootNode.getChild("minecraft:test"));
+		assertNotNull(rootNode.getChild("alpha"));
+		assertNull(rootNode.getChild("minecraft:alpha"));
+		assertNotNull(rootNode.getChild("beta"));
+		assertNull(rootNode.getChild("minecraft:beta"));
+
+		// Check contents of Bukkit CommandMap
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNotNull(commandMap.getCommand("minecraft:test"));
+		assertNotNull(commandMap.getCommand("alpha"));
+		assertNotNull(commandMap.getCommand("minecraft:alpha"));
+		assertNotNull(commandMap.getCommand("beta"));
+		assertNotNull(commandMap.getCommand("minecraft:beta"));
+
+		// Commands should run
+		assertStoresResult(player, "test discord", results, "discord");
+		assertStoresResult(player, "alpha discord", results, "discord");
+		assertStoresResult(player, "beta discord", results, "discord");
+		assertStoresResult(player, "minecraft:test discord", results, "discord");
+		assertStoresResult(player, "minecraft:alpha discord", results, "discord");
+		assertStoresResult(player, "minecraft:beta discord", results, "discord");
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testAliasesWithCustomNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if(enableBeforeRegistering) player = enableWithNamespaces();
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withAliases("alpha", "beta")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Test aliases with a custom namespace
+		command.register("commandtest");
+
+		if(!enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Check contents of Brigadier CommandDispatcher
+		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(rootNode.getChild("test"));
+		assertNotNull(rootNode.getChild("commandtest:test"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		assertNotNull(rootNode.getChild("alpha"));
+		assertNotNull(rootNode.getChild("commandtest:alpha"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		assertNotNull(rootNode.getChild("beta"));
+		assertNotNull(rootNode.getChild("commandtest:beta"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		// Check contents of Bukkit CommandMap
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNotNull(commandMap.getCommand("commandtest:test"));
+		assertNull(commandMap.getCommand("minecraft:test"));
+
+		assertNotNull(commandMap.getCommand("alpha"));
+		assertNotNull(commandMap.getCommand("commandtest:alpha"));
+		assertNull(commandMap.getCommand("minecraft:alpha"));
+
+		assertNotNull(commandMap.getCommand("beta"));
+		assertNotNull(commandMap.getCommand("commandtest:beta"));
+		assertNull(commandMap.getCommand("minecraft:beta"));
+
+		// Commands should run
+		assertStoresResult(player, "test discord", results, "discord");
+		assertStoresResult(player, "alpha discord", results, "discord");
+		assertStoresResult(player, "beta discord", results, "discord");
+		assertStoresResult(player, "commandtest:test discord", results, "discord");
+		assertStoresResult(player, "commandtest:alpha discord", results, "discord");
+		assertStoresResult(player, "commandtest:beta discord", results, "discord");
+
+		// Running the command with the minecraft: namespace should fail
+		assertCommandFailsWith(
+			player,
+			"minecraft:test discord",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+		assertCommandFailsWith(
+			player,
+			"minecraft:alpha discord",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+		assertCommandFailsWith(
+			player,
+			"minecraft:beta discord",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testAliasesWithPluginNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if(enableBeforeRegistering) player = enableWithNamespaces();
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withAliases("alpha", "beta")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(info -> {
+				results.set(info.args().getUnchecked("string"));
+			});
+
+		// Test aliases with a custom namespace
+		command.register(MockPlatform.getConfiguration().getPlugin());
+
+		if(!enableBeforeRegistering) player = enableWithNamespaces();
+
+		// Check contents of Brigadier CommandDispatcher
+		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(rootNode.getChild("test"));
+		assertNotNull(rootNode.getChild("commandapitest:test"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		assertNotNull(rootNode.getChild("alpha"));
+		assertNotNull(rootNode.getChild("commandapitest:alpha"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		assertNotNull(rootNode.getChild("beta"));
+		assertNotNull(rootNode.getChild("commandapitest:beta"));
+		assertNull(rootNode.getChild("minecraft:test"));
+
+		// Check contents of Bukkit CommandMap
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNotNull(commandMap.getCommand("commandapitest:test"));
+		assertNull(commandMap.getCommand("minecraft:test"));
+
+		assertNotNull(commandMap.getCommand("alpha"));
+		assertNotNull(commandMap.getCommand("commandapitest:alpha"));
+		assertNull(commandMap.getCommand("minecraft:test"));
+
+		assertNotNull(commandMap.getCommand("beta"));
+		assertNotNull(commandMap.getCommand("commandapitest:beta"));
+		assertNull(commandMap.getCommand("minecraft:test"));
+
+		// Commands should run
+		assertStoresResult(player, "test discord", results, "discord");
+		assertStoresResult(player, "alpha discord", results, "discord");
+		assertStoresResult(player, "beta discord", results, "discord");
+		assertStoresResult(player, "commandapitest:test discord", results, "discord");
+		assertStoresResult(player, "commandapitest:alpha discord", results, "discord");
+		assertStoresResult(player, "commandapitest:beta discord", results, "discord");
+
+		// Running the command with the minecraft: namespace should fail
+		assertCommandFailsWith(
+			player,
+			"minecraft:test discord",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+		assertCommandFailsWith(
+			player,
+			"minecraft:alpha discord",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+		assertCommandFailsWith(
+			player,
+			"minecraft:beta discord",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testCommandNameConflictButDifferentNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player tempPlayer = null;
+		if(enableBeforeRegistering) tempPlayer = enableWithNamespaces();
+
+		CommandAPICommand a = new CommandAPICommand("test")
+			.withArguments(LiteralArgument.of("a"))
+			.executesPlayer(info -> {
+				results.set("a");
+			});
+
+		CommandAPICommand b = new CommandAPICommand("test")
+			.withArguments(LiteralArgument.of("b"))
+			.executesPlayer(info -> {
+				results.set("b");
+			});
+
+		a.register("a");
+		b.register("b");
+
+		if(!enableBeforeRegistering) tempPlayer = enableWithNamespaces();
+		final Player player = tempPlayer; // Since we use `player` in a lambda it needs to be final
+
+		// The two branches should have merged in the un-namespaced version
+		assertStoresResult(player, "test a", results, "a");
+		assertStoresResult(player, "test b", results, "b");
+
+		// The branches should be separated in the namespaced versions
+		assertStoresResult(player, "a:test a", results, "a");
+		// For some reason, running this test using `server.dispatchThrowableCommand`
+		//  (which is used by assertCommandFailsWith) doesn't work. Stepping through the code,
+		//  I can verify that the command fails, but instead of throwing a `CommandSyntaxException`,
+		//  it seems to just send the failure message to the executor. However, if we execute the
+		//  command directly with Brigadier rather than via `VanillaCommandWrapper`, we can inspect
+		//  the failure ourselves.
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			"Incorrect argument for command at position 7: a:test <--[HERE]",
+			() -> server.dispatchThrowableBrigadierCommand(player, "a:test b")
+		);
+
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			"Incorrect argument for command at position 7: b:test <--[HERE]",
+			() -> server.dispatchThrowableBrigadierCommand(player, "b:test a")
+		);
+		assertStoresResult(player, "b:test b", results, "b");
+
+		assertNoMoreResults(results);
+	}
 }

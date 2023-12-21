@@ -1,8 +1,5 @@
 package dev.jorel.commandapi.test;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandTree;
@@ -13,8 +10,6 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
-import org.bukkit.Bukkit;
-import org.bukkit.event.server.ServerLoadEvent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -22,8 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for the semantics of registering commands
@@ -714,5 +707,4 @@ class CommandRegistrationTests extends TestBase {
 			getDispatcherString()
 		);
 	}
-
 }
