@@ -4,6 +4,14 @@
 
 Chat preview is a feature introduced in Minecraft 1.19 that allows the server to display a preview of a chat message to the client before the client sends their message to the server. This chat preview feature is also compatible with `/say` and `/msg`, as well as the `ChatArgument` and `AdventureChatArgument` classes.
 
+<div class="warning">
+
+## Minecraft version support
+
+The chat preview feature is only present in Minecraft versions 1.19, 1.19.1 and 1.19.2. [Chat preview was removed in 1.19.3](https://minecraft.wiki/w/Java_Edition_1.19.3#General_2), so this feature is unfortunately no longer usable in Minecraft 1.19.3 and beyond.
+
+</div>
+
 -----
 
 ## Enabling chat preview
