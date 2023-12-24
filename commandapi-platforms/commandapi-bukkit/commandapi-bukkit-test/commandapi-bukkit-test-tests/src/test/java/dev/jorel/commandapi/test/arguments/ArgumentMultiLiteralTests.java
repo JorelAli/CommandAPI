@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -83,7 +82,6 @@ public class ArgumentMultiLiteralTests extends TestBase {
 			.register();
 
 		// Make sure all the commands were set up in the tree correctly
-		//  Redirects make the command structure more compact
 		assertEquals("""
 				{
 				  "type": "root",
@@ -91,42 +89,52 @@ public class ArgumentMultiLiteralTests extends TestBase {
 				    "command1": {
 				      "type": "literal",
 				      "children": {
-				        "option2": {
-				          "type": "literal",
-				          "redirect": [
-				            "command1",
-				            "option1"
-				          ]
-				        },
-				        "option3": {
-				          "type": "literal",
-				          "redirect": [
-				            "command1",
-				            "option1"
-				          ]
-				        },
 				        "option1": {
 				          "type": "literal",
 				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
 				            "option2": {
 				              "type": "literal",
-				              "executable": true,
-				              "redirect": [
-				                "command1",
-				                "option1",
-				                "option1"
-				              ]
+				              "executable": true
 				            },
 				            "option3": {
 				              "type": "literal",
-				              "executable": true,
-				              "redirect": [
-				                "command1",
-				                "option1",
-				                "option1"
-				              ]
-				            },
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
 				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option3": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
 				              "type": "literal",
 				              "executable": true
 				            }
@@ -137,42 +145,52 @@ public class ArgumentMultiLiteralTests extends TestBase {
 				    "command2": {
 				      "type": "literal",
 				      "children": {
-				        "option2": {
-				          "type": "literal",
-				          "redirect": [
-				            "command2",
-				            "option1"
-				          ]
-				        },
-				        "option3": {
-				          "type": "literal",
-				          "redirect": [
-				            "command2",
-				            "option1"
-				          ]
-				        },
 				        "option1": {
 				          "type": "literal",
 				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
 				            "option2": {
 				              "type": "literal",
-				              "executable": true,
-				              "redirect": [
-				                "command2",
-				                "option1",
-				                "option1"
-				              ]
+				              "executable": true
 				            },
 				            "option3": {
 				              "type": "literal",
-				              "executable": true,
-				              "redirect": [
-				                "command2",
-				                "option1",
-				                "option1"
-				              ]
-				            },
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
 				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
+				              "type": "literal",
+				              "executable": true
+				            }
+				          }
+				        },
+				        "option3": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "executable": true
+				            },
+				            "option3": {
 				              "type": "literal",
 				              "executable": true
 				            }
@@ -183,38 +201,61 @@ public class ArgumentMultiLiteralTests extends TestBase {
 				    "command3": {
 				      "type": "literal",
 				      "children": {
-				        "option2": {
-				          "type": "literal",
-				          "redirect": [
-				            "command3",
-				            "option1"
-				          ]
-				        },
 				        "option1": {
 				          "type": "literal",
 				          "children": {
-				            "option2": {
-				              "type": "literal",
-				              "redirect": [
-				                "command3",
-				                "option1",
-				                "option1"
-				              ]
-				            },
 				            "option1": {
 				              "type": "literal",
 				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
 				                "option2": {
 				                  "type": "literal",
-				                  "executable": true,
-				                  "redirect": [
-				                    "command3",
-				                    "option1",
-				                    "option1",
-				                    "option1"
-				                  ]
-				                },
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
 				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
 				                  "type": "literal",
 				                  "executable": true
 				                }
@@ -227,38 +268,61 @@ public class ArgumentMultiLiteralTests extends TestBase {
 				    "command4": {
 				      "type": "literal",
 				      "children": {
-				        "option2": {
-				          "type": "literal",
-				          "redirect": [
-				            "command4",
-				            "option1"
-				          ]
-				        },
 				        "option1": {
 				          "type": "literal",
 				          "children": {
-				            "option2": {
-				              "type": "literal",
-				              "redirect": [
-				                "command4",
-				                "option1",
-				                "option1"
-				              ]
-				            },
 				            "option1": {
 				              "type": "literal",
 				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
 				                "option2": {
 				                  "type": "literal",
-				                  "executable": true,
-				                  "redirect": [
-				                    "command4",
-				                    "option1",
-				                    "option1",
-				                    "option1"
-				                  ]
-				                },
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
 				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            }
+				          }
+				        },
+				        "option2": {
+				          "type": "literal",
+				          "children": {
+				            "option1": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
+				                  "type": "literal",
+				                  "executable": true
+				                }
+				              }
+				            },
+				            "option2": {
+				              "type": "literal",
+				              "children": {
+				                "option1": {
+				                  "type": "literal",
+				                  "executable": true
+				                },
+				                "option2": {
 				                  "type": "literal",
 				                  "executable": true
 				                }
@@ -325,11 +389,6 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		assertNoMoreResults(results);
 	}
 
-	// TODO: This test currently fails because MultiLiteralArguments are broken
-	//  See https://github.com/Mojang/brigadier/issues/137
-	//  I hope this is a Brigadier bug, because otherwise the new command build system needs to be rewritten
-	//  Also, it just wouldn't be as cool if MultiLiteralArguments couldn't use redirects
-	@Disabled
 	@Test
 	void executionTestWithMultipleMultiLiteralArguments() {
 		Mut<String> results = Mut.of();

@@ -125,12 +125,15 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Builds the Brigadier {@link CommandNode} structure for this argument tree.
 	 *
-	 * @param previousNode                    The {@link CommandNode} to add this argument tree onto.
+	 * @param previousNodes                   A List of {@link CommandNode}s to add this argument onto.
 	 * @param previousArguments               A List of CommandAPI arguments that came before this argument tree.
 	 * @param previousNonLiteralArgumentNames A List of Strings containing the node names that came before this argument.
 	 * @param <Source>                        The Brigadier Source object for running commands.
 	 */
-	public <Source> void buildBrigadierNode(CommandNode<Source> previousNode, List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames) {
+	public <Source> void buildBrigadierNode(
+		List<CommandNode<Source>> previousNodes,
+		List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames
+	) {
 		// Check preconditions
 		if (argument instanceof GreedyArgument && !arguments.isEmpty()) {
 			// Argument is followed by at least some arguments
@@ -142,7 +145,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Create node for this argument
-		CommandNode<Source> rootNode = argument.addArgumentNodes(previousNode, previousArguments, previousNonLiteralArgumentNames, executor);
+		previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousNonLiteralArgumentNames, executor);
 
 		// Add our branches as children to the node
 		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
@@ -150,7 +153,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			List<Argument> newPreviousArguments = new ArrayList<>(previousArguments);
 			List<String> newPreviousArgumentNames = new ArrayList<>(previousNonLiteralArgumentNames);
 
-			child.buildBrigadierNode(rootNode, newPreviousArguments, newPreviousArgumentNames);
+			child.buildBrigadierNode(previousNodes, newPreviousArguments, newPreviousArgumentNames);
 		}
 	}
 

@@ -122,7 +122,7 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	}
 
 	@Override
-	public <Source> CommandNode<Source> linkNode(CommandNode<Source> previousNode, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor) {
-		return MultiLiteral.super.linkNode(previousNode, rootNode, previousArguments, previousNonLiteralArgumentNames, terminalExecutor);
+	public <Source> List<CommandNode<Source>> linkNode(List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor) {
+		return MultiLiteral.super.linkNode(previousNodes, rootNode, previousArguments, previousNonLiteralArgumentNames, terminalExecutor);
 	}
 }
