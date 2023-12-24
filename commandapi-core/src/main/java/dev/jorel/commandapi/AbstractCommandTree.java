@@ -123,7 +123,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			List<String> previousNonLiteralArgumentNames = new ArrayList<>();
 			previousArguments.add(commandNames);
 
-			argument.buildBrigadierNode(rootNode, previousArguments, previousNonLiteralArgumentNames);
+			argument.buildBrigadierNode(List.of(rootNode), previousArguments, previousNonLiteralArgumentNames);
 		}
 	}
 }

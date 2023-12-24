@@ -112,13 +112,23 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Overrides {@link AbstractArgument#linkNode(CommandNode, CommandNode, List, List, CommandAPIExecutor)}.
+	 * Overrides {@link AbstractArgument#linkNode(List, CommandNode, List, List, CommandAPIExecutor)}.
 	 * <p>
 	 * Normally, Arguments are only represented by a single node, and so only need to link one node. However, a MultiLiteral
 	 * represents multiple literal node paths, which also need to be generated and inserted into the node structure.
 	 */
-	default <Source> CommandNode<Source> linkNode(CommandNode<Source> previousNode, CommandNode<Source> rootNode, List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames,
-												  CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor) {
+	default <Source> List<CommandNode<Source>> linkNode(
+		List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode,
+		List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames,
+		CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor
+	) {
+		List<CommandNode<Source>> newNodes = new ArrayList<>();
+		// Add root node to previous
+		for(CommandNode<Source> previousNode : previousNodes) {
+			previousNode.addChild(rootNode);
+		}
+		newNodes.add(rootNode);
+
 		// Generate nodes for other literals
 		Iterator<String> literals = Arrays.asList(getLiterals()).iterator();
 		literals.next(); // Skip first literal; that was handled by `#createArgumentBuilder`
@@ -126,30 +136,27 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			// Create node
 			MultiLiteralArgumentBuilder<Source> literalBuilder = MultiLiteralArgumentBuilder.multiLiteral(getNodeName(), literals.next());
 
-			// Redirect to root node so all its arguments come after this
-			literalBuilder.redirect(rootNode);
-
 			// Finish building node
 			CommandNode<Source> literalNode = finishBuildingNode(literalBuilder, previousArguments, terminalExecutor);
 
-			// Link node to previous
-			previousNode.addChild(literalNode);
+			// Add node to previous
+			for(CommandNode<Source> previousNode : previousNodes) {
+				previousNode.addChild(literalNode);
+			}
+			newNodes.add(literalNode);
 		}
 
-		// Add root node to previous
-		previousNode.addChild(rootNode);
-
 		// Add combined arguments
-		previousNode = rootNode;
+		previousNodes = newNodes;
 		List<Argument> combinedArguments = getCombinedArguments();
 		for (int i = 0; i < combinedArguments.size(); i++) {
 			Argument subArgument = combinedArguments.get(i);
-			previousNode = subArgument.addArgumentNodes(previousNode, previousArguments, previousNonLiteralArgumentNames,
+			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousNonLiteralArgumentNames,
 				// Only apply the `terminalExecutor` to the last argument
 				i == combinedArguments.size() - 1 ? terminalExecutor : null);
 		}
 
-		// Return last node
-		return previousNode;
+		// Return last nodes
+		return previousNodes;
 	}
 }

@@ -302,7 +302,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		// Create arguments
 		if (hasAnyArguments()) {
-			CommandNode<Source> previousNode = rootNode;
+			List<CommandNode<Source>> previousNodes = List.of(rootNode);
 			List<Argument> previousArguments = new ArrayList<>();
 			List<String> previousArgumentNames = new ArrayList<>();
 
@@ -319,7 +319,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			// Add required arguments
 			for (int i = 0; i < requiredArguments.size(); i++) {
 				Argument argument = requiredArguments.get(i);
-				previousNode = argument.addArgumentNodes(previousNode, previousArguments, previousArgumentNames,
+				previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
 					// Only the last required argument is executable
 					i == requiredArguments.size() - 1 ? executor : null);
 			}
@@ -327,7 +327,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			// Add optional arguments
 			for (Argument argument : optionalArguments) {
 				// All optional arguments are executable
-				previousNode = argument.addArgumentNodes(previousNode, previousArguments, previousArgumentNames, executor);
+				previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames, executor);
 			}
 
 			// Check greedy argument constraint
