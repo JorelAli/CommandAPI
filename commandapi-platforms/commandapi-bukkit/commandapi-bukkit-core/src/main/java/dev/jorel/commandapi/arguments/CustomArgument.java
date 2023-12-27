@@ -20,22 +20,28 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.io.Serializable;
-
-import org.bukkit.command.CommandSender;
-
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-
+import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.BukkitTooltip;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.executors.CommandArguments;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.command.CommandSender;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * An argument that represents any custom object
@@ -113,6 +119,107 @@ public class CustomArgument<T, B> extends Argument<T> {
 				.replace(FULL_INPUT, cmdCtx.getInput());
 			throw new SimpleCommandExceptionType(() -> errorMsg).create();
 		}
+	}
+
+	// All `AbstractArgument` builder method calls should be handled by the base argument
+	@Override
+	public Argument<T> includeSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
+		base.includeSuggestions(suggestions);
+		return this;
+	}
+
+	@Override
+	public Optional<ArgumentSuggestions<CommandSender>> getIncludedSuggestions() {
+		return base.getIncludedSuggestions();
+	}
+
+	@Override
+	public Argument<T> replaceSuggestions(ArgumentSuggestions<CommandSender> suggestions) {
+		base.replaceSuggestions(suggestions);
+		return this;
+	}
+
+	@Override
+	public Optional<ArgumentSuggestions<CommandSender>> getOverriddenSuggestions() {
+		return base.getOverriddenSuggestions();
+	}
+
+	@Override
+	public Argument<T> withPermission(CommandPermission permission) {
+		base.withPermission(permission);
+		return this;
+	}
+
+	@Override
+	public Argument<T> withPermission(String permission) {
+		base.withPermission(permission);
+		return this;
+	}
+
+	@Override
+	public CommandPermission getArgumentPermission() {
+		return base.getArgumentPermission();
+	}
+
+	@Override
+	public Predicate<CommandSender> getRequirements() {
+		return base.getRequirements();
+	}
+
+	@Override
+	public Argument<T> withRequirement(Predicate<CommandSender> requirement) {
+		base.withRequirement(requirement);
+		return this;
+	}
+
+	@Override
+	public boolean isListed() {
+		return base.isListed();
+	}
+
+	@Override
+	public Argument<T> setListed(boolean listed) {
+		base.setListed(listed);
+		return this;
+	}
+
+	@Override
+	public List<Argument<?>> getCombinedArguments() {
+		return base.getCombinedArguments();
+	}
+
+	@Override
+	public boolean hasCombinedArguments() {
+		return base.hasCombinedArguments();
+	}
+
+	@Override
+	public Argument<T> combineWith(List<Argument<?>> combinedArguments) {
+		base.combineWith(combinedArguments);
+		return this;
+	}
+
+	@Override
+	public <Source> List<CommandNode<Source>> addArgumentNodes(
+		List<CommandNode<Source>> previousNodes,
+		List<Argument<?>> previousArguments, List<String> previousArgumentNames,
+		Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator
+	) {
+		// Node structure is determined by the base argument
+		previousNodes = base.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
+			// Replace the base argument with this argument when executing the command
+			terminalExecutorCreator == null ? null :
+				args -> {
+					List<Argument<?>> newArgs = new ArrayList<>(args);
+					newArgs.set(args.indexOf(base), this);
+					return terminalExecutorCreator.apply(newArgs);
+				}
+		);
+
+		// Replace the base argument with this argument when executing the command
+		previousArguments.set(previousArguments.indexOf(base), this);
+
+		return previousNodes;
 	}
 
 	/**

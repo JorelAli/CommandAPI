@@ -1,4 +1,4 @@
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.commandnodes;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
@@ -8,20 +8,22 @@ import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.jorel.commandapi.arguments.Literal;
+import dev.jorel.commandapi.arguments.MultiLiteral;
 
 import java.util.function.Predicate;
 
 /**
- * A special type of {@link LiteralCommandNode} for {@link MultiLiteral}. Compared to the {@link LiteralCommandNode},
- * this class also has a {@code nodeName}. When this node is parsed, it will add its literal value as an argument in
- * the CommandContext, allowing a MultiLiteralArgument to know which literal was selected.
+ * A special type of {@link LiteralCommandNode} for listed {@link Literal}s and {@link MultiLiteral}s. Compared to
+ * the {@link LiteralCommandNode}, this class also has a {@code nodeName}. When this node is parsed, it will add its
+ * literal value as an argument in the CommandContext, like a required argument.
  *
  * @param <Source> The Brigadier Source object for running commands.
  */
-public class MultiLiteralCommandNode<Source> extends LiteralCommandNode<Source> {
+public class NamedLiteralCommandNode<Source> extends LiteralCommandNode<Source> {
 	private final String nodeName;
 
-	public MultiLiteralCommandNode(String nodeName, String literal, Command<Source> command, Predicate<Source> requirement, CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks) {
+	public NamedLiteralCommandNode(String nodeName, String literal, Command<Source> command, Predicate<Source> requirement, CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks) {
 		super(literal, command, requirement, redirect, modifier, forks);
 		this.nodeName = nodeName;
 	}
@@ -33,8 +35,8 @@ public class MultiLiteralCommandNode<Source> extends LiteralCommandNode<Source> 
 		return nodeName;
 	}
 
-	// A MultiLiteralCommandNode is mostly identical to a LiteralCommandNode
-	//  The only difference is that when a MultiLiteral is parsed, it adds its literal as an argument based on the nodeName
+	// A NamedLiteralCommandNode is mostly identical to a LiteralCommandNode
+	//  The only difference is that when a NamedLiteral is parsed, it adds its literal as an argument based on the nodeName
 	@Override
 	public void parse(StringReader reader, CommandContextBuilder<Source> contextBuilder) throws CommandSyntaxException {
 		int start = reader.getCursor();
@@ -45,12 +47,10 @@ public class MultiLiteralCommandNode<Source> extends LiteralCommandNode<Source> 
 
 	// Typical LiteralCommandNode methods, adding in the nodeName parameter
 	//  Mostly copied and inspired by the implementations for these methods in LiteralCommandNode
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		if (!(obj instanceof MultiLiteralCommandNode<?> other)) return false;
-
+		if (!(obj instanceof NamedLiteralCommandNode<?> other)) return false;
 
 		if (!nodeName.equals(other.nodeName)) return false;
 		return super.equals(obj);
@@ -64,8 +64,8 @@ public class MultiLiteralCommandNode<Source> extends LiteralCommandNode<Source> 
 	}
 
 	@Override
-	public MultiLiteralArgumentBuilder<Source> createBuilder() {
-		MultiLiteralArgumentBuilder<Source> builder = MultiLiteralArgumentBuilder.multiLiteral(this.nodeName, getLiteral());
+	public NamedLiteralArgumentBuilder<Source> createBuilder() {
+		NamedLiteralArgumentBuilder<Source> builder = NamedLiteralArgumentBuilder.namedLiteral(this.nodeName, getLiteral());
 
 		builder.requires(getRequirement());
 		builder.forward(getRedirect(), getRedirectModifier(), isFork());
@@ -77,6 +77,6 @@ public class MultiLiteralCommandNode<Source> extends LiteralCommandNode<Source> 
 
 	@Override
 	public String toString() {
-		return "<multiliteral " + nodeName + ":" + getLiteral() + ">";
+		return "<namedliteral " + nodeName + ":" + getLiteral() + ">";
 	}
 }

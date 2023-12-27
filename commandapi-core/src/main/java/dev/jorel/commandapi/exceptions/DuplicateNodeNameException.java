@@ -5,8 +5,8 @@ import dev.jorel.commandapi.arguments.AbstractArgument;
 import java.util.List;
 
 /**
- * An exception caused when two arguments conflict due to sharing the same node name. Note that literal nodes are allowed
- * to share node names with other literals and arguments.
+ * An exception caused when two arguments conflict due to sharing the same node name. Note that unlisted arguments are
+ * allowed to share node names with other arguments.
  */
 public class DuplicateNodeNameException extends CommandRegistrationException {
 	/**
@@ -22,11 +22,11 @@ public class DuplicateNodeNameException extends CommandRegistrationException {
 	private static <Argument extends AbstractArgument<?, ?, ?, ?>> String buildMessage(List<Argument> previousArguments, Argument argument) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append("Duplicate node names for non-literal arguments are not allowed! Going down the ");
+		builder.append("Duplicate node names for listed arguments are not allowed! Going down the ");
 		addArgumentList(builder, previousArguments);
 		builder.append(" branch, found ");
 		addArgument(builder, argument);
-		builder.append(", which had a duplicate node name");
+		builder.append(", which had a duplicated node name");
 
 		return builder.toString();
 	}

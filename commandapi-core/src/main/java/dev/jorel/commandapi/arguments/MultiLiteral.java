@@ -1,14 +1,16 @@
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
-import dev.jorel.commandapi.CommandAPIExecutor;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandnodes.NamedLiteralArgumentBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * An interface representing arguments with multiple literal string definitions
@@ -40,29 +42,24 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	String getNodeName();
 
 	/**
+	 * Links to {@link AbstractArgument#isListed()}.
+	 */
+	boolean isListed();
+
+	/**
 	 * Links to {@link AbstractArgument#getCombinedArguments()}.
 	 */
 	List<Argument> getCombinedArguments();
 
 	/**
-	 * Links to {@link AbstractArgument#finishBuildingNode(ArgumentBuilder, List, CommandAPIExecutor)}.
+	 * Links to {@link AbstractArgument#finishBuildingNode(ArgumentBuilder, List, Function)}.
 	 */
-	<Source> CommandNode<Source> finishBuildingNode(ArgumentBuilder<Source, ?> rootBuilder, List<Argument> previousArguments, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor);
+	<Source> CommandNode<Source> finishBuildingNode(ArgumentBuilder<Source, ?> rootBuilder, List<Argument> previousArguments, Function<List<Argument>, Command<Source>> terminalExecutorCreator);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDING METHODS                                                                             //
 	//  A MultiLiteral has special logic that should override the implementations in AbstractArgument //
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Overrides {@link AbstractArgument#checkPreconditions(List, List)}.
-	 * <p>
-	 * Normally, Arguments cannot be built if their node name is found in {@code previousNonLiteralArgumentNames} list.
-	 * However, LiteralArguments do not have this problem, so we want to skip that check.
-	 */
-	default void checkPreconditions(List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames) {
-
-	}
 
 	/**
 	 * Overrides {@link AbstractArgument#appendToCommandPaths(List)}.
@@ -102,25 +99,29 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Overrides {@link AbstractArgument#createArgumentBuilder(List, List)}.
 	 * <p>
 	 * Normally, Arguments will use Brigadier's RequiredArgumentBuilder. However, MultiLiterals use LiteralArgumentBuilders.
-	 * Arguments also usually add their name to the {@code previousNonLiteralArgumentNames} list, but literal node names
-	 * do not conflict with required argument node names.
 	 */
-	default <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames) {
-		previousArguments.add((Argument) this);
+	default <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument> previousArguments, List<String> previousArgumentNames) {
+		String nodeName = getNodeName();
+		String literal = getLiterals()[0];
 
-		return MultiLiteralArgumentBuilder.multiLiteral(getNodeName(), getLiterals()[0]);
+		previousArguments.add((Argument) this);
+		if(isListed()) previousArgumentNames.add(nodeName);
+
+		return isListed() ?
+			NamedLiteralArgumentBuilder.namedLiteral(nodeName, literal) :
+			LiteralArgumentBuilder.literal(literal);
 	}
 
 	/**
-	 * Overrides {@link AbstractArgument#linkNode(List, CommandNode, List, List, CommandAPIExecutor)}.
+	 * Overrides {@link AbstractArgument#linkNode(List, CommandNode, List, List, Function)}.
 	 * <p>
 	 * Normally, Arguments are only represented by a single node, and so only need to link one node. However, a MultiLiteral
 	 * represents multiple literal node paths, which also need to be generated and inserted into the node structure.
 	 */
 	default <Source> List<CommandNode<Source>> linkNode(
 		List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode,
-		List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames,
-		CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor
+		List<Argument> previousArguments, List<String> previousArgumentNames,
+		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
 		List<CommandNode<Source>> newNodes = new ArrayList<>();
 		// Add root node to previous
@@ -130,14 +131,18 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		newNodes.add(rootNode);
 
 		// Generate nodes for other literals
+		String nodeName = getNodeName();
+		boolean isListed = isListed();
 		Iterator<String> literals = Arrays.asList(getLiterals()).iterator();
 		literals.next(); // Skip first literal; that was handled by `#createArgumentBuilder`
 		while (literals.hasNext()) {
 			// Create node
-			MultiLiteralArgumentBuilder<Source> literalBuilder = MultiLiteralArgumentBuilder.multiLiteral(getNodeName(), literals.next());
+			LiteralArgumentBuilder<Source> literalBuilder = isListed ?
+				NamedLiteralArgumentBuilder.namedLiteral(nodeName, literals.next()) :
+				LiteralArgumentBuilder.literal(literals.next());
 
 			// Finish building node
-			CommandNode<Source> literalNode = finishBuildingNode(literalBuilder, previousArguments, terminalExecutor);
+			CommandNode<Source> literalNode = finishBuildingNode(literalBuilder, previousArguments, terminalExecutorCreator);
 
 			// Add node to previous
 			for(CommandNode<Source> previousNode : previousNodes) {
@@ -151,9 +156,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		List<Argument> combinedArguments = getCombinedArguments();
 		for (int i = 0; i < combinedArguments.size(); i++) {
 			Argument subArgument = combinedArguments.get(i);
-			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousNonLiteralArgumentNames,
+			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
 				// Only apply the `terminalExecutor` to the last argument
-				i == combinedArguments.size() - 1 ? terminalExecutor : null);
+				i == combinedArguments.size() - 1 ? terminalExecutorCreator : null);
 		}
 
 		// Return last nodes

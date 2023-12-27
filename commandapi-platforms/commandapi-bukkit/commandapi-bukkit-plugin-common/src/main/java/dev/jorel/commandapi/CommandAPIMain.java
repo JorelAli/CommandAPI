@@ -20,7 +20,10 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.config.BukkitConfigurationAdapter;
+import dev.jorel.commandapi.executors.CommandArguments;
+import dev.jorel.commandapi.wrappers.IntegerRange;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
@@ -28,9 +31,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -133,7 +134,111 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable();
+
+		// examples from https://github.com/JorelAli/CommandAPI/issues/483
+		new CommandAPICommand("singleFlag")
+			.withArguments(
+				new FlagsArgument("filters")
+					.loopingBranch(
+						new LiteralArgument("filter", "sort").setListed(true),
+						new MultiLiteralArgument("sortType", "furthest", "nearest", "random")
+					)
+					.loopingBranch(
+						new LiteralArgument("filter", "limit").setListed(true),
+						new IntegerArgument("limitAmount", 0)
+					)
+					.loopingBranch(
+						new LiteralArgument("filter", "distance").setListed(true),
+						new IntegerRangeArgument("distanceRange")
+					)
+			)
+			.executes(info -> {
+				for (CommandArguments branch : info.args().<List<CommandArguments>>getUnchecked("filters")) {
+					String filterType = branch.getUnchecked("filter");
+					info.sender().sendMessage(switch (filterType) {
+						case "sort" -> "Sort " + branch.<String>getUnchecked("sortType");
+						case "limit" -> "Limit " + branch.<Integer>getUnchecked("limitAmount");
+						case "distance" -> "Distance " + branch.<IntegerRange>getUnchecked("distanceRange");
+						default -> "Unknown branch " + filterType;
+					});
+				}
+			})
+			.register();
+
+		new CommandAPICommand("nestedFlags")
+			.withArguments(
+				new FlagsArgument("execute")
+					.loopingBranch(
+						new LiteralArgument("subcommand", "as").setListed(true),
+						new EntitySelectorArgument.ManyEntities("targets")
+					)
+					.loopingBranch(
+						new FlagsArgument("if")
+							.terminalBranch(
+								new LiteralArgument("ifType", "block").setListed(true),
+								new BlockPredicateArgument("predicate")
+							)
+							.terminalBranch(
+								new LiteralArgument("ifType", "entity").setListed(true),
+								new EntitySelectorArgument.ManyEntities("predicate")
+							)
+					)
+					.terminalBranch(
+						new LiteralArgument("run")
+					),
+				new CommandArgument("command")
+			)
+			.executes(info -> {
+				info.sender().sendMessage(info.args().argsMap().toString());
+			})
+			.register();
+
+		// example from NextdoorPsycho
+		new CommandAPICommand("colorCommand")
+			.withArguments(
+				createColorArgument("color")
+			)
+			.executes(info -> {
+				info.sender().sendMessage(info.args().<Color>getUnchecked("color").toString());
+			})
+			.register();
 	}
+
+	private static Argument<Color> createColorArgument(String nodeName) {
+		return new CustomArgument<>(
+			new FlagsArgument(nodeName)
+				.loopingBranch(
+					// A DynamicMultiLiteral would be perfect here :P
+					//  https://github.com/JorelAli/CommandAPI/issues/513
+					//  At least, this is how I imagine it would work
+					new StringArgument("channel").replaceSuggestions(ArgumentSuggestions.strings(info -> {
+						Set<String> channelsLeft = new HashSet<>(Set.of("-r", "-g", "-b"));
+						for(CommandArguments previousChannels : info.previousArgs().<List<CommandArguments>>getUnchecked(nodeName)) {
+							// Yes, you can reference previous versions of yourself
+							channelsLeft.remove(previousChannels.<String>getUnchecked("channel"));
+						}
+						return channelsLeft.toArray(String[]::new);
+					})),
+					new IntegerArgument("value", 0, 255)
+				),
+			info -> {
+				int red = 0, green = 0, blue = 0;
+				for (CommandArguments channels : (List<CommandArguments>) info.currentInput()) {
+					int value = channels.getUnchecked("value");
+					String channel = channels.getUnchecked("channel");
+					switch (channel) {
+						case "-r" -> red = value;
+						case "-g" -> green = value;
+						case "-b" -> blue = value;
+						default -> throw CustomArgument.CustomArgumentException.fromString("Unknown channel \"" + channel + "\"");
+					}
+				}
+				return new Color(red, green, blue);
+			}
+		);
+	}
+
+	private record Color(int red, int green, int blue) {}
 
 	/**
 	 * In contrast to the superclass' method {@link org.bukkit.plugin.java.JavaPlugin#saveDefaultConfig()},
@@ -147,5 +252,4 @@ public class CommandAPIMain extends JavaPlugin {
 		File configFile = new File(getDataFolder(), "config.yml");
 		BukkitConfigurationAdapter.createMinimalInstance(configFile).saveDefaultConfig(getDataFolder(), getLogger());
 	}
-
 }

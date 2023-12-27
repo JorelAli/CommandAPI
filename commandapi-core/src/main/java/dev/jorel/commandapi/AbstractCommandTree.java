@@ -120,10 +120,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		for (AbstractArgumentTree<?, Argument, CommandSender> argument : arguments) {
 			// We need new previousArguments lists for each branch so they don't interfere
 			List<Argument> previousArguments = new ArrayList<>();
-			List<String> previousNonLiteralArgumentNames = new ArrayList<>();
+			List<String> previousArgumentNames = new ArrayList<>();
 			previousArguments.add(commandNames);
 
-			argument.buildBrigadierNode(List.of(rootNode), previousArguments, previousNonLiteralArgumentNames);
+			argument.buildBrigadierNode(List.of(rootNode), previousArguments, previousArgumentNames);
 		}
 	}
 }

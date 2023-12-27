@@ -20,17 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
-import dev.jorel.commandapi.CommandAPIExecutor;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * An argument that represents multiple LiteralArguments
@@ -107,22 +107,17 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public void checkPreconditions(List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames) {
-		MultiLiteral.super.checkPreconditions(previousArguments, previousNonLiteralArgumentNames);
-	}
-
-	@Override
 	public void appendToCommandPaths(List<List<String>> argumentStrings) {
 		MultiLiteral.super.appendToCommandPaths(argumentStrings);
 	}
 
 	@Override
-	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames) {
-		return MultiLiteral.super.createArgumentBuilder(previousArguments, previousNonLiteralArgumentNames);
+	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument<?>> previousArguments, List<String> previousArgumentNames) {
+		return MultiLiteral.super.createArgumentBuilder(previousArguments, previousArgumentNames);
 	}
 
 	@Override
-	public <Source> List<CommandNode<Source>> linkNode(List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor) {
-		return MultiLiteral.super.linkNode(previousNodes, rootNode, previousArguments, previousNonLiteralArgumentNames, terminalExecutor);
+	public <Source> List<CommandNode<Source>> linkNode(List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
+		return MultiLiteral.super.linkNode(previousNodes, rootNode, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }
