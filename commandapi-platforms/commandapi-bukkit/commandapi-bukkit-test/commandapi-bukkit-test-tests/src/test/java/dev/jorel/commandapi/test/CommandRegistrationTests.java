@@ -4,7 +4,6 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.DuplicateNodeNameException;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
@@ -57,7 +56,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			GreedyArgumentException.class,
-			"A greedy argument can only be declared at the end of a command. Going down the [test<MultiLiteralArgument>] branch, found arg1<GreedyStringArgument> followed by [arg2<StringArgument>]",
+			"A greedy argument can only be declared at the end of a command. Going down the [test<MultiLiteralArgument>] branch, found the greedy argument arg1<GreedyStringArgument> followed by arg2<StringArgument>",
 			invalidGreedyCommand::register
 		);
 	}
@@ -88,7 +87,7 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			GreedyArgumentException.class,
-			"A greedy argument can only be declared at the end of a command. Going down the [test<MultiLiteralArgument>] branch, found arg1<GreedyStringArgument> followed by [arg2<StringArgument>]",
+			"A greedy argument can only be declared at the end of a command. Going down the [test<MultiLiteralArgument>] branch, found the greedy argument arg1<GreedyStringArgument> followed by arg2<StringArgument>",
 			invalidGreedyCommand::register
 		);
 	}
@@ -249,11 +248,23 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			DuplicateNodeNameException.class,
-			"Duplicate node names for non-literal arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<StringArgument> bob<StringArgument>] branch, found alice<StringArgument>, which had a duplicate node name",
+			"Duplicate node names for listed arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<StringArgument> bob<StringArgument>] branch, found alice<StringArgument>, which had a duplicated node name",
 			commandWithDuplicateArgumentNames::register
 		);
 
-		// This command is okay because LiteralArguments are exempt from the duplicate name rule
+		// This command is okay because unlisted arguments do not cause conflict
+		CommandAPICommand commandWithDuplicateUnlistedArgumentNames = new CommandAPICommand("test")
+			.withArguments(
+				new StringArgument("alice").setListed(false),
+				new StringArgument("bob"),
+				new StringArgument("alice"),
+				new StringArgument("bob").setListed(false)
+			)
+			.executesPlayer(P_EXEC);
+
+		assertDoesNotThrow(() -> commandWithDuplicateUnlistedArgumentNames.register());
+
+		// This command is okay because LiteralArguments are unlisted by default
 		CommandAPICommand commandWithDuplicateLiteralArgumentNames = new CommandAPICommand("test")
 			.withArguments(
 				new LiteralArgument("alice"),
@@ -264,16 +275,20 @@ class CommandRegistrationTests extends TestBase {
 
 		assertDoesNotThrow(() -> commandWithDuplicateLiteralArgumentNames.register());
 
-		// This command is okay because MultiLiteralArguments are exempt from the duplicate name rule
-		CommandAPICommand commandWithDuplicateMultiLiteralArgumentNames = new CommandAPICommand("test")
+		// However, listed LiteralArguments do conflict
+		CommandAPICommand commandWithDuplicateListedLiteralArgumentNames = new CommandAPICommand("test")
 			.withArguments(
-				new MultiLiteralArgument("alice", "option1", "option2"),
-				new MultiLiteralArgument("bob", "option1", "option2"),
-				new MultiLiteralArgument("alice", "option1", "option2")
+				new LiteralArgument("alice").setListed(true),
+				new LiteralArgument("bob").setListed(true),
+				new LiteralArgument("alice").setListed(true)
 			)
 			.executesPlayer(P_EXEC);
 
-		assertDoesNotThrow(() -> commandWithDuplicateMultiLiteralArgumentNames.register());
+		assertThrowsWithMessage(
+			DuplicateNodeNameException.class,
+			"Duplicate node names for listed arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<LiteralArgument> bob<LiteralArgument>] branch, found alice<LiteralArgument>, which had a duplicated node name",
+			commandWithDuplicateListedLiteralArgumentNames::register
+		);
 	}
 
 	@Test
@@ -291,11 +306,26 @@ class CommandRegistrationTests extends TestBase {
 
 		assertThrowsWithMessage(
 			DuplicateNodeNameException.class,
-			"Duplicate node names for non-literal arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<StringArgument> bob<StringArgument>] branch, found alice<StringArgument>, which had a duplicate node name",
+			"Duplicate node names for listed arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<StringArgument> bob<StringArgument>] branch, found alice<StringArgument>, which had a duplicated node name",
 			commandWithDuplicateArgumentNames::register
 		);
 
-		// This command is okay because LiteralArguments are exempt from the duplicate name rule
+		// This command is okay because unlisted arguments do not cause conflict
+		CommandTree commandWithDuplicateUnlistedArgumentNames = new CommandTree("test")
+			.then(
+				new StringArgument("alice").setListed(false).then(
+					new StringArgument("bob").then(
+						new StringArgument("alice").then(
+							new StringArgument("bob").setListed(false)
+								.executesPlayer(P_EXEC)
+						)
+					)
+				)
+			);
+
+		assertDoesNotThrow(() -> commandWithDuplicateUnlistedArgumentNames.register());
+
+		// This command is okay because LiteralArguments are unlisted by default
 		CommandTree commandWithDuplicateLiteralArgumentNames = new CommandTree("test")
 			.then(
 				new LiteralArgument("alice").then(
@@ -308,18 +338,22 @@ class CommandRegistrationTests extends TestBase {
 
 		assertDoesNotThrow(() -> commandWithDuplicateLiteralArgumentNames.register());
 
-		// This command is okay because MultiLiteralArguments are exempt from the duplicate name rule
-		CommandTree commandWithDuplicateMultiLiteralArgumentNames = new CommandTree("test")
+		// However, listed LiteralArguments do conflict
+		CommandTree commandWithDuplicateListedLiteralArgumentNames = new CommandTree("test")
 			.then(
-				new MultiLiteralArgument("alice", "option1", "option2").then(
-					new MultiLiteralArgument("bob", "option1", "option2").then(
-						new MultiLiteralArgument("alice", "option1", "option2")
+				new LiteralArgument("alice").setListed(true).then(
+					new LiteralArgument("bob").setListed(true).then(
+						new LiteralArgument("alice").setListed(true)
 							.executesPlayer(P_EXEC)
 					)
 				)
 			);
 
-		assertDoesNotThrow(() -> commandWithDuplicateMultiLiteralArgumentNames.register());
+		assertThrowsWithMessage(
+			DuplicateNodeNameException.class,
+			"Duplicate node names for listed arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<LiteralArgument> bob<LiteralArgument>] branch, found alice<LiteralArgument>, which had a duplicated node name",
+			commandWithDuplicateListedLiteralArgumentNames::register
+		);
 
 		// This command is okay because the duplicate names are on different paths
 		CommandTree commandWithDuplicateNamesSeparated = new CommandTree("test")

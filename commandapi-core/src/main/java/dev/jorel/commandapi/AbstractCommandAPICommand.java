@@ -20,17 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.GreedyArgument;
-import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -317,30 +317,19 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			previousArguments.add(commandNames);
 
 			// Add required arguments
+			Function<List<Argument>, Command<Source>> executorCreator = executor.hasAnyExecutors() ?
+				args -> handler.generateBrigadierCommand(args, executor) : null;
 			for (int i = 0; i < requiredArguments.size(); i++) {
 				Argument argument = requiredArguments.get(i);
 				previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
 					// Only the last required argument is executable
-					i == requiredArguments.size() - 1 ? executor : null);
+					i == requiredArguments.size() - 1 ? executorCreator : null);
 			}
 
 			// Add optional arguments
 			for (Argument argument : optionalArguments) {
 				// All optional arguments are executable
-				previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames, executor);
-			}
-
-			// Check greedy argument constraint
-			//  We need to check it down here so that all the combined arguments are properly considered after unpacking
-			for (int i = 0; i < previousArguments.size() - 1 /* Minus one since we don't need to check last argument */; i++) {
-				Argument argument = previousArguments.get(i);
-				if (argument instanceof GreedyArgument) {
-					throw new GreedyArgumentException(
-						previousArguments.subList(0, i), // Arguments before this
-						argument,
-						List.of(previousArguments.subList(i + 1, previousArguments.size())) // Arguments after this
-					);
-				}
+				previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames, executorCreator);
 			}
 		}
 

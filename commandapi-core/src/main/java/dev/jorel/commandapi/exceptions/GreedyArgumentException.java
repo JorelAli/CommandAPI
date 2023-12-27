@@ -31,32 +31,26 @@ public class GreedyArgumentException extends CommandRegistrationException {
 	/**
 	 * Creates a GreedyArgumentException
 	 *
-	 * @param previousArguments The arguments that came before the greedy argument
-	 * @param argument          The greedy argument that is in an invalid spot
-	 * @param followingBranches The branches following the greedy argument that weren't supposed to be there
+	 * @param previousArguments The arguments that came before and including the greedy argument
+	 * @param argument          The argument that invalidly came after a greedy argument
 	 * @param <Argument>        The Argument class being used
 	 */
 	public <Argument extends AbstractArgument<?, ?, ?, ?>> GreedyArgumentException(
-		List<Argument> previousArguments, Argument argument, List<List<Argument>> followingBranches) {
-		super(buildMessage(previousArguments, argument, followingBranches));
+		List<Argument> previousArguments, Argument argument) {
+		super(buildMessage(previousArguments, argument));
 	}
 
 	private static <Argument extends AbstractArgument<?, ?, ?, ?>> String buildMessage(
-		List<Argument> previousArguments, Argument argument, List<List<Argument>> followingBranches) {
+		List<Argument> previousArguments, Argument argument) {
 		StringBuilder builder = new StringBuilder();
+		int greedyArgumentIndex = previousArguments.size() - 1;
 
 		builder.append("A greedy argument can only be declared at the end of a command. Going down the ");
-		addArgumentList(builder, previousArguments);
-		builder.append(" branch, found ");
-		addArgument(builder, argument);
+		addArgumentList(builder, previousArguments.subList(0, greedyArgumentIndex));
+		builder.append(" branch, found the greedy argument ");
+		addArgument(builder, previousArguments.get(greedyArgumentIndex));
 		builder.append(" followed by ");
-
-		for (List<Argument> branch : followingBranches) {
-			addArgumentList(builder, branch);
-			builder.append(" and ");
-		}
-
-		builder.setLength(builder.length() - 5);
+		addArgument(builder, argument);
 
 		return builder.toString();
 	}

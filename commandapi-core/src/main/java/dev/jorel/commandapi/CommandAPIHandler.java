@@ -40,6 +40,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -59,23 +60,34 @@ import java.util.concurrent.CompletableFuture;
  * @param <Source>        The class for running Brigadier commands
  */
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
+@RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
+@RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
+@RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<Argument
 /// @cond DOX
 extends AbstractArgument<?, ?, Argument, CommandSender>
 /// @endcond
 , CommandSender, Source> {
-	private static final SafeVarHandle<CommandContext<?>, Map<String, ParsedArgument<?, ?>>> commandContextArguments;
-
-	// Compute all var handles all in one go so we don't do this during main server
-	// runtime
-	static {
-		commandContextArguments = SafeVarHandle.ofOrNull(CommandContext.class, "arguments", "arguments", Map.class);
-	}
-
 	// TODO: Need to ensure this can be safely "disposed of" when we're done (e.g. on reloads).
 	// I hiiiiiiighly doubt we're storing class caches of classes that can be unloaded at runtime,
 	// but this IS a generic class caching system and we don't want derpy memory leaks
-	private static final Map<ClassCache, Field> FIELDS = new HashMap<>();
+	private static final Map<ClassCache, Field> FIELDS;
+
+	private static final SafeVarHandle<CommandContext<?>, Map<String, ParsedArgument<?, ?>>> commandContextArguments;
+	// VarHandle seems incapable of setting final fields, so we have to use Field here
+	private static final Field commandNodeChildren;
+	private static final Field commandNodeLiterals;
+	private static final Field commandNodeArguments;
+
+	// Compute all var handles all in one go so we don't do this during main server runtime
+	static {
+		FIELDS = new HashMap<>();
+
+		commandContextArguments = SafeVarHandle.ofOrNull(CommandContext.class, "arguments", "arguments", Map.class);
+		commandNodeChildren = CommandAPIHandler.getField(CommandNode.class, "children");
+		commandNodeLiterals = CommandAPIHandler.getField(CommandNode.class, "literals");
+		commandNodeArguments = CommandAPIHandler.getField(CommandNode.class, "arguments");
+	}
 
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
@@ -141,7 +153,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	// SECTION: Creating commands //
 	////////////////////////////////
 
-	void registerCommand(ExecutableCommand<?, CommandSender> command, String namespace) {
+	public void registerCommand(ExecutableCommand<?, CommandSender> command, String namespace) {
 		platform.preCommandRegistration(command.getName());
 
 		List<RegisteredCommand> registeredCommandInformation = RegisteredCommand.fromExecutableCommand(command, namespace);
@@ -431,6 +443,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		};
 	}
 
+	////////////////////////////////
+	// SECTION: Brigadier Helpers //
+	////////////////////////////////
+
 	public void writeDispatcherToFile() {
 		File file = CommandAPI.getConfiguration().getDispatcherFile();
 		if (file != null) {
@@ -452,7 +468,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 	}
 
-	LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original, String namespace) {
+	public LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original, String namespace) {
 		// Adapted from a section of `CraftServer#syncCommands`
 		LiteralCommandNode<Source> clone = new LiteralCommandNode<>(
 			namespace + ":" + original.getLiteral(),
@@ -467,6 +483,54 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			clone.addChild(child);
 		}
 		return clone;
+	}
+
+	public static <Source> Map<String, CommandNode<Source>> getCommandNodeChildren(CommandNode<Source> target) {
+		try {
+			return (Map<String, CommandNode<Source>>) commandNodeChildren.get(target);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
+		}
+	}
+
+	public static <Source> void setCommandNodeChildren(CommandNode<Source> target, Map<String, CommandNode<Source>> children) {
+		try {
+			commandNodeChildren.set(target, children);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
+		}
+	}
+
+	public static <Source> Map<String, LiteralCommandNode<Source>> getCommandNodeLiterals(CommandNode<Source> target) {
+		try {
+			return (Map<String, LiteralCommandNode<Source>>) commandNodeLiterals.get(target);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
+		}
+	}
+
+	public static <Source> void setCommandNodeLiterals(CommandNode<Source> target, Map<String, LiteralCommandNode<Source>> literals) {
+		try {
+			commandNodeLiterals.set(target, literals);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
+		}
+	}
+
+	public static <Source> Map<String, ArgumentCommandNode<Source, ?>> getCommandNodeArguments(CommandNode<Source> target) {
+		try {
+			return (Map<String, ArgumentCommandNode<Source, ?>>) commandNodeArguments.get(target);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
+		}
+	}
+
+	public static <Source> void setCommandNodeArguments(CommandNode<Source> target, Map<String, ArgumentCommandNode<Source, ?>> arguments) {
+		try {
+			commandNodeArguments.set(target, arguments);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
+		}
 	}
 
 	////////////////////////////////
@@ -522,7 +586,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return an CommandArguments object which can be used in (sender, args) ->
 	 * @throws CommandSyntaxException If an argument is improperly formatted and cannot be parsed
 	 */
-	CommandArguments argsToCommandArgs(CommandContext<Source> cmdCtx, List<Argument> args) throws CommandSyntaxException {
+	public CommandArguments argsToCommandArgs(CommandContext<Source> cmdCtx, List<Argument> args) throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
@@ -564,7 +628,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return the Argument's corresponding object
 	 * @throws CommandSyntaxException when the input for the argument isn't formatted correctly
 	 */
-	Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, CommandArguments previousArgs) throws CommandSyntaxException {
+	public Object parseArgument(CommandContext<Source> cmdCtx, String key, Argument value, CommandArguments previousArgs) throws CommandSyntaxException {
 		if (value.isListed()) {
 			return value.parseArgument(cmdCtx, key, previousArgs);
 		} else {

@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -27,17 +28,18 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.AbstractArgumentTree;
-import dev.jorel.commandapi.CommandAPIExecutor;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandnodes.UnnamedRequiredArgumentBuilder;
 import dev.jorel.commandapi.exceptions.DuplicateNodeNameException;
+import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -172,7 +174,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there
 	 * are no overridden suggestions.
 	 */
-	public final Optional<ArgumentSuggestions<CommandSender>> getOverriddenSuggestions() {
+	public Optional<ArgumentSuggestions<CommandSender>> getOverriddenSuggestions() {
 		return Optional.ofNullable(replaceSuggestions);
 	}
 
@@ -188,7 +190,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Impl withPermission(CommandPermission permission) {
+	public Impl withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return instance();
 	}
@@ -199,7 +201,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Impl withPermission(String permission) {
+	public Impl withPermission(String permission) {
 		this.permission = CommandPermission.fromString(permission);
 		return instance();
 	}
@@ -209,7 +211,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *
 	 * @return the permission required to run this command
 	 */
-	public final CommandPermission getArgumentPermission() {
+	public CommandPermission getArgumentPermission() {
 		return permission;
 	}
 
@@ -224,7 +226,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *
 	 * @return the requirements required to run this command
 	 */
-	public final Predicate<CommandSender> getRequirements() {
+	public Predicate<CommandSender> getRequirements() {
 		return this.requirements;
 	}
 
@@ -236,7 +238,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Impl withRequirement(Predicate<CommandSender> requirement) {
+	public Impl withRequirement(Predicate<CommandSender> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return instance();
 	}
@@ -313,8 +315,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	@SafeVarargs
 	public final Impl combineWith(Argument... combinedArguments) {
-		this.combinedArguments.addAll(Arrays.asList(combinedArguments));
-		return instance();
+		return this.combineWith(Arrays.asList(combinedArguments));
 	}
 
 	//////////////////////
@@ -357,30 +358,31 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * This process is broken up into 4 other methods for the convenience of defining special node structures for specific
 	 * arguments. Those methods are:
 	 * <ul>
-	 *     <li>{@link #checkPreconditions(List, List)}</li>
+	 *     <li>{@link #checkPreconditions(List, List, List)}</li>
 	 *     <li>{@link #createArgumentBuilder(List, List)}</li>
-	 *     <li>{@link #finishBuildingNode(ArgumentBuilder, List, CommandAPIExecutor)}</li>
-	 *     <li>{@link #linkNode(List, CommandNode, List, List, CommandAPIExecutor)}</li>
+	 *     <li>{@link #finishBuildingNode(ArgumentBuilder, List, Function)}</li>
+	 *     <li>{@link #linkNode(List, CommandNode, List, List, Function)}</li>
 	 * </ul>
 	 *
-	 * @param previousNodes                   A List of {@link CommandNode}s to add this argument onto.
-	 * @param previousArguments               A List of CommandAPI arguments that came before this argument.
-	 * @param previousNonLiteralArgumentNames A List of Strings containing the node names that came before this argument.
-	 * @param terminalExecutor                The {@link CommandAPIExecutor} to apply at the end of the node structure.
-	 *                                        This parameter can be null to indicate that this argument should not be
-	 *                                        executable.
-	 * @param <Source>                        The Brigadier Source object for running commands.
+	 * @param previousNodes           A List of {@link CommandNode}s to add this argument onto.
+	 * @param previousArguments       A List of CommandAPI arguments that came before this argument.
+	 * @param previousArgumentNames   A List of Strings containing the node names that came before this argument.
+	 * @param terminalExecutorCreator A function that transforms the list of {@code previousArguments} into an
+	 *                                appropriate Brigadier {@link Command} which should be applied at the end of
+	 *                                the node structure. This parameter can be null to indicate that this argument
+	 *                                should not be executable.
+	 * @param <Source>                The Brigadier Source object for running commands.
 	 * @return The list of last nodes in the Brigadier node structure for this argument.
 	 */
 	public <Source> List<CommandNode<Source>> addArgumentNodes(
 		List<CommandNode<Source>> previousNodes,
-		List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames,
-		CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor
+		List<Argument> previousArguments, List<String> previousArgumentNames,
+		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
 
 		// Check preconditions
-		checkPreconditions(previousArguments, previousNonLiteralArgumentNames);
+		checkPreconditions(previousNodes, previousArguments, previousArgumentNames);
 
 		// Handle previewable argument
 		if (this instanceof Previewable<?, ?>) {
@@ -388,54 +390,72 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Create node
-		ArgumentBuilder<Source, ?> rootBuilder = createArgumentBuilder(previousArguments, previousNonLiteralArgumentNames);
+		ArgumentBuilder<Source, ?> rootBuilder = createArgumentBuilder(previousArguments, previousArgumentNames);
 
 		// Finish building node
-		CommandNode<Source> rootNode = finishBuildingNode(rootBuilder, previousArguments, terminalExecutor);
+		CommandNode<Source> rootNode = finishBuildingNode(rootBuilder, previousArguments, terminalExecutorCreator);
 
 		// Link node to previous
-		previousNodes = linkNode(previousNodes, rootNode, previousArguments, previousNonLiteralArgumentNames, terminalExecutor);
+		previousNodes = linkNode(previousNodes, rootNode, previousArguments, previousArgumentNames, terminalExecutorCreator);
 
 		// Return last nodes
 		return previousNodes;
 	}
 
 	/**
-	 * Checks for any conditions that mean this argument cannot be build properly.
+	 * Checks for any conditions that mean this argument cannot be built properly.
 	 *
-	 * @param previousArguments               A List of CommandAPI arguments that came before this argument.
-	 * @param previousNonLiteralArgumentNames A List of Strings containing the node names that came before this argument.
+	 * @param previousNodes         A List of {@link CommandNode}s to add this argument onto.
+	 * @param previousArguments     A List of CommandAPI arguments that came before this argument.
+	 * @param previousArgumentNames A List of Strings containing the node names that came before this argument.
 	 */
-	public void checkPreconditions(List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames) {
-		if (previousNonLiteralArgumentNames.contains(nodeName)) {
+	public <Source> void checkPreconditions(
+		List<CommandNode<Source>> previousNodes, List<Argument> previousArguments, List<String> previousArgumentNames
+	) {
+		if(previousNodes.isEmpty()) {
+			throw new GreedyArgumentException(previousArguments, (Argument) this);
+		}
+		if (isListed && previousArgumentNames.contains(nodeName)) {
 			throw new DuplicateNodeNameException(previousArguments, (Argument) this);
 		}
 	}
 
 	/**
 	 * Creates a Brigadier {@link ArgumentBuilder} representing this argument. Note: calling this method will also add
-	 * this argument and its name to the end of the given {@code previousArguments} and {@code previousNonLiteralArgumentNames}
+	 * this argument and its name to the end of the given {@code previousArguments} and {@code previousArgumentNames}
 	 * lists.
 	 *
-	 * @param previousArguments               A List of CommandAPI arguments that came before this argument.
-	 * @param previousNonLiteralArgumentNames A List of Strings containing the node names that came before this argument.
-	 * @param <Source>                        The Brigadier Source object for running commands.
+	 * @param previousArguments     A List of CommandAPI arguments that came before this argument.
+	 * @param previousArgumentNames A List of Strings containing the node names that came before this argument.
+	 * @param <Source>              The Brigadier Source object for running commands.
 	 * @return The {@link ArgumentBuilder} for this argument.
 	 */
-	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames) {
+	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument> previousArguments, List<String> previousArgumentNames) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
 
-		// Create node
-		RequiredArgumentBuilder<Source, ?> rootBuilder = RequiredArgumentBuilder.argument(nodeName, rawType);
+		// Create node and add suggestions
+		// Note: I would like to combine these two `build.suggests(...)` calls, but they are actually two unrelated
+		//  methods since UnnamedRequiredArgumentBuilder does not extend RequiredArgumentBuilder (see
+		//  UnnamedRequiredArgumentBuilder for why). If UnnamedRequiredArgumentBuilder *does* extend
+		//  RequiredArgumentBuilder, please simplify this if statement, like what Literal#createArgumentBuilder does.
+		ArgumentBuilder<Source, ?> rootBuilder;
+		if(isListed) {
+			RequiredArgumentBuilder<Source, ?> builder = RequiredArgumentBuilder.argument(nodeName, rawType);
+			builder.suggests(handler.generateBrigadierSuggestions(previousArguments, (Argument) this));
 
-		// Add suggestions
-		rootBuilder.suggests(handler.generateBrigadierSuggestions(previousArguments, (Argument) this));
+			rootBuilder = builder;
+		} else {
+			UnnamedRequiredArgumentBuilder<Source, ?> builder = UnnamedRequiredArgumentBuilder.unnamedArgument(nodeName, rawType);
+			builder.suggests(handler.generateBrigadierSuggestions(previousArguments, (Argument) this));
+
+			rootBuilder = builder;
+		}
 
 		// Add argument to previousArgument lists
 		//  Note: this argument should not be in the previous arguments list when doing suggestions,
 		//  since this argument is not going to be present in the cmdCtx while being suggested
 		previousArguments.add((Argument) this);
-		previousNonLiteralArgumentNames.add(nodeName);
+		if(isListed) previousArgumentNames.add(nodeName);
 
 		return rootBuilder;
 	}
@@ -443,22 +463,24 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Finishes building the Brigadier {@link ArgumentBuilder} representing this argument.
 	 *
-	 * @param rootBuilder       The {@link ArgumentBuilder} to finish building.
-	 * @param previousArguments A List of CommandAPI arguments that came before this argument.
-	 * @param terminalExecutor  The {@link CommandAPIExecutor} to apply at the end of the node structure. This parameter
-	 *                          can be null to indicate that this argument should not be executable.
-	 * @param <Source>          The Brigadier Source object for running commands.
+	 * @param rootBuilder             The {@link ArgumentBuilder} to finish building.
+	 * @param previousArguments       A List of CommandAPI arguments that came before this argument.
+	 * @param terminalExecutorCreator A function that transforms the list of {@code previousArguments} into an
+	 *                                appropriate Brigadier {@link Command} which should be applied at the end
+	 *                                of the node structure. This parameter can be null to indicate that this
+	 *                                argument should not be executable.
+	 * @param <Source>                The Brigadier Source object for running commands.
 	 * @return The {@link CommandNode} representing this argument created by building the given {@link ArgumentBuilder}.
 	 */
-	public <Source> CommandNode<Source> finishBuildingNode(ArgumentBuilder<Source, ?> rootBuilder, List<Argument> previousArguments, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor) {
+	public <Source> CommandNode<Source> finishBuildingNode(ArgumentBuilder<Source, ?> rootBuilder, List<Argument> previousArguments, Function<List<Argument>, Command<Source>> terminalExecutorCreator) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
 
 		// Add permission and requirements
 		rootBuilder.requires(handler.generateBrigadierRequirements(permission, requirements));
 
 		// Add the given executor if we are the last node
-		if (combinedArguments.isEmpty() && terminalExecutor != null && terminalExecutor.hasAnyExecutors()) {
-			rootBuilder.executes(handler.generateBrigadierCommand(previousArguments, terminalExecutor));
+		if (combinedArguments.isEmpty() && terminalExecutorCreator != null) {
+			rootBuilder.executes(terminalExecutorCreator.apply(previousArguments));
 		}
 
 		return rootBuilder.build();
@@ -467,23 +489,24 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Links this argument into the Brigadier {@link CommandNode} structure.
 	 *
-	 * @param previousNodes                   A List of {@link CommandNode}s to add this argument onto.
-	 * @param rootNode                        The {@link CommandNode} representing this argument.
-	 * @param previousArguments               A List of CommandAPI arguments that came before this argument.
-	 * @param previousNonLiteralArgumentNames A List of Strings containing the node names that came before this argument.
-	 * @param terminalExecutor                The {@link CommandAPIExecutor} to apply at the end of the node structure.
-	 *                                        This parameter can be null to indicate that this argument should not be
-	 *                                        executable.
-	 * @param <Source>                        The Brigadier Source object for running commands.
-	 * @return The list of last nodes in the Brigadier {@link CommandNode} structure representing this Argument. Note that
-	 * this is not necessarily the {@code rootNode} for this argument, since the Brigadier node structure may contain multiple
-	 * nodes in a chain. This might happen if {@link #combineWith(AbstractArgument[])} was called for this argument to merge
-	 * it with other arguments.
+	 * @param previousNodes           A List of {@link CommandNode}s to add this argument onto.
+	 * @param rootNode                The {@link CommandNode} representing this argument.
+	 * @param previousArguments       A List of CommandAPI arguments that came before this argument.
+	 * @param previousArgumentNames   A List of Strings containing the node names that came before this argument.
+	 * @param terminalExecutorCreator A function that transforms the list of {@code previousArguments} into an
+	 *                                appropriate Brigadier {@link Command} which should be applied at the end
+	 *                                of the node structure. This parameter can be null to indicate that this
+	 *                                argument should not be executable.
+	 * @param <Source>                The Brigadier Source object for running commands.
+	 * @return The list of last nodes in the Brigadier {@link CommandNode} structure representing this Argument. Note
+	 * that this is not necessarily the {@code rootNode} for this argument, since the Brigadier node structure may
+	 * contain multiple nodes in a chain. This might happen if {@link #combineWith(AbstractArgument[])} was called
+	 * for this argument to merge it with other arguments.
 	 */
 	public <Source> List<CommandNode<Source>> linkNode(
 		List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode,
-		List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames,
-		CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> terminalExecutor
+		List<Argument> previousArguments, List<String> previousArgumentNames,
+		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
 		// Add rootNode to the previous nodes
 		for(CommandNode<Source> previousNode : previousNodes) {
@@ -491,12 +514,13 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Add combined arguments
-		previousNodes = List.of(rootNode);
+		// A GreedyArgument cannot have arguments after it
+		previousNodes = this instanceof GreedyArgument ? List.of() : List.of(rootNode);
 		for (int i = 0; i < combinedArguments.size(); i++) {
 			Argument subArgument = combinedArguments.get(i);
-			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousNonLiteralArgumentNames,
+			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
 				// Only apply the `terminalExecutor` to the last argument
-				i == combinedArguments.size() - 1 ? terminalExecutor : null);
+				i == combinedArguments.size() - 1 ? terminalExecutorCreator : null);
 		}
 
 		// Return last nodes

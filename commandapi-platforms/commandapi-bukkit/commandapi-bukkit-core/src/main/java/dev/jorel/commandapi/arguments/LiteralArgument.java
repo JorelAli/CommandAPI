@@ -153,12 +153,7 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public void checkPreconditions(List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames) {
-		Literal.super.checkPreconditions(previousArguments, previousNonLiteralArgumentNames);
-	}
-
-	@Override
-	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument<?>> previousArguments, List<String> previousNonLiteralArgumentNames) {
-		return Literal.super.createArgumentBuilder(previousArguments, previousNonLiteralArgumentNames);
+	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument<?>> previousArguments, List<String> previousArgumentNames) {
+		return Literal.super.createArgumentBuilder(previousArguments, previousArgumentNames);
 	}
 }

@@ -2,8 +2,6 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.arguments.GreedyArgument;
-import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 
 import java.util.ArrayList;
@@ -125,55 +123,34 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Builds the Brigadier {@link CommandNode} structure for this argument tree.
 	 *
-	 * @param previousNodes                   A List of {@link CommandNode}s to add this argument onto.
-	 * @param previousArguments               A List of CommandAPI arguments that came before this argument tree.
-	 * @param previousNonLiteralArgumentNames A List of Strings containing the node names that came before this argument.
-	 * @param <Source>                        The Brigadier Source object for running commands.
+	 * @param previousNodes         A List of {@link CommandNode}s to add this argument onto.
+	 * @param previousArguments     A List of CommandAPI arguments that came before this argument tree.
+	 * @param previousArgumentNames A List of Strings containing the node names that came before this argument.
+	 * @param <Source>              The Brigadier Source object for running commands.
 	 */
 	public <Source> void buildBrigadierNode(
 		List<CommandNode<Source>> previousNodes,
-		List<Argument> previousArguments, List<String> previousNonLiteralArgumentNames
+		List<Argument> previousArguments, List<String> previousArgumentNames
 	) {
+		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
+
 		// Check preconditions
-		if (argument instanceof GreedyArgument && !arguments.isEmpty()) {
-			// Argument is followed by at least some arguments
-			throw new GreedyArgumentException(previousArguments, argument, getBranchesAsList());
-		}
 		if (!executor.hasAnyExecutors() && arguments.isEmpty()) {
 			// If we don't have any executors then no branches is bad because this path can't be run at all
 			throw new MissingCommandExecutorException(previousArguments, argument);
 		}
 
 		// Create node for this argument
-		previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousNonLiteralArgumentNames, executor);
+		previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
+			executor.hasAnyExecutors() ? args -> handler.generateBrigadierCommand(args, executor) : null);
 
 		// Add our branches as children to the node
 		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
 			// We need a new list for each branch of the tree
 			List<Argument> newPreviousArguments = new ArrayList<>(previousArguments);
-			List<String> newPreviousArgumentNames = new ArrayList<>(previousNonLiteralArgumentNames);
+			List<String> newPreviousArgumentNames = new ArrayList<>(previousArgumentNames);
 
 			child.buildBrigadierNode(previousNodes, newPreviousArguments, newPreviousArgumentNames);
 		}
-	}
-
-	/**
-	 * @return A list of paths that represent the possible branches of this argument tree as Argument objects.
-	 */
-	protected List<List<Argument>> getBranchesAsList() {
-		if (arguments.isEmpty()) return List.of(List.of());
-
-		List<List<Argument>> branchesList = new ArrayList<>();
-
-		for (AbstractArgumentTree<?, Argument, CommandSender> branch : arguments) {
-			for (List<Argument> subBranchList : branch.getBranchesAsList()) {
-				List<Argument> newBranchList = new ArrayList<>();
-				newBranchList.add(branch.argument);
-				newBranchList.addAll(subBranchList);
-				branchesList.add(newBranchList);
-			}
-		}
-
-		return branchesList;
 	}
 }

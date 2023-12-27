@@ -1,40 +1,23 @@
 package dev.jorel.commandapi;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
-import dev.jorel.commandapi.preprocessor.RequireField;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-@RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
-@RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
-@RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 public abstract class CommandRegistrationStrategy<Source> {
-	// Reflection
-	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
-	//  parameter Source. We still need to cast to that signature for map, so Map is raw.
-	static final SafeVarHandle<CommandNode<?>, Map> commandNodeChildren;
-	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeLiterals;
-	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeArguments;
-
-	// Compute all var handles all in one go so we don't do this during main server runtime
-	static {
-		commandNodeChildren = SafeVarHandle.ofOrNull(CommandNode.class, "children", "children", Map.class);
-		commandNodeLiterals = SafeVarHandle.ofOrNull(CommandNode.class, "literals", "literals", Map.class);
-		commandNodeArguments = SafeVarHandle.ofOrNull(CommandNode.class, "arguments", "arguments", Map.class);
-	}
-
 	// Utility methods
 	protected void removeBrigadierCommands(RootCommandNode<Source> root, String commandName,
 										   boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
-		Map<String, CommandNode<Source>> children = (Map<String, CommandNode<Source>>) commandNodeChildren.get(root);
-		Map<String, CommandNode<Source>> literals = (Map<String, CommandNode<Source>>) commandNodeLiterals.get(root);
-		Map<String, CommandNode<Source>> arguments = (Map<String, CommandNode<Source>>) commandNodeArguments.get(root);
+		Map<String, CommandNode<Source>> children = CommandAPIHandler.getCommandNodeChildren(root);
+		Map<String, LiteralCommandNode<Source>> literals = CommandAPIHandler.getCommandNodeLiterals(root);
+		Map<String, ArgumentCommandNode<Source, ?>> arguments = CommandAPIHandler.getCommandNodeArguments(root);
 
 		removeCommandFromMapIfCheckPasses(children, commandName, extraCheck);
 		removeCommandFromMapIfCheckPasses(literals, commandName, extraCheck);
@@ -49,7 +32,7 @@ public abstract class CommandRegistrationStrategy<Source> {
 		}
 	}
 
-	protected static <T> void removeCommandNamespace(Map<String, T> map, String commandName, Predicate<T> extraCheck) {
+	protected static <T> void removeCommandNamespace(Map<String, ? extends T> map, String commandName, Predicate<T> extraCheck) {
 		for (String key : new HashSet<>(map.keySet())) {
 			if (!isThisTheCommandButNamespaced(commandName, key)) continue;
 
@@ -57,7 +40,7 @@ public abstract class CommandRegistrationStrategy<Source> {
 		}
 	}
 
-	protected static <T> void removeCommandFromMapIfCheckPasses(Map<String, T> map, String key, Predicate<T> extraCheck) {
+	protected static <T> void removeCommandFromMapIfCheckPasses(Map<String, ? extends T> map, String key, Predicate<T> extraCheck) {
 		T element = map.get(key);
 		if (element == null) return;
 		if (extraCheck.test(element)) map.remove(key);
