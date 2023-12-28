@@ -1,5 +1,9 @@
 # NBT arguments
 
+The CommandAPI has support for arguments that interact with Minecraft's [NBT format](https://minecraft.wiki/w/NBT_format). Since Minecraft's NBT format is not directly accessible via Spigot (it is instead implemented via Spigot's APIs when necessary), using NBT-based arguments requires an implementation of an NBT API that is capable of interpreting NMS NBT objects.
+
+
+
 The CommandAPI includes support for NBT compound arguments using an NBT API. The usage for the `NBTCompoundArgument` depends on whether you are using the CommandAPI plugin (using a `CommandAPI.jar` file in your `plugins/` folder), or are shading the CommandAPI (including the compiled CommandAPI code in your own plugin).
 
 -----

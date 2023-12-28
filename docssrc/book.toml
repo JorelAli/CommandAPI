@@ -31,6 +31,7 @@ level = 2
 # Should we check links on the internet? Enabling this option adds a
 # non-negligible performance impact
 follow-web-links = true
+optional = true
 
 # Are we allowed to link to files outside of the book's root directory? This
 # may help prevent linking to sensitive files (e.g. "../../../../etc/shadow")

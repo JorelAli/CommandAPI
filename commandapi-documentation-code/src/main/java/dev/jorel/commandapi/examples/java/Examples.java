@@ -747,6 +747,18 @@ new CommandAPICommand("award")
 }
 }
 
+class argument_nbt_rtag1 extends JavaPlugin {
+/* ANCHOR: argumentNBTRtag1 */
+@Override
+public void onLoad() {
+    CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+        .initializeNBTAPI(Object.class, o -> o)
+    );
+}
+/* ANCHOR_END: argumentNBTRtag1 */
+
+}
+
 void argument_objectives() {
 /* ANCHOR: argumentObjectives1 */
 new CommandAPICommand("sidebar")

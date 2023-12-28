@@ -82,6 +82,7 @@
       - [Block predicate arguments](./argument_blockpredicate.md)
       - [ItemStack predicate arguments](./argument_itemstackpredicate.md)
     - [NBT arguments](./argument_nbt.md)
+      - [NBT Compound argument](./argument_nbt_compound.md)
     - [Literal arguments](./category_literal_arguments.md)
       - [Literal arguments](./argument_literal.md)
       - [Multi literal arguments](./argument_multiliteral.md)
