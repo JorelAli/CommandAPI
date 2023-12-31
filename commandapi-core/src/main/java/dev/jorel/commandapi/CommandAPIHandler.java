@@ -122,6 +122,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
 	final TreeMap<String, CommandPermission> registeredPermissions = new TreeMap<>();
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
+	final Map<String, List<RegisteredCommand>> registeredCommandMap; // Keep track of registered commands in a map for permission lookups
 	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
 
 	private static CommandAPIHandler<?, ?, ?> instance;
@@ -129,6 +130,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	protected CommandAPIHandler(CommandAPIPlatform<Argument, CommandSender, Source> platform) {
 		this.platform = platform;
 		this.registeredCommands = new ArrayList<>();
+		this.registeredCommandMap = new HashMap<>();
 		this.previewableArguments = new HashMap<>();
 
 		CommandAPIHandler.instance = this;
@@ -616,6 +618,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, shortDescription,
 			fullDescription, usageDescription, aliases, permission, namespace);
 		registeredCommands.add(registeredCommandInformation);
+
+		List<RegisteredCommand> registeredCommands = registeredCommandMap.containsKey(commandName)
+			? registeredCommandMap.get(commandName)
+			: new ArrayList<>();
+		registeredCommands.add(registeredCommandInformation);
+		registeredCommandMap.put(commandName, registeredCommands);
 
 		// Handle previewable arguments
 		handlePreviewableArguments(commandName, args, aliases);

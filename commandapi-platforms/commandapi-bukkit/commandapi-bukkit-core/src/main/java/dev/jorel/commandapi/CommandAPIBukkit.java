@@ -249,7 +249,34 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				 * If anyone dares tries to use testPermission() on this command, seriously,
 				 * what are you doing and why?
 				 */
-				for(Command command : new Command[] { map.getCommand(cmdName), map.getCommand("minecraft:" + cmdName) }) {
+				List<Command> commands = new ArrayList<>();
+				commands.add(map.getCommand(cmdName));
+
+				List<RegisteredCommand> registeredCommands = CommandAPIHandler.getInstance().registeredCommandMap.get(cmdName);
+
+				if (registeredCommands == null) {
+					// This happens when dealing with aliases
+					// Doing something here is not necessary because we're
+					// already dealing with them further down this method
+					continue;
+				}
+
+				for (RegisteredCommand registeredCommand : registeredCommands) {
+					String namespace = registeredCommand.namespace().isEmpty()
+						? ""
+						: registeredCommand.namespace() + ":";
+
+					if (!namespace.isEmpty()) {
+						commands.add(map.getCommand(namespace + cmdName));
+					}
+
+					for (String alias : registeredCommand.aliases()) {
+						commands.add(map.getCommand(alias));
+						commands.add(map.getCommand(namespace + alias));
+					}
+				}
+
+				for(Command command : commands) {
 					if (command != null && isVanillaCommandWrapper(command)) {
 						command.setPermission(permNode);
 					}

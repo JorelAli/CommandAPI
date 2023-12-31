@@ -1,6 +1,5 @@
 package dev.jorel.commandapi.test;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
@@ -17,6 +16,8 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerLoadEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -68,7 +69,9 @@ public class CommandNamespaceTests extends TestBase {
 		// Get a CraftPlayer for running VanillaCommandWrapper commands
 		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());
 		// Give player permission to run command
-		Mockito.when(runCommandsPlayer.hasPermission(any(String.class))).thenReturn(true);
+		/*Mockito.when(runCommandsPlayer.hasPermission(any(String.class))).thenAnswer(
+			invocation -> invocation.getArgument(0).equals("permission")
+		);*/
 		// Get location is used when creating the BrigadierSource in MockNMS
 		Mockito.when(runCommandsPlayer.getLocation()).thenReturn(new Location(null, 0, 0, 0));
 
@@ -143,123 +146,6 @@ public class CommandNamespaceTests extends TestBase {
 		assertNoMoreResults(results);
 	}
 
-	@ParameterizedTest
-	@ValueSource(booleans = {true, false})
-	public void testCommandTreeRegistration(boolean enableBeforeRegistering) {
-		Mut<String> results = Mut.of();
-
-		Player player = null;
-		if (enableBeforeRegistering) {
-			player = enableWithNamespaces();
-		}
-
-		CommandTree command = new CommandTree("test")
-			.then(new LiteralArgument("a")
-				.then(new StringArgument("string")
-					.executesPlayer(info -> {
-						results.set("a");
-						results.set(info.args().getUnchecked("string"));
-					})
-				)
-			)
-			.then(new LiteralArgument("b")
-				.then(new IntegerArgument("integer")
-					.executesPlayer(info -> {
-						results.set("b");
-						results.set(String.valueOf(info.args().get("integer")));
-					})
-				)
-			);
-
-		// Make sure the default registration with the minecraft: namespace works
-		command.register();
-
-		if (!enableBeforeRegistering) {
-			player = enableWithNamespaces();
-		}
-
-		server.dispatchCommand(player, "test a alpha");
-		assertEquals("a", results.get());
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "minecraft:test a alpha");
-		assertEquals("a", results.get());
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "test b 123");
-		assertEquals("b", results.get());
-		assertEquals("123", results.get());
-
-		server.dispatchCommand(player, "minecraft:test b 123");
-		assertEquals("b", results.get());
-		assertEquals("123", results.get());
-
-		CommandAPI.unregister("test", true);
-
-		command.register("namespace");
-
-		server.dispatchCommand(player, "test a alpha");
-		assertEquals("a", results.get());
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "namespace:test a alpha");
-		assertEquals("a", results.get());
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "test b 123");
-		assertEquals("b", results.get());
-		assertEquals("123", results.get());
-
-		server.dispatchCommand(player, "namespace:test b 123");
-		assertEquals("b", results.get());
-		assertEquals("123", results.get());
-
-		// Running the command with the minecraft: namespace should fail
-		assertCommandFailsWith(
-			player,
-			"minecraft:test a alpha",
-			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
-		);
-		assertCommandFailsWith(
-			player,
-			"minecraft:test b 123",
-			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
-		);
-
-		CommandAPI.unregister("test", true);
-
-		command.register(MockPlatform.getConfiguration().getPlugin());
-
-		server.dispatchCommand(player, "test a alpha");
-		assertEquals("a", results.get());
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "commandapitest:test a alpha");
-		assertEquals("a", results.get());
-		assertEquals("alpha", results.get());
-
-		server.dispatchCommand(player, "test b 123");
-		assertEquals("b", results.get());
-		assertEquals("123", results.get());
-
-		server.dispatchCommand(player, "commandapitest:test b 123");
-		assertEquals("b", results.get());
-		assertEquals("123", results.get());
-
-		// Running the command with the minecraft: namespace should fail
-		assertCommandFailsWith(
-			player,
-			"minecraft:test a alpha",
-			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
-		);
-		assertCommandFailsWith(
-			player,
-			"minecraft:test b 123",
-			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
-		);
-
-		assertNoMoreResults(results);
-	}
 
 	@Test
 	public void testNullNamespace() {
@@ -726,4 +612,154 @@ public class CommandNamespaceTests extends TestBase {
 
 		assertNoMoreResults(results);
 	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
+	public void testCommandTreeRegistration(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if (enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
+
+		CommandTree command = new CommandTree("test")
+			.then(new LiteralArgument("a")
+				.then(new StringArgument("string")
+					.executesPlayer(info -> {
+						results.set("a");
+						results.set(info.args().getUnchecked("string"));
+					})
+				)
+			)
+			.then(new LiteralArgument("b")
+				.then(new IntegerArgument("integer")
+					.executesPlayer(info -> {
+						results.set("b");
+						results.set(String.valueOf(info.args().get("integer")));
+					})
+				)
+			);
+
+		// Make sure the default registration with the minecraft: namespace works
+		command.register();
+
+		if (!enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
+
+		server.dispatchCommand(player, "test a alpha");
+		assertEquals("a", results.get());
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "minecraft:test a alpha");
+		assertEquals("a", results.get());
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "test b 123");
+		assertEquals("b", results.get());
+		assertEquals("123", results.get());
+
+		server.dispatchCommand(player, "minecraft:test b 123");
+		assertEquals("b", results.get());
+		assertEquals("123", results.get());
+
+		CommandAPI.unregister("test", true);
+
+		command.register("namespace");
+
+		server.dispatchCommand(player, "test a alpha");
+		assertEquals("a", results.get());
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "namespace:test a alpha");
+		assertEquals("a", results.get());
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "test b 123");
+		assertEquals("b", results.get());
+		assertEquals("123", results.get());
+
+		server.dispatchCommand(player, "namespace:test b 123");
+		assertEquals("b", results.get());
+		assertEquals("123", results.get());
+
+		// Running the command with the minecraft: namespace should fail
+		assertCommandFailsWith(
+			player,
+			"minecraft:test a alpha",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+		assertCommandFailsWith(
+			player,
+			"minecraft:test b 123",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+
+		CommandAPI.unregister("test", true);
+
+		command.register(MockPlatform.getConfiguration().getPlugin());
+
+		server.dispatchCommand(player, "test a alpha");
+		assertEquals("a", results.get());
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "commandapitest:test a alpha");
+		assertEquals("a", results.get());
+		assertEquals("alpha", results.get());
+
+		server.dispatchCommand(player, "test b 123");
+		assertEquals("b", results.get());
+		assertEquals("123", results.get());
+
+		server.dispatchCommand(player, "commandapitest:test b 123");
+		assertEquals("b", results.get());
+		assertEquals("123", results.get());
+
+		// Running the command with the minecraft: namespace should fail
+		assertCommandFailsWith(
+			player,
+			"minecraft:test a alpha",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+		assertCommandFailsWith(
+			player,
+			"minecraft:test b 123",
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
+		);
+
+		assertNoMoreResults(results);
+	}
+
+	@Disabled
+	@Test
+	public void testPermissions() {
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withPermission("permission.node")
+			.executesPlayer(P_EXEC);
+
+		// Test with default minecraft: namespace
+		command.register();
+
+		Player player = enableWithNamespaces();
+
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+		assertCommandFailsWith(player, "minecraft:test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+
+		assertTrue(server.dispatchCommand(player, "test"));
+		assertTrue(server.dispatchCommand(player, "minecraft:test"));
+
+		// Unset permission und unregister command
+		CommandAPI.unregister("test", true);
+
+		// Test with custom namespace (same as with a plugins)
+		command.register("commandnamespace");
+
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+		assertCommandFailsWith(player, "commandnamespace:test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+
+		assertTrue(server.dispatchCommand(player, "test"));
+		assertTrue(server.dispatchCommand(player, "commandnamespace:test"));
+	}
+
 }
