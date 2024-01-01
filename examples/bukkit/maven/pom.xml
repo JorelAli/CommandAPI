@@ -39,6 +39,13 @@
 			<version>1.19.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- This assumes you have the NBT API plugin present on your server -->
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api-plugin</artifactId>
+			<version>2.12.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
