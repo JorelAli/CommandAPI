@@ -345,15 +345,17 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param requirements An arbitrary additional check to perform on the CommandSender
 	 *                        after the permissions check
 	 */
-	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
-			Predicate<CommandSender> requirements) {
-		// If commandName was already registered, always use the first permission used
-		if (registeredPermissions.containsKey(commandName.toLowerCase())) {
-			if (!registeredPermissions.get(commandName.toLowerCase()).equals(permission)) {
-				permission = registeredPermissions.get(commandName.toLowerCase());
+	Predicate<Source> generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements, String namespace) {
+		// If namespace:commandName was already registered, always use the first permission used
+		String namespacedCommand = namespace.isEmpty()
+			? commandName.toLowerCase()
+			: namespace.toLowerCase() + ":" + commandName.toLowerCase();
+		if (registeredPermissions.containsKey(namespacedCommand)) {
+			if (!registeredPermissions.get(namespacedCommand).equals(permission)) {
+				permission = registeredPermissions.get(namespacedCommand);
 			}
 		} else {
-			registeredPermissions.put(commandName.toLowerCase(), permission);
+			registeredPermissions.put(namespacedCommand, permission);
 		}
 
 		// Register permission to the platform's registry, if both exist
@@ -647,13 +649,13 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		if (args.length == 0) {
 			// Link command name to the executor
 			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
-				.requires(generatePermissions(commandName, permission, requirements)).executes(command), namespace);
+				.requires(generatePermissions(commandName, permission, requirements, namespace)).executes(command), namespace);
 
 			// Register aliases
 			for (String alias : aliases) {
 				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
-					.requires(generatePermissions(alias, permission, requirements)).executes(command), namespace));
+					.requires(generatePermissions(alias, permission, requirements, namespace)).executes(command), namespace));
 			}
 		} else {
 
@@ -664,7 +666,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			// Link command name to first argument and register
 			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
-				.requires(generatePermissions(commandName, permission, requirements)).then(commandArguments), namespace);
+				.requires(generatePermissions(commandName, permission, requirements, namespace)).then(commandArguments), namespace);
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -673,7 +675,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				}
 
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
-					.requires(generatePermissions(alias, permission, requirements)).then(commandArguments), namespace));
+					.requires(generatePermissions(alias, permission, requirements, namespace)).then(commandArguments), namespace));
 			}
 		}
 

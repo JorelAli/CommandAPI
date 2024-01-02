@@ -69,9 +69,7 @@ public class CommandNamespaceTests extends TestBase {
 		// Get a CraftPlayer for running VanillaCommandWrapper commands
 		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());
 		// Give player permission to run command
-		/*Mockito.when(runCommandsPlayer.hasPermission(any(String.class))).thenAnswer(
-			invocation -> invocation.getArgument(0).equals("permission")
-		);*/
+		Mockito.when(runCommandsPlayer.hasPermission(any(String.class))).thenReturn(true);
 		// Get location is used when creating the BrigadierSource in MockNMS
 		Mockito.when(runCommandsPlayer.getLocation()).thenReturn(new Location(null, 0, 0, 0));
 
@@ -735,7 +733,7 @@ public class CommandNamespaceTests extends TestBase {
 	@Test
 	public void testPermissions() {
 		CommandAPICommand command = new CommandAPICommand("test")
-			.withPermission("permission.node")
+			.withPermission("permission")
 			.executesPlayer(P_EXEC);
 
 		// Test with default minecraft: namespace
@@ -743,8 +741,12 @@ public class CommandNamespaceTests extends TestBase {
 
 		Player player = enableWithNamespaces();
 
+		PermissionAttachment attachment = player.addAttachment(MockPlatform.getConfiguration().getPlugin(), "permission", false);
+
 		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
 		assertCommandFailsWith(player, "minecraft:test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+
+		attachment.unsetPermission("permission");
 
 		assertTrue(server.dispatchCommand(player, "test"));
 		assertTrue(server.dispatchCommand(player, "minecraft:test"));
