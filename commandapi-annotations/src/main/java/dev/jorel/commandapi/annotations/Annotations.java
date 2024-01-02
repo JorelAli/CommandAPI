@@ -21,21 +21,41 @@
 package dev.jorel.commandapi.annotations;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.ExecutableType;
+import javax.tools.Diagnostic.Kind;
+import javax.tools.JavaFileObject;
 
 import com.google.auto.service.AutoService;
 
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.annotations.ArgumentParser;
 import dev.jorel.commandapi.annotations.annotations.Command;
+import dev.jorel.commandapi.annotations.annotations.Executes;
 import dev.jorel.commandapi.annotations.annotations.Help;
 import dev.jorel.commandapi.annotations.annotations.NeedsOp;
 import dev.jorel.commandapi.annotations.annotations.Permission;
@@ -92,7 +112,10 @@ import dev.jorel.commandapi.annotations.arguments.ATeamArgument;
 import dev.jorel.commandapi.annotations.arguments.ATextArgument;
 import dev.jorel.commandapi.annotations.arguments.ATimeArgument;
 import dev.jorel.commandapi.annotations.arguments.AUUIDArgument;
+import dev.jorel.commandapi.annotations.arguments.Primitive;
 import dev.jorel.commandapi.annotations.parser.Parser;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 
 /**
  * The main annotation processor for annotation-based arguments
@@ -132,7 +155,8 @@ public class Annotations extends AbstractProcessor {
 		Command.class, NeedsOp.class,
 		Permission.class, Help.class,
 		Suggestion.class, ArgumentParser.class,
-		Subcommand.class, Subcommands.class, Suggests.class
+		Subcommand.class, Subcommands.class, Suggests.class,
+		Executes.class
 	);
 
 	/**
