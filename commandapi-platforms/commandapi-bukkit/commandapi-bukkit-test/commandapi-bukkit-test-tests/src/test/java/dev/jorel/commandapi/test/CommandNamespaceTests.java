@@ -146,13 +146,24 @@ public class CommandNamespaceTests extends TestBase {
 
 
 	@Test
-	public void testNullNamespace() {
+	public void testNullNamespaceWithCommandAPICommand() {
 		// Registering a command using null should fail
 		CommandAPICommand command = new CommandAPICommand("test").executesPlayer(P_EXEC);
 		assertThrowsWithMessage(
 			NullPointerException.class,
 			"Parameter 'namespace' was null when registering a CommandAPICommand!",
 			() -> command.register((String) null)
+		);
+	}
+
+	@Test
+	public void testNullNamespaceWithCommandTree() {
+		// Registering a command using null should fail
+		CommandTree commandTree = new CommandTree("test").executesPlayer(P_EXEC);
+		assertThrowsWithMessage(
+			NullPointerException.class,
+			"Parameter 'namespace' was null when registering a CommandTree!",
+			() -> commandTree.register((String) null)
 		);
 	}
 
@@ -613,7 +624,7 @@ public class CommandNamespaceTests extends TestBase {
 
 	@ParameterizedTest
 	@ValueSource(booleans = {true, false})
-	public void testCommandTreeRegistration(boolean enableBeforeRegistering) {
+	public void testCommandTreeRegistrationDefaultNamespace(boolean enableBeforeRegistering) {
 		Mut<String> results = Mut.of();
 
 		Player player = null;
@@ -662,9 +673,42 @@ public class CommandNamespaceTests extends TestBase {
 		assertEquals("b", results.get());
 		assertEquals("123", results.get());
 
-		CommandAPI.unregister("test", true);
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false,true})
+	public void testCommandTreeRegistrationCustomNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if (enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
+
+		CommandTree command = new CommandTree("test")
+			.then(new LiteralArgument("a")
+				.then(new StringArgument("string")
+					.executesPlayer(info -> {
+						results.set("a");
+						results.set(info.args().getUnchecked("string"));
+					})
+				)
+			)
+			.then(new LiteralArgument("b")
+				.then(new IntegerArgument("integer")
+					.executesPlayer(info -> {
+						results.set("b");
+						results.set(String.valueOf(info.args().get("integer")));
+					})
+				)
+			);
 
 		command.register("namespace");
+
+		if (!enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
 
 		server.dispatchCommand(player, "test a alpha");
 		assertEquals("a", results.get());
@@ -694,9 +738,42 @@ public class CommandNamespaceTests extends TestBase {
 			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
 		);
 
-		CommandAPI.unregister("test", true);
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false,true})
+	public void testCommandTreeRegistrationPluginNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player player = null;
+		if (enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
+
+		CommandTree command = new CommandTree("test")
+			.then(new LiteralArgument("a")
+				.then(new StringArgument("string")
+					.executesPlayer(info -> {
+						results.set("a");
+						results.set(info.args().getUnchecked("string"));
+					})
+				)
+			)
+			.then(new LiteralArgument("b")
+				.then(new IntegerArgument("integer")
+					.executesPlayer(info -> {
+						results.set("b");
+						results.set(String.valueOf(info.args().get("integer")));
+					})
+				)
+			);
 
 		command.register(MockPlatform.getConfiguration().getPlugin());
+
+		if (!enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
 
 		server.dispatchCommand(player, "test a alpha");
 		assertEquals("a", results.get());
