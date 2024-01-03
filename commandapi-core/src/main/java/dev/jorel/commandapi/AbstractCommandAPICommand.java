@@ -271,14 +271,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Registers the command with the default namespace
-	 */
-	@Override
-	public void register() {
-		register(CommandAPI.getConfiguration().getNamespace());
-	}
-
-	/**
 	 * Registers the command with a given namespace
 	 *
 	 * @param namespace The namespace of this command. This cannot be null
