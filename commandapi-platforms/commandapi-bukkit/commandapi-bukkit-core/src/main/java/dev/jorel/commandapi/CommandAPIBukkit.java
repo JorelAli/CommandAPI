@@ -569,25 +569,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		// Do the same for the namespace, if it exists
 		if (!namespace.isEmpty()) {
 			knownCommands.put(namespace + ":" + name, command);
-			root.addChild(namespaceNode(resultantNode, namespace));
+			root.addChild(CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace));
 		}
-	}
-
-	private LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original, String namespace) {
-		// Adapted from a section of `CraftServer#syncCommands`
-		LiteralCommandNode<Source> clone = new LiteralCommandNode<>(
-			namespace + ":" + original.getLiteral(),
-			original.getCommand(),
-			original.getRequirement(),
-			original.getRedirect(),
-			original.getRedirectModifier(),
-			original.isFork()
-		);
-
-		for (CommandNode<Source> child : original.getChildren()) {
-			clone.addChild(child);
-		}
-		return clone;
 	}
 
 	@Override
@@ -602,14 +585,14 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// However, another command has requested that `minecraft:name` be removed
 			// We'll keep track of everything that should be `minecraft:name` in
 			//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
-			minecraftCommandNamespaces.addChild(namespaceNode(builtNode, "minecraft"));
+			minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, "minecraft"));
 		} else if (namespace.isEmpty()) {
 			// Bukkit will automatically create `minecraft:command`
 			// We want to remove that so there is no namespace
 			fillNamespacesToFix(name);
 		} else if (!namespaceEqualsMinecraft) {
 			// We should set up a custom namespace
-			customNamespaceNode = namespaceNode(builtNode, namespace);
+			customNamespaceNode = CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace);
 			// Make sure to remove the `minecraft:name` and
 			//  `minecraft:namespace:name` commands Bukkit will create
 			fillNamespacesToFix(name, namespace + ":" + name);
@@ -639,7 +622,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				// We'll keep track of everything that should be `minecraft:command` in
 				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
 				// TODO: Ideally, we should be working without this cast to LiteralCommandNode. I don't know if this can fail
-				minecraftCommandNamespaces.addChild(namespaceNode((LiteralCommandNode<Source>) currentNode, "minecraft"));
+				minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode((LiteralCommandNode<Source>) currentNode, "minecraft"));
 			}
 		}
 	}

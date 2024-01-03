@@ -48,6 +48,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.AbstractArgument;
@@ -745,6 +746,23 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				CommandAPI.logError("Failed to write command registration info to " + file.getName() + ": " + e.getMessage());
 			}
 		}
+	}
+
+	<CommandSource> LiteralCommandNode<CommandSource> namespaceNode(LiteralCommandNode<CommandSource> original, String namespace) {
+		// Adapted from a section of `CraftServer#syncCommands`
+		LiteralCommandNode<CommandSource> clone = new LiteralCommandNode<>(
+			namespace + ":" + original.getLiteral(),
+			original.getCommand(),
+			original.getRequirement(),
+			original.getRedirect(),
+			original.getRedirectModifier(),
+			original.isFork()
+		);
+
+		for (CommandNode<CommandSource> child : original.getChildren()) {
+			clone.addChild(child);
+		}
+		return clone;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
