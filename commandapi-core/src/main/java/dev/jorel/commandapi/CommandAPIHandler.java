@@ -620,12 +620,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, shortDescription,
 			fullDescription, usageDescription, aliases, permission, namespace);
 		registeredCommands.add(registeredCommandInformation);
-
-		List<RegisteredCommand> registeredCommands = registeredCommandMap.containsKey(commandName)
-			? registeredCommandMap.get(commandName)
-			: new ArrayList<>();
-		registeredCommands.add(registeredCommandInformation);
-		registeredCommandMap.put(commandName, registeredCommands);
+		registeredCommandMap.computeIfAbsent(commandName, k -> new ArrayList<>()).add(registeredCommandInformation);
 
 		// Handle previewable arguments
 		handlePreviewableArguments(commandName, args, aliases);
