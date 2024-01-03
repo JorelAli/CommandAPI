@@ -51,6 +51,19 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 		return this;
 	}
 
+	/**
+	 * Sets whether the CommandAPI should use the plugin's name as the default namespace namespace
+	 * <p>
+	 * If called, any call to {@link CommandAPIConfig#setNamespace(String)} will be ignored
+	 *
+	 * @return this CommandAPIBukkitConfig
+	 */
+	public CommandAPIBukkitConfig usePluginNamespace() {
+		super.setNamespace(plugin.getName().toLowerCase());
+		super.usePluginNamespace = true;
+		return this;
+	}
+
 	@Override
 	public CommandAPIBukkitConfig instance() {
 		return this;

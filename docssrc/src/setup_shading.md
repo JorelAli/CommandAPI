@@ -51,6 +51,7 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig {
     CommandAPIBukkitConfig(JavaPlugin plugin);
 
     CommandAPIBukkitConfig shouldHookPaperReload(boolean hooked); // Whether the CommandAPI should hook into the Paper-exclusive ServerResourcesReloadedEvent
+    CommandAPIBukkitConfig usePluginNamespace(); // Whether the CommandAPI should use the name of the plugin passed into the CommandAPIBukkitConfig as the default namespace for commands
 }
 ```
 

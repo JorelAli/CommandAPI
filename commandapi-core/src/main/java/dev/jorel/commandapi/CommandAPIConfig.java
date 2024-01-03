@@ -49,6 +49,7 @@ extends CommandAPIConfig<Impl>
 	Class<?> nbtContainerClass = null;
 	Function<Object, ?> nbtContainerConstructor = null;
 
+	boolean usePluginNamespace = false;
 	String namespace = null;
 
 	/**
@@ -159,7 +160,9 @@ extends CommandAPIConfig<Impl>
 	 * @return this CommandAPIConfig
 	 */
 	public Impl setNamespace(String namespace) {
-		this.namespace = namespace;
+		if (!usePluginNamespace) {
+			this.namespace = namespace;
+		}
 		return instance();
 	}
 
