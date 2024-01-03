@@ -31,5 +31,4 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	public CommandAPICommand instance() {
 		return this;
 	}
-
 }

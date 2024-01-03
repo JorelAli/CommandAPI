@@ -41,5 +41,4 @@ public class InternalBukkitConfig extends InternalConfig {
 	public boolean shouldHookPaperReload() {
 		return shouldHookPaperReload;
 	}
-
 }

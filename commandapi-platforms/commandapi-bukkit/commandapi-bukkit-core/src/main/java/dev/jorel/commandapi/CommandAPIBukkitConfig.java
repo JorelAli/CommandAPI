@@ -52,7 +52,7 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	}
 
 	/**
-	 * Sets whether the CommandAPI should use the plugin's name as the default namespace namespace
+	 * Sets whether the CommandAPI should use the plugin's name as the default namespace
 	 * <p>
 	 * If called, any call to {@link CommandAPIConfig#setNamespace(String)} will be ignored
 	 *

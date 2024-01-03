@@ -27,5 +27,4 @@ public class InternalVelocityConfig extends InternalConfig {
 	public ProxyServer getServer() {
 		return server;
 	}
-
 }
