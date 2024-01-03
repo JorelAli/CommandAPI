@@ -177,7 +177,7 @@ Executes a command regardless of what the command sender is, using the `NativePr
 void register()
 ```
 
-Registers the command with the default `minecraft` namespace.
+Registers the command with the default `minecraft` namespace. If you are [shading](./setup_shading.md) you can set the default namespace using `CommandAPIConfig#setNamespace(String)` or `CommandAPIBukkitConfig#usePluginNamespace()`.
 
 ```java
 void register(String namespace)
