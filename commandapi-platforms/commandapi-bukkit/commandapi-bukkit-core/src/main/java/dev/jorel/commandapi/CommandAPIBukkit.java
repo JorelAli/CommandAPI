@@ -843,9 +843,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	boolean isInvalidNamespace(String commandName, String namespace, Class<?> commandClass) {
+	boolean isInvalidNamespace(String commandName, String namespace) {
 		if (namespace == null) {
-			throw new NullPointerException("Parameter 'namespace' was null when registering a " + commandClass.getSimpleName() + "!");
+			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + commandName + "!");
 		}
 		if (namespace.isEmpty()) {
 			CommandAPI.logNormal("Registering command '" + commandName + "' using the default namespace because an empty namespace was given!");

@@ -25,7 +25,7 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 	 * @param namespace The namespace of this command. This cannot be null or empty
 	 */
 	public void register(String namespace) {
-		if (CommandAPIBukkit.get().isInvalidNamespace(this.meta.commandName, namespace, this.getClass())) {
+		if (CommandAPIBukkit.get().isInvalidNamespace(this.meta.commandName, namespace)) {
 			super.register();
 			return;
 		}

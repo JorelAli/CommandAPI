@@ -31,7 +31,7 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	 *
 	 */
 	public void register(String namespace) {
-		if (CommandAPIBukkit.get().isInvalidNamespace(this.meta.commandName, namespace, this.getClass())) {
+		if (CommandAPIBukkit.get().isInvalidNamespace(this.meta.commandName, namespace)) {
 			super.register();
 			return;
 		}
