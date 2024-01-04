@@ -309,49 +309,6 @@ public class CommandNamespaceTests extends TestBase {
 
 	@ParameterizedTest
 	@ValueSource(booleans = {false, true})
-	public void testNoNamespace(boolean enableBeforeRegistering) {
-		Mut<String> results = Mut.of();
-
-		Player player = null;
-		if (enableBeforeRegistering) {
-			player = enableWithNamespaces();
-		}
-
-		// Special case: Registering a command without a namespace
-		CommandAPICommand command = new CommandAPICommand("test")
-			.executesPlayer(info -> {
-				results.set("success");
-			});
-
-		command.register("");
-
-		if (!enableBeforeRegistering) {
-			player = enableWithNamespaces();
-		}
-
-		// Check contents of Brigadier CommandDispatcher
-		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
-		assertNotNull(rootNode.getChild("test"));
-		assertNull(rootNode.getChild("minecraft:test"));
-
-		// Check contents of Bukkit CommandMap
-		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
-		assertNotNull(commandMap.getCommand("test"));
-		assertNull(commandMap.getCommand("minecraft:test"));
-
-		assertStoresResult(player, "test", results, "success");
-
-		assertCommandFailsWith(
-			player,
-			"minecraft:test",
-			"Unknown or incomplete command, see below for error at position 0: <--[HERE]"
-		);
-
-		assertNoMoreResults(results);
-	}
-
-	@ParameterizedTest
-	@ValueSource(booleans = {false, true})
 	public void testAliasesWithDefaultNamespace(boolean enableBeforeRegistering) {
 		Mut<String> results = Mut.of();
 

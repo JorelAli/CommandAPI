@@ -262,13 +262,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 
 				for (RegisteredCommand registeredCommand : registeredCommands) {
-					String namespace = registeredCommand.namespace().isEmpty()
-						? ""
-						: registeredCommand.namespace() + ":";
-
-					if (!namespace.isEmpty()) {
-						commands.add(map.getCommand(namespace + cmdName));
-					}
+					String namespace = registeredCommand.namespace() + ":";
+					commands.add(map.getCommand(namespace + cmdName));
 
 					for (String alias : registeredCommand.aliases()) {
 						commands.add(map.getCommand(alias));
@@ -537,11 +532,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			String namespace = registeredCommand.namespace();
 			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
 
-			registerCommand(knownCommands, root, name, permNode, namespace, resultantNode);
+			registerCommand(root, name, permNode, namespace, resultantNode);
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
-				registerCommand(knownCommands, root, node.getLiteral(), permNode, namespace, node);
+				registerCommand(root, node.getLiteral(), permNode, namespace, node);
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
@@ -554,23 +549,19 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private void registerCommand(Map<String, Command> knownCommands, RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
+	private void registerCommand(RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
 		// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
 		// in `CraftServer#setVanillaCommands`
 		Command command = wrapToVanillaCommandWrapper(resultantNode);
-		knownCommands.put(name, command);
 
 		// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
 		command.setPermission(permNode);
 
 		// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
 		root.addChild(resultantNode);
+		root.addChild(CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace));
 
-		// Do the same for the namespace, if it exists
-		if (!namespace.isEmpty()) {
-			knownCommands.put(namespace + ":" + name, command);
-			root.addChild(CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace));
-		}
+		paper.getCommandMap().register(name, namespace, command);
 	}
 
 	@Override
@@ -586,10 +577,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// We'll keep track of everything that should be `minecraft:name` in
 			//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
 			minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, "minecraft"));
-		} else if (namespace.isEmpty()) {
-			// Bukkit will automatically create `minecraft:command`
-			// We want to remove that so there is no namespace
-			fillNamespacesToFix(name);
 		} else if (!namespaceEqualsMinecraft) {
 			// We should set up a custom namespace
 			customNamespaceNode = CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace);
@@ -854,6 +841,17 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 			}
 		}
-		
 	}
+
+	boolean isInvalidNamespace(String commandName, String namespace, Class<?> commandClass) {
+		if (namespace == null) {
+			throw new NullPointerException("Parameter 'namespace' was null when registering a " + commandClass.getSimpleName() + "!");
+		}
+		if (namespace.isEmpty()) {
+			CommandAPI.logNormal("Registering command '" + commandName + "' using the default namespace because an empty namespace was given!");
+			return true;
+		}
+		return false;
+	}
+
 }

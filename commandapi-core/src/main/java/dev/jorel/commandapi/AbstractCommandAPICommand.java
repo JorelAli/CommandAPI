@@ -279,6 +279,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	@Override
 	public void register(String namespace) {
 		if (namespace == null) {
+			// Only reachable through Velocity
 			throw new NullPointerException("Parameter 'namespace' was null when registering a CommandAPICommand!");
 		}
 		@SuppressWarnings("unchecked")

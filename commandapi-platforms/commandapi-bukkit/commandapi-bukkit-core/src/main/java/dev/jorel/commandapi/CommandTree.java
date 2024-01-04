@@ -20,6 +20,19 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 	}
 
 	/**
+	 * Registers the command with a given namespace
+	 *
+	 * @param namespace The namespace of this command. This cannot be null or empty
+	 */
+	public void register(String namespace) {
+		if (CommandAPIBukkit.get().isInvalidNamespace(this.meta.commandName, namespace, this.getClass())) {
+			super.register();
+			return;
+		}
+		super.register(namespace);
+	}
+
+	/**
 	 * Registers this command with a given {@link JavaPlugin} instance
 	 *
 	 * @param plugin The plugin instance used to determine this command's namespace
