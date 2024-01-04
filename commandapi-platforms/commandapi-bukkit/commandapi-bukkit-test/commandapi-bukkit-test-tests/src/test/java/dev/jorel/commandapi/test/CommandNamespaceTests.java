@@ -151,7 +151,7 @@ public class CommandNamespaceTests extends TestBase {
 		CommandAPICommand command = new CommandAPICommand("test").executesPlayer(P_EXEC);
 		assertThrowsWithMessage(
 			NullPointerException.class,
-			"Parameter 'namespace' was null when registering a CommandAPICommand!",
+			"Parameter 'namespace' was null when registering command /test!",
 			() -> command.register((String) null)
 		);
 	}
@@ -162,7 +162,7 @@ public class CommandNamespaceTests extends TestBase {
 		CommandTree commandTree = new CommandTree("test").executesPlayer(P_EXEC);
 		assertThrowsWithMessage(
 			NullPointerException.class,
-			"Parameter 'namespace' was null when registering a CommandTree!",
+			"Parameter 'namespace' was null when registering command /test!",
 			() -> commandTree.register((String) null)
 		);
 	}
