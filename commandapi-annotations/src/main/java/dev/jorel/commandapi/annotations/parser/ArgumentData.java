@@ -73,6 +73,11 @@ public class ArgumentData extends CommandElement {
 	 * it isn't then we emit isListed(false).
 	 */
 	private final boolean isListed;
+	
+	/**
+	 * Is this argument flagged as optional? If it is, we emit setOptional(true).
+	 */
+	private final boolean isOptional;
 
 	public ArgumentData(Logging logging, Element varElement, Annotation annotation, CommandPermission permission,
 			String nodeName, Optional<TypeMirror> suggests, Optional<SuggestionClass> suggestions, CommandData parent, boolean classArgument, boolean isListed) {
@@ -88,6 +93,7 @@ public class ArgumentData extends CommandElement {
 		this.parent = parent;
 		this.classArgument = classArgument;
 		this.isListed = isListed;
+		this.isOptional = new ArgumentAnnotationProperties(annotation).optional();
 	}
 	
 	public boolean isClassArgument() {
@@ -236,6 +242,13 @@ public class ArgumentData extends CommandElement {
 		if (!isListed) {
 			out.println();
 			out.print(indentation() + ".setListed(false)");
+			printedAnyOptionalFeatures = true;
+		}
+		
+		// Optional arguments
+		if (isOptional) {
+			out.println();
+			out.print(indentation() + ".setOptional(true)");
 			printedAnyOptionalFeatures = true;
 		}
 		

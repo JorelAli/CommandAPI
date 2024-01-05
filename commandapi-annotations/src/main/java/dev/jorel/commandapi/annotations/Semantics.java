@@ -42,6 +42,10 @@ public class Semantics {
 				
 			}
 		}
+		
+		// If a class has @Subcommand, then:
+		// The class shouuuuuld have either an @Executes method OR have a @ExternalSubcommand or @Subcommand
+		// The class should extend either a @Subcommand or @Command. The top-level extension should be @Command
 	}
 
 }
