@@ -45,4 +45,9 @@ public @interface ALongArgument {
 	 */
 	public long max() default Long.MAX_VALUE;
 
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

@@ -36,4 +36,9 @@ public @interface ACustomArgument {
 	
 	public boolean keyed() default false;
 	
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

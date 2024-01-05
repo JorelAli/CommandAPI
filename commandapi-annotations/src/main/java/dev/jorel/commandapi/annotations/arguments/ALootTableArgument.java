@@ -34,4 +34,10 @@ import dev.jorel.commandapi.arguments.LootTableArgument;
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ALootTableArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

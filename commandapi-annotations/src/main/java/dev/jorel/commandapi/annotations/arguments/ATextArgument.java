@@ -34,4 +34,10 @@ import dev.jorel.commandapi.arguments.TextArgument;
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ATextArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

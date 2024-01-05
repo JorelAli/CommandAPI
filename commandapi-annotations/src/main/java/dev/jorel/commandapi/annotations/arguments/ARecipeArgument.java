@@ -34,4 +34,10 @@ import dev.jorel.commandapi.arguments.RecipeArgument;
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 public @interface ARecipeArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

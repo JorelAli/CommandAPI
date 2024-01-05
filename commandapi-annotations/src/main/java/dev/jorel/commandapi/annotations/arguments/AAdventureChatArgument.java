@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.AdventureChatArgument;
 @Primitive("net.kyori.adventure.text.Component")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface AAdventureChatArgument {		
+public @interface AAdventureChatArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

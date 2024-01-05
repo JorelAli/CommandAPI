@@ -44,4 +44,9 @@ public @interface ALocation2DArgument {
 	 */
 	LocationType value() default LocationType.PRECISE_POSITION;
 
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

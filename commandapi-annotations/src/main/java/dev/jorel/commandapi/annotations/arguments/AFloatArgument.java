@@ -45,4 +45,9 @@ public @interface AFloatArgument {
 	 */
 	public float max() default Float.MAX_VALUE;
 
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

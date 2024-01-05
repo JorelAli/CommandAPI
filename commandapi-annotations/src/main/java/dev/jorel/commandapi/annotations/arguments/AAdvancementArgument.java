@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.AdvancementArgument;
 @Primitive("org.bukkit.advancement.Advancement")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface AAdvancementArgument {		
+public @interface AAdvancementArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

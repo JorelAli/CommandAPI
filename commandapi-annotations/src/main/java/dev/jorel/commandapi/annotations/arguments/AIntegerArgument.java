@@ -45,4 +45,9 @@ public @interface AIntegerArgument {
 	 */
 	public int max() default Integer.MAX_VALUE;
 
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

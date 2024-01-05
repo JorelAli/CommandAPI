@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.FloatRangeArgument;
 @Primitive("dev.jorel.commandapi.wrappers.FloatRange")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface AFloatRangeArgument {		
+public @interface AFloatRangeArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

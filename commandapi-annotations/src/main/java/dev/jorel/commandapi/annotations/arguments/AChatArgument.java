@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.ChatArgument;
 @Primitive("net.md_5.bungee.api.chat.BaseComponent[]")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface AChatArgument {		
+public @interface AChatArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

@@ -44,4 +44,9 @@ public @interface AScoreHolderArgument {
 	 */
 	ArgumentSubType value() default ArgumentSubType.SCOREHOLDER_SINGLE;
 
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

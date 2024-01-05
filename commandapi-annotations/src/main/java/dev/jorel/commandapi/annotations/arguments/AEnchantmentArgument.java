@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.EnchantmentArgument;
 @Primitive("org.bukkit.enchantments.Enchantment")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface AEnchantmentArgument {		
+public @interface AEnchantmentArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

@@ -45,4 +45,9 @@ public @interface ADoubleArgument {
 	 */
 	public double max() default Double.MAX_VALUE;
 
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

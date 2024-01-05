@@ -41,4 +41,9 @@ public @interface ALiteralArgument {
 	 */
 	String value();
 
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

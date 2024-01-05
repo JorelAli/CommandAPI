@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.ChatColorArgument;
 @Primitive("org.bukkit.ChatColor")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface AChatColorArgument {		
+public @interface AChatColorArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

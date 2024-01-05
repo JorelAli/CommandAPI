@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.BiomeArgument;
 @Primitive("org.bukkit.block.Biome")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface ABiomeArgument {		
+public @interface ABiomeArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

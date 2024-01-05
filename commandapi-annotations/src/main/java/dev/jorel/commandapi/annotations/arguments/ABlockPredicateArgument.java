@@ -33,5 +33,11 @@ import dev.jorel.commandapi.arguments.BlockPredicateArgument;
 @Primitive("java.util.function.Predicate<org.bukkit.block.Block>")
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.PARAMETER, ElementType.FIELD})
-public @interface ABlockPredicateArgument {		
+public @interface ABlockPredicateArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

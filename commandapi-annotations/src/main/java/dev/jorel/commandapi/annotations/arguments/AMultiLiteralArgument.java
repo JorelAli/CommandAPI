@@ -32,12 +32,17 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
  */
 @Primitive("java.lang.String")
 @Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.PARAMETER, ElementType.FIELD})
+@Target({ ElementType.PARAMETER, ElementType.FIELD })
 public @interface AMultiLiteralArgument {
-	
+
 	/**
 	 * @return the literals that this argument represents
 	 */
 	String[] value();
-	
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }

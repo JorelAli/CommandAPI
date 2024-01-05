@@ -32,6 +32,12 @@ import dev.jorel.commandapi.arguments.NamespacedKeyArgument;
  */
 @Primitive("org.bukkit.NamespacedKey")
 @Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.PARAMETER, ElementType.FIELD})
+@Target({ ElementType.PARAMETER, ElementType.FIELD })
 public @interface ANamespacedKeyArgument {
+
+	/**
+	 * @return whether this argument should be marked as an optional argument
+	 */
+	boolean optional() default false;
+
 }
