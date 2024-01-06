@@ -124,7 +124,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
 	final TreeMap<String, CommandPermission> registeredPermissions = new TreeMap<>();
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
-	final Map<String, List<RegisteredCommand>> registeredCommandMap; // Keep track of registered commands in a map for permission lookups
 	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
 	static final Pattern NAMESPACE_PATTERN = Pattern.compile("[0-9a-z_.-]+");
 
@@ -133,7 +132,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	protected CommandAPIHandler(CommandAPIPlatform<Argument, CommandSender, Source> platform) {
 		this.platform = platform;
 		this.registeredCommands = new ArrayList<>();
-		this.registeredCommandMap = new HashMap<>();
 		this.previewableArguments = new HashMap<>();
 
 		CommandAPIHandler.instance = this;
@@ -354,11 +352,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			? commandName.toLowerCase()
 			: namespace.toLowerCase() + ":" + commandName.toLowerCase();
 		if (registeredPermissions.containsKey(namespacedCommand)) {
-			if (!registeredPermissions.get(namespacedCommand).equals(permission)) {
-				permission = registeredPermissions.get(namespacedCommand);
-			}
+			permission = registeredPermissions.get(namespacedCommand);
 		} else {
 			registeredPermissions.put(namespacedCommand, permission);
+			// The first command to be registered determines the permission for the `commandName` version of the command
+			registeredPermissions.putIfAbsent(commandName, permission);
 		}
 
 		// Register permission to the platform's registry, if both exist
@@ -623,7 +621,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, shortDescription,
 			fullDescription, usageDescription, aliases, permission, namespace);
 		registeredCommands.add(registeredCommandInformation);
-		registeredCommandMap.computeIfAbsent(commandName, k -> new ArrayList<>()).add(registeredCommandInformation);
 
 		// Handle previewable arguments
 		handlePreviewableArguments(commandName, args, aliases);

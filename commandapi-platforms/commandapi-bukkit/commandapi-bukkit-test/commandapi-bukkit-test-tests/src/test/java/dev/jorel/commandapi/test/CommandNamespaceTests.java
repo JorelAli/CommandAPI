@@ -13,13 +13,16 @@ import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerLoadEvent;
-import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -31,7 +34,7 @@ import org.mockito.Mockito;
 import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
 
 /**
  * Tests for testing if namespaces work correctly
@@ -70,8 +73,21 @@ public class CommandNamespaceTests extends TestBase {
 
 		// Get a CraftPlayer for running VanillaCommandWrapper commands
 		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());
-		// Give player permission to run command
-		Mockito.when(runCommandsPlayer.hasPermission(any(String.class))).thenReturn(true);
+		// Ensure player can have permissions modified
+		PermissibleBase perm = new PermissibleBase(runCommandsPlayer);
+		Mockito.when(runCommandsPlayer.addAttachment(isA(Plugin.class))).thenAnswer(invocation ->
+			perm.addAttachment(invocation.getArgument(0))
+		);
+		Mockito.when(runCommandsPlayer.addAttachment(isA(Plugin.class), isA(String.class), isA(Boolean.class))).thenAnswer(invocation ->
+			perm.addAttachment(invocation.getArgument(0), invocation.getArgument(1), invocation.getArgument(2))
+		);
+		Mockito.doAnswer(invocation -> {
+			perm.recalculatePermissions();
+			return null;
+		}).when(runCommandsPlayer).recalculatePermissions();
+		Mockito.when(runCommandsPlayer.hasPermission(isA(String.class))).thenAnswer(invocation ->
+			perm.hasPermission(invocation.getArgument(0, String.class))
+		);
 		// Get location is used when creating the BrigadierSource in MockNMS
 		Mockito.when(runCommandsPlayer.getLocation()).thenReturn(new Location(null, 0, 0, 0));
 
@@ -559,12 +575,9 @@ public class CommandNamespaceTests extends TestBase {
 
 		// The branches should be separated in the namespaced versions
 		assertStoresResult(player, "a:test a", results, "a");
-		// For some reason, running this test using `server.dispatchThrowableCommand`
-		//  (which is used by assertCommandFailsWith) doesn't work. Stepping through the code,
-		//  I can verify that the command fails, but instead of throwing a `CommandSyntaxException`,
-		//  it seems to just send the failure message to the executor. However, if we execute the
-		//  command directly with Brigadier rather than via `VanillaCommandWrapper`, we can inspect
-		//  the failure ourselves.
+		// When `server.dispatchThrowableCommand` (which is used by assertCommandFailsWith) is used here,
+		//  Bukkit catches the exception and sends the exception message to the sender. Instead, we execute the
+		//  command directly with Brigadier rather than via `VanillaCommandWrapper` to inspect the failure message.
 		assertThrowsWithMessage(
 			CommandSyntaxException.class,
 			"Incorrect argument for command at position 7: a:test <--[HERE]",
@@ -765,39 +778,172 @@ public class CommandNamespaceTests extends TestBase {
 		assertNoMoreResults(results);
 	}
 
-	@Disabled
-	@Test
-	public void testPermissions() {
+	void assertPermissionCheckFails(CommandSender sender, String commandLine) {
+		// When the player executes a Brigadier command, Brigadier fully handles the permission check and throws an
+		// exception. However, when a Brigadier command is executed server side (for example with `Bukkit#dispatchCommand`),
+		// VanillaCommandWrapper handles the permission check and sends a message to the sender. We want to make sure the
+		// permission works in both cases.
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]",
+			() -> server.dispatchThrowableBrigadierCommand(sender, commandLine)
+		);
+
+		Mockito.clearInvocations(sender);
+		server.dispatchCommand(sender, commandLine);
+		Mockito.verify(sender).sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this " +
+			"command. Please contact the server administrators if you believe that this is a mistake.");
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false,true})
+	public void testPermissionsWithDefaultNamespace(boolean enableBeforeRegistering) {
+		Mut<String> commandRan = Mut.of();
+
+		Player player = null;
+		if (enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
+
 		CommandAPICommand command = new CommandAPICommand("test")
 			.withPermission("permission")
-			.executesPlayer(P_EXEC);
+			.executesPlayer(info -> {
+				commandRan.set("ran");
+			});
 
 		// Test with default minecraft: namespace
 		command.register();
 
-		Player player = enableWithNamespaces();
+		if (!enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
 
-		PermissionAttachment attachment = player.addAttachment(MockPlatform.getConfiguration().getPlugin(), "permission", false);
+		assertPermissionCheckFails(player, "test");
+		assertPermissionCheckFails(player, "minecraft:test");
 
-		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
-		assertCommandFailsWith(player, "minecraft:test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+		player.addAttachment(super.plugin, "permission", true);
 
-		attachment.unsetPermission("permission");
+		assertStoresResult(player, "test", commandRan, "ran");
+		assertStoresResult(player, "minecraft:test", commandRan, "ran");
 
-		assertTrue(server.dispatchCommand(player, "test"));
-		assertTrue(server.dispatchCommand(player, "minecraft:test"));
+		assertNoMoreResults(commandRan);
+	}
 
-		// Unset permission und unregister command
-		CommandAPI.unregister("test", true);
+	@ParameterizedTest
+	@ValueSource(booleans = {false,true})
+	public void testPermissionsWithCustomNamespace(boolean enableBeforeRegistering) {
+		Mut<String> commandRan = Mut.of();
+
+		Player player = null;
+		if (enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withPermission("permission")
+			.executesPlayer(info -> {
+				commandRan.set("ran");
+			});
 
 		// Test with custom namespace (same as with a plugins)
-		command.register("commandnamespace");
+		command.register("custom");
 
-		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
-		assertCommandFailsWith(player, "commandnamespace:test", "Unknown or incomplete command, see below for error at position 0: <--[HERE]");
+		if (!enableBeforeRegistering) {
+			player = enableWithNamespaces();
+		}
 
-		assertTrue(server.dispatchCommand(player, "test"));
-		assertTrue(server.dispatchCommand(player, "commandnamespace:test"));
+		assertPermissionCheckFails(player, "test");
+		assertPermissionCheckFails(player, "custom:test");
+
+		player.addAttachment(super.plugin, "permission", true);
+
+		assertStoresResult(player, "test", commandRan, "ran");
+		assertStoresResult(player, "custom:test", commandRan, "ran");
+
+		assertNoMoreResults(commandRan);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false,true})
+	public void testPermissionsWithCommandNameConflictButDifferentNamespace(boolean enableBeforeRegistering) {
+		Mut<String> commandRan = Mut.of();
+
+		Player tempPlayer = null;
+		if (enableBeforeRegistering) {
+			tempPlayer = enableWithNamespaces();
+		}
+
+		CommandAPICommand first = new CommandAPICommand("test")
+			.withArguments(new LiteralArgument("first").withPermission("first"))
+			.withPermission("first")
+			.executesPlayer(info -> {
+				commandRan.set("first");
+			});
+
+		CommandAPICommand second = new CommandAPICommand("test")
+			.withArguments(new LiteralArgument("second").withPermission("second"))
+			.withPermission("second")
+			.executesPlayer(info -> {
+				commandRan.set("second");
+			});
+
+		first.register("first");
+		second.register("second");
+
+		if (!enableBeforeRegistering) {
+			tempPlayer = enableWithNamespaces();
+		}
+		final Player player = tempPlayer;
+
+		PermissionAttachment permissions = player.addAttachment(super.plugin);
+
+		// At least one permission is required
+		permissions.setPermission("first", false);
+		permissions.setPermission("second", false);
+		player.recalculatePermissions();
+
+		assertPermissionCheckFails(player, "test first");
+		assertPermissionCheckFails(player, "test second");
+		assertPermissionCheckFails(player, "first:test first");
+		assertPermissionCheckFails(player, "second:test second");
+
+		// First permission also applies to the unnamespaced command literal, but not the 'second' literal
+		permissions.setPermission("first", true);
+		permissions.setPermission("second", false);
+		player.recalculatePermissions();
+
+		assertStoresResult(player, "test first", commandRan, "first");
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			"Incorrect argument for command at position 5: test <--[HERE]",
+			() -> server.dispatchThrowableBrigadierCommand(player, "test second")
+		);
+		assertStoresResult(player, "first:test first", commandRan, "first");
+		assertPermissionCheckFails(player, "second:test second");
+
+		// Second permission only applies to `second:test`
+		permissions.setPermission("first", false);
+		permissions.setPermission("second", true);
+		player.recalculatePermissions();
+
+		assertPermissionCheckFails(player, "test first");
+		assertPermissionCheckFails(player, "test second");
+		assertPermissionCheckFails(player, "first:test first");
+		// TODO: This assertion should work no matter when commands are registered
+		if(!enableBeforeRegistering) assertStoresResult(player, "second:test second", commandRan, "second");
+
+		// All permissions allows all commands
+		permissions.setPermission("first", true);
+		permissions.setPermission("second", true);
+		player.recalculatePermissions();
+
+		assertStoresResult(player, "test first", commandRan, "first");
+		assertStoresResult(player, "test second", commandRan, "second");
+		assertStoresResult(player, "first:test first", commandRan, "first");
+		assertStoresResult(player, "second:test second", commandRan, "second");
+
+
+		assertNoMoreResults(commandRan);
 	}
 
 	@Test
