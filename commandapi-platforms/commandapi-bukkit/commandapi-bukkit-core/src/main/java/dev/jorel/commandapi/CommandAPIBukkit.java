@@ -566,31 +566,32 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
-		LiteralCommandNode<Source> builtNode = node.build();
-		LiteralCommandNode<Source> customNamespaceNode = null;
+		RootCommandNode<Source> rootNode = getBrigadierDispatcher().getRoot();
 
+		LiteralCommandNode<Source> builtNode = node.build();
 		String name = node.getLiteral();
-		boolean namespaceEqualsMinecraft = namespace.equals("minecraft");
-		if (namespaceEqualsMinecraft && namespacesToFix.contains("minecraft:" + name)) {
-			// This command wants to exist as `minecraft:name`
-			// However, another command has requested that `minecraft:name` be removed
-			// We'll keep track of everything that should be `minecraft:name` in
-			//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
-			minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, "minecraft"));
-		} else if (!namespaceEqualsMinecraft) {
-			// We should set up a custom namespace
-			customNamespaceNode = CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace);
+		if (namespace.equals("minecraft")) {
+			if (namespacesToFix.contains("minecraft:" + name)) {
+				// This command wants to exist as `minecraft:name`
+				// However, another command has requested that `minecraft:name` be removed
+				// We'll keep track of everything that should be `minecraft:name` in
+				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
+				minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, "minecraft"));
+			}
+		} else {
 			// Make sure to remove the `minecraft:name` and
 			//  `minecraft:namespace:name` commands Bukkit will create
 			fillNamespacesToFix(name, namespace + ":" + name);
+
+			// Create the namespaced node
+			rootNode.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace));
 		}
 
-		// Add the nodes to the main dispatcher
-		RootCommandNode<Source> rootNode = getBrigadierDispatcher().getRoot();
+		// Add the main node to dispatcher
+		//  We needed to wait until after `fillNamespacesToFix` was called to do this, in case a previous 
+		//  `minecraft:name` version of the command needed to be saved separately before this node was added
 		rootNode.addChild(builtNode);
-		if (customNamespaceNode != null) {
-			rootNode.addChild(customNamespaceNode);
-		}
+		
 		return builtNode;
 	}
 
