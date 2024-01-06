@@ -65,6 +65,18 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	}
 
 	@Override
+	public CommandAPIBukkitConfig setNamespace(String namespace) {
+		if (namespace == null) {
+			throw new NullPointerException("Default namespace can't be null!");
+		}
+		if (namespace.isEmpty()) {
+			CommandAPI.logNormal("Did not set namespace to an empty value! Namespace '" + super.namespace + "' is used as the default namespace!");
+			return this;
+		}
+		return super.setNamespace(namespace);
+	}
+
+	@Override
 	public CommandAPIBukkitConfig instance() {
 		return this;
 	}
