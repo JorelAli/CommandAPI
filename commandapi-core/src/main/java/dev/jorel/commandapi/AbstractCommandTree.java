@@ -53,7 +53,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public void register(String namespace) {
 		if (namespace == null) {
 			// Only reachable through Velocity
-			throw new NullPointerException("Parameter 'namespace' was null when registering a CommandTree!");
+			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + this.meta.commandName + "!");
 		}
 		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
 		if (this.executor.hasAnyExecutors()) {

@@ -280,7 +280,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public void register(String namespace) {
 		if (namespace == null) {
 			// Only reachable through Velocity
-			throw new NullPointerException("Parameter 'namespace' was null when registering a CommandAPICommand!");
+			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + this.meta.commandName + "!");
 		}
 		@SuppressWarnings("unchecked")
 		Argument[] argumentsArray = (Argument[]) (arguments == null ? new AbstractArgument[0] : arguments.toArray(AbstractArgument[]::new));
