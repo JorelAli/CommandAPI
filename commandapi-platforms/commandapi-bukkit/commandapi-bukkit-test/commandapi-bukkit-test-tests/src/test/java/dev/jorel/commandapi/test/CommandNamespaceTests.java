@@ -852,6 +852,41 @@ public class CommandNamespaceTests extends TestBase {
 		// The namespace was first set to a custom one, then was set to use the plugin name, then was set to use a custom one
 		// usePluginNamespace() should take priority and the plugin name should be the namespace
 		assertEquals("commandapitest", internalConfig.getNamespace());
+
+		config = new CommandAPIBukkitConfig(MockPlatform.getConfiguration().getPlugin())
+			.setNamespace("Custom");
+		internalConfig = new InternalBukkitConfig(config);
+
+		// The namespace uses invalid characters so the namespace should default to minecraft
+		assertEquals("minecraft", internalConfig.getNamespace());
+
+		Player player = enableWithNamespaces();
+
+		// Here, it doesn't really matter when we're registering the command, we only care for namespaces
+		CommandAPICommand command = new CommandAPICommand("test")
+			.executesPlayer(P_EXEC);
+
+		command.register("");
+
+		// The command should be registered with the minecraft namespace because the namespace was empty
+		assertTrue(server.dispatchCommand(player, "test"));
+		assertTrue(server.dispatchCommand(player, "minecraft:test"));
+
+		CommandAPI.unregister("test", true);
+
+		command.register("Command");
+
+		// The command should be registered with the minecraft namespace because the namespace was invalid
+		assertTrue(server.dispatchCommand(player, "test"));
+		assertTrue(server.dispatchCommand(player, "minecraft:test"));
+
+		CommandAPI.unregister("test", true);
+
+		command.register("test_123.-");
+
+		// The command should be registered with the custom provided namespace
+		assertTrue(server.dispatchCommand(player, "test"));
+		assertTrue(server.dispatchCommand(player, "test_123.-:test"));
 	}
 
 }

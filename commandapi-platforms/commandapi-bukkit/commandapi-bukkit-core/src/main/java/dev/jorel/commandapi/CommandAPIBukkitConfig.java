@@ -3,6 +3,8 @@ package dev.jorel.commandapi;
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.regex.Pattern;
+
 /**
  * A class that contains information needed to configure the CommandAPI on Bukkit-based servers.
  */
@@ -71,6 +73,11 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 		}
 		if (namespace.isEmpty()) {
 			CommandAPI.logNormal("Did not set namespace to an empty value! Namespace '" + super.namespace + "' is used as the default namespace!");
+			return this;
+		}
+		Pattern namespacePattern = Pattern.compile("[0-9a-z_.-]+");
+		if (!namespacePattern.matcher(namespace).matches()) {
+			CommandAPI.logNormal("Did not set namespace to the provided '" + namespace + "' namespace because only 0-9, a-z, underscores, periods and hyphens are allowed!");
 			return this;
 		}
 		return super.setNamespace(namespace);

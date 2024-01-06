@@ -20,6 +20,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import dev.jorel.commandapi.commandsenders.*;
 import org.bukkit.Bukkit;
@@ -850,6 +851,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 		if (namespace.isEmpty()) {
 			CommandAPI.logNormal("Registering command '" + commandName + "' using the default namespace because an empty namespace was given!");
+			return true;
+		}
+		Pattern namespacePattern = Pattern.compile("[a-z0-9_.-]+");
+		if (!namespacePattern.matcher(namespace).matches()) {
+			CommandAPI.logNormal("Registering comand '" + commandName + "' using the default namespace because an invalid namespace (" + namespace + ") was given. Only 0-9, a-z, underscores, periods and hyphens are allowed!");
 			return true;
 		}
 		return false;
