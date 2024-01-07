@@ -75,8 +75,7 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 			CommandAPI.logNormal("Did not set namespace to an empty value! Namespace '" + super.namespace + "' is used as the default namespace!");
 			return this;
 		}
-		Pattern namespacePattern = Pattern.compile("[0-9a-z_.-]+");
-		if (!namespacePattern.matcher(namespace).matches()) {
+		if (!CommandAPIBukkit.get().namespacePattern.matcher(namespace).matches()) {
 			CommandAPI.logNormal("Did not set namespace to the provided '" + namespace + "' namespace because only 0-9, a-z, underscores, periods and hyphens are allowed!");
 			return this;
 		}
