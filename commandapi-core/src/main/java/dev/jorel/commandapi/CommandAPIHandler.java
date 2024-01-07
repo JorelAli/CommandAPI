@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -125,6 +126,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<String, List<RegisteredCommand>> registeredCommandMap; // Keep track of registered commands in a map for permission lookups
 	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
+	final Pattern namespacePattern = Pattern.compile("[0-9a-z_.-]+");
 
 	private static CommandAPIHandler<?, ?, ?> instance;
 

@@ -20,7 +20,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import dev.jorel.commandapi.commandsenders.*;
 import org.bukkit.Bukkit;
@@ -75,7 +74,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	// Namespaces
 	private final Set<String> namespacesToFix = new HashSet<>();
 	private final RootCommandNode<Source> minecraftCommandNamespaces = new RootCommandNode<>();
-	final Pattern namespacePattern = Pattern.compile("[a-z0-9_.-]+");
 
 	// Static VarHandles
 	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
@@ -855,7 +853,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			CommandAPI.logNormal("Registering command '" + commandName + "' using the default namespace because an empty namespace was given!");
 			return true;
 		}
-		if (!namespacePattern.matcher(namespace).matches()) {
+		if (!CommandAPIHandler.getInstance().namespacePattern.matcher(namespace).matches()) {
 			CommandAPI.logNormal("Registering comand '" + commandName + "' using the default namespace because an invalid namespace (" + namespace + ") was given. Only 0-9, a-z, underscores, periods and hyphens are allowed!");
 			return true;
 		}

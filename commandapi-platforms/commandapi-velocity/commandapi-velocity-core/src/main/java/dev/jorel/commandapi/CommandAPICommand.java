@@ -27,6 +27,20 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 		return new CommandAPICommand(metaData);
 	}
 
+	/**
+	 * Registers the command with a given namespace
+	 *
+	 * @param namespace The namespace of this command. This cannot be null or empty
+	 *
+	 */
+	public void register(String namespace) {
+		if (!CommandAPIHandler.getInstance().namespacePattern.matcher(namespace).matches()) {
+			super.register();
+			return;
+		}
+		super.register(namespace);
+	}
+
 	@Override
 	public CommandAPICommand instance() {
 		return this;
