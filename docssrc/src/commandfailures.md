@@ -5,8 +5,8 @@ Sometimes, you want your command to fail on purpose. This is the way to "gracefu
 ```java
 throw CommandAPI.failWithString(String message);
 throw CommandAPI.failWithMessage(Message message);
-throw CommandAPI.failWithBaseComponents(BaseComponent... message);
-throw CommandAPI.failWithAdventureComponent(Component message);
+throw CommandAPIBukkit.failWithBaseComponents(BaseComponent... message);
+throw CommandAPIBukkit.failWithAdventureComponent(Component message);
 ```
 
 When the CommandAPI handles the fail method, it will cause the command to return a _success value_ of 0, to indicate failure.
