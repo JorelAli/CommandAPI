@@ -853,7 +853,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			CommandAPI.logNormal("Registering command '" + commandName + "' using the default namespace because an empty namespace was given!");
 			return true;
 		}
-		if (!CommandAPIHandler.getInstance().namespacePattern.matcher(namespace).matches()) {
+		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
 			CommandAPI.logNormal("Registering comand '" + commandName + "' using the default namespace because an invalid namespace (" + namespace + ") was given. Only 0-9, a-z, underscores, periods and hyphens are allowed!");
 			return true;
 		}

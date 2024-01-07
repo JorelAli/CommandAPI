@@ -20,7 +20,7 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 	 *
 	 */
 	public void register(String namespace) {
-		if (!CommandAPIHandler.getInstance().namespacePattern.matcher(namespace).matches()) {
+		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
 			super.register();
 			return;
 		}

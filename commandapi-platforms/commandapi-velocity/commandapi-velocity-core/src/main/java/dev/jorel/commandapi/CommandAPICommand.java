@@ -34,7 +34,7 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	 *
 	 */
 	public void register(String namespace) {
-		if (!CommandAPIHandler.getInstance().namespacePattern.matcher(namespace).matches()) {
+		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
 			super.register();
 			return;
 		}
