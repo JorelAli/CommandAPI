@@ -50,8 +50,8 @@ public class InternalConfig {
 	private final List<String> skipSenderProxy;
 
 	// NBT API configuration
-	private final Class<?> nbtContainerClass;
-	private final Function<Object, ?> nbtContainerConstructor;
+	private Class<?> nbtContainerClass;
+	private Function<Object, ?> nbtContainerConstructor;
 
 	/**
 	 * Creates an {@link InternalConfig} from a {@link CommandAPIConfig}
@@ -127,6 +127,11 @@ public class InternalConfig {
 	 */
 	public Function<Object, ?> getNBTContainerConstructor() {
 		return this.nbtContainerConstructor;
+	}
+	
+	public void lateInitializeNBT(Class<?> nbtContainerClass, Function<Object, ?> nbtContainerConstructor) {
+		this.nbtContainerClass = nbtContainerClass;
+		this.nbtContainerConstructor = nbtContainerConstructor;
 	}
 
 }

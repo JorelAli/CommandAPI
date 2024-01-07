@@ -7,7 +7,7 @@
 	<parent>
 		<artifactId>commandapi-platforms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.3.0</version>
+		<version>9.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>commandapi-bukkit</artifactId>
@@ -27,5 +27,8 @@
 		<module>commandapi-bukkit-plugin</module>
 		<module>commandapi-bukkit-test</module>
 		<module>commandapi-bukkit-shade</module>
+		
+		<module>commandapi-bukkit-plugin-mojang-mapped</module>
+		<module>commandapi-bukkit-shade-mojang-mapped</module>
 	</modules>
 </project>

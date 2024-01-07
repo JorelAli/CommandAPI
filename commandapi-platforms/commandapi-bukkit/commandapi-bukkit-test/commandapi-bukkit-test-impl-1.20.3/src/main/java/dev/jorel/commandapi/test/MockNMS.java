@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Stack;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -77,6 +78,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerAdvancementManager;
+import net.minecraft.server.ServerFunctionLibrary;
+import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.ServerScoreboard;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -117,6 +120,7 @@ public class MockNMS extends Enums {
 	final RecipeManager recipeManager;
 	Map<ResourceLocation, CommandFunction> functions = new HashMap<>();
 	Map<ResourceLocation, Collection<CommandFunction>> tags = new HashMap<>();
+	Stack<Integer> functionCallbackResults = new Stack<>();
 
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
@@ -384,6 +388,9 @@ public class MockNMS extends Enums {
 			// We don't really need to do anything funky here, we'll just return the same CSS
 			Mockito.when(css.withSuppressedOutput()).thenReturn(css);
 			Mockito.when(css.withMaximumPermission(anyInt())).thenReturn(css);
+			Mockito.when(css.callback()).thenReturn((success, result) -> {
+				functionCallbackResults.push(result);
+			});
 		}
 		return css;
 	}
@@ -538,29 +545,29 @@ public class MockNMS extends Enums {
 
 		// FunctionArgument
 		// We're using 2 as the function compilation level.
-//		Mockito.when(minecraftServerMock.getFunctionCompilationLevel()).thenReturn(2);
-//		Mockito.when(minecraftServerMock.getFunctions()).thenAnswer(i -> {
-//			ServerFunctionLibrary serverFunctionLibrary = Mockito.mock(ServerFunctionLibrary.class);
-//
-//			// Functions
-//			Mockito.when(serverFunctionLibrary.getFunction(any())).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
-//			Mockito.when(serverFunctionLibrary.getFunctions()).thenAnswer(invocation -> functions);
-//
-//			// Tags
-//			Mockito.when(serverFunctionLibrary.getTag(any())).thenAnswer(invocation -> tags.getOrDefault(invocation.getArgument(0), List.of()));
-//			Mockito.when(serverFunctionLibrary.getAvailableTags()).thenAnswer(invocation -> tags.keySet());
-//
-//			return new ServerFunctionManager(minecraftServerMock, serverFunctionLibrary) {
-//				
-//				// Make sure we don't use ServerFunctionManager#getDispatcher!
-//				// That method accesses MinecraftServer.vanillaCommandDispatcher
-//				// directly (boo) and that causes all sorts of nonsense.
-//				@Override
-//				public CommandDispatcher<CommandSourceStack> getDispatcher() {
-//					return Brigadier.getCommandDispatcher();
-//				}
-//			};
-//		});
+		Mockito.when(minecraftServerMock.getFunctionCompilationLevel()).thenReturn(2);
+		Mockito.when(minecraftServerMock.getFunctions()).thenAnswer(i -> {
+			ServerFunctionLibrary serverFunctionLibrary = Mockito.mock(ServerFunctionLibrary.class);
+
+			// Functions
+			Mockito.when(serverFunctionLibrary.getFunction(any())).thenAnswer(invocation -> Optional.ofNullable(functions.get(invocation.getArgument(0))));
+			Mockito.when(serverFunctionLibrary.getFunctions()).thenAnswer(invocation -> functions);
+
+			// Tags
+			Mockito.when(serverFunctionLibrary.getTag(any())).thenAnswer(invocation -> tags.getOrDefault(invocation.getArgument(0), List.of()));
+			Mockito.when(serverFunctionLibrary.getAvailableTags()).thenAnswer(invocation -> tags.keySet());
+
+			return new ServerFunctionManager(minecraftServerMock, serverFunctionLibrary) {
+				
+				// Make sure we don't use ServerFunctionManager#getDispatcher!
+				// That method accesses MinecraftServer.vanillaCommandDispatcher
+				// directly (boo) and that causes all sorts of nonsense.
+				@Override
+				public CommandDispatcher<CommandSourceStack> getDispatcher() {
+					return Brigadier.getCommandDispatcher();
+				}
+			};
+		});
 		
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
 		Mockito.when(minecraftServerMock.getProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
@@ -663,6 +670,11 @@ public class MockNMS extends Enums {
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public int popFunctionCallbackResult() {
+		return functionCallbackResults.pop();
 	}
 
 //	@Override

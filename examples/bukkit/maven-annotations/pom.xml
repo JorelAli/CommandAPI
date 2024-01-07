@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-plugin</artifactId>
-			<version>9.3.0</version>
+			<version>9.4.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-annotations</artifactId>
-			<version>9.3.0</version>
+			<version>9.4.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -46,6 +46,12 @@
 			<artifactId>spigot-api</artifactId>
 			<version>1.19.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.12.2</version>
 		</dependency>
 	</dependencies>
 
@@ -63,7 +69,7 @@
 						<path>
 							<groupId>dev.jorel</groupId>
 							<artifactId>commandapi-annotations</artifactId>
-							<version>9.3.0</version>
+							<version>9.4.0-SNAPSHOT</version>
 						</path>
 					</annotationProcessorPaths>
 					<release>16</release>

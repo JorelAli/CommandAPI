@@ -7,9 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  * A class that contains information needed to configure the CommandAPI on Bukkit-based servers.
  */
 public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitConfig> {
+
 	JavaPlugin plugin;
+
 	// Default configuration
 	boolean shouldHookPaperReload = true;
+	boolean shouldUseMojangMappings = false;
 
 	/**
 	 * Creates a new CommandAPIBukkitConfig object. Variables in this
@@ -32,6 +35,18 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	 */
 	public CommandAPIBukkitConfig shouldHookPaperReload(boolean hooked) {
 		this.shouldHookPaperReload = hooked;
+		return this;
+	}
+	
+	/**
+	 * Sets whether the CommandAPI should use Mojang mappings as opposed to Spigot's mappings
+	 * for internal calls. If set to true, the CommandAPI will use Mojang mappings.
+	 * 
+	 * @param useMojangMappings whether the CommandAPI should use Mojang mappings for internal calls
+	 * @return this CommandAPIBukkitConfig
+	 */
+	public CommandAPIBukkitConfig useMojangMappings(boolean useMojangMappings) {
+		this.shouldUseMojangMappings = useMojangMappings;
 		return this;
 	}
 

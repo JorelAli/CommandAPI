@@ -1,10 +1,11 @@
 package io.github.jorelali;
 
+import org.bukkit.command.CommandSender;
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.arguments.ANBTCompoundArgument;
-import dev.jorel.commandapi.nbtapi.NBTContainer;
-import org.bukkit.command.CommandSender;
 
 @Command("nbt")
 public class NBTCommand {
