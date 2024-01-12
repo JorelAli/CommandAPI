@@ -36,6 +36,7 @@ import com.mojang.brigadier.context.ParsedArgument;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
 import dev.jorel.commandapi.wrappers.ParticleData;
 
 public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
@@ -113,6 +114,11 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	@Override
 	public final void reloadDataPacks() {
 		assert true; // Nothing to do here
+	}
+
+	@Override
+	public void setupPaperCommandDispatcherReadWriteManager(CommandDispatcherReadWriteManager commandDispatcherReadWriteManager) {
+		// We don't test Paper-based stuff, so there's nothing to do here
 	}
 
 	/******************

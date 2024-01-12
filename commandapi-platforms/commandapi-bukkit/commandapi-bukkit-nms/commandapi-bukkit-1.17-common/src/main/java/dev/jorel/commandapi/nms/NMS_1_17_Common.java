@@ -96,6 +96,8 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
+import dev.jorel.commandapi.paper.ForkJoinPoolCommandSendingInterceptor;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import net.kyori.adventure.text.Component;
@@ -104,6 +106,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
@@ -728,4 +731,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		}
 	}
 
+	@Override
+	public void setupPaperCommandDispatcherReadWriteManager(CommandDispatcherReadWriteManager commandDispatcherReadWriteManager) {
+		new ForkJoinPoolCommandSendingInterceptor(commandDispatcherReadWriteManager, Commands.class);
+	}
 }

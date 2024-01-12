@@ -3,10 +3,14 @@ package dev.jorel.commandapi;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.chat.TextComponent;
+
+import java.util.function.Supplier;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
@@ -17,32 +21,75 @@ import org.bukkit.plugin.Plugin;
 
 public class PaperImplementations {
 
+	private final NMS<?> nmsInstance;
+
 	private final boolean isPaperPresent;
 	private final boolean isFoliaPresent;
-	private final NMS<?> nmsInstance;
+
+	private final boolean canHookServerResourcesReloadedEvent;
 	private final Class<? extends CommandSender> feedbackForwardingCommandSender;
+	private final CommandDispatcherReadWriteManager commandDispatcherReadWriteManager;
 
 	/**
 	 * Constructs a PaperImplementations object
-	 * 
-	 * @param isPaperPresent Whether this is a Paper server or not
-	 * @param isFoliaPresent Whether this is a Folia server or not
-	 * @param nmsInstance    The instance of NMS
+	 *
+	 * @param nmsInstance The instance of NMS
 	 */
 	@SuppressWarnings("unchecked")
-	public PaperImplementations(boolean isPaperPresent, boolean isFoliaPresent, NMS<?> nmsInstance) {
-		this.isPaperPresent = isPaperPresent;
-		this.isFoliaPresent = isFoliaPresent;
+	public PaperImplementations(NMS<?> nmsInstance) {
 		this.nmsInstance = nmsInstance;
-		
+
+		// General check for Paper
+		boolean isPaperPresent;
+		try {
+			// This class has nothing to do with the CommandAPI, but it was added to Paper very early on
+			//  and still exists today, making it a good indicator of when we're on Paper no matter the version
+			//  other than that, it just happened to be the first thing I found :P
+			Class.forName("com.destroystokyo.paper.event.block.BeaconEffectEvent");
+			isPaperPresent = true;
+			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
+		} catch (ClassNotFoundException e) {
+			isPaperPresent = false;
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning("Could not hook into Paper for for paper-specific API implementations. Consider upgrading to Paper: https://papermc.io/");
+			}
+		}
+		this.isPaperPresent = isPaperPresent;
+
+		// General check for Folia
+		boolean isFoliaPresent;
+		try {
+			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
+			isFoliaPresent = true;
+			CommandAPI.logNormal("Hooked into Folia for folia-specific API implementations");
+			CommandAPI.logNormal("Folia support is still in development. Please report any issues to the CommandAPI developers!");
+		} catch (ClassNotFoundException e) {
+			isFoliaPresent = false;
+		}
+		this.isFoliaPresent = isFoliaPresent;
+
+		// Check for the ServerResourcesReloadedEvent
+		boolean canHookServerResourcesReloadedEvent;
+		try {
+			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
+			canHookServerResourcesReloadedEvent = true;
+		} catch (ClassNotFoundException e) {
+			canHookServerResourcesReloadedEvent = false;
+		}
+		this.canHookServerResourcesReloadedEvent = canHookServerResourcesReloadedEvent;
+
+		// Check for Paper's special CommandSender
 		Class<? extends CommandSender> tempFeedbackForwardingCommandSender = null;
 		try {
 			tempFeedbackForwardingCommandSender = (Class<? extends CommandSender>) Class.forName("io.papermc.paper.commands.FeedbackForwardingSender");
 		} catch (ClassNotFoundException e) {
 			// uhh...
 		}
-		
 		this.feedbackForwardingCommandSender = tempFeedbackForwardingCommandSender;
+
+		// Catch Paper's async Commands packet building
+		this.commandDispatcherReadWriteManager = new CommandDispatcherReadWriteManager();
+		if(isPaperPresent) nmsInstance.setupPaperCommandDispatcherReadWriteManager(this.commandDispatcherReadWriteManager);
 	}
 
 	/**
@@ -53,15 +100,13 @@ public class PaperImplementations {
 	 * @param plugin the plugin that the CommandAPI is being used from
 	 */
 	public void registerReloadHandler(Plugin plugin) {
-		if (isPaperPresent && CommandAPIBukkit.getConfiguration().shouldHookPaperReload()) {
+		if (canHookServerResourcesReloadedEvent && CommandAPIBukkit.getConfiguration().shouldHookPaperReload()) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-
 				@EventHandler
 				public void onServerReloadResources(ServerResourcesReloadedEvent event) {
 					CommandAPI.logNormal("/minecraft:reload detected. Reloading CommandAPI commands!");
 					nmsInstance.reloadDataPacks();
 				}
-
 			}, plugin);
 			CommandAPI.logNormal("Hooked into Paper ServerResourcesReloadedEvent");
 		} else {
@@ -121,4 +166,33 @@ public class PaperImplementations {
 		}
 	}	
 
+	/**
+	 * Waits to make sure Paper is not reading from the Brigadier CommandDispatchers before running a task that
+	 * modifies those CommandDispatchers. This ensures that the command trees are not modified while Paper is 
+	 * building a Commands packet asynchronously, which may cause a ConcurrentModificationException.
+	 * <p>
+	 * If Paper isn't building Commands packets async (probably because we're on Spigot), 
+	 * the task is run immediately, since there isn't any chance of conflict anyway.
+	 *
+	 * @param modifyTask The task to run that modifies the command trees.
+	 */
+	public void modifyCommandTreesAndAvoidPaperCME(Runnable modifyTask) {
+		this.commandDispatcherReadWriteManager.runWriteTask(modifyTask);
+	}
+
+	/**
+	 * Waits to make sure Paper is not reading from the Brigadier CommandDispatchers before running a task that
+	 * modifies those CommandDispatchers. This ensures that the command trees are not modified while Paper is 
+	 * building a Commands packet asynchronously, which may cause a ConcurrentModificationException.
+	 * <p>
+	 * If Paper isn't building Commands packets async (probably because we're on Spigot), 
+	 * the task is run immediately, since there isn't any chance of conflict anyway.
+	 *
+	 * @param modifyTask The task to run that modifies the command trees.
+	 * @return The result of running the {@code modifyTask}.
+	 * @param <T> The class of the object returned by the {@code modifyTask}.
+	 */
+	public <T> T modifyCommandTreesAndAvoidPaperCME(Supplier<T> modifyTask) {
+		return this.commandDispatcherReadWriteManager.runWriteTask(modifyTask);
+    }
 }

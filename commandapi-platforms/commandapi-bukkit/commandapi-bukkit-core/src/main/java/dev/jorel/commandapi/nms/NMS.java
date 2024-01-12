@@ -60,8 +60,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
+import dev.jorel.commandapi.PaperImplementations;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -457,4 +459,22 @@ public interface NMS<CommandListenerWrapper> {
 
 	Message generateMessageFromJson(String json);
 
+	/**
+	 * Since <a href="https://github.com/PaperMC/Paper/pull/3116">PaperMC/Paper#3116</a>, Paper sometimes reads
+	 * from the Brigadier CommandDispatcher asyncronously. This can cause ConcurrentModificationExceptions if the
+	 * CommandAPI tries to create a command and write to the dispatcher at the same time.
+	 * <p>
+	 * This method hooks our read-write control into the appropriate location. This action is version-specific
+	 * since Paper has altered thier implementation slightly over time.
+	 * <p>
+	 * Calling this method is unecessary if {@link PaperImplementations#isPaperPresent()} returns false, since Spigot doesn't
+	 * build Commands packets async at all, so there is never any conflict to deal with. This method may assume that if it
+	 * is called, it is being called on a Paper server, so calling this method when {@link PaperImplementations#isPaperPresent()} 
+	 * returns false is also discouraged.
+	 * <p>
+	 * See <a href="https://github.com/JorelAli/CommandAPI/pull/501">CommandAPI#501</a> for more details.
+	 * 
+	 * @param commandDispatcherReadWriteManager The read-write manager being used
+	 */
+    void setupPaperCommandDispatcherReadWriteManager(CommandDispatcherReadWriteManager commandDispatcherReadWriteManager);
 }

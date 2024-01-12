@@ -78,6 +78,8 @@ import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.exceptions.UnimplementedArgumentException;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
+import dev.jorel.commandapi.paper.ForkJoinPoolCommandSendingInterceptor;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -510,7 +512,7 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
+	public CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
 		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a();
 	}
 
@@ -990,4 +992,12 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		}
 	}
 
+	@Override
+	public void setupPaperCommandDispatcherReadWriteManager(CommandDispatcherReadWriteManager commandDispatcherReadWriteManager) {
+		// Read-write control is only necessary after Paper build paper-1.15.2-177
+		// This class also covers 1.15 and 1.15.1, so we will be doing a bit of unecessary work on those versions
+		// We could spin off another NMS class for those versions, but I don't think it's a big deal
+		// I'm not sure how to detect the specific Paper build either, so we'd be doing extra work on ~1/2 of 1.15.2 builds anyway
+		new ForkJoinPoolCommandSendingInterceptor(commandDispatcherReadWriteManager, net.minecraft.server.v1_15_R1.CommandDispatcher.class);
+	}
 }

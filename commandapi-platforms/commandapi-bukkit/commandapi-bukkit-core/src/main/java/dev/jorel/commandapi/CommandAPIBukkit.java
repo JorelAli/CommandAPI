@@ -161,31 +161,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 		}
 
-		boolean isPaperPresent = false;
-
-		try {
-			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
-			isPaperPresent = true;
-			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
-		} catch (ClassNotFoundException e) {
-			isPaperPresent = false;
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
-			}
-		}
-
-		boolean isFoliaPresent = false;
-
-		try {
-			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
-			isFoliaPresent = true;
-			CommandAPI.logNormal("Hooked into Folia for folia-specific API implementations");
-			CommandAPI.logNormal("Folia support is still in development. Please report any issues to the CommandAPI developers!");
-		} catch (ClassNotFoundException e) {
-			isFoliaPresent = false;
-		}
-
-		paper = new PaperImplementations(isPaperPresent, isFoliaPresent, this);
+		paper = new PaperImplementations(this);
 	}
 
 	@Override
@@ -472,48 +448,50 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	@Override
 	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		if(!CommandAPI.canRegister()) {
-			// Usually, when registering commands during server startup, we can just put our commands into the
-			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
-			// it and the CommandAPI do some extra stuff to make everything work, and we move on.
-			// So, if we want to register commands while the server is running, we need to do all that extra stuff, and
-			// that is what this code does.
-			// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
-			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
+			paper.modifyCommandTreesAndAvoidPaperCME(() -> {
+				// Usually, when registering commands during server startup, we can just put our commands into the
+				// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
+				// it and the CommandAPI do some extra stuff to make everything work, and we move on.
+				// So, if we want to register commands while the server is running, we need to do all that extra stuff, and
+				// that is what this code does.
+				// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
+				// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
 
-			CommandMap map = paper.getCommandMap();
-			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
-			RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
+				CommandMap map = paper.getCommandMap();
+				String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
+				RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
 
-			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
-			// in `CraftServer#setVanillaCommands`
-			Command command = wrapToVanillaCommandWrapper(resultantNode);
-			map.register("minecraft", command);
-
-			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
-			command.setPermission(permNode);
-
-			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
-			root.addChild(resultantNode);
-			root.addChild(namespaceNode(resultantNode));
-
-			// Do the same for the aliases
-			for(LiteralCommandNode<Source> node: aliasNodes) {
-				command = wrapToVanillaCommandWrapper(node);
+				// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
+				// in `CraftServer#setVanillaCommands`
+				Command command = wrapToVanillaCommandWrapper(resultantNode);
 				map.register("minecraft", command);
 
+				// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
 				command.setPermission(permNode);
 
-				root.addChild(node);
-				root.addChild(namespaceNode(node));
-			}
+				// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
+				root.addChild(resultantNode);
+				root.addChild(namespaceNode(resultantNode));
 
-			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
-			updateHelpForCommands(List.of(registeredCommand));
+				// Do the same for the aliases
+				for(LiteralCommandNode<Source> node: aliasNodes) {
+					command = wrapToVanillaCommandWrapper(node);
+					map.register("minecraft", command);
 
-			// Sending command dispatcher packets usually happens when Players join the server
-			for(Player p: Bukkit.getOnlinePlayers()) {
-				p.updateCommands();
-			}
+					command.setPermission(permNode);
+
+					root.addChild(node);
+					root.addChild(namespaceNode(node));
+				}
+
+				// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
+				updateHelpForCommands(List.of(registeredCommand));
+
+				// Sending command dispatcher packets usually happens when Players join the server
+				for(Player p: Bukkit.getOnlinePlayers()) {
+					p.updateCommands();
+				}
+			});
 		}
 	}
 
@@ -536,7 +514,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node) {
-		return getBrigadierDispatcher().register(node);
+		return paper.modifyCommandTreesAndAvoidPaperCME(() -> getBrigadierDispatcher().register(node));
 	}
 
 	@Override
@@ -563,52 +541,54 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	private void unregisterInternal(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
-		CommandAPI.logInfo("Unregistering command /" + commandName);
+		paper.modifyCommandTreesAndAvoidPaperCME(() -> {
+			CommandAPI.logInfo("Unregistering command /" + commandName);
 
-		if(!unregisterBukkit) {
-			// Remove nodes from the Vanilla dispatcher
-			// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
-			//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
-			removeBrigadierCommands(getBrigadierDispatcher(), commandName, unregisterNamespaces, c -> true);
+			if(!unregisterBukkit) {
+				// Remove nodes from the Vanilla dispatcher
+				// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
+				//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
+				removeBrigadierCommands(getBrigadierDispatcher(), commandName, unregisterNamespaces, c -> true);
 
-			// Update the dispatcher file
-			CommandAPIHandler.getInstance().writeDispatcherToFile();
-		}
-
-		if(unregisterBukkit || !CommandAPI.canRegister()) {
-			// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
-			//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
-			//  moved the Vanilla command into the CommandMap
-			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
-
-			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
-			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
-			boolean isMainVanilla = isVanillaCommandWrapper(knownCommands.get(commandName));
-			if(unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
-
-			if(unregisterNamespaces) {
-				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper(c));
+				// Update the dispatcher file
+				CommandAPIHandler.getInstance().writeDispatcherToFile();
 			}
-		}
 
-		if(!CommandAPI.canRegister()) {
-			// If the server is enabled, we have extra cleanup to do
+			if(unregisterBukkit || !CommandAPI.canRegister()) {
+				// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
+				//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
+				//  moved the Vanilla command into the CommandMap
+				Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 
-			// Remove commands from the resources dispatcher
-			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
-			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
-			removeBrigadierCommands(getResourcesDispatcher(), commandName, unregisterNamespaces,
-				c -> !unregisterBukkit ^ isBukkitCommandWrapper(c));
+				// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
+				// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
+				boolean isMainVanilla = isVanillaCommandWrapper(knownCommands.get(commandName));
+				if(unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
 
-			// Help topics (from Bukkit and CommandAPI) are only setup after plugins enable, so we only need to worry
-			//  about removing them once the server is loaded.
-			getHelpMap().remove("/" + commandName);
-
-			// Notify players
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				p.updateCommands();
+				if(unregisterNamespaces) {
+					removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper(c));
+				}
 			}
-		}
+
+			if(!CommandAPI.canRegister()) {
+				// If the server is enabled, we have extra cleanup to do
+
+				// Remove commands from the resources dispatcher
+				// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
+				// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
+				removeBrigadierCommands(getResourcesDispatcher(), commandName, unregisterNamespaces,
+					c -> !unregisterBukkit ^ isBukkitCommandWrapper(c));
+
+				// Help topics (from Bukkit and CommandAPI) are only setup after plugins enable, so we only need to worry
+				//  about removing them once the server is loaded.
+				getHelpMap().remove("/" + commandName);
+
+				// Notify players
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					p.updateCommands();
+				}
+			}
+		});
 	}
 
 	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,

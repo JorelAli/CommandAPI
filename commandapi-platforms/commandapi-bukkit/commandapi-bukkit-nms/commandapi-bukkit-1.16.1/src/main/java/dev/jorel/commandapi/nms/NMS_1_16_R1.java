@@ -84,6 +84,8 @@ import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.exceptions.UnimplementedArgumentException;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
+import dev.jorel.commandapi.paper.ForkJoinPoolCommandSendingInterceptor;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -533,7 +535,7 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
+	public CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
 		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a();
 	}
 
@@ -1067,4 +1069,8 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		}
 	}
 
+	@Override
+	public void setupPaperCommandDispatcherReadWriteManager(CommandDispatcherReadWriteManager commandDispatcherReadWriteManager) {
+		new ForkJoinPoolCommandSendingInterceptor(commandDispatcherReadWriteManager, net.minecraft.server.v1_16_R1.CommandDispatcher.class);
+	}
 }

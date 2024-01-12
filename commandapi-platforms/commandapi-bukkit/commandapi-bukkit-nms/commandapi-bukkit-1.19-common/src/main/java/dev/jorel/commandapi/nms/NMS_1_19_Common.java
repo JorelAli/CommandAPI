@@ -42,6 +42,8 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.paper.CommandDispatcherReadWriteManager;
+import dev.jorel.commandapi.paper.ThreadPoolExecutorCommandSendingInterceptor;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
@@ -55,6 +57,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.*;
 import net.minecraft.commands.arguments.ResourceOrTagLocationArgument.Result;
@@ -146,6 +149,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
@@ -159,6 +163,10 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
+// This class is Paper-specific, so we can't directly access it at all :(
+// @RequireField(in = MCUtil.class, name = "asyncExecutor", ofType = ThreadPoolExecutor.class)
+// This field is Paper-specific, so we can't actually check this field with the current pre-processor
+// @RequireField(in = Commands.class, name = "COMMAND_SENDING_POOL", ofType = ThreadPoolExecutor.class)
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
 public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 
@@ -166,6 +174,8 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
+	// private static final SafeVarHandle<MCUtil, ThreadPoolExecutor> mCUtilAsyncExecutor;
+	private static final SafeVarHandle<Commands, ThreadPoolExecutor> commandDispatcherCommandSendingPool;
 
 	// From net.minecraft.server.commands.LocateCommand
 	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
@@ -196,6 +206,8 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
+		// mCUtilAsyncExecutor = SafeVarHandle.ofOrNull(MCUtil.class, "asyncExecutor", "asyncExecutor", ThreadPoolExecutor.class);
+		commandDispatcherCommandSendingPool = SafeVarHandle.ofOrNull(Commands.class, "COMMAND_SENDING_POOL", "COMMAND_SENDING_POOL", ThreadPoolExecutor.class);
 
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
@@ -931,6 +943,26 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 			return (T) server.getServer();
 		} else {
 			return null;
+		}
+	}
+
+	@Override
+	public void setupPaperCommandDispatcherReadWriteManager(CommandDispatcherReadWriteManager commandDispatcherReadWriteManager) {
+		// Switching from build paper-1.19.2-116 to paper-1.19.2-117, Paper's implementation for sending command packets changed
+		// We can actually detect this change based on wheter the field `Commands.COMMAND_SENDING_POOL` exists or not
+		// This also covers 1.19 and 1.19.1, where the field will never exist, but I don't think it's a big
+		//  enough deal to spin off another NMS class to avoid this simple check
+		if(commandDispatcherCommandSendingPool == null) {
+			Class<?> mCUtil;
+			try {
+				mCUtil = Class.forName("net.minecraft.server.MCUtil");
+			} catch(ClassNotFoundException ignored) {
+				throw new IllegalStateException("NMS#setupPaperCommandDispatcherReadWriteManager called, but the Paper class MCUtil was not found!");
+			}
+			SafeVarHandle<?, ThreadPoolExecutor> mCUtilAsyncExecutor = SafeVarHandle.ofOrNull(mCUtil, "asyncExecutor", "asyncExecutor", ThreadPoolExecutor.class);
+			new ThreadPoolExecutorCommandSendingInterceptor(commandDispatcherReadWriteManager, Commands.class, mCUtilAsyncExecutor);
+		} else {
+			new ThreadPoolExecutorCommandSendingInterceptor(commandDispatcherReadWriteManager, Commands.class, commandDispatcherCommandSendingPool);
 		}
 	}
 }
