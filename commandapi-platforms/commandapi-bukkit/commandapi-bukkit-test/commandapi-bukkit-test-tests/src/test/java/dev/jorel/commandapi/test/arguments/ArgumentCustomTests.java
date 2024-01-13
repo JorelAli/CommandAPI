@@ -155,7 +155,7 @@ class ArgumentCustomTests extends TestBase {
 		});
 		
 		// MultiLiteralArgument
-		MultiLiteralArgument multiLiteralArgument = new MultiLiteralArgument("node", List.of("hello", "world"));
+		MultiLiteralArgument multiLiteralArgument = new MultiLiteralArgument("node", "hello", "world");
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			new CustomArgument<>(multiLiteralArgument, info -> 1);
