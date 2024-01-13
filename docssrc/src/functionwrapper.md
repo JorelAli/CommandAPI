@@ -30,6 +30,14 @@ These methods allow you to interact with the Minecraft function that this class 
 
 ### `run()`
 
+<div class="warning">
+
+### run() support in 1.20.3+
+
+As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling `run()` will always return a value of `1`, regardless of whether the command succeeds, fails, or returns a result.
+
+</div>
+
 The `run()` method runs the function. The command executor that runs this function is the command executor that was used to retrieve it. For example, if a player in-game populated this argument, then the player will be filled in for `@p` and the player's location would be used for things such as `~ ~ ~`:
 
 <div class="multi-pre">
@@ -45,5 +53,13 @@ The `run()` method runs the function. The command executor that runs this functi
 </div>
 
 ### `runAs(Entity)`
+
+<div class="warning">
+
+### runAs(Entity) support in 1.20.3+
+
+As of CommandAPI 9.3.0 (compatible with Minecraft versions 1.20.3 and 1.20.4), calling `runAs(Entity)` will always return a value of `1`, regardless of whether the command succeeds, fails, or returns a result.
+
+</div>
 
 The `runAs(Entity)` is the same as the `run()` method, but it allows you to change the command executor to another entity.

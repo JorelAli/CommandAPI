@@ -39,7 +39,8 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 9.2.0 \\(\rightarrow\\) 9.3.0
 
-- Updates [Kotlin DSL](./kotlindsl.md) page to mention every possible executor method
+- Updates [Incompatible version information](./incompatibleversions.md) page and `FunctionArgument` pages that functions made with the `FunctionArgument` will always return 1 when running on 1.20.3 and 1.20.4.
+- Updates [Kotlin DSL](./kotlindsl.md) page to mention every possible executor method.
 
 ### Documentation changes 9.1.0 \\(\rightarrow\\) 9.2.0
 

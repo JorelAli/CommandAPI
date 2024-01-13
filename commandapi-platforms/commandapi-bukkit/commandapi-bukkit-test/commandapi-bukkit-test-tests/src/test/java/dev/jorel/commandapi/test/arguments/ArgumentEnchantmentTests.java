@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.test.arguments;
 
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
@@ -31,6 +32,8 @@ class ArgumentEnchantmentTests extends TestBase {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
+
+		assumeTrue(version.lessThan(MCVersion.V1_20_3));
 	}
 
 	@AfterEach

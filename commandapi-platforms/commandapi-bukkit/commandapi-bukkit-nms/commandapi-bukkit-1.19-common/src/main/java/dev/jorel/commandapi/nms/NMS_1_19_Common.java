@@ -101,6 +101,7 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
+import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
@@ -159,7 +160,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @Differs(from = {"1.13", "1.14", "1.15", "1.16", "1.17", "1.18"}, by = "Added chat preview")
-public abstract class NMS_1_19_Common extends NMS_Common {
+public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -465,7 +466,7 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	}
 
 	@Override
-	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have
@@ -486,9 +487,17 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 					for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
 						result.add(entity.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_ENTITIES_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<org.bukkit.entity.Entity>();
+					if (allowEmpty) {
+						yield new ArrayList<org.bukkit.entity.Entity>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_MANY_PLAYERS:
 				try {
@@ -496,9 +505,17 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 					for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
 						result.add(player.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_PLAYERS_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<Player>();
+					if (allowEmpty) {
+						yield new ArrayList<Player>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_ONE_ENTITY:
 				yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
@@ -756,7 +773,12 @@ public abstract class NMS_1_19_Common extends NMS_Common {
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		Collection<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
-		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
+		SimpleFunctionWrapper[] convertedCustomFunctions = new SimpleFunctionWrapper[customFunctions.size()];
+		int index = 0;
+		for (CommandFunction customFunction : customFunctions) {
+			convertedCustomFunctions[index++] = convertFunction(customFunction);
+		}
+		return convertedCustomFunctions;
 	}
 	
 	@Override

@@ -2,12 +2,28 @@
 
 To use the CommandAPI in your plugins, there are a few methods of adding it to your development environment. First things first, if you're using the CommandAPI plugin, you need to add the CommandAPI has a dependent in your plugin.yml:
 
-```yaml
+<div class="multi-pre">
+
+```yaml, plugin.yml_(Bukkit/Spigot/Paper)
 name: MyPlugin
 main: some.package.name.Main
 version: 1.0
 depend: [CommandAPI]
 ```
+
+```yaml, paper-plugin.yml_(Paper)
+name: MyPlugin
+main: some.package.name.Main
+version: 1.0
+dependencies:
+  server:
+    CommandAPI:
+      load: BEFORE
+      required: true
+      join-classpath: true
+```
+
+</div>
 
 -----
 
@@ -24,7 +40,7 @@ depend: [CommandAPI]
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-bukkit-core</artifactId>
-          <version>9.3.0-SNAPSHOT</version>
+          <version>9.4.0-SNAPSHOT</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -45,7 +61,7 @@ depend: [CommandAPI]
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-bukkit-core:9.3.0-SNAPSHOT"
+      compileOnly "dev.jorel:commandapi-bukkit-core:9.4.0-SNAPSHOT"
   }
   ```
 

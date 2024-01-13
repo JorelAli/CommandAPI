@@ -56,6 +56,28 @@ Similar changes have also been made for the component-related argument methods i
 + dev.jorel.commandapi.kotlindsl.adventure.chatComponentArgument
 ```
 
+## From 9.2.0 to 9.3.0
+
+The `BukkitTooltip.generateAdvenureComponents` methods have now been deprecated in favour of the correctly named `BukkitTooltip.generateAdventureComponents` methods:
+
+<div class="multi-pre">
+
+```java,9.2.0
+BukkitTooltip.generateAdvenureComponents()
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,9.3.0
+BukkitTooltip.generateAdventureComponents()
+```
+
+</div>
+
 -----
 
 ## From 9.0.3 to 9.1.0

@@ -4,6 +4,8 @@ var classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip =
     [ "build", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#a1fd884e6214d788be750c0c4116c744d", null ],
     [ "generate", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#af4f5f0bda6ced2af1e089500732ef854", null ],
     [ "generate", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#a5f72d8a4a5e8e76726ca2be0fb19d1f7", null ],
+    [ "generateAdventureComponents", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#a8a4324b25590275fb4714b3017d6e8ff", null ],
+    [ "generateAdventureComponents", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#a367946f502b0e4473b4bb04492168e13", null ],
     [ "generateAdvenureComponents", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#a9f6f91cb7294b97829b1242298c8c87c", null ],
     [ "generateAdvenureComponents", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#a83e5ea5ec54d7b79282fc9d5ca860034", null ],
     [ "generateBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_bukkit_tooltip.html#a1986cc4e581f2a61f59478fefac8ec5e", null ],

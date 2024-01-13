@@ -1,15 +1,19 @@
 package io.github.jorelali;
 
-import dev.jorel.commandapi.nbtapi.NBTContainer;
-import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.arguments.*;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.NBTCompoundArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
 
 public class MyCommands {
 

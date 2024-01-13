@@ -171,7 +171,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-public class NMS_1_20_R2 extends NMS_Common {
+public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -358,7 +358,7 @@ public class NMS_1_20_R2 extends NMS_Common {
 	}
 
 	@Override
-	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
+	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have level 2 permissions in order to use entity selectors. We're
@@ -378,7 +378,11 @@ public class NMS_1_20_R2 extends NMS_Common {
 					for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
 						result.add(entity.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_ENTITIES_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
 					yield new ArrayList<org.bukkit.entity.Entity>();
 				}
@@ -388,9 +392,17 @@ public class NMS_1_20_R2 extends NMS_Common {
 					for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
 						result.add(player.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_PLAYERS_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<Player>();
+					if (allowEmpty) {
+						yield new ArrayList<Player>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_ONE_ENTITY:
 				yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
@@ -663,7 +675,12 @@ public class NMS_1_20_R2 extends NMS_Common {
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
 		Collection<CommandFunction> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
-		return customFunctions.toArray(new SimpleFunctionWrapper[0]);
+		SimpleFunctionWrapper[] convertedCustomFunctions = new SimpleFunctionWrapper[customFunctions.size()];
+		int index = 0;
+		for (CommandFunction customFunction : customFunctions) {
+			convertedCustomFunctions[index++] = convertFunction(customFunction);
+		}
+		return convertedCustomFunctions;
 	}
 	
 	@Override

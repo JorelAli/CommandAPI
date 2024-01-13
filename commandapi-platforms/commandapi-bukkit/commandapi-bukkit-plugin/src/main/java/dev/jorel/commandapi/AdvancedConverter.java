@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import dev.jorel.commandapi.arguments.adventure.ChatArgument;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.adventure.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
@@ -226,6 +225,7 @@ class AdvancedConverter {
 	 * Additionally, we only need this for the plugin version of the CommandAPI, not
 	 * the main API.
 	 */
+	@SuppressWarnings("rawtypes")
 	private Argument<?> parseDefinedArgumentType(String argumentType, String nodeName) throws UnknownArgumentException {
 		return switch (CommandAPIArgumentType.fromInternal(argumentType)) {
 			case ADVANCEMENT -> new AdvancementArgument(nodeName);
@@ -253,7 +253,7 @@ class AdvancedConverter {
 			case LOOT_TABLE -> new LootTableArgument(nodeName);
 			case MATH_OPERATION -> new MathOperationArgument(nodeName);
 			case NAMESPACED_KEY -> new NamespacedKeyArgument(nodeName);
-			case NBT_COMPOUND -> new NBTCompoundArgument<NBTContainer>(nodeName);
+			case NBT_COMPOUND -> new NBTCompoundArgument(nodeName);
 			case OBJECTIVE -> new ObjectiveArgument(nodeName);
 			case OBJECTIVE_CRITERIA -> new ObjectiveCriteriaArgument(nodeName);
 			case OFFLINE_PLAYER -> new OfflinePlayerArgument(nodeName);

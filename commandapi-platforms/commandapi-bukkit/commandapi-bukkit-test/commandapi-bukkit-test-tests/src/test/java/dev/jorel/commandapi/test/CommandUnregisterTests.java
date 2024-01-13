@@ -27,7 +27,7 @@ class CommandUnregisterTests extends TestBase {
 			{
 			  "type": "root",
 			  "children": {
-			    "minecraft:test": {
+			    "test": {
 			      "type": "literal",
 			      "children": {
 			        "string": {
@@ -40,7 +40,7 @@ class CommandUnregisterTests extends TestBase {
 			        }
 			      }
 			    },
-			    "test": {
+			    "minecraft:test": {
 			      "type": "literal",
 			      "children": {
 			        "string": {

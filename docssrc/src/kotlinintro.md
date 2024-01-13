@@ -17,7 +17,7 @@ To install the DSL, you need to add the `commandapi-bukkit-kotlin` dependency in
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-kotlin</artifactId>
-        <version>9.3.0-SNAPSHOT</version>
+        <version>9.4.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
@@ -93,13 +93,13 @@ Next, you need to add the dependency:
 
 ```groovy,build.gradle
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-kotlin:9.3.0-SNAPSHOT"
+    implementation "dev.jorel:commandapi-bukkit-kotlin:9.4.0-SNAPSHOT"
 }
 ```
 
 ```kotlin,build.gradle.kts
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-kotlin:9.3.0-SNAPSHOT")
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.4.0-SNAPSHOT")
 }
 ```
 
