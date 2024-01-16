@@ -558,26 +558,23 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
 		root.addChild(resultantNode);
 
-		// Handle namespaces
+		// Handle namespace
+		LiteralCommandNode<Source> namespacedNode = CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace);
 		if (namespace.equals("minecraft")) {
 			// The minecraft namespace version should be registered as a straight alias of the original command, since
 			//  the `minecraft:name` node does not exist in the Brigadier dispatcher, which is referenced by
 			//  VanillaCommandWrapper (note this is not true if there is a command conflict, but
 			//  `CommandAPIBukkit#postCommandRegistration` will deal with this later using `minecraftCommandNamespaces`).
 			knownCommands.putIfAbsent("minecraft:" + name, command);
-
-			// Still make sure to add a node to the resources dispatcher
-			root.addChild(CommandAPIHandler.getInstance().namespaceNode(resultantNode, "minecraft"));
 		} else {
 			// A custom namespace should be registered like a separate command, so that it can reference the namespaced
 			//  node, rather than the original unnamespaced node
-			LiteralCommandNode<Source> namespacedNode = CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace);
-
 			Command namespacedCommand = wrapToVanillaCommandWrapper(namespacedNode);
 			knownCommands.putIfAbsent(namespacedCommand.getName(), namespacedCommand);
 			namespacedCommand.setPermission(permNode);
-			root.addChild(namespacedNode);
 		}
+		// In both cases, add the node to the resources dispatcher
+		root.addChild(namespacedNode);
 	}
 
 	@Override
