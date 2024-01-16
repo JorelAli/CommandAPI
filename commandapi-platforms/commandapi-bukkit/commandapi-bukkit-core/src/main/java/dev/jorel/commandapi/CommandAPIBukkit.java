@@ -7,15 +7,7 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -73,7 +65,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	// Namespaces
 	private final Set<String> namespacesToFix = new HashSet<>();
-	private final RootCommandNode<Source> minecraftCommandNamespaces = new RootCommandNode<>();
+	private RootCommandNode<Source> minecraftCommandNamespaces = new RootCommandNode<>();
 
 	// Static VarHandles
 	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
@@ -403,11 +395,21 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		// Add back certain minecraft: namespace commands
-		RootCommandNode<Source> rootNode = resourcesDispatcher.getRoot();
+		RootCommandNode<Source> resourcesRootNode = resourcesDispatcher.getRoot();
+		RootCommandNode<Source> brigadierRootNode = getBrigadierDispatcher().getRoot();
 		for (CommandNode<Source> node : minecraftCommandNamespaces.getChildren()) {
 			knownCommands.put(node.getName(), wrapToVanillaCommandWrapper(node));
-			rootNode.addChild(node);
+			resourcesRootNode.addChild(node);
+
+			// VanillaCommandWrappers in the CommandMap defer to the Brigadier dispatcher when executing.
+			// While the minecraft namespace usually does not exist in the Brigadier dispatcher, in the case of a
+			//  command conflict we do need this node to exist separately from the unnamespaced version to keep the
+			//  commands separate.
+			brigadierRootNode.addChild(node);
 		}
+		// Clear minecraftCommandNamespaces for dealing with command conflicts after the server is enabled
+		//  See `CommandAPIBukkit#postCommandRegistration`
+		minecraftCommandNamespaces = new RootCommandNode<>();
 	}
 
 	@Override
@@ -510,11 +512,28 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			String namespace = registeredCommand.namespace();
 			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
 
-			registerCommand(root, name, permNode, namespace, resultantNode);
+			registerCommand(knownCommands, root, name, permNode, namespace, resultantNode);
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
-				registerCommand(root, node.getLiteral(), permNode, namespace, node);
+				registerCommand(knownCommands, root, node.getLiteral(), permNode, namespace, node);
+			}
+
+			Collection<CommandNode<Source>> minecraftNamespacesToFix = minecraftCommandNamespaces.getChildren();
+			if (!minecraftNamespacesToFix.isEmpty()) {
+				// Adding new `minecraft` namespace nodes to the Brigadier dispatcher
+				//  usually happens in `CommandAPIBukkit#fixNamespaces`.
+				// Note that the previous calls to `CommandAPIBukkit#registerCommand` in this method
+				//  will have already dealt with adding the nodes here to the resources dispatcher.
+				// We also have to set the permission to simulate the result of `CommandAPIBukkit#fixPermissions`.
+				RootCommandNode<Source> brigadierRootNode = getBrigadierDispatcher().getRoot();
+				for (CommandNode<Source> node : minecraftNamespacesToFix) {
+					Command minecraftNamespaceCommand = wrapToVanillaCommandWrapper(node);
+					knownCommands.put(node.getName(), minecraftNamespaceCommand);
+					minecraftNamespaceCommand.setPermission(permNode);
+					brigadierRootNode.addChild(node);
+				}
+				minecraftCommandNamespaces = new RootCommandNode<>();
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
@@ -527,19 +546,38 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private void registerCommand(RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
+	private void registerCommand(Map<String, Command> knownCommands, RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
 		// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
 		// in `CraftServer#setVanillaCommands`
 		Command command = wrapToVanillaCommandWrapper(resultantNode);
+		knownCommands.putIfAbsent(name, command);
 
-		// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
+		// Adding permissions to these Commands usually happens in `CommandAPIBukkit#fixPermissions`
 		command.setPermission(permNode);
 
 		// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
 		root.addChild(resultantNode);
-		root.addChild(CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace));
 
-		paper.getCommandMap().register(name, namespace, command);
+		// Handle namespaces
+		if (namespace.equals("minecraft")) {
+			// The minecraft namespace version should be registered as a straight alias of the original command, since
+			//  the `minecraft:name` node does not exist in the Brigadier dispatcher, which is referenced by
+			//  VanillaCommandWrapper (note this is not true if there is a command conflict, but
+			//  `CommandAPIBukkit#postCommandRegistration` will deal with this later using `minecraftCommandNamespaces`).
+			knownCommands.putIfAbsent("minecraft:" + name, command);
+
+			// Still make sure to add a node to the resources dispatcher
+			root.addChild(CommandAPIHandler.getInstance().namespaceNode(resultantNode, "minecraft"));
+		} else {
+			// A custom namespace should be registered like a separate command, so that it can reference the namespaced
+			//  node, rather than the original unnamespaced node
+			LiteralCommandNode<Source> namespacedNode = CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace);
+
+			Command namespacedCommand = wrapToVanillaCommandWrapper(namespacedNode);
+			knownCommands.putIfAbsent(namespacedCommand.getName(), namespacedCommand);
+			namespacedCommand.setPermission(permNode);
+			root.addChild(namespacedNode);
+		}
 	}
 
 	@Override

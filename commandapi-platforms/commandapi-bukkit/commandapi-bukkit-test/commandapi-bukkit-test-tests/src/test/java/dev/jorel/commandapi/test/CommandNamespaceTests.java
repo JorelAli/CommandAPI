@@ -25,7 +25,6 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -108,61 +107,6 @@ public class CommandNamespaceTests extends TestBase {
 	/*********
 	 * Tests *
 	 *********/
-
-	@Disabled
-	@ParameterizedTest
-	@ValueSource(booleans = {false, true})
-	public void testSameCommandNameWithDefaultNamespaceAndCustomNamespace(boolean enableBeforeRegistering) {
-		// TODO: This apparently fails
-		Mut<String> results = Mut.of();
-
-		Player player = null;
-		if (enableBeforeRegistering) {
-			player = enableWithNamespaces();
-		}
-
-		CommandAPICommand defaultNamespace = new CommandAPICommand("test")
-			.withArguments(LiteralArgument.of("a"))
-			.executesPlayer(info -> {
-				results.set("a");
-			});
-
-		CommandAPICommand customNamespace = new CommandAPICommand("test")
-			.withArguments(LiteralArgument.of("b"))
-			.executesPlayer(info -> {
-				results.set("b");
-			});
-
-		defaultNamespace.register();
-		customNamespace.register("custom");
-
-		if (!enableBeforeRegistering) {
-			player = enableWithNamespaces();
-		}
-
-		RootCommandNode<Object> root = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
-		assertNotNull(root.getChild("test"));
-		assertNotNull(root.getChild("custom:test"));
-		assertNull(root.getChild("minecraft:test"));
-
-		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
-		assertNotNull(commandMap.getCommand("test"));
-		assertNotNull(commandMap.getCommand("minecraft:test"));
-		assertNotNull(commandMap.getCommand("custom:test"));
-		assertNull(commandMap.getCommand("minecraft:custom:test"));
-
-		assertStoresResult(player, "test a", results, "a");
-		assertStoresResult(player, "test b", results, "b");
-		assertStoresResult(player, "minecraft:test a", results, "a");
-		assertStoresResult(player, "custom:test b", results, "b");
-
-		assertCommandFailsWith(player, "custom:test a", "");
-		assertCommandFailsWith(player, "minecraft:test b", "");
-
-		assertNoMoreResults(results);
-	}
-
-
 	@Test
 	public void testNullNamespaceWithCommandAPICommand() {
 		// Registering a command using null should fail
@@ -212,7 +156,7 @@ public class CommandNamespaceTests extends TestBase {
 		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
 		assertNotNull(rootNode.getChild("test"));
 		// Unlike custom namespaces, the minecraft namespace should NOT appear in the Brigadier dispatcher
-		//  `minecraft:test` is only created when moved to Bukkit's CommandMap
+		//  `minecraft:test` is only created when moved to Bukkit's CommandMap, or if there is a command conflict
 		assertNull(rootNode.getChild("minecraft:test"));
 
 		// Check contents of Bukkit CommandMap
@@ -352,7 +296,7 @@ public class CommandNamespaceTests extends TestBase {
 		// Check contents of Brigadier CommandDispatcher
 		RootCommandNode<Object> rootNode = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
 		assertNotNull(rootNode.getChild("test"));
-		// `minecraft` namespace is only created in the CommandMap
+		// `minecraft` namespace is only created in the CommandMap since there is no command conflict
 		assertNull(rootNode.getChild("minecraft:test"));
 		assertNotNull(rootNode.getChild("alpha"));
 		assertNull(rootNode.getChild("minecraft:alpha"));
@@ -590,6 +534,68 @@ public class CommandNamespaceTests extends TestBase {
 			() -> server.dispatchThrowableBrigadierCommand(player, "b:test a")
 		);
 		assertStoresResult(player, "b:test b", results, "b");
+
+		assertNoMoreResults(results);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	public void testSameCommandNameConflictWithDefaultNamespaceAndCustomNamespace(boolean enableBeforeRegistering) {
+		Mut<String> results = Mut.of();
+
+		Player tempPlayer = null;
+		if (enableBeforeRegistering) {
+			tempPlayer = enableWithNamespaces();
+		}
+
+		CommandAPICommand defaultNamespace = new CommandAPICommand("test")
+			.withArguments(LiteralArgument.of("a"))
+			.executesPlayer(info -> {
+				results.set("a");
+			});
+
+		CommandAPICommand customNamespace = new CommandAPICommand("test")
+			.withArguments(LiteralArgument.of("b"))
+			.executesPlayer(info -> {
+				results.set("b");
+			});
+
+		defaultNamespace.register();
+		customNamespace.register("custom");
+
+		if (!enableBeforeRegistering) {
+			tempPlayer = enableWithNamespaces();
+		}
+		final Player player = tempPlayer;
+
+		RootCommandNode<Object> root = MockPlatform.getInstance().getBrigadierDispatcher().getRoot();
+		assertNotNull(root.getChild("test"));
+		assertNotNull(root.getChild("custom:test"));
+		// The `minecraft:test` node should exist in the Brigadier map so the `minecraft:test` VanillaCommandWrapper
+		//  can properly execute the command separately from the `custom:test` b branch
+		assertNotNull(root.getChild("minecraft:test"));
+
+		CommandMap commandMap = MockPlatform.getInstance().getSimpleCommandMap();
+		assertNotNull(commandMap.getCommand("test"));
+		assertNotNull(commandMap.getCommand("minecraft:test"));
+		assertNotNull(commandMap.getCommand("custom:test"));
+		assertNull(commandMap.getCommand("minecraft:custom:test"));
+
+		assertStoresResult(player, "test a", results, "a");
+		assertStoresResult(player, "test b", results, "b");
+		assertStoresResult(player, "minecraft:test a", results, "a");
+		assertStoresResult(player, "custom:test b", results, "b");
+
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			"Incorrect argument for command at position 12: ...stom:test <--[HERE]",
+			() -> server.dispatchThrowableBrigadierCommand(player, "custom:test a")
+		);
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			"Incorrect argument for command at position 15: ...raft:test <--[HERE]",
+			() -> server.dispatchThrowableBrigadierCommand(player, "minecraft:test b")
+		);
 
 		assertNoMoreResults(results);
 	}
@@ -929,8 +935,7 @@ public class CommandNamespaceTests extends TestBase {
 		assertPermissionCheckFails(player, "test first");
 		assertPermissionCheckFails(player, "test second");
 		assertPermissionCheckFails(player, "first:test first");
-		// TODO: This assertion should work no matter when commands are registered
-		if(!enableBeforeRegistering) assertStoresResult(player, "second:test second", commandRan, "second");
+		assertStoresResult(player, "second:test second", commandRan, "second");
 
 		// All permissions allows all commands
 		permissions.setPermission("first", true);
