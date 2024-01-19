@@ -416,33 +416,6 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
-	/*
-	 * ADVENTURE START
-	 * These methods use the Adventure API, but the Adventure API isn't present
-	 * in paper until Minecraft 1.16.5. We assume that the developer is shading
-	 * Adventure manually (or otherwise), using https://docs.advntr.dev/platform/bukkit.html
-	 */
-
-	@Override
-	public final Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public final NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		final Integer color = ArgumentChatFormat.a(cmdCtx, key).e();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.ofExact(color);
-	}
-
-	@Override
-	public final Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
-	}
-
-	/*
-	 * ADVENTURE END
-	 */
-
 	@Override
 	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) { return ArgumentAngle.a(cmdCtx, key); }
 
@@ -487,21 +460,6 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	@Override
 	public BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
-	}
-
-	@Override
-	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return CraftChatMessage.getColor(ArgumentChatFormat.a(cmdCtx, key));
-	}
-
-	@Override
-	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 
 	@Override
@@ -988,15 +946,4 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 		}
 	}
 
-	@Override
-	public CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy() {
-		return new SpigotCommandRegistration<>(
-			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a(),
-			(SimpleCommandMap) getPaper().getCommandMap(),
-			() -> this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(),
-			command -> command instanceof VanillaCommandWrapper,
-			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
-			node -> node.getCommand() instanceof BukkitCommandWrapper
-		);
-	}
 }

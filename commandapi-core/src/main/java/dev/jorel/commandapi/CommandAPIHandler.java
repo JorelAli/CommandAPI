@@ -927,21 +927,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 	}
 
-	/**
-	 * 
-	 * @param path a list of Strings representing the path (names of command nodes)
-	 *             to (and including) the previewable argument
-	 * @return Whether a previewable is legacy (non-Adventure) or not
-	 */
-	public boolean lookupPreviewableLegacyStatus(List<String> path) {
-		final Previewable<?, ?> previewable = previewableArguments.get(path);
-		if (previewable != null && previewable.getPreview().isPresent()) {
-			return previewable.isLegacy();
-		} else {
-			return true;
-		}
-	}
-
 	/////////////////////////
 	// SECTION: Reflection //
 	/////////////////////////

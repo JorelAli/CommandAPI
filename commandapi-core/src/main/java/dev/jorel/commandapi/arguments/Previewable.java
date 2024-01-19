@@ -43,9 +43,4 @@ extends AbstractArgument<?, ?, ?, ?>
 	 */
 	public T usePreview(boolean usePreview);
 
-	/**
-	 * @return whether this argument uses legacy chat component APIs
-	 */
-	public boolean isLegacy();
-
 }

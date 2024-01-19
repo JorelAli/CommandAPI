@@ -20,16 +20,8 @@
 		<!-- NMS versions -->
 		<module>commandapi-bukkit-nms</module>
 
-		<!-- Version selectors -->
-		<module>commandapi-bukkit-vh</module>
-		<module>commandapi-bukkit-mojang-mapped</module>
-
-		<!-- Outputs -->
-		<module>commandapi-bukkit-plugin</module>
+		<!-- Tests do not compile at this time. This is a big todo
 		<module>commandapi-bukkit-test</module>
-		<module>commandapi-bukkit-shade</module>
-		
-		<module>commandapi-bukkit-plugin-mojang-mapped</module>
-		<module>commandapi-bukkit-shade-mojang-mapped</module>
+		<module>../../commandapi-test/commandapi-test-bukkit</module>-->
 	</modules>
 </project>

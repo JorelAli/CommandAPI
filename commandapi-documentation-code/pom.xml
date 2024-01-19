@@ -60,12 +60,17 @@
 		<!-- CommandAPI -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-core</artifactId>
+			<artifactId>commandapi-paper-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-kotlin</artifactId>
+			<artifactId>commandapi-spigot-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-kotlin-bukkit</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

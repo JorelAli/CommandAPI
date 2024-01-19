@@ -41,13 +41,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		
-		<!-- Code coverage the tests -->
+		<!-- Code coverage the tests
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-test-tests</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 		
 		<!-- From commandapi-bukkit-nms-dependency-mojang-mapped -->
 		

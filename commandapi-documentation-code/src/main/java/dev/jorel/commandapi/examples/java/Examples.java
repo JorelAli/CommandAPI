@@ -28,33 +28,105 @@ import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import dev.jorel.commandapi.*;
-import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.Brigadier;
+import dev.jorel.commandapi.BukkitTooltip;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandPermission;
+import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.Converter;
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.arguments.AdvancementArgument;
+import dev.jorel.commandapi.arguments.AngleArgument;
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.BiomeArgument;
+import dev.jorel.commandapi.arguments.BlockPredicateArgument;
+import dev.jorel.commandapi.arguments.BlockStateArgument;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.CommandArgument;
+import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
+import dev.jorel.commandapi.arguments.DoubleArgument;
+import dev.jorel.commandapi.arguments.EnchantmentArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
+import dev.jorel.commandapi.arguments.EntityTypeArgument;
+import dev.jorel.commandapi.arguments.FunctionArgument;
+import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.IntegerRangeArgument;
+import dev.jorel.commandapi.arguments.ItemStackArgument;
+import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
+import dev.jorel.commandapi.arguments.ListArgumentBuilder;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
+import dev.jorel.commandapi.arguments.LocationType;
+import dev.jorel.commandapi.arguments.LootTableArgument;
+import dev.jorel.commandapi.arguments.MapArgumentBuilder;
+import dev.jorel.commandapi.arguments.MathOperationArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.ObjectiveArgument;
+import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
+import dev.jorel.commandapi.arguments.ParticleArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.PotionEffectArgument;
+import dev.jorel.commandapi.arguments.RecipeArgument;
+import dev.jorel.commandapi.arguments.RotationArgument;
+import dev.jorel.commandapi.arguments.SafeSuggestions;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
+import dev.jorel.commandapi.arguments.SoundArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.SuggestionsBranch;
+import dev.jorel.commandapi.arguments.TeamArgument;
+import dev.jorel.commandapi.arguments.TextArgument;
+import dev.jorel.commandapi.arguments.TimeArgument;
+import dev.jorel.commandapi.arguments.WorldArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutorType;
+import dev.jorel.commandapi.wrappers.CommandResult;
+import dev.jorel.commandapi.wrappers.FunctionWrapper;
+import dev.jorel.commandapi.wrappers.IntegerRange;
+import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
-import dev.jorel.commandapi.wrappers.*;
-import net.kyori.adventure.inventory.Book;
+import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
-import org.bukkit.block.*;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
 import org.bukkit.help.HelpTopic;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ComplexRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -75,8 +147,17 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
@@ -232,96 +313,6 @@ new CommandAPICommand("set")
     })
     .register();
 /* ANCHOR_END: argumentBlockState1 */
-}
-
-void argument_chatAdventure() {
-/* ANCHOR: argumentChatAdventure1 */
-new CommandAPICommand("namecolor")
-    .withArguments(new AdventureChatColorArgument("chatcolor"))
-    .executesPlayer((player, args) -> {
-        NamedTextColor color = (NamedTextColor) args.get("chatcolor");
-        player.displayName(Component.text().color(color).append(Component.text(player.getName())).build());
-    })
-    .register();
-/* ANCHOR_END: argumentChatAdventure1 */
-
-/* ANCHOR: argumentChatAdventure2 */
-new CommandAPICommand("showbook")
-    .withArguments(new PlayerArgument("target"))
-    .withArguments(new TextArgument("title"))
-    .withArguments(new StringArgument("author"))
-    .withArguments(new AdventureChatComponentArgument("contents"))
-    .executes((sender, args) -> {
-        Player target = (Player) args.get("target");
-        String title = (String) args.get("title");
-        String author = (String) args.get("author");
-        Component content = (Component) args.get("contents");
-        
-        // Create a book and show it to the user (Requires Paper)
-        Book mybook = Book.book(Component.text(title), Component.text(author), content);
-        target.openBook(mybook);
-    })
-    .register();
-/* ANCHOR_END: argumentChatAdventure2 */
-
-/* ANCHOR: argumentChatAdventure3 */
-new CommandAPICommand("pbroadcast")
-    .withArguments(new AdventureChatArgument("message"))
-    .executes((sender, args) -> {
-        Component message = (Component) args.get("message");
-        
-        // Broadcast the message to everyone with broadcast permissions.
-        Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS);
-        Bukkit.getServer().broadcast(message);
-    })
-    .register();
-/* ANCHOR_END: argumentChatAdventure3 */
-}
-
-void argument_chatSpigot() {
-/* ANCHOR: argumentChatSpigot1 */
-new CommandAPICommand("namecolor")
-    .withArguments(new ChatColorArgument("chatcolor"))
-    .executesPlayer((player, args) -> {
-        ChatColor color = (ChatColor) args.get("chatcolor");
-        player.setDisplayName(color + player.getName());
-    })
-    .register();
-/* ANCHOR_END: argumentChatSpigot1 */
-
-/* ANCHOR: argumentChatSpigot2 */
-new CommandAPICommand("makebook")
-    .withArguments(new PlayerArgument("player"))
-    .withArguments(new ChatComponentArgument("contents"))
-    .executes((sender, args) -> {
-        Player player = (Player) args.get("player");
-        BaseComponent[] arr = (BaseComponent[]) args.get("contents");
-        
-        // Create book
-        ItemStack is = new ItemStack(Material.WRITTEN_BOOK);
-        BookMeta meta = (BookMeta) is.getItemMeta(); 
-        meta.setTitle("Custom Book");
-        meta.setAuthor(player.getName());
-        meta.spigot().setPages(arr);
-        is.setItemMeta(meta);
-        
-        // Give player the book
-        player.getInventory().addItem(is);
-    })
-    .register();
-/* ANCHOR_END: argumentChatSpigot2 */
-
-/* ANCHOR: argumentChatSpigot3 */
-new CommandAPICommand("pbroadcast")
-    .withArguments(new ChatArgument("message"))
-    .executes((sender, args) -> {
-        BaseComponent[] message = (BaseComponent[]) args.get("message");
-    
-        // Broadcast the message to everyone on the server
-        Bukkit.getServer().spigot().broadcast(message);
-    })
-    .register();
-/* ANCHOR_END: argumentChatSpigot3 */
 }
 
 void argument_command() {
@@ -738,30 +729,6 @@ new CommandAPICommand("gamemode")
     }) 
     .register();
 /* ANCHOR_END: argumentMultiLiteral1 */
-}
-
-class argument_nbt extends JavaPlugin {
-/* ANCHOR: argumentNBT1 */
-@Override
-public void onLoad() {
-    CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
-        .initializeNBTAPI(NBTContainer.class, NBTContainer::new)
-    );
-}
-/* ANCHOR_END: argumentNBT1 */
-
-void argument_nbt2() {
-/* ANCHOR: argumentNBT2 */
-new CommandAPICommand("award")
-    .withArguments(new NBTCompoundArgument<NBTContainer>("nbt"))
-    .executes((sender, args) -> {
-        NBTContainer nbt = (NBTContainer) args.get("nbt");
-        
-        // Do something with "nbt" here...
-    })
-    .register();
-/* ANCHOR_END: argumentNBT2 */
-}
 }
 
 void argument_objectives() {
@@ -1291,74 +1258,6 @@ new CommandAPICommand("commandargument")
         Bukkit.dispatchCommand(sender, (String) args.get("command"));
     }).register();
 /* ANCHOR_END: brigadierSuggestions3 */
-}
-
-void chatPreview() {
-/* ANCHOR: chatPreview1 */
-new CommandAPICommand("broadcast")
-    .withArguments(new ChatArgument("message").withPreview(info -> {
-        // Convert parsed BaseComponent[] to plain text
-        String plainText = BaseComponent.toPlainText(info.parsedInput());
-
-        // Translate the & in plain text and generate a new BaseComponent[]
-        return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText));
-    }))
-    .executesPlayer((player, args) -> {
-        // The user still entered legacy text. We need to properly convert this
-        // to a BaseComponent[] by converting to plain text then to BaseComponent[]
-        String plainText = BaseComponent.toPlainText((BaseComponent[]) args.get("message"));
-        Bukkit.spigot().broadcast(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText)));
-    })
-    .register();
-/* ANCHOR_END: chatPreview1 */
-
-/* ANCHOR: chatPreview2 */
-new CommandAPICommand("broadcast")
-    .withArguments(new AdventureChatArgument("message").withPreview(info -> {
-        // Convert parsed Component to plain text
-        String plainText = PlainTextComponentSerializer.plainText().serialize(info.parsedInput());
-
-        // Translate the & in plain text and generate a new Component
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(plainText);
-    }))
-    .executesPlayer((player, args) -> {
-        // The user still entered legacy text. We need to properly convert this
-        // to a Component by converting to plain text then to Component
-        String plainText = PlainTextComponentSerializer.plainText().serialize((Component) args.get("broadcast"));
-        Bukkit.broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(plainText));
-    })
-    .register();
-/* ANCHOR_END: chatPreview2 */
-
-/* ANCHOR: chatPreview3 */
-new CommandAPICommand("broadcast")
-    .withArguments(new ChatArgument("message").usePreview(true).withPreview(info -> {
-        // Convert parsed BaseComponent[] to plain text
-        String plainText = BaseComponent.toPlainText(info.parsedInput());
-
-        // Translate the & in plain text and generate a new BaseComponent[]
-        return TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText));
-    }))
-    .executesPlayer((player, args) -> {
-        Bukkit.spigot().broadcast((BaseComponent[]) args.get("message"));
-    })
-    .register();
-/* ANCHOR_END: chatPreview3 */
-
-/* ANCHOR: chatPreview4 */
-new CommandAPICommand("broadcast")
-    .withArguments(new AdventureChatArgument("message").usePreview(true).withPreview(info -> {
-        // Convert parsed Component to plain text
-        String plainText = PlainTextComponentSerializer.plainText().serialize(info.parsedInput());
-
-        // Translate the & in plain text and generate a new Component
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(plainText);
-    }))
-    .executesPlayer((player, args) -> {
-        Bukkit.broadcast((Component) args.get("message"));
-    })
-    .register();
-/* ANCHOR_END: chatPreview4 */
 }
 
 void commandArguments() {
@@ -2322,45 +2221,6 @@ new CommandAPICommand("removeeffect")
     })
     .register();
 /* ANCHOR_END: safeArgumentSuggestions7 */
-}
-
-class setupShading {
-JavaPlugin plugin = new JavaPlugin() {};
-
-{
-/* ANCHOR: setupShading1 */
-CommandAPI.onLoad(new CommandAPIBukkitConfig(plugin).silentLogs(true));
-/* ANCHOR_END: setupShading1 */
-}
-
-/* ANCHOR: setupShading2 */
-class MyPlugin extends JavaPlugin {
-
-    @Override
-    public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true)); // Load with verbose output
-        
-        new CommandAPICommand("ping")
-            .executes((sender, args) -> {
-                sender.sendMessage("pong!");
-            })
-            .register();
-    }
-    
-    @Override
-    public void onEnable() {
-        CommandAPI.onEnable();
-        
-        // Register commands, listeners etc.
-    }
-    
-    @Override
-    public void onDisable() {
-        CommandAPI.onDisable();
-    }
-
-}
-/* ANCHOR_END: setupShading2 */
 }
 
 class stringArgumentSuggestions {
