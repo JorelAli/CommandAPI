@@ -49,12 +49,4 @@ public class NMS_1_19_R1 extends NMS_1_19_Common {
 		return new String[] { "1.19" };
 	}
 
-	@Override
-	public void hookChatPreview(Plugin plugin, Player player) {
-		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
-			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_R1_ChatPreviewHandler(this, plugin, player));
-		}
-	}
-
 }
