@@ -14,16 +14,10 @@ import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException
 import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException
 import dev.jorel.commandapi.executors.*
-import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import dev.jorel.commandapi.kotlindsl.getValue
-import dev.jorel.commandapi.kotlindsl.playerArgument
-import dev.jorel.commandapi.kotlindsl.playerExecutor
-import dev.jorel.commandapi.kotlindsl.stringArgument
 import dev.jorel.commandapi.wrappers.*
 import dev.jorel.commandapi.wrappers.Rotation
-import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.md_5.bungee.api.chat.BaseComponent
@@ -57,8 +51,6 @@ import org.bukkit.util.EulerAngle
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Predicate
-import java.util.function.Supplier
-import kotlin.collections.LinkedHashMap
 import kotlin.random.Random
 
 class Examples : JavaPlugin() {
@@ -186,96 +178,6 @@ CommandAPICommand("set")
     })
     .register()
 /* ANCHOR_END: argumentBlockState1 */
-}
-
-fun argument_chatAdventure() {
-/* ANCHOR: argumentChatAdventure1 */
-CommandAPICommand("namecolor")
-    .withArguments(AdventureChatColorArgument("chatcolor"))
-    .executesPlayer(PlayerCommandExecutor { player, args ->
-        val color = args["chatcolor"] as NamedTextColor
-        player.displayName(Component.text().color(color).append(Component.text(player.name)).build())
-    })
-    .register()
-/* ANCHOR_END: argumentChatAdventure1 */
-
-/* ANCHOR: argumentChatAdventure2 */
-CommandAPICommand("showbook")
-    .withArguments(PlayerArgument("target"))
-    .withArguments(TextArgument("title"))
-    .withArguments(StringArgument("author"))
-    .withArguments(AdventureChatComponentArgument("contents"))
-    .executes(CommandExecutor { _, args ->
-        val target = args["target"] as Player
-        val title = args["title"] as String
-        val author = args["author"] as String
-        val content = args["contents"] as Component
-
-        // Create a book and show it to the user (Requires Paper)
-        val mybook = Book.book(Component.text(title), Component.text(author), content)
-        target.openBook(mybook)
-    })
-    .register()
-/* ANCHOR_END: argumentChatAdventure2 */
-
-/* ANCHOR: argumentChatAdventure3 */
-CommandAPICommand("pbroadcast")
-    .withArguments(AdventureChatArgument("message"))
-    .executes(CommandExecutor { _, args ->
-        val message = args["message"] as Component
-
-        // Broadcast the message to everyone with broadcast permissions.
-        Bukkit.getServer().broadcast(message, Server.BROADCAST_CHANNEL_USERS)
-        Bukkit.getServer().broadcast(message)
-    })
-    .register()
-/* ANCHOR_END: argumentChatAdventure3 */
-}
-
-fun argument_chatSpigot() {
-/* ANCHOR: argumentChatSpigot1 */
-CommandAPICommand("namecolor")
-    .withArguments(ChatColorArgument("chatColor"))
-    .executesPlayer(PlayerCommandExecutor { player, args ->
-        val color = args["chatColor"] as ChatColor
-        player.setDisplayName("$color${player.name}")
-    })
-    .register()
-/* ANCHOR_END: argumentChatSpigot1 */
-
-/* ANCHOR: argumentChatSpigot2 */
-CommandAPICommand("makebook")
-    .withArguments(PlayerArgument("player"))
-    .withArguments(ChatComponentArgument("contents"))
-    .executes(CommandExecutor { _, args ->
-        val player = args["player"] as Player
-        val arr = args["contents"] as Array<BaseComponent>
-
-        // Create book
-        val item = ItemStack(Material.WRITTEN_BOOK)
-        val meta = item.itemMeta as BookMeta
-        meta.title = "Custom Book"
-        meta.author = player.name
-        meta.spigot().setPages(arr)
-        item.itemMeta = meta
-
-        // Give player the book
-        player.inventory.addItem(item)
-    })
-    .register()
-/* ANCHOR_END: argumentChatSpigot2 */
-
-/* ANCHOR: argumentChatSpigot3 */
-CommandAPICommand("pbroadcast")
-    .withArguments(ChatArgument("message"))
-    .executes(CommandExecutor { _, args ->
-        val message = args["message"] as Array<BaseComponent>
-
-        // Broadcast the message to everyone on the server
-        Bukkit.getServer().spigot().broadcast(*message)
-    })
-    .register()
-/* ANCHOR_END: argumentChatSpigot3 */
 }
 
 fun argument_command() {
@@ -672,31 +574,6 @@ CommandAPICommand("gamemode")
     })
     .register()
 /* ANCHOR_END: argumentMultiLiteral1 */
-}
-
-class argument_nbt : JavaPlugin() {
-
-/* ANCHOR: argumentNBT1 */
-override fun onLoad() {
-    CommandAPI.onLoad(CommandAPIBukkitConfig(this)
-        .initializeNBTAPI(NBTContainer::class.java, ::NBTContainer)
-    )
-}
-/* ANCHOR_END: argumentNBT1 */
-
-fun argument_nbt2() {
-/* ANCHOR: argumentNBT2 */
-CommandAPICommand("award")
-    .withArguments(NBTCompoundArgument<NBTContainer>("nbt"))
-    .executes(CommandExecutor { _, args ->
-        val nbt = args["nbt"] as NBTContainer
-
-        // Do something with "nbt" here...
-    })
-    .register()
-/* ANCHOR_END: argumentNBT2 */
-}
-
 }
 
 fun argument_objectives() {
@@ -1211,75 +1088,6 @@ CommandAPICommand("commandargument")
     })
     .register()
 /* ANCHOR_END: brigadierSuggestions3 */
-}
-
-fun chatPreview() {
-/* ANCHOR: chatPreview1 */
-CommandAPICommand("broadcast")
-    .withArguments(ChatArgument("message").withPreview { info ->
-        // Convert parsed BaseComponent[] to plain text
-        val plainText: String = BaseComponent.toPlainText(*info.parsedInput() as Array<BaseComponent>)
-
-        // Translate the & in plain text and generate a new BaseComponent[]
-        TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
-    } )
-    .executesPlayer(PlayerCommandExecutor { _, args ->
-        // The user still entered legacy text. We need to properly convert this
-        // to a BaseComponent[] by converting to plain text then to BaseComponent[]
-        val plainText: String = BaseComponent.toPlainText(*args["message"] as Array<BaseComponent>)
-        val baseComponents: Array<BaseComponent> = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
-        Bukkit.spigot().broadcast(*baseComponents)
-    })
-    .register()
-/* ANCHOR_END: chatPreview1 */
-
-/* ANCHOR: chatPreview2 */
-CommandAPICommand("broadcast")
-    .withArguments(AdventureChatArgument("message").withPreview { info ->
-        // Convert parsed Component to plain text
-        val plainText: String = PlainTextComponentSerializer.plainText().serialize(info.parsedInput() as Component)
-
-        // Translate the & in plain text and generate a new Component
-        LegacyComponentSerializer.legacyAmpersand().deserialize(plainText)
-    } )
-    .executesPlayer(PlayerCommandExecutor { _, args ->
-        // The user still entered legacy text. We need to properly convert this
-        // to a Component by converting to plain text then to Component
-        val plainText: String = PlainTextComponentSerializer.plainText().serialize(args["message"] as Component)
-        Bukkit.broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(plainText))
-    })
-    .register()
-/* ANCHOR_END: chatPreview2 */
-
-/* ANCHOR: chatPreview3 */
-CommandAPICommand("broadcast")
-    .withArguments(ChatArgument("message").usePreview(true).withPreview { info ->
-        // Convert parsed BaseComponent[] to plain text
-        val plainText = BaseComponent.toPlainText(*info.parsedInput() as Array<BaseComponent>)
-
-        // Translate the & in plain text and generate a new BaseComponent[]
-        TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plainText))
-    } )
-    .executesPlayer(PlayerCommandExecutor { _, args ->
-        Bukkit.spigot().broadcast(*args["message"] as Array<BaseComponent>)
-    })
-    .register()
-/* ANCHOR_END: chatPreview3 */
-
-/* ANCHOR: chatPreview4 */
-CommandAPICommand("broadcast")
-    .withArguments(AdventureChatArgument("message").usePreview(true).withPreview { info ->
-        // Convert parsed Component to plain text
-        val plainText = PlainTextComponentSerializer.plainText().serialize(info.parsedInput() as Component)
-
-        // Translate the & in plain text and generate a new Component
-        LegacyComponentSerializer.legacyAmpersand().deserialize(plainText)
-    } )
-    .executesPlayer(PlayerCommandExecutor { _, args ->
-        Bukkit.broadcast(args["message"] as Component)
-    })
-    .register()
-/* ANCHOR_END: chatPreview4 */
 }
 
 fun commandArguments() {
@@ -2218,42 +2026,6 @@ CommandAPICommand("removeeffect")
     })
     .register()
 /* ANCHOR_END: safeArgumentSuggestions7 */
-}
-
-class setupShading {
-val plugin: JavaPlugin = object: JavaPlugin() {}
-
-fun setupShading1() {
-/* ANCHOR: setupShading1 */
-CommandAPI.onLoad(CommandAPIBukkitConfig(plugin).silentLogs(true))
-/* ANCHOR_END: setupShading1 */
-}
-
-/* ANCHOR: setupShading2 */
-class MyPlugin : JavaPlugin() {
-
-    override fun onLoad() {
-        CommandAPI.onLoad(CommandAPIBukkitConfig(this).verboseOutput(true)) // Load with verbose output
-
-        CommandAPICommand("ping")
-            .executes(CommandExecutor { sender, _ ->
-                sender.sendMessage("pong!")
-            })
-            .register()
-    }
-
-    override fun onEnable() {
-        CommandAPI.onEnable()
-
-        // Register commands, listeners etc.
-    }
-
-    override fun onDisable() {
-        CommandAPI.onDisable()
-    }
-
-}
-/* ANCHOR_END: setupShading2 */
 }
 
 class stringArgumentSuggestions {
