@@ -9,7 +9,6 @@ import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SafeVarHandle;
@@ -259,7 +258,7 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
 		return baseNMS.wrapToVanillaCommandWrapper(node);
 	}
 

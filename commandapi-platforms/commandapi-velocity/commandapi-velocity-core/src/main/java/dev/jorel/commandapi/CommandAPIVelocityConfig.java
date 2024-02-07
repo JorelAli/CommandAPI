@@ -16,6 +16,19 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 	 */
 	public CommandAPIVelocityConfig(ProxyServer server) {
 		this.server = server;
+		super.setNamespace("");
+	}
+
+	@Override
+	public CommandAPIVelocityConfig setNamespace(String namespace) {
+		if (namespace == null) {
+			throw new NullPointerException("Default namespace can't be null!");
+		}
+		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
+			CommandAPI.logNormal("Did not set namespace to the provided '" + namespace + "' namespace because only 0-9, a-z, underscores, periods and hyphens are allowed!");
+			return this;
+		}
+		return super.setNamespace(namespace);
 	}
 
 	@Override

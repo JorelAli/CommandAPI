@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -48,6 +49,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.arguments.AbstractArgument;
@@ -123,6 +125,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	final TreeMap<String, CommandPermission> registeredPermissions = new TreeMap<>();
 	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
+	static final Pattern NAMESPACE_PATTERN = Pattern.compile("[0-9a-z_.-]+");
 
 	private static CommandAPIHandler<?, ?, ?> instance;
 
@@ -343,15 +346,17 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param requirements An arbitrary additional check to perform on the CommandSender
 	 *                        after the permissions check
 	 */
-	Predicate<Source> generatePermissions(String commandName, CommandPermission permission,
-			Predicate<CommandSender> requirements) {
-		// If commandName was already registered, always use the first permission used
-		if (registeredPermissions.containsKey(commandName.toLowerCase())) {
-			if (!registeredPermissions.get(commandName.toLowerCase()).equals(permission)) {
-				permission = registeredPermissions.get(commandName.toLowerCase());
-			}
+	Predicate<Source> generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements, String namespace) {
+		// If namespace:commandName was already registered, always use the first permission used
+		String namespacedCommand = namespace.isEmpty()
+			? commandName.toLowerCase()
+			: namespace.toLowerCase() + ":" + commandName.toLowerCase();
+		if (registeredPermissions.containsKey(namespacedCommand)) {
+			permission = registeredPermissions.get(namespacedCommand);
 		} else {
-			registeredPermissions.put(commandName.toLowerCase(), permission);
+			registeredPermissions.put(namespacedCommand, permission);
+			// The first command to be registered determines the permission for the `commandName` version of the command
+			registeredPermissions.putIfAbsent(commandName.toLowerCase(), permission);
 		}
 
 		// Register permission to the platform's registry, if both exist
@@ -408,7 +413,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean expandMultiLiterals(CommandMetaData<CommandSender> meta, final Argument[] args,
-			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted, String namespace) {
 
 		// "Expands" our MultiLiterals into Literals
 		for (int index = 0; index < args.length; index++) {
@@ -432,7 +437,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 					// Reconstruct the list of arguments and place in the new literals
 					Argument[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
-					register(meta, newArgs, executor, converted);
+					register(meta, newArgs, executor, converted, namespace);
 				}
 				return true;
 			}
@@ -568,10 +573,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	// Builds a command then registers it
 	void register(CommandMetaData<CommandSender> meta, final Argument[] args,
-			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
-
+			CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted, String namespace) {
 		// "Expands" our MultiLiterals into Literals
-		if (expandMultiLiterals(meta, args, executor, converted)) {
+		if (expandMultiLiterals(meta, args, executor, converted, namespace)) {
 			return;
 		}
 
@@ -615,7 +619,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 		}
 		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, shortDescription,
-			fullDescription, usageDescription, aliases, permission);
+			fullDescription, usageDescription, aliases, permission, namespace);
 		registeredCommands.add(registeredCommandInformation);
 
 		// Handle previewable arguments
@@ -623,7 +627,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		platform.preCommandRegistration(commandName);
 
-		CommandAPI.logInfo("Registering command /" + commandName + " " + humanReadableCommandArgSyntax);
+		String namespacedCommandName = namespace.isEmpty() ? commandName : namespace +  ":" + commandName;
+		CommandAPI.logInfo("Registering command /" + namespacedCommandName + " " + humanReadableCommandArgSyntax);
 
 		// Generate the actual command
 		Command<Source> command = generateCommand(args, executor, converted);
@@ -639,24 +644,24 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		if (args.length == 0) {
 			// Link command name to the executor
 			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
-					.requires(generatePermissions(commandName, permission, requirements)).executes(command));
+				.requires(generatePermissions(commandName, permission, requirements, namespace)).executes(command), namespace);
 
 			// Register aliases
 			for (String alias : aliases) {
 				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permission, requirements)).executes(command)));
+					.requires(generatePermissions(alias, permission, requirements, namespace)).executes(command), namespace));
 			}
 		} else {
 
 			// Generate all of the arguments, following each other and finally linking to
 			// the executor
 			ArgumentBuilder<Source, ?> commandArguments = generateOuterArguments(
-					generateInnerArgument(command, args), args);
+				generateInnerArgument(command, args), args);
 
 			// Link command name to first argument and register
 			resultantNode = platform.registerCommandNode(getLiteralArgumentBuilder(commandName)
-					.requires(generatePermissions(commandName, permission, requirements)).then(commandArguments));
+				.requires(generatePermissions(commandName, permission, requirements, namespace)).then(commandArguments), namespace);
 
 			// Register aliases
 			for (String alias : aliases) {
@@ -665,7 +670,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				}
 
 				aliasNodes.add(platform.registerCommandNode(getLiteralArgumentBuilder(alias)
-						.requires(generatePermissions(alias, permission, requirements)).then(commandArguments)));
+					.requires(generatePermissions(alias, permission, requirements, namespace)).then(commandArguments), namespace));
 			}
 		}
 
@@ -685,7 +690,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes);
 	}
-	
+
 	/**
 	 * Checks for duplicate argument node names and logs them as errors in the
 	 * console
@@ -740,6 +745,23 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				CommandAPI.logError("Failed to write command registration info to " + file.getName() + ": " + e.getMessage());
 			}
 		}
+	}
+
+	<CommandSource> LiteralCommandNode<CommandSource> namespaceNode(LiteralCommandNode<CommandSource> original, String namespace) {
+		// Adapted from a section of `CraftServer#syncCommands`
+		LiteralCommandNode<CommandSource> clone = new LiteralCommandNode<>(
+			namespace + ":" + original.getLiteral(),
+			original.getCommand(),
+			original.getRequirement(),
+			original.getRedirect(),
+			original.getRedirectModifier(),
+			original.isFork()
+		);
+
+		for (CommandNode<CommandSource> child : original.getChildren()) {
+			clone.addChild(child);
+		}
+		return clone;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////

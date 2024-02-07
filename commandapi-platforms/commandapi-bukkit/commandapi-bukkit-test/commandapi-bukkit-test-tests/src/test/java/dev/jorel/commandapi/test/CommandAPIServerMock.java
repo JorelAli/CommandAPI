@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.isA;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
+import be.seeseemelk.mockbukkit.plugin.PluginManagerMock;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
@@ -18,6 +20,7 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemFactory;
+import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +34,17 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import dev.jorel.commandapi.Brigadier;
+import org.mockito.Mockito;
 
 public class CommandAPIServerMock extends ServerMock {
+	public CommandAPIServerMock() {
+		// The functionality of these methods is not important, but they shouldn't throw an `UnimplementedOperationException`
+		//  These methods are called indirectly when `CommandNamespaceTests#enableWithNamespaces` constructs a `PermissibleBase`
+		PluginManagerMock pluginManagerSpy = Mockito.spy(this.getPluginManager());
+		Mockito.doNothing().when(pluginManagerSpy).unsubscribeFromDefaultPerms(isA(Boolean.class), isA(Permissible.class));
+		Mockito.doNothing().when(pluginManagerSpy).subscribeToDefaultPerms(isA(Boolean.class), isA(Permissible.class));
+		MockPlatform.setField(ServerMock.class, "pluginManager", this, pluginManagerSpy);
+	}
 
 	@SuppressWarnings("unchecked")
 	public boolean dispatchThrowableCommand(CommandSender sender, String commandLine) throws CommandSyntaxException {
@@ -59,18 +71,22 @@ public class CommandAPIServerMock extends ServerMock {
 			return false;
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public int dispatchBrigadierCommand(CommandSender sender, String commandLine) {
 		try {
-			@SuppressWarnings("rawtypes")
-			CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
-			Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
-			return dispatcher.execute(commandLine, css);
+			return dispatchThrowableBrigadierCommand(sender, commandLine);
 		} catch (CommandSyntaxException e) {
-			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableCommand() instead.", e);
+			fail("Command '/" + commandLine + "' failed. If you expected this to fail, use dispatchThrowableBrigadierCommand() instead.", e);
 			return 0;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public int dispatchThrowableBrigadierCommand(CommandSender sender, String commandLine) throws CommandSyntaxException {
+		@SuppressWarnings("rawtypes")
+		CommandDispatcher dispatcher = Brigadier.getCommandDispatcher();
+		Object css = Brigadier.getBrigadierSourceFromCommandSender(sender);
+		return dispatcher.execute(commandLine, css);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

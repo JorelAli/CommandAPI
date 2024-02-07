@@ -129,7 +129,7 @@ public class CommandAPISponge extends CommandAPIPlatform<Argument<?>, Object, Ob
 	}
 
 	@Override
-	public LiteralCommandNode<Object> registerCommandNode(LiteralArgumentBuilder<Object> node) {
+	public LiteralCommandNode<Object> registerCommandNode(LiteralArgumentBuilder<Object> node, String namespace) {
 		return null;
 	}
 

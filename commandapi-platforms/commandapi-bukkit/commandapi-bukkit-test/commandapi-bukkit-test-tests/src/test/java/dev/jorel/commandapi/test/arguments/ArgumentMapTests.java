@@ -71,7 +71,7 @@ public class ArgumentMapTests extends TestBase {
 						.build()
 				)
 				.executesPlayer(P_EXEC);
-		assertDoesNotThrow(command::register);
+		assertDoesNotThrow(() -> command.register());
 
 		command.withArguments(new StringArgument("string"));
 		assertThrows(GreedyArgumentException.class, command::register);

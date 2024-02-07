@@ -85,7 +85,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
@@ -694,7 +693,7 @@ public class NMS_1_20_R2 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 

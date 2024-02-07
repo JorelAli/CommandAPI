@@ -49,7 +49,7 @@ class CommandRegistrationTests extends TestBase {
 			.withArguments(new GreedyStringArgument("arg2"))
 			.executesPlayer(P_EXEC);
 
-		assertDoesNotThrow(validGreedyCommand::register);
+		assertDoesNotThrow(() -> validGreedyCommand.register());
 
 		// Should throw, greedy argument is not at the end
 		CommandAPICommand invalidGreedyCommand = new CommandAPICommand("test")
@@ -76,7 +76,7 @@ class CommandRegistrationTests extends TestBase {
 					)
 			);
 
-		assertDoesNotThrow(validGreedyCommand::register);
+		assertDoesNotThrow(() -> validGreedyCommand.register());
 
 		// Should throw, greedy argument is not at the end
 		CommandTree invalidGreedyCommand = new CommandTree("test")
@@ -171,7 +171,7 @@ class CommandRegistrationTests extends TestBase {
 				)
 			);
 
-		assertDoesNotThrow(commandWithEventuallyRunnableSubcommand::register);
+		assertDoesNotThrow(() -> commandWithEventuallyRunnableSubcommand.register());
 	}
 
 	// TODO: This test does not succeed
@@ -211,7 +211,7 @@ class CommandRegistrationTests extends TestBase {
 				)
 			);
 
-		assertDoesNotThrow(commandWithEventuallyRunnableSubcommand::register);
+		assertDoesNotThrow(() -> commandWithEventuallyRunnableSubcommand.register());
 
 		// This command is not okay because some paths are not executable
 		CommandTree commandTreeWithSomeNotExecutablePaths = new CommandTree("test")

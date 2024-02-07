@@ -13,7 +13,6 @@ import java.util.stream.StreamSupport;
 
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.SafeVarHandle;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -276,7 +275,7 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node) {
+	public Command wrapToVanillaCommandWrapper(CommandNode<CommandListenerWrapper> node) {
 		return baseNMS.wrapToVanillaCommandWrapper(node);
 	}
 

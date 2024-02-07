@@ -5,9 +5,12 @@ package dev.jorel.commandapi.kotlindsl
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
 import org.bukkit.command.CommandSender
+import org.bukkit.plugin.java.JavaPlugin
 import java.util.function.Predicate
 
 inline fun commandAPICommand(name: String, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register()
+inline fun commandAPICommand(name: String, namespace: String, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register(namespace)
+inline fun commandAPICommand(name: String, namespace: JavaPlugin, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register(namespace)
 @Deprecated("This method has been deprecated since version 9.1.0 as it is not needed anymore. See the documentation for more information", ReplaceWith(""), DeprecationLevel.WARNING)
 inline fun commandAPICommand(name: String, predicate: Predicate<CommandSender>, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).withRequirement(predicate).apply(command).register()
 
