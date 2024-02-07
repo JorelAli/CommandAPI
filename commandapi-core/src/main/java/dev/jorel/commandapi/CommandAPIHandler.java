@@ -356,7 +356,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		} else {
 			registeredPermissions.put(namespacedCommand, permission);
 			// The first command to be registered determines the permission for the `commandName` version of the command
-			registeredPermissions.putIfAbsent(commandName, permission);
+			registeredPermissions.putIfAbsent(commandName.toLowerCase(), permission);
 		}
 
 		// Register permission to the platform's registry, if both exist
