@@ -2,7 +2,7 @@
 
 > **Developer's Note:**
 >
-> The CommandAPI hasn't been released for Velocity yet. 
+> The CommandAPI hasn't been released for Velocity yet.
 > We do, however, offer snapshot builds. This small section on Velocity will outline how to get the snapshot builds and what limitations the CommandAPI currently has on Velocity.
 
 ## Adding the snapshot repository with Maven or Gradle
