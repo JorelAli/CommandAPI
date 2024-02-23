@@ -5,6 +5,7 @@ import dev.jorel.commandapi.arguments.IntegerArgument;
 import net.kyori.adventure.text.Component;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Examples {
 
@@ -16,7 +17,7 @@ new CommandAPICommand("randomnumber")
     .executesPlayer((player, args) -> {
         int min = (int) args.get("min");
         int max = (int) args.get("max");
-        Random random = new Random();
+        Random random = ThreadLocalRandom.current();
         int randomNumber = random.nextInt(min, max);
         player.sendMessage(Component.text().content("Your random number is: " + randomNumber));
     })
