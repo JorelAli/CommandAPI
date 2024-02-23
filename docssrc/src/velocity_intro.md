@@ -1,8 +1,8 @@
 # Velocity
 
 > **Developer's Note:**
-> 
-> The CommandAPI hasn't been released for Velocity yet.
+>
+> The CommandAPI hasn't been released for Velocity yet. 
 > We do, however, offer snapshot builds. This small section on Velocity will outline how to get the snapshot builds and what limitations the CommandAPI currently has on Velocity.
 
 ## Adding the snapshot repository with Maven or Gradle
@@ -83,3 +83,33 @@ However, the CommandAPI offers access for the primitive type arguments:
 - [`GreedyStringArgument`](./argument_strings.md#greedy-string-argument)
 - [`LiteralArgument`](./argument_literal.md)
 - [`MultiLiteralArgument`](./argument_multiliteral.md)
+
+## Registering a simple command
+
+Command registration works the same way as it does in Bukkit. To visualize this, we want to register a simple command that registers a random number between a chosen minimum and a chosen maximum value:
+
+<div class="example">
+
+### Example - Registering a simple command
+
+We want to register the command `/randomnumber` with the following syntax:
+
+```mccmd
+/randomnumber <min> <max>
+```
+
+To accomplish that, we register the command like this:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-velocity-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:velocityIntro1}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-velocity-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:velocityIntro1}}
+```
+
+</div>
+
+</div>

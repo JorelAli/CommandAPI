@@ -9,3 +9,6 @@ indent_style = space
 
 [commandapi-documentation-code/**{.java,.kt}]
 indent_style = space
+
+[commandapi-documentation-velocity-code/**{.java,.kt}]
+indent_style = space
