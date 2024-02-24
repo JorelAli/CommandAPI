@@ -125,7 +125,7 @@ public class CommandPermission {
 		return (negated ? "not " : "") + result;
 	}
 
-	Optional<String> getPermission() {
+	public Optional<String> getPermission() {
 		return Optional.ofNullable(this.permission);
 	}
 
