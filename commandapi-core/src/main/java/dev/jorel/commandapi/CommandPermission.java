@@ -137,7 +137,7 @@ public class CommandPermission {
 	/**
 	 * Returns if the permission is negated
 	 * 
-	 * @return the permissions negation state
+	 * @return the permission's negation state
 	 */
 	public boolean isNegated() {
 		return this.negated;
