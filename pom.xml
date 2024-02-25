@@ -70,11 +70,11 @@
 
 		<!-- Documentation code -->
 		<module>commandapi-documentation-code</module>
-        <module>commandapi-documentation-velocity-code</module>
+		<module>commandapi-documentation-velocity-code</module>
 
 		<!-- Code coverage reports -->
 		<module>commandapi-codecov</module>
-    </modules>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
