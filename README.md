@@ -421,7 +421,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/issues/495 Adds a parameter to <code>EntitySelectorArgument</code> to allow failure when no entity lists are empty</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/367, https://github.com/JorelAli/CommandAPI/pull/509 Adds the ability to register commands with a custom namespace</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/523 Made the optional string permission in the <code>CommandPermission</code> public</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/523 Exposed more details of the <code>CommandPermission</code></li>
                 </ul>
             </td>
         </tr>
