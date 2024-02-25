@@ -86,7 +86,7 @@ However, the CommandAPI offers access for the primitive type arguments:
 
 ## Registering a simple command
 
-Command registration works the same way as it does in Bukkit. To visualize this, we want to register a simple command that registers a random number between a chosen minimum and a chosen maximum value:
+Command registration works the same way as it does in Bukkit. To visualize this, we want to register a simple command that generates a random number between a chosen minimum and a chosen maximum value:
 
 <div class="example">
 
