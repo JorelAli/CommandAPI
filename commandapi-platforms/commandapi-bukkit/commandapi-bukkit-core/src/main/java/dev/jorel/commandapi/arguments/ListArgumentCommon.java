@@ -134,7 +134,6 @@ public class ListArgumentCommon<T> extends Argument<List> {
 
 		// If the argument's value is in the list of values, include it
 		List<T> list = new ArrayList<>();
-		if (skipListValidation) return list;
 		String argument = cmdCtx.getArgument(key, String.class);
 		String[] strArr = argument.split(Pattern.quote(delimiter));
 		StringReader context = new StringReader(argument);
@@ -157,7 +156,7 @@ public class ListArgumentCommon<T> extends Argument<List> {
 					addedItem = true;
 				}
 			}
-			if(!addedItem) {
+			if(!addedItem && !skipListValidation) {
 				context.setCursor(cursor);
 				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
 			}
