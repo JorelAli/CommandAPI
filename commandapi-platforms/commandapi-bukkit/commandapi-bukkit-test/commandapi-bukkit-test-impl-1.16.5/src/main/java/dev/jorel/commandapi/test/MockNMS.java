@@ -14,6 +14,7 @@ import java.util.stream.StreamSupport;
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -35,15 +36,16 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
 
 import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import dev.jorel.commandapi.Brigadier;
@@ -60,9 +62,11 @@ import net.minecraft.server.v1_16_R3.CraftingManager;
 import net.minecraft.server.v1_16_R3.CustomFunction;
 import net.minecraft.server.v1_16_R3.CustomFunctionData;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
+import net.minecraft.server.v1_16_R3.Entity;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.GameProfilerDisabled;
 import net.minecraft.server.v1_16_R3.GameRules;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent;
 import net.minecraft.server.v1_16_R3.IRecipe;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.IScoreboardCriteria;
@@ -295,8 +299,12 @@ public class MockNMS extends Enums {
 			Location loc = player.getLocation();
 			Mockito.when(clw.getPosition()).thenReturn(new Vec3D(loc.getX(), loc.getY(), loc.getZ()));
 
-			WorldServer worldServerMock = Mockito.mock(WorldServer.class);
-			Mockito.when(clw.getWorld()).thenReturn(worldServerMock);
+			// If player gives us a ServerLevel, use it, otherwise mock it
+			WorldServer worldServer;
+			if(player.getWorld() instanceof CraftWorld cw) worldServer = cw.getHandle();
+			else worldServer = Mockito.mock(WorldServer.class);
+
+			Mockito.when(clw.getWorld()).thenReturn(worldServer);
 //			Mockito.when(clw.getWorld().hasChunkAt(any(BlockPosition.class))).thenReturn(true);
 //			Mockito.when(clw.getWorld().isInWorldBounds(any(BlockPosition.class))).thenReturn(true);
 			Mockito.when(clw.k()).thenReturn(Anchor.EYES);
@@ -359,6 +367,32 @@ public class MockNMS extends Enums {
 			Mockito.when(clw.a()).thenReturn(clw);
 			Mockito.when(clw.b(anyInt())).thenReturn(clw);
 		}
+
+		// NativeProxyCommandSender construction (NMS#createNativeProxyCommandSender)
+		//  Make sure these builder methods work as expected
+		Mockito.when(clw.a(ArgumentMatchers.<Vec3D>any())).thenAnswer(invocation -> {
+			Mockito.when(clw.getPosition()).thenReturn(invocation.getArgument(0));
+			return clw;
+		});
+		Mockito.when(clw.a(ArgumentMatchers.<Vec2F>any())).thenAnswer(invocation -> {
+			Mockito.when(clw.i()).thenReturn(invocation.getArgument(0));
+			return clw;
+		});
+		Mockito.when(clw.a(ArgumentMatchers.<WorldServer>any())).thenAnswer(invocation -> {
+			Mockito.when(clw.getWorld()).thenReturn(invocation.getArgument(0));
+			return clw;
+		});
+		Mockito.when(clw.a(ArgumentMatchers.<Entity>any())).thenAnswer(invocation -> {
+			Entity entity = invocation.getArgument(0);
+			String name = entity.getDisplayName().getString();
+			IChatBaseComponent displayName = entity.getScoreboardDisplayName();
+
+			Mockito.when(clw.getEntity()).thenReturn(entity);
+			Mockito.when(clw.getName()).thenReturn(name);
+			Mockito.when(clw.getScoreboardDisplayName()).thenReturn(displayName);
+			return clw;
+		});
+
 		return clw;
 	}
 
@@ -371,7 +405,7 @@ public class MockNMS extends Enums {
 
 	@Override
 	public World getWorldForCSS(CommandListenerWrapper clw) {
-		return new WorldMock();
+		return baseNMS.getWorldForCSS(clw);
 	}
 
 	@SuppressWarnings({ "deprecation", "null" })
@@ -567,8 +601,33 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public Class<? extends Player> getCraftPlayerClass() {
-		return CraftPlayer.class;
+	public Player setupMockedCraftPlayer(String name) {
+		CraftPlayer player = Mockito.mock(CraftPlayer.class);
+
+		// getLocation and getWorld is used when creating the CommandSourceStack in MockNMS
+		WorldServer worldServer = Mockito.mock(WorldServer.class);
+		CraftWorld world = Mockito.mock(CraftWorld.class);
+		Mockito.when(world.getHandle()).thenReturn(worldServer);
+		Mockito.when(worldServer.getWorld()).thenReturn(world);
+
+		Mockito.when(player.getLocation()).thenReturn(new Location(world, 0, 0, 0));
+		Mockito.when(player.getWorld()).thenReturn(world);
+
+		// Provide proper handle as VanillaCommandWrapper expects
+		CommandListenerWrapper css = getBrigadierSourceFromCommandSender(wrapCommandSender(player));
+
+		EntityPlayer handle = Mockito.mock(EntityPlayer.class);
+		Mockito.when(handle.getCommandListener()).thenReturn(css);
+
+		Mockito.when(player.getHandle()).thenReturn(handle);
+
+
+		// getDisplayName and getScoreboardDisplayName are used when CommandSourceStack#withEntity is called
+		IChatBaseComponent nameComponent = new ChatComponentText(name);
+		Mockito.when(handle.getDisplayName()).thenReturn(nameComponent);
+		Mockito.when(handle.getScoreboardDisplayName()).thenReturn(nameComponent);
+
+		return player;
 	}
 
 	@Override
@@ -588,6 +647,16 @@ public class MockNMS extends Enums {
 				return List.of();
 			}
 		};
+	}
+
+	@Override
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative) {
+		return baseNMS.getSenderForCommand(cmdCtx, forceNative);
+	}
+
+	@Override
+	public NativeProxyCommandSender createNativeProxyCommandSender(CommandSender caller, CommandSender callee, Location location, World world) {
+		return baseNMS.createNativeProxyCommandSender(caller, callee, location, world);
 	}
 
 	@Override

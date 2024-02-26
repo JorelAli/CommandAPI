@@ -1090,6 +1090,23 @@ commandAPICommand("break") {
     }
 }
 /* ANCHOR_END: native1 */
+
+/* ANCHOR: native1 */
+commandAPICommand("executeAs") {
+    entitySelectorArgumentOneEntity("target")
+    locationArgument("location")
+    worldArgument("world")
+    commandArgument("command")
+    anyExecutor { caller, args ->
+        val callee = args["target"] as CommandSender
+        val location = args["location"] as Location
+        val world = args["world"] as World
+        val command = args["command"] as CommandResult
+
+        command.execute(NativeProxyCommandSender.from(caller, callee, location, world))
+    }
+}
+/* ANCHOR_END: native1 */
 }
 
 fun optional_arguments() {

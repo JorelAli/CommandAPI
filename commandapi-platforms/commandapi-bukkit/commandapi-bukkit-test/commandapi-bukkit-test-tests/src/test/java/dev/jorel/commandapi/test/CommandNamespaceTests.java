@@ -3,7 +3,6 @@ package dev.jorel.commandapi.test;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
-import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -14,7 +13,6 @@ import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -29,8 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
-
-import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
@@ -70,8 +66,9 @@ public class CommandNamespaceTests extends TestBase {
 		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
 		assertFalse(CommandAPI.canRegister());
 
-		// Get a CraftPlayer for running VanillaCommandWrapper commands
-		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());
+		// Get a mocked CraftPlayer for running VanillaCommandWrapper commands
+		Player runCommandsPlayer = server.setupMockedCraftPlayer();
+
 		// Ensure player can have permissions modified
 		PermissibleBase perm = new PermissibleBase(runCommandsPlayer);
 		Mockito.when(runCommandsPlayer.addAttachment(isA(Plugin.class))).thenAnswer(invocation ->
@@ -87,19 +84,6 @@ public class CommandNamespaceTests extends TestBase {
 		Mockito.when(runCommandsPlayer.hasPermission(isA(String.class))).thenAnswer(invocation ->
 			perm.hasPermission(invocation.getArgument(0, String.class))
 		);
-		// Get location is used when creating the BrigadierSource in MockNMS
-		Mockito.when(runCommandsPlayer.getLocation()).thenReturn(new Location(null, 0, 0, 0));
-
-		// Provide proper handle as VanillaCommandWrapper expects
-		Method getHandle = assertDoesNotThrow(() -> runCommandsPlayer.getClass().getDeclaredMethod("getHandle"));
-		Object brigadierSource = Brigadier.getBrigadierSourceFromCommandSender(runCommandsPlayer);
-		Object handle = Mockito.mock(getHandle.getReturnType(), invocation -> brigadierSource);
-		// This is a funny quirk of Mockito, but you don't need to put the method call you want to mock inside `when`
-		//  As long as the method is called, `when` knows what you are talking about
-		//  That means we can mock `CraftPlayer#getHandle` indirectly using reflection
-		//  See the additional response in https://stackoverflow.com/a/10131885
-		assertDoesNotThrow(() -> getHandle.invoke(runCommandsPlayer));
-		Mockito.when(null).thenReturn(handle);
 
 		return runCommandsPlayer;
 	}

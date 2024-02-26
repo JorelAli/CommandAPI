@@ -48,11 +48,11 @@ import com.google.common.collect.Streams;
 import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.serialization.JsonOps;
 
 import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import dev.jorel.commandapi.Brigadier;
@@ -61,6 +61,7 @@ import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
@@ -85,6 +86,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.util.profiling.metrics.profiling.InactiveMetricsRecorder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -312,8 +314,12 @@ public class MockNMS extends Enums {
 			Location loc = player.getLocation();
 			Mockito.when(css.getPosition()).thenReturn(new Vec3(loc.getX(), loc.getY(), loc.getZ()));
 
-			ServerLevel worldServerMock = Mockito.mock(ServerLevel.class);
-			Mockito.when(css.getLevel()).thenReturn(worldServerMock);
+			// If player gives us a ServerLevel, use it, otherwise mock it
+			ServerLevel worldServerLevel;
+			if(player.getWorld() instanceof CraftWorld cw) worldServerLevel = cw.getHandle();
+			else worldServerLevel = Mockito.mock(ServerLevel.class);
+
+			Mockito.when(css.getLevel()).thenReturn(worldServerLevel);
 			Mockito.when(css.getLevel().hasChunkAt(any(BlockPos.class))).thenReturn(true);
 //			Mockito.when(css.getLevel().getBlockState(any(BlockPos.class))).thenAnswer(i -> {
 //				BlockPos bp = i.getArgument(0);
@@ -391,6 +397,32 @@ public class MockNMS extends Enums {
 				functionCallbackResults.push(result);
 			});
 		}
+
+		// NativeProxyCommandSender construction (NMS#createNativeProxyCommandSender)
+		//  Make sure these builder methods work as expected
+		Mockito.when(css.withPosition(any())).thenAnswer(invocation -> {
+			Mockito.when(css.getPosition()).thenReturn(invocation.getArgument(0));
+			return css;
+		});
+		Mockito.when(css.withRotation(any())).thenAnswer(invocation -> {
+			Mockito.when(css.getRotation()).thenReturn(invocation.getArgument(0));
+			return css;
+		});
+		Mockito.when(css.withLevel(any())).thenAnswer(invocation -> {
+			Mockito.when(css.getLevel()).thenReturn(invocation.getArgument(0));
+			return css;
+		});
+		Mockito.when(css.withEntity(any())).thenAnswer(invocation -> {
+			Entity entity = invocation.getArgument(0);
+			String name = entity.getName().getString();
+			net.minecraft.network.chat.Component displayName = entity.getDisplayName();
+
+			Mockito.when(css.getEntity()).thenReturn(entity);
+			Mockito.when(css.getTextName()).thenReturn(name);
+			Mockito.when(css.getDisplayName()).thenReturn(displayName);
+			return css;
+		});
+
 		return css;
 	}
 
@@ -403,7 +435,7 @@ public class MockNMS extends Enums {
 
 	@Override
 	public World getWorldForCSS(CommandSourceStack clw) {
-		return new WorldMock();
+		return baseNMS.getWorldForCSS(clw);
 	}
 
 	@Override
@@ -612,8 +644,33 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public Class<? extends Player> getCraftPlayerClass() {
-		return CraftPlayer.class;
+	public Player setupMockedCraftPlayer(String name) {
+		CraftPlayer player = Mockito.mock(CraftPlayer.class);
+
+		// getLocation and getWorld is used when creating the CommandSourceStack in MockNMS
+		ServerLevel serverLevel = Mockito.mock(ServerLevel.class);
+		CraftWorld world = Mockito.mock(CraftWorld.class);
+		Mockito.when(world.getHandle()).thenReturn(serverLevel);
+		Mockito.when(serverLevel.getWorld()).thenReturn(world);
+
+		Mockito.when(player.getLocation()).thenReturn(new Location(world, 0, 0, 0));
+		Mockito.when(player.getWorld()).thenReturn(world);
+
+		// Provide proper handle as VanillaCommandWrapper expects
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(wrapCommandSender(player));
+
+		ServerPlayer handle = Mockito.mock(ServerPlayer.class);
+		Mockito.when(handle.createCommandSourceStack()).thenReturn(css);
+
+		Mockito.when(player.getHandle()).thenReturn(handle);
+
+
+		// getName and getDisplayName are used when CommandSourceStack#withEntity is called
+		net.minecraft.network.chat.Component nameComponent = net.minecraft.network.chat.Component.literal(name);
+		Mockito.when(handle.getName()).thenReturn(nameComponent);
+		Mockito.when(handle.getDisplayName()).thenReturn(nameComponent);
+
+		return player;
 	}
 
 	@Override
@@ -660,6 +717,16 @@ public class MockNMS extends Enums {
 //				throw new IllegalStateException("getRoot is unimplemented");
 //			}
 		};
+	}
+
+	@Override
+	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean forceNative) {
+		return baseNMS.getSenderForCommand(cmdCtx, forceNative);
+	}
+
+	@Override
+	public NativeProxyCommandSender createNativeProxyCommandSender(CommandSender caller, CommandSender callee, Location location, World world) {
+		return baseNMS.createNativeProxyCommandSender(caller, callee, location, world);
 	}
 
 	@Override
