@@ -738,6 +738,15 @@ public class NMS_1_18_R2 extends NMS_Common {
 	}
 
 	@Override
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
+	}
+
+	@Override
 	public World getWorldForCSS(CommandSourceStack css) {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
 	}

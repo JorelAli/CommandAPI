@@ -683,6 +683,15 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
+	}
+
+	@Override
 	public Team getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		String teamName = TeamArgument.getTeam(cmdCtx, key).getName();
 		return Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);

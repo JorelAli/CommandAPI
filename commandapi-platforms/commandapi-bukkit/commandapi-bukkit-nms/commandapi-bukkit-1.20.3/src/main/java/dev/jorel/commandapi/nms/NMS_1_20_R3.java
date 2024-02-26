@@ -818,6 +818,15 @@ public class NMS_1_20_R3 extends NMS_Common {
 		}
 		return convertedCustomFunctions;
 	}
+	
+	@Override
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
+	}
 
 	@Override
 	public World getWorldForCSS(CommandSourceStack css) {

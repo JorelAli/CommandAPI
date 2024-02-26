@@ -565,13 +565,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract SimpleFunctionWrapper[] getTag(NamespacedKey key);
 
 	@Override
-	public final Set<NamespacedKey> getTags() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
-			result.add(fromResourceLocation(resourceLocation));
-		}
-		return result;
-	}
+	@Unimplemented(because = NAME_CHANGED, info = "See https://github.com/JorelAli/CommandAPI/issues/524")
+	public abstract Set<NamespacedKey> getTags();
 
 	@Override
 	public Team getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
