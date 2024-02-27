@@ -342,7 +342,7 @@ public abstract class Enums extends ArgumentNMS {
 			org.bukkit.loot.LootTables.SNIFFER_DIGGING,
 			org.bukkit.loot.LootTables.PIGLIN_BARTERING,
 			org.bukkit.loot.LootTables.TRIAL_CHAMBER_KEY,
-			org.bukkit.loot.LootTables.RIAL_CHAMBER_CONSUMABLES,
+			org.bukkit.loot.LootTables.TRIAL_CHAMBER_CONSUMABLES,
 			org.bukkit.loot.LootTables.DESERT_WELL_ARCHAEOLOGY,
 			org.bukkit.loot.LootTables.DESERT_PYRAMID_ARCHAEOLOGY,
 			org.bukkit.loot.LootTables.TRAIL_RUINS_ARCHAEOLOGY_COMMON,
