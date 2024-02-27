@@ -111,6 +111,14 @@
 - [Using the DSL](./kotlindsl.md)
 - [Delegated properties](./delegated_properties.md)
 
+-----
+
+# Velocity
+
+- [Velocity](./velocity_intro.md)
+
+-----
+
 # CommandAPI Utilities
 
 - [Command conversion](./conversion.md)
