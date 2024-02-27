@@ -4,6 +4,8 @@
 >
 > The CommandAPI hasn't been released for Velocity yet.
 > We do, however, offer snapshot builds. This small section on Velocity will outline how to get the snapshot builds and what limitations the CommandAPI currently has on Velocity.
+>
+> This page focuses on outlining how to set up the CommandAPI for Velocity. It expects that you are already familiar with how to set up a Velocity plugin.
 
 ## Adding the snapshot repository with Maven or Gradle
 
@@ -68,6 +70,29 @@ dependencies {
 
 </div>
 
+## Setting up the CommandAPI
+
+The CommandAPI requires two steps: loading and enabling. We will perform these steps in Velocity's loading stages, construction and initialization. These two stages are explained in [their documentation](https://docs.papermc.io/velocity/dev/api-basics#a-word-of-caution).
+We will perform the CommandAPI's loading step in the construction phase first:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-velocity-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:velocityIntro1}}
+```
+
+</div>
+
+Next, we want to utilize Velocity's `ProxyInitializeEvent` to perform the CommandAPI's enabling step:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-velocity-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:velocityIntro2}}
+```
+
+</div>
+
 ## Current limitations
 
 The CommandAPI currently only offers support for a very limited amount of arguments on Velocity. This is because arguments are primarily implemented on the backend servers.
@@ -103,7 +128,7 @@ To accomplish that, we register the command like this:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-velocity-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:velocityIntro1}}
+{{#include ../../commandapi-documentation-velocity-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:velocityIntro3}}
 ```
 
 ```kotlin,Kotlin
