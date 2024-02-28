@@ -239,6 +239,13 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// Do the same for the namespaced version of the command (which is never empty on Bukkit forks)
 			String namespace = commonCommandInformation.namespace().toLowerCase();
 			permissionsToFix.putIfAbsent(namespace + ":" + commandName, permission);
+
+			// Do the same for the aliases
+			for (String alias : commonCommandInformation.aliases()) {
+				alias = alias.toLowerCase();
+				permissionsToFix.putIfAbsent(alias, permission);
+				permissionsToFix.putIfAbsent(namespace + ":" + alias, permission);
+			}
 		}
 	}
 
