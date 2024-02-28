@@ -47,11 +47,11 @@ public void onLoad() {
 
 For example, if you have an NBT compound tag with this data:
 
-```json
+```js
 {
-    "some": {
-        "path": {
-            "here": "hello"
+    some: {
+        path: {
+            here: "hello"
         }
     }
 }
@@ -87,7 +87,7 @@ public void onLoad() {
 
 Say you have an NBT compound tag that looks like this:
 
-```json
+```js
 {
     name: "Notch",
     exp: 20s,
