@@ -17,7 +17,7 @@ import java.util.Map;
 
 // Based on https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/
 /**
- * A {@link CommandAPIMessenger} for sending and receiving messages to and from CommandAPIBukkit and {@link Player}s
+ * A {@link CommandAPIMessenger} for sending and receiving messages to and from Bukkit and {@link Player}s
  * connected to the Bukkit server.
  */
 public class BukkitNetworkingCommandAPIMessenger extends CommandAPIMessenger<Player, Player> implements PluginMessageListener, Listener {
@@ -74,7 +74,7 @@ public class BukkitNetworkingCommandAPIMessenger extends CommandAPIMessenger<Pla
 
 	/**
 	 * Sets the {@link CommandAPIProtocol#PROTOCOL_VERSION} being used by the given player. This is only intended to be
-	 * called by {@link BukkitHandshakePacketHandler#handleSetVersionPacket(Player, SetVersionPacket)} when a
+	 * called by {@link BukkitNetworkingHandshakePacketHandler#handleSetVersionPacket(Player, SetVersionPacket)} when a
 	 * {@link SetVersionPacket} is received.
 	 *
 	 * @param sender          The player that sent the {@link SetVersionPacket}.

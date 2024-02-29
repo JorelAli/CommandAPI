@@ -8,21 +8,21 @@ import dev.jorel.commandapi.CommandAPINetworkingMain;
  * A {@link CommandAPIPacketHandlerProvider} for the barebones netowrking plugin for Bukkit.
  */
 public class BukkitNetworkingPacketHandlerProvider implements CommandAPIPacketHandlerProvider<Player> {
-	private final BukkitHandshakePacketHandler handshakePacketHandler;
-	private final BukkitPlayPacketHandler playPacketHandler;
+	private final BukkitNetworkingHandshakePacketHandler handshakePacketHandler;
+	private final BukkitNetworkingPlayPacketHandler playPacketHandler;
 
 	protected BukkitNetworkingPacketHandlerProvider(CommandAPINetworkingMain plugin) {
-		handshakePacketHandler = new BukkitHandshakePacketHandler(plugin);
-		playPacketHandler = new BukkitPlayPacketHandler(plugin);
+		handshakePacketHandler = new BukkitNetworkingHandshakePacketHandler(plugin);
+		playPacketHandler = new BukkitNetworkingPlayPacketHandler(plugin);
 	}
 
 	@Override
-	public BukkitHandshakePacketHandler getHandshakePacketHandler() {
+	public BukkitNetworkingHandshakePacketHandler getHandshakePacketHandler() {
 		return handshakePacketHandler;
 	}
 
 	@Override
-	public BukkitPlayPacketHandler getPlayPacketHandler() {
+	public BukkitNetworkingPlayPacketHandler getPlayPacketHandler() {
 		return playPacketHandler;
 	}
 }

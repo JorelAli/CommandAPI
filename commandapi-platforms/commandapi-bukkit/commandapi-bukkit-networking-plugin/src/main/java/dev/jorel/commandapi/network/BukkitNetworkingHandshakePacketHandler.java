@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 /**
  * A {@link HandshakePacketHandler} for handling {@link CommandAPIPacket}s sent to Bukkit by {@link Player} connections.
  */
-public class BukkitHandshakePacketHandler implements HandshakePacketHandler<Player> {
+public class BukkitNetworkingHandshakePacketHandler implements HandshakePacketHandler<Player> {
 	private final CommandAPINetworkingMain plugin;
 
-	protected BukkitHandshakePacketHandler(CommandAPINetworkingMain plugin) {
+	protected BukkitNetworkingHandshakePacketHandler(CommandAPINetworkingMain plugin) {
 		this.plugin = plugin;
 	}
 
