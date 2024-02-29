@@ -29,7 +29,7 @@ public ExamplePlugin(ProxyServer server, Logger logger) {
     this.server = server;
     this.logger = logger;
 
-    CommandAPI.onLoad(new CommandAPIVelocityConfig(server));
+    CommandAPI.onLoad(new CommandAPIVelocityConfig(this, server));
 }
 /* ANCHOR_END: velocityIntro1 */
 

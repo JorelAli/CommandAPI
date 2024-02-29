@@ -1,5 +1,6 @@
 package dev.jorel.commandapi;
 
+import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 /**
@@ -8,6 +9,8 @@ import com.velocitypowered.api.proxy.ProxyServer;
  * getter methods.
  */
 public class InternalVelocityConfig extends InternalConfig {
+	// The plugin that loaded the CommandAPI
+	private final Object plugin;
 	// The server that the CommandAPI is running on
 	private final ProxyServer server;
 
@@ -18,7 +21,15 @@ public class InternalVelocityConfig extends InternalConfig {
 	 */
 	public InternalVelocityConfig(CommandAPIVelocityConfig config) {
 		super(config);
+		this.plugin = config.plugin;
 		this.server = config.server;
+	}
+
+	/**
+	 * @return The plugin object (annotated by {@link Plugin}) loading the CommandAPI
+	 */
+	public Object getPlugin() {
+		return plugin;
 	}
 
 	/**

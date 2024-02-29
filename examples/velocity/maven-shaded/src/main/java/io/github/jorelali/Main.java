@@ -27,7 +27,7 @@ public class Main {
 		// Load the CommandAPI first
 		CommandAPI.onLoad(
 			// Configure the CommandAPI
-			new CommandAPIVelocityConfig(server)
+			new CommandAPIVelocityConfig(this, server)
 				// Turn on verbose output for command registration logs
 				.verboseOutput(true)
 				// Give file where Brigadier's command registration tree should be dumped

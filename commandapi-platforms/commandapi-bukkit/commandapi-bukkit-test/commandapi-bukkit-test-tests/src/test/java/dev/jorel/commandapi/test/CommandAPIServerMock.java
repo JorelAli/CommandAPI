@@ -20,6 +20,8 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemFactory;
+import org.bukkit.plugin.messaging.Messenger;
+import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -201,6 +203,15 @@ public class CommandAPIServerMock extends ServerMock {
 //		// the raw CraftItemMeta objects for the ItemStackArgument <3
 //		return MockPlatform.getInstance().getItemFactory();
 //	}
+
+	// 1.16 and 1.17 MockServers do not implement this method, but other versions do
+	//  Easiest to just always override this method
+	//  This is copied from MockBukkit-v1.18
+	private final StandardMessenger messenger = new StandardMessenger();
+	@Override
+	public @NotNull Messenger getMessenger() {
+		return messenger;
+	}
 
 	// Advancements
 	
