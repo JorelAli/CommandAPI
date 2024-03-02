@@ -7,6 +7,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
  */
 public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocityConfig> {
 	ProxyServer server;
+	Object plugin;
 
 	/**
 	 * Creates a new CommandAPIVelocityConfig object. Variables in this
@@ -15,8 +16,34 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 	 * @param server The {@link ProxyServer} that the CommandAPI is running on.
 	 */
 	public CommandAPIVelocityConfig(ProxyServer server) {
+		this(server, null);
+	}
+
+	/**
+	 * Creates a new CommandAPIVelocityConfig object. Variables in this
+	 * constructor are required to load the CommandAPI on Velocity properly.
+	 *
+	 * @param server The {@link ProxyServer} that the CommandAPI is running on.
+	 * @param plugin The plugin that is loading the CommandAPI.
+	 */
+	public CommandAPIVelocityConfig(ProxyServer server, Object plugin) {
 		this.server = server;
+		this.plugin = plugin;
 		super.setNamespace("");
+	}
+
+	/**
+	 * @return this CommandAPIVelocityConfig
+	 */
+	@Override
+	public CommandAPIVelocityConfig usePluginNamespace() {
+		if (plugin == null) {
+			CommandAPI.logNormal("Cannot use plugin namespace because plugin was not set or null. The currently set namespace wasn't changed.");
+			return instance();
+		}
+		super.setNamespace(server.getPluginManager().fromInstance(plugin).orElseThrow().getDescription().getId());
+		super.usePluginNamespace = true;
+		return instance();
 	}
 
 	@Override
