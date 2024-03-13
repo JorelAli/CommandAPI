@@ -36,7 +36,7 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 	public void register(Object plugin) {
 		ProxyServer server = CommandAPIVelocity.getConfiguration().getServer();
 		if (server.getPluginManager().fromInstance(plugin).isEmpty()) {
-			CommandAPI.logInfo("Using the default namespace to register commands since the given Object is not a Velocity plugin!");
+			CommandAPI.logInfo("Using the default namespace to register commands since " + plugin.getClass().getSimpleName() + " is not a Velocity plugin!");
 			super.register();
 			return;
 		}

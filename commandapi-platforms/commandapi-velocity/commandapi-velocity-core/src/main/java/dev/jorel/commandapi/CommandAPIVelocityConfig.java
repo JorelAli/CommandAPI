@@ -46,7 +46,7 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 		}
 		Optional<PluginContainer> pluginContainerOptional = server.getPluginManager().fromInstance(plugin);
 		if (pluginContainerOptional.isEmpty()) {
-			CommandAPI.logInfo("Using the default namespace to register commands since the given Object is not a Velocity plugin!");
+			CommandAPI.logInfo("Cannot use plugin namespace because " + plugin.getClass().getSimpleName() + " is not a Velocity plugin! The currently set namespace wasn't changed.");
 			return instance();
 		}
 		super.setNamespace(pluginContainerOptional.get().getDescription().getId());
