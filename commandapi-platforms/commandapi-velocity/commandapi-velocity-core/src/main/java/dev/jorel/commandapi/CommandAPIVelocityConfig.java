@@ -1,22 +1,43 @@
 package dev.jorel.commandapi;
 
+import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
+
+import java.util.Optional;
 
 /**
  * A class that contains information needed to configure the CommandAPI on Velocity-based servers.
  */
 public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocityConfig> {
 	ProxyServer server;
+	Object plugin;
 
 	/**
 	 * Creates a new CommandAPIVelocityConfig object. Variables in this
 	 * constructor are required to load the CommandAPI on Velocity properly.
 	 *
 	 * @param server The {@link ProxyServer} that the CommandAPI is running on.
+	 * @param plugin The plugin that is loading the CommandAPI.
 	 */
-	public CommandAPIVelocityConfig(ProxyServer server) {
+	public CommandAPIVelocityConfig(ProxyServer server, Object plugin) {
 		this.server = server;
+		this.plugin = plugin;
 		super.setNamespace("");
+	}
+
+	/**
+	 * @return this CommandAPIVelocityConfig
+	 */
+	@Override
+	public CommandAPIVelocityConfig usePluginNamespace() {
+		Optional<PluginContainer> pluginContainerOptional = server.getPluginManager().fromInstance(plugin);
+		if (pluginContainerOptional.isEmpty()) {
+			CommandAPI.logInfo("Cannot use plugin namespace because " + plugin.getClass().getSimpleName() + " is not a Velocity plugin! The currently set namespace wasn't changed.");
+			return instance();
+		}
+		super.setNamespace(pluginContainerOptional.get().getDescription().getId());
+		super.usePluginNamespace = true;
+		return instance();
 	}
 
 	@Override
