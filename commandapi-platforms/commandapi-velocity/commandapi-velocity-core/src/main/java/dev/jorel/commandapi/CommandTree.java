@@ -34,6 +34,9 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 	 * @param plugin The plugin instance used to determine this command's namespace
 	 */
 	public void register(Object plugin) {
+		if (plugin == null) {
+			throw new NullPointerException("Parameter 'plugin' was null while trying to register command /" + meta.commandName + "!");
+		}
 		ProxyServer server = CommandAPIVelocity.getConfiguration().getServer();
 		if (server.getPluginManager().fromInstance(plugin).isEmpty()) {
 			CommandAPI.logInfo("Using the default namespace to register commands since " + plugin.getClass().getSimpleName() + " is not a Velocity plugin!");
