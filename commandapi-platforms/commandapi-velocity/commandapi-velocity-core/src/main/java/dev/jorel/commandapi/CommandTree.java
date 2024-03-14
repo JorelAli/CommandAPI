@@ -1,8 +1,11 @@
 package dev.jorel.commandapi;
 
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.jorel.commandapi.arguments.Argument;
+
+import java.util.Optional;
 
 public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, CommandSource> implements VelocityExecutable<CommandTree> {
 	/**
@@ -38,12 +41,13 @@ public class CommandTree extends AbstractCommandTree<CommandTree, Argument<?>, C
 			throw new NullPointerException("Parameter 'plugin' was null while trying to register command /" + meta.commandName + "!");
 		}
 		ProxyServer server = CommandAPIVelocity.getConfiguration().getServer();
-		if (server.getPluginManager().fromInstance(plugin).isEmpty()) {
+		Optional<PluginContainer> pluginContainerOptional = server.getPluginManager().fromInstance(plugin);
+		if (pluginContainerOptional.isEmpty()) {
 			CommandAPI.logInfo("Using the default namespace to register commands since " + plugin.getClass().getSimpleName() + " is not a Velocity plugin!");
 			super.register();
 			return;
 		}
-		super.register(server.getPluginManager().fromInstance(plugin).get().getDescription().getId());
+		super.register(pluginContainerOptional.get().getDescription().getId());
 	}
 
 	@Override
