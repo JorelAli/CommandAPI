@@ -17,16 +17,6 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 	 * constructor are required to load the CommandAPI on Velocity properly.
 	 *
 	 * @param server The {@link ProxyServer} that the CommandAPI is running on.
-	 */
-	public CommandAPIVelocityConfig(ProxyServer server) {
-		this(server, null);
-	}
-
-	/**
-	 * Creates a new CommandAPIVelocityConfig object. Variables in this
-	 * constructor are required to load the CommandAPI on Velocity properly.
-	 *
-	 * @param server The {@link ProxyServer} that the CommandAPI is running on.
 	 * @param plugin The plugin that is loading the CommandAPI.
 	 */
 	public CommandAPIVelocityConfig(ProxyServer server, Object plugin) {
@@ -40,10 +30,6 @@ public class CommandAPIVelocityConfig extends CommandAPIConfig<CommandAPIVelocit
 	 */
 	@Override
 	public CommandAPIVelocityConfig usePluginNamespace() {
-		if (plugin == null) {
-			CommandAPI.logNormal("Cannot use plugin namespace because plugin was not set or null. The currently set namespace wasn't changed.");
-			return instance();
-		}
 		Optional<PluginContainer> pluginContainerOptional = server.getPluginManager().fromInstance(plugin);
 		if (pluginContainerOptional.isEmpty()) {
 			CommandAPI.logInfo("Cannot use plugin namespace because " + plugin.getClass().getSimpleName() + " is not a Velocity plugin! The currently set namespace wasn't changed.");
