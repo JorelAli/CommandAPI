@@ -282,12 +282,6 @@ public interface NMS<CommandListenerWrapper> {
 
 	Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
-	Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-
-	NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
 	float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
@@ -298,12 +292,6 @@ public interface NMS<CommandListenerWrapper> {
 		throws CommandSyntaxException;
 
 	BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-
-	ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	World getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 

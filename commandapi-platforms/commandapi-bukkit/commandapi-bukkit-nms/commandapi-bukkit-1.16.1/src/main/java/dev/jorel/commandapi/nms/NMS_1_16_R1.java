@@ -463,33 +463,6 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
-	/*
-	 * ADVENTURE START
-	 * These methods use the Adventure API, but the Adventure API isn't present
-	 * in paper until Minecraft 1.16.5. We assume that the developer is shading
-	 * Adventure manually (or otherwise), using https://docs.advntr.dev/platform/bukkit.html
-	 */
-
-	@Override
-	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		final Integer color = ArgumentChatFormat.a(cmdCtx, key).e();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
-	}
-
-	@Override
-	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
-	}
-
-	/*
-	 * ADVENTURE END
-	 */
-
 	@Override
 	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		throw new UnimplementedArgumentException("AngleArgument", "1.16.2");
@@ -539,21 +512,6 @@ public class NMS_1_16_R1 extends NMSWrapper_1_16_R1 {
 	@Override
 	public CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher() {
 		return this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a();
-	}
-
-	@Override
-	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return CraftChatMessage.getColor(ArgumentChatFormat.a(cmdCtx, key));
-	}
-
-	@Override
-	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 
 	@Override

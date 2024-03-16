@@ -68,9 +68,12 @@
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
 
-		<!-- Documentation code -->
+		<!-- General and platform documentation -->
 		<module>commandapi-documentation-code</module>
 		<module>commandapi-documentation-velocity-code</module>
+		<!-- TODO: Definitely find a solution for this problem, for now we just disable this -->
+		<!--<module>commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code</module>
+		<module>commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code</module>-->
 
 		<!-- Code coverage reports -->
 		<module>commandapi-codecov</module>

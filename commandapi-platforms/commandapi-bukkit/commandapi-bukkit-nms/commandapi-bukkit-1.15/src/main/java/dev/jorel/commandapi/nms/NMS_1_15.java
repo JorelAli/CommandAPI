@@ -171,7 +171,6 @@ import net.minecraft.server.v1_15_R1.Vec3D;
 @RequireField(in = ParticleParamRedstone.class, name = "f", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
 @RequireField(in = CraftSound.class, name = "minecraftKey", ofType = String.class)
-@RequireField(in = EnumChatFormat.class, name = "D", ofType = Integer.class)
 public class NMS_1_15 extends NMSWrapper_1_15 {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
@@ -181,7 +180,6 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	private static final SafeVarHandle<ParticleParamRedstone, Float> particleParamRedstoneSize;
 	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
 	private static final SafeVarHandle<CraftSound, String> craftSoundMinecraftKey;
-	private static final SafeVarHandle<EnumChatFormat, Integer> enumChatFormatD;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -194,7 +192,6 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		particleParamRedstoneSize = SafeVarHandle.ofOrNull(ParticleParamRedstone.class, "f", "f", float.class);
 		itemStackPredicateArgument = SafeVarHandle.ofOrNull(ArgumentPredicateItemStack.class, "c", "c", NBTTagCompound.class);
 		craftSoundMinecraftKey = SafeVarHandle.ofOrNull(CraftSound.class, "minecraftKey", "minecraftKey", String.class);
-		enumChatFormatD = SafeVarHandle.ofOrNull(EnumChatFormat.class, "D", "D", Integer.class);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -445,33 +442,6 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
-	/*
-	 * ADVENTURE START
-	 * These methods use the Adventure API, but the Adventure API isn't present
-	 * in paper until Minecraft 1.16.5. We assume that the developer is shading
-	 * Adventure manually (or otherwise), using https://docs.advntr.dev/platform/bukkit.html
-	 */
-
-	@Override
-	public Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		final Integer color = enumChatFormatD.get(ArgumentChatFormat.a(cmdCtx, key));
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
-	}
-
-	@Override
-	public Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
-	}
-
-	/*
-	 * ADVENTURE END
-	 */
-
 	@Override
 	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		throw new UnimplementedArgumentException("AngleArgument", "1.16.2");
@@ -516,21 +486,6 @@ public class NMS_1_15 extends NMSWrapper_1_15 {
 	@Override
 	public CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher() {
 		return this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a();
-	}
-
-	@Override
-	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return CraftChatMessage.getColor(ArgumentChatFormat.a(cmdCtx, key));
-	}
-
-	@Override
-	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
 	}
 
 	@Override

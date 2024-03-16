@@ -79,19 +79,4 @@ public class NMS_1_16_R3 extends NMS_1_16_4_R3 {
 		return new String[] { "1.16.5" };
 	}
 
-	@Override
-	public final Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public final NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		final Integer color = ArgumentChatFormat.a(cmdCtx, key).e();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.ofExact(color);
-	}
-
-	@Override
-	public final Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
-	}
 }

@@ -276,6 +276,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		return baseNMS.getAdvancement(cmdCtx, key);
 	}
 
+	// TODO: Add special modules for component related arguments
+	/*
 	@Override
 	public Component getAdventureChat(CommandContext cmdCtx, String key)
 		throws CommandSyntaxException {
@@ -290,7 +292,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	@Override
 	public Component getAdventureChatComponent(CommandContext cmdCtx, String key) {
 		return baseNMS.getAdventureChatComponent(cmdCtx, key);
-	}
+	}*/
 
 	@Override
 	public float getAngle(CommandContext cmdCtx, String key) {
@@ -318,6 +320,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		return baseNMS.getBlockState(cmdCtx, key);
 	}
 
+	// TODO: Add special modules for component related arguments
+	/*
 	@Override
 	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return baseNMS.getChat(cmdCtx, key);
@@ -331,7 +335,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	@Override
 	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String key) {
 		return baseNMS.getChatComponent(cmdCtx, key);
-	}
+	}*/
 
 	@Override
 	public World getDimension(CommandContext cmdCtx, String key) throws CommandSyntaxException {

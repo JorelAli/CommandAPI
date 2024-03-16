@@ -32,18 +32,18 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *
 	 * @param config the configuration to use for the CommandAPI.
 	 */
-	public abstract void onLoad(CommandAPIConfig<?> config);
+	void onLoad(CommandAPIConfig<?> config);
 
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is enabled,
 	 * such as registering event listeners.
 	 */
-	public abstract void onEnable();
+	void onEnable();
 
 	/**
 	 * Platform-specific stuff that should happen when the CommandAPI is disabled.
 	 */
-	public abstract void onDisable();
+	void onDisable();
 
 	// Converting between CommandSender, AbstractCommandSender, and Brigadier Sources
 
@@ -82,7 +82,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	// Registers a permission. Bukkit's permission system requires permissions to be "registered"
 	// before they can be used.
-	public abstract void registerPermission(String string);
+	void registerPermission(String string);
 
 	// Some commands have existing suggestion providers
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
@@ -93,7 +93,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *
 	 * @param commandName The name of the command about to be registered
 	 */
-	public abstract void preCommandRegistration(String commandName);
+	void preCommandRegistration(String commandName);
 
 	/**
 	 * Stuff to run after a command has been generated.
@@ -102,7 +102,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param resultantNode     The node that was registered
 	 * @param aliasNodes        Any alias nodes that were also registered as a part of this registration process
 	 */
-	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
 	 * Registers a Brigadier command node and returns the built node.
@@ -118,7 +118,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *                                command that start with a namespace. Eg. `minecraft:command`, `bukkit:command`,
 	 *                                or `plugin:command`
 	 */
-	public abstract void unregister(String commandName, boolean unregisterNamespaces);
+	void unregister(String commandName, boolean unregisterNamespaces);
 
 	/**
 	 * @return The Brigadier CommandDispatcher tree being used by the platform's server
@@ -133,12 +133,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param dispatcher The Brigadier CommandDispatcher
 	 * @throws IOException When the file fails to be written to
 	 */
-	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> dispatcher) throws IOException;
+	void createDispatcherFile(File file, CommandDispatcher<Source> dispatcher) throws IOException;
 
 	/**
 	 * @return A new default Logger meant for the CommandAPI to use
 	 */
-	public default CommandAPILogger getLogger() {
+	default CommandAPILogger getLogger() {
 		return new CommandAPILogger() {
 			private static final String PREFIX = "[CommandAPI] ";
 			private static final String YELLOW = "\u001B[33m";
@@ -171,14 +171,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Reloads the server's data packs to include CommandAPI commands
 	 */
-	public abstract void reloadDataPacks();
+	void reloadDataPacks();
 
 	/**
 	 * Updates the requirements required for a given player to execute a command.
 	 *
 	 * @param player the player to update
 	 */
-	public abstract void updateRequirements(AbstractPlayer<?> player);
+	void updateRequirements(AbstractPlayer<?> player);
 
 	// Create the concrete instances of objects implemented by the platform
 	public abstract AbstractCommandAPICommand<?, Argument, CommandSender> newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta);

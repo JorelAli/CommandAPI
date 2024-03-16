@@ -44,7 +44,7 @@
 		<!-- Code coverage the tests -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-test-tests</artifactId>
+			<artifactId>commandapi-paper-test-tests</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

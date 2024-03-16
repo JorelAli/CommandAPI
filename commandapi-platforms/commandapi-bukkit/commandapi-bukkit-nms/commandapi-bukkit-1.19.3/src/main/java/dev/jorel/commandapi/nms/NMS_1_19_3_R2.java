@@ -276,17 +276,6 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
 	}
 
-	@Override
-	public NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		final Integer color = ColorArgument.getColor(cmdCtx, key).getColor();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
-	}
-
-	@Override
-	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
-	}
-
 	@Differs(from = "1.19.2", by = "Now uses ResourceArgument instead of ResourceOrTagLocationArgument")
 	@Override
 	public final Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {

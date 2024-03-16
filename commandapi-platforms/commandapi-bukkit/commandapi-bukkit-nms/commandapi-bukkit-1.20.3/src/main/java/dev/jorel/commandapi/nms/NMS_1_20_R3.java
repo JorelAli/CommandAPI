@@ -369,18 +369,6 @@ public class NMS_1_20_R3 extends NMS_Common {
 	}
 
 	@Override
-	public NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		final Integer color = ColorArgument.getColor(cmdCtx, key).getColor();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
-	}
-
-	@Override
-	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return GsonComponentSerializer.gson()
-				.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
-	}
-
-	@Override
 	public final Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType)
 			throws CommandSyntaxException {
 		final ResourceLocation resourceLocation = ResourceArgument.getResource(cmdCtx, key, Registries.BIOME).key()

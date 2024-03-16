@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>dev.jorel</groupId>
+		<artifactId>commandapi-paper-test</artifactId>
+		<version>9.4.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>commandapi-paper-test-impl-1.19.2</artifactId>
+
+	<properties>
+		<minecraft.mappings>1.19.2-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19.2-R0.1-SNAPSHOT</spigot.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<!-- NBT API -->
+			<id>codemc-repo-public</id>
+			<url>https://repo.codemc.io/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.io/repository/nms/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>papermc</id>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
+		</repository>
+		<repository>
+			<id>minecraft-libraries</id>
+			<url>https://libraries.minecraft.net</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- Main dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.6.1</version>
+		</dependency>
+		<dependency>
+			<!-- This is literally just for testing, we're not actually packaging this -->
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.11.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mojang</groupId>
+			<artifactId>brigadier</artifactId>
+			<version>1.0.17</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-paper-test-impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-paper-shade</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-impl-1.19.2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Version-specific dependencies -->
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.19</artifactId>
+			<version>2.29.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>${paper.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
+			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.md-5</groupId>
+				<artifactId>specialsource-maven-plugin</artifactId>
+				<version>1.2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>remap</goal>
+						</goals>
+						<id>remap-obf</id>
+						<configuration>
+							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:txt:maps-mojang</srgIn>
+							<reverse>true</reverse>
+							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-mojang</remappedDependencies>
+							<remappedArtifactAttached>true</remappedArtifactAttached>
+							<remappedClassifierName>remapped-obf</remappedClassifierName>
+						</configuration>
+					</execution>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>remap</goal>
+						</goals>
+						<id>remap-spigot</id>
+						<configuration>
+							<inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:csrg:maps-spigot</srgIn>
+							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-obf</remappedDependencies>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

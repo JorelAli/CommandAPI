@@ -8,12 +8,11 @@ import java.util.regex.Pattern;
 /**
  * A class that contains information needed to configure the CommandAPI on Bukkit-based servers.
  */
-public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitConfig> {
+public abstract class CommandAPIBukkitConfig<T extends CommandAPIBukkitConfig<T>> extends CommandAPIConfig<T> {
 
 	JavaPlugin plugin;
 
 	// Default configuration
-	boolean shouldHookPaperReload = true;
 	boolean shouldUseMojangMappings = false;
 
 	/**
@@ -27,19 +26,6 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 		this.plugin = plugin;
 		super.setNamespace("minecraft");
 	}
-
-	/**
-	 * Sets the CommandAPI to hook into Paper's {@link ServerResourcesReloadedEvent} when available
-	 * if true. This helps CommandAPI commands to work in datapacks after {@code /minecraft:reload}
-	 * is run.
-	 *
-	 * @param hooked whether the CommandAPI should hook into Paper's {@link ServerResourcesReloadedEvent}
-	 * @return this CommandAPIBukkitConfig
-	 */
-	public CommandAPIBukkitConfig shouldHookPaperReload(boolean hooked) {
-		this.shouldHookPaperReload = hooked;
-		return this;
-	}
 	
 	/**
 	 * Sets whether the CommandAPI should use Mojang mappings as opposed to Spigot's mappings
@@ -48,38 +34,36 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	 * @param useMojangMappings whether the CommandAPI should use Mojang mappings for internal calls
 	 * @return this CommandAPIBukkitConfig
 	 */
-	public CommandAPIBukkitConfig useMojangMappings(boolean useMojangMappings) {
+	public T useMojangMappings(boolean useMojangMappings) {
 		this.shouldUseMojangMappings = useMojangMappings;
-		return this;
+		return instance();
 	}
 
 	/**
 	 * @return this CommandAPIBukkitConfig
 	 */
-	public CommandAPIBukkitConfig usePluginNamespace() {
+	public T usePluginNamespace() {
 		super.setNamespace(plugin.getName().toLowerCase());
 		super.usePluginNamespace = true;
-		return this;
+		return instance();
 	}
 
 	@Override
-	public CommandAPIBukkitConfig setNamespace(String namespace) {
+	public T setNamespace(String namespace) {
 		if (namespace == null) {
 			throw new NullPointerException("Default namespace can't be null!");
 		}
 		if (namespace.isEmpty()) {
 			CommandAPI.logNormal("Did not set namespace to an empty value! Namespace '" + super.namespace + "' is used as the default namespace!");
-			return this;
+			return instance();
 		}
 		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
 			CommandAPI.logNormal("Did not set namespace to the provided '" + namespace + "' namespace because only 0-9, a-z, underscores, periods and hyphens are allowed!");
-			return this;
+			return instance();
 		}
 		return super.setNamespace(namespace);
 	}
 
 	@Override
-	public CommandAPIBukkitConfig instance() {
-		return this;
-	}
+	public abstract T instance();
 }
