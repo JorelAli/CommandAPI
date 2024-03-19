@@ -84,6 +84,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
 	/**
+	 * Ensures the given String is a valid command namespace on this platform. If the namespace 
+	 * is not valid, this method will return a String that should be used instead.
+	 * 
+	 * @param command   The command being registered with the given namespace.
+	 * @param namespace The String that wants to be used as a namespace.
+	 * @return The String that should be used as the namespace. If the given String is a valid namespace, it will be returned.
+	 */
+    public abstract String validateNamespace(ExecutableCommand<?, CommandSender> command, String namespace);
+
+	/**
 	 * Stuff to run before a command is generated. For Bukkit, this involves checking
 	 * if a command was declared in the plugin.yml when it isn't supposed to be.
 	 *

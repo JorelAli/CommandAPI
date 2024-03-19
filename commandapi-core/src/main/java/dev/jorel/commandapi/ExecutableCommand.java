@@ -1,13 +1,14 @@
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 
 /**
  * This is a base class for {@link AbstractCommandAPICommand} and {@link AbstractCommandTree} command definitions
@@ -317,15 +318,13 @@ extends ExecutableCommand<Impl, CommandSender>
 	}
 
 	/**
-	 * Registers the command with a given namespace.
+	 * Registers the command with the given namespace.
 	 *
-	 * @param namespace The namespace of this command. This cannot be null
-	 * @throws NullPointerException if the namespace is null
+	 * @param namespace The namespace for this command. This cannot be null, and each platform may impose additional requirements. 
+	 *                  See {@link CommandAPIPlatform#validateNamespace(ExecutableCommand, String)}.
+	 * @throws NullPointerException if the namespace is null.
 	 */
 	public void register(String namespace) {
-		if (namespace == null) {
-			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + this.name + "!");
-		}
 		((CommandAPIHandler<?, CommandSender, ?>) CommandAPIHandler.getInstance()).registerCommand(this, namespace);
 	}
 

@@ -42,16 +42,13 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	}
 
 	/**
-	 * Registers the command with a given namespace.
+	 * Registers this command with the given namespace.
 	 *
-	 * @param namespace The namespace of this command. This cannot be null or empty.
-	 *
+	 * @param namespace The namespace for this command. This cannot be null or empty, and can only contain 0-9, a-z, underscores, periods, and hyphens.
+	 * @throws NullPointerException if the namespace is null.
 	 */
+	@Override
 	public void register(String namespace) {
-		if (CommandAPIBukkit.get().isInvalidNamespace(this.name, namespace)) {
-			super.register();
-			return;
-		}
 		super.register(namespace);
 	}
 

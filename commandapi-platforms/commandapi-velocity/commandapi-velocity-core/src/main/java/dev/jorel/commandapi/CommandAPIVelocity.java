@@ -198,6 +198,21 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 		return (context, builder) -> Suggestions.empty();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * On Velocity, namespaces may be empty, but can only contain 0-9, a-z, underscores, periods, and hyphens.
+	 */
+	@Override
+	public String validateNamespace(ExecutableCommand<?, CommandSource> command, String namespace) {
+		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
+			CommandAPI.logNormal("Registering comand '" + command.getName() + "' using the default namespace because an invalid namespace (" + namespace + ") was given. Only 0-9, a-z, underscores, periods and hyphens are allowed!");
+			return config.getNamespace();
+		}
+
+		// Namespace is good, return it
+		return namespace;
+	}
+
 	@Override
 	public void preCommandRegistration(String commandName) {
 		// Nothing to do

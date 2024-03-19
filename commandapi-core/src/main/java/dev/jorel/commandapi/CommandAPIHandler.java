@@ -153,9 +153,25 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	// SECTION: Creating commands //
 	////////////////////////////////
 
+	/**
+	 * Registers a command with a given namespace. This is intended to be called by {@link ExecutableCommand#register(String)}
+	 *
+	 * @param command   The command to register.
+	 * @param namespace The namespace of this command. This cannot be null, and each platform may impose additional requirements. 
+	 *                  See {@link CommandAPIPlatform#validateNamespace(ExecutableCommand, String)}.
+	 * @throws NullPointerException if the namespace is null.
+	 */
 	public void registerCommand(ExecutableCommand<?, CommandSender> command, String namespace) {
+		// Validate parameters
+		if (namespace == null) {
+			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + command.getName() + "!");
+		}
+		namespace = platform.validateNamespace(command, namespace);
+
+		// Do plaform-specific pre-registration tasks
 		platform.preCommandRegistration(command.getName());
 
+		// Record the commands that are registered
 		List<RegisteredCommand> registeredCommandInformation = RegisteredCommand.fromExecutableCommand(command, namespace);
 		registeredCommands.addAll(registeredCommandInformation);
 
@@ -191,6 +207,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// partial) command registration. Generate the dispatcher file!
 		writeDispatcherToFile();
 
+		// Do platform-specific post-registration tasks
 		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes);
 	}
 
