@@ -423,6 +423,25 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
+	/**
+	 * {@inheritDoc}
+	 * On Bukkit, namespaces must not be empty, and can only contain 0-9, a-z, underscores, periods, and hyphens.
+	 */
+	@Override
+	public String validateNamespace(ExecutableCommand<?, CommandSender> command, String namespace) {
+		if (namespace.isEmpty()) {
+			CommandAPI.logNormal("Registering command '" + command.getName() + "' using the default namespace because an empty namespace was given!");
+			return config.getNamespace();
+		}
+		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
+			CommandAPI.logNormal("Registering comand '" + command.getName() + "' using the default namespace because an invalid namespace (" + namespace + ") was given. Only 0-9, a-z, underscores, periods and hyphens are allowed!");
+			return config.getNamespace();
+		}
+
+		// Namespace is good, return it
+		return namespace;
+	}
+
 	@Override
 	public void preCommandRegistration(String commandName) {
 		// Warn if the command we're registering already exists in this plugin's
@@ -640,20 +659,5 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 			}
 		}
-	}
-
-	boolean isInvalidNamespace(String commandName, String namespace) {
-		if (namespace == null) {
-			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + commandName + "!");
-		}
-		if (namespace.isEmpty()) {
-			CommandAPI.logNormal("Registering command '" + commandName + "' using the default namespace because an empty namespace was given!");
-			return true;
-		}
-		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
-			CommandAPI.logNormal("Registering comand '" + commandName + "' using the default namespace because an invalid namespace (" + namespace + ") was given. Only 0-9, a-z, underscores, periods and hyphens are allowed!");
-			return true;
-		}
-		return false;
 	}
 }
