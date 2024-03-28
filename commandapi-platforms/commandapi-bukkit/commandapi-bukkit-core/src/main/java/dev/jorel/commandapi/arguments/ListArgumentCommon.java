@@ -38,14 +38,16 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	private final Function<SuggestionInfo<CommandSender>, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 	private final boolean text;
+	private final boolean skipListValidation;
 
-	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text) {
+	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text, boolean skipListValidation) {
 		super(nodeName, text ? StringArgumentType.string() : StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
 		this.supplier = supplier;
 		this.mapper = suggestionsMapper;
 		this.text = text;
+		this.skipListValidation = skipListValidation;
 
 		applySuggestions();
 	}
@@ -154,7 +156,7 @@ public class ListArgumentCommon<T> extends Argument<List> {
 					addedItem = true;
 				}
 			}
-			if(!addedItem) {
+			if(!addedItem && !skipListValidation) {
 				context.setCursor(cursor);
 				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
 			}

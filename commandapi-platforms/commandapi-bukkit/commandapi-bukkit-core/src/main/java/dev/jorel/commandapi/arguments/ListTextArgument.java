@@ -37,6 +37,6 @@ import dev.jorel.commandapi.SuggestionInfo;
  */
 public class ListTextArgument<T> extends ListArgumentCommon<T> {
 	ListTextArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
-		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, true);
+		super(nodeName, delimiter, allowDuplicates, supplier, suggestionsMapper, true, false);
 	}
 }

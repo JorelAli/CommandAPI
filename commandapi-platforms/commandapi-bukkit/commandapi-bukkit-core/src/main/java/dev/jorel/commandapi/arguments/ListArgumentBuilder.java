@@ -21,6 +21,7 @@ public class ListArgumentBuilder<T> {
 	private final String nodeName;
 	private final String delimiter;
 	private boolean allowDuplicates = false;
+	private boolean skipListValidation = false;
 
 	/**
 	 * Creates a new ListArgumentBuilder with a specified node name. Defaults the
@@ -53,6 +54,17 @@ public class ListArgumentBuilder<T> {
 	 */
 	public ListArgumentBuilder<T> allowDuplicates(boolean allowDuplicates) {
 		this.allowDuplicates = allowDuplicates;
+		return this;
+	}
+
+	/**
+	 * Whether the list verification should be skipped
+	 *
+	 * @param skipListValidation whether to skip list validation
+	 * @return this list argument builder
+	 */
+	public ListArgumentBuilder<T> skipListValidation(boolean skipListValidation) {
+		this.skipListValidation = skipListValidation;
 		return this;
 	}
 
@@ -161,7 +173,7 @@ public class ListArgumentBuilder<T> {
 			 * @return a {@link ListArgument}
 			 */
 			public ListArgument<T> buildGreedy() {
-				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
+				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper, skipListValidation);
 			}
 			
 			/**
