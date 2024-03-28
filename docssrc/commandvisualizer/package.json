@@ -4,15 +4,15 @@
   "description": "Web-based Minecraft command viewer",
   "main": "commandvisualizer.js",
   "dependencies": {
-    "mojangson-parser": "^2.1.5",
-    "node-brigadier": "^0.0.12",
-    "webpack": "^5.76.0"
+    "mojangson-parser": ">=2.2.0",
+    "node-brigadier": ">=0.0.12",
+    "webpack": "latest"
   },
   "devDependencies": {
-    "ts-loader": "^9.4.1",
-    "typescript": "^4.8.3",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.11.1"
+    "ts-loader": "latest",
+    "typescript": "latest",
+    "webpack-cli": "latest",
+    "webpack-dev-server": "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
