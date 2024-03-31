@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import dev.jorel.commandapi.CommandAPINetworkingMain;
 
 /**
- * A {@link CommandAPIPacketHandlerProvider} for the barebones netowrking plugin for Bukkit.
+ * A {@link CommandAPIPacketHandlerProvider} for the barebones networking plugin for Bukkit.
  */
 public class BukkitNetworkingPacketHandlerProvider implements CommandAPIPacketHandlerProvider<Player> {
 	private final BukkitNetworkingHandshakePacketHandler handshakePacketHandler;
