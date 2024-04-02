@@ -1,5 +1,7 @@
 package dev.jorel.commandapi.executors;
 
+import dev.jorel.commandapi.arguments.AbstractArgument;
+
 import javax.annotation.Nullable;
 
 import java.util.Collection;
@@ -79,7 +81,7 @@ public record CommandArguments(
 	public int count() {
 		return args.length;
 	}
-	
+
 	// Main accessing methods. In Kotlin, methods named get() allows it to
 	// access these methods using array notation, as a part of operator overloading.
 	// More information about operator overloading in Kotlin can be found here:
@@ -342,7 +344,7 @@ public record CommandArguments(
 		}
 		return Optional.of(rawArgsMap.get(nodeName));
 	}
-	
+
 	/** Unchecked methods. These are the same as the methods above, but use
 	 * unchecked generics to conform to the type they are declared as. In Java,
 	 * the normal methods (checked) require casting:
@@ -367,7 +369,7 @@ public record CommandArguments(
 	public <T> T getUnchecked(int index) {
 		return (T) get(index);
 	}
-	
+
 	/**
 	 * Returns an argument by its node name
 	 *
@@ -441,6 +443,57 @@ public record CommandArguments(
 	 */
 	public <T> Optional<T> getOptionalUnchecked(String nodeName) {
 		return (Optional<T>) getOptional(nodeName);
+	}
+
+	/**
+	 * Returns an argument purely based on its CommandAPI representation. This also attempts to directly cast the argument to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
+	 *
+	 * @param argumentType The argument instance used to create the argument
+	 * @return The argument represented by the CommandAPI argument, or null if the argument's clas cannot be cast to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
+	 */
+	@Nullable
+	public <T> T getByArgument(AbstractArgument<T, ?, ?, ?> argumentType) {
+		Object argument = get(argumentType.getNodeName());
+		return castArgument(argument, argumentType.getPrimitiveType());
+	}
+
+	/**
+	 * Returns an argument based on its node name. This also attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
+	 *
+	 * @param nodeName The node name of the argument
+	 * @param argumentType The class that represents the argument
+	 * @return The argument with the given node name, or null if the argument's class cannot be cast to the type represented by the given {@code argumentType} argument
+	 */
+	@Nullable
+	public <T> T getByClass(String nodeName, Class<T> argumentType) {
+		Object argument = get(nodeName);
+		return castArgument(argument, argumentType);
+	}
+
+	/**
+	 * Returns an argument based on its index. This also attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
+	 *
+	 * @param index The position of the argument
+	 * @param argumentType The class that represents the argument
+	 * @return The argument at the given index, or null if the argument's class cannot be cast to the type represented by the given {@code argumentType} argument
+	 */
+	@Nullable
+	public <T> T getByClass(int index, Class<T> argumentType) {
+		Object argument = get(index);
+		return castArgument(argument, argumentType);
+	}
+
+	private <T> T castArgument(Object argument, Class<T> argumentType) {
+		if (argument == null) {
+			return null;
+		}
+		if (!argument.getClass().equals(argumentType)) {
+			return null;
+		}
+		if (!argumentType.isAssignableFrom(argument.getClass())) {
+			return null;
+		}
+		return (T) argument;
 	}
 
 }
