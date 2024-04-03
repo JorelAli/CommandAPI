@@ -44,6 +44,7 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.exceptions.CommandConflictException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -184,6 +185,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		LiteralCommandNode<Source> resultantNode = nodes.rootNode();
 		List<LiteralCommandNode<Source>> aliasNodes = nodes.aliasNodes();
 
+		// Handle command conflicts
+		ensureNoCommandConflict(resultantNode);
+
 		// Register rootNode
 		platform.registerCommandNode(resultantNode, namespace);
 
@@ -211,84 +215,43 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes);
 	}
 
-//	// Builds a command then registers it
-//	// TODO: Move into new register method
-//	void register(CommandMetaData<CommandSender> meta, final Argument[] args,
-//				  CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
-//
-//		// TODO: precondition, might need it if a step that depends on it is used
-//		//  Although, kinda hard to get the same syntax
-//		// Create the human-readable command syntax of arguments
-//		final String humanReadableCommandArgSyntax;
-//		{
-//			StringBuilder builder = new StringBuilder();
-//			for (Argument arg : args) {
-//				builder.append(arg.toString()).append(" ");
-//			}
-//			humanReadableCommandArgSyntax = builder.toString().trim();
-//		}
-//
-//		// TODO: Unclear if this step is necessary
-//		// Handle command conflicts
-//		boolean hasRegisteredCommand = false;
-//		for (int i = 0, size = registeredCommands.size(); i < size && !hasRegisteredCommand; i++) {
-//			hasRegisteredCommand |= registeredCommands.get(i).commandName().equals(commandName);
-//		}
-//
-//		if (hasRegisteredCommand && hasCommandConflict(commandName, args, humanReadableCommandArgSyntax)) {
-//			return;
-//		}
-//	}
-//
-//	// Prevent nodes of the same name but with different types:
-//	// allow /race invite<LiteralArgument> player<PlayerArgument>
-//	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
-//	// Return true if conflict was present, otherwise return false
-//	private boolean hasCommandConflict(String commandName, Argument[] args, String argumentsAsString) {
-//		// TODO: This code only checks if the last argument of two commands have the same name
-//		//  I'm not sure this actually prevents any relevant problems
-//		List<String[]> regArgs = new ArrayList<>();
-//		for (RegisteredCommand rCommand : registeredCommands) {
-//			if (rCommand.commandName().equals(commandName)) {
-//				for (String str : rCommand.argsAsStr()) {
-//					regArgs.add(str.split(":"));
-//				}
-//				// We just find the first entry that causes a conflict. If this
-//				// were some industry-level code, we would probably generate a
-//				// list of all commands first, then check for command conflicts
-//				// all in one go so we can display EVERY command conflict for
-//				// all commands, but this works perfectly and isn't important.
-//				break;
-//			}
-//		}
-//		for (int i = 0; i < args.length; i++) {
-//			// Avoid IAOOBEs and ensure all node names are the same
-//			if ((regArgs.size() == i && regArgs.size() < args.length) || (!regArgs.get(i)[0].equals(args[i].getNodeName()))) {
-//				break;
-//			}
-//			// This only applies to the last argument
-//			if (i == args.length - 1 && !regArgs.get(i)[1].equals(args[i].getClass().getSimpleName())) {
-//				// Command it conflicts with
-//				StringBuilder builder2 = new StringBuilder();
-//				for (String[] arg : regArgs) {
-//					builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
-//				}
-//
-//				// TODO: Error message isn't very clear as to what a command conflict is
-//				CommandAPI.logError("""
-//					Failed to register command:
-//
-//					  %s %s
-//
-//					Because it conflicts with this previously registered command:
-//
-//					  %s %s
-//					""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	/**
+	 * When a command is registered, all its nodes get merged into the existing nodes in the Brigadier CommandDispatcher.
+	 * Brigadier's default behavior is to <a href=https://github.com/Mojang/brigadier/blob/b92c420b2a292dd5c20f6adfafff5e21b9835c6d/src/main/java/com/mojang/brigadier/tree/CommandNode.java#L77>
+	 * override executors</a>. This method will throw an exception if this overriding is going to happen so we can avoid 
+	 * messing up previously registered commands.
+	 * 
+	 * @param nodeToRegister The {@link CommandNode} that is going to be regsitered.
+	 * @throws CommandConflictException if registering the given node would cause an executor set up by a previous command to be overridden.
+	 */
+	public void ensureNoCommandConflict(CommandNode<Source> nodeToRegister) {
+		ensureNoCommandConflict(nodeToRegister, platform.getBrigadierDispatcher().getRoot(), List.of());
+	}
+	
+	private void ensureNoCommandConflict(CommandNode<Source> nodeToRegister, CommandNode<Source> targetLocation, List<String> pathSoFar) {
+		CommandNode<Source> mergeTarget = targetLocation.getChild(nodeToRegister.getName());
+
+		if (mergeTarget == null) return; // The `nodeToRegister` does not already exist, no conflict possible
+
+		// Add node to path
+		List<String> path = new ArrayList<>();
+		path.addAll(pathSoFar);
+		path.add(nodeToRegister.getName());
+
+		if (nodeToRegister.getCommand() != null && mergeTarget.getCommand() != null) {
+			// We just find the first entry that causes a conflict. If this
+			// were some industry-level code, we would probably generate a
+			// list of all commands first, then check for command conflicts
+			// all in one go so we can display EVERY command conflict for
+			// all commands, but this works perfectly and isn't important.
+			throw new CommandConflictException(path);
+		}
+
+		// Ensure children do not conflict
+		for (CommandNode<Source> child : nodeToRegister.getChildren()) {
+			ensureNoCommandConflict(child, mergeTarget, path);
+		}
+	}
 
 	/**
 	 * Generates a Brigadier {@link Command} using the given CommandAPI objects.

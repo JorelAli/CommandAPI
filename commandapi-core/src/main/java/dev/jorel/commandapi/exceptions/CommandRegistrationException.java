@@ -7,14 +7,14 @@ import java.util.List;
 /**
  * An exception that happens while registering a command
  */
-public class CommandRegistrationException extends RuntimeException {
-	public CommandRegistrationException(String message) {
+public abstract class CommandRegistrationException extends RuntimeException {
+	protected CommandRegistrationException(String message) {
 		super(message);
 	}
 
 	protected static <Argument extends AbstractArgument<?, ?, ?, ?>> void addArgumentList(StringBuilder builder, List<Argument> arguments) {
 		builder.append("[");
-		for (AbstractArgument<?, ?, ?, ?> argument : arguments) {
+		for (Argument argument : arguments) {
 			addArgument(builder, argument);
 			builder.append(" ");
 		}
