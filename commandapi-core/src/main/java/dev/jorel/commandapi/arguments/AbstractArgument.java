@@ -361,6 +361,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		this.withPermission(argument.getArgumentPermission());
 	}
 
+	public String getHelpString() {
+		return "<" + this.getNodeName() + ">";
+	}
+
 	@Override
 	public String toString() {
 		return this.getNodeName() + "<" + this.getClass().getSimpleName() + ">";

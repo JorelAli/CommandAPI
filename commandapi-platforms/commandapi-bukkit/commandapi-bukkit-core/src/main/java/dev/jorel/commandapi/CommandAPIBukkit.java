@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.commandsenders.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -315,8 +316,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				final RegisteredCommand command = commandsWithIdenticalNames.get(i);
 				StringBuilder usageString = new StringBuilder();
 				usageString.append("/").append(command.commandName()).append(" ");
-				for (String arg : command.argsAsStr()) {
-					usageString.append("<").append(arg.split(":")[0]).append("> ");
+				for (AbstractArgument<?, ?, ?, ?> arg : command.arguments()) {
+					usageString.append(arg.getHelpString()).append(" ");
 				}
 				usages[i] = usageString.toString().trim();
 			}

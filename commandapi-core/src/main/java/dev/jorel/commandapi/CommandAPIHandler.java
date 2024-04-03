@@ -618,7 +618,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		for (Argument arg : args) {
 			argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 		}
-		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, shortDescription,
+		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, List.of(args), shortDescription,
 			fullDescription, usageDescription, aliases, permission, namespace);
 		registeredCommands.add(registeredCommandInformation);
 

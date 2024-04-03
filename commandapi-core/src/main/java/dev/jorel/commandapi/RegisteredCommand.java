@@ -1,5 +1,7 @@
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.arguments.AbstractArgument;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +27,11 @@ public record RegisteredCommand(
 	 *         {@code value:}{@link IntegerArgument}
 	 */
 	List<String> argsAsStr,
+
+	/**
+	 * @return An unmodifiable list of arguments for this command
+	 */
+	List<AbstractArgument<?, ?, ?, ?>> arguments,
 
 	/**
 	 * @return An {@link Optional} containing this command's help's short

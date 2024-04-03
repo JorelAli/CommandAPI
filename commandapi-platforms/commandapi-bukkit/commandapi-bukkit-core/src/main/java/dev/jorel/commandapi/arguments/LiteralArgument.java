@@ -138,6 +138,11 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	}
 
 	@Override
+	public String getHelpString() {
+		return literal;
+	}
+
+	@Override
 	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return literal;
 	}
