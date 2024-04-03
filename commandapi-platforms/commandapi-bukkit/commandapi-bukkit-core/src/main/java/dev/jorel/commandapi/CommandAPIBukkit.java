@@ -317,7 +317,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				StringBuilder usageString = new StringBuilder();
 				usageString.append("/").append(command.commandName()).append(" ");
 				for (AbstractArgument<?, ?, ?, ?> arg : command.arguments()) {
-					usageString.append(arg.getAsArgumentString()).append(" ");
+					usageString.append(arg.getHelpString()).append(" ");
 				}
 				usages[i] = usageString.toString().trim();
 			}

@@ -361,7 +361,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		this.withPermission(argument.getArgumentPermission());
 	}
 
-	public String getAsArgumentString() {
+	public String getHelpString() {
 		return "<" + this.getNodeName() + ">";
 	}
 

@@ -134,7 +134,7 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	}
 
 	@Override
-	public String getAsArgumentString() {
+	public String getHelpString() {
 		return literal;
 	}
 
