@@ -31,6 +31,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			// Nodes in the `arguments`/`literals` maps should have all children of this node as children
 			//  and store all the flag values given
 			Map<String, CommandNode<Source>> children = CommandAPIHandler.getCommandNodeChildren(node);
+			Map<String, LiteralCommandNode<Source>> literals = CommandAPIHandler.getCommandNodeLiterals(node);
+			Map<String, ArgumentCommandNode<Source, ?>> arguments = CommandAPIHandler.getCommandNodeArguments(node);
+
 			for (CommandNode<Source> child : node.getChildren()) {
 				// Clone the node, redirect it here, then put the clone into the children map
 				children.put(child.getName(), child.createBuilder().redirect(this).build());
@@ -41,13 +44,13 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 					LiteralCommandNode<Source> wrappedNode =
 						FlagsArgumentEndingNode.wrapNode(literalNode, getName(), previousArguments);
 
-					CommandAPIHandler.getCommandNodeLiterals(node).put(literalNode.getName(), wrappedNode);
+					literals.put(literalNode.getName(), wrappedNode);
 					finalWrappedNode = wrappedNode;
 				} else if(child instanceof ArgumentCommandNode<Source,?> argumentNode) {
 					ArgumentCommandNode<Source, ?> wrappedNode =
 						FlagsArgumentEndingNode.wrapNode(argumentNode, getName(), previousArguments);
 
-					CommandAPIHandler.getCommandNodeArguments(node).put(argumentNode.getName(), wrappedNode);
+					arguments.put(argumentNode.getName(), wrappedNode);
 					finalWrappedNode = wrappedNode;
 				} else {
 					throw new IllegalArgumentException("Node must be an argument or literal. Given " + child + " with type " + child.getClass().getName());
