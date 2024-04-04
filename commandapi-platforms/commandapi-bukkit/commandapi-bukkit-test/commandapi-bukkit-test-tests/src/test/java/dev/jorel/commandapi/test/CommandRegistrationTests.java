@@ -2,18 +2,27 @@ package dev.jorel.commandapi.test;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.arguments.DoubleArgument;
+import dev.jorel.commandapi.arguments.FloatArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.LongArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.exceptions.CommandConflictException;
 import dev.jorel.commandapi.exceptions.DuplicateNodeNameException;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
+import dev.jorel.commandapi.executors.PlayerExecutionInfo;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+import org.bukkit.entity.Player;
 
 /**
  * Tests for the semantics of registering commands
@@ -363,5 +372,108 @@ class CommandRegistrationTests extends TestBase {
 			.then(new LiteralArgument("path4").then(new StringArgument("alice").executesPlayer(P_EXEC)));
 
 		assertDoesNotThrow(() -> commandWithDuplicateNamesSeparated.register());
+	}
+
+	@Test
+	void testCommandConflictException() {
+		Mut<String> results = Mut.of();
+		Player player = server.addPlayer();
+
+		// The executor we register first should not be overwritten and should always run
+		PlayerExecutionInfo firstExecutor = info -> {results.set("first");};
+		PlayerExecutionInfo secondExecutor = info -> {results.set("second");};
+
+		// No arguments
+		new CommandAPICommand("noArguments")
+			.executesPlayer(firstExecutor)
+			.register();
+
+		CommandAPICommand noArguments = new CommandAPICommand("noArguments")
+			.executesPlayer(secondExecutor);
+
+		assertThrowsWithMessage(
+			CommandConflictException.class, 
+			"The command path \"/noArguments\" could not be registered because it conflicts with a previously registered command.", 
+			noArguments::register
+		);
+		assertStoresResult(player, "noArguments", results, "first");
+
+		// Arguments
+		new CommandAPICommand("arguments")
+			.withArguments(
+				new LiteralArgument("literal"),
+				new StringArgument("string")
+			)
+			.executesPlayer(firstExecutor)
+			.register();
+
+		CommandAPICommand arguments = new CommandAPICommand("arguments")
+			.withArguments(
+				new LiteralArgument("literal"),
+				new StringArgument("string")
+			)
+			.executesPlayer(secondExecutor);
+
+		assertThrowsWithMessage(
+			CommandConflictException.class,
+			"The command path \"/arguments literal string\" could not be registered because it conflicts with a previously registered command.",
+			arguments::register
+		);
+		assertStoresResult(player, "arguments literal string", results, "first");
+
+		// Different argument types
+		new CommandAPICommand("argumentTypes")
+			.withArguments(
+				new IntegerArgument("alice"),
+				new FloatArgument("bob")
+			)
+			.executesPlayer(firstExecutor)
+			.register();
+
+		CommandAPICommand argumentTypes = new CommandAPICommand("argumentTypes")
+			.withArguments(
+				new LongArgument("alice"),
+				new DoubleArgument("bob")
+			)
+			.executesPlayer(secondExecutor);
+
+		assertThrowsWithMessage(
+			CommandConflictException.class, 
+			"The command path \"/argumentTypes alice bob\" could not be registered because it conflicts with a previously registered command.", 
+			argumentTypes::register
+		);
+		assertStoresResult(player, "argumentTypes 0 0", results, "first");
+
+		// Different branches
+		new CommandTree("branches")
+			.then(
+				new LiteralArgument("alice")
+					.executesPlayer(firstExecutor)
+			)
+			.then(
+				new LiteralArgument("bob")
+					.executesPlayer(firstExecutor)
+			)
+			.register();
+
+		CommandTree branches = new CommandTree("branches")
+			.then(
+				new LiteralArgument("bob")
+					.executesPlayer(secondExecutor)
+			)
+			.then(
+				new LiteralArgument("alice")
+					.executesPlayer(secondExecutor)
+			);
+
+		assertThrowsWithMessage(
+			CommandConflictException.class, 
+			"The command path \"/branches bob\" could not be registered because it conflicts with a previously registered command.", 
+			branches::register
+		);
+		assertStoresResult(player, "branches alice", results, "first");
+		assertStoresResult(player, "branches bob", results, "first");
+
+		assertNoMoreResults(results);
 	}
 }

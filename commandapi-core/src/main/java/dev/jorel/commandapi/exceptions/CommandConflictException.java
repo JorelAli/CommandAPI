@@ -25,7 +25,7 @@ public class CommandConflictException extends CommandRegistrationException {
         }
         builder.setCharAt(builder.length()-1, '\"');
 
-        builder.append(" could not be regsitered because it conflicts with a previously registered command.");
+        builder.append(" could not be registered because it conflicts with a previously registered command.");
 
         return builder.toString();
     }
