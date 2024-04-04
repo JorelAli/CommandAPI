@@ -316,15 +316,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			previousArguments.add(commandNames);
 
-			// Add required arguments
 			Function<List<Argument>, Command<Source>> executorCreator = executor.hasAnyExecutors() ?
 				args -> handler.generateBrigadierCommand(args, executor) : null;
-			for (int i = 0; i < requiredArguments.size(); i++) {
-				Argument argument = requiredArguments.get(i);
-				previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
-					// Only the last required argument is executable
-					i == requiredArguments.size() - 1 ? executorCreator : null);
-			}
+			// Stack required arguments
+			// Only the last required argument is executable
+			previousNodes = AbstractArgument.stackArguments(requiredArguments, previousNodes, previousArguments, previousArgumentNames, executorCreator);
 
 			// Add optional arguments
 			for (Argument argument : optionalArguments) {

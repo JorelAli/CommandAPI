@@ -151,15 +151,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			newNodes.add(literalNode);
 		}
 
-		// Add combined arguments
-		previousNodes = newNodes;
-		List<Argument> combinedArguments = getCombinedArguments();
-		for (int i = 0; i < combinedArguments.size(); i++) {
-			Argument subArgument = combinedArguments.get(i);
-			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
-				// Only apply the `terminalExecutor` to the last argument
-				i == combinedArguments.size() - 1 ? terminalExecutorCreator : null);
-		}
+		// Stack on combined arguments
+		previousNodes = AbstractArgument.stackArguments(getCombinedArguments(), newNodes, previousArguments, previousArgumentNames, terminalExecutorCreator);
 
 		// Return last nodes
 		return previousNodes;

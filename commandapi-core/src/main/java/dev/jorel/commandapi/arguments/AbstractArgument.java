@@ -513,17 +513,42 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			previousNode.addChild(rootNode);
 		}
 
-		// Add combined arguments
 		// A GreedyArgument cannot have arguments after it
 		previousNodes = this instanceof GreedyArgument ? List.of() : List.of(rootNode);
-		for (int i = 0; i < combinedArguments.size(); i++) {
-			Argument subArgument = combinedArguments.get(i);
-			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
-				// Only apply the `terminalExecutor` to the last argument
-				i == combinedArguments.size() - 1 ? terminalExecutorCreator : null);
-		}
+		// Stack on combined arguments
+		previousNodes = stackArguments(combinedArguments, previousNodes, previousArguments, previousArgumentNames, terminalExecutorCreator);
 
 		// Return last nodes
+		return previousNodes;
+	}
+
+	/**
+	 * Builds a linear Brigadier {@link CommandNode} structure using 
+	 * CommandAPI arguments. Only the last argument will be executable.
+	 *
+	 * @param argumentsToStack        A List of CommandAPI arguments to put in sequence
+	 * @param previousNodes           A List of {@link CommandNode}s that start the stack.
+	 * @param previousArguments       A List of CommandAPI arguments that came before the {@code argumentsToStack}.
+	 * @param previousArgumentNames   A List of Strings containing the node names that came before the {@code argumentsToStack}.
+	 * @param terminalExecutorCreator A function that transforms the list of {@code previousArguments} into an
+	 *                                appropriate Brigadier {@link Command} which should be applied to the last 
+	 *                                stacked argument of the node structure. This parameter can be null to indicate 
+	 *                                that the argument stack should not be executable.
+	 * @param <Source>                The Brigadier Source object for running commands.
+	 * @return The list of last nodes in the Brigadier {@link CommandNode} structure representing the built argument stack.
+	 */
+	public static <Argument extends AbstractArgument<?, ?, Argument, ?>, Source> List<CommandNode<Source>> stackArguments(
+		List<Argument> argumentsToStack, List<CommandNode<Source>> previousNodes,
+		List<Argument> previousArguments, List<String> previousArgumentNames,
+		Function<List<Argument>, Command<Source>> terminalExecutorCreator
+	) {
+		int lastIndex = argumentsToStack.size() - 1;
+		for (int i = 0; i < argumentsToStack.size(); i++) {
+			Argument subArgument = argumentsToStack.get(i);
+			previousNodes = subArgument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
+				// Only apply the `terminalExecutor` to the last argument
+				i == lastIndex ? terminalExecutorCreator : null);
+		}
 		return previousNodes;
 	}
 }
