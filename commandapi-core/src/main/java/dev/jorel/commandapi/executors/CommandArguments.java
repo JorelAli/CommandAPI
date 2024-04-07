@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -47,6 +48,17 @@ public record CommandArguments(
 	 */
 	String fullInput
 ) {
+
+	private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = new HashMap<>() {{
+		put(boolean.class, Boolean.class);
+		put(char.class, Character.class);
+		put(byte.class, Byte.class);
+		put(short.class, Short.class);
+		put(int.class, Integer.class);
+		put(long.class, Long.class);
+		put(float.class, Float.class);
+		put(double.class, Double.class);
+	}};
 
 	// Access the inner structure directly
 
@@ -487,10 +499,10 @@ public record CommandArguments(
 		if (argument == null) {
 			return null;
 		}
-		if (!argument.getClass().equals(argumentType)) {
+		if (!argument.getClass().equals(PRIMITIVE_TO_WRAPPER.getOrDefault(argumentType, argumentType))) {
 			return null;
 		}
-		if (!argumentType.isAssignableFrom(argument.getClass())) {
+		if (!PRIMITIVE_TO_WRAPPER.getOrDefault(argumentType, argumentType).isAssignableFrom(argument.getClass())) {
 			return null;
 		}
 		return (T) argument;
