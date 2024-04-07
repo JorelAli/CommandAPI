@@ -466,7 +466,7 @@ public record CommandArguments(
 	@Nullable
 	public <T> T getByArgument(AbstractArgument<T, ?, ?, ?> argumentType) {
 		Object argument = get(argumentType.getNodeName());
-		return castArgument(argument, argumentType.getPrimitiveType());
+		return castArgument(argument, argumentType.getPrimitiveType(), argumentType.getNodeName());
 	}
 
 	/**
@@ -479,7 +479,7 @@ public record CommandArguments(
 	@Nullable
 	public <T> T getByClass(String nodeName, Class<T> argumentType) {
 		Object argument = get(nodeName);
-		return castArgument(argument, argumentType);
+		return castArgument(argument, argumentType, nodeName);
 	}
 
 	/**
@@ -492,18 +492,36 @@ public record CommandArguments(
 	@Nullable
 	public <T> T getByClass(int index, Class<T> argumentType) {
 		Object argument = get(index);
-		return castArgument(argument, argumentType);
+		// This seems like an extremely bogus implementation but I really don't want
+		// to figure the node name vs index stuff out in the castArgument method
+		int argumentIndex = 0;
+		for (String nodeName : argsMap.keySet()) {
+			if (argumentIndex != index) {
+				argumentIndex++;
+				continue;
+			}
+			// Ensure the found node name points to the right argument
+			if (argument == null) {
+				return null;
+			}
+			if (!argument.equals(argsMap.get(nodeName))) {
+				throw new IllegalStateException("Unexpected behaviour detected while retrieving argument (arguments don't match up)!" +
+					"This should never happen - if you're seeing this message, please" +
+					"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
+			}
+			return castArgument(argument, argumentType, nodeName);
+		}
+		throw new IllegalStateException("Unexpected behaviour detected while retrieving argument (didn't find the node name)!" +
+			"This should never happen - if you're seeing this message, please" +
+			"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
 	}
 
-	private <T> T castArgument(Object argument, Class<T> argumentType) {
+	private <T> T castArgument(Object argument, Class<T> argumentType, String name) {
 		if (argument == null) {
 			return null;
 		}
-		if (!argument.getClass().equals(PRIMITIVE_TO_WRAPPER.getOrDefault(argumentType, argumentType))) {
-			return null;
-		}
 		if (!PRIMITIVE_TO_WRAPPER.getOrDefault(argumentType, argumentType).isAssignableFrom(argument.getClass())) {
-			return null;
+			throw new IllegalArgumentException("Argument '" + name + "' is defined as " + argument.getClass().getSimpleName() + ", not " + argumentType);
 		}
 		return (T) argument;
 	}
