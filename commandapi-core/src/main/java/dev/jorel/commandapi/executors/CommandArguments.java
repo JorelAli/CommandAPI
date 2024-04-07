@@ -449,7 +449,7 @@ public record CommandArguments(
 	 * Returns an argument purely based on its CommandAPI representation. This also attempts to directly cast the argument to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
 	 *
 	 * @param argumentType The argument instance used to create the argument
-	 * @return The argument represented by the CommandAPI argument, or null if the argument's clas cannot be cast to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
+	 * @return The argument represented by the CommandAPI argument, or null if the argument's class cannot be cast to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
 	 */
 	@Nullable
 	public <T> T getByArgument(AbstractArgument<T, ?, ?, ?> argumentType) {
