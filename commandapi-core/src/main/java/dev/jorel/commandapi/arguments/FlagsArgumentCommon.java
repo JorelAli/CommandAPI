@@ -121,7 +121,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Setup looping branches
-		boolean loopingBranchesExecutable = getCombinedArguments().isEmpty() && getTerminalBranches().isEmpty();
+		boolean loopingBranchesExecutable = getTerminalBranches().isEmpty();
 		Function<List<Argument>, Command<Source>> loopingBranchExecutor = loopingBranchesExecutable ? terminalExecutorCreator : null;
 
 		for(List<Argument> loopingBranch : getLoopingBranches()) {
