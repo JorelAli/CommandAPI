@@ -67,6 +67,7 @@ import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess.Frozen;
 import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -121,6 +122,7 @@ import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R3.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_19_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -560,8 +562,12 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return PotionEffectType.getByKey(fromResourceLocation(BuiltInRegistries.MOB_EFFECT.getKey(ResourceArgument.getMobEffect(cmdCtx, key).value())));
+	public Object getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch (subType) {
+			case POTION_EFFECT_POTION_EFFECT -> CraftPotionEffectType.getByKey(fromResourceLocation(BuiltInRegistries.MOB_EFFECT.getKey(ResourceArgument.getMobEffect(cmdCtx, key).value())));
+			case POTION_EFFECT_NAMESPACEDKEY -> fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Override
@@ -648,6 +654,7 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 			};
 			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			case POTION_EFFECTS -> (context, builder) -> SharedSuggestionProvider.suggestResource(BuiltInRegistries.MOB_EFFECT.keySet(), builder);
 			default -> (context, builder) -> Suggestions.empty();
 		};
 	}

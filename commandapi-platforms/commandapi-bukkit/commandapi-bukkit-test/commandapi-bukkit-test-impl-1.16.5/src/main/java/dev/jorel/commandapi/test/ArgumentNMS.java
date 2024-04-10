@@ -429,9 +429,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandListenerWrapper> {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext cmdCtx, String key)
+	public Object getPotionEffect(CommandContext cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException {
-		return baseNMS.getPotionEffect(cmdCtx, key);
+		return baseNMS.getPotionEffect(cmdCtx, key, subType);
 	}
 
 	@Override

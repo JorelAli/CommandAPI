@@ -42,6 +42,9 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.tree.CommandNode;
+import net.minecraft.server.v1_16_R3.MobEffectList;
+import net.minecraft.server.v1_16_R3.Registry;
+import net.minecraft.server.v1_16_R3.ResourceKey;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -786,8 +789,12 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return new CraftPotionEffectType(ArgumentMobEffect.a(cmdCtx, key));
+	public Object getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch (subType) {
+			case POTION_EFFECT_POTION_EFFECT -> new CraftPotionEffectType(ArgumentMobEffect.a(cmdCtx, key));
+			case POTION_EFFECT_NAMESPACEDKEY -> fromMinecraftKey(ArgumentMinecraftKeyRegistered.e(cmdCtx, key));
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Override
@@ -878,6 +885,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 			case LOOT_TABLES -> (cmdCtx, builder) -> ICompletionProvider.a(this.<MinecraftServer>getMinecraftServer().getLootTableRegistry().a(), builder);
 			case BIOMES -> CompletionProviders.d;
 			case ENTITIES -> CompletionProviders.e;
+			case POTION_EFFECTS -> (context, builder) -> ICompletionProvider.a(IRegistry.MOB_EFFECT.keySet(), builder);
 			default -> (context, builder) -> Suggestions.empty();
 		};
 	}

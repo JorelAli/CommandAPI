@@ -430,6 +430,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                     <li>https://github.com/JorelAli/CommandAPI/issues/524 Fixes <code>CommandAPIBukkit.get().getTags()</code> erroring in 1.20.4</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/536, https://github.com/JorelAli/CommandAPI/pull/537 Fixes <code>MultiLiteralArgument</code> help displaying the node name instead of the literal text</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/540 Add methods to "safe-cast" arguments to <code>CommandArguments</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/541 Adds support for a <code>NamespacedKey</code> variant for the <code>PotionEffectArgument</code></li>
                 </ul>
                 <b>Minecraft Version Changes:</b>
                 <ul>

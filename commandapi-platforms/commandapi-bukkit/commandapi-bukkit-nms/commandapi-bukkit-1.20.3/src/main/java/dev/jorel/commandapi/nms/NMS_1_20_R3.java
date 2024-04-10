@@ -69,6 +69,7 @@ import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_20_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -690,10 +691,12 @@ public class NMS_1_20_R3 extends NMS_Common {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return PotionEffectType.getByKey(fromResourceLocation(
-				BuiltInRegistries.MOB_EFFECT.getKey(ResourceArgument.getMobEffect(cmdCtx, key).value())));
+	public Object getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch (subType) {
+			case POTION_EFFECT_POTION_EFFECT -> CraftPotionEffectType.minecraftToBukkit(ResourceArgument.getMobEffect(cmdCtx, key).value());
+			case POTION_EFFECT_NAMESPACEDKEY -> fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Differs(from = "1.20.1", by = "ResourceLocationArgument#getRecipe returns RecipeHolder now. Recipe id is access via id() instead of getId()")
@@ -804,6 +807,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 		};
 		case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 		case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+		case POTION_EFFECTS -> (context, builder) -> SharedSuggestionProvider.suggestResource(BuiltInRegistries.MOB_EFFECT.keySet(), builder);
 		default -> (context, builder) -> Suggestions.empty();
 		};
 	}
