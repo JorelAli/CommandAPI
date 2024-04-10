@@ -163,8 +163,8 @@
 <p>Sometimes, you want your command to fail on purpose. This is the way to &quot;gracefully&quot; handle errors in your command execution. This is performed by throwing any of the following methods:</p>
 <pre><code class="language-java">throw CommandAPI.failWithString(String message);
 throw CommandAPI.failWithMessage(Message message);
-throw CommandAPIBukkit.failWithBaseComponents(BaseComponent... message);
-throw CommandAPIBukkit.failWithAdventureComponent(Component message);
+throw CommandAPI.failWithBaseComponents(BaseComponent... message);
+throw CommandAPI.failWithAdventureComponent(Component message);
 </code></pre>
 <p>When the CommandAPI handles the fail method, it will cause the command to return a <em>success value</em> of 0, to indicate failure.</p>
 <div class="example">
