@@ -42,9 +42,6 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.tree.CommandNode;
-import net.minecraft.server.v1_16_R3.MobEffectList;
-import net.minecraft.server.v1_16_R3.Registry;
-import net.minecraft.server.v1_16_R3.ResourceKey;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

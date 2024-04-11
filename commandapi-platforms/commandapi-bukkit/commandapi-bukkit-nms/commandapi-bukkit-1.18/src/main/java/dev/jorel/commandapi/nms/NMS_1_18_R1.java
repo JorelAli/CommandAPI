@@ -76,7 +76,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;

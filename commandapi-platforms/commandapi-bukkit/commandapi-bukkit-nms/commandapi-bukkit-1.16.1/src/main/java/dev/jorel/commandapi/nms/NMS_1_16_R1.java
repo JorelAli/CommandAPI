@@ -22,7 +22,6 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.tree.CommandNode;
-import net.minecraft.server.v1_16_R1.MobEffectList;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

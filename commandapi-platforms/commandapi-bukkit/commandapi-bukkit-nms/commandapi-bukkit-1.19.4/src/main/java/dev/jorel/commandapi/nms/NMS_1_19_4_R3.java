@@ -67,7 +67,6 @@ import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess.Frozen;
 import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -128,7 +127,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;

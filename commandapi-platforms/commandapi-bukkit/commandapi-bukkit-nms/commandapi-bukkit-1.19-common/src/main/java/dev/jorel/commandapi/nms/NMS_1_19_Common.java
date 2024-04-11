@@ -136,7 +136,6 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
