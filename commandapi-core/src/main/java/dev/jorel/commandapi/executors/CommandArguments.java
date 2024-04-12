@@ -457,11 +457,15 @@ public record CommandArguments(
 		return (Optional<T>) getOptional(nodeName);
 	}
 
+	/*****************************************
+	 ********** SAFE-CAST ARGUMENTS **********
+	 *****************************************/
+
 	/**
 	 * Returns an argument purely based on its CommandAPI representation. This also attempts to directly cast the argument to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
 	 *
 	 * @param argumentType The argument instance used to create the argument
-	 * @return The argument represented by the CommandAPI argument, or null if the argument's class cannot be cast to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
+	 * @return The argument represented by the CommandAPI argument, or null if the argument was not found.
 	 */
 	@Nullable
 	public <T> T getByArgument(AbstractArgument<T, ?, ?, ?> argumentType) {
@@ -470,11 +474,38 @@ public record CommandArguments(
 	}
 
 	/**
+	 * Returns an argument purely based on its CommandAPI representation or a default value if the argument wasn't found.
+	 * <p>
+	 * If the argument was found, this also attempts to directly cast the argument to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
+	 *
+	 * @param argumentType The argument instance used to create the argument
+	 * @param defaultValue The default value to return if the argument wasn't found
+	 * @return The argument represented by the CommandAPI argument, or the default value if the argument was not found.
+	 */
+	public <T> T getByArgumentOrDefault(AbstractArgument<T, ?, ?, ?> argumentType, T defaultValue) {
+		T argument = getByArgument(argumentType);
+		return (argument != null) ? argument : defaultValue;
+	}
+
+	/**
+	 * Returns an <code>Optional</code> holding the provided argument. This <code>Optional</code> can be empty if the argument was not given when running the command.
+	 * <p>
+	 * This attempts to directly cast the argument to the type represented by {@link dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()}
+	 *
+	 * @param argumentType The argument instance used to create the argument
+	 * @return An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.
+	 */
+	public <T> Optional<T> getOptionalByArgument(AbstractArgument<T, ?, ?, ?> argumentType) {
+		T argument = getByArgument(argumentType);
+		return Optional.ofNullable(argument);
+	}
+
+	/**
 	 * Returns an argument based on its node name. This also attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
 	 *
 	 * @param nodeName The node name of the argument
 	 * @param argumentType The class that represents the argument
-	 * @return The argument with the given node name, or null if the argument's class cannot be cast to the type represented by the given {@code argumentType} argument
+	 * @return The argument with the given node name, or null if the argument was not found.
 	 */
 	@Nullable
 	public <T> T getByClass(String nodeName, Class<T> argumentType) {
@@ -483,11 +514,40 @@ public record CommandArguments(
 	}
 
 	/**
+	 * Returns an argument based on its node name or a default value if the argument wasn't found.
+	 * <p>
+	 * If the argument was found, this method attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
+	 *
+	 * @param nodeName The node name of the argument
+	 * @param argumentType The class that represents the argument
+	 * @param defaultValue The default value to return if the argument wasn't found
+	 * @return The argument with the given node name, or the default value if the argument was not found.
+	 */
+	public <T> T getByClassOrDefault(String nodeName, Class<T> argumentType, T defaultValue) {
+		T argument = getByClass(nodeName, argumentType);
+		return (argument != null) ? argument : defaultValue;
+	}
+
+	/**
+	 * Returns an <code>Optional</code> holding the argument with the given node name. This <code>Optional</code> can be empty if the argument was not given when running the command.
+	 * <p>
+	 * This attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
+	 *
+	 * @param nodeName The node name of the argument
+	 * @param argumentType The class that represents the argument
+	 * @return An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.
+	 */
+	public <T> Optional<T> getOptionalByClass(String nodeName, Class<T> argumentType) {
+		T argument = getByClass(nodeName, argumentType);
+		return Optional.ofNullable(argument);
+	}
+
+	/**
 	 * Returns an argument based on its index. This also attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
 	 *
-	 * @param index The position of the argument
+	 * @param index The index of the argument
 	 * @param argumentType The class that represents the argument
-	 * @return The argument at the given index, or null if the argument's class cannot be cast to the type represented by the given {@code argumentType} argument
+	 * @return The argument at the given index, or null if the argument was not found.
 	 */
 	@Nullable
 	public <T> T getByClass(int index, Class<T> argumentType) {
@@ -514,6 +574,35 @@ public record CommandArguments(
 		throw new IllegalStateException("Unexpected behaviour detected while retrieving argument (didn't find the node name)!" +
 			"This should never happen - if you're seeing this message, please" +
 			"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
+	}
+
+	/**
+	 * Returns an argument based on its index or a default value if the argument wasn't found.
+	 * <p>
+	 * If the argument was found, this method attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
+	 *
+	 * @param index The index of the argument
+	 * @param argumentType The class that represents the argument
+	 * @param defaultValue The default value to return if the argument wasn't found
+	 * @return The argument at the given index, or the default value if the argument was not found.
+	 */
+	public <T> T getByClassOrDefault(int index, Class<T> argumentType, T defaultValue) {
+		T argument = getByClass(index, argumentType);
+		return (argument != null) ? argument : defaultValue;
+	}
+
+	/**
+	 * Returns an <code>Optional</code> holding the argument at the given index. This <code>Optional</code> can be empty if the argument was not given when running the command.
+	 * <p>
+	 * This attempts to directly cast the argument to the type represented by the {@code argumentType} parameter.
+	 *
+	 * @param index The index of the argument
+	 * @param argumentType The class that represents the argument
+	 * @return An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.
+	 */
+	public <T> Optional<T> getOptionalByClass(int index, Class<T> argumentType) {
+		T argument = getByClass(index, argumentType);
+		return Optional.ofNullable(argument);
 	}
 
 	private <T> T castArgument(Object argument, Class<T> argumentType, String name) {
