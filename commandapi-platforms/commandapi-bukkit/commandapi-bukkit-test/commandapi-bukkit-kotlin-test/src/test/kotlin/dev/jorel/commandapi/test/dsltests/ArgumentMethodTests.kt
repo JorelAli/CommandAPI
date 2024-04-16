@@ -88,4 +88,31 @@ class ArgumentMethodTests : TestBase() {
 		assertNoMoreResults(results)
 	}
 
+	@Test
+	fun executionTestWithCommandTreeAndArgumentMethodUsingGetter() {
+		val results: Mut<String> = Mut.of()
+
+		commandTree("test") {
+			argument(StringArgument("value")) { getValue ->
+				playerExecutor { player, args ->
+					results.set(getValue(args))
+				}
+			}
+		}
+
+		val player: PlayerMock = server.addPlayer()
+
+		// /test hello
+		server.dispatchCommand(player, "test hello")
+		assertEquals("hello", results.get())
+
+		// /test world
+		server.dispatchCommand(player, "test world")
+		assertEquals("world", results.get())
+
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
+
+		assertNoMoreResults(results)
+	}
 }

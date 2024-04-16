@@ -74,4 +74,27 @@ class CommandAPICommandTests : TestBase() {
 		assertNoMoreResults(results)
 	}
 
+	@Test
+	fun executionTestWithSimpleCommandAPICommandAndArgumentGetter() {
+		val results: Mut<String> = Mut.of()
+
+		commandAPICommand("test") {
+			val getValue = stringArgument("value")
+			playerExecutor { player, args ->
+				val string = getValue(args)
+				results.set(string)
+			}
+		}
+
+		val player: PlayerMock = server.addPlayer()
+
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
+
+		// /test hello
+		server.dispatchCommand(player, "test hello")
+		assertEquals("hello", results.get())
+
+		assertNoMoreResults(results)
+	}
 }
