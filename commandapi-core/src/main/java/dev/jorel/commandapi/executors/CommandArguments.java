@@ -552,28 +552,7 @@ public record CommandArguments(
 	@Nullable
 	public <T> T getByClass(int index, Class<T> argumentType) {
 		Object argument = get(index);
-		// This seems like an extremely bogus implementation but I really don't want
-		// to figure the node name vs index stuff out in the castArgument method
-		int argumentIndex = 0;
-		for (String nodeName : argsMap.keySet()) {
-			if (argumentIndex != index) {
-				argumentIndex++;
-				continue;
-			}
-			// Ensure the found node name points to the right argument
-			if (argument == null) {
-				return null;
-			}
-			if (!argument.equals(argsMap.get(nodeName))) {
-				throw new IllegalStateException("Unexpected behaviour detected while retrieving argument (arguments don't match up)!" +
-					"This should never happen - if you're seeing this message, please" +
-					"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
-			}
-			return castArgument(argument, argumentType, nodeName);
-		}
-		throw new IllegalStateException("Unexpected behaviour detected while retrieving argument (didn't find the node name)!" +
-			"This should never happen - if you're seeing this message, please" +
-			"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
+		return castArgument(argument, argumentType, index);
 	}
 
 	/**
@@ -605,14 +584,26 @@ public record CommandArguments(
 		return Optional.ofNullable(argument);
 	}
 
-	private <T> T castArgument(Object argument, Class<T> argumentType, String name) {
+	private <T> T castArgument(Object argument, Class<T> argumentType, Object argumentNameOrIndex) {
 		if (argument == null) {
 			return null;
 		}
 		if (!PRIMITIVE_TO_WRAPPER.getOrDefault(argumentType, argumentType).isAssignableFrom(argument.getClass())) {
-			throw new IllegalArgumentException("Argument '" + name + "' is defined as " + argument.getClass().getSimpleName() + ", not " + argumentType);
+			throw new IllegalArgumentException(buildExceptionMessage(argumentNameOrIndex, argument.getClass().getSimpleName(), argumentType.getSimpleName()));
 		}
 		return (T) argument;
+	}
+
+	private String buildExceptionMessage(Object argumentNameOrIndex, String expectedClass, String actualClass) {
+		if (argumentNameOrIndex instanceof Integer i) {
+			return "Argument at index '" + i + "' is defined as " + expectedClass + ", not " + actualClass;
+		}
+		if (argumentNameOrIndex instanceof String s) {
+			return "Argument '" + s + "' is defined as " + expectedClass + ", not " + actualClass;
+		}
+		throw new IllegalStateException("Unexpected behaviour detected while building exception message!" +
+			"This should never happen - if you're seeing this message, please" +
+			"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
 	}
 
 }
