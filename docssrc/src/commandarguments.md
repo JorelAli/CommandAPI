@@ -8,6 +8,7 @@ While the argument array just gives the possibility to access the arguments via 
 - [Access arguments](#access-arguments)
 - [Access raw arguments](#access-raw-arguments)
 - [Access unsafe arguments](#access-unsafe-arguments)
+- [Access safe arguments](#access-safe-arguments)
 
 -----
 
@@ -249,6 +250,70 @@ Here, we don't actually want to cast the argument, so we use unsafe arguments to
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandArguments3}}
+```
+
+</div>
+
+</div>
+
+-----
+
+## Access safe arguments
+
+<div class="warning">
+
+**Developer's Note:**
+
+The following methods can not be used to access a value returned by a `CustomArgument` as its return type depends on the base argument for it.
+
+</div>
+
+Lastly, the CommandArguments class offers you a way to access your arguments in a more safe way by using internal casts. Again, methods are offered to access arguments by their
+index or their node name:
+
+```java
+T getByClass(String nodeName, Class<T> argumentType);
+T getByClassOrDefault(String nodeName, Class<T> argumentType, T defaultValue);
+T getOptionalByClass(String nodeName, Class<T> argumentType);
+T getByClass(int index, Class<T> argumentType);
+T getByClassOrDefault(int index, Class<T> argumentType, T defaultValue);
+T getOptionalByClass(int index, Class<T> argumentType);
+```
+
+The main addition in contrast to all the other methods the `CommandArguments` class offers, these methods take an additional parameter of type `Class<T>` where `T` is the return type
+of the argument with the given node name or index.
+
+For example, say you declared a `new StringArgument("value")` and you now want to access the return value of this argument using safe casting. This would be done as follows:
+
+```java
+String value = args.getByClass("value", String.class);
+```
+
+### Access safe arguments using an argument instance
+
+Finally, there is one more, even safer way of accessing safe arguments: by using an argument instance:
+
+```java
+T getByArgument(Argument<T> argumentType);
+T getByArgumentOrDefault(Argument<T> argumentType, T defaultValue);
+T getOptionalByArgument(Argument<T> argumentType);
+```
+
+However, while safer, this also introduces the need to first initialize your arguments before you can start implementing your command.
+To visualize this, we want to implement the command from [Access arguments by node name and index](#example---access-arguments-by-node-name-and-index) again, this time using safe arguments with an argument instance:
+
+<div class="example">
+
+### Example - Access safe arguments using an argument instance
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:commandArguments4}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:commandArguments4}}
 ```
 
 </div>
