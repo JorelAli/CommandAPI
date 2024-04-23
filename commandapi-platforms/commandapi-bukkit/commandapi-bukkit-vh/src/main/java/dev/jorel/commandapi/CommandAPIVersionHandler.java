@@ -54,7 +54,6 @@ public interface CommandAPIVersionHandler {
 		} else {
 			String version = Bukkit.getBukkitVersion().split("-")[0];
 			return switch (version) {
-				case "1.15", "1.15.1", "1.15.2" -> new NMS_1_15();
 				case "1.16.1" -> new NMS_1_16_R1();
 				case "1.16.2", "1.16.3" -> new NMS_1_16_R2();
 				case "1.16.4" -> new NMS_1_16_4_R3();
