@@ -360,7 +360,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// Don't override the plugin help topic
 			String commandPrefix = generateCommandHelpPrefix(command.commandName());
 
-			// Namespaced commands shouldn't have a namespace, we should save the namespaced command name
+			// Namespaced commands shouldn't have a help topic, we should save the namespaced command name
 			commandPrefix = commandPrefix.substring(1); // Get rid of the '/' for the namespaced command
 			namespacedCommandNames.add("/" + command.namespace() + ":" + commandPrefix); // Bukkit it stupid, it registers commands with a '/' in the help map
 			
@@ -425,7 +425,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 					commandPrefix = generateCommandHelpPrefix(alias);
 					helpTopic = generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission);
 
-					// Namespaced commands shouldn't have a namespace, we should save the namespaced command name
+					// Namespaced commands shouldn't have a help topic, we should save the namespaced alias name
 					commandPrefix = commandPrefix.substring(1); // Get rid of the '/' for the namespaced command
 					namespacedCommandNames.add("/" + command.namespace() + ":" + commandPrefix); // Bukkit it stupid, it registers commands with a '/' in the help map
 				}
