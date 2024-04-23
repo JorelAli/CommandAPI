@@ -628,11 +628,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 	@Override
 	public final org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		ResourceLocation resourceLocation = ResourceLocationArgument.getId(cmdCtx, key);
-		MinecraftServer server = this.<MinecraftServer>getMinecraftServer();
-		// TODO: Bruh where do I get loot tables from?
-		return new CraftLootTable(fromResourceLocation(resourceLocation),
-				this.<MinecraftServer>getMinecraftServer().getLootData().getLootTable(resourceLocation));
+		return CraftLootTable.minecraftToBukkit(ResourceLocationArgument.getId(cmdCtx, key));
 	}
 
 	@Override
@@ -801,7 +797,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 		};
 		case LOOT_TABLES -> (cmdCtx, builder) -> {
 			return SharedSuggestionProvider.suggestResource(
-					this.<MinecraftServer>getMinecraftServer().getLootData().getKeys(LootDataType.TABLE), builder);
+					this.<MinecraftServer>getMinecraftServer().reloadableRegistries().getKeys(Registries.LOOT_TABLE), builder);
 		};
 		case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 		case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
