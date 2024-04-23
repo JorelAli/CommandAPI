@@ -20,7 +20,7 @@
  *******************************************************************************/
 import java.util.Map;
 
-import org.bukkit.craftbukkit.v1_20_R3.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.v1_20_R4.help.SimpleHelpMap;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Either;
@@ -30,9 +30,9 @@ import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.server.CustomFunctionManager;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 
-//Spigot-Mapped reflection
+// Spigot-Mapped reflection
 @RequireField(in = CustomFunctionManager.class, name = "g", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "p", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
-@RequireField(in = EntityPositionSource.class, name = "c", ofType = Either.class)
+@RequireField(in = EntityPositionSource.class, name = "e", ofType = Either.class)
 public class SafeReflect {}

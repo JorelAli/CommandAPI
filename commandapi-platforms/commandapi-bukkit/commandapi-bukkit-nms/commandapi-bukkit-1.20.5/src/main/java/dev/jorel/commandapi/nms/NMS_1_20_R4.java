@@ -89,6 +89,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -132,6 +133,7 @@ import net.minecraft.commands.arguments.ScoreHolderArgument;
 import net.minecraft.commands.arguments.ScoreboardSlotArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
@@ -148,6 +150,8 @@ import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistryAccess.Frozen;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -185,7 +189,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.gameevent.BlockPositionSource;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.ScoreHolder;
@@ -197,13 +200,13 @@ import net.minecraft.world.scores.ScoreHolder;
 @NMSMeta(compatibleWith = { "1.20.5" })
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
-@RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
+// @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 public class NMS_1_20_R4 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
-	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
+	// private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
 
 	// Derived from net.minecraft.commands.Commands;
@@ -222,7 +225,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "p", "usesSelector");
-		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
+		// itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher");
 	}
@@ -287,16 +290,77 @@ public class NMS_1_20_R4 extends NMS_Common {
 		return new String[] { "1.20.5" };
 	};
 
+	@Differs(from = "1.20.4", by = "Everything")
 	@Override
 	public final String convert(org.bukkit.inventory.ItemStack is) {
-		// TODO: Figure out what we're doing about this
-		return is.getType().getKey().toString() + CraftItemStack.asNMSCopy(is).getOrCreateTag().getAsString();
+		// Let's assume that this functionality has never been implemented thus far...
+		final String itemStackKey = is.getType().getKey().toString();
+		DataComponentMap components = CraftItemStack.asNMSCopy(is).getComponents();
+		
+		// If we have components, add them to the end of the item stack string, such as
+		// netherite_hoe[damage=5,repair_cost=2]
+		final StringBuilder itemStackComponentsBuilder = new StringBuilder();
+		if (!components.isEmpty()) {
+			itemStackComponentsBuilder.append('[');
+
+			for (Iterator<TypedDataComponent<?>> iterator = components.iterator(); iterator.hasNext();) {
+				final TypedDataComponent<?> component = iterator.next();
+				itemStackComponentsBuilder.append(component.type());
+				itemStackComponentsBuilder.append('=');
+				
+				// TODO: We may have to format this object better (e.g. add quotes around strings)
+				// but we'll find that in testing (hopefully?)
+				itemStackComponentsBuilder.append(component.value());
+				
+				if (iterator.hasNext()) {
+					itemStackComponentsBuilder.append(',');
+				}
+			}
+			
+			itemStackComponentsBuilder.append(']');
+		}
+		
+		return itemStackKey + itemStackComponentsBuilder.toString();
 	}
 
+	@Differs(from = "1.20.4", by = "Everything")
 	@Override
 	public final String convert(ParticleData<?> particle) {
-		// TODO: Figure out what we're doing about this
-		return CraftParticle.createParticleParam(particle.particle(), particle.data()).writeToString();
+		final ParticleOptions options = CraftParticle.createParticleParam(particle.particle(), particle.data());
+		final ResourceLocation particleKey = BuiltInRegistries.PARTICLE_TYPE.getKey(options.getType());
+		
+		// The minimal "viable" solution...
+		return particleKey.toString();
+//		
+//		
+//		
+//		
+//		
+//		// Do I literally have to implement this for each particle type???
+//		final Object particleData = particle.data();
+//		String particleDataString = "";
+//		if (particleData instanceof BlockParticleOption blockParticle) {
+//			particleDataString = " " + BlockStateParser.serialize(blockParticle.getState());
+//		} else if (particleData instanceof DustColorTransitionOptions a) {
+//			RecordCodecBuilder.
+//		}
+//			
+//			BlockParticleOption.class
+//			DustColorTransitionOptions.class
+//			DustParticleOptions.class
+//			DustParticleOptionsBase.class
+//			ItemParticleOption.class
+//			ParticleOptions.class
+//			ParticleType.class
+//			ParticleTypes.class
+//			SculkChargeParticleOptions.class
+//			ShriekParticleOption.class
+//			SimpleParticleType.class
+//			VibrationParticleOption.class
+//		
+//		// TODO: Figure out what we're doing about this
+//		BuiltInRegistries.PARTICLE_TYPE.getKey(particle.particle().getKey()).toString()
+//		return CraftParticle.createParticleParam(particle.particle(), particle.data()).writeToString();
 	}
 	
 	/**
@@ -576,14 +640,15 @@ public class NMS_1_20_R4 extends NMS_Common {
 		// Create the basic ItemStack with an amount of 1
 		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
 
+		// TODO: Item counts
 		// Try and find the amount from the CompoundTag (if present)
-		final CompoundTag tag = itemInput.get(input);
-		if (tag != null) {
-			// The tag has some extra metadata we need! Get the Count (amount)
-			// and create the ItemStack with the correct metadata
-			int count = (int) tag.getByte("Count");
-			itemWithMaybeTag = input.createItemStack(count == 0 ? 1 : count, false);
-		}
+//		final CompoundTag tag = itemInput.get(input);
+//		if (tag != null) {
+//			// The tag has some extra metadata we need! Get the Count (amount)
+//			// and create the ItemStack with the correct metadata
+//			int count = (int) tag.getByte("Count");
+//			itemWithMaybeTag = input.createItemStack(count == 0 ? 1 : count, false);
+//		}
 
 		org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
 		result.setItemMeta(CraftItemStack.getItemMeta(itemWithMaybeTag));
@@ -883,8 +948,6 @@ public class NMS_1_20_R4 extends NMS_Common {
 			}
 			collection = packIDs;
 		}
-
-		Frozen registryAccess = this.<MinecraftServer>getMinecraftServer().registryAccess();
 
 		// Step 1: Construct an async supplier of a list of all resource packs to
 		// be loaded in the reload phase
