@@ -975,7 +975,8 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 	@Override
 	public Message generateMessageFromJson(String json) {
-		return Serializer.fromJson(json);
+		// TODO: Same as #getAdventureChatComponent, figure out if an empty provider is suitable here
+		return Serializer.fromJson(json, Provider.create(Stream.of()));
 	}
 
 	@SuppressWarnings("unchecked")
