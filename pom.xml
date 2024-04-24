@@ -96,6 +96,10 @@
 		<!-- sonarcloud CI -->
 		<sonar.organization>jorel-ali</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+		<!-- Hot-fix for Mockito and Java 21, should really update Mockito instead.
+			 See https://github.com/raphw/byte-buddy/issues/1396 for more info -->
+		<argLine>-Dnet.bytebuddy.experimental=true</argLine>
 	</properties>
 
 	<build>
