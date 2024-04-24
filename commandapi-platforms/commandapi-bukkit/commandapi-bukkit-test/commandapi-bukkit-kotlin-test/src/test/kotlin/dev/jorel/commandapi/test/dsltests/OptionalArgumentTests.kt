@@ -80,7 +80,7 @@ class OptionalArgumentTests: TestBase() {
 		// because everything can be achieved by using the normal CommandTree DSL syntax and
 		// the argument() method
 		commandTree("test") {
-			stringArgument("value", optional = true) {
+			stringOptionalArgument("value") {
 				playerExecutor { player, args ->
 					results.set(args.getOptional("value").orElse("DefaultValue") as String)
 				}
