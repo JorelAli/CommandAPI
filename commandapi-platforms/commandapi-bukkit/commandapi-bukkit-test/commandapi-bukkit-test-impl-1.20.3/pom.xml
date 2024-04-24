@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>4.6.1</version>
+			<version>5.11.0</version>
 		</dependency>
 		<dependency>
 			<!-- This is literally just for testing, we're not actually packaging this -->

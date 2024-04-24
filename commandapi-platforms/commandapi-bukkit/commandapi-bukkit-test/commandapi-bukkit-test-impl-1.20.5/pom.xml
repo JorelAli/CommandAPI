@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2018, 2021 Jorel Ali (Skepter) - MIT License
+    Copyright 2024 Jorel Ali (Skepter) - MIT License
    
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in
@@ -30,12 +30,12 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-bukkit-test-impl-1.19.4</artifactId>
+	<artifactId>commandapi-bukkit-test-impl-1.20.5</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19.4-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19.4-R0.1-SNAPSHOT</spigot.version>
-		<paper.version>1.19.4-R0.1-SNAPSHOT</paper.version>
+		<minecraft.mappings>1.20.5-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.20.5-R0.1-SNAPSHOT</spigot.version>
+		<paper.version>1.20.4-R0.1-SNAPSHOT</paper.version>
 	</properties>
 
 	<repositories>
@@ -87,7 +87,7 @@
 		<dependency>
 			<groupId>com.mojang</groupId>
 			<artifactId>brigadier</artifactId>
-			<version>1.0.17</version>
+			<version>1.2.9</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -103,22 +103,22 @@
 
 		<!-- Version-specific dependencies -->
 		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.19</artifactId>
-			<version>2.29.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.papermc.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>${paper.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.20</artifactId>
+			<version>3.9.0</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>${paper.version}</version>
+		</dependency> -->
 	</dependencies>
 
 	<build>
@@ -143,7 +143,7 @@
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>
-				<version>1.2.4</version>
+				<version>2.0.2</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
