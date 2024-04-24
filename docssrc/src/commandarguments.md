@@ -264,7 +264,7 @@ Here, we don't actually want to cast the argument, so we use unsafe arguments to
 
 **Developer's Note:**
 
-The following methods can not be used to access a value returned by a `CustomArgument` as its return type depends on the base argument for it.
+The following methods cannot be used to access a value returned by a `CustomArgument` as its return type depends on the base argument for it.
 
 </div>
 
@@ -280,14 +280,22 @@ T getByClassOrDefault(int index, Class<T> argumentType, T defaultValue);
 T getOptionalByClass(int index, Class<T> argumentType);
 ```
 
-The main addition in contrast to all the other methods the `CommandArguments` class offers, these methods take an additional parameter of type `Class<T>` where `T` is the return type
+Compared to the other methods the `CommandArguments` class offers, these methods take an additional parameter of type `Class<T>` where `T` is the return type
 of the argument with the given node name or index.
 
 For example, say you declared a `new StringArgument("value")` and you now want to access the return value of this argument using safe casting. This would be done as follows:
 
-```java
+<div class="multi-pre">
+
+```java,Java
 String value = args.getByClass("value", String.class);
 ```
+
+```kotlin,Kotlin
+val value = args.getByClass("value", String::class.java)
+```
+
+</div>
 
 ### Access safe arguments using an argument instance
 
@@ -300,7 +308,7 @@ T getOptionalByArgument(Argument<T> argumentType);
 ```
 
 However, while safer, this also introduces the need to first initialize your arguments before you can start implementing your command.
-To visualize this, we want to implement the command from [Access arguments by node name and index](#example---access-arguments-by-node-name-and-index) again, this time using safe arguments with an argument instance:
+To visualize this, we want to implement the command from [Access arguments by node name and index](#example---access-arguments-by-node-name-and-index) again, but this time using safe arguments with an argument instance:
 
 <div class="example">
 

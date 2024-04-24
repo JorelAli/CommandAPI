@@ -49,16 +49,16 @@ public record CommandArguments(
 	String fullInput
 ) {
 
-	private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = new HashMap<>() {{
-		put(boolean.class, Boolean.class);
-		put(char.class, Character.class);
-		put(byte.class, Byte.class);
-		put(short.class, Short.class);
-		put(int.class, Integer.class);
-		put(long.class, Long.class);
-		put(float.class, Float.class);
-		put(double.class, Double.class);
-	}};
+	private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = Map.of(
+		boolean.class, Boolean.class,
+		char.class, Character.class,
+		byte.class, Byte.class,
+		short.class, Short.class,
+		int.class, Integer.class,
+		long.class, Long.class,
+		float.class, Float.class,
+		double.class, Double.class
+	);
 
 	// Access the inner structure directly
 
@@ -469,8 +469,7 @@ public record CommandArguments(
 	 */
 	@Nullable
 	public <T> T getByArgument(AbstractArgument<T, ?, ?, ?> argumentType) {
-		Object argument = get(argumentType.getNodeName());
-		return castArgument(argument, argumentType.getPrimitiveType(), argumentType.getNodeName());
+		return castArgument(get(argumentType.getNodeName()), argumentType.getPrimitiveType(), argumentType.getNodeName());
 	}
 
 	/**
@@ -496,8 +495,7 @@ public record CommandArguments(
 	 * @return An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.
 	 */
 	public <T> Optional<T> getOptionalByArgument(AbstractArgument<T, ?, ?, ?> argumentType) {
-		T argument = getByArgument(argumentType);
-		return Optional.ofNullable(argument);
+		return Optional.ofNullable(getByArgument(argumentType));
 	}
 
 	/**
@@ -509,8 +507,7 @@ public record CommandArguments(
 	 */
 	@Nullable
 	public <T> T getByClass(String nodeName, Class<T> argumentType) {
-		Object argument = get(nodeName);
-		return castArgument(argument, argumentType, nodeName);
+		return castArgument(get(nodeName), argumentType, nodeName);
 	}
 
 	/**
@@ -538,8 +535,7 @@ public record CommandArguments(
 	 * @return An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.
 	 */
 	public <T> Optional<T> getOptionalByClass(String nodeName, Class<T> argumentType) {
-		T argument = getByClass(nodeName, argumentType);
-		return Optional.ofNullable(argument);
+		return Optional.ofNullable(getByClass(nodeName, argumentType));
 	}
 
 	/**
@@ -551,8 +547,7 @@ public record CommandArguments(
 	 */
 	@Nullable
 	public <T> T getByClass(int index, Class<T> argumentType) {
-		Object argument = get(index);
-		return castArgument(argument, argumentType, index);
+		return castArgument(get(index), argumentType, index);
 	}
 
 	/**
@@ -580,8 +575,7 @@ public record CommandArguments(
 	 * @return An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.
 	 */
 	public <T> Optional<T> getOptionalByClass(int index, Class<T> argumentType) {
-		T argument = getByClass(index, argumentType);
-		return Optional.ofNullable(argument);
+		return Optional.ofNullable(getByClass(index, argumentType));
 	}
 
 	private <T> T castArgument(Object argument, Class<T> argumentType, Object argumentNameOrIndex) {
