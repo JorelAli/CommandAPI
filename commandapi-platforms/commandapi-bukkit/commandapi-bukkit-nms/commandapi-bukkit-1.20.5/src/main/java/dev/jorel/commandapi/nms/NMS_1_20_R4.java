@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -38,7 +39,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
-import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -89,6 +89,9 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -135,6 +138,7 @@ import net.minecraft.commands.arguments.ScoreHolderArgument;
 import net.minecraft.commands.arguments.ScoreboardSlotArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
@@ -149,9 +153,6 @@ import net.minecraft.commands.functions.CommandFunction;
 import net.minecraft.commands.functions.InstantiatedFunction;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -164,6 +165,8 @@ import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -295,78 +298,62 @@ public class NMS_1_20_R4 extends NMS_Common {
 	public String[] compatibleVersions() {
 		return new String[] { "1.20.5" };
 	};
+	
+	private static String serializeNMSItemStack(ItemStack is) {
+		String result = new ItemInput(is.getItemHolder(), is.getComponents()).serialize(COMMAND_BUILD_CONTEXT);
+		System.out.println("Converted is: " + result);
+		return result;
+	}
 
 	@Differs(from = "1.20.4", by = "Everything")
 	@Override
 	public final String convert(org.bukkit.inventory.ItemStack is) {
-		// Let's assume that this functionality has never been implemented thus far...
-		final String itemStackKey = is.getType().getKey().toString();
-		DataComponentMap components = CraftItemStack.asNMSCopy(is).getComponents();
+		ItemStack itemStack = CraftItemStack.asNMSCopy(is);
 		
-		// If we have components, add them to the end of the item stack string, such as
-		// netherite_hoe[damage=5,repair_cost=2]
-		final StringBuilder itemStackComponentsBuilder = new StringBuilder();
-		if (!components.isEmpty()) {
-			itemStackComponentsBuilder.append('[');
-
-			for (Iterator<TypedDataComponent<?>> iterator = components.iterator(); iterator.hasNext();) {
-				final TypedDataComponent<?> component = iterator.next();
-				itemStackComponentsBuilder.append(component.type());
-				itemStackComponentsBuilder.append('=');
-				
-				// TODO: We may have to format this object better (e.g. add quotes around strings)
-				// but we'll find that in testing (hopefully?)
-				itemStackComponentsBuilder.append(component.value());
-				
-				if (iterator.hasNext()) {
-					itemStackComponentsBuilder.append(',');
-				}
-			}
-			
-			itemStackComponentsBuilder.append(']');
-		}
+		System.out.println(is.getType() + "Patch:");
+		System.out.println(itemStack.getComponentsPatch());
 		
-		return itemStackKey + itemStackComponentsBuilder.toString();
+		// TODO: We need to figure out how to get this component patch
+		// which contains the "minimal set of components" into a form
+		// of standard components, which is then serializable.
+		
+		System.out.println("Serialized:");
+		System.out.println(serializeNMSItemStack(CraftItemStack.asNMSCopy(is)));
+		return serializeNMSItemStack(CraftItemStack.asNMSCopy(is));
 	}
 
 	@Differs(from = "1.20.4", by = "Everything")
 	@Override
 	public final String convert(ParticleData<?> particle) {
-		final ParticleOptions options = CraftParticle.createParticleParam(particle.particle(), particle.data());
-		final ResourceLocation particleKey = BuiltInRegistries.PARTICLE_TYPE.getKey(options.getType());
+		System.out.println("Unpacking " + particle.particle().getKey());
+		final ParticleOptions particleOptions = CraftParticle.createParticleParam(particle.particle(), particle.data());
+		final ResourceLocation particleKey = BuiltInRegistries.PARTICLE_TYPE.getKey(particleOptions.getType());
+		// /particle dust{scale:2,color:[1,2,2]}
+		Codec codec = particleOptions.getType().codec().codec();
+		DataResult result = codec.encodeStart(NbtOps.INSTANCE, particleOptions);
+		Object o = result.result().get();
+		System.out.println("UNPACKED to " + o);
+		System.out.println(o.getClass().getName());
 		
-		// The minimal "viable" solution...
-		return particleKey.toString();
+//		.encodeStart(NbtOps.INSTANCE, particleOptions);
 //		
-//		
-//		
-//		
-//		
-//		// Do I literally have to implement this for each particle type???
-//		final Object particleData = particle.data();
-//		String particleDataString = "";
-//		if (particleData instanceof BlockParticleOption blockParticle) {
-//			particleDataString = " " + BlockStateParser.serialize(blockParticle.getState());
-//		} else if (particleData instanceof DustColorTransitionOptions a) {
-//			RecordCodecBuilder.
-//		}
-//			
-//			BlockParticleOption.class
-//			DustColorTransitionOptions.class
-//			DustParticleOptions.class
-//			DustParticleOptionsBase.class
-//			ItemParticleOption.class
-//			ParticleOptions.class
-//			ParticleType.class
-//			ParticleTypes.class
-//			SculkChargeParticleOptions.class
-//			ShriekParticleOption.class
-//			SimpleParticleType.class
-//			VibrationParticleOption.class
-//		
-//		// TODO: Figure out what we're doing about this
-//		BuiltInRegistries.PARTICLE_TYPE.getKey(particle.particle().getKey()).toString()
-//		return CraftParticle.createParticleParam(particle.particle(), particle.data()).writeToString();
+//
+//		// From RecipeManager#fromJson which isn't accessible
+//		final Recipe recipe = Recipe.CODEC.parse(JsonOps.INSTANCE, p.second()).getOrThrow(JsonParseException::new);
+//		return new RecipeHolder(new ResourceLocation(p.first()), recipe);
+		
+//		particleOptions.getType().codec().decoder().;
+		
+		
+		final String dataString;
+		
+		if (o.toString().equals("{}")) {
+			dataString = "";
+		} else {
+			dataString = o.toString();
+		}
+		
+		return particleKey.toString() + dataString;
 	}
 	
 	/**
@@ -445,7 +432,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Differs(from = "1.20.4", by = "Serializer.toJson now needs a Provider")
 	@Override
 	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key), Provider.create(Stream.of())));
+		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key), COMMAND_BUILD_CONTEXT));
 	}
 
 	@Override
@@ -458,7 +445,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		// TODO: Figure out if an empty provider is suitable for this context
 		return GsonComponentSerializer.gson()
-				.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key), Provider.create(Stream.of())));
+				.deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key), COMMAND_BUILD_CONTEXT));
 	}
 
 	@Override
@@ -508,7 +495,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Differs(from = "1.20.4", by = "Serializer.toJson now needs a Provider")
 	@Override
 	public final BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return ComponentSerializer.parse(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key), Provider.create(Stream.of())));
+		return ComponentSerializer.parse(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key), COMMAND_BUILD_CONTEXT));
 	}
 
 	@Override
@@ -1057,7 +1044,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Override
 	public Message generateMessageFromJson(String json) {
 		// TODO: Same as #getAdventureChatComponent, figure out if an empty provider is suitable here
-		return Serializer.fromJson(json, Provider.create(Stream.of()));
+		return Serializer.fromJson(json, COMMAND_BUILD_CONTEXT);
 	}
 
 	@SuppressWarnings("unchecked")
