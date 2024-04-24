@@ -299,6 +299,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
 	}
 
+	private String generateCommandHelpPrefix(String command, String namespace) {
+		return (Bukkit.getPluginCommand(command) == null ? "/" + namespace + ":" : "/minecraft:") + command;
+	}
+
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
 		// Generate usages
 		String[] usages = getUsageList(command);
@@ -361,8 +365,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			String commandPrefix = generateCommandHelpPrefix(command.commandName());
 
 			// Namespaced commands shouldn't have a help topic, we should save the namespaced command name
-			commandPrefix = commandPrefix.substring(1); // Get rid of the '/' for the namespaced command
-			namespacedCommandNames.add("/" + command.namespace() + ":" + commandPrefix); // Bukkit it stupid, it registers commands with a '/' in the help map
+			namespacedCommandNames.add(generateCommandHelpPrefix(command.commandName(), command.namespace()));
 			
 			StringBuilder aliasSb = new StringBuilder();
 			final String shortDescription;
@@ -426,8 +429,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 					helpTopic = generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission);
 
 					// Namespaced commands shouldn't have a help topic, we should save the namespaced alias name
-					commandPrefix = commandPrefix.substring(1); // Get rid of the '/' for the namespaced command
-					namespacedCommandNames.add("/" + command.namespace() + ":" + commandPrefix); // Bukkit it stupid, it registers commands with a '/' in the help map
+					namespacedCommandNames.add(generateCommandHelpPrefix(alias, command.namespace()));
 				}
 				helpTopicsToAdd.put(commandPrefix, helpTopic);
 			}
