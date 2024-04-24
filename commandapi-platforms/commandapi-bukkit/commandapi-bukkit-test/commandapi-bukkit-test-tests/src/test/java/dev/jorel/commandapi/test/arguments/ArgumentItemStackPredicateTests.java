@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -55,10 +56,18 @@ class ArgumentItemStackPredicateTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// /test dirt
-		server.dispatchCommand(player, "test dirt");
-		assertTrue(results.get().test(new ItemStack(Material.DIRT)));
-		
+		// I don't know why, but for some reason, in 1.20.5 you can't have
+		// an item predicate that doesn't contain a # character?
+		if (version.lessThan(MCVersion.V1_20_5)) {
+			// /test dirt
+			server.dispatchCommand(player, "test dirt");
+			assertTrue(results.get().test(new ItemStack(Material.DIRT)));
+		} else {
+			// /test #axes
+			server.dispatchCommand(player, "test #axes");
+			assertTrue(results.get().test(new ItemStack(Material.DIAMOND_AXE)));
+		}
+
 		// TODO: Not sure why this fails, but it does!
 		// /test dirt
 //		server.dispatchCommand(player, "test dirt{Count:3b}");

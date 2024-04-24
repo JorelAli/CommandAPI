@@ -78,9 +78,9 @@ class ArgumentChatColorTests extends TestBase {
 			if(color.isFormat() && !color.equals(ChatColor.RESET)) {
 				String colorName = color.name().toLowerCase();
 				if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
-					assertCommandFailsWith(player, "test " + colorName, "Unknown color '" + colorName + "'");
-				} else {
 					assertCommandFailsWith(player, "test " + colorName, "Unknown color '" + colorName + "' at position 10: test magic<--[HERE]");
+				} else {
+					assertCommandFailsWith(player, "test " + colorName, "Unknown color '" + colorName + "'");
 				}
 			}
 		}

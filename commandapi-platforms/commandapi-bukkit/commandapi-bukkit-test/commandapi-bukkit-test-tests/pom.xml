@@ -206,6 +206,53 @@
 			</dependencies>
 		</profile>
 		<profile>
+			<id>Minecraft_1_20_5_Mojang</id>
+			<dependencies>
+				<dependency>
+					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
+					 commandapi-core, but isn't inherited here automatically, so we add
+					 it here -->
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-api</artifactId>
+					<version>2.23.1</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-nms-dependency-mojang-mapped</artifactId>
+					<version>${project.version}</version>
+					<type>pom</type>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-shade</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>dev.jorel</groupId>
+					<artifactId>commandapi-bukkit-test-impl-1.20.5</artifactId>
+					<version>${project.version}</version>
+					<classifier>mojang-mapped</classifier>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<classifier>remapped-mojang</classifier>
+					<version>1.20.5-R0.1-SNAPSHOT</version>
+				</dependency>
+				<!-- Ideally we'd include paper here, but this
+				causes MockBukkit to fall apart because it then
+				tries to register potion effects when the server
+				is null and I CBA to sort that out right now -->
+				<!-- <dependency>
+					<groupId>io.papermc.paper</groupId>
+					<artifactId>paper-api</artifactId>
+					<version>1.20.2-R0.1-SNAPSHOT</version>
+				</dependency> -->
+			</dependencies>
+		</profile>
+		<profile>
 			<id>Minecraft_1_20_3</id>
 			<dependencies>
 				<dependency>
