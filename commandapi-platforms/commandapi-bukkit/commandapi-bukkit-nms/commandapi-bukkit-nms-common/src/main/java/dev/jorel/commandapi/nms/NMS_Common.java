@@ -120,7 +120,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentChatComponent() {
+	@Overridden(in = "1.20.5", because = "This now takes in a CommandBuildContext")
+	public ArgumentType<?> _ArgumentChatComponent() {
 		return ComponentArgument.textComponent();
 	}
 
@@ -310,7 +311,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		throws CommandSyntaxException;
 
 	@Override
-	public final Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	@Overridden(in = "1.20.5", because = "Serializer.toJson now needs a Provider")
+	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
@@ -356,7 +358,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract CommandDispatcher<CommandSourceStack> getResourcesDispatcher();
 
 	@Override
-	public final BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	@Overridden(in = "1.20.5", because = "Serializer.toJson now needs a Provider")
+	public BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return ComponentSerializer.parse(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 

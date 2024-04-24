@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -69,7 +70,11 @@ class ArgumentScoreHolderTests extends TestBase {
 		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9},limit=1]", "Selector not allowed");
 
 		// /test @e[type=player,scores={deaths=..9}]
-		assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9}]", "Only one entity is allowed, but the provided selector allows more than one");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9}]", "Only one entity is allowed, but the provided selector allows more than one at position 40: ...aths=..9}]<--[HERE]");
+		} else {
+			assertCommandFailsWith(player, "test @e[type=player,scores={deaths=..9}]", "Only one entity is allowed, but the provided selector allows more than one");
+		}
 
 		player.setOp(true);
 		

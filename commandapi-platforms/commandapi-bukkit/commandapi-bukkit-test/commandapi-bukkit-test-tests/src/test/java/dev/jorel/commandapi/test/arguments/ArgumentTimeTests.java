@@ -78,7 +78,9 @@ class ArgumentTimeTests extends TestBase {
 
 		// /test -2
 		// Fails because -2 is negative (ticks can only be 0 or greater)
-		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertCommandFailsWith(player, "test -2", "The tick count must not be less than 0, found -2 at position 7: test -2<--[HERE]");
+		} else if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
 			assertCommandFailsWith(player, "test -2", "Tick count must not be less than 0, found -2");
 		} else {
 			assertCommandFailsWith(player, "test -2", "Tick count must be non-negative");

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -76,7 +77,11 @@ class ArgumentChatColorTests extends TestBase {
 		for(ChatColor color : ChatColor.values()) {
 			if(color.isFormat() && !color.equals(ChatColor.RESET)) {
 				String colorName = color.name().toLowerCase();
-				assertCommandFailsWith(player, "test " + colorName, "Unknown color '" + colorName + "'");
+				if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+					assertCommandFailsWith(player, "test " + colorName, "Unknown color '" + colorName + "'");
+				} else {
+					assertCommandFailsWith(player, "test " + colorName, "Unknown color '" + colorName + "' at position 10: test magic<--[HERE]");
+				}
 			}
 		}
 
