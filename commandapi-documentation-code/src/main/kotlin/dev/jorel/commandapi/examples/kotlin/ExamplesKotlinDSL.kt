@@ -910,7 +910,7 @@ fun help() {
 /* ANCHOR: help1 */
 commandAPICommand("mycmd") {
     withShortDescription("Says hi")
-    withFullDescription("Broadcasts ho to everyone on the server")
+    withFullDescription("Broadcasts hi to everyone on the server")
     anyExecutor { _, _ ->
         Bukkit.broadcastMessage("Hi!")
     }

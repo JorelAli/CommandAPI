@@ -81,7 +81,57 @@ We could also register this command using the `withHelp` method instead:
 
 </div>
 
-## Help usage
+## Advanced help topics
+
+For more control over help topics, the CommandAPI offers the following method, which allows you to provide your own `HelpTopic` object:
+
+```java
+CommandAPICommand withHelp(HelpTopic helpTopic);
+```
+
+<div class="example">
+
+### Example - Adding locale-specific help
+
+In this example, we implement locale-specific help so players can see help in their desired language. To do this, we must make use of the Bukkit `HelpTopic` object which gives us more control over the content of help that is displayed to a player:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:help3}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:help3}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:help3}}
+```
+
+</div>
+
+We then add our new `HelpTopic` to the command using the `withHelp` method:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:help4}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:help4}}
+```
+
+```kotlin,Kotlin_DSL
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:help4}}
+```
+
+</div>
+
+</div>
+
+## Command usage
 
 When registering a command, there also is a command usage generated. The CommandAPI provides a way to customise this usage by providing the `withUsage()` method:
 

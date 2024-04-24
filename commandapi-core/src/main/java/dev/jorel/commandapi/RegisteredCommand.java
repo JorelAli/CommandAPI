@@ -50,6 +50,11 @@ public record RegisteredCommand(
 	 *          usage
 	 */
 	Optional<String[]> usageDescription,
+	
+	/**
+	 * @return An {@link Optional} containing this command's help topic (for Bukkit)
+	 */
+	Optional<Object> helpTopic,
 
 	/**
 	 * @return a {@link String}{@code []} of aliases for this command
@@ -74,7 +79,7 @@ public record RegisteredCommand(
 		int result = 1;
 		result = prime * result + Arrays.hashCode(aliases);
 		result = prime * result + Arrays.hashCode(usageDescription.orElse(null));
-		result = prime * result + Objects.hash(argsAsStr, commandName, fullDescription, permission, shortDescription, namespace);
+		result = prime * result + Objects.hash(argsAsStr, commandName, fullDescription, permission, shortDescription, helpTopic, namespace);
 		return result;
 	}
 
@@ -89,14 +94,15 @@ public record RegisteredCommand(
 		RegisteredCommand other = (RegisteredCommand) obj;
 		return Arrays.equals(aliases, other.aliases) && Objects.equals(argsAsStr, other.argsAsStr) && Objects.equals(commandName, other.commandName)
 			&& Objects.equals(namespace, other.namespace) && Arrays.equals(usageDescription.orElse(null), other.usageDescription.orElse(null))
-			&& Objects.equals(fullDescription, other.fullDescription) && Objects.equals(permission, other.permission) && Objects.equals(shortDescription, other.shortDescription);
+			&& Objects.equals(fullDescription, other.fullDescription) && Objects.equals(permission, other.permission) && Objects.equals(shortDescription, other.shortDescription)
+			&& Objects.equals(helpTopic, other.helpTopic);
 	}
 
 	@Override
 	public String toString() {
 		return "RegisteredCommand [commandName=" + commandName + ", argsAsStr=" + argsAsStr + ", shortDescription=" + shortDescription + ", fullDescription=" + fullDescription
 			+ ", usageDescription=" + (usageDescription.isPresent() ? "Optional[" + Arrays.toString(usageDescription.get()) + "]" : "Optional.empty")
-			+ ", aliases=" + Arrays.toString(aliases) + ", permission=" + permission + ", namespace=" + namespace + "]";
+			+ ", aliases=" + Arrays.toString(aliases) + ", permission=" + permission + ", namespace=" + namespace + ", helpTopic=" + helpTopic + "]";
 	}
 
 }

@@ -36,6 +36,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.ProxiedCommandSender
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
+import org.bukkit.help.HelpTopic
 import org.bukkit.inventory.ComplexRecipe
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.Recipe
@@ -1601,6 +1602,42 @@ CommandAPICommand("mycmd")
     })
     .register()
 /* ANCHOR_END: help2 */
+}
+
+/* ANCHOR: help3 */
+fun makeHelp(command: String): HelpTopic = object: HelpTopic() {
+    override fun getShortText(): String = "Says hi"
+
+    override fun getFullText(forWho: CommandSender): String {
+        var helpText = ""
+        if (forWho is Player) {
+            // Make use of the player's locale to make language-specific help!
+            val playerLocale = forWho.locale()
+            if (playerLocale.getLanguage() == "en") {
+                helpText = "Broadcasts hi to everyone on the server"
+            } else if (playerLocale.getLanguage() == "de") {
+                helpText = "Sendet Hallo an alle auf dem Server"
+            }
+        } else {
+            helpText = "Broadcasts hi to everyone on the server"
+        }
+        return helpText
+    }
+
+    // Allow anyone to see this help topic
+    override fun canSee(player: CommandSender): Boolean = true
+}
+/* ANCHOR_END: help3 */
+
+fun help2() {
+/* ANCHOR: help4 */
+return CommandAPICommand("mycmd")
+    .withHelp(makeHelp("mycmd"))
+    .executes(CommandExecutor { _, _ ->
+        Bukkit.broadcastMessage("Hi!")
+    })
+    .register()
+/* ANCHOR_END: help4 */
 }
 
 fun listed() {

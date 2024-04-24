@@ -76,6 +76,7 @@ The `withAliases` method is used to declare a list of aliases that can be used t
 
 ```java
 CommandAPICommand withHelp(String shortDescription, fullDescription)
+CommandAPICommand withHelp(HelpTopic helpTopic)
 CommandAPICommand withShortDescription(String shortDescription)
 CommandAPICommand withFullDescription(String fullDescription)
 ```

@@ -7,18 +7,33 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import dev.jorel.commandapi.arguments.AbstractArgument;
-import dev.jorel.commandapi.commandsenders.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
-import org.bukkit.command.*;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -38,10 +53,22 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 
+import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
+import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitEntity;
+import dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitRemoteConsoleCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -329,56 +356,70 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 
 		for (RegisteredCommand command : commands) {
-			// Generate short description
-			final String shortDescription;
-			final Optional<String> shortDescriptionOptional = command.shortDescription();
-			final Optional<String> fullDescriptionOptional = command.fullDescription();
-			if (shortDescriptionOptional.isPresent()) {
-				shortDescription = shortDescriptionOptional.get();
-			} else if (fullDescriptionOptional.isPresent()) {
-				shortDescription = fullDescriptionOptional.get();
-			} else {
-				shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
-			}
-
-			// Generate full description
-			StringBuilder sb = new StringBuilder();
-			if (fullDescriptionOptional.isPresent()) {
-				sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(fullDescriptionOptional.get()).append("\n");
-			}
-
-			generateHelpUsage(sb, command);
-			sb.append("\n");
-
-			// Generate aliases. We make a copy of the StringBuilder because we
-			// want to change the output when we register aliases
-			StringBuilder aliasSb = new StringBuilder(sb.toString());
-			if (command.aliases().length > 0) {
-				sb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE).append(String.join(", ", command.aliases()));
-			}
-
-			// Must be empty string, not null as defined by OBC::CustomHelpTopic
-			String permission = command.permission().getPermission().orElse("");
-
 			// Don't override the plugin help topic
 			String commandPrefix = generateCommandHelpPrefix(command.commandName());
-			helpTopicsToAdd.put(commandPrefix, generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
+			StringBuilder aliasSb = new StringBuilder();
+			final String shortDescription;
+			
+			// Must be empty string, not null as defined by OBC::CustomHelpTopic
+			final String permission = command.permission().getPermission().orElse("");
+			
+			HelpTopic helpTopic;
+			if (command.helpTopic().isPresent()) {
+				helpTopic = (HelpTopic) command.helpTopic().get();
+				shortDescription = "";
+			} else {
+				// Generate short description
+				final Optional<String> shortDescriptionOptional = command.shortDescription();
+				final Optional<String> fullDescriptionOptional = command.fullDescription();
+				if (shortDescriptionOptional.isPresent()) {
+					shortDescription = shortDescriptionOptional.get();
+				} else if (fullDescriptionOptional.isPresent()) {
+					shortDescription = fullDescriptionOptional.get();
+				} else {
+					shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
+				}
+	
+				// Generate full description
+				StringBuilder sb = new StringBuilder();
+				if (fullDescriptionOptional.isPresent()) {
+					sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(fullDescriptionOptional.get()).append("\n");
+				}
+	
+				generateHelpUsage(sb, command);
+				sb.append("\n");
+	
+				// Generate aliases. We make a copy of the StringBuilder because we
+				// want to change the output when we register aliases
+				aliasSb = new StringBuilder(sb.toString());
+				if (command.aliases().length > 0) {
+					sb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE).append(String.join(", ", command.aliases()));
+				}
+
+				helpTopic = generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission);
+			}
+			helpTopicsToAdd.put(commandPrefix, helpTopic);
 
 			for (String alias : command.aliases()) {
-				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
-				currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
-
-				// We want to get all aliases (including the original command name),
-				// except for the current alias
-				List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
-				aliases.add(command.commandName());
-				aliases.remove(alias);
-
-				currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
-
-				// Don't override the plugin help topic
-				commandPrefix = generateCommandHelpPrefix(alias);
-				helpTopicsToAdd.put(commandPrefix, generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission));
+				if (command.helpTopic().isPresent()) {
+					helpTopic = (HelpTopic) command.helpTopic().get();
+				} else {
+					StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
+					currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
+	
+					// We want to get all aliases (including the original command name),
+					// except for the current alias
+					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
+					aliases.add(command.commandName());
+					aliases.remove(alias);
+	
+					currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
+	
+					// Don't override the plugin help topic
+					commandPrefix = generateCommandHelpPrefix(alias);
+					helpTopic = generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission);
+				}
+				helpTopicsToAdd.put(commandPrefix, helpTopic);
 			}
 		}
 

@@ -603,6 +603,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		Optional<String> shortDescription = meta.shortDescription;
 		Optional<String> fullDescription = meta.fullDescription;
 		Optional<String[]> usageDescription = meta.usageDescription;
+		Optional<Object> helpTopic = meta.helpTopic;
 
 		// Handle command conflicts
 		boolean hasRegisteredCommand = false;
@@ -619,7 +620,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 		}
 		RegisteredCommand registeredCommandInformation = new RegisteredCommand(commandName, argumentsString, List.of(args), shortDescription,
-			fullDescription, usageDescription, aliases, permission, namespace);
+			fullDescription, usageDescription, helpTopic, aliases, permission, namespace);
 		registeredCommands.add(registeredCommandInformation);
 
 		// Handle previewable arguments
