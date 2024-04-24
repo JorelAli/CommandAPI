@@ -1699,12 +1699,12 @@ public HelpTopic makeHelp(String command) {
                 // Make use of the player's locale to make language-specific help!
                 Locale playerLocale = player.locale();
                 if (playerLocale.getLanguage().equals("en")) {
-                    helpText = "Broadcasts hi to everyone on the server";
+                    helpText = "Broadcasts \"Hi!\" to everyone on the server";
                 } else if (playerLocale.getLanguage().equals("de")) {
-                    helpText = "Sendet Hallo an alle auf dem Server";
+                    helpText = "Sendet \"Hi!\" an alle auf dem Server";
                 }
             } else {
-                helpText = "Broadcasts hi to everyone on the server";
+                helpText = "Broadcasts \"Hi!\" to everyone on the server";
             }
             return helpText;
         }

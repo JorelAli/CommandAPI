@@ -105,10 +105,6 @@ In this example, we implement locale-specific help so players can see help in th
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:help3}}
 ```
 
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:help3}}
-```
-
 </div>
 
 We then add our new `HelpTopic` to the command using the `withHelp` method:
@@ -121,10 +117,6 @@ We then add our new `HelpTopic` to the command using the `withHelp` method:
 
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:help4}}
-```
-
-```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:help4}}
 ```
 
 </div>

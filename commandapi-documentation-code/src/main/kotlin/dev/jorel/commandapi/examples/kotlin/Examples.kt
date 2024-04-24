@@ -1614,12 +1614,12 @@ fun makeHelp(command: String): HelpTopic = object: HelpTopic() {
             // Make use of the player's locale to make language-specific help!
             val playerLocale = forWho.locale()
             if (playerLocale.getLanguage() == "en") {
-                helpText = "Broadcasts hi to everyone on the server"
+                helpText = "Broadcasts \"Hi!\" to everyone on the server"
             } else if (playerLocale.getLanguage() == "de") {
-                helpText = "Sendet Hallo an alle auf dem Server"
+                helpText = "Sendet \"Hi!\" an alle auf dem Server"
             }
         } else {
-            helpText = "Broadcasts hi to everyone on the server"
+            helpText = "Broadcasts \"Hi!\" to everyone on the server"
         }
         return helpText
     }
