@@ -42,9 +42,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mockito.Mockito;
 
+import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.serialization.JsonOps;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
@@ -81,6 +83,8 @@ import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.util.profiling.metrics.profiling.InactiveMetricsRecorder;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -237,16 +241,16 @@ public class MockNMS extends Enums {
 	}
 
 	private void registerDefaultRecipes() {
-//		@SuppressWarnings({ "unchecked", "rawtypes" })
-//		List<RecipeHolder<?>> recipes = (List) getRecipes(MinecraftServer.class)
-//			.stream()
-//			.map(p -> {
-//				// From RecipeManager#fromJson which isn't accessible
-//				final Recipe recipe = net.minecraft.Util.getOrThrow(Recipe.CODEC.parse(JsonOps.INSTANCE, p.second()), JsonParseException::new);
-//				return new RecipeHolder(new ResourceLocation(p.first()), recipe);
-//			})
-//			.toList();
-//		recipeManager.replaceRecipes(recipes);
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		List<RecipeHolder<?>> recipes = (List) getRecipes(MinecraftServer.class)
+			.stream()
+			.map(p -> {
+				// From RecipeManager#fromJson which isn't accessible
+				final Recipe recipe = Recipe.CODEC.parse(JsonOps.INSTANCE, p.second()).getOrThrow(JsonParseException::new);
+				return new RecipeHolder(new ResourceLocation(p.first()), recipe);
+			})
+			.toList();
+		recipeManager.replaceRecipes(recipes);
 	}
 
 	/**************************

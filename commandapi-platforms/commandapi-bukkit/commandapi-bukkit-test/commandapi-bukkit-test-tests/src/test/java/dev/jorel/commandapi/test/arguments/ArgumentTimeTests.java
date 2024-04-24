@@ -88,7 +88,11 @@ class ArgumentTimeTests extends TestBase {
 		
 		// /test 2x
 		// Fails because 'x' is not a valid unit
-		assertCommandFailsWith(player, "test 2x", "Invalid unit");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertCommandFailsWith(player, "test 2x", "Invalid unit at position 7: test 2x<--[HERE]");
+		} else {
+			assertCommandFailsWith(player, "test 2x", "Invalid unit");
+		}
 		
 		assertNoMoreResults(results);
 	}
