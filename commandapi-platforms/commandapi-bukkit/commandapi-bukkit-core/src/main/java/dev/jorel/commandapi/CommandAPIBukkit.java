@@ -358,7 +358,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	void updateHelpForCommands(List<RegisteredCommand> commands) {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
-		List<String> namespacedCommandNames = new ArrayList<>();
+		Set<String> namespacedCommandNames = new HashSet<>();
 
 		for (RegisteredCommand command : commands) {
 			// Don't override the plugin help topic
