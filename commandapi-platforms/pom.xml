@@ -21,6 +21,7 @@
 				<module>commandapi-bukkit</module>
 				<module>../commandapi-kotlin/commandapi-core-kotlin</module>
 				<module>../commandapi-kotlin/commandapi-bukkit-kotlin</module>
+				<module>../commandapi-documentation-code</module>
 			</modules>
 		</profile>
 		<profile>
@@ -35,6 +36,7 @@
 				<module>commandapi-velocity</module>
 				<module>../commandapi-kotlin/commandapi-core-kotlin</module>
 				<module>../commandapi-kotlin/commandapi-velocity-kotlin</module>
+				<module>../commandapi-documentation-velocity-code</module>
 			</modules>
 		</profile>
 	</profiles>

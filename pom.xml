@@ -61,16 +61,12 @@
 		<!-- Main core code -->
 		<module>commandapi-core</module>
 
-		<!-- Platform implementations -->
+		<!-- Platform implementations (includes documentation code) -->
 		<module>commandapi-platforms</module>
 		<module>commandapi-kotlin</module>
 
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
-
-		<!-- Documentation code -->
-		<module>commandapi-documentation-code</module>
-		<module>commandapi-documentation-velocity-code</module>
 
 		<!-- Code coverage reports -->
 		<module>commandapi-codecov</module>
