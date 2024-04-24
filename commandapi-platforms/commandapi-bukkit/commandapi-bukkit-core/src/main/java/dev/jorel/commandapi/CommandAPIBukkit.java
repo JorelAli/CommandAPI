@@ -299,6 +299,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
 	}
 
+	private String generateCommandHelpPrefix(String command, String namespace) {
+		return (Bukkit.getPluginCommand(command) == null ? "/" + namespace + ":" : "/minecraft:") + command;
+	}
+
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
 		// Generate usages
 		String[] usages = getUsageList(command);
@@ -354,10 +358,15 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	void updateHelpForCommands(List<RegisteredCommand> commands) {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
+		Set<String> namespacedCommandNames = new HashSet<>();
 
 		for (RegisteredCommand command : commands) {
 			// Don't override the plugin help topic
 			String commandPrefix = generateCommandHelpPrefix(command.commandName());
+
+			// Namespaced commands shouldn't have a help topic, we should save the namespaced command name
+			namespacedCommandNames.add(generateCommandHelpPrefix(command.commandName(), command.namespace()));
+			
 			StringBuilder aliasSb = new StringBuilder();
 			final String shortDescription;
 			
@@ -418,6 +427,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 					// Don't override the plugin help topic
 					commandPrefix = generateCommandHelpPrefix(alias);
 					helpTopic = generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission);
+
+					// Namespaced commands shouldn't have a help topic, we should save the namespaced alias name
+					namespacedCommandNames.add(generateCommandHelpPrefix(alias, command.namespace()));
 				}
 				helpTopicsToAdd.put(commandPrefix, helpTopic);
 			}
@@ -425,6 +437,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 		// We have to use helpTopics.put (instead of .addTopic) because we're overwriting an existing help topic, not adding a new help topic
 		getHelpMap().putAll(helpTopicsToAdd);
+
+		// We also have to remove help topics for namespaced command names
+		for (String namespacedCommandName : namespacedCommandNames) {
+			getHelpMap().remove(namespacedCommandName);
+		}
 	}
 
 	private void fixNamespaces() {
