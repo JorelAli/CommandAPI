@@ -417,7 +417,7 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
     <tbody>
         <tr>
             <td valign="top"><b>9.4.0</b></td>
-            <td valign="top">???</td>
+            <td valign="top">April 2024</td>
             <td valign="top">
                 <b>CommandAPI Changes:</b>
                 <ul>
@@ -425,6 +425,10 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                     <li>https://github.com/JorelAli/CommandAPI/issues/367, https://github.com/JorelAli/CommandAPI/pull/509 Adds the ability to register commands with a custom namespace</li>
                     <li>https://github.com/JorelAli/CommandAPI/pull/523 Exposed more details of the <code>CommandPermission</code></li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/526, https://github.com/JorelAli/CommandAPI/pull/527 Fix wrong help generation for literal arguments</li>
+                    <li>Fixed implementation issues with <code>FunctionArgument</code></li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/490 Adds (experimental) support for Mojang-mapped servers via the CommandAPI config</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/524 Fixes <code>CommandAPIBukkit.get().getTags()</code> erroring in 1.20.4</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/536 Fixes <code>MultiLiteralArgument</code> help displaying the node name instead of the literal text</li>
                 </ul>
                 <b>Minecraft Version Changes:</b>
                 <ul>
