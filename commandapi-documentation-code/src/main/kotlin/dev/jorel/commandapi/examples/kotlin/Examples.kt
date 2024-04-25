@@ -1287,6 +1287,31 @@ CommandAPICommand("mycommand")
     })
     .register();
 /* ANCHOR_END: commandArguments3 */
+
+/* ANCHOR: commandArguments4 */
+val nameArgument = StringArgument("name")
+val amountArgument = IntegerArgument("amount")
+val playerArgument = PlayerArgument("player")
+val targetArgument = PlayerArgument("target")
+val messageArgument = GreedyStringArgument("message")
+
+CommandAPICommand("mycommand")
+    .withArguments(nameArgument)
+    .withArguments(amountArgument)
+    .withOptionalArguments(playerArgument)
+    .withOptionalArguments(targetArgument)
+    .withOptionalArguments(messageArgument)
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val name: String = args.getByArgument(nameArgument)!!
+        val amount: Int = args.getByArgument(amountArgument)!!
+        val p: Player = args.getByArgumentOrDefault(playerArgument, player)
+        val target: Player = args.getByArgumentOrDefault(targetArgument, player)
+        val message: String = args.getOptionalByArgument(messageArgument).orElse("Hello!")
+
+        // Do whatever with these values
+    })
+    .register();
+/* ANCHOR_END: commandArguments4 */
 }
 
 fun commandFailures() {

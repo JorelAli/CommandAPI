@@ -40,6 +40,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 9.3.0 \\(\rightarrow\\) 9.4.0
 
 - Adds [Velocity](./velocity_intro.md) page to outline how to setup the CommandAPI for Velocity
+- Updates [CommandArguments](./commandarguments.md) to document new additions for safe arguments
 
 ### Documentation changes 9.2.0 \\(\rightarrow\\) 9.3.0
 

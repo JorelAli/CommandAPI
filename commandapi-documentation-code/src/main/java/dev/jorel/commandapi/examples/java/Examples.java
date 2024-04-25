@@ -1366,6 +1366,31 @@ new CommandAPICommand("mycommand")
     })
     .register();
 /* ANCHOR_END: commandArguments3 */
+
+/* ANCHOR: commandArguments4 */
+StringArgument nameArgument = new StringArgument("name");
+IntegerArgument amountArgument = new IntegerArgument("amount");
+PlayerArgument playerArgument = new PlayerArgument("player");
+PlayerArgument targetArgument = new PlayerArgument("target");
+GreedyStringArgument messageArgument = new GreedyStringArgument("message");
+
+new CommandAPICommand("mycommand")
+    .withArguments(nameArgument)
+    .withArguments(amountArgument)
+    .withOptionalArguments(playerArgument)
+    .withOptionalArguments(targetArgument)
+    .withOptionalArguments(messageArgument)
+    .executesPlayer((player, args) -> {
+        String name = args.getByArgument(nameArgument);
+        int amount = args.getByArgument(amountArgument);
+        Player p = args.getByArgumentOrDefault(playerArgument, player);
+        Player target = args.getByArgumentOrDefault(targetArgument, player);
+        String message = args.getOptionalByArgument(messageArgument).orElse("Hello!");
+
+        // Do whatever with these values
+    })
+    .register();
+/* ANCHOR_END: commandArguments4 */
 }
 
 void commandFailures() {
