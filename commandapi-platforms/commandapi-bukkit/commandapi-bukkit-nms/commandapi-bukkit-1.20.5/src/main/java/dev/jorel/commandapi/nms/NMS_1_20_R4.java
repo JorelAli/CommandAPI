@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -91,7 +90,6 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -138,7 +136,6 @@ import net.minecraft.commands.arguments.ScoreHolderArgument;
 import net.minecraft.commands.arguments.ScoreboardSlotArgument;
 import net.minecraft.commands.arguments.blocks.BlockPredicateArgument;
 import net.minecraft.commands.arguments.blocks.BlockStateArgument;
-import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.ColumnPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec2Argument;
@@ -153,6 +150,8 @@ import net.minecraft.commands.functions.CommandFunction;
 import net.minecraft.commands.functions.InstantiatedFunction;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -166,7 +165,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -300,59 +298,30 @@ public class NMS_1_20_R4 extends NMS_Common {
 	};
 	
 	private static String serializeNMSItemStack(ItemStack is) {
-		String result = new ItemInput(is.getItemHolder(), is.getComponents()).serialize(COMMAND_BUILD_CONTEXT);
-		System.out.println("Converted is: " + result);
-		return result;
+		final DataComponentMap patchedMap = PatchedDataComponentMap.fromPatch(PatchedDataComponentMap.EMPTY, is.getComponentsPatch());
+		return new ItemInput(is.getItemHolder(), patchedMap).serialize(COMMAND_BUILD_CONTEXT);
 	}
 
 	@Differs(from = "1.20.4", by = "Everything")
 	@Override
 	public final String convert(org.bukkit.inventory.ItemStack is) {
-		ItemStack itemStack = CraftItemStack.asNMSCopy(is);
-		
-		System.out.println(is.getType() + "Patch:");
-		System.out.println(itemStack.getComponentsPatch());
-		
-		// TODO: We need to figure out how to get this component patch
-		// which contains the "minimal set of components" into a form
-		// of standard components, which is then serializable.
-		
-		System.out.println("Serialized:");
-		System.out.println(serializeNMSItemStack(CraftItemStack.asNMSCopy(is)));
 		return serializeNMSItemStack(CraftItemStack.asNMSCopy(is));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Differs(from = "1.20.4", by = "Everything")
 	@Override
 	public final String convert(ParticleData<?> particle) {
-		System.out.println("Unpacking " + particle.particle().getKey());
 		final ParticleOptions particleOptions = CraftParticle.createParticleParam(particle.particle(), particle.data());
 		final ResourceLocation particleKey = BuiltInRegistries.PARTICLE_TYPE.getKey(particleOptions.getType());
+		
 		// /particle dust{scale:2,color:[1,2,2]}
-		Codec codec = particleOptions.getType().codec().codec();
-		DataResult result = codec.encodeStart(NbtOps.INSTANCE, particleOptions);
-		Object o = result.result().get();
-		System.out.println("UNPACKED to " + o);
-		System.out.println(o.getClass().getName());
-		
-//		.encodeStart(NbtOps.INSTANCE, particleOptions);
-//		
-//
-//		// From RecipeManager#fromJson which isn't accessible
-//		final Recipe recipe = Recipe.CODEC.parse(JsonOps.INSTANCE, p.second()).getOrThrow(JsonParseException::new);
-//		return new RecipeHolder(new ResourceLocation(p.first()), recipe);
-		
-//		particleOptions.getType().codec().decoder().;
-		
-		
-		final String dataString;
-		
-		if (o.toString().equals("{}")) {
-			dataString = "";
-		} else {
-			dataString = o.toString();
-		}
-		
+		// Use the particle option's codec to convert the data into NBT. If we have any tags, add them
+		// to the end, otherwise leave it as it is (e.g. `/particle crit` as opposed to `/particle crit{}`)
+		final Codec codec = particleOptions.getType().codec().codec();
+		final DataResult<CompoundTag> result = codec.encodeStart(NbtOps.INSTANCE, particleOptions);
+		final CompoundTag particleOptionsTag = result.result().get();
+		final String dataString = particleOptionsTag.getAllKeys().isEmpty() ? "" : particleOptionsTag.getAsString();
 		return particleKey.toString() + dataString;
 	}
 	
