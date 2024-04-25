@@ -2,11 +2,13 @@ package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -43,6 +45,21 @@ class ArgumentParticleTests extends TestBase {
 
 		// Disabled for 1.20.3+ due to "reasons"
 		// assumeTrue(version.lessThan(MCVersion.V1_20_3));
+		
+		/**
+		 * From https://misode.github.io/versions/?id=1.20.5-pre1&tab=changelog&tags=command
+		 * 
+		 * Changed the /particle command syntax for particles with extra options:
+
+block redstone_lamp[lit=true] → block{block_state:{Name:"redstone_lamp",Properties:{lit:"true"}}} (also for block_marker, falling_dust, and dust_pillar)
+dust 0.1 0.2 0.3 0.4 → dust{color:[0.1,0.2,0.3],scale:0.4}
+dust_color_transition 0.1 0.2 0.3 0.4 0.5 0.6 0.7 → dust_color_transition{from_color:[0.1,0.2,0.3],scale:0.4,to_color:[0.5,0.6,0.7]}
+entity_effect → entity_effect{color:[0.1,0.2,0.3,0.4]}
+item diamond → item{item:"diamond"}
+sculk_charge 0.1 → sculk_charge{roll:0.1}
+shriek 1 → shriek{delay:1}
+vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3]},arrival_in_ticks:4}
+		 */
 	}
 
 	@AfterEach
@@ -78,10 +95,17 @@ class ArgumentParticleTests extends TestBase {
 
 		for (Particle particle : Particle.values()) {
 			if (particle.getDataType().equals(Void.class) && !dodgyParticles.contains(particle)) {
-				
-				// TODO: If 1.20.5+, we we can use particle.getKey() directly
-				
-				server.dispatchCommand(player, "test " + MockPlatform.getInstance().getNMSParticleNameFromBukkit(particle));
+				if (version.greaterThanOrEqualTo(MCVersion.V1_20_5) && particle.name().equals("SPELL_MOB")) {
+					// SPELL_MOB (entity_effect) has an additional parameter in 1.20.5 onwards
+					continue;
+				} else {
+					String particleName = MockPlatform.getInstance().getNMSParticleNameFromBukkit(particle);
+					if (particleName != null) {
+						server.dispatchCommand(player, "test " + particleName);
+					} else {
+						continue;
+					}
+				}
 				assertEquals(particle, results.get().particle());
 			}
 		}
@@ -180,10 +204,11 @@ class ArgumentParticleTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// block block_type[meta]
 		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
-			server.dispatchCommand(player, "test block minecraft:grass_block{snowy:true}");
+			// block{block_state{state}}
+			server.dispatchCommand(player, "test block{block_state:{Name:\"minecraft:grass_block\",Properties:{snowy:\"true\"}}}");
 		} else {
+			// block block_type[meta]
 			server.dispatchCommand(player, "test block minecraft:grass_block[snowy=true]");
 		}
 		
@@ -216,8 +241,13 @@ class ArgumentParticleTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// item item_id
-		server.dispatchCommand(player, "test item apple");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			// item{item:"item_id"}
+			server.dispatchCommand(player, "test item{item:\"apple\"}");
+		} else {
+			// item item_id
+			server.dispatchCommand(player, "test item apple");
+		}
 		@SuppressWarnings("unchecked")
 		ParticleData<ItemStack> result = (ParticleData<ItemStack>) results.get();
 
@@ -232,5 +262,81 @@ class ArgumentParticleTests extends TestBase {
 
 		assertNoMoreResults(results);
 	}
+	
+	@Test
+	void executionTestWithParticleArgumentEntityEffect() {
+		// Only effective from 1.20.5+
+		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_20_5));
+
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set(args.getUnchecked("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// entity_effect{color:[r,g,b,a]}
+		// (red entity effect, fully visible)
+		server.dispatchCommand(player, "test entity_effect{color:[1.0,0.0,0.0,1.0]}");
+		
+		@SuppressWarnings("unchecked")
+		ParticleData<Color> result = (ParticleData<Color>) results.get();
+
+		assumeFalse(Bukkit.getBukkitVersion().equals("1.20.1-R0.1-SNAPSHOT"));
+
+		// Check the particle type is correct
+		assertEquals(Particle.valueOf("ENTITY_EFFECT"), result.particle());
+		
+		// TODO: Can't handle particle data yet in 1.20.5
+		assumeTrue(version.lessThan(MCVersion.V1_20_5));
+
+		// Check the particle properties
+		assertEquals(255, result.data().getRed());
+		assertEquals(0, result.data().getGreen());
+		assertEquals(0, result.data().getBlue());
+		assertEquals(255, result.data().getAlpha());
+
+		assertNoMoreResults(results);
+	}
+
+//	@Test
+//	void executionTestWithParticleArgumentVibration() {
+//		Mut<ParticleData<?>> results = Mut.of();
+//
+//		new CommandAPICommand("test")
+//			.withArguments(new ParticleArgument("particle"))
+//			.executesPlayer((player, args) -> {
+//				results.set((ParticleData<?>) args.get("particle"));
+//			})
+//			.register();
+//
+//		PlayerMock player = server.addPlayer();
+//
+//		// block block_type[meta]
+//		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+//			server.dispatchCommand(player, "test block{block_state:{Name:\"minecraft:grass_block\",Properties:{snowy:\"true\"}}}");
+//		} else {
+//			server.dispatchCommand(player, "test block minecraft:grass_block[snowy=true]");
+//		}
+//		
+//		@SuppressWarnings("unchecked")
+//		ParticleData<BlockData> result = (ParticleData<BlockData>) results.get();
+//
+//		// Check the particle type is correct
+//		assertEquals(Particle.BLOCK_CRACK, result.particle());
+//		
+//		// TODO: Can't handle particle data yet in 1.20.5
+//		assumeTrue(version.lessThan(MCVersion.V1_20_5));
+//
+//		// Check the particle properties
+//		assertEquals(Material.GRASS_BLOCK, result.data().getMaterial());
+//		assertTrue(((Snowable) result.data()).isSnowy());
+//
+//		assertNoMoreResults(results);
+//	}
 
 }

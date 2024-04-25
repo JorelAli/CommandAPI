@@ -75,7 +75,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
@@ -154,6 +153,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -658,6 +658,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 		return CraftLootTable.minecraftToBukkit(ResourceLocationArgument.getId(cmdCtx, key));
 	}
 
+	@Differs(from = "1.20.4", by = "New particle option ColorParticleOption")
 	@Override
 	public final ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, key);
@@ -684,10 +685,24 @@ public class NMS_1_20_R4 extends NMS_Common {
 		} else if (particleOptions instanceof SculkChargeParticleOptions options) {
 			// CraftBukkit implements sculk charge particles as a (boxed) Float object
 			return new ParticleData<Float>(particle, Float.valueOf(options.roll()));
+		} else if (particleOptions instanceof ColorParticleOption options) {
+			return getParticleDataAsColorParticleOption(particle, options);
 		} else {
 			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 			return new ParticleData<Void>(particle, null);
 		}
+	}
+
+	@Differs(from = "1.20.4", by = "This now exists")
+	private ParticleData<Color> getParticleDataAsColorParticleOption(Particle particle,
+			ColorParticleOption options) {
+		final Color color = Color.fromARGB(
+			(int) (options.getAlpha() * 255.0F),
+			(int) (options.getRed() * 255.0F),
+			(int) (options.getGreen() * 255.0F),
+			(int) (options.getBlue() * 255.0F)
+		);
+		return new ParticleData<Color>(particle, color);
 	}
 
 	@Differs(from = "1.20.4", by = "Now uses options#getFromColor instead of options.getColor")

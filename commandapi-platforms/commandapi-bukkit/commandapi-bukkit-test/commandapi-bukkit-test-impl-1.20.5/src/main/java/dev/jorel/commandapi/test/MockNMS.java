@@ -449,7 +449,7 @@ public class MockNMS extends Enums {
 		// return BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.bukkitToMinecraft(particle)).toString();
 		// return particle.getKey().toString();
 		
-		return Map.ofEntries(
+		Map<org.bukkit.Particle, String> particleMap = Map.ofEntries(
 			Map.entry(Particle.valueOf("EXPLOSION_NORMAL"), "poof"), 
 			Map.entry(Particle.valueOf("EXPLOSION_LARGE"), "explosion"), 
 			Map.entry(Particle.valueOf("EXPLOSION_HUGE"), "explosion_emitter"), 
@@ -548,7 +548,13 @@ public class MockNMS extends Enums {
 			Map.entry(Particle.valueOf("CHERRY_LEAVES"), "cherry_leaves"), 
 			Map.entry(Particle.valueOf("EGG_CRACK"), "egg_crack"), 
 			Map.entry(Particle.valueOf("BLOCK_MARKER"), "dust_plume")
-		).get(particle);
+		);
+
+		final String particleName = particleMap.get(particle);
+		if (particleName == null) {
+			System.err.println("Couldn't find particle name for " + particle);
+		}
+		return particleName;
 	}
 
 	@Override
