@@ -662,7 +662,21 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Override
 	public final ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, key);
-		final Particle particle = CraftParticle.minecraftToBukkit(particleOptions.getType());
+
+		// In our test suite, we can't parse particles via CraftParticle.minecraftToBukkit
+		// on 1.20.3+ because initializing CraftParticle's static constructor requires
+		// implementing a registry. We don't care about a registry for the sake of testing,
+		// all we're actually interested in is testing that the particle data is being parsed
+		// and converted to Bukkit properly, because that's what actually matters. If the
+		// Bukkit#getServer is a CraftServer, that means we're running on a normal (Bukkit/Spigot/Paper)
+		// server. If it isn't, that means we're running in our test environment (i.e. a mocked
+		// server instance), or some weird flavour of Bukkit that we're not supposed to use.
+		final Particle particle;
+		if (Bukkit.getServer() instanceof CraftServer server) {
+			particle = CraftParticle.minecraftToBukkit(particleOptions.getType());
+		} else {
+			particle = null;
+		}
 
 		if (particleOptions instanceof SimpleParticleType) {
 			return new ParticleData<Void>(particle, null);

@@ -137,9 +137,6 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 
 		// Check the particle type is correct
 		assertEquals(Particle.REDSTONE, result.particle());
-		
-		// TODO: Can't handle particle data yet in 1.20.5
-		assumeTrue(version.lessThan(MCVersion.V1_20_5));
 
 		// Check the particle properties
 		assertEquals(4, result.data().getSize());
@@ -180,9 +177,6 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 
 		// Check the particle type is correct
 		assertEquals(Particle.REDSTONE, result.particle());
-		
-		// TODO: Can't handle particle data yet in 1.20.5
-		assumeTrue(version.lessThan(MCVersion.V1_20_5));
 
 		// Check the particle properties
 		assertEquals(size, result.data().getSize());
@@ -217,9 +211,6 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 
 		// Check the particle type is correct
 		assertEquals(Particle.BLOCK_CRACK, result.particle());
-		
-		// TODO: Can't handle particle data yet in 1.20.5
-		assumeTrue(version.lessThan(MCVersion.V1_20_5));
 
 		// Check the particle properties
 		assertEquals(Material.GRASS_BLOCK, result.data().getMaterial());
@@ -253,9 +244,6 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 
 		// Check the particle type is correct
 		assertEquals(Particle.ITEM_CRACK, result.particle());
-		
-		// TODO: Can't handle particle data yet in 1.20.5
-		assumeTrue(version.lessThan(MCVersion.V1_20_5));
 
 		// Check the particle properties
 		assertEquals(new ItemStack(Material.APPLE), (ItemStack) result.data());
@@ -290,9 +278,6 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 
 		// Check the particle type is correct
 		assertEquals(Particle.valueOf("ENTITY_EFFECT"), result.particle());
-		
-		// TODO: Can't handle particle data yet in 1.20.5
-		assumeTrue(version.lessThan(MCVersion.V1_20_5));
 
 		// Check the particle properties
 		assertEquals(255, result.data().getRed());
