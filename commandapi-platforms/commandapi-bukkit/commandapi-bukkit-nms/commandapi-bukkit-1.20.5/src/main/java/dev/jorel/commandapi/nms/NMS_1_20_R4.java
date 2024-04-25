@@ -613,10 +613,8 @@ public class NMS_1_20_R4 extends NMS_Common {
 		ItemInput input = ItemArgument.getItem(cmdCtx, key);
 
 		// Create the basic ItemStack with an amount of 1
-		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
-		org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
-		result.setItemMeta(CraftItemStack.getItemMeta(itemWithMaybeTag));
-		return result;
+		net.minecraft.world.item.ItemStack item = input.createItemStack(1, false);
+		return CraftItemStack.asBukkitCopy(item);
 	}
 
 	@Override
