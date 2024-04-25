@@ -363,7 +363,7 @@ public interface NMS<CommandListenerWrapper> {
 	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 		throws CommandSyntaxException;
 
-	PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+	Object getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException;
 
 	Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;

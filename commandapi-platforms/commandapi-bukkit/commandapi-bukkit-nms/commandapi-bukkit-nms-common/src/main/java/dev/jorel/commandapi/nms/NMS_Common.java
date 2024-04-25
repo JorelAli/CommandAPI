@@ -501,7 +501,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.18")
-	public abstract PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
+	public abstract Object getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException;
 
 	@Override

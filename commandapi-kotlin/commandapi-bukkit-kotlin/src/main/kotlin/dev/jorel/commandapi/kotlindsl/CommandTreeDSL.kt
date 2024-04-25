@@ -86,7 +86,8 @@ inline fun CommandTree.lootTableArgument(nodeName: String, optional: Boolean = f
 inline fun CommandTree.mathOperationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(MathOperationArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.namespacedKeyArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(NamespacedKeyArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.particleArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ParticleArgument(nodeName).setOptional(optional).apply(block))
-inline fun CommandTree.potionEffectArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.potionEffectArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree =
+	if (useNamespacedKey) then(PotionEffectArgument.NamespacedKey(nodeName).setOptional(optional).apply(block)) else then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.recipeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).setOptional(optional).apply(block))
 
 inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree =
@@ -191,7 +192,8 @@ inline fun Argument<*>.lootTableArgument(nodeName: String, optional: Boolean = f
 inline fun Argument<*>.mathOperationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MathOperationArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.namespacedKeyArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(NamespacedKeyArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.particleArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ParticleArgument(nodeName).setOptional(optional).apply(block))
-inline fun Argument<*>.potionEffectArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.potionEffectArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> =
+	if (useNamespacedKey) then(PotionEffectArgument.NamespacedKey(nodeName).setOptional(optional).apply(block)) else then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.recipeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(RecipeArgument(nodeName).setOptional(optional).apply(block))
 
 inline fun Argument<*>.soundArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> =

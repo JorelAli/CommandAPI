@@ -818,6 +818,25 @@ new CommandAPICommand("potion")
     })
     .register();
 /* ANCHOR_END: argumentPotion1 */
+/* ANCHOR: argumentPotion2 */
+new CommandAPICommand("potion")
+    .withArguments(new PlayerArgument("target"))
+    .withArguments(new PotionEffectArgument.NamespacedKey("potion"))
+    .withArguments(new TimeArgument("duration"))
+    .withArguments(new IntegerArgument("strength"))
+    .executes((sender, args) -> {
+        Player target = (Player) args.get("target");
+        NamespacedKey potionKey = (NamespacedKey) args.get("potion");
+        int duration = (int) args.get("duration");
+        int strength = (int) args.get("strength");
+
+        PotionEffectType potion = PotionEffectType.getByKey(potionKey);
+
+        // Add the potion effect to the target player
+        target.addPotionEffect(new PotionEffect(potion, duration, strength));
+    })
+    .register();
+/* ANCHOR_END: argumentPotion2 */
 }
 
 @SuppressWarnings("null")

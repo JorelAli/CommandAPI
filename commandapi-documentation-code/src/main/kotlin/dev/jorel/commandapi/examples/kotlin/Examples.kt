@@ -751,6 +751,25 @@ CommandAPICommand("potion")
     })
     .register()
 /* ANCHOR_END: argumentPotion1 */
+/* ANCHOR: argumentPotion2 */
+CommandAPICommand("potion")
+    .withArguments(PlayerArgument("target"))
+    .withArguments(PotionEffectArgument.NamespacedKey("potion"))
+    .withArguments(TimeArgument("duration"))
+    .withArguments(IntegerArgument("strength"))
+    .executes(CommandExecutor { _, args ->
+        val target = args["target"] as Player
+        val potionKey = args["potion"] as NamespacedKey
+        val duration = args["duration"] as Int
+        val strength = args["strength"] as Int
+
+        val potion = PotionEffectType.getByKey(potionKey)!!
+
+        // Add the potion effect to the target player
+        target.addPotionEffect(PotionEffect(potion, duration, strength))
+    })
+    .register()
+/* ANCHOR_END: argumentPotion2 */
 }
 
 fun argument_primitives() {
