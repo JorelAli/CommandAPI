@@ -169,18 +169,20 @@ public class MockNMS extends Enums {
 		});
 		
 		// CraftBukkit's registry is shared across all instances of a test (or all tests?)
+		// Idk if we need to actually implement this, but it seems to make certain issues
+		// a little calmer
 		if (CraftRegistry.getMinecraftRegistry() == null) {
 			RegistryAccess registry = Mockito.mock(RegistryAccess.class);
 			Mockito.when(registry.registry(any())).thenAnswer(args -> {
 				ResourceKey key = args.getArgument(0);
-				System.out.println("Trying to access registry: " + key.registry());
-				Thread.currentThread().dumpStack();
+//				System.out.println("Trying to access registry: " + key.registry());
+//				Thread.currentThread().dumpStack();
 				return Optional.ofNullable(null);
 			});
 			Mockito.when(registry.registryOrThrow(any())).thenAnswer(args -> {
 				ResourceKey key = args.getArgument(0);
-				System.out.println("Trying to access registry: " + key.registry());
-				Thread.currentThread().dumpStack();
+//				System.out.println("Trying to access registry: " + key.registry());
+//				Thread.currentThread().dumpStack();
 				return null;
 			});
 			CraftRegistry.setMinecraftRegistry(registry);
@@ -443,9 +445,110 @@ public class MockNMS extends Enums {
 		// change your mind, here's how to access it via the registry. This doesn't
 		// scale well for pre 1.19 versions though!
 		// BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.toNMS(particle).getType()).toString();
-		particle.getKey();
-		return BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.bukkitToMinecraft(particle)).toString();
+		// particle.getKey();
+		// return BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.bukkitToMinecraft(particle)).toString();
 		// return particle.getKey().toString();
+		
+		return Map.ofEntries(
+			Map.entry(Particle.valueOf("EXPLOSION_NORMAL"), "poof"), 
+			Map.entry(Particle.valueOf("EXPLOSION_LARGE"), "explosion"), 
+			Map.entry(Particle.valueOf("EXPLOSION_HUGE"), "explosion_emitter"), 
+			Map.entry(Particle.valueOf("FIREWORKS_SPARK"), "firework"), 
+			Map.entry(Particle.valueOf("WATER_BUBBLE"), "bubble"), 
+			Map.entry(Particle.valueOf("WATER_SPLASH"), "splash"), 
+			Map.entry(Particle.valueOf("WATER_WAKE"), "fishing"), 
+			Map.entry(Particle.valueOf("SUSPENDED"), "underwater"), 
+//				Map.entry(Particle.valueOf("SUSPENDED_DEPTH"), put("???"), 
+			Map.entry(Particle.valueOf("CRIT"), "crit"), 
+			Map.entry(Particle.valueOf("CRIT_MAGIC"), "enchanted_hit"), 
+			Map.entry(Particle.valueOf("SMOKE_NORMAL"), "smoke"), 
+			Map.entry(Particle.valueOf("SMOKE_LARGE"), "large_smoke"), 
+			Map.entry(Particle.valueOf("SPELL"), "effect"), 
+			Map.entry(Particle.valueOf("SPELL_INSTANT"), "instant_effect"), 
+			Map.entry(Particle.valueOf("SPELL_MOB"), "entity_effect"), 
+//				Map.entry(Particle.valueOf("SPELL_MOB_AMBIENT"), put("???"), 
+			Map.entry(Particle.valueOf("SPELL_WITCH"), "witch"), 
+			Map.entry(Particle.valueOf("DRIP_WATER"), "dripping_water"), 
+			Map.entry(Particle.valueOf("DRIP_LAVA"), "dripping_lava"), 
+			Map.entry(Particle.valueOf("VILLAGER_ANGRY"), "angry_villager"), 
+			Map.entry(Particle.valueOf("VILLAGER_HAPPY"), "happy_villager"), 
+			Map.entry(Particle.valueOf("TOWN_AURA"), "mycelium"), 
+			Map.entry(Particle.valueOf("NOTE"), "note"), 
+			Map.entry(Particle.valueOf("PORTAL"), "portal"), 
+			Map.entry(Particle.valueOf("ENCHANTMENT_TABLE"), "enchant"), 
+			Map.entry(Particle.valueOf("FLAME"), "flame"), 
+			Map.entry(Particle.valueOf("LAVA"), "lava"), 
+			Map.entry(Particle.valueOf("CLOUD"), "cloud"), 
+			Map.entry(Particle.valueOf("REDSTONE"), "dust"), 
+			Map.entry(Particle.valueOf("SNOWBALL"), "item_snowball"), 
+			Map.entry(Particle.valueOf("SNOW_SHOVEL"), "item_slime"), 
+//				Map.entry(Particle.valueOf("SLIME"), put("???"), 
+			Map.entry(Particle.valueOf("HEART"), "heart"), 
+			Map.entry(Particle.valueOf("ITEM_CRACK"), "item"), 
+			Map.entry(Particle.valueOf("BLOCK_CRACK"), "block"), 
+			Map.entry(Particle.valueOf("BLOCK_DUST"), "rain"), 
+//				Map.entry(Particle.valueOf("WATER_DROP"), put("???"), 
+			Map.entry(Particle.valueOf("MOB_APPEARANCE"), "elder_guardian"), 
+			Map.entry(Particle.valueOf("DRAGON_BREATH"), "dragon_breath"), 
+			Map.entry(Particle.valueOf("END_ROD"), "end_rod"), 
+			Map.entry(Particle.valueOf("DAMAGE_INDICATOR"), "damage_indicator"), 
+			Map.entry(Particle.valueOf("SWEEP_ATTACK"), "sweep_attack"), 
+			Map.entry(Particle.valueOf("FALLING_DUST"), "falling_dust"), 
+			Map.entry(Particle.valueOf("TOTEM"), "totem_of_undying"), 
+			Map.entry(Particle.valueOf("SPIT"), "spit"), 
+			Map.entry(Particle.valueOf("SQUID_INK"), "squid_ink"), 
+			Map.entry(Particle.valueOf("BUBBLE_POP"), "bubble_pop"), 
+			Map.entry(Particle.valueOf("CURRENT_DOWN"), "current_down"), 
+			Map.entry(Particle.valueOf("BUBBLE_COLUMN_UP"), "bubble_column_up"), 
+			Map.entry(Particle.valueOf("NAUTILUS"), "nautilus"), 
+			Map.entry(Particle.valueOf("DOLPHIN"), "dolphin"), 
+			Map.entry(Particle.valueOf("SNEEZE"), "sneeze"), 
+			Map.entry(Particle.valueOf("CAMPFIRE_COSY_SMOKE"), "campfire_cosy_smoke"), 
+			Map.entry(Particle.valueOf("CAMPFIRE_SIGNAL_SMOKE"), "campfire_signal_smoke"), 
+			Map.entry(Particle.valueOf("COMPOSTER"), "composter"), 
+			Map.entry(Particle.valueOf("FLASH"), "flash"), 
+			Map.entry(Particle.valueOf("FALLING_LAVA"), "falling_lava"), 
+			Map.entry(Particle.valueOf("LANDING_LAVA"), "landing_lava"), 
+			Map.entry(Particle.valueOf("FALLING_WATER"), "falling_water"), 
+			Map.entry(Particle.valueOf("DRIPPING_HONEY"), "dripping_honey"), 
+			Map.entry(Particle.valueOf("FALLING_HONEY"), "falling_honey"), 
+			Map.entry(Particle.valueOf("LANDING_HONEY"), "landing_honey"), 
+			Map.entry(Particle.valueOf("FALLING_NECTAR"), "falling_nectar"), 
+			Map.entry(Particle.valueOf("SOUL_FIRE_FLAME"), "soul_fire_flame"), 
+			Map.entry(Particle.valueOf("ASH"), "ash"), 
+			Map.entry(Particle.valueOf("CRIMSON_SPORE"), "crimson_spore"), 
+			Map.entry(Particle.valueOf("WARPED_SPORE"), "warped_spore"), 
+			Map.entry(Particle.valueOf("SOUL"), "soul"), 
+			Map.entry(Particle.valueOf("DRIPPING_OBSIDIAN_TEAR"), "dripping_obsidian_tear"), 
+			Map.entry(Particle.valueOf("FALLING_OBSIDIAN_TEAR"), "falling_obsidian_tear"), 
+			Map.entry(Particle.valueOf("LANDING_OBSIDIAN_TEAR"), "landing_obsidian_tear"), 
+			Map.entry(Particle.valueOf("REVERSE_PORTAL"), "reverse_portal"), 
+			Map.entry(Particle.valueOf("WHITE_ASH"), "white_ash"), 
+			Map.entry(Particle.valueOf("DUST_COLOR_TRANSITION"), "dust_color_transition"), 
+			Map.entry(Particle.valueOf("VIBRATION"), "vibration"), 
+			Map.entry(Particle.valueOf("FALLING_SPORE_BLOSSOM"), "falling_spore_blossom"), 
+			Map.entry(Particle.valueOf("SPORE_BLOSSOM_AIR"), "spore_blossom_air"), 
+			Map.entry(Particle.valueOf("SMALL_FLAME"), "small_flame"), 
+			Map.entry(Particle.valueOf("SNOWFLAKE"), "snowflake"), 
+			Map.entry(Particle.valueOf("DRIPPING_DRIPSTONE_LAVA"), "dripping_dripstone_lava"), 
+			Map.entry(Particle.valueOf("FALLING_DRIPSTONE_LAVA"), "falling_dripstone_lava"), 
+			Map.entry(Particle.valueOf("DRIPPING_DRIPSTONE_WATER"), "dripping_dripstone_water"), 
+			Map.entry(Particle.valueOf("FALLING_DRIPSTONE_WATER"), "falling_dripstone_water"), 
+			Map.entry(Particle.valueOf("GLOW_SQUID_INK"), "glow_squid_ink"), 
+			Map.entry(Particle.valueOf("GLOW"), "glow"), 
+			Map.entry(Particle.valueOf("WAX_ON"), "wax_on"), 
+			Map.entry(Particle.valueOf("WAX_OFF"), "wax_off"), 
+			Map.entry(Particle.valueOf("ELECTRIC_SPARK"), "electric_spark"), 
+			Map.entry(Particle.valueOf("SCRAPE"), "scrape"), 
+			Map.entry(Particle.valueOf("SONIC_BOOM"), "sonic_boom"), 
+			Map.entry(Particle.valueOf("SCULK_SOUL"), "sculk_soul"), 
+			Map.entry(Particle.valueOf("SCULK_CHARGE"), "sculk_charge"), 
+			Map.entry(Particle.valueOf("SCULK_CHARGE_POP"), "sculk_charge_pop"), 
+			Map.entry(Particle.valueOf("SHRIEK"), "shriek"), 
+			Map.entry(Particle.valueOf("CHERRY_LEAVES"), "cherry_leaves"), 
+			Map.entry(Particle.valueOf("EGG_CRACK"), "egg_crack"), 
+			Map.entry(Particle.valueOf("BLOCK_MARKER"), "dust_plume")
+		).get(particle);
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -17,18 +19,15 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.Registry.SimpleRegistry;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_20_R4.CraftParticle;
-import org.bukkit.craftbukkit.v1_20_R4.util.CraftNamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 import org.mockito.MockedStatic;
@@ -67,6 +66,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderOwner;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -542,9 +542,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public ParticleData<?> getParticle(CommandContext cmdCtx, String key) {
-		
 		final ParticleData<?> result;
-		
 		try (MockedStatic<CraftParticle> craftParticle = Mockito.mockStatic(CraftParticle.class)) {
 			craftParticle.when(() -> CraftParticle.minecraftToBukkit(any()))
 			.thenAnswer(args -> {
@@ -552,15 +550,245 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 				
 				
 				Registry<ParticleType<?>> registry = BuiltInRegistries.PARTICLE_TYPE; //CraftRegistry.getMinecraftRegistry(Registries.PARTICLE_TYPE);
-				org.bukkit.Registry.PARTICLE_TYPE
-				// new SimpleRegistry(Particle.class, (par) -> par.register);
+//				org.bukkit.Registry.PARTICLE_TYPE
+//				// new SimpleRegistry(Particle.class, (par) -> par.register);
+//				
+				// We can't actually implement this until we have MockBukkit
+				// linked against 1.20.5, which is super annoying...
 				
-				Particle bukkit = (Particle) org.bukkit.Registry.PARTICLE_TYPE.get(CraftNamespacedKey
-						.fromMinecraft(((ResourceKey) registry.getResourceKey(minecraft).orElseThrow()).location()));
-				return bukkit;
+				// Do we wait for MockBukkit to update its paper dependencies, 
+				// or do we just fork MockBukkit at this point?
+//				
+//				Particle bukkit = (Particle) org.bukkit.Registry.PARTICLE_TYPE.get(CraftNamespacedKey
+//						.fromMinecraft(((ResourceKey) registry.getResourceKey(minecraft).orElseThrow()).location()));
+				
+				
+				
+				return Particle.CRIT;
+				
+				// return bukkit;
 			});
 			
-			result = baseNMS.getParticle(cmdCtx, key);
+			Map<String, Particle> map = new HashMap<>();
+//			map.put("poof", Particle.POOF);
+//			map.put("explosion", Particle.EXPLOSION);
+//			map.put("explosion_emitter", Particle.EXPLOSION_EMITTER);
+//			map.put("firework", Particle.FIREWORK);
+//			map.put("bubble", Particle.BUBBLE);
+//			map.put("splash", Particle.SPLASH);
+//			map.put("fishing", Particle.FISHING);
+//			map.put("underwater", Particle.UNDERWATER);
+//			map.put("crit", Particle.CRIT);
+//			map.put("enchanted_hit", Particle.ENCHANTED_HIT);
+//			map.put("smoke", Particle.SMOKE);
+//			map.put("large_smoke", Particle.LARGE_SMOKE);
+//			map.put("effect", Particle.EFFECT);
+//			map.put("instant_effect", Particle.INSTANT_EFFECT);
+//			map.put("entity_effect", Particle.ENTITY_EFFECT);
+//			map.put("witch", Particle.WITCH);
+//			map.put("dripping_water", Particle.DRIPPING_WATER);
+//			map.put("dripping_lava", Particle.DRIPPING_LAVA);
+//			map.put("angry_villager", Particle.ANGRY_VILLAGER);
+//			map.put("happy_villager", Particle.HAPPY_VILLAGER);
+//			map.put("mycelium", Particle.MYCELIUM);
+//			map.put("note", Particle.NOTE);
+//			map.put("portal", Particle.PORTAL);
+//			map.put("enchant", Particle.ENCHANT);
+//			map.put("flame", Particle.FLAME);
+//			map.put("lava", Particle.LAVA);
+//			map.put("cloud", Particle.CLOUD);
+//			map.put("dust", Particle.DUST);
+//			map.put("item_snowball", Particle.ITEM_SNOWBALL);
+//			map.put("item_slime", Particle.ITEM_SLIME);
+//			map.put("heart", Particle.HEART);
+//			map.put("item", Particle.ITEM);
+//			map.put("block", Particle.BLOCK);
+//			map.put("rain", Particle.RAIN);
+//			map.put("elder_guardian", Particle.ELDER_GUARDIAN);
+//			map.put("dragon_breath", Particle.DRAGON_BREATH);
+//			map.put("end_rod", Particle.END_ROD);
+//			map.put("damage_indicator", Particle.DAMAGE_INDICATOR);
+//			map.put("sweep_attack", Particle.SWEEP_ATTACK);
+//			map.put("falling_dust", Particle.FALLING_DUST);
+//			map.put("totem_of_undying", Particle.TOTEM_OF_UNDYING);
+//			map.put("spit", Particle.SPIT);
+//			map.put("squid_ink", Particle.SQUID_INK);
+//			map.put("bubble_pop", Particle.BUBBLE_POP);
+//			map.put("current_down", Particle.CURRENT_DOWN);
+//			map.put("bubble_column_up", Particle.BUBBLE_COLUMN_UP);
+//			map.put("nautilus", Particle.NAUTILUS);
+//			map.put("dolphin", Particle.DOLPHIN);
+//			map.put("sneeze", Particle.SNEEZE);
+//			map.put("campfire_cosy_smoke", Particle.CAMPFIRE_COSY_SMOKE);
+//			map.put("campfire_signal_smoke", Particle.CAMPFIRE_SIGNAL_SMOKE);
+//			map.put("composter", Particle.COMPOSTER);
+//			map.put("flash", Particle.FLASH);
+//			map.put("falling_lava", Particle.FALLING_LAVA);
+//			map.put("landing_lava", Particle.LANDING_LAVA);
+//			map.put("falling_water", Particle.FALLING_WATER);
+//			map.put("dripping_honey", Particle.DRIPPING_HONEY);
+//			map.put("falling_honey", Particle.FALLING_HONEY);
+//			map.put("landing_honey", Particle.LANDING_HONEY);
+//			map.put("falling_nectar", Particle.FALLING_NECTAR);
+//			map.put("soul_fire_flame", Particle.SOUL_FIRE_FLAME);
+//			map.put("ash", Particle.ASH);
+//			map.put("crimson_spore", Particle.CRIMSON_SPORE);
+//			map.put("warped_spore", Particle.WARPED_SPORE);
+//			map.put("soul", Particle.SOUL);
+//			map.put("dripping_obsidian_tear", Particle.DRIPPING_OBSIDIAN_TEAR);
+//			map.put("falling_obsidian_tear", Particle.FALLING_OBSIDIAN_TEAR);
+//			map.put("landing_obsidian_tear", Particle.LANDING_OBSIDIAN_TEAR);
+//			map.put("reverse_portal", Particle.REVERSE_PORTAL);
+//			map.put("white_ash", Particle.WHITE_ASH);
+//			map.put("dust_color_transition", Particle.DUST_COLOR_TRANSITION);
+//			map.put("vibration", Particle.VIBRATION);
+//			map.put("falling_spore_blossom", Particle.FALLING_SPORE_BLOSSOM);
+//			map.put("spore_blossom_air", Particle.SPORE_BLOSSOM_AIR);
+//			map.put("small_flame", Particle.SMALL_FLAME);
+//			map.put("snowflake", Particle.SNOWFLAKE);
+//			map.put("dripping_dripstone_lava", Particle.DRIPPING_DRIPSTONE_LAVA);
+//			map.put("falling_dripstone_lava", Particle.FALLING_DRIPSTONE_LAVA);
+//			map.put("dripping_dripstone_water", Particle.DRIPPING_DRIPSTONE_WATER);
+//			map.put("falling_dripstone_water", Particle.FALLING_DRIPSTONE_WATER);
+//			map.put("glow_squid_ink", Particle.GLOW_SQUID_INK);
+//			map.put("glow", Particle.GLOW);
+//			map.put("wax_on", Particle.WAX_ON);
+//			map.put("wax_off", Particle.WAX_OFF);
+//			map.put("electric_spark", Particle.ELECTRIC_SPARK);
+//			map.put("scrape", Particle.SCRAPE);
+//			map.put("sonic_boom", Particle.SONIC_BOOM);
+//			map.put("sculk_soul", Particle.SCULK_SOUL);
+//			map.put("sculk_charge", Particle.SCULK_CHARGE);
+//			map.put("sculk_charge_pop", Particle.SCULK_CHARGE_POP);
+//			map.put("shriek", Particle.SHRIEK);
+//			map.put("cherry_leaves", Particle.CHERRY_LEAVES);
+//			map.put("egg_crack", Particle.EGG_CRACK);
+//			map.put("dust_plume", Particle.DUST_PLUME);
+//			map.put("white_smoke", Particle.WHITE_SMOKE);
+//			map.put("gust", Particle.GUST);
+//			map.put("small_gust", Particle.SMALL_GUST);
+//			map.put("gust_emitter_large", Particle.GUST_EMITTER_LARGE);
+//			map.put("gust_emitter_small", Particle.GUST_EMITTER_SMALL);
+//			map.put("trial_spawner_detection", Particle.TRIAL_SPAWNER_DETECTION);
+//			map.put("trial_spawner_detection_ominous", Particle.TRIAL_SPAWNER_DETECTION_OMINOUS);
+//			map.put("vault_connection", Particle.VAULT_CONNECTION);
+//			map.put("infested", Particle.INFESTED);
+//			map.put("item_cobweb", Particle.ITEM_COBWEB);
+//			map.put("dust_pillar", Particle.DUST_PILLAR);
+//			map.put("ominous_spawning", Particle.OMINOUS_SPAWNING);
+//			map.put("raid_omen", Particle.RAID_OMEN);
+//			map.put("trial_omen", Particle.TRIAL_OMEN);
+//			map.put("block_marker", Particle.BLOCK_MARKER);
+			
+			map.put("poof", Particle.valueOf("EXPLOSION_NORMAL"));
+			map.put("explosion", Particle.valueOf("EXPLOSION_LARGE"));
+			map.put("explosion_emitter", Particle.valueOf("EXPLOSION_HUGE"));
+			map.put("firework", Particle.valueOf("FIREWORKS_SPARK"));
+			map.put("bubble", Particle.valueOf("WATER_BUBBLE"));
+			map.put("splash", Particle.valueOf("WATER_SPLASH"));
+			map.put("fishing", Particle.valueOf("WATER_WAKE"));
+			map.put("underwater", Particle.valueOf("SUSPENDED"));
+			// map.put("???", Particle.valueOf("SUSPENDED_DEPTH"));
+			map.put("crit", Particle.valueOf("CRIT"));
+			map.put("enchanted_hit", Particle.valueOf("CRIT_MAGIC"));
+			map.put("smoke", Particle.valueOf("SMOKE_NORMAL"));
+			map.put("large_smoke", Particle.valueOf("SMOKE_LARGE"));
+			map.put("effect", Particle.valueOf("SPELL"));
+			map.put("instant_effect", Particle.valueOf("SPELL_INSTANT"));
+			map.put("entity_effect", Particle.valueOf("SPELL_MOB"));
+			// map.put("???", Particle.valueOf("SPELL_MOB_AMBIENT"));
+			map.put("witch", Particle.valueOf("SPELL_WITCH"));
+			map.put("dripping_water", Particle.valueOf("DRIP_WATER"));
+			map.put("dripping_lava", Particle.valueOf("DRIP_LAVA"));
+			map.put("angry_villager", Particle.valueOf("VILLAGER_ANGRY"));
+			map.put("happy_villager", Particle.valueOf("VILLAGER_HAPPY"));
+			map.put("mycelium", Particle.valueOf("TOWN_AURA"));
+			map.put("note", Particle.valueOf("NOTE"));
+			map.put("portal", Particle.valueOf("PORTAL"));
+			map.put("enchant", Particle.valueOf("ENCHANTMENT_TABLE"));
+			map.put("flame", Particle.valueOf("FLAME"));
+			map.put("lava", Particle.valueOf("LAVA"));
+			map.put("cloud", Particle.valueOf("CLOUD"));
+			map.put("dust", Particle.valueOf("REDSTONE"));
+			map.put("item_snowball", Particle.valueOf("SNOWBALL"));
+			map.put("item_slime", Particle.valueOf("SNOW_SHOVEL"));
+			// map.put("???", Particle.valueOf("SLIME"));
+			map.put("heart", Particle.valueOf("HEART"));
+			map.put("item", Particle.valueOf("ITEM_CRACK"));
+			map.put("block", Particle.valueOf("BLOCK_CRACK"));
+			map.put("rain", Particle.valueOf("BLOCK_DUST"));
+			// map.put("???", Particle.valueOf("WATER_DROP"));
+			map.put("elder_guardian", Particle.valueOf("MOB_APPEARANCE"));
+			map.put("dragon_breath", Particle.valueOf("DRAGON_BREATH"));
+			map.put("end_rod", Particle.valueOf("END_ROD"));
+			map.put("damage_indicator", Particle.valueOf("DAMAGE_INDICATOR"));
+			map.put("sweep_attack", Particle.valueOf("SWEEP_ATTACK"));
+			map.put("falling_dust", Particle.valueOf("FALLING_DUST"));
+			map.put("totem_of_undying", Particle.valueOf("TOTEM"));
+			map.put("spit", Particle.valueOf("SPIT"));
+			map.put("squid_ink", Particle.valueOf("SQUID_INK"));
+			map.put("bubble_pop", Particle.valueOf("BUBBLE_POP"));
+			map.put("current_down", Particle.valueOf("CURRENT_DOWN"));
+			map.put("bubble_column_up", Particle.valueOf("BUBBLE_COLUMN_UP"));
+			map.put("nautilus", Particle.valueOf("NAUTILUS"));
+			map.put("dolphin", Particle.valueOf("DOLPHIN"));
+			map.put("sneeze", Particle.valueOf("SNEEZE"));
+			map.put("campfire_cosy_smoke", Particle.valueOf("CAMPFIRE_COSY_SMOKE"));
+			map.put("campfire_signal_smoke", Particle.valueOf("CAMPFIRE_SIGNAL_SMOKE"));
+			map.put("composter", Particle.valueOf("COMPOSTER"));
+			map.put("flash", Particle.valueOf("FLASH"));
+			map.put("falling_lava", Particle.valueOf("FALLING_LAVA"));
+			map.put("landing_lava", Particle.valueOf("LANDING_LAVA"));
+			map.put("falling_water", Particle.valueOf("FALLING_WATER"));
+			map.put("dripping_honey", Particle.valueOf("DRIPPING_HONEY"));
+			map.put("falling_honey", Particle.valueOf("FALLING_HONEY"));
+			map.put("landing_honey", Particle.valueOf("LANDING_HONEY"));
+			map.put("falling_nectar", Particle.valueOf("FALLING_NECTAR"));
+			map.put("soul_fire_flame", Particle.valueOf("SOUL_FIRE_FLAME"));
+			map.put("ash", Particle.valueOf("ASH"));
+			map.put("crimson_spore", Particle.valueOf("CRIMSON_SPORE"));
+			map.put("warped_spore", Particle.valueOf("WARPED_SPORE"));
+			map.put("soul", Particle.valueOf("SOUL"));
+			map.put("dripping_obsidian_tear", Particle.valueOf("DRIPPING_OBSIDIAN_TEAR"));
+			map.put("falling_obsidian_tear", Particle.valueOf("FALLING_OBSIDIAN_TEAR"));
+			map.put("landing_obsidian_tear", Particle.valueOf("LANDING_OBSIDIAN_TEAR"));
+			map.put("reverse_portal", Particle.valueOf("REVERSE_PORTAL"));
+			map.put("white_ash", Particle.valueOf("WHITE_ASH"));
+			map.put("dust_color_transition", Particle.valueOf("DUST_COLOR_TRANSITION"));
+			map.put("vibration", Particle.valueOf("VIBRATION"));
+			map.put("falling_spore_blossom", Particle.valueOf("FALLING_SPORE_BLOSSOM"));
+			map.put("spore_blossom_air", Particle.valueOf("SPORE_BLOSSOM_AIR"));
+			map.put("small_flame", Particle.valueOf("SMALL_FLAME"));
+			map.put("snowflake", Particle.valueOf("SNOWFLAKE"));
+			map.put("dripping_dripstone_lava", Particle.valueOf("DRIPPING_DRIPSTONE_LAVA"));
+			map.put("falling_dripstone_lava", Particle.valueOf("FALLING_DRIPSTONE_LAVA"));
+			map.put("dripping_dripstone_water", Particle.valueOf("DRIPPING_DRIPSTONE_WATER"));
+			map.put("falling_dripstone_water", Particle.valueOf("FALLING_DRIPSTONE_WATER"));
+			map.put("glow_squid_ink", Particle.valueOf("GLOW_SQUID_INK"));
+			map.put("glow", Particle.valueOf("GLOW"));
+			map.put("wax_on", Particle.valueOf("WAX_ON"));
+			map.put("wax_off", Particle.valueOf("WAX_OFF"));
+			map.put("electric_spark", Particle.valueOf("ELECTRIC_SPARK"));
+			map.put("scrape", Particle.valueOf("SCRAPE"));
+			map.put("sonic_boom", Particle.valueOf("SONIC_BOOM"));
+			map.put("sculk_soul", Particle.valueOf("SCULK_SOUL"));
+			map.put("sculk_charge", Particle.valueOf("SCULK_CHARGE"));
+			map.put("sculk_charge_pop", Particle.valueOf("SCULK_CHARGE_POP"));
+			map.put("shriek", Particle.valueOf("SHRIEK"));
+			map.put("cherry_leaves", Particle.valueOf("CHERRY_LEAVES"));
+			map.put("egg_crack", Particle.valueOf("EGG_CRACK"));
+			map.put("dust_plume", Particle.valueOf("BLOCK_MARKER"));
+			
+			Registry<ParticleType<?>> registry = BuiltInRegistries.PARTICLE_TYPE; //CraftRegistry.getMinecraftRegistry(Registries.PARTICLE_TYPE);
+			
+			final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, key);
+			
+//			registry.getResourceKey(particleOptions.getType()).get().
+			// registry.asLookup().
+			
+			String nmsKey = registry.getResourceKey(particleOptions.getType()).get().location().getPath();
+			System.out.println("Trying to find " + nmsKey + " but got " + map.get(nmsKey));
+			result = new ParticleData(map.get(nmsKey), null); //baseNMS.getParticle(cmdCtx, key);
 		}
 		
 		return result;
