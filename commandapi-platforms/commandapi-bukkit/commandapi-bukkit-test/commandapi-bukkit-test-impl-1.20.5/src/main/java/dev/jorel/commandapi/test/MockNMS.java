@@ -30,9 +30,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R4.CraftParticle;
+import org.bukkit.craftbukkit.v1_20_R4.CraftRegistry;
 import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemFactory;
+import org.bukkit.craftbukkit.v1_20_R4.util.CraftNamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
@@ -41,6 +43,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import com.google.gson.JsonParseException;
@@ -67,7 +70,11 @@ import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.commands.functions.CommandFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.numbers.BlankFormat;
 import net.minecraft.resources.ResourceKey;
@@ -160,6 +167,24 @@ public class MockNMS extends Enums {
 			}
 			return null;
 		});
+		
+		// CraftBukkit's registry is shared across all instances of a test (or all tests?)
+		if (CraftRegistry.getMinecraftRegistry() == null) {
+			RegistryAccess registry = Mockito.mock(RegistryAccess.class);
+			Mockito.when(registry.registry(any())).thenAnswer(args -> {
+				ResourceKey key = args.getArgument(0);
+				System.out.println("Trying to access registry: " + key.registry());
+				Thread.currentThread().dumpStack();
+				return Optional.ofNullable(null);
+			});
+			Mockito.when(registry.registryOrThrow(any())).thenAnswer(args -> {
+				ResourceKey key = args.getArgument(0);
+				System.out.println("Trying to access registry: " + key.registry());
+				Thread.currentThread().dumpStack();
+				return null;
+			});
+			CraftRegistry.setMinecraftRegistry(registry);
+		}
 	}
 
 	/*************************
@@ -412,11 +437,13 @@ public class MockNMS extends Enums {
 
 	@Override
 	public String getNMSParticleNameFromBukkit(Particle particle) {
+		// CraftRegistry.setMinecraftRegistry(this.<MinecraftServer>getMinecraftServer().getServer().registryAccess());
 		// Didn't want to do it like this, but it's way easier than going via the
 		// registry to do all sorts of nonsense with lookups. If you ever want to
 		// change your mind, here's how to access it via the registry. This doesn't
 		// scale well for pre 1.19 versions though!
 		// BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.toNMS(particle).getType()).toString();
+		particle.getKey();
 		return BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.bukkitToMinecraft(particle)).toString();
 		// return particle.getKey().toString();
 	}

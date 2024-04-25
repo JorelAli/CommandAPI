@@ -140,7 +140,11 @@ class ArgumentParticleTests extends TestBase {
 		// caps it off at 4.
 		int size = ThreadLocalRandom.current().nextInt(1, 5);
 
-		server.dispatchCommand(player, "test dust %s %s %s %d".formatted(red, green, blue, size));
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			server.dispatchCommand(player, "test dust{color:[%sf,%sf,%sf],scale:%d.0f}".formatted(red, green, blue, size));
+		} else {
+			server.dispatchCommand(player, "test dust %s %s %s %d".formatted(red, green, blue, size));
+		}
 		@SuppressWarnings("unchecked")
 		ParticleData<DustOptions> result = (ParticleData<DustOptions>) results.get();
 

@@ -15,9 +15,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.Registry.SimpleRegistry;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.v1_20_R4.CraftParticle;
+import org.bukkit.craftbukkit.v1_20_R4.util.CraftNamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -27,6 +31,7 @@ import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import com.mojang.brigadier.Message;
@@ -61,8 +66,11 @@ import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderOwner;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 
 /**
@@ -241,6 +249,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.PARTICLE_TYPE.asLookup()).orElseThrow()); // Registry.PARTICLE_TYPE
+		Mockito
+			.when(buildContextMock.createSerializationContext(any()))
+			.thenAnswer(a -> RegistryOps.create(a.getArgument(0), buildContextMock));
 		return ParticleArgument.particle(buildContextMock);
 	}
 
@@ -531,7 +542,28 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
 	@Override
 	public ParticleData<?> getParticle(CommandContext cmdCtx, String key) {
-		return baseNMS.getParticle(cmdCtx, key);
+		
+		final ParticleData<?> result;
+		
+		try (MockedStatic<CraftParticle> craftParticle = Mockito.mockStatic(CraftParticle.class)) {
+			craftParticle.when(() -> CraftParticle.minecraftToBukkit(any()))
+			.thenAnswer(args -> {
+				ParticleType minecraft = args.getArgument(0, ParticleType.class);
+				
+				
+				Registry<ParticleType<?>> registry = BuiltInRegistries.PARTICLE_TYPE; //CraftRegistry.getMinecraftRegistry(Registries.PARTICLE_TYPE);
+				org.bukkit.Registry.PARTICLE_TYPE
+				// new SimpleRegistry(Particle.class, (par) -> par.register);
+				
+				Particle bukkit = (Particle) org.bukkit.Registry.PARTICLE_TYPE.get(CraftNamespacedKey
+						.fromMinecraft(((ResourceKey) registry.getResourceKey(minecraft).orElseThrow()).location()));
+				return bukkit;
+			});
+			
+			result = baseNMS.getParticle(cmdCtx, key);
+		}
+		
+		return result;
 	}
 
 	@Override
