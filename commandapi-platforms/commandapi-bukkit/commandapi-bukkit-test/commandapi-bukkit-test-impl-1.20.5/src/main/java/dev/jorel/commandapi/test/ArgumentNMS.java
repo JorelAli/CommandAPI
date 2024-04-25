@@ -93,6 +93,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.BLOCK.asLookup())); // Registry.BLOCK
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.BLOCK.asLookup()).orElseThrow()); // Registry.BLOCK
 		return BlockPredicateArgument.blockPredicate(buildContextMock);
 	}
 
@@ -102,6 +105,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.BLOCK.asLookup())); // Registry.BLOCK
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.BLOCK.asLookup()).orElseThrow()); // Registry.BLOCK
 		return BlockStateArgument.block(buildContextMock);
 	}
 
@@ -131,6 +137,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.ENCHANTMENT.asLookup())); // Registry.ENCHANTMENT
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.ENCHANTMENT.asLookup()).orElseThrow()); // Registry.ENCHANTMENT
 		return ResourceArgument.resource(buildContextMock, Registries.ENCHANTMENT);
 	}
 
@@ -148,6 +157,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.ENTITY_TYPE.asLookup())); // Registry.ENTITY_TYPE
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.ENTITY_TYPE.asLookup()).orElseThrow()); // Registry.ENTITY_TYPE
 		return ResourceArgument.resource(buildContextMock, Registries.ENTITY_TYPE);
 	}
 
@@ -167,6 +179,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.ITEM.asLookup())); // Registry.ITEM
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.ITEM.asLookup()).orElseThrow()); // Registry.ITEM
 		return ItemPredicateArgument.itemPredicate(buildContextMock);
 	}
 
@@ -181,6 +196,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.ITEM.asLookup())); // Registry.ITEM
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.ITEM.asLookup()).orElseThrow()); // Registry.ITEM
 		return ItemArgument.item(buildContextMock);
 	}
 
@@ -203,6 +221,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.MOB_EFFECT.asLookup())); // Registry.MOB_EFFECT
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.MOB_EFFECT.asLookup()).orElseThrow()); // Registry.MOB_EFFECT
 		return ResourceArgument.resource(buildContextMock, Registries.MOB_EFFECT);
 	}
 
@@ -217,6 +238,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 		Mockito
 			.when(buildContextMock.lookup(any(ResourceKey.class)))
 			.thenReturn(Optional.of(BuiltInRegistries.PARTICLE_TYPE.asLookup())); // Registry.PARTICLE_TYPE
+		Mockito
+			.when(buildContextMock.lookupOrThrow(any(ResourceKey.class)))
+			.thenReturn(Optional.of(BuiltInRegistries.PARTICLE_TYPE.asLookup()).orElseThrow()); // Registry.PARTICLE_TYPE
 		return ParticleArgument.particle(buildContextMock);
 	}
 

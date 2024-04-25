@@ -87,7 +87,9 @@ class ArgumentEntityTypeTests extends TestBase {
 
 		// /test giraffe
 		// Unknown entity, giraffe is not a valid entity type
-		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertCommandFailsWith(player, "test giraffe", "Can't find element 'minecraft:giraffe' of type 'minecraft:entity_type' at position 12: ...st giraffe<--[HERE]");
+		} else if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
 			assertCommandFailsWith(player, "test giraffe", "Can't find element 'minecraft:giraffe' of type 'minecraft:entity_type'");
 		} else {
 			assertCommandFailsWith(player, "test giraffe", "Unknown entity: minecraft:giraffe");

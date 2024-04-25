@@ -3,6 +3,7 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -101,28 +102,46 @@ class ArgumentItemStackPredicateTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 		
-		// Identical to the ItemStackArgument tests
+		// Identical to the ItemStackArgument tests, except ItemStackPredicates have a slightly
+		// different list of possible values because it can also accept * and tags (starting with #)
+		List<String> itemPredicateNames = new ArrayList<>(MockPlatform.getInstance().getAllItemNames());
+		itemPredicateNames.add(0, "#");
+		itemPredicateNames.add(1, "*");
 		
 		// /test
 		// All items should be suggested
-		assertEquals(MockPlatform.getInstance().getAllItemNames(), server.getSuggestions(player, "test "));
+		assertEquals(itemPredicateNames, server.getSuggestions(player, "test "));
 	
 		// /test x
 		// All items starting with 'a' should be suggested, as well as items which
 		// are underscore-separated and start with 'a', such as 'wooden_axe'
-		assertEquals(MockPlatform.getInstance().getAllItemNames().stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
+		assertEquals(itemPredicateNames.stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
 		
-		// test dirt
-		// Completed item names should suggest open brackets
-		assertEquals(List.of("{"), server.getSuggestions(player, "test dirt"));
+		// /test dirt
+		// Completed item names should suggest open curly braces (or square brackets in 1.20.5+)
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertEquals(List.of("["), server.getSuggestions(player, "test dirt"));
+		} else {
+			assertEquals(List.of("{"), server.getSuggestions(player, "test dirt"));
+		}
 		
-		// test dirt{
+		// /test dirt{
+		// /test dirt[ (1.20.5+)
 		// NBT has no suggestions
-		assertEquals(List.of(), server.getSuggestions(player, "test dirt{"));
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt["));
+		} else {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt{"));
+		}
 		
-		// test dirt{}
+		// /test dirt{}
+		// /test dirt[] (1.20.5+)
 		// NBT has no suggestions
-		assertEquals(List.of(), server.getSuggestions(player, "test dirt{}"));
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt[]"));
+		} else {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt{}"));
+		}
 	}
 
 }

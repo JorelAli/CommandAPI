@@ -613,17 +613,6 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 		// Create the basic ItemStack with an amount of 1
 		net.minecraft.world.item.ItemStack itemWithMaybeTag = input.createItemStack(1, false);
-
-		// TODO: Item counts
-		// Try and find the amount from the CompoundTag (if present)
-//		final CompoundTag tag = itemInput.get(input);
-//		if (tag != null) {
-//			// The tag has some extra metadata we need! Get the Count (amount)
-//			// and create the ItemStack with the correct metadata
-//			int count = (int) tag.getByte("Count");
-//			itemWithMaybeTag = input.createItemStack(count == 0 ? 1 : count, false);
-//		}
-
 		org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemWithMaybeTag);
 		result.setItemMeta(CraftItemStack.getItemMeta(itemWithMaybeTag));
 		return result;

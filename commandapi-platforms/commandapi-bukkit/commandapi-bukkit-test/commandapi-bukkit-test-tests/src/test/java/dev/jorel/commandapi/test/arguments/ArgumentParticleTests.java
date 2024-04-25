@@ -41,7 +41,8 @@ class ArgumentParticleTests extends TestBase {
 	public void setUp() {
 		super.setUp();
 
-		assumeTrue(version.lessThan(MCVersion.V1_20_3));
+		// Disabled for 1.20.3+ due to "reasons"
+		// assumeTrue(version.lessThan(MCVersion.V1_20_3));
 	}
 
 	@AfterEach
@@ -99,7 +100,11 @@ class ArgumentParticleTests extends TestBase {
 		PlayerMock player = server.addPlayer();
 
 		// dust red green blue size, where red, green and blue are between 0 and 1
-		server.dispatchCommand(player, "test dust 1 0.5 0 4");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			server.dispatchCommand(player, "test dust{color:[1.0f,0.5f,0.0f],scale:4.0f}");
+		} else {
+			server.dispatchCommand(player, "test dust 1 0.5 0 4");
+		}
 		@SuppressWarnings("unchecked")
 		ParticleData<DustOptions> result = (ParticleData<DustOptions>) results.get();
 

@@ -29,6 +29,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_20_R4.CraftParticle;
 import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemFactory;
@@ -416,7 +417,8 @@ public class MockNMS extends Enums {
 		// change your mind, here's how to access it via the registry. This doesn't
 		// scale well for pre 1.19 versions though!
 		// BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.toNMS(particle).getType()).toString();
-		return particle.getKey().toString();
+		return BuiltInRegistries.PARTICLE_TYPE.getKey(CraftParticle.bukkitToMinecraft(particle)).toString();
+		// return particle.getKey().toString();
 	}
 
 	@Override
