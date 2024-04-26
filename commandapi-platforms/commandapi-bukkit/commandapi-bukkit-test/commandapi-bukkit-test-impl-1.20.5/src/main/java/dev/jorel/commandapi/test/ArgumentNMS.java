@@ -785,9 +785,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 			String nmsKey = registry.getResourceKey(particleOptions.getType()).get().location().getPath();
 			result = new ParticleData(map.get(nmsKey), baseNMS.getParticle(cmdCtx, key).data());
 		}
-		
-		
-		
+
 		return result;
 	}
 

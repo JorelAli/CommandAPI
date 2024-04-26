@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test.arguments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -13,6 +14,9 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Particle.DustTransition;
+import org.bukkit.Vibration;
+import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Snowable;
 import org.bukkit.inventory.ItemStack;
@@ -186,6 +190,40 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 	}
 
 	@Test
+	void executionTestWithParticleArgumentDustColorTransition() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// dust_color_transition from_red from_green from_blue size to_red to_green to_blue, where red, green and blue are between 0 and 1
+		// 
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			server.dispatchCommand(player, "test dust_color_transition{from_color:[0.1,0.2,0.3],scale:0.4,to_color:[0.5,0.6,0.7]}");
+		} else {
+			server.dispatchCommand(player, "test dust_color_transition 0.1 0.2 0.3 0.4 0.5 0.6 0.7");
+		}
+		@SuppressWarnings("unchecked")
+		ParticleData<DustTransition> result = (ParticleData<DustTransition>) results.get();
+
+		// Check the particle type is correct
+		assertEquals(Particle.DUST_COLOR_TRANSITION, result.particle());
+
+		// Check the particle properties
+		assertEquals(Color.fromRGB((int) (0.1f * 255), (int) (0.2f * 255), (int) (0.3f * 255)), result.data().getColor());
+		assertEquals(0.4f, result.data().getSize());
+		assertEquals(Color.fromRGB((int) (0.5f * 255), (int) (0.6f * 255), (int) (0.7f * 255)), result.data().getToColor());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
 	void executionTestWithParticleArgumentBlock() {
 		Mut<ParticleData<?>> results = Mut.of();
 
@@ -288,40 +326,109 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		assertNoMoreResults(results);
 	}
 
-//	@Test
-//	void executionTestWithParticleArgumentVibration() {
-//		Mut<ParticleData<?>> results = Mut.of();
-//
-//		new CommandAPICommand("test")
-//			.withArguments(new ParticleArgument("particle"))
-//			.executesPlayer((player, args) -> {
-//				results.set((ParticleData<?>) args.get("particle"));
-//			})
-//			.register();
-//
-//		PlayerMock player = server.addPlayer();
-//
-//		// block block_type[meta]
-//		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
-//			server.dispatchCommand(player, "test block{block_state:{Name:\"minecraft:grass_block\",Properties:{snowy:\"true\"}}}");
-//		} else {
-//			server.dispatchCommand(player, "test block minecraft:grass_block[snowy=true]");
-//		}
-//		
-//		@SuppressWarnings("unchecked")
-//		ParticleData<BlockData> result = (ParticleData<BlockData>) results.get();
-//
-//		// Check the particle type is correct
-//		assertEquals(Particle.BLOCK_CRACK, result.particle());
-//		
-//		// TODO: Can't handle particle data yet in 1.20.5
-//		assumeTrue(version.lessThan(MCVersion.V1_20_5));
-//
-//		// Check the particle properties
-//		assertEquals(Material.GRASS_BLOCK, result.data().getMaterial());
-//		assertTrue(((Snowable) result.data()).isSnowy());
-//
-//		assertNoMoreResults(results);
-//	}
+	@Test
+	void executionTestWithParticleArgumentVibration() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// vibration 1.0 2.0 3.0 4
+		// vibration{destination:{type:\"block\",pos:[1.0,2.0,3.0]},arrival_in_ticks:4}
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			server.dispatchCommand(player, "test vibration{destination:{type:\"block\",pos:[1.0,2.0,3.0]},arrival_in_ticks:4}");
+		} else {
+			server.dispatchCommand(player, "test vibration 1.0 2.0 3.0 4");
+		}
+		
+		@SuppressWarnings("unchecked")
+		ParticleData<Vibration> result = (ParticleData<Vibration>) results.get();
+
+		// Check the particle type is correct
+		assertEquals(Particle.VIBRATION, result.particle());
+
+		// Check the particle properties
+		assertEquals(4, result.data().getArrivalTime());
+		assertInstanceOf(BlockDestination.class, result.data().getDestination());
+		
+		BlockDestination blockDestination = (BlockDestination) result.data().getDestination();
+		assertEquals(1, blockDestination.getLocation().getBlockX());
+		assertEquals(2, blockDestination.getLocation().getBlockY());
+		assertEquals(3, blockDestination.getLocation().getBlockZ());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentShriek() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// shriek 1
+		// shriek{delay:1}
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			server.dispatchCommand(player, "test shriek{delay:1}");
+		} else {
+			server.dispatchCommand(player, "test shriek 1");
+		}
+		
+		@SuppressWarnings("unchecked")
+		ParticleData<Integer> result = (ParticleData<Integer>) results.get();
+
+		// Check the particle type is correct
+		assertEquals(Particle.SHRIEK, result.particle());
+
+		// Check the particle properties
+		assertEquals(1, result.data());
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithParticleArgumentSculkCharge() {
+		Mut<ParticleData<?>> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new ParticleArgument("particle"))
+			.executesPlayer((player, args) -> {
+				results.set((ParticleData<?>) args.get("particle"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		// sculk_charge 0.1
+		// sculk_charge{roll:0.1}
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			server.dispatchCommand(player, "test sculk_charge{roll:0.1}");
+		} else {
+			server.dispatchCommand(player, "test sculk_charge 0.1");
+		}
+		
+		@SuppressWarnings("unchecked")
+		ParticleData<Float> result = (ParticleData<Float>) results.get();
+
+		// Check the particle type is correct
+		assertEquals(Particle.SCULK_CHARGE, result.particle());
+
+		// Check the particle properties
+		assertEquals(0.1f, result.data());
+
+		assertNoMoreResults(results);
+	}
 
 }
