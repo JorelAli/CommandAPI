@@ -105,8 +105,10 @@ class ArgumentItemStackPredicateTests extends TestBase {
 		// Identical to the ItemStackArgument tests, except ItemStackPredicates have a slightly
 		// different list of possible values because it can also accept * and tags (starting with #)
 		List<String> itemPredicateNames = new ArrayList<>(MockPlatform.getInstance().getAllItemNames());
-		itemPredicateNames.add(0, "#");
-		itemPredicateNames.add(1, "*");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			itemPredicateNames.add(0, "#");
+			itemPredicateNames.add(1, "*");
+		}
 		
 		// /test
 		// All items should be suggested
