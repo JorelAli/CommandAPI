@@ -197,9 +197,9 @@ import net.minecraft.world.scores.ScoreHolder;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.20.5
+ * NMS implementation for Minecraft 1.20.5, 1.20.6
  */
-@NMSMeta(compatibleWith = { "1.20.5" })
+@NMSMeta(compatibleWith = { "1.20.5", "1.20.6" })
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 // @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
@@ -295,7 +295,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.20.5" };
+		return new String[] { "1.20.5", "1.20.6" };
 	};
 	
 	private static String serializeNMSItemStack(ItemStack is) {

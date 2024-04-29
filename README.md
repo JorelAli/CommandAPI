@@ -67,7 +67,7 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.20.1**         | 9.0.3 - 9.4.0               | 9.4.0                        | 16                                                        |
 | **1.20.2**         | 9.2.0 - 9.4.0               | 9.4.0                        | 16                                                        |
 | **1.20.3, 1.20.4** | 9.3.0 - 9.4.0               | 9.4.0                        | 16                                                        |
-| **1.20.5**         | 9.4.0                       | 9.4.0                        | 16                                                        |
+| **1.20.5, 1.20.6** | 9.4.0                       | 9.4.0                        | 16                                                        |
 
 -----
 
@@ -380,7 +380,7 @@ The resulting compiled documentation is found in `docs/X.X.X`, where `X.X.X` is 
 
 ## CommandAPI Project Timeline
 
-This is the current roadmap for the CommandAPI (as of 11th May 2023):
+This is the current roadmap for the CommandAPI (as of 30th April 2024):
 
 - **10.0.0:**
 
@@ -434,6 +434,8 @@ This is the current roadmap for the CommandAPI (as of 11th May 2023):
                 <b>Minecraft Version Changes:</b>
                 <ul>
                     <li>Drops support for version 1.15.x</li>
+                    <li>Adds support for version 1.20.5</li>
+                    <li>Adds support for version 1.20.6</li>
                 </ul>
             </td>
         </tr>
