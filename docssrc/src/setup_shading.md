@@ -107,6 +107,39 @@ By default, the CommandAPI is written in the `dev.jorel.commandapi` package. It 
 
 -----
 
+## A note about Paper 1.20.5+ servers
+
+_If you are using the Spigot API, you can ignore this section and jump to [Shading with Maven](#shading-with-maven) or [Shading with Gradle](#shading-with-gradle)
+depending on the build tool you use._
+
+<div class="warning">
+
+**Developer's Note:**
+
+Starting from Minecraft version 1.20.5, Paper will only ship mojang-mapped servers which use mojang-mapped class names and CraftBukkit classes without the version package.
+However, when starting the server, Paper will remap Spigot-mapped plugins so that they can run on a mojang-mapped server.
+
+At this time, the CommandAPI is not able to provide a version that runs on a mojang-mapped server without being relocated so your plugin has top be marked as Spigot-mapped
+to make the server remap your plugin and your shaded CommandAPI version so that the CommandAPI is able to run on a 1.20.5 Paper server.
+
+</div>
+
+In the following section we distinguish between the use of the `Paper API`, in our context just the use of the `io.papermc.paper:paper-api:apiVersion` dependency
+without Paper's internal code ("NMS"), and the use of `paperweight-userdev` (Paper's internal code) because the use of either of them will decide what you have to
+do to make your plugin with the CommandAPI 1.20.5 Paper-compatible.
+
+You now need to differentiate between certain configurations in order to make your plugin and the CommandAPI compatible with 1.20.5 servers:
+
+| Build Tool | Paper                  | Plugin Flavour                      | What to do                                                                                                                                                            |
+|------------|------------------------|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Maven      | Paper API              | `plugin.yml`                        | [Shading with Maven](#shading-with-maven)                                                                                                                             |
+| Maven      | Paper API              | `paper-plugin.yml`                  | <ol><li><a href="#shading-with-maven">Shading with Maven<a/></li><li><a href="#setting-the-manifest-value-maven">Setting the manifest value (Maven)</a></li></ol>     |
+| Gradle     | Paper API              | `plugin.yml`                        | [Shading with Gradle](#shading-with-gradle)                                                                                                                           |
+| Gradle     | Paper API              | `paper-plugin.yml`                  | <ol><li><a href="#shading-with-gradle">Shading with Gradle</a></li><li><a href="#setting-the-manifest-value-gradle">Setting the manifest value (Gradle)</a></li></ol> |
+| Gradle     | `paperweight-userdev`  | `plugin.yml`<br>`paper-plugin.yml`  | [Shading with Gradle (`paperweight-userdev`)](#shading-with-gradle-paperweight-userdev)                                                                               |
+
+-----
+
 ## Shading with Maven
 
 To shade the CommandAPI into a maven project, you'll need to use the `commandapi-bukkit-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. **You do not need to use `commandapi-bukkit-core` if you are shading**:
@@ -240,7 +273,7 @@ shadowJar {
 ```
 
 ```kotlin,build.gradle.kts
-shadowJar {
+tasks.withType<ShadowJar> {
     dependencies {
         include(dependency("dev.jorel:commandapi-bukkit-shade:9.4.0-SNAPSHOT"))
     }
@@ -259,3 +292,78 @@ gradlew build shadowJar
 ```
 
 As we're shading the CommandAPI into your plugin, we **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.
+
+## Setting the manifest value (Maven)
+
+> **Developer's Note:**
+> 
+> This step is only necessary when targeting Paper servers while using a `paper-plugin.yml`
+
+In order to tell Paper that your plugin should be remapped to Mojang mappings at runtime, you have to set a manifest value in the `maven-jar-plugin`. This step is necessary as
+Paper assumes that every plugin using a `paper-plugin.yml` already is mojang-mapped.
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <version>3.4.1</version>
+    <configuration>
+        <archive>
+            <manifestEntries>
+                <paperweight-mappings-namespace>spigot</paperweight-mappings-namespace>
+            </manifestEntries>
+        </archive>
+    </configuration>
+</plugin>
+```
+
+This will mark your plugin as Spigot-mapped and Paper will remap your plugin at runtime.
+
+## Setting the manifest value (Gradle)
+
+> **Developer's Note:**
+> 
+> This step is only necessary when targeting Paper servers while using a `paper-plugin.yml`
+
+In order to tell Paper that your plugin should be remapped to Mojang mappings at runtime, you have to set a manifest value in the `shadowJar` task. This step is necessary as
+Paper assumes that every plugin using a `paper-plugin.yml` already is mojang-mapped.
+
+```kotlin
+tasks.withType<ShadowJar> {
+    manifest {
+        attributes["paperweight-mappings-namespace"] = "spigot"
+    }
+}
+```
+
+This will mark your plugin as Spigot-mapped and Paper will remap your plugin at runtime.
+
+## Shading with Gradle (`paperweight-userdev`)
+
+> **Developer's Note:**
+>
+> This section assumes that you already have a project using `paperweight-userdev` set up.
+
+<div class="warning">
+
+When using `paperweight-userdev`, building your plugin using the `shadowJar` task is not recommended since that task builds the mojang-mapped jar but does not remap any dependencies
+you may have.
+
+Because of that, the Paper server will see your plugin as mojang-mapped and will not try to remap your plugin resulting in a `NoClassDefFoundError` when calling the CommandAPI's
+`onLoad` method because this uses the versioned CraftBukkit classes while a Paper server doesn't have those anymore.
+
+</div>
+
+Instead, please follow these instructions to be able to run the CommandAPI while having made your plugin using `paperweight-userdev`:
+
+1. Please add this to your build script:
+
+```kotlin
+paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.REOBF_PRODUCTION
+```
+
+2. Only run the `reobfJar` task to build your plugin from now on. The main plugin artifact will be Spigot mapped and Paper will remap your plugin so that in the end
+running the CommandAPI works.
+
+
+
