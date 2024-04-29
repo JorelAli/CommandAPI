@@ -49,10 +49,14 @@ public interface CommandAPIVersionHandler {
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
+		String version = Bukkit.getBukkitVersion().split("-")[0];
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_20_R3();
+			try {
+				return (NMS_Common) Class.forName("dev.jorel.commandapi.nms.NMS_1_20_R4").getConstructor().newInstance();
+			} catch (Exception e) {
+				throw new UnsupportedVersionException(version);
+			}
 		} else {
-			String version = Bukkit.getBukkitVersion().split("-")[0];
 			return switch (version) {
 				case "1.15", "1.15.1", "1.15.2" -> new NMS_1_15();
 				case "1.16.1" -> new NMS_1_16_R1();
@@ -70,6 +74,13 @@ public interface CommandAPIVersionHandler {
 				case "1.20", "1.20.1" -> new NMS_1_20_R1();
 				case "1.20.2" -> new NMS_1_20_R2();
 				case "1.20.3", "1.20.4" -> new NMS_1_20_R3();
+				case "1.20.5", "1.20.6" -> {
+					try {
+						yield (NMS_Common) Class.forName("dev.jorel.commandapi.nms.NMS_1_20_R4").getConstructor().newInstance();
+					} catch (Exception e) {
+						throw new UnsupportedVersionException(version);
+					}
+				}
 				default -> throw new UnsupportedVersionException(version);
 			};
 		}

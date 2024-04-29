@@ -25,29 +25,33 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-bukkit-1.20.3</artifactId>
+	<artifactId>commandapi-bukkit-1.20.5</artifactId>
 
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
-		<java.version>17</java.version>
-		<minecraft.mappings>1.20.4-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.20.4-R0.1-SNAPSHOT</spigot.version>
-		<paper.version>1.20.4-R0.1-SNAPSHOT</paper.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<java.version>21</java.version>
+		<minecraft.mappings>1.20.5-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.20.5-R0.1-SNAPSHOT</spigot.version>
+		<paper.version>1.20.5-R0.1-SNAPSHOT</paper.version>
 	</properties>
 
 	<repositories>
 		<repository>
-			<id>minecraft-libraries</id>
-			<url>https://libraries.minecraft.net</url>
+			<id>sonatype-oss-snapshots1</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>papermc</id>
+			<url>https://papermc.io/repo/repository/maven-public/</url>
 		</repository>
 		<repository>
 			<id>codemc-repo</id>
 			<url>https://repo.codemc.io/repository/nms/</url>
 		</repository>
 		<repository>
-			<id>papermc</id>
-			<url>https://papermc.io/repo/repository/maven-public/</url>
+			<id>minecraft-libraries</id>
+			<url>https://libraries.minecraft.net</url>
 		</repository>
 	</repositories>
 
@@ -95,6 +99,27 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-toolchains-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>toolchain</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<toolchains>
+						<jdk>
+							<version>21</version>
+							<vendor>temurin</vendor>
+						</jdk>
+					</toolchains>
+				</configuration>
+			</plugin>
 			<!-- Generate Mojang mapped jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

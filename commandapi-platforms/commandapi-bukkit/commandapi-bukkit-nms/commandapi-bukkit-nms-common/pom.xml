@@ -84,6 +84,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.4.1</version>
 				<executions>
 					<execution>
 						<id>Mojang-Mapped</id>
@@ -99,7 +100,7 @@
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>
-				<version>1.2.4</version>
+				<version>2.0.3</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -133,6 +134,18 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<id>Spigot_1_20_5_R1</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot</artifactId>
+					<version>1.20.5-R0.1-SNAPSHOT</version>
+					<classifier>remapped-mojang</classifier>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 		<profile>
 			<id>Spigot_1_20_4_R3</id>
 			<dependencies>
