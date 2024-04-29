@@ -296,7 +296,7 @@ As we're shading the CommandAPI into your plugin, we **don't** need to add `depe
 ## Setting the manifest value (Maven)
 
 > **Developer's Note:**
-> 
+>
 > This step is only necessary when targeting Paper servers while using a `paper-plugin.yml`
 
 In order to tell Paper that your plugin should be remapped to Mojang mappings at runtime, you have to set a manifest value in the `maven-jar-plugin`. This step is necessary as
@@ -322,7 +322,7 @@ This will mark your plugin as Spigot-mapped and Paper will remap your plugin at 
 ## Setting the manifest value (Gradle)
 
 > **Developer's Note:**
-> 
+>
 > This step is only necessary when targeting Paper servers while using a `paper-plugin.yml`
 
 In order to tell Paper that your plugin should be remapped to Mojang mappings at runtime, you have to set a manifest value in the `shadowJar` task. This step is necessary as
@@ -364,6 +364,3 @@ paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.REOBF_PRODUC
 
 2. Only run the `reobfJar` task to build your plugin from now on. The main plugin artifact will be Spigot mapped and Paper will remap your plugin so that in the end
 running the CommandAPI works.
-
-
-
