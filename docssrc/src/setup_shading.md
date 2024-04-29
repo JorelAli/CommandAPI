@@ -293,6 +293,8 @@ gradlew build shadowJar
 
 As we're shading the CommandAPI into your plugin, we **don't** need to add `depend: [CommandAPI]` to your `plugin.yml` file.
 
+-----
+
 ## Setting the manifest value (Maven)
 
 > **Developer's Note:**

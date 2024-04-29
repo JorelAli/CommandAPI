@@ -43,6 +43,7 @@ Here's the list of changes to the documentation between each update. You can vie
 - Updates [CommandArguments](./commandarguments.md) to document new additions for safe arguments
 - Updates [Potion effect arguments](./argument_potion.md) to include examples for the newly added `NamespacedKey` variant for the `PotionEffectArgument`
 - Updates [Arguments](./arguments.md) to list the newly added `PotionEffectArgument.NamespacedKey` argument
+- Updates [Particles](./argument_particles.md) page to include both [old particle information](./argument_particle_old.md) and [new particle information](./argument_particle_new.md)
 
 ### Documentation changes 9.2.0 \\(\rightarrow\\) 9.3.0
 
@@ -146,7 +147,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 7.0.0 \\(\rightarrow\\) 8.0.0
 
-- Updated particle arguments in the [Particle arguments](./argument_particle.md) section.
+- Updated particle arguments in the [Particle arguments](./argument_particles.md) section.
 - Update the [Upgrading guide](./upgrading.md) for the new changes in 8.0.0.
 
 ### Documentation changes 6.5.4 \\(\rightarrow\\) 7.0.0
