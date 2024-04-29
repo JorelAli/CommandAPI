@@ -183,11 +183,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	}
 
 	@Override
-	public void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-		// Using registeredCommands.get(0) as representation for most command features.
-		//  This is fine, because the only difference between the commands in the list is their argument strings.
-		RegisteredCommand commonCommandInformation = registeredCommands.get(0);
-
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		if (!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
 			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
@@ -201,8 +197,8 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			RootCommandNode<Source> root = getResourcesDispatcher.get().getRoot();
 
 			String name = resultantNode.getLiteral();
-			String namespace = commonCommandInformation.namespace();
-			String permNode = unpackInternalPermissionNodeString(commonCommandInformation.permission());
+			String namespace = registeredCommand.namespace();
+			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
 
 			registerCommand(knownCommands, root, name, permNode, namespace, resultantNode);
 
@@ -228,20 +224,20 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 				minecraftCommandNamespaces = new RootCommandNode<>();
 			}
 		} else {
-			CommandPermission permission = commonCommandInformation.permission();
+			CommandPermission permission = registeredCommand.permission();
 
 			// Since the VanillaCommandWrappers aren't created yet, we need to remember to
 			//  fix those permissions once the server is enabled. Using `putIfAbsent` to
 			//  default to the first permission associated with this command.
-			String commandName = commonCommandInformation.commandName().toLowerCase();
+			String commandName = registeredCommand.commandName().toLowerCase();
 			permissionsToFix.putIfAbsent(commandName, permission);
 
 			// Do the same for the namespaced version of the command (which is never empty on Bukkit forks)
-			String namespace = commonCommandInformation.namespace().toLowerCase();
+			String namespace = registeredCommand.namespace().toLowerCase();
 			permissionsToFix.putIfAbsent(namespace + ":" + commandName, permission);
 
 			// Do the same for the aliases
-			for (String alias : commonCommandInformation.aliases()) {
+			for (String alias : registeredCommand.aliases()) {
 				alias = alias.toLowerCase();
 				permissionsToFix.putIfAbsent(alias, permission);
 				permissionsToFix.putIfAbsent(namespace + ":" + alias, permission);

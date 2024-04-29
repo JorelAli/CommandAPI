@@ -46,7 +46,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -243,35 +242,34 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	private String[] getUsageList(RegisteredCommand currentCommand) {
-		List<RegisteredCommand> commandsWithIdenticalNames = new ArrayList<>();
-
-		// Collect every command with the same name
-		for (RegisteredCommand registeredCommand : CommandAPIHandler.getInstance().registeredCommands) {
-			if (registeredCommand.commandName().equals(currentCommand.commandName())) {
-				commandsWithIdenticalNames.add(registeredCommand);
-			}
-		}
-
-		// Generate command usage or fill it with a user provided one
-		final String[] usages;
+		// TODO: I don't think the changes I made here are well tested, so this could have changed behavior
 		final Optional<String[]> usageDescription = currentCommand.usageDescription();
-		if (usageDescription.isPresent()) {
-			usages = usageDescription.get();
-		} else {
-			// TODO: Figure out if default usage generation should be updated
-			final int numCommandsWithIdenticalNames = commandsWithIdenticalNames.size();
-			usages = new String[numCommandsWithIdenticalNames];
-			for (int i = 0; i < numCommandsWithIdenticalNames; i++) {
-				final RegisteredCommand command = commandsWithIdenticalNames.get(i);
-				StringBuilder usageString = new StringBuilder();
-				usageString.append("/").append(command.commandName()).append(" ");
-				for (AbstractArgument<?, ?, ?, ?> arg : command.arguments()) {
-					usageString.append(arg.getHelpString()).append(" ");
-				}
-				usages[i] = usageString.toString().trim();
-			}
+		if (usageDescription.isPresent()) return usageDescription.get(); // Usage was overriden
+
+		// Generate command usage
+		// TODO: Should default usage generation be updated? https://github.com/JorelAli/CommandAPI/issues/363
+		List<String> usages = new ArrayList<>();
+		StringBuilder usageSoFar = new StringBuilder("/");
+		addUsageForNode(currentCommand.rootNode(), usages, usageSoFar);
+		return usages.toArray(String[]::new);
+	}
+
+	private void addUsageForNode(RegisteredCommand.Node node, List<String> usages, StringBuilder usageSoFar) {
+		// Add node to usage
+		usageSoFar.append(node.helpString());
+
+		// Add usage to the list if this is executable
+		if (node.executable()) usages.add(usageSoFar.toString());
+
+		// Add children
+		usageSoFar.append(" ");
+		int currentLength = usageSoFar.length();
+		for (RegisteredCommand.Node child : node.children()) {
+			// Reset the string builder to the usage up to and including this node
+			usageSoFar.delete(currentLength, usageSoFar.length());
+
+			addUsageForNode(child, usages, usageSoFar);
 		}
-		return usages;
 	}
 
 	void updateHelpForCommands(List<RegisteredCommand> commands) {
@@ -419,6 +417,15 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		throw new RuntimeException("Failed to wrap CommandSender " + sender + " to a CommandAPI-compatible BukkitCommandSender");
 	}
 
+	public void registerPermission(String string) {
+		try {
+			Bukkit.getPluginManager().addPermission(new Permission(string));
+		} catch (IllegalArgumentException ignored) {
+			// Exception is thrown if we attempt to register a permission that already exists
+			//  If it already exists, that's totally fine, so just ignore the exception
+		}
+	}
+
 	@Override
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
@@ -463,28 +470,16 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-		commandRegistrationStrategy.postCommandRegistration(registeredCommands, resultantNode, aliasNodes);
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+		commandRegistrationStrategy.postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
 
-		// Using registeredCommands.get(0) as representation for most command features.
-		//  This is fine, because the only difference between the commands in the list is their argument strings.
-		RegisteredCommand commonCommandInformation = registeredCommands.get(0);
-
-		// Register the command's permission node to Bukkit's manager, if it exists
-		CommandPermission permission = commonCommandInformation.permission();
-		Optional<String> wrappedPermissionString = permission.getPermission();
-		if (wrappedPermissionString.isPresent()) {
-			try {
-				Bukkit.getPluginManager().addPermission(new Permission(wrappedPermissionString.get()));
-			} catch (IllegalArgumentException ignored) {
-				// Exception is thrown if we attempt to register a permission that already exists
-				//  If it already exists, that's totally fine, so just ignore the exception
-			}
-		}
+		// Register the command's permission string (if it exists) to Bukkit's manager
+		CommandPermission permission = registeredCommand.permission();
+		permission.getPermission().ifPresent(this::registerPermission);
 
 		if (!CommandAPI.canRegister()) {
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
-			updateHelpForCommands(registeredCommands);
+			updateHelpForCommands(List.of(registeredCommand));
 
 			// Sending command dispatcher packets usually happens when Players join the server
 			for (Player p : Bukkit.getOnlinePlayers()) {

@@ -1,6 +1,5 @@
 package dev.jorel.commandapi.test;
 
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
@@ -12,17 +11,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static dev.jorel.commandapi.test.RegisteredCommandTestBase.NodeBuilder.node;
 
 /**
  * Tests for making sure the {@link RegisteredCommand} information is correct when registering {@link CommandTree}s
  */
-class CommandTreeRegisteredCommandTests extends TestBase {
+class CommandTreeRegisteredCommandTests extends RegisteredCommandTestBase {
 
 	/*********
 	 * Setup *
@@ -38,64 +35,8 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 		super.tearDown();
 	}
 
-	private RegisteredCommand registeredCommandNoHelpOrPermission(String name, List<String> argsAsStr, String... aliases) {
-		return new RegisteredCommand(name, argsAsStr,
-			Optional.empty(), Optional.empty(), Optional.empty(),
-			aliases,
-			CommandPermission.NONE, "minecraft"
-		);
-	}
-
-	private void assertCreatedRegisteredCommands(RegisteredCommand... commands) {
-		List<RegisteredCommand> expectedCommands = Arrays.asList(commands);
-		List<RegisteredCommand> actualCommands = CommandAPI.getRegisteredCommands();
-
-		if (expectedCommands.size() != actualCommands.size()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("Expected ").append(expectedCommands.size()).append(" command(s), found ").append(actualCommands.size()).append(" command(s).");
-
-			builder.append("\nExpected: ");
-			addRegisteredCommandList(builder, expectedCommands);
-			builder.append("\nActual: ");
-			addRegisteredCommandList(builder, actualCommands);
-
-			fail(builder.toString());
-		}
-
-		for (int i = 0; i < expectedCommands.size(); i++) {
-			RegisteredCommand expectedCommand = expectedCommands.get(i);
-			RegisteredCommand actualCommand = actualCommands.get(i);
-
-			if (!Objects.equals(expectedCommand, actualCommand)) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("Command #").append(i + 1).append(" differed. Expected:\n");
-				builder.append(expectedCommand);
-				builder.append("\nActual:\n");
-				builder.append(actualCommand);
-
-				builder.append("\nExpected list: ");
-				addRegisteredCommandList(builder, expectedCommands);
-				builder.append("\nActual list: ");
-				addRegisteredCommandList(builder, actualCommands);
-
-				fail(builder.toString());
-			}
-		}
-	}
-
-	private void addRegisteredCommandList(StringBuilder builder, List<RegisteredCommand> commands) {
-		if (commands.isEmpty()) {
-			builder.append("[]");
-			return;
-		}
-
-		builder.append("[\n");
-		for (RegisteredCommand command : commands) {
-			builder.append("\t");
-			builder.append(command);
-			builder.append("\n");
-		}
-		builder.append("]");
+	private NodeBuilder commandNode(String nodeName, boolean executable) {
+		return node(nodeName, CommandTree.class, executable).helpString(nodeName);
 	}
 
 	/*********
@@ -108,7 +49,11 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of()));
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", true),
+			List.of("command:CommandTree")
+		);
 	}
 
 	@Test
@@ -123,13 +68,13 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			new RegisteredCommand(
-				"command", List.of(),
-				Optional.of("short description"), Optional.of("full description"), Optional.of(new String[]{"usage 1", "usage 2", "usage 3"}),
-				new String[0], CommandPermission.NONE, "minecraft"
-			)
+		RegisteredCommand expectedCommand = new RegisteredCommand(
+			"command", new String[0], "minecraft", CommandPermission.NONE,
+			Optional.of("short description"), Optional.of("full description"), Optional.of(new String[]{"usage 1", "usage 2", "usage 3"}),
+			commandNode("command", true).build()
 		);
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -139,13 +84,13 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			new RegisteredCommand(
-				"command", List.of(),
-				Optional.empty(), Optional.empty(), Optional.empty(),
-				new String[0], CommandPermission.OP, "minecraft"
-			)
+		RegisteredCommand expectedCommand = new RegisteredCommand(
+			"command", new String[0], "minecraft", CommandPermission.OP,
+			Optional.empty(), Optional.empty(), Optional.empty(),
+			commandNode("command", true).build()
 		);
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -155,13 +100,13 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			new RegisteredCommand(
-				"command", List.of(),
-				Optional.empty(), Optional.empty(), Optional.empty(),
-				new String[0], CommandPermission.fromString("permission"), "minecraft"
-			)
+		RegisteredCommand expectedCommand = new RegisteredCommand(
+			"command", new String[0], "minecraft", CommandPermission.fromString("permission"),
+			Optional.empty(), Optional.empty(), Optional.empty(),
+			commandNode("command", true).build()
 		);
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -171,7 +116,9 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of(), "alias1"));
+		RegisteredCommand expectedCommand = simpleRegisteredCommand("command", "minecraft", commandNode("command", true), "alias1");
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -181,7 +128,20 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of(), "alias1", "alias2"));
+		RegisteredCommand expectedCommand = simpleRegisteredCommand("command", "minecraft", commandNode("command", true), "alias1", "alias2");
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
+	}
+
+	@Test 
+	void testRegisterNamespace() {
+		new CommandTree("command")
+			.executesPlayer(P_EXEC)
+			.register("custom");
+
+		RegisteredCommand expectedCommand = simpleRegisteredCommand("command", "custom", commandNode("command", true));
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -190,7 +150,12 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.then(new StringArgument("string").executesPlayer(P_EXEC))
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument")));
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false)
+				.withChildren(node("string", StringArgument.class, true)),
+			List.of("command:CommandTree", "string:StringArgument")
+		);
 	}
 
 	@Test
@@ -200,9 +165,14 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			.then(new IntegerArgument("integer").executesPlayer(P_EXEC))
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("integer:IntegerArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command",
+			commandNode("command", false).withChildren(
+				node("string", StringArgument.class, true),
+				node("integer", IntegerArgument.class, true)
+			),
+			List.of("command:CommandTree", "string:StringArgument"),
+			List.of("command:CommandTree", "integer:IntegerArgument")
 		);
 	}
 
@@ -215,16 +185,14 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("a:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("b:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("c:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("a:LiteralArgument", "e:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("b:LiteralArgument", "e:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("c:LiteralArgument", "e:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("a:LiteralArgument", "f:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("b:LiteralArgument", "f:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("c:LiteralArgument", "f:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command",
+			commandNode("command", false).withChildren(
+				node("literal1", MultiLiteralArgument.class, false).helpString("(a|b|c)").withChildren(
+					node("literal2", MultiLiteralArgument.class, true).helpString("(d|e|f)")
+				)
+			),
+			List.of("command:CommandTree", "literal1:MultiLiteralArgument", "literal2:MultiLiteralArgument")
 		);
 	}
 
@@ -248,18 +216,29 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of(
+		assertCreatedSimpleRegisteredCommand(
+			"command",
+			commandNode("command", false)
+				.withChildren(node("1", LiteralArgument.class, false).helpString("1")
+				.withChildren(node("2", LiteralArgument.class, false).helpString("2")
+				.withChildren(node("3", LiteralArgument.class, false).helpString("3")
+				.withChildren(node("4", LiteralArgument.class, true).helpString("4")
+				.withChildren(node("5", LiteralArgument.class, false).helpString("5")
+				.withChildren(node("6", LiteralArgument.class, true).helpString("6")
+				.withChildren(node("7", LiteralArgument.class, false).helpString("7")
+				.withChildren(node("8", LiteralArgument.class, true).helpString("8")
+			)))))))),
+			List.of("command:CommandTree", 
 				"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument"
-			)),
-			registeredCommandNoHelpOrPermission("command", List.of(
+			),
+			List.of("command:CommandTree", 
 				"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument",
 				"5:LiteralArgument", "6:LiteralArgument"
-			)),
-			registeredCommandNoHelpOrPermission("command", List.of(
+			),
+			List.of("command:CommandTree", 
 				"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument",
 				"5:LiteralArgument", "6:LiteralArgument", "7:LiteralArgument", "8:LiteralArgument"
-			))
+			)
 		);
 	}
 
@@ -278,9 +257,12 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command",
+			commandNode("command", true)
+				.withChildren(node("subcommand", LiteralArgument.class, true).helpString("subcommand")),
+			List.of("command:CommandTree"),
+			List.of("command:CommandTree", "subcommand:LiteralArgument")
 		);
 	}
 
@@ -299,11 +281,22 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "string1:StringArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "integer1:IntegerArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "string2:StringArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "integer2:IntegerArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command",
+			commandNode("command", false).withChildren(
+				node("subcommand1", LiteralArgument.class, false).helpString("subcommand1").withChildren(
+					node("string1", StringArgument.class, true),
+					node("integer1", IntegerArgument.class, true)
+				),
+				node("subcommand2", LiteralArgument.class, false).helpString("subcommand2").withChildren(
+					node("string2", StringArgument.class, true),
+					node("integer2", IntegerArgument.class, true)
+				)
+			),
+			List.of("command:CommandTree", "subcommand1:LiteralArgument", "string1:StringArgument"),
+			List.of("command:CommandTree", "subcommand1:LiteralArgument", "integer1:IntegerArgument"),
+			List.of("command:CommandTree", "subcommand2:LiteralArgument", "string2:StringArgument"),
+			List.of("command:CommandTree", "subcommand2:LiteralArgument", "integer2:IntegerArgument")
 		);
 	}
 
@@ -334,11 +327,150 @@ class CommandTreeRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "1a:LiteralArgument", "1b:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "1a:LiteralArgument", "1b:LiteralArgument", "1c:LiteralArgument", "1d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "2a:LiteralArgument", "2b:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "2a:LiteralArgument", "2b:LiteralArgument", "2c:LiteralArgument", "2d:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command",
+			commandNode("command", false).withChildren(
+				node("subcommand1", LiteralArgument.class, false).helpString("subcommand1")
+					.withChildren(node("1a", LiteralArgument.class, false).helpString("1a")
+					.withChildren(node("1b", LiteralArgument.class, true).helpString("1b")
+					.withChildren(node("1c", LiteralArgument.class, false).helpString("1c")
+					.withChildren(node("1d", LiteralArgument.class, true).helpString("1d")
+				)))),
+				node("subcommand2", LiteralArgument.class, false).helpString("subcommand2")
+					.withChildren(node("2a", LiteralArgument.class, false).helpString("2a")
+					.withChildren(node("2b", LiteralArgument.class, true).helpString("2b")
+					.withChildren(node("2c", LiteralArgument.class, false).helpString("2c")
+					.withChildren(node("2d", LiteralArgument.class, true).helpString("2d")
+				))))
+			),
+			List.of("command:CommandTree", "subcommand1:LiteralArgument", "1a:LiteralArgument", "1b:LiteralArgument"),
+			List.of("command:CommandTree", "subcommand1:LiteralArgument", "1a:LiteralArgument", "1b:LiteralArgument", "1c:LiteralArgument", "1d:LiteralArgument"),
+			List.of("command:CommandTree", "subcommand2:LiteralArgument", "2a:LiteralArgument", "2b:LiteralArgument"),
+			List.of("command:CommandTree", "subcommand2:LiteralArgument", "2a:LiteralArgument", "2b:LiteralArgument", "2c:LiteralArgument", "2d:LiteralArgument")
 		);
+	}
+
+	/////////////////////////
+	// Information merging //
+	/////////////////////////
+
+	/////////////////////////
+	// Information merging //
+	/////////////////////////
+	
+	@Test
+	void testRegisterTwoSeparateCommands() {
+		new CommandTree("command1")
+			.executesPlayer(P_EXEC)
+			.register();
+
+		new CommandTree("command2")
+			.executesPlayer(P_EXEC)
+			.register();
+
+		RegisteredCommand command1 = simpleRegisteredCommand("command1", "minecraft", commandNode("command1", true));
+		RegisteredCommand command2 = simpleRegisteredCommand("command2", "minecraft", commandNode("command2", true));
+
+		assertCreatedRegisteredCommands(
+			command1.copyWithEmptyNamespace(), command1,
+			command2.copyWithEmptyNamespace(), command2
+		);
+	}
+
+	@Test
+	void testRegisterMergeArguments() {
+		new CommandTree("command")
+			.then(new StringArgument("string").executesPlayer(P_EXEC))
+			.register();
+
+		new CommandTree("command")
+			.then(new IntegerArgument("integer").executesPlayer(P_EXEC))
+			.register();
+
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				node("string", StringArgument.class, true),
+				node("integer", IntegerArgument.class, true)
+			),
+			List.of("command:CommandTree", "string:StringArgument"),
+			List.of("command:CommandTree", "integer:IntegerArgument")
+		);
+	}
+
+	@Test
+	void testRegisterMergeDifferentLengthBranches() {
+		new CommandTree("command")
+			.then(
+				new LiteralArgument("first").then(
+					new StringArgument("argument").executesPlayer(P_EXEC)
+				)
+			)
+			.then(
+				new LiteralArgument("second").executesPlayer(P_EXEC)
+			)
+			.register();
+
+		new CommandTree("command")
+			.then(
+				new LiteralArgument("first").executesPlayer(P_EXEC)
+			)
+			.then(
+				new LiteralArgument("second").then(
+					new IntegerArgument("argument").executesPlayer(P_EXEC)
+				)
+			)
+			.register();
+
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				node("first", LiteralArgument.class, true).helpString("first").withChildren(
+					node("argument", StringArgument.class, true)
+				),
+				node("second", LiteralArgument.class, true).helpString("second").withChildren(
+					node("argument", IntegerArgument.class, true)
+				)
+			), 
+			List.of("command:CommandTree", "first:LiteralArgument"),
+			List.of("command:CommandTree", "first:LiteralArgument", "argument:StringArgument"),
+			List.of("command:CommandTree", "second:LiteralArgument"),
+			List.of("command:CommandTree", "second:LiteralArgument", "argument:IntegerArgument")
+		);
+	}
+
+	@Test
+	void testRegisterMergeNamespaces() {
+		new CommandTree("command")
+			.then(new LiteralArgument("first").executesPlayer(P_EXEC))
+			.register("first");
+
+		new CommandTree("command")
+			.then(new LiteralArgument("second").executesPlayer(P_EXEC))
+			.register("second");
+
+		RegisteredCommand first = simpleRegisteredCommand(
+			"command", "first", 
+			commandNode("command", false).withChildren(
+				node("first", LiteralArgument.class, true).helpString("first")
+			)
+		);
+
+		RegisteredCommand second = simpleRegisteredCommand(
+			"command", "second", 
+			commandNode("command", false).withChildren(
+				node("second", LiteralArgument.class, true).helpString("second")
+			)
+		);
+
+		RegisteredCommand merged = simpleRegisteredCommand(
+			"command", "", 
+			commandNode("command", false).withChildren(
+				node("first", LiteralArgument.class, true).helpString("first"),
+				node("second", LiteralArgument.class, true).helpString("second")
+			)
+		);
+
+		assertCreatedRegisteredCommands(merged, first, second);
 	}
 }

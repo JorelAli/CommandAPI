@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 
 import java.util.ArrayList;
@@ -72,25 +73,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	//////////////////
 	// Registration //
 	//////////////////
-
-	@Override
-	public List<List<String>> getArgumentsAsStrings() {
-		// Return an empty list if we have no arguments
-		if (arguments.isEmpty()) return List.of(List.of());
-
-		List<List<String>> argumentStrings = new ArrayList<>();
-
-		// If this node is executable, no arguments is a valid path
-		if (this.executor.hasAnyExecutors()) argumentStrings.add(List.of());
-
-		// Add branching paths
-		for (AbstractArgumentTree<?, Argument, CommandSender> argument : arguments) {
-			argumentStrings.addAll(argument.getBranchesAsStrings());
-		}
-
-		return argumentStrings;
-	}
-
 	@Override
 	protected void checkPreconditions() {
 		if (!executor.hasAnyExecutors() && arguments.isEmpty()) {
@@ -105,8 +87,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	@Override
-	protected <Source> void createArgumentNodes(LiteralCommandNode<Source> rootNode) {
+	protected <Source> List<RegisteredCommand.Node> createArgumentNodes(LiteralCommandNode<Source> rootNode) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
+
+		List<RegisteredCommand.Node> childrenNodes = new ArrayList<>();
 
 		// The previous arguments include an unlisted MultiLiteral representing the command name and aliases
 		//  This doesn't affect how the command acts, but it helps represent the command path in exceptions
@@ -119,11 +103,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Build branches
 		for (AbstractArgumentTree<?, Argument, CommandSender> argument : arguments) {
 			// We need new previousArguments lists for each branch so they don't interfere
+			NodeInformation<Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), children -> childrenNodes.addAll(children));
 			List<Argument> previousArguments = new ArrayList<>();
 			List<String> previousArgumentNames = new ArrayList<>();
+
 			previousArguments.add(commandNames);
 
-			argument.buildBrigadierNode(List.of(rootNode), previousArguments, previousArgumentNames);
+			argument.buildBrigadierNode(previousNodeInformation, previousArguments, previousArgumentNames);
 		}
+
+		// Return children
+		return childrenNodes;
 	}
 }

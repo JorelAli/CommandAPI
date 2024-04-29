@@ -4,6 +4,9 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
+
+import dev.jorel.commandapi.RegisteredCommand;
+import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.commandnodes.NamedLiteralArgumentBuilder;
 
 import java.util.ArrayList;
@@ -60,41 +63,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	// OVERRIDING METHODS                                                                             //
 	//  A MultiLiteral has special logic that should override the implementations in AbstractArgument //
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Overrides {@link AbstractArgument#appendToCommandPaths(List)}.
-	 * <p>
-	 * Normally, Arguments only represent a single branching path. However, a MultiLiteral represents multiple literal
-	 * node paths, so we need to branch out the current paths for each literal.
-	 */
-	default void appendToCommandPaths(List<List<String>> argumentStrings) {
-		// Create paths for this argument
-		Iterator<String> literals = Arrays.asList(getLiterals()).iterator();
-		String firstLiteralArgumentString = literals.next() + ":LiteralArgument";
-
-		// Copy each path for the other literals
-		List<List<String>> newPaths = new ArrayList<>();
-		while (literals.hasNext()) {
-			String literalArgumentString = literals.next() + ":LiteralArgument";
-			for (List<String> path : argumentStrings) {
-				List<String> newPath = new ArrayList<>(path);
-				newPath.add(literalArgumentString);
-				newPaths.add(newPath);
-			}
-		}
-
-		// Add first literal to the original paths
-		for (List<String> path : argumentStrings) {
-			path.add(firstLiteralArgumentString);
-		}
-		argumentStrings.addAll(newPaths);
-
-		// Add combined arguments
-		for (Argument argument : getCombinedArguments()) {
-			argument.appendToCommandPaths(argumentStrings);
-		}
-	}
-
 	/**
 	 * Overrides {@link AbstractArgument#createArgumentBuilder(List, List)}.
 	 * <p>
@@ -113,19 +81,19 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Overrides {@link AbstractArgument#linkNode(List, CommandNode, List, List, Function)}.
+	 * Overrides {@link AbstractArgument#linkNode(NodeInformation, CommandNode, List, List, Function)}.
 	 * <p>
 	 * Normally, Arguments are only represented by a single node, and so only need to link one node. However, a MultiLiteral
 	 * represents multiple literal node paths, which also need to be generated and inserted into the node structure.
 	 */
-	default <Source> List<CommandNode<Source>> linkNode(
-		List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode,
+	default <Source> NodeInformation<Source> linkNode(
+		NodeInformation<Source> previousNodeInformation, CommandNode<Source> rootNode,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
 		List<CommandNode<Source>> newNodes = new ArrayList<>();
 		// Add root node to previous
-		for(CommandNode<Source> previousNode : previousNodes) {
+		for(CommandNode<Source> previousNode : previousNodeInformation.lastCommandNodes()) {
 			previousNode.addChild(rootNode);
 		}
 		newNodes.add(rootNode);
@@ -145,16 +113,27 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			CommandNode<Source> literalNode = finishBuildingNode(literalBuilder, previousArguments, terminalExecutorCreator);
 
 			// Add node to previous
-			for(CommandNode<Source> previousNode : previousNodes) {
+			for(CommandNode<Source> previousNode : previousNodeInformation.lastCommandNodes()) {
 				previousNode.addChild(literalNode);
 			}
 			newNodes.add(literalNode);
 		}
 
-		// Stack on combined arguments
-		previousNodes = AbstractArgument.stackArguments(getCombinedArguments(), newNodes, previousArguments, previousArgumentNames, terminalExecutorCreator);
+		// Create information for this node
+		NodeInformation<Source> nodeInformation = new NodeInformation<>(
+			newNodes, 
+			// Create registered node information once children are created
+			children -> previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of(
+				new RegisteredCommand.Node(
+					nodeName, getClass().getSimpleName(), 
+					"(" + String.join("|", getLiterals())+ ")",
+					getCombinedArguments().isEmpty() && terminalExecutorCreator != null, 
+					children
+				)
+			))
+		);
 
-		// Return last nodes
-		return previousNodes;
+		// Stack on combined arguments and return last nodes
+		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }

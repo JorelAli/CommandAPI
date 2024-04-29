@@ -49,7 +49,7 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 	}
 
 	@Override
-	public void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		// Nothing to do
 	}
 

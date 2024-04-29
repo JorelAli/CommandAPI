@@ -308,6 +308,6 @@ public class CommandAPI {
 	 * registered by the CommandAPI so far. The returned list is immutable.
 	 */
 	public static List<RegisteredCommand> getRegisteredCommands() {
-		return Collections.unmodifiableList(CommandAPIHandler.getInstance().registeredCommands);
+		return Collections.unmodifiableList(new ArrayList<>(CommandAPIHandler.getInstance().registeredCommands.values()));
 	}
 }

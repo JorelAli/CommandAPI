@@ -21,9 +21,9 @@
 package dev.jorel.commandapi;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
@@ -222,65 +222,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	//////////////////
 	// Registration //
 	//////////////////
-
-	@Override
-	public List<List<String>> getArgumentsAsStrings() {
-		// Return an empty list if we have no arguments
-		if (subcommands.isEmpty() && !hasAnyArguments()) {
-			return List.of(List.of());
-		}
-
-		List<List<String>> argumentStrings = new ArrayList<>();
-
-		// Build main path, if it is executable
-		if (executor.hasAnyExecutors()) {
-			// Required arguments represent one path
-			List<List<String>> mainPath = new ArrayList<>();
-			mainPath.add(new ArrayList<>());
-			for (Argument argument : requiredArguments) {
-				argument.appendToCommandPaths(mainPath);
-			}
-
-			List<Integer> slicePositions = new ArrayList<>();
-			// Note: Assumption that all paths are the same length
-			slicePositions.add(mainPath.get(0).size());
-
-			// Each optional argument is a potential stopping point
-			for (Argument argument : optionalArguments) {
-				argument.appendToCommandPaths(mainPath);
-				slicePositions.add(mainPath.get(0).size());
-			}
-
-			// Return each path as sublists of the main path
-			for (List<String> path : mainPath) {
-				for (int slicePos : slicePositions) {
-					argumentStrings.add(path.subList(0, slicePos));
-				}
-			}
-		}
-
-		// Build subcommand paths
-		for (Impl subCommand : subcommands) {
-			String[] subCommandArguments = new String[subCommand.aliases.length + 1];
-			subCommandArguments[0] = subCommand.name;
-			System.arraycopy(subCommand.aliases, 0, subCommandArguments, 1, subCommand.aliases.length);
-			for (int i = 0; i < subCommandArguments.length; i++) {
-				subCommandArguments[i] += ":LiteralArgument";
-			}
-
-			for (List<String> subArgs : subCommand.getArgumentsAsStrings()) {
-				for (String subCommandArgument : subCommandArguments) {
-					List<String> newPath = new ArrayList<>();
-					newPath.add(subCommandArgument);
-					newPath.addAll(subArgs);
-					argumentStrings.add(newPath);
-				}
-			}
-		}
-
-		return argumentStrings;
-	}
-
 	@Override
 	protected void checkPreconditions() {
 		if (!executor.hasAnyExecutors() && (subcommands.isEmpty() || hasAnyArguments())) {
@@ -297,12 +238,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	@Override
-	protected <Source> void createArgumentNodes(LiteralCommandNode<Source> rootNode) {
+	protected <Source> List<RegisteredCommand.Node> createArgumentNodes(LiteralCommandNode<Source> rootNode) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
+
+		List<RegisteredCommand.Node> childrenNodes = new ArrayList<>();
 
 		// Create arguments
 		if (hasAnyArguments()) {
-			List<CommandNode<Source>> previousNodes = List.of(rootNode);
+			NodeInformation<Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), children -> childrenNodes.addAll(children));
 			List<Argument> previousArguments = new ArrayList<>();
 			List<String> previousArgumentNames = new ArrayList<>();
 
@@ -316,26 +259,50 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			previousArguments.add(commandNames);
 
-			Function<List<Argument>, Command<Source>> executorCreator = executor.hasAnyExecutors() ?
-				args -> handler.generateBrigadierCommand(args, executor) : null;
+			// Note that `executor#hasAnyExecutors` must be true here
+			//  If not, then `checkPreconditions` would have thrown a `MissingCommandExecutorException` 
+			Function<List<Argument>, Command<Source>> executorCreator = args -> handler.generateBrigadierCommand(args, executor);
+
 			// Stack required arguments
 			// Only the last required argument is executable
-			previousNodes = AbstractArgument.stackArguments(requiredArguments, previousNodes, previousArguments, previousArgumentNames, executorCreator);
+			previousNodeInformation = AbstractArgument.stackArguments(requiredArguments, previousNodeInformation, previousArguments, previousArgumentNames, executorCreator);
 
 			// Add optional arguments
 			for (Argument argument : optionalArguments) {
 				// All optional arguments are executable
-				previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames, executorCreator);
+				previousNodeInformation = argument.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames, executorCreator);
 			}
+
+			// Create registered nodes now that all children are generated
+			previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of());
 		}
 
 		// Add subcommands
 		for (Impl subCommand : subcommands) {
-			Nodes<Source> nodes = subCommand.createCommandNodes();
+			CommandInformation<Source> nodes = subCommand.createCommandInformation("");
+
+			// Add root node
 			rootNode.addChild(nodes.rootNode());
+
+			RegisteredCommand.Node rootNodeInformation = nodes.command().rootNode();
+			childrenNodes.add(rootNodeInformation);
+
+			// Add aliases
 			for (LiteralCommandNode<Source> aliasNode : nodes.aliasNodes()) {
 				rootNode.addChild(aliasNode);
+
+				// Create node information for the alias
+				String aliasName = aliasNode.getLiteral();
+				childrenNodes.add(
+					new RegisteredCommand.Node(
+						aliasName, rootNodeInformation.className(), aliasName, 
+						rootNodeInformation.executable(), rootNodeInformation.children()
+					)
+				);
 			}
 		}
+
+		// Return node information
+		return childrenNodes;
 	}
 }

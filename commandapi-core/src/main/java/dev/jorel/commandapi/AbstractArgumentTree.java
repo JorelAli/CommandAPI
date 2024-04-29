@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 
 import java.util.ArrayList;
@@ -89,47 +90,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	//////////////////
 	// Registration //
 	//////////////////
-
-	/**
-	 * @return A list of paths that represent the possible branches of this argument tree as Strings, starting with the
-	 * base argument held by this tree.
-	 */
-	public List<List<String>> getBranchesAsStrings() {
-		List<List<String>> argumentStrings = new ArrayList<>();
-
-		// Create paths for the argument at this node
-		List<List<String>> baseArgumentPaths = new ArrayList<>();
-		baseArgumentPaths.add(new ArrayList<>());
-		argument.appendToCommandPaths(baseArgumentPaths);
-
-		// If this node is executable, add it as a valid path
-		if (this.executor.hasAnyExecutors()) argumentStrings.addAll(baseArgumentPaths);
-
-		// Add paths for the branches
-		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
-			for (List<String> subArgs : child.getBranchesAsStrings()) {
-				for (List<String> basePath : baseArgumentPaths) {
-					List<String> mergedPaths = new ArrayList<>();
-					mergedPaths.addAll(basePath);
-					mergedPaths.addAll(subArgs);
-					argumentStrings.add(mergedPaths);
-				}
-			}
-		}
-
-		return argumentStrings;
-	}
-
 	/**
 	 * Builds the Brigadier {@link CommandNode} structure for this argument tree.
 	 *
-	 * @param previousNodes         A List of {@link CommandNode}s to add this argument onto.
-	 * @param previousArguments     A List of CommandAPI arguments that came before this argument tree.
-	 * @param previousArgumentNames A List of Strings containing the node names that came before this argument.
-	 * @param <Source>              The Brigadier Source object for running commands.
+	 * @param previousNodeInformation The {@link NodeInformation} of the argument this argument is being added to.
+	 * @param previousArguments       A List of CommandAPI arguments that came before this argument tree.
+	 * @param previousArgumentNames   A List of Strings containing the node names that came before this argument.
+	 * @param <Source>                The Brigadier Source object for running commands.
 	 */
 	public <Source> void buildBrigadierNode(
-		List<CommandNode<Source>> previousNodes,
+		NodeInformation<Source> previousNodeInformation,
 		List<Argument> previousArguments, List<String> previousArgumentNames
 	) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
@@ -141,16 +111,28 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Create node for this argument
-		previousNodes = argument.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
+		previousNodeInformation = argument.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames,
 			executor.hasAnyExecutors() ? args -> handler.generateBrigadierCommand(args, executor) : null);
+
+		// Collect children into our own list
+		List<RegisteredCommand.Node> childrenNodeInformation = new ArrayList<>();
 
 		// Add our branches as children to the node
 		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
-			// We need a new list for each branch of the tree
+			// Collect children into our own list
+			NodeInformation<Source> newPreviousNodeInformation = new NodeInformation<>(
+				previousNodeInformation.lastCommandNodes(), 
+				children -> childrenNodeInformation.addAll(children)
+			);
+
+			// We need a new list so each branch acts independently
 			List<Argument> newPreviousArguments = new ArrayList<>(previousArguments);
 			List<String> newPreviousArgumentNames = new ArrayList<>(previousArgumentNames);
 
-			child.buildBrigadierNode(previousNodes, newPreviousArguments, newPreviousArgumentNames);
+			child.buildBrigadierNode(newPreviousNodeInformation, newPreviousArguments, newPreviousArgumentNames);
 		}
+
+		// Create registered nodes now that all children are generated
+		previousNodeInformation.childrenConsumer().createNodeWithChildren(childrenNodeInformation);
 	}
 }

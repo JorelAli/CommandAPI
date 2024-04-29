@@ -10,6 +10,8 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.RegisteredCommand;
+import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.commandnodes.FlagsArgumentEndingNode;
 import dev.jorel.commandapi.commandnodes.FlagsArgumentRootNode;
 import dev.jorel.commandapi.executors.CommandArguments;
@@ -52,10 +54,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	List<Argument> getCombinedArguments();
 
 	/**
-	 * Links to {@link AbstractArgument#checkPreconditions(List, List, List)}.
+	 * Links to {@link AbstractArgument#checkPreconditions(NodeInformation, List, List)}.
 	 */
 	<Source> void checkPreconditions(
-		List<CommandNode<Source>> previousNodes, List<Argument> previousArguments, List<String> previousArgumentNames
+		NodeInformation<Source> previousNodes, List<Argument> previousArguments, List<String> previousArgumentNames
 	);
 
 	/**
@@ -93,18 +95,18 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Overrides {@link AbstractArgument#addArgumentNodes(List, List, List, Function)}.
+	 * Overrides {@link AbstractArgument#addArgumentNodes(NodeInformation, List, List, Function)}.
 	 * <p>
 	 * A FlagsArgument works completely differently from a typical argument, so we need to completely
 	 * override the usual logic.
 	 */
-	default <Source> List<CommandNode<Source>> addArgumentNodes(
-		List<CommandNode<Source>> previousNodes,
+	default <Source> NodeInformation<Source> addArgumentNodes(
+		NodeInformation<Source> previousNodeInformation,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
 		// Typical preconditions still apply
-		checkPreconditions(previousNodes, previousArguments, previousArgumentNames);
+		checkPreconditions(previousNodeInformation, previousArguments, previousArgumentNames);
 
 		// Add this argument to the lists
 		String nodeName = getNodeName();
@@ -116,7 +118,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		finishBuildingNode(rootBuilder, previousArguments, null);
 		FlagsArgumentRootNode<Argument, CommandSender, Source> rootNode = new FlagsArgumentRootNode<>(rootBuilder.build());
 
-		for(CommandNode<Source> previousNode : previousNodes) {
+		for(CommandNode<Source> previousNode : previousNodeInformation.lastCommandNodes()) {
 			previousNode.addChild(rootNode);
 		}
 
@@ -133,18 +135,28 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		Function<List<Argument>, Command<Source>> terminalBranchExecutor = terminalBranchesExecutable ? terminalExecutorCreator : null;
 
 		// The last nodes here will be our final nodes
-		previousNodes = new ArrayList<>();
+		List<CommandNode<Source>> newNodes = new ArrayList<>();
 		for(List<Argument> terminalBranch : getTerminalBranches()) {
-			previousNodes.addAll(
+			newNodes.addAll(
 				setupBranch(terminalBranch, rootNode, previousArguments, previousArgumentNames, terminalBranchExecutor, this::wrapTerminalBranchNodes)
 			);
 		}
 
-		// Stack on combined arguments
-		previousNodes = AbstractArgument.stackArguments(getCombinedArguments(), previousNodes, previousArguments, previousArgumentNames, terminalExecutorCreator);
+		// Create information for this node
+		NodeInformation<Source> nodeInformation = new NodeInformation<>(
+			newNodes, 
+			// Create registered node information once children are created
+			children -> previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of(
+				new RegisteredCommand.Node(
+					nodeName, getClass().getSimpleName(), "<" + nodeName + ">", 
+					loopingBranchesExecutable || terminalBranchesExecutable, 
+					children
+				)
+			))
+		);
 
-		// Return last nodes
-		return previousNodes;
+		// Stack on combined arguments and return last nodes
+		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 
 	private static <Argument extends AbstractArgument<?, ?, Argument, ?>, Source> List<CommandNode<Source>> setupBranch(
@@ -158,10 +170,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		List<String> branchPreviousArgumentNames = new ArrayList<>(previousArgumentNames);
 
 		RootCommandNode<Source> branchRoot = new RootCommandNode<>();
-		List<CommandNode<Source>> branchPreviousNodes = List.of(branchRoot);
+		NodeInformation<Source> branchNodeInformation = new NodeInformation<>(List.of(branchRoot), null);
 
 		// Stack branch nodes
-		branchPreviousNodes = AbstractArgument.stackArguments(branchArguments, branchPreviousNodes, branchPreviousArguments, branchPreviousArgumentNames, terminalExecutorCreator);
+		branchNodeInformation = AbstractArgument.stackArguments(branchArguments, branchNodeInformation, branchPreviousArguments, branchPreviousArgumentNames, terminalExecutorCreator);
 
 		// Find second-to-last nodes so their children can be modified
 		//  Unfortunately, we can't get this while stacking since arguments may (and may not) unpack to multiple layers
@@ -187,7 +199,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		CommandAPIHandler.getCommandNodeArguments(rootNode).putAll(CommandAPIHandler.getCommandNodeArguments(branchRoot));
 
 		// Return the last nodes in the tree
-		return branchPreviousNodes;
+		return branchNodeInformation.lastCommandNodes();
 	}
 
 	private <Source> void wrapTerminalBranchNodes(
