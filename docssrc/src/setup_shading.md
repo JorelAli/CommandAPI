@@ -358,9 +358,9 @@ Instead, please follow these instructions to be able to run the CommandAPI while
 
 1. Please add this to your build script:
 
-```kotlin
-paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.REOBF_PRODUCTION
-```
+    ```kotlin
+    paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.REOBF_PRODUCTION
+    ```
 
 2. Only run the `reobfJar` task to build your plugin from now on. The main plugin artifact will be Spigot mapped and Paper will remap your plugin so that in the end
 running the CommandAPI works.
