@@ -3,7 +3,6 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import com.saicone.rtag.tag.TagCompound;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -36,9 +34,6 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 
 	@BeforeEach
 	public void setUp() {
-		// Ignoring 1.20.5 for NBT tests until they update
-		assumeTrue(version.lessThan(MCVersion.V1_20_5));
-
 		// There are lots of ways to use Rtag!
 		
 		// The simplest case just uses plain ol' object to object mapping. This
@@ -80,6 +75,7 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 				case V1_20 -> "v1_20_R1";
 				case V1_20_2 -> "v1_20_R2";
 				case V1_20_3 -> "v1_20_R3";
+				case V1_20_5 -> "v1_20_R4";
 				default -> throw new IllegalArgumentException("Unexpected value: " + version);
 			};
 			
