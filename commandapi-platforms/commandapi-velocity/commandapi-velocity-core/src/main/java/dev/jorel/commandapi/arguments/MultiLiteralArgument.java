@@ -105,17 +105,12 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public void appendToCommandPaths(List<List<String>> argumentStrings) {
-		MultiLiteral.super.appendToCommandPaths(argumentStrings);
-	}
-
-	@Override
 	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument<?>> previousArguments, List<String> previousArgumentNames) {
 		return MultiLiteral.super.createArgumentBuilder(previousArguments, previousArgumentNames);
 	}
 
 	@Override
-	public <Source> List<CommandNode<Source>> linkNode(List<CommandNode<Source>> previousNodes, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
-		return MultiLiteral.super.linkNode(previousNodes, rootNode, previousArguments, previousArgumentNames, terminalExecutorCreator);
+	public <Source> NodeInformation<Source> linkNode(NodeInformation<Source> previousNodeInformation, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
+		return MultiLiteral.super.linkNode(previousNodeInformation, rootNode, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }

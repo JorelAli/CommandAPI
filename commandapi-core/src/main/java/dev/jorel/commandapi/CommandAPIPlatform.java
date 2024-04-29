@@ -104,11 +104,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Stuff to run after a command has been generated.
 	 *
-	 * @param registeredCommands A List of {@link RegisteredCommand} objects that holds the CommandAPI information for each branch of the registered command
-	 * @param resultantNode      The node that was registered
-	 * @param aliasNodes         Any alias nodes that were also registered as a part of this registration process
+	 * @param registeredCommand A {@link RegisteredCommand} instance that holds the CommandAPI information for the command
+	 * @param resultantNode     The node that was registered
+	 * @param aliasNodes        Any alias nodes that were also registered as a part of this registration process
 	 */
-	public abstract void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
 	 * Builds and registers a Brigadier command node.

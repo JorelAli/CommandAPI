@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -298,9 +299,6 @@ extends ExecutableCommand<Impl, CommandSender>
 	//////////////////
 	// Registration //
 	//////////////////
-
-	public abstract List<List<String>> getArgumentsAsStrings();
-
 	/**
 	 * Overrides a command. Effectively the same as unregistering the command using
 	 * CommandAPI.unregister() and then registering the command using .register()
@@ -328,19 +326,28 @@ extends ExecutableCommand<Impl, CommandSender>
 		((CommandAPIHandler<?, CommandSender, ?>) CommandAPIHandler.getInstance()).registerCommand(this, namespace);
 	}
 
-	record Nodes<Source>(LiteralCommandNode<Source> rootNode, List<LiteralCommandNode<Source>> aliasNodes) {
+	protected static record CommandInformation<Source>(LiteralCommandNode<Source> rootNode, List<LiteralCommandNode<Source>> aliasNodes, RegisteredCommand command) {
 	}
 
-	<Source> Nodes<Source> createCommandNodes() {
+	protected <Source> CommandInformation<Source> createCommandInformation(String namespace) {
 		checkPreconditions();
 
+		// Create rootNode
 		LiteralCommandNode<Source> rootNode = this.<Source>createCommandNodeBuilder(name).build();
 
-		createArgumentNodes(rootNode);
+		List<RegisteredCommand.Node> children = createArgumentNodes(rootNode);
 
+		// Create aliaseNodes
 		List<LiteralCommandNode<Source>> aliasNodes = createAliasNodes(rootNode);
 
-		return new Nodes<>(rootNode, aliasNodes);
+		// Create command information
+		RegisteredCommand command = new RegisteredCommand(
+			name, aliases, namespace, permission, 
+			Optional.ofNullable(shortDescription), Optional.ofNullable(fullDescription), Optional.ofNullable(usageDescription), Optional.ofNullable(helpTopic),
+			new RegisteredCommand.Node(name, getClass().getSimpleName(), name, isRootExecutable(), children)
+		);
+
+		return new CommandInformation<>(rootNode, aliasNodes, command);
 	}
 
 	protected <Source> LiteralArgumentBuilder<Source> createCommandNodeBuilder(String nodeName) {
@@ -380,5 +387,5 @@ extends ExecutableCommand<Impl, CommandSender>
 
 	protected abstract boolean isRootExecutable();
 
-	protected abstract <Source> void createArgumentNodes(LiteralCommandNode<Source> rootNode);
+	protected abstract <Source> List<RegisteredCommand.Node> createArgumentNodes(LiteralCommandNode<Source> rootNode);
 }

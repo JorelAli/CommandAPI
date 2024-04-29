@@ -3,7 +3,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
 
@@ -74,7 +73,7 @@ public class FlagsArgument extends Argument<List> implements FlagsArgumentCommon
 	}
 
 	@Override
-	public <Source> List<CommandNode<Source>> addArgumentNodes(List<CommandNode<Source>> previousNodes, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
-		return FlagsArgumentCommon.super.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames, terminalExecutorCreator);
+	public <Source> NodeInformation<Source> addArgumentNodes(NodeInformation<Source> previousNodeInformation, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
+		return FlagsArgumentCommon.super.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }

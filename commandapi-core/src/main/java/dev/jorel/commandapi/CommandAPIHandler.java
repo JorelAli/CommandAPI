@@ -29,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -91,7 +92,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
-	final List<RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
+	final Map<String, RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
 	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
 	static final Pattern NAMESPACE_PATTERN = Pattern.compile("[0-9a-z_.-]+");
 
@@ -103,7 +104,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	protected CommandAPIHandler(CommandAPIPlatform<Argument, CommandSender, Source> platform) {
 		this.platform = platform;
-		this.registeredCommands = new ArrayList<>();
+		this.registeredCommands = new LinkedHashMap<>(); // This should be a LinkedHashMap to preserve insertion order
 		this.previewableArguments = new HashMap<>();
 
 		CommandAPIHandler.instance = this;
@@ -172,18 +173,17 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Do plaform-specific pre-registration tasks
 		platform.preCommandRegistration(command.getName());
 
-		// Record the commands that are registered
-		List<RegisteredCommand> registeredCommandInformation = RegisteredCommand.fromExecutableCommand(command, namespace);
-		registeredCommands.addAll(registeredCommandInformation);
+		// Generate command information
+		ExecutableCommand.CommandInformation<Source> commandInformation = command.createCommandInformation(namespace);
 
-		for (RegisteredCommand singleCommand : registeredCommandInformation) {
-			CommandAPI.logInfo("Registering command /" + command.getName() + " " + String.join(" ", singleCommand.argsAsStr()));
+		LiteralCommandNode<Source> resultantNode = commandInformation.rootNode();
+		List<LiteralCommandNode<Source>> aliasNodes = commandInformation.aliasNodes();
+		RegisteredCommand registeredCommand = commandInformation.command();
+
+		// Log the commands being registered
+		for (List<String> argsAsStr : registeredCommand.rootNode().argsAsStr()) {
+			CommandAPI.logInfo("Registering command /" + String.join(" ", argsAsStr));
 		}
-
-		// Create command nodes
-		ExecutableCommand.Nodes<Source> nodes = command.createCommandNodes();
-		LiteralCommandNode<Source> resultantNode = nodes.rootNode();
-		List<LiteralCommandNode<Source>> aliasNodes = nodes.aliasNodes();
 
 		// Handle command conflicts
 		ensureNoCommandConflict(resultantNode);
@@ -211,8 +211,21 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// partial) command registration. Generate the dispatcher file!
 		writeDispatcherToFile();
 
+		// Merge RegisteredCommand into map
+		BiFunction<String, RegisteredCommand, RegisteredCommand> mergeRegisteredCommands = (key, value) -> value == null ? registeredCommand : value.mergeCommandInformation(registeredCommand);
+		
+		if (registeredCommand.namespace().isEmpty()) {
+			registeredCommands.compute(registeredCommand.commandName(), mergeRegisteredCommands);
+		} else {
+			registeredCommands.compute(registeredCommand.commandName(), (key, value) -> value == null ? 
+				registeredCommand.copyWithEmptyNamespace() : 
+				value.mergeCommandInformation(registeredCommand)
+			);
+			registeredCommands.compute(registeredCommand.namespace() + ":" + registeredCommand.commandName(), mergeRegisteredCommands);
+		}
+
 		// Do platform-specific post-registration tasks
-		platform.postCommandRegistration(registeredCommandInformation, resultantNode, aliasNodes);
+		platform.postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
 	}
 
 	/**
@@ -635,12 +648,18 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Generate all paths to the argument
 		List<List<String>> paths = new ArrayList<>();
 		paths.add(new ArrayList<>());
-		for (Argument argument : previousArguments) {
-			argument.appendToCommandPaths(paths);
-		}
-		previewableArgument.appendToCommandPaths(paths);
 
-		// Insert paths to out map
+		// TODO: Fix this, the `appendToCommandPaths` method was removed
+		//  A smarter way to get this information should exist
+		//  It probably makes sense to make a custom CommandNode for PreviewableArgument
+		if(true) throw new IllegalStateException("TODO: Fix this method");
+
+		// for (Argument argument : previousArguments) {
+		// 	argument.appendToCommandPaths(paths);
+		// }
+		// previewableArgument.appendToCommandPaths(paths);
+
+		// Insert paths to our map
 		for (List<String> path : paths) {
 			previewableArguments.put(path, previewable);
 		}

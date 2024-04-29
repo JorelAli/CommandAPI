@@ -20,14 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
+
 import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * A pseudo-argument representing a single literal string
@@ -137,11 +141,6 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	}
 
 	@Override
-	public String getHelpString() {
-		return literal;
-	}
-
-	@Override
 	public <Source> String parseArgument(CommandContext<Source> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
 		return literal;
 	}
@@ -155,5 +154,10 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	@Override
 	public <Source> ArgumentBuilder<Source, ?> createArgumentBuilder(List<Argument<?>> previousArguments, List<String> previousArgumentNames) {
 		return Literal.super.createArgumentBuilder(previousArguments, previousArgumentNames);
+	}
+
+	@Override
+	public <Source> NodeInformation<Source> linkNode(NodeInformation<Source> previousNodeInformation, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
+		return Literal.super.linkNode(previousNodeInformation, rootNode, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }

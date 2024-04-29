@@ -1,10 +1,16 @@
 package dev.jorel.commandapi.arguments;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
+
+import dev.jorel.commandapi.RegisteredCommand;
+import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.commandnodes.NamedLiteralArgumentBuilder;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * An interface representing literal-based arguments
@@ -38,6 +44,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	boolean isListed();
 
+	/**
+	 * Links to {@link AbstractArgument#getCombinedArguments()}.
+	 */
+	List<Argument> getCombinedArguments();
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDING METHODS                                                                        //
 	//  A Literal has special logic that should override the implementations in AbstractArgument //
@@ -61,5 +72,37 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		return isListed() ?
 			NamedLiteralArgumentBuilder.namedLiteral(nodeName, literal) :
 			LiteralArgumentBuilder.literal(literal);
+	}
+
+	/**
+	 * Overrides {@link AbstractArgument#linkNode(NodeInformation, CommandNode, List, List, Function)}.
+	 * <p>
+	 * Normally, Arguments use thier node name as their help string. However, a Literal uses its literal as the help string.
+	 */
+	default <Source> NodeInformation<Source> linkNode(
+		NodeInformation<Source> previousNodeInformation, CommandNode<Source> rootNode,
+		List<Argument> previousArguments, List<String> previousArgumentNames,
+		Function<List<Argument>, Command<Source>> terminalExecutorCreator
+	) {
+		// Add rootNode to the previous nodes
+		for(CommandNode<Source> previousNode : previousNodeInformation.lastCommandNodes()) {
+			previousNode.addChild(rootNode);
+		}
+
+		// Create information for this node
+		NodeInformation<Source> nodeInformation = new NodeInformation<>(
+			List.of(rootNode),
+			// Create registered node information once children are created
+			children -> previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of(
+				new RegisteredCommand.Node(
+					getNodeName(), getClass().getSimpleName(), getLiteral(), 
+					getCombinedArguments().isEmpty() && terminalExecutorCreator != null, 
+					children
+				)
+			))
+		);
+
+		// Stack on combined arguments and return last nodes
+		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }

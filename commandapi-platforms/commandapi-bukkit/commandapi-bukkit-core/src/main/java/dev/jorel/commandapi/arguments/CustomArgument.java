@@ -26,7 +26,6 @@ import com.mojang.brigadier.Message;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.BukkitTooltip;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -200,13 +199,13 @@ public class CustomArgument<T, B> extends Argument<T> {
 	}
 
 	@Override
-	public <Source> List<CommandNode<Source>> addArgumentNodes(
-		List<CommandNode<Source>> previousNodes,
+	public <Source> NodeInformation<Source> addArgumentNodes(
+		NodeInformation<Source> previousNodeInformation,
 		List<Argument<?>> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator
 	) {
 		// Node structure is determined by the base argument
-		previousNodes = base.addArgumentNodes(previousNodes, previousArguments, previousArgumentNames,
+		previousNodeInformation = base.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames,
 			// Replace the base argument with this argument when executing the command
 			terminalExecutorCreator == null ? null :
 				args -> {
@@ -219,7 +218,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		// Replace the base argument with this argument when executing the command
 		previousArguments.set(previousArguments.indexOf(base), this);
 
-		return previousNodes;
+		return previousNodeInformation;
 	}
 
 	/**

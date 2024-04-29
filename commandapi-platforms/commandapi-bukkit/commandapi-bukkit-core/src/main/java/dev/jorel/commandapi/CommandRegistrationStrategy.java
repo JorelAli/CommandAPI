@@ -58,7 +58,7 @@ public abstract class CommandRegistrationStrategy<Source> {
 
 	public abstract void runTasksAfterServerStart();
 
-	public abstract void postCommandRegistration(List<RegisteredCommand> registeredCommands, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	public abstract void registerCommandNode(LiteralCommandNode<Source> node, String namespace);
 

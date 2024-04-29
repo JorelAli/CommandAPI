@@ -1,9 +1,9 @@
 package dev.jorel.commandapi.test;
 
-import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
+import dev.jorel.commandapi.RegisteredCommand.Node;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -12,17 +12,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static dev.jorel.commandapi.test.RegisteredCommandTestBase.NodeBuilder.node;
+import static dev.jorel.commandapi.test.RegisteredCommandTestBase.NodeBuilder.children;
 
 /**
  * Tests for making sure the {@link RegisteredCommand} information is correct when registering {@link CommandAPICommand}s
  */
-class CommandAPICommandRegisteredCommandTests extends TestBase {
+class CommandAPICommandRegisteredCommandTests extends RegisteredCommandTestBase {
 
 	/*********
 	 * Setup *
@@ -38,64 +37,8 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 		super.tearDown();
 	}
 
-	private RegisteredCommand registeredCommandNoHelpOrPermission(String name, List<String> argsAsStr, String... aliases) {
-		return new RegisteredCommand(name, argsAsStr,
-			Optional.empty(), Optional.empty(), Optional.empty(),
-			aliases,
-			CommandPermission.NONE, "minecraft"
-		);
-	}
-
-	private void assertCreatedRegisteredCommands(RegisteredCommand... commands) {
-		List<RegisteredCommand> expectedCommands = Arrays.asList(commands);
-		List<RegisteredCommand> actualCommands = CommandAPI.getRegisteredCommands();
-
-		if (expectedCommands.size() != actualCommands.size()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("Expected ").append(expectedCommands.size()).append(" command(s), found ").append(actualCommands.size()).append(" command(s).");
-
-			builder.append("\nExpected: ");
-			addRegisteredCommandList(builder, expectedCommands);
-			builder.append("\nActual: ");
-			addRegisteredCommandList(builder, actualCommands);
-
-			fail(builder.toString());
-		}
-
-		for (int i = 0; i < expectedCommands.size(); i++) {
-			RegisteredCommand expectedCommand = expectedCommands.get(i);
-			RegisteredCommand actualCommand = actualCommands.get(i);
-
-			if (!Objects.equals(expectedCommand, actualCommand)) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("Command #").append(i + 1).append(" differed. Expected:\n");
-				builder.append(expectedCommand);
-				builder.append("\nActual:\n");
-				builder.append(actualCommand);
-
-				builder.append("\nExpected list: ");
-				addRegisteredCommandList(builder, expectedCommands);
-				builder.append("\nActual list: ");
-				addRegisteredCommandList(builder, actualCommands);
-
-				fail(builder.toString());
-			}
-		}
-	}
-
-	private void addRegisteredCommandList(StringBuilder builder, List<RegisteredCommand> commands) {
-		if (commands.isEmpty()) {
-			builder.append("[]");
-			return;
-		}
-
-		builder.append("[\n");
-		for (RegisteredCommand command : commands) {
-			builder.append("\t");
-			builder.append(command);
-			builder.append("\n");
-		}
-		builder.append("]");
+	private NodeBuilder commandNode(String nodeName, boolean executable) {
+		return node(nodeName, CommandAPICommand.class, executable).helpString(nodeName);
 	}
 
 	/*********
@@ -108,7 +51,11 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of()));
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", true),
+			List.of("command:CommandAPICommand")
+		);
 	}
 
 	@Test
@@ -123,13 +70,13 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			new RegisteredCommand(
-				"command", List.of(),
-				Optional.of("short description"), Optional.of("full description"), Optional.of(new String[]{"usage 1", "usage 2", "usage 3"}),
-				new String[0], CommandPermission.NONE, "minecraft"
-			)
+		RegisteredCommand expectedCommand = new RegisteredCommand(
+			"command", new String[0], "minecraft", CommandPermission.NONE,
+			Optional.of("short description"), Optional.of("full description"), Optional.of(new String[]{"usage 1", "usage 2", "usage 3"}),
+			commandNode("command", true).build()
 		);
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -139,13 +86,13 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			new RegisteredCommand(
-				"command", List.of(),
-				Optional.empty(), Optional.empty(), Optional.empty(),
-				new String[0], CommandPermission.OP, "minecraft"
-			)
+		RegisteredCommand expectedCommand = new RegisteredCommand(
+			"command", new String[0], "minecraft", CommandPermission.OP,
+			Optional.empty(), Optional.empty(), Optional.empty(),
+			commandNode("command", true).build()
 		);
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -155,13 +102,13 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			new RegisteredCommand(
-				"command", List.of(),
-				Optional.empty(), Optional.empty(), Optional.empty(),
-				new String[0], CommandPermission.fromString("permission"), "minecraft"
-			)
+		RegisteredCommand expectedCommand = new RegisteredCommand(
+			"command", new String[0], "minecraft", CommandPermission.fromString("permission"), 
+			Optional.empty(), Optional.empty(), Optional.empty(),
+			commandNode("command", true).build()
 		);
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -171,7 +118,9 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of(), "alias1"));
+		RegisteredCommand expectedCommand = simpleRegisteredCommand("command", "minecraft", commandNode("command", true), "alias1");
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -181,7 +130,20 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of(), "alias1", "alias2"));
+		RegisteredCommand expectedCommand = simpleRegisteredCommand("command", "minecraft", commandNode("command", true), "alias1", "alias2");
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
+	}
+
+	@Test 
+	void testRegisterNamespace() {
+		new CommandAPICommand("command")
+			.executesPlayer(P_EXEC)
+			.register("custom");
+
+		RegisteredCommand expectedCommand = simpleRegisteredCommand("command", "custom", commandNode("command", true));
+
+		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 	}
 
 	@Test
@@ -191,7 +153,12 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument")));
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false)
+				.withChildren(node("string", StringArgument.class, true)),
+			List.of("command:CommandAPICommand", "string:StringArgument")
+		);
 	}
 
 	@Test
@@ -204,7 +171,14 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument", "integer:IntegerArgument")));
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false)
+				.withChildren(node("string", StringArgument.class, false)
+					.withChildren(node("integer", IntegerArgument.class, true))
+				),
+			List.of("command:CommandAPICommand", "string:StringArgument", "integer:IntegerArgument")
+		);
 	}
 
 	@Test
@@ -217,16 +191,14 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("a:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("b:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("c:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("a:LiteralArgument", "e:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("b:LiteralArgument", "e:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("c:LiteralArgument", "e:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("a:LiteralArgument", "f:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("b:LiteralArgument", "f:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("c:LiteralArgument", "f:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command",
+			commandNode("command", false).withChildren(
+				node("literal1", MultiLiteralArgument.class, false).helpString("(a|b|c)").withChildren(
+					node("literal2", MultiLiteralArgument.class, true).helpString("(d|e|f)")
+				)
+			),
+			List.of("command:CommandAPICommand", "literal1:MultiLiteralArgument", "literal2:MultiLiteralArgument")
 		);
 	}
 
@@ -237,9 +209,12 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", true)
+				.withChildren(node("string", StringArgument.class, true)),
+			List.of("command:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "string:StringArgument")
 		);
 	}
 
@@ -253,10 +228,15 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("string:StringArgument", "integer:IntegerArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", true)
+				.withChildren(node("string", StringArgument.class, true)
+					.withChildren(node("integer", IntegerArgument.class, true))
+				),
+			List.of("command:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "string:StringArgument"),
+			List.of("command:CommandAPICommand", "string:StringArgument", "integer:IntegerArgument")
 		);
 	}
 
@@ -270,10 +250,17 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("1:LiteralArgument", "2:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", true)
+				.withChildren(node("1", LiteralArgument.class, false).helpString("1")
+				.withChildren(node("2", LiteralArgument.class, true).helpString("2")
+				.withChildren(node("3", LiteralArgument.class, false).helpString("3")
+				.withChildren(node("4", LiteralArgument.class, true).helpString("4")
+			)))),
+			List.of("command:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "1:LiteralArgument", "2:LiteralArgument"),
+			List.of("command:CommandAPICommand", "1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument")
 		);
 	}
 
@@ -291,19 +278,30 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			.executesPlayer(P_EXEC)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of(
-				"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument"
-			)),
-			registeredCommandNoHelpOrPermission("command", List.of(
-				"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument",
-				"5:LiteralArgument", "6:LiteralArgument"
-			)),
-			registeredCommandNoHelpOrPermission("command", List.of(
-				"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument",
-				"5:LiteralArgument", "6:LiteralArgument", "7:LiteralArgument", "8:LiteralArgument"
-			))
-		);
+			assertCreatedSimpleRegisteredCommand(
+				"command", 
+				commandNode("command", false)
+					.withChildren(node("1", LiteralArgument.class, false).helpString("1")
+					.withChildren(node("2", LiteralArgument.class, false).helpString("2")
+					.withChildren(node("3", LiteralArgument.class, false).helpString("3")
+					.withChildren(node("4", LiteralArgument.class, true).helpString("4")
+					.withChildren(node("5", LiteralArgument.class, false).helpString("5")
+					.withChildren(node("6", LiteralArgument.class, true).helpString("6")
+					.withChildren(node("7", LiteralArgument.class, false).helpString("7")
+					.withChildren(node("8", LiteralArgument.class, true).helpString("8")
+				)))))))),
+				List.of("command:CommandAPICommand", 
+					"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument"
+				),
+				List.of("command:CommandAPICommand", 
+					"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument",
+					"5:LiteralArgument", "6:LiteralArgument"
+				),
+				List.of("command:CommandAPICommand", 
+					"1:LiteralArgument", "2:LiteralArgument", "3:LiteralArgument", "4:LiteralArgument",
+					"5:LiteralArgument", "6:LiteralArgument", "7:LiteralArgument", "8:LiteralArgument"
+				)
+			);
 	}
 
 	//////////////////////////////////////
@@ -320,7 +318,12 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument")));
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false)
+				.withChildren(commandNode("subcommand", true)),
+			List.of("command:CommandAPICommand", "subcommand:CommandAPICommand")
+		);
 	}
 
 	@Test
@@ -334,9 +337,14 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				commandNode("subcommand1", true),
+				commandNode("subcommand2", true)
+			),
+			List.of("command:CommandAPICommand", "subcommand1:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "subcommand2:CommandAPICommand")
 		);
 	}
 
@@ -350,9 +358,12 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of()),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", true)
+				.withChildren(commandNode("subcommand", true)),
+			List.of("command:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "subcommand:CommandAPICommand")
 		);
 	}
 
@@ -366,10 +377,16 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias1:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias2:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				commandNode("subcommand", true),
+				commandNode("alias1", true),
+				commandNode("alias2", true)
+			),
+			List.of("command:CommandAPICommand", "subcommand:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "alias1:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "alias2:CommandAPICommand")
 		);
 	}
 
@@ -392,9 +409,22 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "string1:StringArgument", "integer1:IntegerArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "string2:StringArgument", "integer2:IntegerArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				commandNode("subcommand1", false).withChildren(
+					node("string1", StringArgument.class, false).withChildren(
+						node("integer1", IntegerArgument.class, true)
+					)
+				),
+				commandNode("subcommand2", false).withChildren(
+					node("string2", StringArgument.class, false).withChildren(
+						node("integer2", IntegerArgument.class, true)
+					)
+				)
+			),
+			List.of("command:CommandAPICommand", "subcommand1:CommandAPICommand", "string1:StringArgument", "integer1:IntegerArgument"),
+			List.of("command:CommandAPICommand", "subcommand2:CommandAPICommand", "string2:StringArgument", "integer2:IntegerArgument")
 		);
 	}
 
@@ -412,19 +442,26 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument", "a:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias1:LiteralArgument", "a:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias2:LiteralArgument", "a:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument", "b:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias1:LiteralArgument", "b:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias2:LiteralArgument", "b:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument", "a:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias1:LiteralArgument", "a:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias2:LiteralArgument", "a:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand:LiteralArgument", "b:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias1:LiteralArgument", "b:LiteralArgument", "d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("alias2:LiteralArgument", "b:LiteralArgument", "d:LiteralArgument"))
+		List<Node> literal2 = children(
+			node("literal2", MultiLiteralArgument.class, true).helpString("(c|d)")
+		);
+
+		List<Node> literal1 = children(
+			node("literal1", MultiLiteralArgument.class, false).helpString("(a|b)").withChildren(literal2)
+		);
+
+		List<Node> subcommands = children(
+			commandNode("subcommand", false).withChildren(literal1),
+			commandNode("alias1", false).withChildren(literal1),
+			commandNode("alias2", false).withChildren(literal1)
+		);
+
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(subcommands),
+			List.of("command:CommandAPICommand", "subcommand:CommandAPICommand", "literal1:MultiLiteralArgument", "literal2:MultiLiteralArgument"),
+			List.of("command:CommandAPICommand", "alias1:CommandAPICommand", "literal1:MultiLiteralArgument", "literal2:MultiLiteralArgument"),
+			List.of("command:CommandAPICommand", "alias2:CommandAPICommand", "literal1:MultiLiteralArgument", "literal2:MultiLiteralArgument")
 		);
 	}
 
@@ -449,13 +486,26 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "a:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "a:LiteralArgument", "b:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "c:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "c:LiteralArgument", "d:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				commandNode("subcommand1", true).withChildren(
+					node("a", LiteralArgument.class, true).helpString("a").withChildren(
+						node("b", LiteralArgument.class, true).helpString("b")
+					)
+				),
+				commandNode("subcommand2", true).withChildren(
+					node("c", LiteralArgument.class, true).helpString("c").withChildren(
+						node("d", LiteralArgument.class, true).helpString("d")
+					)
+				)
+			),
+			List.of("command:CommandAPICommand", "subcommand1:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "subcommand1:CommandAPICommand", "a:LiteralArgument"),
+			List.of("command:CommandAPICommand", "subcommand1:CommandAPICommand", "a:LiteralArgument", "b:LiteralArgument"),
+			List.of("command:CommandAPICommand", "subcommand2:CommandAPICommand"),
+			List.of("command:CommandAPICommand", "subcommand2:CommandAPICommand", "c:LiteralArgument"),
+			List.of("command:CommandAPICommand", "subcommand2:CommandAPICommand", "c:LiteralArgument", "d:LiteralArgument")
 		);
 	}
 
@@ -484,11 +534,109 @@ class CommandAPICommandRegisteredCommandTests extends TestBase {
 			)
 			.register();
 
-		assertCreatedRegisteredCommands(
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "1a:LiteralArgument", "1b:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand1:LiteralArgument", "1a:LiteralArgument", "1b:LiteralArgument", "1c:LiteralArgument", "1d:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "2a:LiteralArgument", "2b:LiteralArgument")),
-			registeredCommandNoHelpOrPermission("command", List.of("subcommand2:LiteralArgument", "2a:LiteralArgument", "2b:LiteralArgument", "2c:LiteralArgument", "2d:LiteralArgument"))
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				commandNode("subcommand1", false)
+					.withChildren(node("1a", LiteralArgument.class, false).helpString("1a")
+					.withChildren(node("1b", LiteralArgument.class, true).helpString("1b")
+					.withChildren(node("1c", LiteralArgument.class, false).helpString("1c")
+					.withChildren(node("1d", LiteralArgument.class, true).helpString("1d")
+				)))),
+				commandNode("subcommand2", false)
+					.withChildren(node("2a", LiteralArgument.class, false).helpString("2a")
+					.withChildren(node("2b", LiteralArgument.class, true).helpString("2b")
+					.withChildren(node("2c", LiteralArgument.class, false).helpString("2c")
+					.withChildren(node("2d", LiteralArgument.class, true).helpString("2d")
+				))))
+			),
+			List.of("command:CommandAPICommand", "subcommand1:CommandAPICommand", "1a:LiteralArgument", "1b:LiteralArgument"),
+			List.of("command:CommandAPICommand", "subcommand1:CommandAPICommand", "1a:LiteralArgument", "1b:LiteralArgument", "1c:LiteralArgument", "1d:LiteralArgument"),
+			List.of("command:CommandAPICommand", "subcommand2:CommandAPICommand", "2a:LiteralArgument", "2b:LiteralArgument"),
+			List.of("command:CommandAPICommand", "subcommand2:CommandAPICommand", "2a:LiteralArgument", "2b:LiteralArgument", "2c:LiteralArgument", "2d:LiteralArgument")
 		);
+	}
+
+	/////////////////////////
+	// Information merging //
+	/////////////////////////
+	
+	@Test
+	void testRegisterTwoSeparateCommands() {
+		new CommandAPICommand("command1")
+			.executesPlayer(P_EXEC)
+			.register();
+
+		new CommandAPICommand("command2")
+			.executesPlayer(P_EXEC)
+			.register();
+
+		RegisteredCommand command1 = simpleRegisteredCommand("command1", "minecraft", commandNode("command1", true));
+		RegisteredCommand command2 = simpleRegisteredCommand("command2", "minecraft", commandNode("command2", true));
+
+		assertCreatedRegisteredCommands(
+			command1.copyWithEmptyNamespace(), command1,
+			command2.copyWithEmptyNamespace(), command2
+		);
+	}
+
+	@Test
+	void testRegisterMergeArguments() {
+		new CommandAPICommand("command")
+			.withArguments(new StringArgument("string"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		new CommandAPICommand("command")
+			.withArguments(new IntegerArgument("integer"))
+			.executesPlayer(P_EXEC)
+			.register();
+
+		assertCreatedSimpleRegisteredCommand(
+			"command", 
+			commandNode("command", false).withChildren(
+				node("string", StringArgument.class, true),
+				node("integer", IntegerArgument.class, true)
+			),
+			List.of("command:CommandAPICommand", "string:StringArgument"),
+			List.of("command:CommandAPICommand", "integer:IntegerArgument")
+		);
+	}
+
+	@Test
+	void testRegisterMergeNamespaces() {
+		new CommandAPICommand("command")
+			.withArguments(new LiteralArgument("first"))
+			.executesPlayer(P_EXEC)
+			.register("first");
+
+		new CommandAPICommand("command")
+			.withArguments(new LiteralArgument("second"))
+			.executesPlayer(P_EXEC)
+			.register("second");
+
+		RegisteredCommand first = simpleRegisteredCommand(
+			"command", "first", 
+			commandNode("command", false).withChildren(
+				node("first", LiteralArgument.class, true).helpString("first")
+			)
+		);
+
+		RegisteredCommand second = simpleRegisteredCommand(
+			"command", "second", 
+			commandNode("command", false).withChildren(
+				node("second", LiteralArgument.class, true).helpString("second")
+			)
+		);
+
+		RegisteredCommand merged = simpleRegisteredCommand(
+			"command", "", 
+			commandNode("command", false).withChildren(
+				node("first", LiteralArgument.class, true).helpString("first"),
+				node("second", LiteralArgument.class, true).helpString("second")
+			)
+		);
+
+		assertCreatedRegisteredCommands(merged, first, second);
 	}
 }
