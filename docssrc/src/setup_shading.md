@@ -119,7 +119,7 @@ depending on the build tool you use._
 Starting from Minecraft version 1.20.5, Paper will only ship mojang-mapped servers which use mojang-mapped class names and CraftBukkit classes without the version package.
 However, when starting the server, Paper will remap Spigot-mapped plugins so that they can run on a mojang-mapped server.
 
-At this time, the CommandAPI is not able to provide a version that runs on a mojang-mapped server without being relocated so your plugin has top be marked as Spigot-mapped
+At this time, the CommandAPI is not able to provide a version that runs on a mojang-mapped server without being relocated so your plugin has to be marked as Spigot-mapped
 to make the server remap your plugin and your shaded CommandAPI version so that the CommandAPI is able to run on a 1.20.5 Paper server.
 
 </div>
