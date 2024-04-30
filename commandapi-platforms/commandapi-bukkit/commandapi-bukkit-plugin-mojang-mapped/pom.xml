@@ -110,6 +110,12 @@
 									</excludes>
 								</filter>
 							</filters>
+							<relocations>
+								<relocation>
+									<pattern>org.bukkit.craftbukkit.v1_20_R4</pattern>
+									<shadedPattern>org.bukkit.craftbukkit</shadedPattern>
+								</relocation>
+							</relocations>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 									<resource>LICENSE</resource>
@@ -118,6 +124,20 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<!-- Add the maven-jar-plugin to mark the Mojang mapped plugin (this one) as mojang mapped
+			 as Paper would assume Spigot mappings when no manifest entry is given and a plugin.yml is used -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.4.1</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
+						</manifestEntries>
+					</archive>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
