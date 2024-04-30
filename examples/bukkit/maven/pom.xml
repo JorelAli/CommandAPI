@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api-plugin</artifactId>
-			<version>2.12.2</version>
+			<version>2.12.4</version>
 		</dependency>
 	</dependencies>
 
