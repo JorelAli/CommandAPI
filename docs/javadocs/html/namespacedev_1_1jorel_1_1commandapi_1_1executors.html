@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -572,6 +572,93 @@ The number of arguments for this command</dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An optional holding the argument with the specified node name, or an empty optional if the index was invalid</dd></dl>
+<p>Returns an argument purely based on its <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> representation. This also attempts to directly cast the argument to the type represented by <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#a89192bb67b017b42c9df7c9aec30dce9">dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argumentType</td><td>The argument instance used to create the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument represented by the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> argument, or null if the argument was not found.</dd></dl>
+<p>Returns an argument purely based on its <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> representation or a default value if the argument wasn't found. </p>
+<p >If the argument was found, this also attempts to directly cast the argument to the type represented by <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#a89192bb67b017b42c9df7c9aec30dce9">dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argumentType</td><td>The argument instance used to create the argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the argument wasn't found </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument represented by the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> argument, or the default value if the argument was not found.</dd></dl>
+<p>Returns an <code>Optional</code> holding the provided argument. This <code>Optional</code> can be empty if the argument was not given when running the command. </p>
+<p >This attempts to directly cast the argument to the type represented by <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#a89192bb67b017b42c9df7c9aec30dce9">dev.jorel.commandapi.arguments.AbstractArgument#getPrimitiveType()</a></code></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argumentType</td><td>The argument instance used to create the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.</dd></dl>
+<p>Returns an argument based on its node name. This also attempts to directly cast the argument to the type represented by the <code class="JavaDocCode">argumentType</code> parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of the argument </td></tr>
+    <tr><td class="paramname">argumentType</td><td>The class that represents the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument with the given node name, or null if the argument was not found.</dd></dl>
+<p>Returns an argument based on its node name or a default value if the argument wasn't found. </p>
+<p >If the argument was found, this method attempts to directly cast the argument to the type represented by the <code class="JavaDocCode">argumentType</code> parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of the argument </td></tr>
+    <tr><td class="paramname">argumentType</td><td>The class that represents the argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the argument wasn't found </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument with the given node name, or the default value if the argument was not found.</dd></dl>
+<p>Returns an <code>Optional</code> holding the argument with the given node name. This <code>Optional</code> can be empty if the argument was not given when running the command. </p>
+<p >This attempts to directly cast the argument to the type represented by the <code class="JavaDocCode">argumentType</code> parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>The node name of the argument </td></tr>
+    <tr><td class="paramname">argumentType</td><td>The class that represents the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.</dd></dl>
+<p>Returns an argument based on its index. This also attempts to directly cast the argument to the type represented by the <code class="JavaDocCode">argumentType</code> parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the argument </td></tr>
+    <tr><td class="paramname">argumentType</td><td>The class that represents the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument at the given index, or null if the argument was not found.</dd></dl>
+<p>Returns an argument based on its index or a default value if the argument wasn't found. </p>
+<p >If the argument was found, this method attempts to directly cast the argument to the type represented by the <code class="JavaDocCode">argumentType</code> parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the argument </td></tr>
+    <tr><td class="paramname">argumentType</td><td>The class that represents the argument </td></tr>
+    <tr><td class="paramname">defaultValue</td><td>The default value to return if the argument wasn't found </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The argument at the given index, or the default value if the argument was not found.</dd></dl>
+<p>Returns an <code>Optional</code> holding the argument at the given index. This <code>Optional</code> can be empty if the argument was not given when running the command. </p>
+<p >This attempts to directly cast the argument to the type represented by the <code class="JavaDocCode">argumentType</code> parameter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the argument </td></tr>
+    <tr><td class="paramname">argumentType</td><td>The class that represents the argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An <code>Optional</code> holding the argument, or an empty <code>Optional</code> if the argument was not found.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">args</td><td></td></tr>
@@ -597,7 +684,7 @@ The number of arguments for this command</dd></dl>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1executors.html">executors</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:59 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

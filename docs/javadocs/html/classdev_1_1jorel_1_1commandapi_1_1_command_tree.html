@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -112,13 +112,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a21c4e45370dd6c0603fe2bc0243dc848"><td class="memItemLeft" align="right" valign="top"><a id="a21c4e45370dd6c0603fe2bc0243dc848" name="a21c4e45370dd6c0603fe2bc0243dc848"></a>
 <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html">CommandTree</a>&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
 <tr class="separator:a21c4e45370dd6c0603fe2bc0243dc848"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8885bdc174fd566bc77475285e9ba27c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a8885bdc174fd566bc77475285e9ba27c">register</a> (String namespace)</td></tr>
+<tr class="memdesc:a8885bdc174fd566bc77475285e9ba27c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the command with a given namespace.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a8885bdc174fd566bc77475285e9ba27c">More...</a><br /></td></tr>
+<tr class="separator:a8885bdc174fd566bc77475285e9ba27c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d5c97ead75459f23d909bf3805f0ddf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a4d5c97ead75459f23d909bf3805f0ddf">register</a> (JavaPlugin plugin)</td></tr>
+<tr class="memdesc:a4d5c97ead75459f23d909bf3805f0ddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers this command with a given <code><a class="el" href="">JavaPlugin</a></code> instance.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a4d5c97ead75459f23d909bf3805f0ddf">More...</a><br /></td></tr>
+<tr class="separator:a4d5c97ead75459f23d909bf3805f0ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b18f25a41e52e8a2c2e8583da231972"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972">then</a> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt; tree)</td></tr>
 <tr class="memdesc:a2b18f25a41e52e8a2c2e8583da231972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a child branch on the tree.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972">More...</a><br /></td></tr>
 <tr class="separator:a2b18f25a41e52e8a2c2e8583da231972"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="memItemLeft" align="right" valign="top"><a id="a08c8aea02a7dcf4011bcccbd6096f96b" name="a08c8aea02a7dcf4011bcccbd6096f96b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>register</b> ()</td></tr>
-<tr class="memdesc:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the command. <br /></td></tr>
-<tr class="separator:a08c8aea02a7dcf4011bcccbd6096f96b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d1762584d31697c20378449f26213f7"><td class="memItemLeft" align="right" valign="top">default Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a8d1762584d31697c20378449f26213f7">executes</a> (<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_command_executor.html">CommandExecutor</a> executor, ExecutorType... types)</td></tr>
 <tr class="memdesc:a8d1762584d31697c20378449f26213f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an executor to the current command builder.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_bukkit_executable.html#a8d1762584d31697c20378449f26213f7">More...</a><br /></td></tr>
 <tr class="separator:a8d1762584d31697c20378449f26213f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1560,6 +1562,58 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>register</b> ()</td><
 
 </div>
 </div>
+<a id="a4d5c97ead75459f23d909bf3805f0ddf" name="a4d5c97ead75459f23d909bf3805f0ddf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d5c97ead75459f23d909bf3805f0ddf">&#9670;&nbsp;</a></span>register() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dev.jorel.commandapi.CommandTree.register </td>
+          <td>(</td>
+          <td class="paramtype">JavaPlugin&#160;</td>
+          <td class="paramname"><em>plugin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers this command with a given <code><a class="el" href="">JavaPlugin</a></code> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">plugin</td><td>The plugin instance used to determine this command's namespace </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8885bdc174fd566bc77475285e9ba27c" name="a8885bdc174fd566bc77475285e9ba27c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8885bdc174fd566bc77475285e9ba27c">&#9670;&nbsp;</a></span>register() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dev.jorel.commandapi.CommandTree.register </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>namespace</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers the command with a given namespace. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">namespace</td><td>The namespace of this command. This cannot be null or empty </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a2b18f25a41e52e8a2c2e8583da231972" name="a2b18f25a41e52e8a2c2e8583da231972"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2b18f25a41e52e8a2c2e8583da231972">&#9670;&nbsp;</a></span>then()</h2>
 
@@ -1602,7 +1656,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>register</b> ()</td><
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_tree.html">CommandTree</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

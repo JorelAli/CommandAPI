@@ -271,6 +271,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.arguments.EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.FunctionArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.LootTableArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_loot_table_argument.html", null ],
+      [ "dev.jorel.commandapi.arguments.PotionEffectArgument.NamespacedKey", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument_1_1_namespaced_key.html", null ],
       [ "dev.jorel.commandapi.arguments.RecipeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_recipe_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.SoundArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.SoundArgument.NamespacedKey", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument_1_1_namespaced_key.html", null ]
@@ -431,6 +432,7 @@ var hierarchy =
       [ "dev.jorel.commandapi.executors.RemoteConsoleResultingCommandExecutor", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_remote_console_resulting_command_executor.html", null ],
       [ "dev.jorel.commandapi.executors.RemoteConsoleResultingExecutionInfo", "interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_remote_console_resulting_execution_info.html", null ]
     ] ],
+    [ "com.mojang.brigadier.tree.RootCommandNode< Source >", "classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html", null ],
     [ "dev.jorel.commandapi.wrappers.Rotation", "classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html", null ],
     [ "RuntimeException", null, [
       [ "dev.jorel.commandapi.exceptions.BadLiteralException", "classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_bad_literal_exception.html", null ],
@@ -527,6 +529,7 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< org.bukkit.NamespacedKey, org.bukkit.NamespacedKey >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [
       [ "dev.jorel.commandapi.arguments.BiomeArgument.NamespacedKey", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument_1_1_namespaced_key.html", null ],
+      [ "dev.jorel.commandapi.arguments.PotionEffectArgument.NamespacedKey", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument_1_1_namespaced_key.html", null ],
       [ "dev.jorel.commandapi.arguments.SoundArgument.NamespacedKey", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument_1_1_namespaced_key.html", null ]
     ] ],
     [ "dev.jorel.commandapi.arguments.SafeOverrideableArgument< ParticleData, ParticleData<?> >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_safe_overrideable_argument.html", [

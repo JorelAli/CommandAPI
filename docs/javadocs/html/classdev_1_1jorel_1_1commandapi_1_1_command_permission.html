@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -109,6 +109,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>hashCode</b> ()</td></
 <tr class="memitem:a52b96b0e42edef36463700e626d0ce20"><td class="memItemLeft" align="right" valign="top">String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a52b96b0e42edef36463700e626d0ce20">toString</a> ()</td></tr>
 <tr class="memdesc:a52b96b0e42edef36463700e626d0ce20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a human-readable string of this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html" title="A representation of permission nodes for commands.">CommandPermission</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a52b96b0e42edef36463700e626d0ce20">More...</a><br /></td></tr>
 <tr class="separator:a52b96b0e42edef36463700e626d0ce20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7575458ee5b50152a300d3ab9d6638e4"><td class="memItemLeft" align="right" valign="top">Optional&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a7575458ee5b50152a300d3ab9d6638e4">getPermission</a> ()</td></tr>
+<tr class="memdesc:a7575458ee5b50152a300d3ab9d6638e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the custom permission in string form if set.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a7575458ee5b50152a300d3ab9d6638e4">More...</a><br /></td></tr>
+<tr class="separator:a7575458ee5b50152a300d3ab9d6638e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab99b7f3e1afec0951e82ef098cf0e332"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#ab99b7f3e1afec0951e82ef098cf0e332">isNegated</a> ()</td></tr>
+<tr class="memdesc:ab99b7f3e1afec0951e82ef098cf0e332"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if the permission is negated.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#ab99b7f3e1afec0951e82ef098cf0e332">More...</a><br /></td></tr>
+<tr class="separator:ab99b7f3e1afec0951e82ef098cf0e332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -166,6 +172,46 @@ static final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_per
 
 </div>
 </div>
+<a id="a7575458ee5b50152a300d3ab9d6638e4" name="a7575458ee5b50152a300d3ab9d6638e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7575458ee5b50152a300d3ab9d6638e4">&#9670;&nbsp;</a></span>getPermission()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Optional&lt; String &gt; dev.jorel.commandapi.CommandPermission.getPermission </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the custom permission in string form if set. </p>
+<dl class="section return"><dt>Returns</dt><dd>An <code class="JavaDocCode">Optional&lt;String&gt;</code> with the custom permission or an empty <code class="JavaDocCode">Optional</code> if not set </dd></dl>
+
+</div>
+</div>
+<a id="ab99b7f3e1afec0951e82ef098cf0e332" name="ab99b7f3e1afec0951e82ef098cf0e332"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab99b7f3e1afec0951e82ef098cf0e332">&#9670;&nbsp;</a></span>isNegated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean dev.jorel.commandapi.CommandPermission.isNegated </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns if the permission is negated. </p>
+<dl class="section return"><dt>Returns</dt><dd>the permission's negation state </dd></dl>
+
+</div>
+</div>
 <a id="a52b96b0e42edef36463700e626d0ce20" name="a52b96b0e42edef36463700e626d0ce20"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a52b96b0e42edef36463700e626d0ce20">&#9670;&nbsp;</a></span>toString()</h2>
 
@@ -193,7 +239,7 @@ static final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_per
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html">CommandPermission</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>
