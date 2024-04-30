@@ -39,6 +39,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 9.3.0 \\(\rightarrow\\) 9.4.0
 
+- Updates [Shading the CommandAPI in your plugins](./setup_shading.md) page with spigot-mapped and mojang-mapped dependencies
 - Adds [Velocity](./velocity_intro.md) page to outline how to setup the CommandAPI for Velocity
 - Updates [CommandArguments](./commandarguments.md) to document new additions for safe arguments
 - Updates [Potion effect arguments](./argument_potion.md) to include examples for the newly added `NamespacedKey` variant for the `PotionEffectArgument`
