@@ -26,11 +26,13 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.AbstractArgumentTree;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
+import dev.jorel.commandapi.commandnodes.PreviewableArgumentBuilder;
 import dev.jorel.commandapi.commandnodes.UnnamedRequiredArgumentBuilder;
 import dev.jorel.commandapi.exceptions.DuplicateNodeNameException;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
@@ -371,15 +373,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		List<Argument> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
-		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
-
 		// Check preconditions
 		checkPreconditions(previousNodeInformation, previousArguments, previousArgumentNames);
-
-		// Handle previewable argument
-		if (this instanceof Previewable<?, ?>) {
-			handler.addPreviewableArgument(previousArguments, (Argument) this);
-		}
 
 		// Create node
 		ArgumentBuilder<Source, ?> rootBuilder = createArgumentBuilder(previousArguments, previousArgumentNames);
@@ -426,19 +421,29 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
 
 		// Create node and add suggestions
-		// Note: I would like to combine these two `build.suggests(...)` calls, but they are actually two unrelated
-		//  methods since UnnamedRequiredArgumentBuilder does not extend RequiredArgumentBuilder (see
-		//  UnnamedRequiredArgumentBuilder for why). If UnnamedRequiredArgumentBuilder *does* extend
-		//  RequiredArgumentBuilder, please simplify this if statement, like what Literal#createArgumentBuilder does.
+		// Note: I would like to combine these `builder.suggests(...)` calls, but they are actually unrelated
+		//  methods since UnnamedRequiredArgumentBuilder and PreviewableArgumentBuilder do not extend RequiredArgumentBuilder 
+		//  (see those classes for why). If this has been fixed and they do extend RequiredArgumentBuilder, please simplify 
+		//  this if statement, like what Literal#createArgumentBuilder does.
+		SuggestionProvider<Source> suggestions = handler.generateBrigadierSuggestions(previousArguments, (Argument) this);
 		ArgumentBuilder<Source, ?> rootBuilder;
-		if(isListed) {
+		if (this instanceof Previewable<?, ?> previewable) {
+			// Handle previewable argument
+			PreviewableArgumentBuilder<Source, ?> builder = PreviewableArgumentBuilder.previewableArgument(
+				nodeName, rawType, 
+				previewable.getPreview().orElse(null), previewable.isLegacy(), isListed
+			);
+			builder.suggests(suggestions);
+
+			rootBuilder = builder;
+		} else if (isListed) {
 			RequiredArgumentBuilder<Source, ?> builder = RequiredArgumentBuilder.argument(nodeName, rawType);
-			builder.suggests(handler.generateBrigadierSuggestions(previousArguments, (Argument) this));
+			builder.suggests(suggestions);
 
 			rootBuilder = builder;
 		} else {
 			UnnamedRequiredArgumentBuilder<Source, ?> builder = UnnamedRequiredArgumentBuilder.unnamedArgument(nodeName, rawType);
-			builder.suggests(handler.generateBrigadierSuggestions(previousArguments, (Argument) this));
+			builder.suggests(suggestions);
 
 			rootBuilder = builder;
 		}
