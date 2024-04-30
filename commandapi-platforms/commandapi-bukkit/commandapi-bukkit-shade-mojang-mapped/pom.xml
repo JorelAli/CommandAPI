@@ -77,6 +77,12 @@
 									</excludes>
 								</filter>
 							</filters>
+							<relocations>
+								<relocation>
+									<pattern>org.bukkit.craftbukkit.v1_20_R4</pattern>
+									<shadedPattern>org.bukkit.craftbukkit</shadedPattern>
+								</relocation>
+							</relocations>
 						</configuration>
 					</execution>
 				</executions>
