@@ -5,6 +5,7 @@ var enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers =
     [ "ENTITIES", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html#ac1898f1eb54465561d477e5e6fecf28e", null ],
     [ "FUNCTION", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html#ad419467acd515ee10d3128bf52f065a6", null ],
     [ "LOOT_TABLES", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html#a30b3a98c4875c6c855d2868307a63d7c", null ],
+    [ "POTION_EFFECTS", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html#ab1afa35116e999e115d3b13fce75b3bd", null ],
     [ "RECIPES", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html#a704914d66c48553507c985c95e6ce33f", null ],
     [ "SOUNDS", "enumdev_1_1jorel_1_1commandapi_1_1arguments_1_1_suggestion_providers.html#a08184946ffa10e48de1fd75f16fb6cb7", null ]
 ];

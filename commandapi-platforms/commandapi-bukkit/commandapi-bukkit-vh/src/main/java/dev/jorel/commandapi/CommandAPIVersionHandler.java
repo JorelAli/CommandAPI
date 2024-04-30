@@ -50,11 +50,10 @@ public interface CommandAPIVersionHandler {
 	 */
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_20_R3();
+			return new NMS_1_20_R4();
 		} else {
 			String version = Bukkit.getBukkitVersion().split("-")[0];
 			return switch (version) {
-				case "1.15", "1.15.1", "1.15.2" -> new NMS_1_15();
 				case "1.16.1" -> new NMS_1_16_R1();
 				case "1.16.2", "1.16.3" -> new NMS_1_16_R2();
 				case "1.16.4" -> new NMS_1_16_4_R3();
@@ -70,6 +69,7 @@ public interface CommandAPIVersionHandler {
 				case "1.20", "1.20.1" -> new NMS_1_20_R1();
 				case "1.20.2" -> new NMS_1_20_R2();
 				case "1.20.3", "1.20.4" -> new NMS_1_20_R3();
+				case "1.20.5", "1.20.6" -> new NMS_1_20_R4();
 				default -> throw new UnsupportedVersionException(version);
 			};
 		}

@@ -125,16 +125,26 @@ public class CommandPermission {
 		return (negated ? "not " : "") + result;
 	}
 
-	Optional<String> getPermission() {
+	/**
+	 * Returns the custom permission in string form if set
+	 * 
+	 * @return An {@code Optional<String>} with the custom permission or an empty {@code Optional} if not set
+	 */
+	public Optional<String> getPermission() {
 		return Optional.ofNullable(this.permission);
+	}
+
+	/**
+	 * Returns if the permission is negated
+	 * 
+	 * @return the permission's negation state
+	 */
+	public boolean isNegated() {
+		return this.negated;
 	}
 
 	PermissionNode getPermissionNode() {
 		return this.permissionNode;
-	}
-
-	boolean isNegated() {
-		return this.negated;
 	}
 
 	CommandPermission negate() {

@@ -16,6 +16,7 @@ import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -24,7 +25,7 @@ import dev.jorel.commandapi.test.TestBase;
 /**
  * Tests for the {@link NBTCompoundArgument}
  */
-@Disabled("I don't know what's going on with NBT API 2.12.0, but it's probably something on our end. Let's skip these tests for now so we're not screwing over GitHub Actions")
+@Disabled
 class ArgumentNBTCompoundNBTAPITests extends TestBase {
 
 	/*********
@@ -33,6 +34,9 @@ class ArgumentNBTCompoundNBTAPITests extends TestBase {
 
 	@BeforeEach
 	public void setUp() {
+		// Ignoring 1.20.5 for NBT tests until they update
+		assumeTrue(version.lessThan(MCVersion.V1_20_5));
+
 		// NBT API can't run via Mojang Mappings
 		assumeTrue(!CommandAPIVersionHandler.IS_MOJANG_MAPPED);
 
@@ -49,6 +53,7 @@ class ArgumentNBTCompoundNBTAPITests extends TestBase {
 			case V1_19_4 -> MinecraftVersion.MC1_19_R3;
 			case V1_20 -> MinecraftVersion.MC1_20_R1;
 			case V1_20_2 -> MinecraftVersion.MC1_20_R2;
+			case V1_20_3 -> MinecraftVersion.MC1_20_R3;
 			default -> throw new IllegalArgumentException("Unexpected value: " + version);
 		};
 		MockPlatform.setField(MinecraftVersion.class, "version", null, currentNBTAPIMinecraftVersion);

@@ -31,7 +31,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.logging.LogUtils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
@@ -99,6 +98,7 @@ import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
+import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
 import org.bukkit.Vibration.Destination;
@@ -121,12 +121,12 @@ import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R3.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_19_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
@@ -337,7 +337,7 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
+	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have level 2 permissions in order to use entity selectors. We're
@@ -357,9 +357,17 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 					for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
 						result.add(entity.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_ENTITIES_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<org.bukkit.entity.Entity>();
+					if (allowEmpty) {
+						yield new ArrayList<org.bukkit.entity.Entity>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_MANY_PLAYERS:
 				try {
@@ -367,9 +375,17 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 					for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
 						result.add(player.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_PLAYERS_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<Player>();
+					if (allowEmpty) {
+						yield new ArrayList<Player>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_ONE_ENTITY:
 				yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
@@ -544,8 +560,12 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return PotionEffectType.getByKey(fromResourceLocation(BuiltInRegistries.MOB_EFFECT.getKey(ResourceArgument.getMobEffect(cmdCtx, key).value())));
+	public Object getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch (subType) {
+			case POTION_EFFECT_POTION_EFFECT -> CraftPotionEffectType.getByKey(fromResourceLocation(BuiltInRegistries.MOB_EFFECT.getKey(ResourceArgument.getMobEffect(cmdCtx, key).value())));
+			case POTION_EFFECT_NAMESPACEDKEY -> fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Override
@@ -632,6 +652,7 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 			};
 			case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			case POTION_EFFECTS -> (context, builder) -> SharedSuggestionProvider.suggestResource(BuiltInRegistries.MOB_EFFECT.keySet(), builder);
 			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
@@ -646,7 +667,16 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 		}
 		return convertedCustomFunctions;
 	}
-	
+
+	@Override
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
+	}
+
 	@Override
 	public World getWorldForCSS(CommandSourceStack css) {
 		return (css.getLevel() == null) ? null : css.getLevel().getWorld();
@@ -658,7 +688,7 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 

@@ -215,8 +215,13 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
-	public LiteralCommandNode<CommandSource> registerCommandNode(LiteralArgumentBuilder<CommandSource> node) {
-		return getBrigadierDispatcher().register(node);
+	public LiteralCommandNode<CommandSource> registerCommandNode(LiteralArgumentBuilder<CommandSource> node, String namespace) {
+		LiteralCommandNode<CommandSource> builtNode = getBrigadierDispatcher().register(node);
+		if (!namespace.isEmpty()) {
+			getBrigadierDispatcher().getRoot().addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace));
+		}
+		// We're done. The command already is registered
+		return builtNode;
 	}
 
 	@Override

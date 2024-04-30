@@ -191,6 +191,11 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	
 	public abstract String getNMSParticleNameFromBukkit(Particle particle);
 	
+	// Overrideable
+	public int popFunctionCallbackResult() {
+		throw new IllegalStateException("Pop function callback result hasn't been overridden");
+	}
+	
 	static record Pair<A, B>(A first, B second) {}
 	
 	/**

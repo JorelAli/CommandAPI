@@ -69,7 +69,9 @@
       - [LootTable argument](./argument_loottable.md)
       - [MathOperation arguments](./argument_mathoperation.md)
       - [NamespacedKey arguments](./argument_namespacedkey.md)
-      - [Particle arguments](./argument_particle.md)
+      - [Particle arguments](./argument_particles.md)
+        - [Particle data (before 1.20.5)](./argument_particle_old.md)
+        - [Particle data (1.20.5+)](./argument_particle_new.md)
       - [Potion effect arguments](./argument_potion.md)
       - [Recipe arguments](./argument_recipe.md)
       - [Sound arguments](./argument_sound.md)
@@ -110,6 +112,14 @@
 - [Kotlin-based commands](./kotlinintro.md)
 - [Using the DSL](./kotlindsl.md)
 - [Delegated properties](./delegated_properties.md)
+
+-----
+
+# Velocity
+
+- [Velocity](./velocity_intro.md)
+
+-----
 
 # CommandAPI Utilities
 

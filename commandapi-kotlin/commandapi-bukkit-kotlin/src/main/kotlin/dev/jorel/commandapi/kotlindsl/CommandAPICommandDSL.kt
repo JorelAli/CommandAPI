@@ -5,9 +5,12 @@ package dev.jorel.commandapi.kotlindsl
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
 import org.bukkit.command.CommandSender
+import org.bukkit.plugin.java.JavaPlugin
 import java.util.function.Predicate
 
 inline fun commandAPICommand(name: String, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register()
+inline fun commandAPICommand(name: String, namespace: String, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register(namespace)
+inline fun commandAPICommand(name: String, namespace: JavaPlugin, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).apply(command).register(namespace)
 @Deprecated("This method has been deprecated since version 9.1.0 as it is not needed anymore. See the documentation for more information", ReplaceWith(""), DeprecationLevel.WARNING)
 inline fun commandAPICommand(name: String, predicate: Predicate<CommandSender>, command: CommandAPICommand.() -> Unit = {}) = CommandAPICommand(name).withRequirement(predicate).apply(command).register()
 
@@ -59,9 +62,9 @@ inline fun CommandAPICommand.adventureChatArgument(nodeName: String, optional: B
 
 // Entity & Player arguments
 inline fun CommandAPICommand.entitySelectorArgumentOneEntity(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EntitySelectorArgument.OneEntity(nodeName).setOptional(optional).apply(block))
-inline fun CommandAPICommand.entitySelectorArgumentManyEntities(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EntitySelectorArgument.ManyEntities(nodeName).setOptional(optional).apply(block))
+inline fun CommandAPICommand.entitySelectorArgumentManyEntities(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EntitySelectorArgument.ManyEntities(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun CommandAPICommand.entitySelectorArgumentOnePlayer(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EntitySelectorArgument.OnePlayer(nodeName).setOptional(optional).apply(block))
-inline fun CommandAPICommand.entitySelectorArgumentManyPlayers(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EntitySelectorArgument.ManyPlayers(nodeName).setOptional(optional).apply(block))
+inline fun CommandAPICommand.entitySelectorArgumentManyPlayers(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EntitySelectorArgument.ManyPlayers(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun CommandAPICommand.playerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(PlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandAPICommand.offlinePlayerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(OfflinePlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandAPICommand.entityTypeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(EntityTypeArgument(nodeName).setOptional(optional).apply(block))
@@ -90,7 +93,8 @@ inline fun CommandAPICommand.lootTableArgument(nodeName: String, optional: Boole
 inline fun CommandAPICommand.mathOperationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(MathOperationArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandAPICommand.namespacedKeyArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(NamespacedKeyArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandAPICommand.particleArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(ParticleArgument(nodeName).setOptional(optional).apply(block))
-inline fun CommandAPICommand.potionEffectArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
+inline fun CommandAPICommand.potionEffectArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand =
+	if (useNamespacedKey) withArguments(PotionEffectArgument.NamespacedKey(nodeName).setOptional(optional).apply(block)) else withArguments(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandAPICommand.recipeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand = withArguments(RecipeArgument(nodeName).setOptional(optional).apply(block))
 
 inline fun CommandAPICommand.soundArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandAPICommand =

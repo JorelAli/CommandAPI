@@ -107,7 +107,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/**
 	 * Registers a Brigadier command node and returns the built node.
 	 */
-	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node);
+	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace);
 
 
 	/**

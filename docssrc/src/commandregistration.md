@@ -76,6 +76,7 @@ The `withAliases` method is used to declare a list of aliases that can be used t
 
 ```java
 CommandAPICommand withHelp(String shortDescription, fullDescription)
+CommandAPICommand withHelp(HelpTopic helpTopic)
 CommandAPICommand withShortDescription(String shortDescription)
 CommandAPICommand withFullDescription(String fullDescription)
 ```
@@ -92,42 +93,49 @@ The `withSubcommand` method is used to declare a subcommand that leads on from t
 
 ```java
 CommandAPICommand executes((sender, args) -> {})
+CommandAPICommand executes(info -> {})
 ```
 
 Executes a command using the `CommandSender` object.
 
 ```java
 CommandAPICommand executesPlayer((player, args) -> {})
+CommandAPICommand executesPlayer(info -> {})
 ```
 
 Executes a command only if the command sender is a `Player`.
 
 ```java
 CommandAPICommand executesEntity((entity, args) -> {})
+CommandAPICommand executesEntity(info -> {})
 ```
 
 Executes a command only if the command sender is an `Entity`.
 
 ```java
 CommandAPICommand executesCommandBlock((cmdblock, args) -> {})
+CommandAPICommand executesCommandBlock(info -> {})
 ```
 
 Executes a command only if the command sender is a `BlockCommandSender`.
 
 ```java
 CommandAPICommand executesConsole((console, args) -> {})
+CommandAPICommand executesConsole(info -> {})
 ```
 
 Executes a command only if the command sender is a `ConsoleCommandSender`.
 
 ```java
 CommandAPICommand executesProxy((proxy, args) -> {})
+CommandAPICommand executesProxy(info -> {})
 ```
 
 Executes a command only if the command sender is a `ProxiedCommandSender`.
 
 ```java
 CommandAPICommand executesNative((proxy, args) -> {})
+CommandAPICommand executesNative(info -> {})
 ```
 
 Executes a command regardless of what the command sender is, using the `NativeProxyCommandSender`.  Read more about native proxied command senders [here](./native.md).
@@ -170,7 +178,19 @@ Executes a command regardless of what the command sender is, using the `NativePr
 void register()
 ```
 
-Registers the command.
+Registers the command with the default `minecraft` namespace. If you are [shading](./setup_shading.md) you can set the default namespace using `CommandAPIConfig#setNamespace(String)` or `CommandAPIBukkitConfig#usePluginNamespace()`.
+
+```java
+void register(String namespace)
+```
+
+Registers the command with a custom provided namespace.
+
+```java
+void register(JavaPlugin plugin)
+```
+
+Registers the command with the provided plugin's name.
 
 -----
 

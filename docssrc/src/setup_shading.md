@@ -34,6 +34,8 @@ public class CommandAPIConfig {
     CommandAPIConfig useLatestNMSVersion(boolean value); // Whether the latest NMS implementation should be used or not
     CommandAPIConfig missingExecutorImplementationMessage(String value); // Set message to display when executor implementation is missing
     CommandAPIConfig dispatcherFile(File file); // If not null, the CommandAPI will create a JSON file with Brigadier's command tree
+    CommandAPIConfig setNamespace(String namespace); // The namespace to use when the CommandAPI registers a command
+    CommandAPIConfig usePluginNamespace(); // Whether the CommandAPI should use the name of the plugin passed into the CommandAPIConfig implementation as the default namespace for commands
 
     <T> CommandAPIConfig initializeNBTAPI(Class<T> nbtContainerClass, Function<Object, T> nbtContainerConstructor); // Initializes hooks with an NBT API. See NBT arguments documentation page for more info
 }
@@ -107,19 +109,33 @@ By default, the CommandAPI is written in the `dev.jorel.commandapi` package. It 
 
 ## Shading with Maven
 
-To shade the CommandAPI into a maven project, you'll need to use the `commandapi-bukkit-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. **You do not need to use `commandapi-bukkit-core` if you are shading**:
+To shade the CommandAPI into a maven project, you'll need to use the `commandapi-bukkit-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. Here you have a choice between the Spigot-mapped version and the Mojang-mapped version. **You do not need to use `commandapi-bukkit-core` if you are shading**:
 
 Add the CommandAPI shade dependency:
 
-```xml
+<div class="multi-pre">
+
+```xml,Spigot_Mappings
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-shade</artifactId>
-        <version>9.3.0</version>
+        <version>9.4.0</version>
     </dependency>
 </dependencies>
 ```
+
+```xml,Mojang_Mappings
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-bukkit-shade-mojang-mapped</artifactId>
+        <version>9.4.0</version>
+    </dependency>
+</dependencies>
+```
+
+</div>
 
 You can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using version `3.3.0` (compatible with Java 16):
 
@@ -208,15 +224,27 @@ Next, we declare our dependencies:
 
 <div class="multi-pre">
 
-```groovy,build.gradle
+```groovy,build.gradle_(Spigot_Mappings)
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade:9.3.0"
+    implementation "dev.jorel:commandapi-bukkit-shade:9.4.0"
 }
 ```
 
-```kotlin,build.gradle.kts
+```groovy,build.gradle_(Mojang_Mappings)
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade:9.3.0")
+    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT"
+}
+```
+
+```kotlin,build.gradle.kts_(Spigot_Mappings)
+dependencies {
+    implementation("dev.jorel:commandapi-bukkit-shade:9.4.0")
+}
+```
+
+```kotlin,build.gradle.kts_(Mojang_Mappings)
+dependencies {
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT")
 }
 ```
 
@@ -226,10 +254,10 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 
 <div class="multi-pre">
 
-```groovy,build.gradle
+```groovy,build.gradle_(Spigot_Mappings)
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.3.0")
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.4.0")
     }
 
     // TODO: Change this to my own package name
@@ -237,10 +265,32 @@ shadowJar {
 }
 ```
 
-```kotlin,build.gradle.kts
+```groovy,build.gradle_(Mojang_Mappings)
 shadowJar {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.3.0"))
+        include dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT")
+    }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```kotlin,build.gradle.kts_(Spigot_Mappings)
+tasks.withType<ShadowJar> {
+    dependencies {
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.4.0"))
+    }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```kotlin,build.gradle.kts_(Mojang_Mappings)
+tasks.withType<ShadowJar> {
+    dependencies {
+        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT"))
     }
 
     // TODO: Change this to my own package name

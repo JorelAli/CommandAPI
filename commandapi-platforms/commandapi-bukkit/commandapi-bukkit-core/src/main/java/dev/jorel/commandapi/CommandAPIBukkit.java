@@ -9,21 +9,31 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import dev.jorel.commandapi.commandsenders.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
-import org.bukkit.command.*;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,10 +53,22 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 
+import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
+import dev.jorel.commandapi.commandsenders.AbstractPlayer;
+import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitEntity;
+import dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
+import dev.jorel.commandapi.commandsenders.BukkitRemoteConsoleCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -68,6 +90,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private static CommandAPIBukkit<?> instance;
 	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
+
+	// Namespaces
+	private final Set<String> namespacesToFix = new HashSet<>();
+	private RootCommandNode<Source> minecraftCommandNamespaces = new RootCommandNode<>();
 
 	// Static VarHandles
 	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
@@ -113,6 +139,14 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
 		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
+			// A little unconventional, but we really don't need to implement mojang mapping flags
+			// all over the place, we want it to have as minimal interaction as possible so it can
+			// be used by the test framework as a global static flag. Also, we want to set this
+			// as early as possible in the CommandAPI's loading sequence!
+			if (bukkitConfig.shouldUseMojangMappings) {
+				SafeVarHandle.USING_MOJANG_MAPPINGS = true;
+			}
+
 			CommandAPIBukkit.setInternalConfig(new InternalBukkitConfig(bukkitConfig));
 		} else {
 			CommandAPI.logError("CommandAPIBukkit was loaded with non-Bukkit config!");
@@ -131,12 +165,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		Class<?> nbtContainerClass = CommandAPI.getConfiguration().getNBTContainerClass();
 		if (nbtContainerClass != null && CommandAPI.getConfiguration().getNBTContainerConstructor() != null) {
 			CommandAPI.logNormal("Hooked into an NBT API with class " + nbtContainerClass.getName());
-		} else {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning(
-					"Could not hook into the NBT API for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
-			}
 		}
+		// We don't need to log if no NBT was found, constructing an NBTCompoundArgument without one will do that for us
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
@@ -188,6 +218,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		JavaPlugin plugin = config.getPlugin();
 
 		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
+			// Fix namespaces first thing when starting the server
+			fixNamespaces();
 			// Sort out permissions after the server has finished registering them all
 			fixPermissions();
 			if (paper.isFoliaPresent()) {
@@ -238,10 +270,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				 * If anyone dares tries to use testPermission() on this command, seriously,
 				 * what are you doing and why?
 				 */
-				for(Command command : new Command[] { map.getCommand(cmdName), map.getCommand("minecraft:" + cmdName) }) {
-					if (command != null && isVanillaCommandWrapper(command)) {
-						command.setPermission(permNode);
-					}
+				Command command = map.getCommand(cmdName);
+				if(command != null && isVanillaCommandWrapper(command)) {
+					command.setPermission(permNode);
 				}
 			}
 		}
@@ -266,6 +297,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	 */
 	private String generateCommandHelpPrefix(String command) {
 		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
+	}
+
+	private String generateCommandHelpPrefix(String command, String namespace) {
+		return (Bukkit.getPluginCommand(command) == null ? "/" + namespace + ":" : "/minecraft:") + command;
 	}
 
 	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
@@ -312,8 +347,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				final RegisteredCommand command = commandsWithIdenticalNames.get(i);
 				StringBuilder usageString = new StringBuilder();
 				usageString.append("/").append(command.commandName()).append(" ");
-				for (String arg : command.argsAsStr()) {
-					usageString.append("<").append(arg.split(":")[0]).append("> ");
+				for (AbstractArgument<?, ?, ?, ?> arg : command.arguments()) {
+					usageString.append(arg.getHelpString()).append(" ");
 				}
 				usages[i] = usageString.toString().trim();
 			}
@@ -323,63 +358,117 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	void updateHelpForCommands(List<RegisteredCommand> commands) {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
+		Set<String> namespacedCommandNames = new HashSet<>();
 
 		for (RegisteredCommand command : commands) {
-			// Generate short description
-			final String shortDescription;
-			final Optional<String> shortDescriptionOptional = command.shortDescription();
-			final Optional<String> fullDescriptionOptional = command.fullDescription();
-			if (shortDescriptionOptional.isPresent()) {
-				shortDescription = shortDescriptionOptional.get();
-			} else if (fullDescriptionOptional.isPresent()) {
-				shortDescription = fullDescriptionOptional.get();
-			} else {
-				shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
-			}
-
-			// Generate full description
-			StringBuilder sb = new StringBuilder();
-			if (fullDescriptionOptional.isPresent()) {
-				sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(fullDescriptionOptional.get()).append("\n");
-			}
-
-			generateHelpUsage(sb, command);
-			sb.append("\n");
-
-			// Generate aliases. We make a copy of the StringBuilder because we
-			// want to change the output when we register aliases
-			StringBuilder aliasSb = new StringBuilder(sb.toString());
-			if (command.aliases().length > 0) {
-				sb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE).append(String.join(", ", command.aliases()));
-			}
-
-			// Must be empty string, not null as defined by OBC::CustomHelpTopic
-			String permission = command.permission().getPermission().orElse("");
-
 			// Don't override the plugin help topic
 			String commandPrefix = generateCommandHelpPrefix(command.commandName());
-			helpTopicsToAdd.put(commandPrefix, generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
+
+			// Namespaced commands shouldn't have a help topic, we should save the namespaced command name
+			namespacedCommandNames.add(generateCommandHelpPrefix(command.commandName(), command.namespace()));
+			
+			StringBuilder aliasSb = new StringBuilder();
+			final String shortDescription;
+			
+			// Must be empty string, not null as defined by OBC::CustomHelpTopic
+			final String permission = command.permission().getPermission().orElse("");
+			
+			HelpTopic helpTopic;
+			if (command.helpTopic().isPresent()) {
+				helpTopic = (HelpTopic) command.helpTopic().get();
+				shortDescription = "";
+			} else {
+				// Generate short description
+				final Optional<String> shortDescriptionOptional = command.shortDescription();
+				final Optional<String> fullDescriptionOptional = command.fullDescription();
+				if (shortDescriptionOptional.isPresent()) {
+					shortDescription = shortDescriptionOptional.get();
+				} else if (fullDescriptionOptional.isPresent()) {
+					shortDescription = fullDescriptionOptional.get();
+				} else {
+					shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
+				}
+	
+				// Generate full description
+				StringBuilder sb = new StringBuilder();
+				if (fullDescriptionOptional.isPresent()) {
+					sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(fullDescriptionOptional.get()).append("\n");
+				}
+	
+				generateHelpUsage(sb, command);
+				sb.append("\n");
+	
+				// Generate aliases. We make a copy of the StringBuilder because we
+				// want to change the output when we register aliases
+				aliasSb = new StringBuilder(sb.toString());
+				if (command.aliases().length > 0) {
+					sb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE).append(String.join(", ", command.aliases()));
+				}
+
+				helpTopic = generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission);
+			}
+			helpTopicsToAdd.put(commandPrefix, helpTopic);
 
 			for (String alias : command.aliases()) {
-				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
-				currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
+				if (command.helpTopic().isPresent()) {
+					helpTopic = (HelpTopic) command.helpTopic().get();
+				} else {
+					StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
+					currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
+	
+					// We want to get all aliases (including the original command name),
+					// except for the current alias
+					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
+					aliases.add(command.commandName());
+					aliases.remove(alias);
+	
+					currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
+	
+					// Don't override the plugin help topic
+					commandPrefix = generateCommandHelpPrefix(alias);
+					helpTopic = generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission);
 
-				// We want to get all aliases (including the original command name),
-				// except for the current alias
-				List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
-				aliases.add(command.commandName());
-				aliases.remove(alias);
-
-				currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
-
-				// Don't override the plugin help topic
-				commandPrefix = generateCommandHelpPrefix(alias);
-				helpTopicsToAdd.put(commandPrefix, generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission));
+					// Namespaced commands shouldn't have a help topic, we should save the namespaced alias name
+					namespacedCommandNames.add(generateCommandHelpPrefix(alias, command.namespace()));
+				}
+				helpTopicsToAdd.put(commandPrefix, helpTopic);
 			}
 		}
 
 		// We have to use helpTopics.put (instead of .addTopic) because we're overwriting an existing help topic, not adding a new help topic
 		getHelpMap().putAll(helpTopicsToAdd);
+
+		// We also have to remove help topics for namespaced command names
+		for (String namespacedCommandName : namespacedCommandNames) {
+			getHelpMap().remove(namespacedCommandName);
+		}
+	}
+
+	private void fixNamespaces() {
+		Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
+		CommandDispatcher<Source> resourcesDispatcher = getResourcesDispatcher();
+		// Remove namespaces
+		for (String command : namespacesToFix) {
+			knownCommands.remove(command);
+			removeBrigadierCommands(resourcesDispatcher, command, false, c -> true);
+		}
+
+		// Add back certain minecraft: namespace commands
+		RootCommandNode<Source> resourcesRootNode = resourcesDispatcher.getRoot();
+		RootCommandNode<Source> brigadierRootNode = getBrigadierDispatcher().getRoot();
+		for (CommandNode<Source> node : minecraftCommandNamespaces.getChildren()) {
+			knownCommands.put(node.getName(), wrapToVanillaCommandWrapper(node));
+			resourcesRootNode.addChild(node);
+
+			// VanillaCommandWrappers in the CommandMap defer to the Brigadier dispatcher when executing.
+			// While the minecraft namespace usually does not exist in the Brigadier dispatcher, in the case of a
+			//  command conflict we do need this node to exist separately from the unnamespaced version to keep the
+			//  commands separate.
+			brigadierRootNode.addChild(node);
+		}
+		// Clear minecraftCommandNamespaces for dealing with command conflicts after the server is enabled
+		//  See `CommandAPIBukkit#postCommandRegistration`
+		minecraftCommandNamespaces = new RootCommandNode<>();
 	}
 
 	@Override
@@ -475,31 +564,35 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
 			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
 
-			CommandMap map = paper.getCommandMap();
-			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
+			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
 			RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
 
-			// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
-			// in `CraftServer#setVanillaCommands`
-			Command command = wrapToVanillaCommandWrapper(resultantNode);
-			map.register("minecraft", command);
+			String name = resultantNode.getLiteral();
+			String namespace = registeredCommand.namespace();
+			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
 
-			// Adding permissions to these Commands usually happens in `CommandAPIBukkit#onEnable`
-			command.setPermission(permNode);
-
-			// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
-			root.addChild(resultantNode);
-			root.addChild(namespaceNode(resultantNode));
+			registerCommand(knownCommands, root, name, permNode, namespace, resultantNode);
 
 			// Do the same for the aliases
 			for(LiteralCommandNode<Source> node: aliasNodes) {
-				command = wrapToVanillaCommandWrapper(node);
-				map.register("minecraft", command);
+				registerCommand(knownCommands, root, node.getLiteral(), permNode, namespace, node);
+			}
 
-				command.setPermission(permNode);
-
-				root.addChild(node);
-				root.addChild(namespaceNode(node));
+			Collection<CommandNode<Source>> minecraftNamespacesToFix = minecraftCommandNamespaces.getChildren();
+			if (!minecraftNamespacesToFix.isEmpty()) {
+				// Adding new `minecraft` namespace nodes to the Brigadier dispatcher
+				//  usually happens in `CommandAPIBukkit#fixNamespaces`.
+				// Note that the previous calls to `CommandAPIBukkit#registerCommand` in this method
+				//  will have already dealt with adding the nodes here to the resources dispatcher.
+				// We also have to set the permission to simulate the result of `CommandAPIBukkit#fixPermissions`.
+				RootCommandNode<Source> brigadierRootNode = getBrigadierDispatcher().getRoot();
+				for (CommandNode<Source> node : minecraftNamespacesToFix) {
+					Command minecraftNamespaceCommand = wrapToVanillaCommandWrapper(node);
+					knownCommands.put(node.getName(), minecraftNamespaceCommand);
+					minecraftNamespaceCommand.setPermission(permNode);
+					brigadierRootNode.addChild(node);
+				}
+				minecraftCommandNamespaces = new RootCommandNode<>();
 			}
 
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
@@ -512,26 +605,86 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original) {
-		// Adapted from a section of `CraftServer#syncCommands`
-		LiteralCommandNode<Source> clone = new LiteralCommandNode<>(
-			"minecraft:" + original.getLiteral(),
-			original.getCommand(),
-			original.getRequirement(),
-			original.getRedirect(),
-			original.getRedirectModifier(),
-			original.isFork()
-		);
+	private void registerCommand(Map<String, Command> knownCommands, RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
+		// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
+		// in `CraftServer#setVanillaCommands`
+		Command command = wrapToVanillaCommandWrapper(resultantNode);
+		knownCommands.putIfAbsent(name, command);
 
-		for (CommandNode<Source> child : original.getChildren()) {
-			clone.addChild(child);
+		// Adding permissions to these Commands usually happens in `CommandAPIBukkit#fixPermissions`
+		command.setPermission(permNode);
+
+		// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
+		root.addChild(resultantNode);
+
+		// Handle namespace
+		LiteralCommandNode<Source> namespacedNode = CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace);
+		if (namespace.equals("minecraft")) {
+			// The minecraft namespace version should be registered as a straight alias of the original command, since
+			//  the `minecraft:name` node does not exist in the Brigadier dispatcher, which is referenced by
+			//  VanillaCommandWrapper (note this is not true if there is a command conflict, but
+			//  `CommandAPIBukkit#postCommandRegistration` will deal with this later using `minecraftCommandNamespaces`).
+			knownCommands.putIfAbsent("minecraft:" + name, command);
+		} else {
+			// A custom namespace should be registered like a separate command, so that it can reference the namespaced
+			//  node, rather than the original unnamespaced node
+			Command namespacedCommand = wrapToVanillaCommandWrapper(namespacedNode);
+			knownCommands.putIfAbsent(namespacedCommand.getName(), namespacedCommand);
+			namespacedCommand.setPermission(permNode);
 		}
-		return clone;
+		// In both cases, add the node to the resources dispatcher
+		root.addChild(namespacedNode);
 	}
 
 	@Override
-	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node) {
-		return getBrigadierDispatcher().register(node);
+	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
+		RootCommandNode<Source> rootNode = getBrigadierDispatcher().getRoot();
+
+		LiteralCommandNode<Source> builtNode = node.build();
+		String name = node.getLiteral();
+		if (namespace.equals("minecraft")) {
+			if (namespacesToFix.contains("minecraft:" + name)) {
+				// This command wants to exist as `minecraft:name`
+				// However, another command has requested that `minecraft:name` be removed
+				// We'll keep track of everything that should be `minecraft:name` in
+				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
+				minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, "minecraft"));
+			}
+		} else {
+			// Make sure to remove the `minecraft:name` and
+			//  `minecraft:namespace:name` commands Bukkit will create
+			fillNamespacesToFix(name, namespace + ":" + name);
+
+			// Create the namespaced node
+			rootNode.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace));
+		}
+
+		// Add the main node to dispatcher
+		//  We needed to wait until after `fillNamespacesToFix` was called to do this, in case a previous 
+		//  `minecraft:name` version of the command needed to be saved separately before this node was added
+		rootNode.addChild(builtNode);
+		
+		return builtNode;
+	}
+
+	private void fillNamespacesToFix(String... namespacedCommands) {
+		for (String namespacedCommand : namespacedCommands) {
+			// We'll remove these commands later when fixNamespaces is called
+			if (!namespacesToFix.add("minecraft:" + namespacedCommand)) {
+				continue;
+			}
+
+			// If this is the first time considering this command for removal
+			// and there is already a command with this name in the dispatcher
+			// then, the command currently in the dispatcher is supposed to appear as `minecraft:command`
+			CommandNode<Source> currentNode = getBrigadierDispatcher().getRoot().getChild(namespacedCommand);
+			if(currentNode != null) {
+				// We'll keep track of everything that should be `minecraft:command` in
+				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
+				// TODO: Ideally, we should be working without this cast to LiteralCommandNode. I don't know if this can fail
+				minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode((LiteralCommandNode<Source>) currentNode, "minecraft"));
+			}
+		}
 	}
 
 	@Override
@@ -722,6 +875,26 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
 	}
 	
+	/**
+	 * Initializes the CommandAPI's implementation of an NBT API. If you are shading
+	 * the CommandAPI, you should be using
+	 * {@link CommandAPIConfig#initializeNBTAPI(Class, Function)} in your
+	 * {@code onLoad} method instead of calling this method.
+	 *
+	 * @param <T>                     the type that the NBT compound container class
+	 *                                is
+	 * @param nbtContainerClass       the NBT compound container class. For example,
+	 *                                {@code NBTContainer.class}
+	 * @param nbtContainerConstructor a function that takes an Object (NMS
+	 *                                {@code NBTTagCompound}) and returns an
+	 *                                instance of the provided NBT compound
+	 *                                container. For example,
+	 *                                {@code NBTContainer::new}.
+	 */
+	public static <T> void initializeNBTAPI(Class<T> nbtContainerClass, Function<Object, T> nbtContainerConstructor) {
+		getConfiguration().lateInitializeNBT(nbtContainerClass, nbtContainerConstructor);
+	}
+	
 	protected void registerBukkitRecipesSafely(Iterator<Recipe> recipes) {
 		Recipe recipe;
 		while (recipes.hasNext()) {
@@ -733,8 +906,29 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 			} catch (IllegalStateException e) { // From CraftingManager - "Duplicate recipe ignored with ID %id%"
 				assert true; // Can't re-register registered recipes. Not an error.
+			} catch (Exception e) {
+				if (recipe instanceof Keyed keyedRecipe) {
+					CommandAPI.logError("Failed to register recipe " + keyedRecipe.getKey() + ": " + e.getMessage());
+				} else {
+					CommandAPI.logError("Failed to register recipe: " + e.getMessage());
+				}
 			}
 		}
-		
 	}
+
+	boolean isInvalidNamespace(String commandName, String namespace) {
+		if (namespace == null) {
+			throw new NullPointerException("Parameter 'namespace' was null when registering command /" + commandName + "!");
+		}
+		if (namespace.isEmpty()) {
+			CommandAPI.logNormal("Registering command '" + commandName + "' using the default namespace because an empty namespace was given!");
+			return true;
+		}
+		if (!CommandAPIHandler.NAMESPACE_PATTERN.matcher(namespace).matches()) {
+			CommandAPI.logNormal("Registering comand '" + commandName + "' using the default namespace because an invalid namespace (" + namespace + ") was given. Only 0-9, a-z, underscores, periods and hyphens are allowed!");
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -69,7 +69,7 @@ public class EntitySelectorArgument {
 
 		@Override
 		public <CommandSourceStack> Entity parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-			return (Entity) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_ONE_ENTITY);
+			return (Entity) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_ONE_ENTITY, true);
 		}
 
 		@Override
@@ -106,7 +106,7 @@ public class EntitySelectorArgument {
 
 		@Override
 		public <CommandSourceStack> Player parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-			return (Player) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_ONE_PLAYER);
+			return (Player) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_ONE_PLAYER, true);
 		}
 
 		@Override
@@ -124,12 +124,24 @@ public class EntitySelectorArgument {
 	@SuppressWarnings("rawtypes")
 	public static class ManyEntities extends Argument<Collection> {
 
+		private final boolean allowEmpty;
+
 		/**
 		 * An argument that represents many entities
 		 * @param nodeName the name of the node for this argument
 		 */
 		public ManyEntities(String nodeName) {
+			this(nodeName, true);
+		}
+		
+		/**
+		 * An argument that represents many entities
+		 * @param nodeName the name of the node for this argument
+		 * @param allowEmpty whether this entity selector should allow no entities found, or should throw an error instead
+		 */
+		public ManyEntities(String nodeName, boolean allowEmpty) {
 			super(nodeName, CommandAPIBukkit.get()._ArgumentEntity(ArgumentSubType.ENTITYSELECTOR_MANY_ENTITIES));
+			this.allowEmpty = allowEmpty;
 		}
 
 		@Override
@@ -145,7 +157,7 @@ public class EntitySelectorArgument {
 		@SuppressWarnings("unchecked")
 		@Override
 		public <CommandSourceStack> Collection<Entity> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-			return (Collection<Entity>) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_MANY_ENTITIES);
+			return (Collection<Entity>) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_MANY_ENTITIES, this.allowEmpty);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -168,12 +180,24 @@ public class EntitySelectorArgument {
 	@SuppressWarnings("rawtypes")
 	public static class ManyPlayers extends Argument<Collection> {
 
+		private final boolean allowEmpty;
+
 		/**
 		 * An argument that represents many players
 		 * @param nodeName the name of the node for this argument
 		 */
 		public ManyPlayers(String nodeName) {
+			this(nodeName, true);
+		}
+		
+		/**
+		 * An argument that represents many players
+		 * @param nodeName the name of the node for this argument
+		 * * @param allowEmpty whether this entity selector should allow no entities found, or should throw an error instead
+		 */
+		public ManyPlayers(String nodeName, boolean allowEmpty) {
 			super(nodeName, CommandAPIBukkit.get()._ArgumentEntity(ArgumentSubType.ENTITYSELECTOR_MANY_PLAYERS));
+			this.allowEmpty = allowEmpty;
 		}
 
 		@Override
@@ -189,7 +213,7 @@ public class EntitySelectorArgument {
 		@SuppressWarnings("unchecked")
 		@Override
 		public <CommandSourceStack> Collection<Player> parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-			return (Collection<Player>) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_MANY_PLAYERS);
+			return (Collection<Player>) CommandAPIBukkit.<CommandSourceStack>get().getEntitySelector(cmdCtx, key, ArgumentSubType.ENTITYSELECTOR_MANY_PLAYERS, allowEmpty);
 		}
 
 		@SuppressWarnings("unchecked")

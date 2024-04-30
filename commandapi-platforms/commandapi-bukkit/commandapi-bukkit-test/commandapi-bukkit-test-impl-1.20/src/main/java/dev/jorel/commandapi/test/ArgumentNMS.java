@@ -400,8 +400,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		return baseNMS.getEntitySelector(cmdCtx, key, subType);
+	public Object getEntitySelector(CommandContext cmdCtx, String key, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
+		return baseNMS.getEntitySelector(cmdCtx, key, subType, allowEmpty);
 	}
 
 	@Override
@@ -516,9 +516,9 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext cmdCtx, String key)
+	public Object getPotionEffect(CommandContext cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException {
-		return baseNMS.getPotionEffect(cmdCtx, key);
+		return baseNMS.getPotionEffect(cmdCtx, key, subType);
 	}
 
 	@Override

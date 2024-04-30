@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -114,6 +114,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7e0da4e4c64919cd058a19539e4af849"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7e0da4e4c64919cd058a19539e4af849">shouldHookPaperReload</a> (boolean hooked)</td></tr>
 <tr class="memdesc:a7e0da4e4c64919cd058a19539e4af849"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> to hook into Paper's <code><a class="el" href="">ServerResourcesReloadedEvent</a></code> when available if true.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7e0da4e4c64919cd058a19539e4af849">More...</a><br /></td></tr>
 <tr class="separator:a7e0da4e4c64919cd058a19539e4af849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2d40ade51f3ba300c0d72e98f8b5a19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#af2d40ade51f3ba300c0d72e98f8b5a19">useMojangMappings</a> (boolean useMojangMappings)</td></tr>
+<tr class="memdesc:af2d40ade51f3ba300c0d72e98f8b5a19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should use Mojang mappings as opposed to Spigot's mappings for internal calls.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#af2d40ade51f3ba300c0d72e98f8b5a19">More...</a><br /></td></tr>
+<tr class="separator:af2d40ade51f3ba300c0d72e98f8b5a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61004beb690842a80795681a5316ac17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a61004beb690842a80795681a5316ac17">usePluginNamespace</a> ()</td></tr>
+<tr class="separator:a61004beb690842a80795681a5316ac17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae97f4c51e31d22224b42e91ab1a329f9"><td class="memItemLeft" align="right" valign="top"><a id="ae97f4c51e31d22224b42e91ab1a329f9" name="ae97f4c51e31d22224b42e91ab1a329f9"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setNamespace</b> (String namespace)</td></tr>
+<tr class="separator:ae97f4c51e31d22224b42e91ab1a329f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5937a42ed58ca8b8f8d4a2d3cdce6c23"><td class="memItemLeft" align="right" valign="top"><a id="a5937a42ed58ca8b8f8d4a2d3cdce6c23" name="a5937a42ed58ca8b8f8d4a2d3cdce6c23"></a>
 <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
 <tr class="separator:a5937a42ed58ca8b8f8d4a2d3cdce6c23"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,6 +354,52 @@ S - the executor class (normal case) </li>
 
 </div>
 </div>
+<a id="af2d40ade51f3ba300c0d72e98f8b5a19" name="af2d40ade51f3ba300c0d72e98f8b5a19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2d40ade51f3ba300c0d72e98f8b5a19">&#9670;&nbsp;</a></span>useMojangMappings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a> dev.jorel.commandapi.CommandAPIBukkitConfig.useMojangMappings </td>
+          <td>(</td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>useMojangMappings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should use Mojang mappings as opposed to Spigot's mappings for internal calls. </p>
+<p >If set to true, the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> will use Mojang mappings.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">useMojangMappings</td><td>whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should use Mojang mappings for internal calls </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html" title="A class that contains information needed to configure the CommandAPI on Bukkit-based servers.">CommandAPIBukkitConfig</a> </dd></dl>
+
+</div>
+</div>
+<a id="a61004beb690842a80795681a5316ac17" name="a61004beb690842a80795681a5316ac17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61004beb690842a80795681a5316ac17">&#9670;&nbsp;</a></span>usePluginNamespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a> dev.jorel.commandapi.CommandAPIBukkitConfig.usePluginNamespace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html" title="A class that contains information needed to configure the CommandAPI on Bukkit-based servers.">CommandAPIBukkitConfig</a> </dd></dl>
+
+</div>
+</div>
 <a id="a3c6bdf78912f86c84031dfb33dccc74b" name="a3c6bdf78912f86c84031dfb33dccc74b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c6bdf78912f86c84031dfb33dccc74b">&#9670;&nbsp;</a></span>verboseOutput()</h2>
 
@@ -388,7 +442,7 @@ S - the executor class (normal case) </li>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

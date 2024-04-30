@@ -230,7 +230,15 @@ extends ExecutableCommand<Impl, CommandSender>
 	}
 
 	/**
-	 * Registers this command
+	 * Registers this command with the default namespace
 	 */
-	public abstract void register();
+	public void register() {
+		register(CommandAPI.getConfiguration().getNamespace());
+	}
+
+	/**
+	 * Registers this command with a custom {@link String} namespace
+	 */
+	public abstract void register(String namespace);
+
 }

@@ -25,7 +25,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>9.3.0</version>
+	<version>9.4.0</version>
 	<packaging>pom</packaging>
 
 	<name>commandapi</name>
@@ -61,15 +61,12 @@
 		<!-- Main core code -->
 		<module>commandapi-core</module>
 
-		<!-- Platform implementations -->
+		<!-- Platform implementations (includes documentation code) -->
 		<module>commandapi-platforms</module>
 		<module>commandapi-kotlin</module>
 
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
-
-		<!-- Documentation code -->
-		<module>commandapi-documentation-code</module>
 
 		<!-- Code coverage reports -->
 		<module>commandapi-codecov</module>
@@ -143,7 +140,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.8</version>
+					<version>0.8.12</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

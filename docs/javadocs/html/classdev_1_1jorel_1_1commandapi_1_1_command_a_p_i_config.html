@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -129,6 +129,12 @@ Impl&#160;</td><td class="memItemRight" valign="bottom"><b>addSkipSenderProxy</b
 <tr class="memitem:a945fd5cda6b89d9c45f73232c781fea9"><td class="memItemLeft" align="right" valign="top"><a id="a945fd5cda6b89d9c45f73232c781fea9" name="a945fd5cda6b89d9c45f73232c781fea9"></a>
 Impl&#160;</td><td class="memItemRight" valign="bottom"><b>addSkipSenderProxy</b> (List&lt; String &gt; names)</td></tr>
 <tr class="separator:a945fd5cda6b89d9c45f73232c781fea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fdcbd0c132281338149dac6e58cf998"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a7fdcbd0c132281338149dac6e58cf998">setNamespace</a> (String namespace)</td></tr>
+<tr class="memdesc:a7fdcbd0c132281338149dac6e58cf998"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the default namespace to use when register commands.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a7fdcbd0c132281338149dac6e58cf998">More...</a><br /></td></tr>
+<tr class="separator:a7fdcbd0c132281338149dac6e58cf998"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd634c6df590c935827d8773a492b79f"><td class="memItemLeft" align="right" valign="top">abstract Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#acd634c6df590c935827d8773a492b79f">usePluginNamespace</a> ()</td></tr>
+<tr class="memdesc:acd634c6df590c935827d8773a492b79f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should use the plugin's name as the default namespace.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#acd634c6df590c935827d8773a492b79f">More...</a><br /></td></tr>
+<tr class="separator:acd634c6df590c935827d8773a492b79f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71d3ddced6c3f5f65cdf1a03ef8259cf"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_chainable_builder.html#a71d3ddced6c3f5f65cdf1a03ef8259cf">instance</a> ()</td></tr>
 <tr class="memdesc:a71d3ddced6c3f5f65cdf1a03ef8259cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the instance of this class with the class Impl.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1_chainable_builder.html#a71d3ddced6c3f5f65cdf1a03ef8259cf">More...</a><br /></td></tr>
 <tr class="separator:a71d3ddced6c3f5f65cdf1a03ef8259cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,6 +234,33 @@ S - the executor class (normal case) </li>
 
 </div>
 </div>
+<a id="a7fdcbd0c132281338149dac6e58cf998" name="a7fdcbd0c132281338149dac6e58cf998"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fdcbd0c132281338149dac6e58cf998">&#9670;&nbsp;</a></span>setNamespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">dev.jorel.commandapi.CommandAPIConfig</a>&lt; Impl &gt;.setNamespace </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>namespace</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the default namespace to use when register commands. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">namespace</td><td>the namespace to use when register commands </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html" title="A class to contain information about how to configure the CommandAPI during its loading step.">CommandAPIConfig</a> </dd></dl>
+
+</div>
+</div>
 <a id="ab1452399d3ec55fc079c620deaa9483b" name="ab1452399d3ec55fc079c620deaa9483b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab1452399d3ec55fc079c620deaa9483b">&#9670;&nbsp;</a></span>silentLogs()</h2>
 
@@ -283,6 +316,35 @@ S - the executor class (normal case) </li>
 
 </div>
 </div>
+<a id="acd634c6df590c935827d8773a492b79f" name="acd634c6df590c935827d8773a492b79f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd634c6df590c935827d8773a492b79f">&#9670;&nbsp;</a></span>usePluginNamespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">abstract Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">dev.jorel.commandapi.CommandAPIConfig</a>&lt; Impl &gt;.usePluginNamespace </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should use the plugin's name as the default namespace. </p>
+<p >If called, any call to <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a7fdcbd0c132281338149dac6e58cf998">CommandAPIConfig#setNamespace(String)</a></code> will be ignored</p>
+<dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html" title="A class to contain information about how to configure the CommandAPI during its loading step.">CommandAPIConfig</a> </dd></dl>
+
+</div>
+</div>
 <a id="a3c6bdf78912f86c84031dfb33dccc74b" name="a3c6bdf78912f86c84031dfb33dccc74b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c6bdf78912f86c84031dfb33dccc74b">&#9670;&nbsp;</a></span>verboseOutput()</h2>
 
@@ -317,7 +379,7 @@ S - the executor class (normal case) </li>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

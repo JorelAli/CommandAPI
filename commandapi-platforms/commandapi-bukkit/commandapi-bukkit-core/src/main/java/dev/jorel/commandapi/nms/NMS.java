@@ -29,7 +29,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -310,7 +309,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException; // Throws exception in 1.19.3
 
-	Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType)
+	Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType, boolean allowEmpty)
 		throws CommandSyntaxException;
 
 	EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
@@ -364,7 +363,7 @@ public interface NMS<CommandListenerWrapper> {
 	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 		throws CommandSyntaxException;
 
-	PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+	Object getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException;
 
 	Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
@@ -436,7 +435,7 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param node The LiteralCommandNode to wrap
 	 * @return A VanillaCommandWrapper representing the given node
 	 */
-	Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandListenerWrapper> node);
+	Command wrapToVanillaCommandWrapper(CommandNode<CommandListenerWrapper> node);
 
 	/**
 	 * Checks if a Brigadier command node is being handled by Bukkit's BukkitCommandWrapper

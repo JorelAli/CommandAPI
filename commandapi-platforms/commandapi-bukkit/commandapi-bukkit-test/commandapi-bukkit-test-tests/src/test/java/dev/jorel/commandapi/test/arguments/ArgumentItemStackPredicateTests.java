@@ -3,6 +3,7 @@ package dev.jorel.commandapi.test.arguments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -55,10 +57,18 @@ class ArgumentItemStackPredicateTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// /test dirt
-		server.dispatchCommand(player, "test dirt");
-		assertTrue(results.get().test(new ItemStack(Material.DIRT)));
-		
+		// I don't know why, but for some reason, in 1.20.5 you can't have
+		// an item predicate that doesn't contain a # character?
+		if (version.lessThan(MCVersion.V1_20_5)) {
+			// /test dirt
+			server.dispatchCommand(player, "test dirt");
+			assertTrue(results.get().test(new ItemStack(Material.DIRT)));
+		} else {
+			// /test #axes
+			server.dispatchCommand(player, "test #axes");
+			assertTrue(results.get().test(new ItemStack(Material.DIAMOND_AXE)));
+		}
+
 		// TODO: Not sure why this fails, but it does!
 		// /test dirt
 //		server.dispatchCommand(player, "test dirt{Count:3b}");
@@ -92,28 +102,48 @@ class ArgumentItemStackPredicateTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 		
-		// Identical to the ItemStackArgument tests
+		// Identical to the ItemStackArgument tests, except ItemStackPredicates have a slightly
+		// different list of possible values because it can also accept * and tags (starting with #)
+		List<String> itemPredicateNames = new ArrayList<>(MockPlatform.getInstance().getAllItemNames());
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			itemPredicateNames.add(0, "#");
+			itemPredicateNames.add(1, "*");
+		}
 		
 		// /test
 		// All items should be suggested
-		assertEquals(MockPlatform.getInstance().getAllItemNames(), server.getSuggestions(player, "test "));
+		assertEquals(itemPredicateNames, server.getSuggestions(player, "test "));
 	
 		// /test x
 		// All items starting with 'a' should be suggested, as well as items which
 		// are underscore-separated and start with 'a', such as 'wooden_axe'
-		assertEquals(MockPlatform.getInstance().getAllItemNames().stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
+		assertEquals(itemPredicateNames.stream().filter(s -> s.contains(":a") || s.contains("_a")).toList(), server.getSuggestions(player, "test a"));
 		
-		// test dirt
-		// Completed item names should suggest open brackets
-		assertEquals(List.of("{"), server.getSuggestions(player, "test dirt"));
+		// /test dirt
+		// Completed item names should suggest open curly braces (or square brackets in 1.20.5+)
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertEquals(List.of("["), server.getSuggestions(player, "test dirt"));
+		} else {
+			assertEquals(List.of("{"), server.getSuggestions(player, "test dirt"));
+		}
 		
-		// test dirt{
+		// /test dirt{
+		// /test dirt[ (1.20.5+)
 		// NBT has no suggestions
-		assertEquals(List.of(), server.getSuggestions(player, "test dirt{"));
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt["));
+		} else {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt{"));
+		}
 		
-		// test dirt{}
+		// /test dirt{}
+		// /test dirt[] (1.20.5+)
 		// NBT has no suggestions
-		assertEquals(List.of(), server.getSuggestions(player, "test dirt{}"));
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt[]"));
+		} else {
+			assertEquals(List.of(), server.getSuggestions(player, "test dirt{}"));
+		}
 	}
 
 }

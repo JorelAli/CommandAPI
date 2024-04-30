@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -111,6 +111,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9eae8aaa1a1a243328b618be7c88f5d7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_players.html#a9eae8aaa1a1a243328b618be7c88f5d7">ManyPlayers</a> (String nodeName)</td></tr>
 <tr class="memdesc:a9eae8aaa1a1a243328b618be7c88f5d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents many players.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_players.html#a9eae8aaa1a1a243328b618be7c88f5d7">More...</a><br /></td></tr>
 <tr class="separator:a9eae8aaa1a1a243328b618be7c88f5d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19001e25db3bff529affa9ee3da73d6f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_players.html#a19001e25db3bff529affa9ee3da73d6f">ManyPlayers</a> (String nodeName, boolean allowEmpty)</td></tr>
+<tr class="memdesc:a19001e25db3bff529affa9ee3da73d6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">An argument that represents many players.  <a href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_players.html#a19001e25db3bff529affa9ee3da73d6f">More...</a><br /></td></tr>
+<tr class="separator:a19001e25db3bff529affa9ee3da73d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae48fd4d28341d4752ffcea4a75228e30"><td class="memItemLeft" align="right" valign="top"><a id="ae48fd4d28341d4752ffcea4a75228e30" name="ae48fd4d28341d4752ffcea4a75228e30"></a>
 Class&lt; Collection &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPrimitiveType</b> ()</td></tr>
 <tr class="separator:ae48fd4d28341d4752ffcea4a75228e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,7 +132,7 @@ List&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getEn
 <p >@apiNote Returns a <code><a class="el" href="">Collection</a></code><code class="JavaDocCode">&lt;</code><code><a class="el" href="">Player</a></code><code class="JavaDocCode">&gt;</code> object </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9eae8aaa1a1a243328b618be7c88f5d7" name="a9eae8aaa1a1a243328b618be7c88f5d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9eae8aaa1a1a243328b618be7c88f5d7">&#9670;&nbsp;</a></span>ManyPlayers()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eae8aaa1a1a243328b618be7c88f5d7">&#9670;&nbsp;</a></span>ManyPlayers() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,6 +151,46 @@ List&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getEn
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">nodeName</td><td>the name of the node for this argument </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a19001e25db3bff529affa9ee3da73d6f" name="a19001e25db3bff529affa9ee3da73d6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19001e25db3bff529affa9ee3da73d6f">&#9670;&nbsp;</a></span>ManyPlayers() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dev.jorel.commandapi.arguments.EntitySelectorArgument.ManyPlayers.ManyPlayers </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>nodeName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>allowEmpty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>An argument that represents many players. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nodeName</td><td>the name of the node for this argument<ul>
+<li></li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">allowEmpty</td><td>whether this entity selector should allow no entities found, or should throw an error instead </td></tr>
   </table>
   </dd>
 </dl>
@@ -190,7 +233,7 @@ List&lt; String &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getEn
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html">EntitySelectorArgument</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument_1_1_many_players.html">ManyPlayers</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

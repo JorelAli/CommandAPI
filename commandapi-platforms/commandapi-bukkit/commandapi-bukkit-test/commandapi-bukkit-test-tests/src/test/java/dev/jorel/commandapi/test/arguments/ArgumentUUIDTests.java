@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.UUIDArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -58,7 +59,11 @@ class ArgumentUUIDTests extends TestBase {
 
 		// /test blah
 		// Fails because 'blah' is not a valid UUID
-		assertCommandFailsWith(player, "test blah", "Invalid UUID");
+		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
+			assertCommandFailsWith(player, "test blah", "Invalid UUID at position 5: test <--[HERE]");
+		} else {
+			assertCommandFailsWith(player, "test blah", "Invalid UUID");
+		}
 
 		assertNoMoreResults(results);
 	}

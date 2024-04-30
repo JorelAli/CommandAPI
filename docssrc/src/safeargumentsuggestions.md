@@ -62,7 +62,7 @@ The list of supported arguments are displayed in the following table. The parame
 |                                       [`NBTCompoundArgument`](./argument_nbt.md) | `de.tr7zw.nbtapi.NBTContainer`                 |
 |               [`ObjectiveArgument`](./argument_objectives.md#objective-argument) | **`org.bukkit.scoreboard.Objective`**          |
 |                [`OfflinePlayerArgument`](./argument_entities.md#player-argument) | `org.bukkit.OfflinePlayer`                     |
-|                                     [`ParticleArgument`](./argument_particle.md) | `org.bukkit.Particle`                          |
+|                                    [`ParticleArgument`](./argument_particles.md) | `org.bukkit.Particle`                          |
 |                       [`PlayerArgument`](./argument_entities.md#player-argument) | `org.bukkit.entity.Player`                     |
 |                                   [`PotionEffectArgument`](./argument_potion.md) | `org.bukkit.potion.PotionEffectType`           |
 |                                         [`RecipeArgument`](./argument_recipe.md) | `org.bukkit.inventory.Recipe`                  |

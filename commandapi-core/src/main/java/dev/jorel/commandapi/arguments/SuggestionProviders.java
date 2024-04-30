@@ -38,5 +38,10 @@ public enum SuggestionProviders {
 	/**
 	 * A suggestion provider for the EntityTypeArgument
 	 */
-	ENTITIES; 
+	ENTITIES,
+
+	/**
+	 * A suggestion provider for the PotionEffectArgument
+	 */
+	POTION_EFFECTS;
 }

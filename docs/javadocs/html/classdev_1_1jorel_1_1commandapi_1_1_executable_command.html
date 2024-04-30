@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -174,9 +174,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4d0a2bc9e44461cb19931379702755e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#a4d0a2bc9e44461cb19931379702755e1">override</a> ()</td></tr>
 <tr class="memdesc:a4d0a2bc9e44461cb19931379702755e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides a command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#a4d0a2bc9e44461cb19931379702755e1">More...</a><br /></td></tr>
 <tr class="separator:a4d0a2bc9e44461cb19931379702755e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2fc5eefd1535316ea2b2d1611c1b488"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#aa2fc5eefd1535316ea2b2d1611c1b488">register</a> ()</td></tr>
-<tr class="memdesc:aa2fc5eefd1535316ea2b2d1611c1b488"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#aa2fc5eefd1535316ea2b2d1611c1b488">More...</a><br /></td></tr>
-<tr class="separator:aa2fc5eefd1535316ea2b2d1611c1b488"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4ff3e3c8d5bacc9c07ffb2822d5a599"><td class="memItemLeft" align="right" valign="top"><a id="ac4ff3e3c8d5bacc9c07ffb2822d5a599" name="ac4ff3e3c8d5bacc9c07ffb2822d5a599"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>register</b> ()</td></tr>
+<tr class="memdesc:ac4ff3e3c8d5bacc9c07ffb2822d5a599"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers this command with the default namespace. <br /></td></tr>
+<tr class="separator:ac4ff3e3c8d5bacc9c07ffb2822d5a599"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19878e7d47c58dfc7fe8a6e8256df5d9"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#a19878e7d47c58dfc7fe8a6e8256df5d9">register</a> (String namespace)</td></tr>
+<tr class="memdesc:a19878e7d47c58dfc7fe8a6e8256df5d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers this command with a custom <code><a class="el" href="">String</a></code> namespace.  <a href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#a19878e7d47c58dfc7fe8a6e8256df5d9">More...</a><br /></td></tr>
+<tr class="separator:a19878e7d47c58dfc7fe8a6e8256df5d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b832fb173c83dca863be802b89f2f4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html">CommandAPIExecutor</a>&lt; CommandSender, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_command_sender.html">AbstractCommandSender</a>&lt;? extends CommandSender &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable.html#a9b832fb173c83dca863be802b89f2f4f">getExecutor</a> ()</td></tr>
 <tr class="memdesc:a9b832fb173c83dca863be802b89f2f4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the executors that this command has.  <a href="classdev_1_1jorel_1_1commandapi_1_1_executable.html#a9b832fb173c83dca863be802b89f2f4f">More...</a><br /></td></tr>
 <tr class="separator:a9b832fb173c83dca863be802b89f2f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -459,12 +463,12 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
 </div><div class="memdoc">
 
 <p>Overrides a command. </p>
-<p >Effectively the same as unregistering the command using <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af80c6e832cee1fd3e8e7e5ef52f98fb5" title="Unregisters a command.">CommandAPI.unregister()</a> and then registering the command using .<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#aa2fc5eefd1535316ea2b2d1611c1b488" title="Registers this command.">register()</a> </p>
+<p >Effectively the same as unregistering the command using <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#af80c6e832cee1fd3e8e7e5ef52f98fb5" title="Unregisters a command.">CommandAPI.unregister()</a> and then registering the command using .<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#ac4ff3e3c8d5bacc9c07ffb2822d5a599" title="Registers this command with the default namespace.">register()</a> </p>
 
 </div>
 </div>
-<a id="aa2fc5eefd1535316ea2b2d1611c1b488" name="aa2fc5eefd1535316ea2b2d1611c1b488"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2fc5eefd1535316ea2b2d1611c1b488">&#9670;&nbsp;</a></span>register()</h2>
+<a id="a19878e7d47c58dfc7fe8a6e8256df5d9" name="a19878e7d47c58dfc7fe8a6e8256df5d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19878e7d47c58dfc7fe8a6e8256df5d9">&#9670;&nbsp;</a></span>register()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -475,7 +479,8 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
         <tr>
           <td class="memname">abstract void <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">dev.jorel.commandapi.ExecutableCommand</a>&lt; Impl, CommandSender &gt;.register </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>namespace</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -486,9 +491,9 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
 </table>
 </div><div class="memdoc">
 
-<p>Registers this command. </p>
+<p>Registers this command with a custom <code><a class="el" href="">String</a></code> namespace. </p>
 
-<p>Reimplemented in <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command.html#a4a836605f8dcd3e435eae587fcae709b">dev.jorel.commandapi.AbstractCommandAPICommand&lt; Impl, Argument, CommandSender &gt;</a>, and <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a08c8aea02a7dcf4011bcccbd6096f96b">dev.jorel.commandapi.AbstractCommandTree&lt; Impl, Argument, CommandSender &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command.html#a0023a76ee597132bc7eb585d0751b842">dev.jorel.commandapi.AbstractCommandAPICommand&lt; Impl, Argument, CommandSender &gt;</a>, and <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#adf7f775e95252c73f07bc2441dd1fc33">dev.jorel.commandapi.AbstractCommandTree&lt; Impl, Argument, CommandSender &gt;</a>.</p>
 
 </div>
 </div>
@@ -893,7 +898,7 @@ final CommandMetaData&lt; CommandSender &gt;&#160;</td><td class="memItemRight" 
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html">ExecutableCommand</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

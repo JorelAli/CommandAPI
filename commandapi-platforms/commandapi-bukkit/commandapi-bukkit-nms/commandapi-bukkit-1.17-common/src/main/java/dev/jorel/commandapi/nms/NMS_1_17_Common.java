@@ -36,7 +36,6 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.wrappers.*;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.arguments.*;
@@ -69,12 +68,12 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_17_R1.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_17_R1.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
@@ -336,7 +335,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType) throws CommandSyntaxException {
+	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have
@@ -357,9 +356,17 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 					for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
 						result.add(entity.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_ENTITIES_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<org.bukkit.entity.Entity>();
+					if (allowEmpty) {
+						yield new ArrayList<org.bukkit.entity.Entity>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_MANY_PLAYERS:
 				try {
@@ -367,9 +374,17 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 					for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
 						result.add(player.getBukkitEntity());
 					}
-					yield result;
+					if (result.isEmpty() && !allowEmpty) {
+						throw EntityArgument.NO_PLAYERS_FOUND.create();
+					} else {
+						yield result;
+					}
 				} catch (CommandSyntaxException e) {
-					yield new ArrayList<Player>();
+					if (allowEmpty) {
+						yield new ArrayList<Player>();
+					} else {
+						throw e;
+					}
 				}
 			case ENTITYSELECTOR_ONE_ENTITY:
 				yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
@@ -567,8 +582,12 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
-		return PotionEffectType.getById(Registry.MOB_EFFECT.getId(MobEffectArgument.getEffect(cmdCtx, key)));
+	public Object getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch (subType) {
+			case POTION_EFFECT_POTION_EFFECT -> CraftPotionEffectType.getById(Registry.MOB_EFFECT.getId(MobEffectArgument.getEffect(cmdCtx, key)));
+			case POTION_EFFECT_NAMESPACEDKEY -> fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Override
@@ -653,6 +672,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 			};
 			case BIOMES -> net.minecraft.commands.synchronization.SuggestionProviders.AVAILABLE_BIOMES;
 			case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+			case POTION_EFFECTS -> (context, builder) -> SharedSuggestionProvider.suggestResource(Registry.MOB_EFFECT.keySet(), builder);
 			default -> (context, builder) -> Suggestions.empty();
 		};
 	}
@@ -663,6 +683,15 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		SimpleFunctionWrapper[] result = new SimpleFunctionWrapper[customFunctions.size()];
 		for (int i = 0, size = customFunctions.size(); i < size; i++) {
 			result[i] = convertFunction(customFunctions.get(i));
+		}
+		return result;
+	}
+
+	@Override
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
+			result.add(fromResourceLocation(resourceLocation));
 		}
 		return result;
 	}
@@ -684,7 +713,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 

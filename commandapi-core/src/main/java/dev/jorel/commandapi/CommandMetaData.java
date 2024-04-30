@@ -48,6 +48,11 @@ final class CommandMetaData<CommandSender> {
 	Optional<String[]> usageDescription = Optional.empty();
 
 	/**
+	 * An optional HelpTopic object for the command (for Bukkit)
+	 */
+	Optional<Object> helpTopic = Optional.empty();
+	
+	/**
 	 * Create command metadata
 	 * @param commandName The command's name
 	 *
@@ -69,6 +74,7 @@ final class CommandMetaData<CommandSender> {
 		this.shortDescription = original.shortDescription.isPresent() ? Optional.of(original.shortDescription.get()) : Optional.empty();
 		this.fullDescription = original.fullDescription.isPresent() ? Optional.of(original.fullDescription.get()) : Optional.empty();
 		this.usageDescription = original.usageDescription.isPresent() ? Optional.of(original.usageDescription.get()) : Optional.empty();
+		this.helpTopic = original.helpTopic.isPresent() ? Optional.of(original.helpTopic.get()) : Optional.empty();
 	}
 
 }

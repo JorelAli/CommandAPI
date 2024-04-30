@@ -20,6 +20,7 @@ var searchData=
   ['resultingexecutor_3c_20player_2c_20bukkitplayer_20_3e_17',['ResultingExecutor&lt; Player, BukkitPlayer &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
   ['resultingexecutor_3c_20remoteconsolecommandsender_2c_20bukkitremoteconsolecommandsender_20_3e_18',['ResultingExecutor&lt; RemoteConsoleCommandSender, BukkitRemoteConsoleCommandSender &gt;',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_resulting_executor.html',1,'dev::jorel::commandapi::executors']]],
   ['rootcommandnode_19',['RootCommandNode',['../classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html',1,'com::mojang::brigadier::tree']]],
-  ['rotation_20',['Rotation',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html',1,'dev::jorel::commandapi::wrappers']]],
-  ['rotationargument_21',['RotationArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html',1,'dev::jorel::commandapi::arguments']]]
+  ['rootcommandnode_3c_20source_20_3e_20',['RootCommandNode&lt; Source &gt;',['../classcom_1_1mojang_1_1brigadier_1_1tree_1_1_root_command_node.html',1,'com::mojang::brigadier::tree']]],
+  ['rotation_21',['Rotation',['../classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html',1,'dev::jorel::commandapi::wrappers']]],
+  ['rotationargument_22',['RotationArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_rotation_argument.html',1,'dev::jorel::commandapi::arguments']]]
 ];

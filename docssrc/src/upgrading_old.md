@@ -360,7 +360,7 @@ new EntitySelectorArgument<Player>("target", EntitySelector.ONE_PLAYER);
 
 ### Particle arguments
 
-Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./argument_particle.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
+Particle arguments no longer return Bukkit's `org.bukkit.Particle` enum, but now return a wrapper `dev.jorel.commandapi.wrappers.ParticleData` instead. More information about this wrapper class and how to use it can be found on the [particle arguments page](./argument_particles.md). To update, change any `Particle` casts into a `ParticleData` cast instead:
 
 ```java
 new CommandAPICommand("mycommand")

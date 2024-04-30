@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
@@ -43,9 +44,9 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.Registry;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
+import org.bukkit.Registry;
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
@@ -68,12 +69,12 @@ import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_20_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.potion.CraftPotionEffectType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
@@ -86,7 +87,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.CommandAPI;
@@ -115,7 +115,9 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandResultCallback;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.FunctionInstantiationException;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
@@ -138,7 +140,9 @@ import net.minecraft.commands.arguments.item.ItemArgument;
 import net.minecraft.commands.arguments.item.ItemInput;
 import net.minecraft.commands.arguments.item.ItemPredicateArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.commands.execution.ExecutionContext;
 import net.minecraft.commands.functions.CommandFunction;
+import net.minecraft.commands.functions.InstantiatedFunction;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess.Frozen;
@@ -170,6 +174,7 @@ import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.SimpleReloadInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Unit;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -289,15 +294,59 @@ public class NMS_1_20_R3 extends NMS_Common {
 	public final String convert(ParticleData<?> particle) {
 		return CraftParticle.createParticleParam(particle.particle(), particle.data()).writeToString();
 	}
+	
+	/**
+	 * An implementation of {@link ServerFunctionManager#execute(CommandFunction, CommandSourceStack)} with a specified
+	 * command result callback instead of {@link CommandResultCallback.EMPTY}
+	 * @param commandFunction the command function to run
+	 * @param css the command source stack to execute this command
+	 * @return the result of our function. This is either 0 is the command failed, or greater than 0 if the command succeeded
+	 */
+	private final int runCommandFunction(CommandFunction<CommandSourceStack> commandFunction, CommandSourceStack css) {
+		// Profile the function. We want to simulate the execution sequence exactly
+		ProfilerFiller profiler = this.<MinecraftServer>getMinecraftServer().getProfiler();
+		profiler.push(() -> "function " + commandFunction.id());
+
+		// Store our function result
+		AtomicInteger result = new AtomicInteger();
+		CommandResultCallback onCommandResult = (succeeded, resultValue) -> result.set(resultValue);
+
+		try {
+			final InstantiatedFunction<CommandSourceStack> instantiatedFunction = commandFunction.instantiate((CompoundTag) null, this.getBrigadierDispatcher(), css);
+			net.minecraft.commands.Commands.executeCommandInContext(css, (executioncontext) -> {
+				ExecutionContext.queueInitialFunctionCall(executioncontext, instantiatedFunction, css, onCommandResult);
+			});
+		} catch (FunctionInstantiationException functionInstantiationException) {
+			// We don't care if the function failed to instantiate
+			assert true;
+		} catch (Exception exception) {
+			LogUtils.getLogger().warn("Failed to execute function {}", commandFunction.id(), exception);
+		} finally {
+			profiler.pop();
+		}
+
+		return result.get();
+	}
 
 	// Converts NMS function to SimpleFunctionWrapper
 	private final SimpleFunctionWrapper convertFunction(CommandFunction<CommandSourceStack> commandFunction) {
-		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> {
-			this.<MinecraftServer>getMinecraftServer().getFunctions().execute(commandFunction, css);
-			return 1;
-		};
+		ToIntFunction<CommandSourceStack> appliedObj = (CommandSourceStack css) -> runCommandFunction(commandFunction, css);
+		
+		// Unpack the commands by instantiating the function with no CSS, then retrieving its entries
+		String[] commands = new String[0];
+		try {
+			final InstantiatedFunction<CommandSourceStack> instantiatedFunction = commandFunction.instantiate((CompoundTag) null, this.getBrigadierDispatcher(), null);
 
-		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.id()), appliedObj, new String[0]);
+			List<?> cArr = instantiatedFunction.entries();
+			commands = new String[cArr.size()];
+			for (int i = 0, size = cArr.size(); i < size; i++) {
+				commands[i] = cArr.get(i).toString();
+			}
+		} catch (FunctionInstantiationException functionInstantiationException) {
+			// We don't care if the function failed to instantiate
+			assert true;
+		}
+		return new SimpleFunctionWrapper(fromResourceLocation(commandFunction.id()), appliedObj, commands);
 	}
 
 	@Override
@@ -390,7 +439,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 
 	@Override
 	public final Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str,
-			ArgumentSubType subType) throws CommandSyntaxException {
+			ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
 
 		// We override the rule whereby players need "minecraft.command.selector" and
 		// have to have level 2 permissions in order to use entity selectors. We're
@@ -410,9 +459,17 @@ public class NMS_1_20_R3 extends NMS_Common {
 				for (Entity entity : argument.findEntities(cmdCtx.getSource())) {
 					result.add(entity.getBukkitEntity());
 				}
-				yield result;
+				if (result.isEmpty() && !allowEmpty) {
+					throw EntityArgument.NO_ENTITIES_FOUND.create();
+				} else {
+					yield result;
+				}
 			} catch (CommandSyntaxException e) {
-				yield new ArrayList<org.bukkit.entity.Entity>();
+				if (allowEmpty) {
+					yield new ArrayList<org.bukkit.entity.Entity>();
+				} else {
+					throw e;
+				}
 			}
 		case ENTITYSELECTOR_MANY_PLAYERS:
 			try {
@@ -420,9 +477,17 @@ public class NMS_1_20_R3 extends NMS_Common {
 				for (ServerPlayer player : argument.findPlayers(cmdCtx.getSource())) {
 					result.add(player.getBukkitEntity());
 				}
-				yield result;
+				if (result.isEmpty() && !allowEmpty) {
+					throw EntityArgument.NO_PLAYERS_FOUND.create();
+				} else {
+					yield result;
+				}
 			} catch (CommandSyntaxException e) {
-				yield new ArrayList<Player>();
+				if (allowEmpty) {
+					yield new ArrayList<Player>();
+				} else {
+					throw e;
+				}
 			}
 		case ENTITYSELECTOR_ONE_ENTITY:
 			yield argument.findSingleEntity(cmdCtx.getSource()).getBukkitEntity();
@@ -625,10 +690,12 @@ public class NMS_1_20_R3 extends NMS_Common {
 	}
 
 	@Override
-	public PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
-			throws CommandSyntaxException {
-		return PotionEffectType.getByKey(fromResourceLocation(
-				BuiltInRegistries.MOB_EFFECT.getKey(ResourceArgument.getMobEffect(cmdCtx, key).value())));
+	public Object getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
+		return switch (subType) {
+			case POTION_EFFECT_POTION_EFFECT -> CraftPotionEffectType.minecraftToBukkit(ResourceArgument.getMobEffect(cmdCtx, key).value());
+			case POTION_EFFECT_NAMESPACEDKEY -> fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
 	}
 
 	@Differs(from = "1.20.1", by = "ResourceLocationArgument#getRecipe returns RecipeHolder now. Recipe id is access via id() instead of getId()")
@@ -739,6 +806,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 		};
 		case BIOMES -> _ArgumentSyntheticBiome()::listSuggestions;
 		case ENTITIES -> net.minecraft.commands.synchronization.SuggestionProviders.SUMMONABLE_ENTITIES;
+		case POTION_EFFECTS -> (context, builder) -> SharedSuggestionProvider.suggestResource(BuiltInRegistries.MOB_EFFECT.keySet(), builder);
 		default -> (context, builder) -> Suggestions.empty();
 		};
 	}
@@ -753,6 +821,15 @@ public class NMS_1_20_R3 extends NMS_Common {
 		}
 		return convertedCustomFunctions;
 	}
+	
+	@Override
+	public Set<NamespacedKey> getTags() {
+		Set<NamespacedKey> result = new HashSet<>();
+		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
+			result.add(fromResourceLocation(resourceLocation));
+		}
+		return result;
+	}
 
 	@Override
 	public World getWorldForCSS(CommandSourceStack css) {
@@ -765,7 +842,7 @@ public class NMS_1_20_R3 extends NMS_Common {
 	}
 
 	@Override
-	public Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node) {
+	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
 		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 

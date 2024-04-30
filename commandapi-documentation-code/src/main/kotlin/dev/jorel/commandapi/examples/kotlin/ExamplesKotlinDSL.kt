@@ -624,6 +624,25 @@ commandAPICommand("potion") {
     }
 }
 /* ANCHOR_END: argumentPotion1 */
+/* ANCHOR: argumentPotion2 */
+commandAPICommand("potion") {
+    playerArgument("target")
+    potionEffectArgument("potion", true)
+    timeArgument("duration")
+    integerArgument("strength")
+    anyExecutor { _, args ->
+        val target = args["target"] as Player
+        val potionKey = args["potion"] as NamespacedKey
+        val duration = args["duration"] as Int
+        val strength = args["strength"] as Int
+
+        val potion = PotionEffectType.getByKey(potionKey)!!
+
+        // Add the potion effect to the target player
+        target.addPotionEffect(PotionEffect(potion, duration, strength))
+    }
+}
+/* ANCHOR_END: argumentPotion2 */
 }
 
 fun argument_primitives() {
@@ -910,7 +929,7 @@ fun help() {
 /* ANCHOR: help1 */
 commandAPICommand("mycmd") {
     withShortDescription("Says hi")
-    withFullDescription("Broadcasts ho to everyone on the server")
+    withFullDescription("Broadcasts hi to everyone on the server")
     anyExecutor { _, _ ->
         Bukkit.broadcastMessage("Hi!")
     }

@@ -71,5 +71,15 @@ public enum ArgumentSubType {
 	 * Multiple scoreholders. Returns a
 	 * {@link Collection}{@code <}{@link String}{@code >}
 	 */
-	SCOREHOLDER_MULTIPLE;
+	SCOREHOLDER_MULTIPLE,
+
+	/**
+	 * A PotionEffectType. Returns a {@link org.bukkit.potion.PotionEffectType}
+	 */
+	POTION_EFFECT_POTION_EFFECT,
+
+	/**
+	 * A PotionEffectType. Returns a {@link org.bukkit.NamespacedKey}
+	 */
+	POTION_EFFECT_NAMESPACEDKEY;
 }

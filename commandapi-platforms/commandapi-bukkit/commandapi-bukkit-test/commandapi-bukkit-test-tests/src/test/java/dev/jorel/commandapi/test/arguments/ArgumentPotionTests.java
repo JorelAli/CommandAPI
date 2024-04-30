@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.Arrays;
 
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,6 +94,34 @@ class ArgumentPotionTests extends TestBase {
 			server.dispatchCommand(player, "test " + MockPlatform.getInstance().getBukkitPotionEffectTypeName(potionEffect));
 			assertEquals(potionEffect, results.get());
 		}
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void executionTestWithPotionEffectArgumentNamespaced() {
+		Mut<NamespacedKey> results = Mut.of();
+
+		new CommandAPICommand("test")
+			.withArguments(new PotionEffectArgument.NamespacedKey("potion"))
+			.executesPlayer((player, args) -> {
+				results.set((NamespacedKey) args.get("potion"));
+			})
+			.register();
+
+		PlayerMock player = server.addPlayer();
+
+		server.dispatchCommand(player, "test speed");
+		assertEquals(NamespacedKey.minecraft("speed"), results.get());
+
+		server.dispatchCommand(player, "test minecraft:speed");
+		assertEquals(NamespacedKey.minecraft("speed"), results.get());
+
+		server.dispatchCommand(player, "test unknowneffect");
+		assertEquals(NamespacedKey.minecraft("unknowneffect"), results.get());
+
+		server.dispatchCommand(player, "test custom:unknowneffect");
+		assertEquals(NamespacedKey.fromString("custom:unknowneffect"), results.get());
 
 		assertNoMoreResults(results);
 	}

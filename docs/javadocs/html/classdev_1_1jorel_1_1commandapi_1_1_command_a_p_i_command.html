@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.3.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -117,6 +117,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a53b06b0e9e2729ca9b68ba8401638f31"><td class="memItemLeft" align="right" valign="top"><a id="a53b06b0e9e2729ca9b68ba8401638f31" name="a53b06b0e9e2729ca9b68ba8401638f31"></a>
 <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b> ()</td></tr>
 <tr class="separator:a53b06b0e9e2729ca9b68ba8401638f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92baec17739b9cf285be7019f219e645"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a92baec17739b9cf285be7019f219e645">withHelp</a> (HelpTopic helpTopic)</td></tr>
+<tr class="memdesc:a92baec17739b9cf285be7019f219e645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <code><a class="el" href="">HelpTopic</a></code> for this command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a92baec17739b9cf285be7019f219e645">More...</a><br /></td></tr>
+<tr class="separator:a92baec17739b9cf285be7019f219e645"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b07d37762bf88c919126e12f456cafc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a0b07d37762bf88c919126e12f456cafc">register</a> (String namespace)</td></tr>
+<tr class="memdesc:a0b07d37762bf88c919126e12f456cafc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the command with a given namespace.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#a0b07d37762bf88c919126e12f456cafc">More...</a><br /></td></tr>
+<tr class="separator:a0b07d37762bf88c919126e12f456cafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab03c89a9f43afcc5d556fc508df830d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ab03c89a9f43afcc5d556fc508df830d5">register</a> (JavaPlugin plugin)</td></tr>
+<tr class="memdesc:ab03c89a9f43afcc5d556fc508df830d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers this command with a given <code><a class="el" href="">JavaPlugin</a></code> instance.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html#ab03c89a9f43afcc5d556fc508df830d5">More...</a><br /></td></tr>
+<tr class="separator:ab03c89a9f43afcc5d556fc508df830d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a005836a376d7f98166a55373bccb05dd"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command.html#a005836a376d7f98166a55373bccb05dd">isConverted</a> ()</td></tr>
 <tr class="memdesc:a005836a376d7f98166a55373bccb05dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this command is an automatically converted command.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command.html#a005836a376d7f98166a55373bccb05dd">More...</a><br /></td></tr>
 <tr class="separator:a005836a376d7f98166a55373bccb05dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,10 +159,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac81a5e21479232cdcdab3d87d97bed6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command.html#ac81a5e21479232cdcdab3d87d97bed6b">setSubcommands</a> (List&lt; Impl &gt; subcommands)</td></tr>
 <tr class="memdesc:ac81a5e21479232cdcdab3d87d97bed6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the list of subcommands that this command has.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_command_a_p_i_command.html#ac81a5e21479232cdcdab3d87d97bed6b">More...</a><br /></td></tr>
 <tr class="separator:ac81a5e21479232cdcdab3d87d97bed6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a836605f8dcd3e435eae587fcae709b"><td class="memItemLeft" align="right" valign="top"><a id="a4a836605f8dcd3e435eae587fcae709b" name="a4a836605f8dcd3e435eae587fcae709b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>register</b> ()</td></tr>
-<tr class="memdesc:a4a836605f8dcd3e435eae587fcae709b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers this command. <br /></td></tr>
-<tr class="separator:a4a836605f8dcd3e435eae587fcae709b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74d860e91137953bff5e35e92f459192"><td class="memItemLeft" align="right" valign="top"><a id="a74d860e91137953bff5e35e92f459192" name="a74d860e91137953bff5e35e92f459192"></a>
 Impl&#160;</td><td class="memItemRight" valign="bottom"><b>copy</b> ()</td></tr>
 <tr class="separator:a74d860e91137953bff5e35e92f459192"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1673,6 +1678,58 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isConverted</b></t
 
 </div>
 </div>
+<a id="ab03c89a9f43afcc5d556fc508df830d5" name="ab03c89a9f43afcc5d556fc508df830d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab03c89a9f43afcc5d556fc508df830d5">&#9670;&nbsp;</a></span>register() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dev.jorel.commandapi.CommandAPICommand.register </td>
+          <td>(</td>
+          <td class="paramtype">JavaPlugin&#160;</td>
+          <td class="paramname"><em>plugin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers this command with a given <code><a class="el" href="">JavaPlugin</a></code> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">plugin</td><td>The plugin instance used to determine this command's namespace </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0b07d37762bf88c919126e12f456cafc" name="a0b07d37762bf88c919126e12f456cafc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b07d37762bf88c919126e12f456cafc">&#9670;&nbsp;</a></span>register() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dev.jorel.commandapi.CommandAPICommand.register </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>namespace</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers the command with a given namespace. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">namespace</td><td>The namespace of this command. This cannot be null or empty </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a9c2cfc7c38412c3d92ed91430991e388" name="a9c2cfc7c38412c3d92ed91430991e388"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9c2cfc7c38412c3d92ed91430991e388">&#9670;&nbsp;</a></span>setArguments()</h2>
 
@@ -1804,6 +1861,43 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isConverted</b></t
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">args</td><td>A <code>List</code> that represents the arguments that this command can accept </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this command builder </dd></dl>
+
+</div>
+</div>
+<a id="a92baec17739b9cf285be7019f219e645" name="a92baec17739b9cf285be7019f219e645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92baec17739b9cf285be7019f219e645">&#9670;&nbsp;</a></span>withHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a> dev.jorel.commandapi.CommandAPICommand.withHelp </td>
+          <td>(</td>
+          <td class="paramtype">HelpTopic&#160;</td>
+          <td class="paramname"><em>helpTopic</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the <code><a class="el" href="">HelpTopic</a></code> for this command. </p>
+<p >Using this method will override any declared short description, full description or usage description provided via the following methods: </p><ul>
+<li>
+<code><a class="el" href="">CommandAPICommand#withShortDescription(String)</a></code> </li>
+<li>
+<code><a class="el" href="">CommandAPICommand#withFullDescription(String)</a></code> </li>
+<li>
+<code><a class="el" href="">CommandAPICommand#withUsage(String...)</a></code> </li>
+<li>
+<code><a class="el" href="">CommandAPICommand#withHelp(String, String)</a></code> </li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">helpTopic</td><td>the help topic to use for this command </td></tr>
   </table>
   </dd>
 </dl>
@@ -1960,7 +2054,7 @@ boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isConverted</b></t
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_command.html">CommandAPICommand</a></li>
 				<li class="footer">
-					Generated on Mon Dec 11 2023 10:27:41 for CommandAPI 9.3.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

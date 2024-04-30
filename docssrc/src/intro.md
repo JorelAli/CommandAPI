@@ -18,7 +18,7 @@ Welcome to the documentation for the CommandAPI. The CommandAPI lets you create 
 The CommandAPI does not follow the "standard" method of registering commands. In other words, commands which are registered with the CommandAPI will be registered as pure vanilla Minecraft commands as opposed to Bukkit or Spigot commands. This means that the following implications exist:
 
 - **Commands should not be declared in the `plugin.yml` file.**
-- Commands are automatically registered under the `minecraft` namespace. For example, if you register a command `/hello`, you can also run it using `/minecraft:hello`.
+- Commands are automatically registered under the `minecraft` namespace. For example, if you register a command `/hello`, you can also run it using `/minecraft:hello`. However, you can change this default `minecraft` namespace. More about this [on the command registration page](./commandregistration.md#registering-the-command).
 - Commands are not "linked" to a certain plugin. In other words, you cannot look up which commands are registered by which plugin.
 
 -----
@@ -36,6 +36,15 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 ## Documentation changelog
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
+
+### Documentation changes 9.3.0 \\(\rightarrow\\) 9.4.0
+
+- Updates [Shading the CommandAPI in your plugins](./setup_shading.md) page with spigot-mapped and mojang-mapped dependencies
+- Adds [Velocity](./velocity_intro.md) page to outline how to setup the CommandAPI for Velocity
+- Updates [CommandArguments](./commandarguments.md) to document new additions for safe arguments
+- Updates [Potion effect arguments](./argument_potion.md) to include examples for the newly added `NamespacedKey` variant for the `PotionEffectArgument`
+- Updates [Arguments](./arguments.md) to list the newly added `PotionEffectArgument.NamespacedKey` argument
+- Updates [Particles](./argument_particles.md) page to include both [old particle information](./argument_particle_old.md) and [new particle information](./argument_particle_new.md)
 
 ### Documentation changes 9.2.0 \\(\rightarrow\\) 9.3.0
 
@@ -139,7 +148,7 @@ Here's the list of changes to the documentation between each update. You can vie
 
 ### Documentation changes 7.0.0 \\(\rightarrow\\) 8.0.0
 
-- Updated particle arguments in the [Particle arguments](./argument_particle.md) section.
+- Updated particle arguments in the [Particle arguments](./argument_particles.md) section.
 - Update the [Upgrading guide](./upgrading.md) for the new changes in 8.0.0.
 
 ### Documentation changes 6.5.4 \\(\rightarrow\\) 7.0.0

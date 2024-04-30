@@ -11,6 +11,9 @@ public class InternalVelocityConfig extends InternalConfig {
 	// The server that the CommandAPI is running on
 	private final ProxyServer server;
 
+	// The plugin that loads the CommandAPI
+	private final Object plugin;
+
 	/**
 	 * Creates an {@link InternalVelocityConfig} from a {@link CommandAPIVelocityConfig}
 	 *
@@ -19,6 +22,7 @@ public class InternalVelocityConfig extends InternalConfig {
 	public InternalVelocityConfig(CommandAPIVelocityConfig config) {
 		super(config);
 		this.server = config.server;
+		this.plugin = config.plugin;
 	}
 
 	/**
@@ -26,5 +30,12 @@ public class InternalVelocityConfig extends InternalConfig {
 	 */
 	public ProxyServer getServer() {
 		return server;
+	}
+
+	/**
+	 * @return The plugin that loads the CommandAPI
+	 */
+	public Object getPlugin() {
+		return plugin;
 	}
 }

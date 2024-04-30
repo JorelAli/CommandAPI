@@ -24,6 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.executors.CommandArguments;
+import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -53,6 +54,44 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	
 	@Override
 	public <CommandSourceStack> PotionEffectType parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandSourceStack>get().getPotionEffect(cmdCtx, key);
+		return (PotionEffectType) CommandAPIBukkit.<CommandSourceStack>get().getPotionEffect(cmdCtx, key, ArgumentSubType.POTION_EFFECT_POTION_EFFECT);
 	}
+
+	/**
+	 * An argument that represents the Bukkit PotionEffectType object
+	 *
+	 * @apiNote Returns a {@link org.bukkit.NamespacedKey}
+	 */
+	public static class NamespacedKey extends SafeOverrideableArgument<org.bukkit.NamespacedKey, org.bukkit.NamespacedKey> implements CustomProvidedArgument {
+
+		/**
+		 * Constructs a PotionEffectArgument with the given node name. This returns a {@link org.bukkit.NamespacedKey}
+		 *
+		 * @param nodeName The name of the node for this argument
+		 */
+		public NamespacedKey(String nodeName) {
+			super(nodeName, CommandAPIBukkit.get()._ArgumentMinecraftKeyRegistered(), org.bukkit.NamespacedKey::toString);
+		}
+
+		@Override
+		public SuggestionProviders getSuggestionProvider() {
+			return SuggestionProviders.POTION_EFFECTS;
+		}
+
+		@Override
+		public Class<org.bukkit.NamespacedKey> getPrimitiveType() {
+			return org.bukkit.NamespacedKey.class;
+		}
+
+		@Override
+		public CommandAPIArgumentType getArgumentType() {
+			return CommandAPIArgumentType.POTION_EFFECT;
+		}
+
+		@Override
+		public <CommandSourceStack> org.bukkit.NamespacedKey parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
+			return (org.bukkit.NamespacedKey) CommandAPIBukkit.<CommandSourceStack>get().getPotionEffect(cmdCtx, key, ArgumentSubType.POTION_EFFECT_NAMESPACEDKEY);
+		}
+	}
+
 }

@@ -75,6 +75,7 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 				case V1_20 -> "v1_20_R1";
 				case V1_20_2 -> "v1_20_R2";
 				case V1_20_3 -> "v1_20_R3";
+				case V1_20_5 -> "v1_20_R4";
 				default -> throw new IllegalArgumentException("Unexpected value: " + version);
 			};
 			

@@ -41,7 +41,7 @@ public class InternalConfig {
 	private final boolean useLatestNMSVersion;
 
 	// The message to display when an executor implementation is missing
-	private final String message_missingExecutorImplementation;
+	private final String messageMissingExecutorImplementation;
 
 	// Create a command_registration.json file
 	private final File dispatcherFile;
@@ -50,8 +50,11 @@ public class InternalConfig {
 	private final List<String> skipSenderProxy;
 
 	// NBT API configuration
-	private final Class<?> nbtContainerClass;
-	private final Function<Object, ?> nbtContainerConstructor;
+	private Class<?> nbtContainerClass;
+	private Function<Object, ?> nbtContainerConstructor;
+
+	// The default command namespace
+	private final String namespace;
 
 	/**
 	 * Creates an {@link InternalConfig} from a {@link CommandAPIConfig}
@@ -62,11 +65,12 @@ public class InternalConfig {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
-		this.message_missingExecutorImplementation = config.missingExecutorImplementationMessage;
+		this.messageMissingExecutorImplementation = config.missingExecutorImplementationMessage;
 		this.dispatcherFile = config.dispatcherFile;
 		this.skipSenderProxy = config.skipSenderProxy;
 		this.nbtContainerClass = config.nbtContainerClass;
 		this.nbtContainerConstructor = config.nbtContainerConstructor;
+		this.namespace = config.namespace;
 	}
 
 	/**
@@ -95,7 +99,7 @@ public class InternalConfig {
 	 *         implementation for a given type
 	 */
 	public String getMissingImplementationMessage() {
-		return this.message_missingExecutorImplementation;
+		return this.messageMissingExecutorImplementation;
 	}
 
 	/**
@@ -128,5 +132,16 @@ public class InternalConfig {
 	public Function<Object, ?> getNBTContainerConstructor() {
 		return this.nbtContainerConstructor;
 	}
+	
+	public void lateInitializeNBT(Class<?> nbtContainerClass, Function<Object, ?> nbtContainerConstructor) {
+		this.nbtContainerClass = nbtContainerClass;
+		this.nbtContainerConstructor = nbtContainerConstructor;
+	}
 
+	/**
+	 * @return The default namespace used to register commands
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
 }

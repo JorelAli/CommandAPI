@@ -26,7 +26,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
@@ -121,7 +120,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public final ArgumentType<?> _ArgumentChatComponent() {
+	@Overridden(in = "1.20.5", because = "This now takes in a CommandBuildContext")
+	public ArgumentType<?> _ArgumentChatComponent() {
 		return ComponentArgument.textComponent();
 	}
 
@@ -311,7 +311,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 		throws CommandSyntaxException;
 
 	@Override
-	public final Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	@Overridden(in = "1.20.5", because = "Serializer.toJson now needs a Provider")
+	public Component getAdventureChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
@@ -357,7 +358,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract CommandDispatcher<CommandSourceStack> getResourcesDispatcher();
 
 	@Override
-	public final BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+	@Overridden(in = "1.20.5", because = "Serializer.toJson now needs a Provider")
+	public BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return ComponentSerializer.parse(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key)));
 	}
 
@@ -499,7 +501,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.18")
-	public abstract PotionEffectType getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key)
+	public abstract Object getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType)
 		throws CommandSyntaxException;
 
 	@Override
@@ -566,13 +568,8 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract SimpleFunctionWrapper[] getTag(NamespacedKey key);
 
 	@Override
-	public final Set<NamespacedKey> getTags() {
-		Set<NamespacedKey> result = new HashSet<>();
-		for (ResourceLocation resourceLocation : this.<MinecraftServer>getMinecraftServer().getFunctions().getTagNames()) {
-			result.add(fromResourceLocation(resourceLocation));
-		}
-		return result;
-	}
+	@Unimplemented(because = NAME_CHANGED, info = "See https://github.com/JorelAli/CommandAPI/issues/524")
+	public abstract Set<NamespacedKey> getTags();
 
 	@Override
 	public Team getTeam(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
@@ -596,7 +593,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
-	public abstract Command wrapToVanillaCommandWrapper(LiteralCommandNode<CommandSourceStack> node);
+	public abstract Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")

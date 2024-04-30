@@ -49,6 +49,9 @@ extends CommandAPIConfig<Impl>
 	Class<?> nbtContainerClass = null;
 	Function<Object, ?> nbtContainerConstructor = null;
 
+	boolean usePluginNamespace = false;
+	String namespace = null;
+
 	/**
 	 * Sets verbose output logging for the CommandAPI if true.
 	 *
@@ -149,4 +152,27 @@ extends CommandAPIConfig<Impl>
 		this.nbtContainerConstructor = nbtContainerConstructor;
 		return instance();
 	}
+
+	/**
+	 * Sets the default namespace to use when register commands
+	 *
+	 * @param namespace the namespace to use when register commands
+	 * @return this CommandAPIConfig
+	 */
+	public Impl setNamespace(String namespace) {
+		if (!usePluginNamespace) {
+			this.namespace = namespace;
+		}
+		return instance();
+	}
+
+	/**
+	 * Sets whether the CommandAPI should use the plugin's name as the default namespace
+	 * <p>
+	 * If called, any call to {@link CommandAPIConfig#setNamespace(String)} will be ignored
+	 *
+	 * @return this CommandAPIConfig
+	 */
+	public abstract Impl usePluginNamespace();
+
 }

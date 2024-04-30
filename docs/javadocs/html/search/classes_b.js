@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['namespacedkey_0',['NamespacedKey',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument_1_1_namespaced_key.html',1,'dev.jorel.commandapi.arguments.BiomeArgument.NamespacedKey'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument_1_1_namespaced_key.html',1,'dev.jorel.commandapi.arguments.SoundArgument.NamespacedKey']]],
+  ['namespacedkey_0',['NamespacedKey',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_biome_argument_1_1_namespaced_key.html',1,'dev.jorel.commandapi.arguments.BiomeArgument.NamespacedKey'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_potion_effect_argument_1_1_namespaced_key.html',1,'dev.jorel.commandapi.arguments.PotionEffectArgument.NamespacedKey'],['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_sound_argument_1_1_namespaced_key.html',1,'dev.jorel.commandapi.arguments.SoundArgument.NamespacedKey']]],
   ['namespacedkeyargument_1',['NamespacedKeyArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_namespaced_key_argument.html',1,'dev::jorel::commandapi::arguments']]],
   ['nativecommandexecutor_2',['NativeCommandExecutor',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_command_executor.html',1,'dev::jorel::commandapi::executors']]],
   ['nativeexecutioninfo_3',['NativeExecutionInfo',['../interfacedev_1_1jorel_1_1commandapi_1_1executors_1_1_native_execution_info.html',1,'dev::jorel::commandapi::executors']]],

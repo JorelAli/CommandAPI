@@ -3,9 +3,12 @@ package dev.jorel.commandapi.kotlindsl
 import dev.jorel.commandapi.*
 import dev.jorel.commandapi.arguments.*
 import org.bukkit.command.CommandSender
+import org.bukkit.plugin.java.JavaPlugin
 import java.util.function.Predicate
 
 inline fun commandTree(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
+inline fun commandTree(name: String, namespace: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register(namespace)
+inline fun commandTree(name: String, namespace: JavaPlugin, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register(namespace)
 @Deprecated("This method has been deprecated since version 9.1.0 as it is not needed anymore. See the documentation for more information", ReplaceWith(""), DeprecationLevel.WARNING)
 inline fun commandTree(name: String, predicate: Predicate<CommandSender>, tree: CommandTree.() -> Unit = {}) = CommandTree(name).withRequirement(predicate).apply(tree).register()
 
@@ -52,9 +55,9 @@ inline fun CommandTree.adventureChatArgument(nodeName: String, optional: Boolean
 
 // Entity & Player arguments
 inline fun CommandTree.entitySelectorArgumentOneEntity(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.OneEntity(nodeName).setOptional(optional).apply(block))
-inline fun CommandTree.entitySelectorArgumentManyEntities(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyEntities(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.entitySelectorArgumentManyEntities(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyEntities(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun CommandTree.entitySelectorArgumentOnePlayer(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.OnePlayer(nodeName).setOptional(optional).apply(block))
-inline fun CommandTree.entitySelectorArgumentManyPlayers(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyPlayers(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.entitySelectorArgumentManyPlayers(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntitySelectorArgument.ManyPlayers(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun CommandTree.playerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(PlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.offlinePlayerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(OfflinePlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.entityTypeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(EntityTypeArgument(nodeName).setOptional(optional).apply(block))
@@ -83,7 +86,8 @@ inline fun CommandTree.lootTableArgument(nodeName: String, optional: Boolean = f
 inline fun CommandTree.mathOperationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(MathOperationArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.namespacedKeyArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(NamespacedKeyArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.particleArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(ParticleArgument(nodeName).setOptional(optional).apply(block))
-inline fun CommandTree.potionEffectArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
+inline fun CommandTree.potionEffectArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree =
+	if (useNamespacedKey) then(PotionEffectArgument.NamespacedKey(nodeName).setOptional(optional).apply(block)) else then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
 inline fun CommandTree.recipeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(RecipeArgument(nodeName).setOptional(optional).apply(block))
 
 inline fun CommandTree.soundArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree =
@@ -157,9 +161,9 @@ inline fun Argument<*>.adventureChatArgument(nodeName: String, optional: Boolean
 
 // Entity & Player arguments
 inline fun Argument<*>.entitySelectorArgumentOneEntity(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.OneEntity(nodeName).setOptional(optional).apply(block))
-inline fun Argument<*>.entitySelectorArgumentManyEntities(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyEntities(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.entitySelectorArgumentManyEntities(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyEntities(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun Argument<*>.entitySelectorArgumentOnePlayer(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.OnePlayer(nodeName).setOptional(optional).apply(block))
-inline fun Argument<*>.entitySelectorArgumentManyPlayers(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyPlayers(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.entitySelectorArgumentManyPlayers(nodeName: String, allowEmpty: Boolean = true, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntitySelectorArgument.ManyPlayers(nodeName, allowEmpty).setOptional(optional).apply(block))
 inline fun Argument<*>.playerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(PlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.offlinePlayerArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(OfflinePlayerArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.entityTypeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(EntityTypeArgument(nodeName).setOptional(optional).apply(block))
@@ -188,7 +192,8 @@ inline fun Argument<*>.lootTableArgument(nodeName: String, optional: Boolean = f
 inline fun Argument<*>.mathOperationArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MathOperationArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.namespacedKeyArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(NamespacedKeyArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.particleArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(ParticleArgument(nodeName).setOptional(optional).apply(block))
-inline fun Argument<*>.potionEffectArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
+inline fun Argument<*>.potionEffectArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> =
+	if (useNamespacedKey) then(PotionEffectArgument.NamespacedKey(nodeName).setOptional(optional).apply(block)) else then(PotionEffectArgument(nodeName).setOptional(optional).apply(block))
 inline fun Argument<*>.recipeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(RecipeArgument(nodeName).setOptional(optional).apply(block))
 
 inline fun Argument<*>.soundArgument(nodeName: String, useNamespacedKey: Boolean = false, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> =
