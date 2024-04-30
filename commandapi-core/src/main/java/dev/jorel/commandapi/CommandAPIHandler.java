@@ -49,7 +49,6 @@ import dev.jorel.commandapi.exceptions.CommandConflictException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -93,7 +92,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
 	final Map<String, RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
-	final Map<List<String>, Previewable<?, ?>> previewableArguments; // Arguments with previewable chat
 	static final Pattern NAMESPACE_PATTERN = Pattern.compile("[0-9a-z_.-]+");
 
 	private static CommandAPIHandler<?, ?, ?> instance;
@@ -105,7 +103,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	protected CommandAPIHandler(CommandAPIPlatform<Argument, CommandSender, Source> platform) {
 		this.platform = platform;
 		this.registeredCommands = new LinkedHashMap<>(); // This should be a LinkedHashMap to preserve insertion order
-		this.previewableArguments = new HashMap<>();
 
 		CommandAPIHandler.instance = this;
 	}
@@ -626,78 +623,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			return value.parseArgument(cmdCtx, key, previousArgs);
 		} else {
 			return null;
-		}
-	}
-
-	////////////////////////////////////
-	// SECTION: Previewable Arguments //
-	////////////////////////////////////
-
-	/**
-	 * Handles a previewable argument. This stores the path to the previewable argument
-	 * in {@link CommandAPIHandler#previewableArguments} for runtime resolving
-	 *
-	 * @param previousArguments   The list of arguments that came before this argument
-	 * @param previewableArgument The {@link Previewable} argument
-	 */
-	public void addPreviewableArgument(List<Argument> previousArguments, Argument previewableArgument) {
-		if (!(previewableArgument instanceof Previewable<?, ?> previewable)) {
-			throw new IllegalArgumentException("An argument must implement Previewable to be added as previewable argument");
-		}
-
-		// Generate all paths to the argument
-		List<List<String>> paths = new ArrayList<>();
-		paths.add(new ArrayList<>());
-
-		// TODO: Fix this, the `appendToCommandPaths` method was removed
-		//  A smarter way to get this information should exist
-		//  It probably makes sense to make a custom CommandNode for PreviewableArgument
-		if(true) throw new IllegalStateException("TODO: Fix this method");
-
-		// for (Argument argument : previousArguments) {
-		// 	argument.appendToCommandPaths(paths);
-		// }
-		// previewableArgument.appendToCommandPaths(paths);
-
-		// Insert paths to our map
-		for (List<String> path : paths) {
-			previewableArguments.put(path, previewable);
-		}
-	}
-
-	/**
-	 * Looks up the function to generate a chat preview for a path of nodes in the
-	 * command tree. This is a method internal to the CommandAPI and isn't expected
-	 * to be used by plugin developers (but you're more than welcome to use it as
-	 * you see fit).
-	 *
-	 * @param path a list of Strings representing the path (names of command nodes)
-	 *             to (and including) the previewable argument
-	 * @return a {@link PreviewableFunction} that takes in a {@link PreviewInfo} and returns a
-	 * text Component. If such a function is not available, this will
-	 * return a function that always returns null.
-	 */
-	@SuppressWarnings("unchecked")
-	public Optional<PreviewableFunction<?>> lookupPreviewable(List<String> path) {
-		final Previewable<?, ?> previewable = previewableArguments.get(path);
-		if (previewable != null) {
-			return (Optional<PreviewableFunction<?>>) (Optional<?>) previewable.getPreview();
-		} else {
-			return Optional.empty();
-		}
-	}
-
-	/**
-	 * @param path a list of Strings representing the path (names of command nodes)
-	 *             to (and including) the previewable argument
-	 * @return Whether a previewable is legacy (non-Adventure) or not
-	 */
-	public boolean lookupPreviewableLegacyStatus(List<String> path) {
-		final Previewable<?, ?> previewable = previewableArguments.get(path);
-		if (previewable != null && previewable.getPreview().isPresent()) {
-			return previewable.isLegacy();
-		} else {
-			return true;
 		}
 	}
 

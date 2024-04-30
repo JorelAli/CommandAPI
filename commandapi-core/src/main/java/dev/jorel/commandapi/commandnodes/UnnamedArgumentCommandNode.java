@@ -26,7 +26,7 @@ public class UnnamedArgumentCommandNode<Source, T> extends ArgumentCommandNode<S
 	}
 
 	// A UnnamedArgumentCommandNode is mostly identical to a ArgumentCommandNode
-	//  The only difference is that when a UnnamedArgument is parsed, it does not add its result to the CommandContext
+	//  The only difference is that when an UnnamedArgument is parsed, it does not add its argument result to the CommandContext
 	@Override
 	public void parse(StringReader reader, CommandContextBuilder<Source> contextBuilder) throws CommandSyntaxException {
 		final int start = reader.getCursor();
