@@ -422,7 +422,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 					aliases.add(command.commandName());
 					aliases.remove(alias);
 	
-					currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
+					currentAliasSb.append(String.join(", ", aliases));
 	
 					// Don't override the plugin help topic
 					commandPrefix = generateCommandHelpPrefix(alias);

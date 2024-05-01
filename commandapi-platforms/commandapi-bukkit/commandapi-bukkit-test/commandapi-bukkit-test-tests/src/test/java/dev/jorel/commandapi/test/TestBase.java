@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +37,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestion;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.PaperImplementations;
@@ -82,6 +85,15 @@ public abstract class TestBase {
 		server = null;
 		plugin = null;
 		MockPlatform.unload();
+	}
+
+	public void enableServer() {
+		// Run the CommandAPI's enable tasks
+		assertTrue(CommandAPI.canRegister(), "Server was already enabled! Cannot enable twice!");
+		disablePaperImplementations();
+		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
+		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
+		assertFalse(CommandAPI.canRegister());
 	}
 
 	public static final PlayerCommandExecutor P_EXEC = (player, args) -> {};
