@@ -71,6 +71,7 @@ The list of supported arguments are displayed in the following table. The parame
 |                                           [`SoundArgument`](./argument_sound.md) | `org.bukkit.Sound`                             |
 |                                             [`TeamArgument`](./argument_team.md) | **`org.bukkit.scoreboard.Team`**               |
 |                                             [`TimeArgument`](./argument_time.md) | **`dev.jorel.commandapi.wrappers.Time`**       |
+|                                           [`WorldArgument`](./argument_world.md) | `org.bukkit.World`                             |
 
 -----
 
