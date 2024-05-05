@@ -3,8 +3,6 @@ package dev.jorel.commandapi;
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.regex.Pattern;
-
 /**
  * A class that contains information needed to configure the CommandAPI on Bukkit-based servers.
  */
@@ -14,7 +12,6 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 
 	// Default configuration
 	boolean shouldHookPaperReload = true;
-	boolean shouldUseMojangMappings = false;
 
 	/**
 	 * Creates a new CommandAPIBukkitConfig object. Variables in this
@@ -47,9 +44,16 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	 * 
 	 * @param useMojangMappings whether the CommandAPI should use Mojang mappings for internal calls
 	 * @return this CommandAPIBukkitConfig
+	 * @deprecated Use the `commandapi-bukkit-shade-mojang-mapped` depdendency instead of `commandapi-bukkit-shade` if you want to use mojang mappings.
 	 */
+	@Deprecated(since = "9.5.0", forRemoval = true)
 	public CommandAPIBukkitConfig useMojangMappings(boolean useMojangMappings) {
-		this.shouldUseMojangMappings = useMojangMappings;
+		// A little unconventional, but we really don't need to implement mojang mapping flags
+		// all over the place, we want it to have as minimal interaction as possible so it can
+		// be used by the test framework as a global static flag. Also, we want to set this
+		// as early as possible in the CommandAPI's loading sequence, including before loading
+		// an NMS class, which setup reflection based on `USING_MOJANG_MAPPINGS`.
+		SafeVarHandle.USING_MOJANG_MAPPINGS = useMojangMappings;
 		return this;
 	}
 

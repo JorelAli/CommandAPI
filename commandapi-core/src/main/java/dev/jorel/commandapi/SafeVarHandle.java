@@ -13,7 +13,7 @@ import java.lang.invoke.VarHandle;
  */
 public class SafeVarHandle<Type, FieldType> {
 
-	public static boolean USING_MOJANG_MAPPINGS = false; // This should only be set to true in testing.
+	public static boolean USING_MOJANG_MAPPINGS = MojangMappedVersionHandler.isMojangMapped();
 
 	private VarHandle handle;
 

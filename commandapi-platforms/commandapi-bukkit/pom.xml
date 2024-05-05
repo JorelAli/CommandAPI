@@ -20,8 +20,9 @@
 		<!-- NMS versions -->
 		<module>commandapi-bukkit-nms</module>
 
-		<!-- NMS selector -->
+		<!-- Version selectors -->
 		<module>commandapi-bukkit-vh</module>
+		<module>commandapi-bukkit-mojang-mapped</module>
 
 		<!-- Outputs -->
 		<module>commandapi-bukkit-plugin</module>
