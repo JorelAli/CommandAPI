@@ -50,8 +50,7 @@ public class CommandAPIMain extends JavaPlugin {
 			.useLatestNMSVersion(fileConfig.getBoolean("use-latest-nms-version"))
 			.missingExecutorImplementationMessage(fileConfig.getString("messages.missing-executor-implementation"))
 			.dispatcherFile(fileConfig.getBoolean("create-dispatcher-json") ? new File(getDataFolder(), "command_registration.json") : null)
-			.shouldHookPaperReload(fileConfig.getBoolean("hook-paper-reload"))
-			.useMojangMappings(true);
+			.shouldHookPaperReload(fileConfig.getBoolean("hook-paper-reload"));
 
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
 			if (Bukkit.getPluginManager().getPlugin(pluginName) != null) {
