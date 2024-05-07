@@ -46,7 +46,7 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	 * @return this CommandAPIBukkitConfig
 	 * @deprecated Use the `commandapi-bukkit-shade-mojang-mapped` depdendency instead of `commandapi-bukkit-shade` if you want to use mojang mappings.
 	 */
-	@Deprecated(since = "9.5.0", forRemoval = true)
+	@Deprecated(since = "9.4.1", forRemoval = true)
 	public CommandAPIBukkitConfig useMojangMappings(boolean useMojangMappings) {
 		// A little unconventional, but we really don't need to implement mojang mapping flags
 		// all over the place, we want it to have as minimal interaction as possible so it can
