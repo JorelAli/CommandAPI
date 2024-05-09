@@ -319,14 +319,6 @@ plugins-to-convert:
 
 -----
 
-## Dependencies
-
-Bukkit plugin (shaded) dependencies:
-
-- [Item-NBT-API](https://github.com/tr7zw/Item-NBT-API) (MIT License)
-
------
-
 ## Building the CommandAPI
 
 The CommandAPI is built using the Maven build tool - if you don't have it, you can download it [here](https://maven.apache.org/download.cgi).
