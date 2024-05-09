@@ -120,7 +120,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-shade</artifactId>
-        <version>9.4.0</version>
+        <version>9.4.1</version>
     </dependency>
 </dependencies>
 ```
@@ -130,7 +130,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-shade-mojang-mapped</artifactId>
-        <version>9.4.0</version>
+        <version>9.4.1</version>
     </dependency>
 </dependencies>
 ```
@@ -226,25 +226,25 @@ Next, we declare our dependencies:
 
 ```groovy,build.gradle_(Spigot_Mappings)
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade:9.4.0"
+    implementation "dev.jorel:commandapi-bukkit-shade:9.4.1"
 }
 ```
 
 ```groovy,build.gradle_(Mojang_Mappings)
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT"
+    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1"
 }
 ```
 
 ```kotlin,build.gradle.kts_(Spigot_Mappings)
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade:9.4.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.4.1")
 }
 ```
 
 ```kotlin,build.gradle.kts_(Mojang_Mappings)
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1")
 }
 ```
 
@@ -257,7 +257,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```groovy,build.gradle_(Spigot_Mappings)
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.4.0")
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.4.1")
     }
 
     // TODO: Change this to my own package name
@@ -268,7 +268,7 @@ shadowJar {
 ```groovy,build.gradle_(Mojang_Mappings)
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT")
+        include dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1")
     }
 
     // TODO: Change this to my own package name
@@ -279,7 +279,7 @@ shadowJar {
 ```kotlin,build.gradle.kts_(Spigot_Mappings)
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.4.0"))
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.4.1"))
     }
 
     // TODO: Change this to my own package name
@@ -290,7 +290,7 @@ tasks.withType<ShadowJar> {
 ```kotlin,build.gradle.kts_(Mojang_Mappings)
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.0-SNAPSHOT"))
+        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.4.1"))
     }
 
     // TODO: Change this to my own package name

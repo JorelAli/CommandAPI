@@ -10,7 +10,7 @@ Key points:
   <dependency>
       <groupId>dev.jorel</groupId>
       <artifactId>commandapi-bukkit-plugin</artifactId>
-      <version>9.4.0</version>
+      <version>9.4.1</version>
       <scope>provided</scope>
   </dependency>
   ```

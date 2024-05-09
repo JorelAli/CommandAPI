@@ -139,14 +139,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
 		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
-			// A little unconventional, but we really don't need to implement mojang mapping flags
-			// all over the place, we want it to have as minimal interaction as possible so it can
-			// be used by the test framework as a global static flag. Also, we want to set this
-			// as early as possible in the CommandAPI's loading sequence!
-			if (bukkitConfig.shouldUseMojangMappings) {
-				SafeVarHandle.USING_MOJANG_MAPPINGS = true;
-			}
-
 			CommandAPIBukkit.setInternalConfig(new InternalBukkitConfig(bukkitConfig));
 		} else {
 			CommandAPI.logError("CommandAPIBukkit was loaded with non-Bukkit config!");
@@ -225,7 +217,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			if (paper.isFoliaPresent()) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
-				reloadDataPacks();
+				if (!getConfiguration().skipReloadDatapacks()) {
+					reloadDataPacks();
+				}
 			}
 			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
@@ -422,7 +416,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 					aliases.add(command.commandName());
 					aliases.remove(alias);
 	
-					currentAliasSb.append(ChatColor.WHITE).append(String.join(", ", aliases));
+					currentAliasSb.append(String.join(", ", aliases));
 	
 					// Don't override the plugin help topic
 					commandPrefix = generateCommandHelpPrefix(alias);

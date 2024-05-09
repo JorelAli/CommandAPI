@@ -25,7 +25,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.4.0</version>
+		<version>9.4.1</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -50,6 +50,11 @@
 			<artifactId>commandapi-bukkit-vh</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-mojang-mapped</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -67,13 +72,14 @@
 						<configuration>
 							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
 							<createSourcesJar>true</createSourcesJar>
-							<!-- Remove commandapi-core's VersionHandler in favor of ours which
-								loads CommandAPIBukkit for the current version -->
+							<!-- Remove commandapi-core's VersionHandlers in favor of ours which
+								loads CommandAPIBukkit for the current version, and sets up mojang mappings -->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>
 									<excludes>
 										<exclude>dev/jorel/commandapi/CommandAPIVersionHandler**</exclude>
+										<exclude>dev/jorel/commandapi/MojangMappedVersionHandler**</exclude>
 									</excludes>
 								</filter>
 							</filters>

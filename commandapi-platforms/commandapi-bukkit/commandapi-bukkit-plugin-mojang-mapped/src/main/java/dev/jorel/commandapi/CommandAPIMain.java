@@ -51,7 +51,7 @@ public class CommandAPIMain extends JavaPlugin {
 			.missingExecutorImplementationMessage(fileConfig.getString("messages.missing-executor-implementation"))
 			.dispatcherFile(fileConfig.getBoolean("create-dispatcher-json") ? new File(getDataFolder(), "command_registration.json") : null)
 			.shouldHookPaperReload(fileConfig.getBoolean("hook-paper-reload"))
-			.useMojangMappings(true);
+			.skipReloadDatapacks(fileConfig.getBoolean("skip-initial-datapack-reload"));
 
 		for (String pluginName : fileConfig.getStringList("skip-sender-proxy")) {
 			if (Bukkit.getPluginManager().getPlugin(pluginName) != null) {

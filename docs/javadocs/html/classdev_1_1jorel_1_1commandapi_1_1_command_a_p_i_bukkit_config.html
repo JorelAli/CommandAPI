@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.1</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -114,6 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7e0da4e4c64919cd058a19539e4af849"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7e0da4e4c64919cd058a19539e4af849">shouldHookPaperReload</a> (boolean hooked)</td></tr>
 <tr class="memdesc:a7e0da4e4c64919cd058a19539e4af849"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> to hook into Paper's <code><a class="el" href="">ServerResourcesReloadedEvent</a></code> when available if true.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7e0da4e4c64919cd058a19539e4af849">More...</a><br /></td></tr>
 <tr class="separator:a7e0da4e4c64919cd058a19539e4af849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a486b3a68ae7959ba05d4ba8bf45d3a1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a486b3a68ae7959ba05d4ba8bf45d3a1c">skipReloadDatapacks</a> (boolean skip)</td></tr>
+<tr class="memdesc:a486b3a68ae7959ba05d4ba8bf45d3a1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should skip its datapack reload step after the server has finished loading.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a486b3a68ae7959ba05d4ba8bf45d3a1c">More...</a><br /></td></tr>
+<tr class="separator:a486b3a68ae7959ba05d4ba8bf45d3a1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2d40ade51f3ba300c0d72e98f8b5a19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#af2d40ade51f3ba300c0d72e98f8b5a19">useMojangMappings</a> (boolean useMojangMappings)</td></tr>
 <tr class="memdesc:af2d40ade51f3ba300c0d72e98f8b5a19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should use Mojang mappings as opposed to Spigot's mappings for internal calls.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#af2d40ade51f3ba300c0d72e98f8b5a19">More...</a><br /></td></tr>
 <tr class="separator:af2d40ade51f3ba300c0d72e98f8b5a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -318,6 +321,33 @@ S - the executor class (normal case) </li>
 
 </div>
 </div>
+<a id="a486b3a68ae7959ba05d4ba8bf45d3a1c" name="a486b3a68ae7959ba05d4ba8bf45d3a1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a486b3a68ae7959ba05d4ba8bf45d3a1c">&#9670;&nbsp;</a></span>skipReloadDatapacks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a> dev.jorel.commandapi.CommandAPIBukkitConfig.skipReloadDatapacks </td>
+          <td>(</td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>skip</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should skip its datapack reload step after the server has finished loading. </p>
+<p >This does not skip reloading of datapacks when invoked manually when <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7e0da4e4c64919cd058a19539e4af849">shouldHookPaperReload(boolean)</a></code> is set. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">skip</td><td>whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should skip reloading datapacks when the server has finished loading </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html" title="A class that contains information needed to configure the CommandAPI on Bukkit-based servers.">CommandAPIBukkitConfig</a> </dd></dl>
+
+</div>
+</div>
 <a id="a685dcaf578e4b6582e45b054de3652b3" name="a685dcaf578e4b6582e45b054de3652b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a685dcaf578e4b6582e45b054de3652b3">&#9670;&nbsp;</a></span>useLatestNMSVersion()</h2>
 
@@ -379,6 +409,7 @@ S - the executor class (normal case) </li>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html" title="A class that contains information needed to configure the CommandAPI on Bukkit-based servers.">CommandAPIBukkitConfig</a> </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use the <code>commandapi-bukkit-shade-mojang-mapped</code> depdendency instead of <code>commandapi-bukkit-shade</code> if you want to use mojang mappings. </dd></dl>
 
 </div>
 </div>
@@ -442,7 +473,7 @@ S - the executor class (normal case) </li>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html">CommandAPIBukkitConfig</a></li>
 				<li class="footer">
-					Generated on Tue Apr 30 2024 19:05:58 for CommandAPI 9.4.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Thu May 9 2024 19:47:35 for CommandAPI 9.4.1 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

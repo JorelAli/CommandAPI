@@ -142,6 +142,28 @@ hook-paper-reload: false
 
 -----
 
+### `skip-initial-datapack-reload`
+
+Controls whether the CommandAPI should perform its initial datapack reload when the server has finished loading.
+
+The CommandAPI automatically reloads all datapacks in a similar fashion to `/minecraft:reload` in order to propagate CommandAPI commands into datapack functions and tags. This operation may cause a slight delay to server startup and is not necessary if you are not using datapacks or functions that use CommandAPI commands. This operation can be skipped by setting this value to `false`.
+
+Note that datapacks will still be reloaded if performed manually when `hook-paper-reload` is set to `true` and you run `/minecraft:reload`.
+
+**Default value**
+
+```yml
+skip-initial-datapack-reload: false
+```
+
+**Example value**
+
+```yml
+skip-initial-datapack-reload: true
+```
+
+-----
+
 ### `plugins-to-convert`
 
 Controls the list of plugins to process for command conversion. See [Command conversion](./conversionforowners.md) for more information.

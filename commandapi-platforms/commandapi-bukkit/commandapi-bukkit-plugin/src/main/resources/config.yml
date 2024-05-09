@@ -50,6 +50,12 @@ use-latest-nms-version: false
 # reloading datapacks.
 hook-paper-reload: true
 
+# Skips the initial datapack reload when the server loads (default: false)
+# If "true", the CommandAPI will not reload datapacks when the server has finished
+# loading. Datapacks will still be reloaded if performed manually when "hook-paper-reload"
+# is set to "true" and /minecraft:reload is run.
+skip-initial-datapack-reload: false
+
 ################################################################################
 # Command conversion                                                           #
 ################################################################################

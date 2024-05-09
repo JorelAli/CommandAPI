@@ -12,14 +12,12 @@ import dev.jorel.commandapi.InternalBukkitConfig;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
-import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
@@ -64,11 +62,7 @@ public class CommandNamespaceTests extends TestBase {
 		}
 
 		// Run the CommandAPI's enable tasks, especially `fixNamespaces`
-		assertTrue(CommandAPI.canRegister()); // Make sure we weren't already enabled
-		disablePaperImplementations();
-		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
-		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
-		assertFalse(CommandAPI.canRegister());
+		enableServer();
 
 		// Get a CraftPlayer for running VanillaCommandWrapper commands
 		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());

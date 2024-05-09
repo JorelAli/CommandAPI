@@ -7,7 +7,7 @@
 	<parent>
 		<artifactId>commandapi-platforms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.4.0</version>
+		<version>9.4.1</version>
 	</parent>
 
 	<artifactId>commandapi-bukkit</artifactId>
@@ -20,8 +20,9 @@
 		<!-- NMS versions -->
 		<module>commandapi-bukkit-nms</module>
 
-		<!-- NMS selector -->
+		<!-- Version selectors -->
 		<module>commandapi-bukkit-vh</module>
+		<module>commandapi-bukkit-mojang-mapped</module>
 
 		<!-- Outputs -->
 		<module>commandapi-bukkit-plugin</module>

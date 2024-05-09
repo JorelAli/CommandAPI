@@ -15,7 +15,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-annotations</artifactId>
-          <version>9.4.0</version>
+          <version>9.4.1</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -35,7 +35,7 @@ The annotation system effectively needs to be added twice: Once for compilation 
                       <path>
                           <groupId>dev.jorel</groupId>
                           <artifactId>commandapi-annotations</artifactId>
-                          <version>9.4.0</version>
+                          <version>9.4.1</version>
                       </path>
                   </annotationProcessorPaths>
               </configuration>
@@ -74,15 +74,15 @@ The annotation system effectively needs to be added twice: Once for compilation 
   
   ```groovy,build.gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-annotations:9.4.0"
-      annotationProcessor "dev.jorel:commandapi-annotations:9.4.0"
+      compileOnly "dev.jorel:commandapi-annotations:9.4.1"
+      annotationProcessor "dev.jorel:commandapi-annotations:9.4.1"
   }
   ```
   
   ```kotlin,build.gradle.kts
   dependencies {
-      compileOnly("dev.jorel:commandapi-annotations:9.4.0")
-      annotationProcessor("dev.jorel:commandapi-annotations:9.4.0")
+      compileOnly("dev.jorel:commandapi-annotations:9.4.1")
+      annotationProcessor("dev.jorel:commandapi-annotations:9.4.1")
   }
   ```
   

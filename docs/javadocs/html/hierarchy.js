@@ -330,6 +330,7 @@ var hierarchy =
     [ "com.mojang.brigadier.Message", "interfacecom_1_1mojang_1_1brigadier_1_1_message.html", [
       [ "com.mojang.brigadier.LiteralMessage", "classcom_1_1mojang_1_1brigadier_1_1_literal_message.html", null ]
     ] ],
+    [ "dev.jorel.commandapi.MojangMappedVersionHandler", "interfacedev_1_1jorel_1_1commandapi_1_1_mojang_mapped_version_handler.html", null ],
     [ "dev.jorel.commandapi.arguments.MultiLiteral< Argument< String > >", "interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal.html", [
       [ "dev.jorel.commandapi.arguments.MultiLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html", null ]
     ] ],

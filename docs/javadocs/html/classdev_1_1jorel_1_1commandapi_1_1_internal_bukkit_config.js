@@ -11,5 +11,6 @@ var classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config =
     [ "hasVerboseOutput", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config.html#a7b158ac1ec9a9ee0f807893c15fc2bf7", null ],
     [ "shouldHookPaperReload", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config.html#a6027c901ca22713595adb2bf0ae7b397", null ],
     [ "shouldSkipSenderProxy", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config.html#a0f327ff59e435371a601a1eac415b7fe", null ],
-    [ "shouldUseLatestNMSVersion", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config.html#ad870a7b8a974fba9bde5cb25c5faa6c8", null ]
+    [ "shouldUseLatestNMSVersion", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config.html#ad870a7b8a974fba9bde5cb25c5faa6c8", null ],
+    [ "skipReloadDatapacks", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config.html#a4975349b9b0568a4ec1cf3fc9c559295", null ]
 ];
