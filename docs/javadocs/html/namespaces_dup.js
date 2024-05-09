@@ -118,6 +118,7 @@ var namespaces_dup =
           [ "InternalBukkitConfig", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config.html", "classdev_1_1jorel_1_1commandapi_1_1_internal_bukkit_config" ],
           [ "InternalConfig", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html", "classdev_1_1jorel_1_1commandapi_1_1_internal_config" ],
           [ "IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip" ],
+          [ "MojangMappedVersionHandler", "interfacedev_1_1jorel_1_1commandapi_1_1_mojang_mapped_version_handler.html", null ],
           [ "PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations" ],
           [ "PlatformExecutable", "interfacedev_1_1jorel_1_1commandapi_1_1_platform_executable.html", "interfacedev_1_1jorel_1_1commandapi_1_1_platform_executable" ],
           [ "SafeVarHandle", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
