@@ -5,6 +5,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config =
     [ "missingExecutorImplementationMessage", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#aa5317ba92a442bf3aa71a3c03416c612", null ],
     [ "shouldHookPaperReload", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7e0da4e4c64919cd058a19539e4af849", null ],
     [ "silentLogs", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#ab1452399d3ec55fc079c620deaa9483b", null ],
+    [ "skipReloadDatapacks", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a486b3a68ae7959ba05d4ba8bf45d3a1c", null ],
     [ "useLatestNMSVersion", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a685dcaf578e4b6582e45b054de3652b3", null ],
     [ "useMojangMappings", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#af2d40ade51f3ba300c0d72e98f8b5a19", null ],
     [ "usePluginNamespace", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a61004beb690842a80795681a5316ac17", null ],
