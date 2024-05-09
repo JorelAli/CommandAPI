@@ -12,6 +12,7 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 
 	// Default configuration
 	boolean shouldHookPaperReload = true;
+	boolean skipReloadDatapacks = false;
 
 	/**
 	 * Creates a new CommandAPIBukkitConfig object. Variables in this
@@ -35,6 +36,18 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 	 */
 	public CommandAPIBukkitConfig shouldHookPaperReload(boolean hooked) {
 		this.shouldHookPaperReload = hooked;
+		return this;
+	}
+	
+	/**
+	 * Sets whether the CommandAPI should skip its datapack reload step after the server
+	 * has finished loading. This does not skip reloading of datapacks when invoked manually
+	 * when {@link #shouldHookPaperReload(boolean)} is set.
+	 * @param skip whether the CommandAPI should skip reloading datapacks when the server has finished loading
+	 * @return this CommandAPIBukkitConfig
+	 */
+	public CommandAPIBukkitConfig skipReloadDatapacks(boolean skip) {
+		this.skipReloadDatapacks = skip;
 		return this;
 	}
 	
