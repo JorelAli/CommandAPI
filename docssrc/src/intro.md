@@ -37,6 +37,10 @@ Using the search icon <i class="fas fa-search"></i> in the top left corner, you 
 
 Here's the list of changes to the documentation between each update. You can view the current documentation version at the top of this page.
 
+### Documentation changes 9.4.0 \\(\rightarrow\\) 9.4.1
+
+- Updates [Configuration for server owners](./config.md) page with new `skip-initial-datapack-reload` option.
+
 ### Documentation changes 9.3.0 \\(\rightarrow\\) 9.4.0
 
 - Updates [Shading the CommandAPI in your plugins](./setup_shading.md) page with spigot-mapped and mojang-mapped dependencies

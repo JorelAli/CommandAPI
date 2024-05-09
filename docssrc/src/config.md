@@ -142,7 +142,6 @@ hook-paper-reload: false
 
 -----
 
-
 ### `skip-initial-datapack-reload`
 
 Controls whether the CommandAPI should perform its initial datapack reload when the server has finished loading.
