@@ -28,6 +28,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -69,6 +70,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -91,6 +93,18 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
  * (introducing another NMS_Common module perhaps?
  */
 public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
+
+	private static final Field commandDispatcher;
+
+	static {
+		Field temporary;
+		try {
+			temporary = MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
+		} catch (Exception e) {
+			temporary = null;
+		}
+		commandDispatcher = temporary;
+	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
@@ -350,7 +364,12 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+		if (commandDispatcher != null) {
+			return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+		} else {
+			// Hoping this actually acts as a hotfix and commands at least register with Paper 1.20.6 build 65
+			return getResourcesDispatcher();
+		}
 	}
 
 	@Override
