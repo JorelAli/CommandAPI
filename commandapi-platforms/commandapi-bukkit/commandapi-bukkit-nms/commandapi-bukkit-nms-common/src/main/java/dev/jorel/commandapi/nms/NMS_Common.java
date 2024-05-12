@@ -70,6 +70,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -93,10 +94,16 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.*;
  */
 public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
-	private static final SafeVarHandle<MinecraftServer, CommandDispatcher> commandDispatcher;
+	private static final Field commandDispatcher;
 
 	static {
-		commandDispatcher = SafeVarHandle.ofOrNull(MinecraftServer.class, "vanillaCommandDispatcher", "vanillaCommandDispatcher", CommandDispatcher.class);
+		Field temporary;
+		try {
+			temporary = MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
+		} catch (Exception e) {
+			temporary = null;
+		}
+		commandDispatcher = temporary;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {

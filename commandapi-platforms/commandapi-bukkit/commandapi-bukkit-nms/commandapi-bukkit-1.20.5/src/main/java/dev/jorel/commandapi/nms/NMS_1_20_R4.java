@@ -210,6 +210,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	private static final Field entitySelectorUsesSelector;
 	// private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
+	private static final Field vanillaCommandDispatcher;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -230,6 +231,13 @@ public class NMS_1_20_R4 extends NMS_Common {
 		// itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher");
+		Field commandDispatcher;
+		try {
+			commandDispatcher = MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
+		} catch (NoSuchFieldException | SecurityException e) {
+			commandDispatcher = null;
+		}
+		vanillaCommandDispatcher = commandDispatcher;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -895,7 +903,11 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 	@Override
 	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+		if (vanillaCommandDispatcher != null) {
+			return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+		} else {
+			return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommands(), node);
+		}
 	}
 
 	@Override
