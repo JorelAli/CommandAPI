@@ -13,10 +13,6 @@
 	<artifactId>commandapi-platforms</artifactId>
 	<packaging>pom</packaging>
 
-	<modules>
-		<module>commandapi-bukkit</module>
-	</modules>
-
 	<profiles>
 		<!-- Choose which platforms get built -->
 		<profile>
