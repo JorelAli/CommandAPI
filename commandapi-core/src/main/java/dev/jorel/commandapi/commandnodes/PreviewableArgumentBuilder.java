@@ -65,7 +65,7 @@ public class PreviewableArgumentBuilder<Source, T> extends ArgumentBuilder<Sourc
 	}
 
 	public PreviewableCommandNode<Source, T> build() {
-		final PreviewableCommandNode<Source, T> result = new PreviewableCommandNode<Source, T>(
+		final PreviewableCommandNode<Source, T> result = new PreviewableCommandNode<>(
             previewableFunction, legacy, isListed, 
             getName(), getType(),
 			getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider()
