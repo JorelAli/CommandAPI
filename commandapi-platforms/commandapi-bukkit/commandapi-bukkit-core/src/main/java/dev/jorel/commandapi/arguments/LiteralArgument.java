@@ -157,7 +157,7 @@ public class LiteralArgument extends Argument<String> implements Literal<Argumen
 	}
 
 	@Override
-	public <Source> NodeInformation<Source> linkNode(NodeInformation<Source> previousNodeInformation, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
+	public <Source> NodeInformation<CommandSender, Source> linkNode(NodeInformation<CommandSender, Source> previousNodeInformation, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
 		return Literal.super.linkNode(previousNodeInformation, rootNode, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }

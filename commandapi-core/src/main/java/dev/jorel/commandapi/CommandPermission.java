@@ -147,9 +147,14 @@ public class CommandPermission {
 		return this.permissionNode;
 	}
 
-	CommandPermission negate() {
+	/**
+	 * Sets this permission to be negated.
+	 * You can also achieve this using {@link ExecutableCommand#withoutPermission(CommandPermission)}.
+	 * 
+	 * @return This permission object
+	 */
+	public CommandPermission negate() {
 		this.negated = true;
 		return this;
 	}
-
 }

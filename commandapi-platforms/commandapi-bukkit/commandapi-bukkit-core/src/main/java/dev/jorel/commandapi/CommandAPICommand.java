@@ -1,8 +1,8 @@
 package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.Argument;
-
-import java.util.Optional;
+import dev.jorel.commandapi.help.BukkitHelpTopicWrapper;
+import dev.jorel.commandapi.help.CommandAPIHelpTopic;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.help.HelpTopic;
@@ -26,18 +26,21 @@ public class CommandAPICommand extends AbstractCommandAPICommand<CommandAPIComma
 	/**
 	 * Sets the {@link HelpTopic} for this command. Using this method will override
 	 * any declared short description, full description or usage description provided
-	 * via the following methods:
+	 * via the following methods and similar overloads:
 	 * <ul>
 	 *   <li>{@link CommandAPICommand#withShortDescription(String)}</li>
 	 *   <li>{@link CommandAPICommand#withFullDescription(String)}</li>
 	 *   <li>{@link CommandAPICommand#withUsage(String...)}</li>
 	 *   <li>{@link CommandAPICommand#withHelp(String, String)}</li>
 	 * </ul>
+	 * Further calls to these methods will also be ignored.
+	 * See also {@link ExecutableCommand#withHelp(CommandAPIHelpTopic)}.
+	 * 
 	 * @param helpTopic the help topic to use for this command
 	 * @return this command builder
 	 */
 	public CommandAPICommand withHelp(HelpTopic helpTopic) {
-		this.helpTopic = Optional.of(helpTopic);
+		this.helpTopic = new BukkitHelpTopicWrapper(helpTopic);
 		return instance();
 	}
 

@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Predicate;
 
+import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -16,6 +17,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
 import dev.jorel.commandapi.RegisteredCommand.Node;
+import dev.jorel.commandapi.help.EditableHelpTopic;
 
 public abstract class RegisteredCommandTestBase extends TestBase {
 
@@ -39,7 +41,7 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 
 	@SafeVarargs
 	public final void assertCreatedSimpleRegisteredCommand(String name, NodeBuilder args, List<String>... argsAsStr) {
-		RegisteredCommand expectedCommand = simpleRegisteredCommand(name, "minecraft", args);
+		RegisteredCommand<CommandSender> expectedCommand = simpleRegisteredCommand(name, "minecraft", args);
 
 		assertCreatedRegisteredCommands(expectedCommand.copyWithEmptyNamespace(), expectedCommand);
 
@@ -47,10 +49,10 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 		assertEquals(Arrays.asList(argsAsStr), CommandAPI.getRegisteredCommands().get(0).rootNode().argsAsStr());
 	}
 
-    public RegisteredCommand simpleRegisteredCommand(String name, String namespace, NodeBuilder args, String... aliases) {
-		return new RegisteredCommand(
-			name, aliases, namespace, CommandPermission.NONE,
-			Optional.empty(), Optional.empty(), Optional.empty(),
+    public RegisteredCommand<CommandSender> simpleRegisteredCommand(String name, String namespace, NodeBuilder args, String... aliases) {
+		return new RegisteredCommand<>(
+			name, aliases, namespace,
+			new EditableHelpTopic<>(),
 			args.build()
 		);
 	}
@@ -60,8 +62,8 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 			return new NodeBuilder(name, clazz, executable);
 		}
 
-		public static List<Node> children(NodeBuilder... children) {
-            List<Node> result = new ArrayList<>(children.length);
+		public static List<Node<CommandSender>> children(NodeBuilder... children) {
+            List<Node<CommandSender>> result = new ArrayList<>(children.length);
             for (NodeBuilder child : children) {
                 result.add(child.build());
             }
@@ -73,7 +75,10 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 		private final boolean executable;
 
 		private String helpString;
-		private final List<Node> children;
+		private CommandPermission permission = CommandPermission.NONE;
+		private Predicate<CommandSender> requirements = sender -> true;
+
+		private final List<Node<CommandSender>> children;
 
 		public NodeBuilder(String nodeName, Class<?> clazz, boolean executable) {
 			this.nodeName = nodeName;
@@ -89,6 +94,16 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 			return this;
 		}
 
+		public NodeBuilder permission(CommandPermission permission) {
+			this.permission = permission;
+			return this;
+		}
+
+		public NodeBuilder requirements(Predicate<CommandSender> requirements) {
+			this.requirements = requirements;
+			return this;
+		}
+ 
 		public NodeBuilder withChildren(NodeBuilder... children) {
 			for (NodeBuilder child : children) {
 				this.children.add(child.build());
@@ -96,23 +111,25 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 			return this;
 		}
 
-		public NodeBuilder withChildren(Node... children) {
+		@SafeVarargs
+		public final NodeBuilder withChildren(Node<CommandSender>... children) {
 			return withChildren(Arrays.asList(children));
 		}
 
-        public NodeBuilder withChildren(List<Node> children) {
+        public NodeBuilder withChildren(List<Node<CommandSender>> children) {
             this.children.addAll(children);
             return this;
         }
 
-		public Node build() {
-			return new Node(nodeName, className, helpString, executable, children);
+		public Node<CommandSender> build() {
+			return new Node<CommandSender>(nodeName, className, helpString, executable, permission, requirements, children);
 		}		
 	}
 
-	public void assertCreatedRegisteredCommands(RegisteredCommand... commands) {
-		List<RegisteredCommand> expectedCommands = Arrays.asList(commands);
-		List<RegisteredCommand> actualCommands = CommandAPI.getRegisteredCommands();
+	@SafeVarargs
+	public final void assertCreatedRegisteredCommands(RegisteredCommand<CommandSender>... commands) {
+		List<RegisteredCommand<CommandSender>> expectedCommands = Arrays.asList(commands);
+		List<RegisteredCommand<CommandSender>> actualCommands = CommandAPI.getRegisteredCommands();
 
 		if (expectedCommands.size() != actualCommands.size()) {
 			StringBuilder builder = new StringBuilder();
@@ -127,8 +144,8 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 		}
 
 		for (int i = 0; i < expectedCommands.size(); i++) {
-			RegisteredCommand expectedCommand = expectedCommands.get(i);
-			RegisteredCommand actualCommand = actualCommands.get(i);
+			RegisteredCommand<CommandSender> expectedCommand = expectedCommands.get(i);
+			RegisteredCommand<CommandSender> actualCommand = actualCommands.get(i);
 
 			if (!Objects.equals(expectedCommand, actualCommand)) {
 				StringBuilder builder = new StringBuilder();
@@ -147,14 +164,14 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 		}
 	}
 
-	private void addRegisteredCommandList(StringBuilder builder, List<RegisteredCommand> commands) {
+	private void addRegisteredCommandList(StringBuilder builder, List<RegisteredCommand<CommandSender>> commands) {
 		if (commands.isEmpty()) {
 			builder.append("[]");
 			return;
 		}
 
 		builder.append("[\n");
-		for (RegisteredCommand command : commands) {
+		for (RegisteredCommand<CommandSender> command : commands) {
 			builder.append("\t");
 			builder.append(command);
 			builder.append("\n");

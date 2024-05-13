@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
 import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.commandnodes.NamedLiteralArgumentBuilder;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * An interface representing arguments with multiple literal string definitions
@@ -43,6 +45,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Links to {@link AbstractArgument#getNodeName()}.
 	 */
 	String getNodeName();
+
+	/**
+	 * Links to {@link AbstractArgument#getArgumentPermission()}.
+	 */
+	CommandPermission getArgumentPermission();
+
+	/**
+	 * Links to {@link AbstractArgument#getRequirements()}.
+	 */
+	Predicate<CommandSender> getRequirements();
 
 	/**
 	 * Links to {@link AbstractArgument#isListed()}.
@@ -86,8 +98,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Normally, Arguments are only represented by a single node, and so only need to link one node. However, a MultiLiteral
 	 * represents multiple literal node paths, which also need to be generated and inserted into the node structure.
 	 */
-	default <Source> NodeInformation<Source> linkNode(
-		NodeInformation<Source> previousNodeInformation, CommandNode<Source> rootNode,
+	default <Source> NodeInformation<CommandSender, Source> linkNode(
+		NodeInformation<CommandSender, Source> previousNodeInformation, CommandNode<Source> rootNode,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
@@ -120,14 +132,15 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Create information for this node
-		NodeInformation<Source> nodeInformation = new NodeInformation<>(
+		NodeInformation<CommandSender, Source> nodeInformation = new NodeInformation<>(
 			newNodes, 
 			// Create registered node information once children are created
 			children -> previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of(
-				new RegisteredCommand.Node(
+				new RegisteredCommand.Node<>(
 					nodeName, getClass().getSimpleName(), 
 					"(" + String.join("|", getLiterals())+ ")",
 					getCombinedArguments().isEmpty() && terminalExecutorCreator != null, 
+					getArgumentPermission(), getRequirements(),
 					children
 				)
 			))

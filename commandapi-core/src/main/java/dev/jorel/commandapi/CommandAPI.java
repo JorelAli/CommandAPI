@@ -307,7 +307,8 @@ public class CommandAPI {
 	 * @return A list of all {@link RegisteredCommand}{@code s} that have been
 	 * registered by the CommandAPI so far. The returned list is immutable.
 	 */
-	public static List<RegisteredCommand> getRegisteredCommands() {
-		return Collections.unmodifiableList(new ArrayList<>(CommandAPIHandler.getInstance().registeredCommands.values()));
+	public static <CommandSender> List<RegisteredCommand<CommandSender>> getRegisteredCommands() {
+		CommandAPIHandler<?, CommandSender, ?> handler = CommandAPIHandler.getInstance();
+		return Collections.unmodifiableList(new ArrayList<>(handler.registeredCommands.values()));
 	}
 }

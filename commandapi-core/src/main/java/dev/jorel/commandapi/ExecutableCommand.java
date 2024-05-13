@@ -2,7 +2,6 @@ package dev.jorel.commandapi;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -10,6 +9,11 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
+import dev.jorel.commandapi.help.CommandAPIHelpTopic;
+import dev.jorel.commandapi.help.EditableHelpTopic;
+import dev.jorel.commandapi.help.FullDescriptionGenerator;
+import dev.jorel.commandapi.help.ShortDescriptionGenerator;
+import dev.jorel.commandapi.help.UsageGenerator;
 
 /**
  * This is a base class for {@link AbstractCommandAPICommand} and {@link AbstractCommandTree} command definitions
@@ -43,24 +47,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	protected Predicate<CommandSender> requirements = s -> true;
 
 	// Command help
-	/**
-	 * An optional short description for the command
-	 */
-	protected String shortDescription = null;
-	/**
-	 * An optional full description for the command
-	 */
-	protected String fullDescription = null;
-	/**
-	 * An optional usage description for the command
-	 */
-	protected String[] usageDescription = null;
-	// TODO: Bukkit specific fields probably should not be in platform agnostic classes
-	//  Either make HelpTopic platform agnostic or move this field into bukkit-core
-	/**
-	 * An optional HelpTopic object for the command (for Bukkit)
-	 */
-	protected Object helpTopic = null;
+	protected CommandAPIHelpTopic<CommandSender> helpTopic = new EditableHelpTopic<>();
 
 	ExecutableCommand(final String name) {
 		if (name == null || name.isEmpty() || name.contains(" ")) {
@@ -143,6 +130,26 @@ extends ExecutableCommand<Impl, CommandSender>
 	}
 
 	/**
+	 * Sets the {@link CommandAPIHelpTopic} for this command. Using this method will override
+	 * any declared short description, full description or usage description provided
+	 * via the following methods and similar overloads:
+	 * <ul>
+	 *   <li>{@link ExecutableCommand#withShortDescription(String)}</li>
+	 *   <li>{@link ExecutableCommand#withFullDescription(String)}</li>
+	 *   <li>{@link ExecutableCommand#withUsage(String...)}</li>
+	 *   <li>{@link ExecutableCommand#withHelp(String, String)}</li>
+	 * </ul>
+	 * Further calls to these methods will also be ignored.
+	 * 
+	 * @param helpTopic the help topic to use for this command
+	 * @return this command builder
+	 */
+	public Impl withHelp(CommandAPIHelpTopic<CommandSender> helpTopic) {
+		this.helpTopic = helpTopic;
+		return instance();
+	}
+
+	/**
 	 * Sets the short description for this command. This is the help which is
 	 * shown in the main /help menu.
 	 *
@@ -150,7 +157,9 @@ extends ExecutableCommand<Impl, CommandSender>
 	 * @return this command builder
 	 */
 	public Impl withShortDescription(String description) {
-		this.shortDescription = description;
+		if (helpTopic instanceof EditableHelpTopic<CommandSender> editableHelpTopic) {
+			helpTopic = editableHelpTopic.withShortDescription(description);
+		}
 		return instance();
 	}
 
@@ -162,7 +171,9 @@ extends ExecutableCommand<Impl, CommandSender>
 	 * @return this command builder
 	 */
 	public Impl withFullDescription(String description) {
-		this.fullDescription = description;
+		if (helpTopic instanceof EditableHelpTopic<CommandSender> editableHelpTopic) {
+			helpTopic = editableHelpTopic.withFullDescription(description);
+		}
 		return instance();
 	}
 
@@ -176,8 +187,9 @@ extends ExecutableCommand<Impl, CommandSender>
 	 * @return this command builder
 	 */
 	public Impl withHelp(String shortDescription, String fullDescription) {
-		this.shortDescription = shortDescription;
-		this.fullDescription = fullDescription;
+		if (helpTopic instanceof EditableHelpTopic<CommandSender> editableHelpTopic) {
+			helpTopic = editableHelpTopic.withHelp(shortDescription, fullDescription);
+		}
 		return instance();
 	}
 
@@ -189,7 +201,51 @@ extends ExecutableCommand<Impl, CommandSender>
 	 * @return this command builder
 	 */
 	public Impl withUsage(String... usage) {
-		this.usageDescription = usage;
+		if (helpTopic instanceof EditableHelpTopic<CommandSender> editableHelpTopic) {
+			helpTopic = editableHelpTopic.withUsage(usage);
+		}
+		return instance();
+	}
+
+	/**
+	 * Sets the short description of this command to be generated using the given {@link ShortDescriptionGenerator}.
+	 * This is the help which is shown in the main /help menu.
+	 * 
+	 * @param description The {@link ShortDescriptionGenerator} to use to generate the short description.
+	 * @return this command builder
+	 */
+	public Impl withShortDescription(ShortDescriptionGenerator description) {
+		if (helpTopic instanceof EditableHelpTopic<CommandSender> editableHelpTopic) {
+			helpTopic = editableHelpTopic.withShortDescription(description);
+		}
+		return instance();
+	}
+
+	/**
+	 * Sets the full description of this command to be generated using the given {@link FullDescriptionGenerator}.
+	 * This is the help which is shown in the specific /help page for this command (e.g. /help mycommand).
+	 * 
+	 * @param description The {@link FullDescriptionGenerator} to use to generate the full description.
+	 * @return this command builder
+	 */
+	public Impl withFullDescription(FullDescriptionGenerator<CommandSender> description) {
+		if (helpTopic instanceof EditableHelpTopic<CommandSender> editableHelpTopic) {
+			helpTopic = editableHelpTopic.withFullDescription(description);
+		}
+		return instance();
+	}
+
+	/**
+	 * Sets the usage of this command to be generated using the given {@link UsageGenerator}.
+	 * This is the usage which is shown in the specific /help page for this command (e.g. /help mycommand).
+	 * 
+	 * @param usage The {@link UsageGenerator} to use to generate the usage.
+	 * @return this command builder
+	 */
+	public Impl withUsage(UsageGenerator<CommandSender> usage) {
+		if (helpTopic instanceof EditableHelpTopic<CommandSender> editableHelpTopic) {
+			helpTopic = editableHelpTopic.withUsage(usage);
+		}
 		return instance();
 	}
 
@@ -261,12 +317,21 @@ extends ExecutableCommand<Impl, CommandSender>
 	}
 
 	/**
+	 * Returns the {@link CommandAPIHelpTopic} for this command
+	 * 
+	 * @return the {@link CommandAPIHelpTopic} for this command
+	 */
+	public CommandAPIHelpTopic<CommandSender> getHelpTopic() {
+		return helpTopic;
+	}
+
+	/**
 	 * Returns the short description for this command
 	 *
 	 * @return the short description for this command
 	 */
 	public String getShortDescription() {
-		return this.shortDescription;
+		return this.helpTopic.getShortDescription().orElse(null);
 	}
 
 	/**
@@ -275,7 +340,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	 * @return the full description for this command
 	 */
 	public String getFullDescription() {
-		return this.fullDescription;
+		return this.helpTopic.getFullDescription(null).orElse(null);
 	}
 
 	/**
@@ -284,16 +349,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	 * @return the usage for this command
 	 */
 	public String[] getUsage() {
-		return this.usageDescription;
-	}
-
-	/**
-	 * Returns the {@code HelpTopic} object assigned to this command (For Bukkit)
-	 * 
-	 * @return the {@code HelpTopic} object assigned to this command (For Bukkit)
-	 */
-	public Object getHelpTopic() {
-		return helpTopic;
+		return this.helpTopic.getUsage(null, null).orElse(null);
 	}
 
 	//////////////////
@@ -326,25 +382,24 @@ extends ExecutableCommand<Impl, CommandSender>
 		((CommandAPIHandler<?, CommandSender, ?>) CommandAPIHandler.getInstance()).registerCommand(this, namespace);
 	}
 
-	protected static record CommandInformation<Source>(LiteralCommandNode<Source> rootNode, List<LiteralCommandNode<Source>> aliasNodes, RegisteredCommand command) {
+	protected static record CommandInformation<CommandSender, Source>(LiteralCommandNode<Source> rootNode, List<LiteralCommandNode<Source>> aliasNodes, RegisteredCommand<CommandSender> command) {
 	}
 
-	protected <Source> CommandInformation<Source> createCommandInformation(String namespace) {
+	protected <Source> CommandInformation<CommandSender, Source> createCommandInformation(String namespace) {
 		checkPreconditions();
 
 		// Create rootNode
 		LiteralCommandNode<Source> rootNode = this.<Source>createCommandNodeBuilder(name).build();
 
-		List<RegisteredCommand.Node> children = createArgumentNodes(rootNode);
+		List<RegisteredCommand.Node<CommandSender>> children = createArgumentNodes(rootNode);
 
 		// Create aliaseNodes
 		List<LiteralCommandNode<Source>> aliasNodes = createAliasNodes(rootNode);
 
 		// Create command information
-		RegisteredCommand command = new RegisteredCommand(
-			name, aliases, namespace, permission, 
-			Optional.ofNullable(shortDescription), Optional.ofNullable(fullDescription), Optional.ofNullable(usageDescription), Optional.ofNullable(helpTopic),
-			new RegisteredCommand.Node(name, getClass().getSimpleName(), name, isRootExecutable(), children)
+		RegisteredCommand<CommandSender> command = new RegisteredCommand<>(
+			name, aliases, namespace, helpTopic,
+			new RegisteredCommand.Node<>(name, getClass().getSimpleName(), name, isRootExecutable(), permission, requirements, children)
 		);
 
 		return new CommandInformation<>(rootNode, aliasNodes, command);
@@ -387,5 +442,5 @@ extends ExecutableCommand<Impl, CommandSender>
 
 	protected abstract boolean isRootExecutable();
 
-	protected abstract <Source> List<RegisteredCommand.Node> createArgumentNodes(LiteralCommandNode<Source> rootNode);
+	protected abstract <Source> List<RegisteredCommand.Node<CommandSender>> createArgumentNodes(LiteralCommandNode<Source> rootNode);
 }
