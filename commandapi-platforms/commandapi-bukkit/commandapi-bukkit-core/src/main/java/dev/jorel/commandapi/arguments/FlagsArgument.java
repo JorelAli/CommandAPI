@@ -73,7 +73,7 @@ public class FlagsArgument extends Argument<List> implements FlagsArgumentCommon
 	}
 
 	@Override
-	public <Source> NodeInformation<Source> addArgumentNodes(NodeInformation<Source> previousNodeInformation, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
+	public <Source> NodeInformation<CommandSender, Source> addArgumentNodes(NodeInformation<CommandSender, Source> previousNodeInformation, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
 		return FlagsArgumentCommon.super.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 }

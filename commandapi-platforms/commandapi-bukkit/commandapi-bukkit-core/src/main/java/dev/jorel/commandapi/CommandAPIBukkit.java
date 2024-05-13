@@ -10,19 +10,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -62,6 +58,9 @@ import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitRemoteConsoleCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.help.BukkitHelpTopicWrapper;
+import dev.jorel.commandapi.help.CommandAPIHelpTopic;
+import dev.jorel.commandapi.help.CustomCommandAPIHelpTopic;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -212,153 +211,51 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	/*
 	 * Generate and register help topics
 	 */
-	private String generateCommandHelpPrefix(String command) {
-		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
-	}
-
-	private String generateCommandHelpPrefix(String command, String namespace) {
-		return (Bukkit.getPluginCommand(command) == null ? "/" + namespace + ":" : "/minecraft:") + command;
-	}
-
-	private void generateHelpUsage(StringBuilder sb, RegisteredCommand command) {
-		// Generate usages
-		String[] usages = getUsageList(command);
-
-		if (usages.length == 0) {
-			// Might happen if the developer calls `.withUsage()` with no parameters
-			// They didn't give any usage, so we won't put any there
-			return;
-		}
-
-		sb.append(ChatColor.GOLD).append("Usage: ").append(ChatColor.WHITE);
-		// If 1 usage, put it on the same line, otherwise format like a list
-		if (usages.length == 1) {
-			sb.append(usages[0]);
-		} else {
-			for (String usage : usages) {
-				sb.append("\n- ").append(usage);
-			}
-		}
-	}
-
-	private String[] getUsageList(RegisteredCommand currentCommand) {
-		// TODO: I don't think the changes I made here are well tested, so this could have changed behavior
-		final Optional<String[]> usageDescription = currentCommand.usageDescription();
-		if (usageDescription.isPresent()) return usageDescription.get(); // Usage was overriden
-
-		// Generate command usage
-		// TODO: Should default usage generation be updated? https://github.com/JorelAli/CommandAPI/issues/363
-		List<String> usages = new ArrayList<>();
-		StringBuilder usageSoFar = new StringBuilder("/");
-		addUsageForNode(currentCommand.rootNode(), usages, usageSoFar);
-		return usages.toArray(String[]::new);
-	}
-
-	private void addUsageForNode(RegisteredCommand.Node node, List<String> usages, StringBuilder usageSoFar) {
-		// Add node to usage
-		usageSoFar.append(node.helpString());
-
-		// Add usage to the list if this is executable
-		if (node.executable()) usages.add(usageSoFar.toString());
-
-		// Add children
-		usageSoFar.append(" ");
-		int currentLength = usageSoFar.length();
-		for (RegisteredCommand.Node child : node.children()) {
-			// Reset the string builder to the usage up to and including this node
-			usageSoFar.delete(currentLength, usageSoFar.length());
-
-			addUsageForNode(child, usages, usageSoFar);
-		}
-	}
-
-	void updateHelpForCommands(List<RegisteredCommand> commands) {
+	void updateHelpForCommands(List<RegisteredCommand<CommandSender>> commands) {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
-		Set<String> namespacedCommandNames = new HashSet<>();
 
-		for (RegisteredCommand command : commands) {
-			// Don't override the plugin help topic
-			String commandPrefix = generateCommandHelpPrefix(command.commandName());
-
-			// Namespaced commands shouldn't have a help topic, we should save the namespaced command name
-			namespacedCommandNames.add(generateCommandHelpPrefix(command.commandName(), command.namespace()));
+		for (RegisteredCommand<CommandSender> command : commands) {
+			String namespaceAddon = (command.namespace().isEmpty() ? "" : command.namespace() + ":");
+			String commandName = namespaceAddon + command.commandName();
+			CommandAPIHelpTopic<CommandSender> commandAPIHelpTopic = command.helpTopic();
 			
-			StringBuilder aliasSb = new StringBuilder();
-			final String shortDescription;
-			
-			// Must be empty string, not null as defined by OBC::CustomHelpTopic
-			final String permission = command.permission().getPermission().orElse("");
-			
-			HelpTopic helpTopic;
-			final Optional<Object> commandHelpTopic = command.helpTopic();
-			if (commandHelpTopic.isPresent()) {
-				helpTopic = (HelpTopic) commandHelpTopic.get();
-				shortDescription = "";
-			} else {
-				// Generate short description
-				final Optional<String> shortDescriptionOptional = command.shortDescription();
-				final Optional<String> fullDescriptionOptional = command.fullDescription();
-				if (shortDescriptionOptional.isPresent()) {
-					shortDescription = shortDescriptionOptional.get();
-				} else if (fullDescriptionOptional.isPresent()) {
-					shortDescription = fullDescriptionOptional.get();
+			// Don't override other plugin's help topics
+			if(Bukkit.getPluginCommand(commandName) == null) {
+				final HelpTopic helpTopic;
+				if (commandAPIHelpTopic instanceof BukkitHelpTopicWrapper bukkitHelpTopic) {
+					helpTopic = bukkitHelpTopic.helpTopic();
 				} else {
-					shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
+					helpTopic = new CustomCommandAPIHelpTopic(commandName, command.aliases(), commandAPIHelpTopic, command.rootNode());
 				}
-	
-				// Generate full description
-				StringBuilder sb = new StringBuilder();
-				if (fullDescriptionOptional.isPresent()) {
-					sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(fullDescriptionOptional.get()).append("\n");
-				}
-	
-				generateHelpUsage(sb, command);
-				sb.append("\n");
-	
-				// Generate aliases. We make a copy of the StringBuilder because we
-				// want to change the output when we register aliases
-				aliasSb = new StringBuilder(sb.toString());
-				if (command.aliases().length > 0) {
-					sb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE).append(String.join(", ", command.aliases()));
-				}
-
-				helpTopic = generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission);
+				helpTopicsToAdd.put("/" + commandName, helpTopic);
 			}
-			helpTopicsToAdd.put(commandPrefix, helpTopic);
 
 			for (String alias : command.aliases()) {
-				if (commandHelpTopic.isPresent()) {
-					helpTopic = (HelpTopic) commandHelpTopic.get();
+				String aliasName = namespaceAddon + alias;
+
+				// Don't override other plugin's help topics
+				if(Bukkit.getPluginCommand(aliasName) != null) {
+					continue;
+				}
+
+				final HelpTopic helpTopic;
+				if (commandAPIHelpTopic instanceof BukkitHelpTopicWrapper bukkitHelpTopic) {
+					helpTopic = bukkitHelpTopic.helpTopic();
 				} else {
-					StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
-					currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
-	
 					// We want to get all aliases (including the original command name),
 					// except for the current alias
 					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
 					aliases.add(command.commandName());
 					aliases.remove(alias);
-	
-					currentAliasSb.append(String.join(", ", aliases));
-	
-					// Don't override the plugin help topic
-					commandPrefix = generateCommandHelpPrefix(alias);
-					helpTopic = generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission);
 
-					// Namespaced commands shouldn't have a help topic, we should save the namespaced alias name
-					namespacedCommandNames.add(generateCommandHelpPrefix(alias, command.namespace()));
+					helpTopic = new CustomCommandAPIHelpTopic(aliasName, aliases.toArray(String[]::new), commandAPIHelpTopic, command.rootNode());
 				}
-				helpTopicsToAdd.put(commandPrefix, helpTopic);
+				helpTopicsToAdd.put("/" + aliasName, helpTopic);
 			}
 		}
 
 		// We have to use helpTopics.put (instead of .addTopic) because we're overwriting an existing help topic, not adding a new help topic
 		getHelpMap().putAll(helpTopicsToAdd);
-
-		// We also have to remove help topics for namespaced command names
-		for (String namespacedCommandName : namespacedCommandNames) {
-			getHelpMap().remove(namespacedCommandName);
-		}
 	}
 
 	@Override
@@ -470,16 +367,22 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+	public void postCommandRegistration(RegisteredCommand<CommandSender> registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		commandRegistrationStrategy.postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
 
 		// Register the command's permission string (if it exists) to Bukkit's manager
-		CommandPermission permission = registeredCommand.permission();
+		CommandPermission permission = registeredCommand.rootNode().permission();
 		permission.getPermission().ifPresent(this::registerPermission);
 
 		if (!CommandAPI.canRegister()) {
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
-			updateHelpForCommands(List.of(registeredCommand));
+			//  We'll make sure to retrieve the merged versions from CommandAPIHandler
+			CommandAPIHandler<?, CommandSender, ?> handler = CommandAPIHandler.getInstance();
+			Map<String, RegisteredCommand<CommandSender>> registeredCommands = handler.registeredCommands;
+			updateHelpForCommands(List.of(
+				registeredCommands.get(registeredCommand.commandName()),
+				registeredCommands.get(registeredCommand.namespace() + ":" + registeredCommand.commandName())
+			));
 
 			// Sending command dispatcher packets usually happens when Players join the server
 			for (Player p : Bukkit.getOnlinePlayers()) {

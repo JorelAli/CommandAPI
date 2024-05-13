@@ -91,7 +91,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
-	final Map<String, RegisteredCommand> registeredCommands; // Keep track of what has been registered for type checking
+	final Map<String, RegisteredCommand<CommandSender>> registeredCommands; // Keep track of what has been registered for type checking
 	static final Pattern NAMESPACE_PATTERN = Pattern.compile("[0-9a-z_.-]+");
 
 	private static CommandAPIHandler<?, ?, ?> instance;
@@ -171,11 +171,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		platform.preCommandRegistration(command.getName());
 
 		// Generate command information
-		ExecutableCommand.CommandInformation<Source> commandInformation = command.createCommandInformation(namespace);
+		ExecutableCommand.CommandInformation<CommandSender, Source> commandInformation = command.createCommandInformation(namespace);
 
 		LiteralCommandNode<Source> resultantNode = commandInformation.rootNode();
 		List<LiteralCommandNode<Source>> aliasNodes = commandInformation.aliasNodes();
-		RegisteredCommand registeredCommand = commandInformation.command();
+		RegisteredCommand<CommandSender> registeredCommand = commandInformation.command();
 
 		// Log the commands being registered
 		for (List<String> argsAsStr : registeredCommand.rootNode().argsAsStr()) {
@@ -209,7 +209,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		writeDispatcherToFile();
 
 		// Merge RegisteredCommand into map
-		BiFunction<String, RegisteredCommand, RegisteredCommand> mergeRegisteredCommands = (key, value) -> value == null ? registeredCommand : value.mergeCommandInformation(registeredCommand);
+		BiFunction<String, RegisteredCommand<CommandSender>, RegisteredCommand<CommandSender>> mergeRegisteredCommands = 
+			(key, value) -> value == null ? registeredCommand : value.mergeCommandInformation(registeredCommand);
 		
 		if (registeredCommand.namespace().isEmpty()) {
 			registeredCommands.compute(registeredCommand.commandName(), mergeRegisteredCommands);

@@ -6,6 +6,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 
 import java.util.*;
@@ -183,7 +184,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	}
 
 	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
+	public void postCommandRegistration(RegisteredCommand<CommandSender> registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		if (!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
 			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
@@ -198,7 +199,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 
 			String name = resultantNode.getLiteral();
 			String namespace = registeredCommand.namespace();
-			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
+			String permNode = unpackInternalPermissionNodeString(registeredCommand.rootNode().permission());
 
 			registerCommand(knownCommands, root, name, permNode, namespace, resultantNode);
 
@@ -224,7 +225,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 				minecraftCommandNamespaces = new RootCommandNode<>();
 			}
 		} else {
-			CommandPermission permission = registeredCommand.permission();
+			CommandPermission permission = registeredCommand.rootNode().permission();
 
 			// Since the VanillaCommandWrappers aren't created yet, we need to remember to
 			//  fix those permissions once the server is enabled. Using `putIfAbsent` to

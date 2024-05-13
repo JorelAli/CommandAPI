@@ -298,11 +298,6 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	public abstract void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException;
 
 	@Override
-	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CustomHelpTopic")
-	public abstract HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
-		String permission);
-
-	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.20.2")
 	public abstract org.bukkit.advancement.Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key)
 		throws CommandSyntaxException;

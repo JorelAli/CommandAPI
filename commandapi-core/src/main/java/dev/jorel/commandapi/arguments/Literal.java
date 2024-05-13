@@ -5,12 +5,14 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
 import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.commandnodes.NamedLiteralArgumentBuilder;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * An interface representing literal-based arguments
@@ -38,6 +40,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Links to {@link AbstractArgument#getNodeName()}.
 	 */
 	String getNodeName();
+
+	/**
+	 * Links to {@link AbstractArgument#getArgumentPermission()}.
+	 */
+	CommandPermission getArgumentPermission();
+
+	/**
+	 * Links to {@link AbstractArgument#getRequirements()}.
+	 */
+	Predicate<CommandSender> getRequirements();
 
 	/**
 	 * Links to {@link AbstractArgument#isListed()}.
@@ -79,8 +91,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * <p>
 	 * Normally, Arguments use thier node name as their help string. However, a Literal uses its literal as the help string.
 	 */
-	default <Source> NodeInformation<Source> linkNode(
-		NodeInformation<Source> previousNodeInformation, CommandNode<Source> rootNode,
+	default <Source> NodeInformation<CommandSender, Source> linkNode(
+		NodeInformation<CommandSender, Source> previousNodeInformation, CommandNode<Source> rootNode,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
@@ -90,13 +102,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Create information for this node
-		NodeInformation<Source> nodeInformation = new NodeInformation<>(
+		NodeInformation<CommandSender, Source> nodeInformation = new NodeInformation<>(
 			List.of(rootNode),
 			// Create registered node information once children are created
 			children -> previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of(
-				new RegisteredCommand.Node(
+				new RegisteredCommand.Node<>(
 					getNodeName(), getClass().getSimpleName(), getLiteral(), 
 					getCombinedArguments().isEmpty() && terminalExecutorCreator != null, 
+					getArgumentPermission(), getRequirements(),
 					children
 				)
 			))

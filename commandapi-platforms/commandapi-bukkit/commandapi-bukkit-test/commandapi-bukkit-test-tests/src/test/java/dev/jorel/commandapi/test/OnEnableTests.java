@@ -162,7 +162,7 @@ class OnEnableTests extends TestBase {
 			short description
 			&6Description: &ffull description
 			&6Usage: &f/command <argument>
-			&6Aliases: &falias1, alias2"""), topic.getFullText(null));
+			&6Aliases: &falias1, alias2"""), topic.getFullText(runCommandsPlayer));
 
 
 		// Make sure commands run correctly

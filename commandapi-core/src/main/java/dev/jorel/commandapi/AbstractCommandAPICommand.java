@@ -238,14 +238,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	@Override
-	protected <Source> List<RegisteredCommand.Node> createArgumentNodes(LiteralCommandNode<Source> rootNode) {
+	protected <Source> List<RegisteredCommand.Node<CommandSender>> createArgumentNodes(LiteralCommandNode<Source> rootNode) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
 
-		List<RegisteredCommand.Node> childrenNodes = new ArrayList<>();
+		List<RegisteredCommand.Node<CommandSender>> childrenNodes = new ArrayList<>();
 
 		// Create arguments
 		if (hasAnyArguments()) {
-			NodeInformation<Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), children -> childrenNodes.addAll(children));
+			NodeInformation<CommandSender, Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), children -> childrenNodes.addAll(children));
 			List<Argument> previousArguments = new ArrayList<>();
 			List<String> previousArgumentNames = new ArrayList<>();
 
@@ -279,12 +279,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		// Add subcommands
 		for (Impl subCommand : subcommands) {
-			CommandInformation<Source> nodes = subCommand.createCommandInformation("");
+			CommandInformation<CommandSender, Source> nodes = subCommand.createCommandInformation("");
 
 			// Add root node
 			rootNode.addChild(nodes.rootNode());
 
-			RegisteredCommand.Node rootNodeInformation = nodes.command().rootNode();
+			RegisteredCommand.Node<CommandSender> rootNodeInformation = nodes.command().rootNode();
 			childrenNodes.add(rootNodeInformation);
 
 			// Add aliases
@@ -294,9 +294,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				// Create node information for the alias
 				String aliasName = aliasNode.getLiteral();
 				childrenNodes.add(
-					new RegisteredCommand.Node(
+					new RegisteredCommand.Node<>(
 						aliasName, rootNodeInformation.className(), aliasName, 
-						rootNodeInformation.executable(), rootNodeInformation.children()
+						rootNodeInformation.executable(), rootNodeInformation.permission(), rootNodeInformation.requirements(),
+						rootNodeInformation.children()
 					)
 				);
 			}

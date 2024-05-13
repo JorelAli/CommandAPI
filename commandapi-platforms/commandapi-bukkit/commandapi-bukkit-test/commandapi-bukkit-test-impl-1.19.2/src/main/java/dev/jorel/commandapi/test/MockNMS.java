@@ -842,11 +842,6 @@ public class MockNMS extends Enums {
 //			}
 //		}
 //	}
-	
-	@Override
-	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
-		return baseNMS.generateHelpTopic(commandName, shortDescription, fullDescription, permission);
-	}
 
 	@Override
 	public Map<String, HelpTopic> getHelpMap() {

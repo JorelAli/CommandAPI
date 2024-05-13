@@ -199,8 +199,8 @@ public class CustomArgument<T, B> extends Argument<T> {
 	}
 
 	@Override
-	public <Source> NodeInformation<Source> addArgumentNodes(
-		NodeInformation<Source> previousNodeInformation,
+	public <Source> NodeInformation<CommandSender, Source> addArgumentNodes(
+		NodeInformation<CommandSender, Source> previousNodeInformation,
 		List<Argument<?>> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator
 	) {

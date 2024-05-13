@@ -99,7 +99,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param <Source>                The Brigadier Source object for running commands.
 	 */
 	public <Source> void buildBrigadierNode(
-		NodeInformation<Source> previousNodeInformation,
+		NodeInformation<CommandSender, Source> previousNodeInformation,
 		List<Argument> previousArguments, List<String> previousArgumentNames
 	) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
@@ -115,12 +115,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			executor.hasAnyExecutors() ? args -> handler.generateBrigadierCommand(args, executor) : null);
 
 		// Collect children into our own list
-		List<RegisteredCommand.Node> childrenNodeInformation = new ArrayList<>();
+		List<RegisteredCommand.Node<CommandSender>> childrenNodeInformation = new ArrayList<>();
 
 		// Add our branches as children to the node
 		for (AbstractArgumentTree<?, Argument, CommandSender> child : arguments) {
 			// Collect children into our own list
-			NodeInformation<Source> newPreviousNodeInformation = new NodeInformation<>(
+			NodeInformation<CommandSender, Source> newPreviousNodeInformation = new NodeInformation<>(
 				previousNodeInformation.lastCommandNodes(), 
 				children -> childrenNodeInformation.addAll(children)
 			);

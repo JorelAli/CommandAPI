@@ -410,8 +410,6 @@ public interface NMS<CommandListenerWrapper> {
 	 */
 	void reloadDataPacks();
 
-	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
-
 	Map<String, HelpTopic> getHelpMap();
 
 	Message generateMessageFromJson(String json);

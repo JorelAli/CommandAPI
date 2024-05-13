@@ -10,6 +10,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
 import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
 import dev.jorel.commandapi.commandnodes.FlagsArgumentEndingNode;
@@ -19,6 +20,7 @@ import dev.jorel.commandapi.executors.CommandArguments;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public interface FlagsArgumentCommon<Impl
 /// @cond DOX
@@ -49,6 +51,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	String getNodeName();
 
 	/**
+	 * Links to {@link AbstractArgument#getArgumentPermission()}.
+	 */
+	CommandPermission getArgumentPermission();
+
+	/**
+	 * Links to {@link AbstractArgument#getRequirements()}.
+	 */
+	Predicate<CommandSender> getRequirements();
+
+	/**
 	 * Links to {@link AbstractArgument#getCombinedArguments()}.
 	 */
 	List<Argument> getCombinedArguments();
@@ -57,7 +69,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * Links to {@link AbstractArgument#checkPreconditions(NodeInformation, List, List)}.
 	 */
 	<Source> void checkPreconditions(
-		NodeInformation<Source> previousNodes, List<Argument> previousArguments, List<String> previousArgumentNames
+		NodeInformation<CommandSender, Source> previousNodes, List<Argument> previousArguments, List<String> previousArgumentNames
 	);
 
 	/**
@@ -100,8 +112,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * A FlagsArgument works completely differently from a typical argument, so we need to completely
 	 * override the usual logic.
 	 */
-	default <Source> NodeInformation<Source> addArgumentNodes(
-		NodeInformation<Source> previousNodeInformation,
+	default <Source> NodeInformation<CommandSender, Source> addArgumentNodes(
+		NodeInformation<CommandSender, Source> previousNodeInformation,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument>, Command<Source>> terminalExecutorCreator
 	) {
@@ -143,13 +155,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		}
 
 		// Create information for this node
-		NodeInformation<Source> nodeInformation = new NodeInformation<>(
+		NodeInformation<CommandSender, Source> nodeInformation = new NodeInformation<>(
 			newNodes, 
 			// Create registered node information once children are created
 			children -> previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of(
-				new RegisteredCommand.Node(
+				new RegisteredCommand.Node<>(
 					nodeName, getClass().getSimpleName(), "<" + nodeName + ">", 
 					loopingBranchesExecutable || terminalBranchesExecutable, 
+					getArgumentPermission(), getRequirements(),
 					children
 				)
 			))
@@ -159,7 +172,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
 	}
 
-	private static <Argument extends AbstractArgument<?, ?, Argument, ?>, Source> List<CommandNode<Source>> setupBranch(
+	private static <Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender, Source> List<CommandNode<Source>> setupBranch(
 		List<Argument> branchArguments, CommandNode<Source> rootNode,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
 		Function<List<Argument>, Command<Source>> terminalExecutorCreator,
@@ -170,7 +183,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		List<String> branchPreviousArgumentNames = new ArrayList<>(previousArgumentNames);
 
 		RootCommandNode<Source> branchRoot = new RootCommandNode<>();
-		NodeInformation<Source> branchNodeInformation = new NodeInformation<>(List.of(branchRoot), null);
+		NodeInformation<CommandSender, Source> branchNodeInformation = new NodeInformation<>(List.of(branchRoot), null);
 
 		// Stack branch nodes
 		branchNodeInformation = AbstractArgument.stackArguments(branchArguments, branchNodeInformation, branchPreviousArguments, branchPreviousArgumentNames, terminalExecutorCreator);

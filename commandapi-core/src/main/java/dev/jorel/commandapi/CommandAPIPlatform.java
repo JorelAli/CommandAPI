@@ -108,7 +108,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param resultantNode     The node that was registered
 	 * @param aliasNodes        Any alias nodes that were also registered as a part of this registration process
 	 */
-	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(RegisteredCommand<CommandSender> registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	/**
 	 * Builds and registers a Brigadier command node.

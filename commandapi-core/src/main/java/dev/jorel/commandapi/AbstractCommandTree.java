@@ -87,10 +87,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	@Override
-	protected <Source> List<RegisteredCommand.Node> createArgumentNodes(LiteralCommandNode<Source> rootNode) {
+	protected <Source> List<RegisteredCommand.Node<CommandSender>> createArgumentNodes(LiteralCommandNode<Source> rootNode) {
 		CommandAPIHandler<Argument, CommandSender, Source> handler = CommandAPIHandler.getInstance();
 
-		List<RegisteredCommand.Node> childrenNodes = new ArrayList<>();
+		List<RegisteredCommand.Node<CommandSender>> childrenNodes = new ArrayList<>();
 
 		// The previous arguments include an unlisted MultiLiteral representing the command name and aliases
 		//  This doesn't affect how the command acts, but it helps represent the command path in exceptions
@@ -103,7 +103,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Build branches
 		for (AbstractArgumentTree<?, Argument, CommandSender> argument : arguments) {
 			// We need new previousArguments lists for each branch so they don't interfere
-			NodeInformation<Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), children -> childrenNodes.addAll(children));
+			NodeInformation<CommandSender, Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), children -> childrenNodes.addAll(children));
 			List<Argument> previousArguments = new ArrayList<>();
 			List<String> previousArgumentNames = new ArrayList<>();
 

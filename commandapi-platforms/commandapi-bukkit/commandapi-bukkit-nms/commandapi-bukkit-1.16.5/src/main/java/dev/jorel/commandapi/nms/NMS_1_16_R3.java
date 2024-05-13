@@ -66,7 +66,6 @@ import org.bukkit.craftbukkit.v1_16_R3.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R3.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_16_R3.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R3.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_16_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R3.potion.CraftPotionEffectType;
@@ -404,11 +403,6 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	public void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
 		Files.write(new GsonBuilder().setPrettyPrinting().create()
 				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
-	}
-
-	@Override
-	public HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission) {
-		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
 	@Override

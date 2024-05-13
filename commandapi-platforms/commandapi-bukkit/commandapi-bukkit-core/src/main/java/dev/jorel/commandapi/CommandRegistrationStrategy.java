@@ -5,6 +5,7 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
+import org.bukkit.command.CommandSender;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +59,7 @@ public abstract class CommandRegistrationStrategy<Source> {
 
 	public abstract void runTasksAfterServerStart();
 
-	public abstract void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
+	public abstract void postCommandRegistration(RegisteredCommand<CommandSender> registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes);
 
 	public abstract void registerCommandNode(LiteralCommandNode<Source> node, String namespace);
 
