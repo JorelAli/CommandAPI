@@ -103,7 +103,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Build branches
 		for (AbstractArgumentTree<?, Argument, CommandSender> argument : arguments) {
 			// We need new previousArguments lists for each branch so they don't interfere
-			NodeInformation<CommandSender, Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), children -> childrenNodes.addAll(children));
+			NodeInformation<CommandSender, Source> previousNodeInformation = new NodeInformation<>(List.of(rootNode), childrenNodes::addAll);
 			List<Argument> previousArguments = new ArrayList<>();
 			List<String> previousArgumentNames = new ArrayList<>();
 

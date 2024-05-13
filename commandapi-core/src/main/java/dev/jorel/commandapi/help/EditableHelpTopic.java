@@ -12,7 +12,7 @@ import dev.jorel.commandapi.RegisteredCommand;
  * An {@link CommandAPIHelpTopic} that can have its short description, full description, and usage edited.
  */
 public class EditableHelpTopic<CommandSender> implements CommandAPIHelpTopic<CommandSender> {
-    private ShortDescriptionGenerator shortDescription = () -> Optional.empty();
+    private ShortDescriptionGenerator shortDescription = Optional::empty;
     private FullDescriptionGenerator<CommandSender> fullDescription = forWho -> Optional.empty();
     private UsageGenerator<CommandSender> usage = (forWho, argumentTree) -> Optional.empty();
 

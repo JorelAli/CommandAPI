@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Tests for the {@link MultiLiteralArgument}
  */
-public class ArgumentMultiLiteralTests extends TestBase {
+class ArgumentMultiLiteralTests extends TestBase {
 
 	/*********
 	 * Setup *
