@@ -708,7 +708,7 @@ public class NMS_1_18_R1 extends NMS_Common {
 
 	@Override
 	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommands(), node);
 	}
 
 	@Override

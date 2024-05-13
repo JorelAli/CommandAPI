@@ -529,7 +529,7 @@ public class MockNMS extends Enums {
 		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
 		net.minecraft.server.v1_16_R3.CommandDispatcher commands = new net.minecraft.server.v1_16_R3.CommandDispatcher();
 		MockPlatform.setField(commands.getClass(), "b", commands, getBrigadierDispatcher());
-		minecraftServerMock.vanillaCommandDispatcher = commands;
+		
 
 		return (T) minecraftServerMock;
 	}

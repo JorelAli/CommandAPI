@@ -350,7 +350,11 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final CommandDispatcher<CommandSourceStack> getBrigadierDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+		try {
+			return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
+		} catch (Throwable e) {
+			return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher();
+		}
 	}
 
 	@Override

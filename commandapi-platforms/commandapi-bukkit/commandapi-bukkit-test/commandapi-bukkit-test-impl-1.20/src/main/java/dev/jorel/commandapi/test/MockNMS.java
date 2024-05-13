@@ -523,7 +523,7 @@ public class MockNMS extends Enums {
 			return new ServerFunctionManager(minecraftServerMock, serverFunctionLibrary) {
 				
 				// Make sure we don't use ServerFunctionManager#getDispatcher!
-				// That method accesses MinecraftServer.vanillaCommandDispatcher
+				// That method accesses MinecraftServer.getCommands()
 				// directly (boo) and that causes all sorts of nonsense.
 				@Override
 				public CommandDispatcher<CommandSourceStack> getDispatcher() {
@@ -538,7 +538,7 @@ public class MockNMS extends Enums {
 		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
 		Commands commands = new Commands();
 		MockPlatform.setField(commands.getClass(), "g", "dispatcher", commands, getBrigadierDispatcher());
-		minecraftServerMock.vanillaCommandDispatcher = commands;
+		
 
 		return (T) minecraftServerMock;
 	}
