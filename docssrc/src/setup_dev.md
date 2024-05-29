@@ -40,7 +40,7 @@ dependencies:
       <dependency>
           <groupId>dev.jorel</groupId>
           <artifactId>commandapi-bukkit-core</artifactId>
-          <version>9.4.2</version>
+          <version>9.5.0-SNAPSHOT</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
@@ -61,7 +61,7 @@ dependencies:
 
   ```gradle
   dependencies {
-      compileOnly "dev.jorel:commandapi-bukkit-core:9.4.2"
+      compileOnly "dev.jorel:commandapi-bukkit-core:9.5.0-SNAPSHOT"
   }
   ```
 

@@ -16,7 +16,7 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/
 
 # Gradle
 sed -i "s/dev\.jorel:commandapi-bukkit-shade:$oldVer/dev\.jorel:commandapi-bukkit-shade:$newVer/" docssrc/src/setup_shading.md
-sed -i "s/dev\.jorel:commandapi-bukkit-shade:$oldVer/dev\.jorel:commandapi-bukkit-shade-mojang-mapped:$newVer/" docssrc/src/setup_shading.md
+sed -i "s/dev\.jorel:commandapi-bukkit-shade-mojang-mapped:$oldVer/dev\.jorel:commandapi-bukkit-shade-mojang-mapped:$newVer/" docssrc/src/setup_shading.md
 sed -i "s/dev\.jorel:commandapi-bukkit-core:$oldVer/dev\.jorel:commandapi-bukkit-core:$newVer/" docssrc/src/setup_dev.md
 sed -i "s/dev\.jorel:commandapi-annotations:$oldVer/dev\.jorel:commandapi-annotations:$newVer/" docssrc/src/setup_annotations.md
 sed -i "s/dev\.jorel:commandapi-bukkit-kotlin:$oldVer/dev\.jorel:commandapi-bukkit-kotlin:$newVer/" docssrc/src/kotlinintro.md
