@@ -32,9 +32,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.logging.LogUtils;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -316,8 +314,11 @@ public class NMS_1_20_R1 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public final CommandDispatcher<CommandSourceStack> getResourcesDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(this,
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
+		);
 	}
 
 	@Override

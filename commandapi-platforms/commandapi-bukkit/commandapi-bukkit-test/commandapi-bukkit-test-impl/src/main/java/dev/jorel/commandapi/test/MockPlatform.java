@@ -14,6 +14,8 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import dev.jorel.commandapi.CommandRegistrationStrategy;
+import dev.jorel.commandapi.SpigotCommandRegistration;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -64,23 +66,16 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 * CommandAPIBukkit implementations *
 	 ************************************/
 
-	private CommandDispatcher<CLW> dispatcher = null;
-	private CommandDispatcher<CLW> resourcesDispatcher = null;
+	private final CommandDispatcher<CLW> dispatcher = new CommandDispatcher<>();
+	private final CommandDispatcher<CLW> resourcesDispatcher = new CommandDispatcher<>();
 
 	@Override
-	public final CommandDispatcher<CLW> getBrigadierDispatcher() {
-		if (this.dispatcher == null) {
-			this.dispatcher = new CommandDispatcher<>();
-		}
-		return this.dispatcher;
+	public CommandRegistrationStrategy<CLW> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(this, dispatcher, resourcesDispatcher);
 	}
 
-	@Override
 	public CommandDispatcher<CLW> getResourcesDispatcher() {
-		if (this.resourcesDispatcher == null) {
-			this.resourcesDispatcher = new CommandDispatcher<>();
-		}
-		return this.resourcesDispatcher;
+		return resourcesDispatcher;
 	}
 
 	@Override

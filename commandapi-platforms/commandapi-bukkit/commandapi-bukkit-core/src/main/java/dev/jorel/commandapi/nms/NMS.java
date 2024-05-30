@@ -29,6 +29,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.CommandRegistrationStrategy;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -387,20 +388,6 @@ public interface NMS<CommandListenerWrapper> {
 	World getWorldForCSS(CommandListenerWrapper clw);
 
 	/**
-	 * Returns the Brigadier CommandDispatcher from the NMS CommandDispatcher
-	 *
-	 * @return A Brigadier CommandDispatcher
-	 */
-	CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher();
-
-	/**
-	 * Returns the Brigadier CommandDispatcher used when commands are sent to Players
-	 *
-	 * @return A Brigadier CommandDispatcher
-	 */
-	CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher();
-
-	/**
 	 * Returns the Server's internal (OBC) CommandMap
 	 * 
 	 * @return A SimpleCommandMap from the OBC server
@@ -456,4 +443,5 @@ public interface NMS<CommandListenerWrapper> {
 
 	Message generateMessageFromJson(String json);
 
+	CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy();
 }

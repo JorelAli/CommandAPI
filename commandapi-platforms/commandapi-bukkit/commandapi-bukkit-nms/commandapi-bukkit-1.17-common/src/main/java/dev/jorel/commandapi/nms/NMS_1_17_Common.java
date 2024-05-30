@@ -36,6 +36,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.wrappers.*;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.arguments.*;
@@ -87,9 +88,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -315,8 +313,11 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public CommandDispatcher<CommandSourceStack> getResourcesDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(this,
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
+		);
 	}
 
 	@Override

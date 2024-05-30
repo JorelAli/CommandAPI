@@ -150,7 +150,7 @@ class OnEnableTests extends TestBase {
 
 
 		// Make sure commands were added to 'resources' dispatcher
-		RootCommandNode<?> resourcesRoot = CommandAPIBukkit.get().getResourcesDispatcher().getRoot();
+		RootCommandNode<?> resourcesRoot = MockPlatform.getInstance().getResourcesDispatcher().getRoot();
 
 		assertNotNull(resourcesRoot.getChild("command"));
 		assertNotNull(resourcesRoot.getChild("alias1"));

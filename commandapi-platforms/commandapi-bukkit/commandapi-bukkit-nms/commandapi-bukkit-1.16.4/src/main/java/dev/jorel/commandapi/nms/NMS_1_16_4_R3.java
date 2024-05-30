@@ -42,6 +42,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.*;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -93,9 +94,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -486,13 +484,11 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	}
 
 	@Override
-	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a();
-	}
-
-	@Override
-	public CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a();
+	public CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(this,
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a(),
+			this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a()
+		);
 	}
 
 	@Override

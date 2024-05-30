@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -91,9 +92,6 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -210,7 +208,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	private static final Field entitySelectorUsesSelector;
 	// private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
-	private static final Field vanillaCommandDispatcher;
+	private static final boolean vanillaCommandDispatcherFieldExists;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -231,13 +229,16 @@ public class NMS_1_20_R4 extends NMS_Common {
 		// itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher");
-		Field commandDispatcher;
+
+		boolean fieldExists;
 		try {
-			commandDispatcher = MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
+			MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
+			fieldExists = true;
 		} catch (NoSuchFieldException | SecurityException e) {
-			commandDispatcher = null;
+			// Expected on Paper-1.20.6-65 or later due to https://github.com/PaperMC/Paper/pull/8235
+			fieldExists = false;
 		}
-		vanillaCommandDispatcher = commandDispatcher;
+		vanillaCommandDispatcherFieldExists = fieldExists;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -457,11 +458,6 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Override
 	public final BlockData getBlockState(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return CraftBlockData.fromData(BlockStateArgument.getBlock(cmdCtx, key).getState());
-	}
-
-	@Override
-	public final CommandDispatcher<CommandSourceStack> getResourcesDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
 	}
 
 	@Override
@@ -902,17 +898,30 @@ public class NMS_1_20_R4 extends NMS_Common {
 	}
 
 	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		if (vanillaCommandDispatcherFieldExists) {
+			return new SpigotCommandRegistration<>(this,
+				this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+				this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
+			);
+		} else {
+			return new PaperCommandRegistration<>(this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher());
+		}
+	}
+
+	@Override
 	public final boolean isVanillaCommandWrapper(Command command) {
 		return command instanceof VanillaCommandWrapper;
 	}
 
 	@Override
 	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
-		if (vanillaCommandDispatcher != null) {
-			return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
-		} else {
-			return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommands(), node);
-		}
+		// The `vanillaCommandDispatcher` field does not exist on Paper-1.20.6-65 or later,
+		//  but this method should never be called anyway if we're using the `PaperCommandRegistration`
+		//  strategy. Maybe there is a better way to handle the fact that `SpigotCommandRegistration`
+		//  needs to be passed a reference to `CommandAPIBukkit` to access these command wrapper classes
+		//  that Paper registration doesn't worry about.
+		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
 	}
 
 	@Override
