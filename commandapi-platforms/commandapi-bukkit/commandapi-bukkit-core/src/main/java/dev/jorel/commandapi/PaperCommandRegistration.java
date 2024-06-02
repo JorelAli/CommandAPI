@@ -4,8 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -18,7 +18,7 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 	private final Supplier<CommandDispatcher<Source>> getBrigadierDispatcher;
 
 	// Store registered commands nodes for eventual reloads
-	private final List<LiteralCommandNode<Source>> registeredNodes = new ArrayList<>();
+	private final RootCommandNode<Source> registeredNodes = new RootCommandNode<>();
 
 	public PaperCommandRegistration(Supplier<CommandDispatcher<Source>> getBrigadierDispatcher) {
 		this.getBrigadierDispatcher = getBrigadierDispatcher;
@@ -45,8 +45,8 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 		LiteralCommandNode<Source> namespacedCommandNode = CommandAPIHandler.getInstance().namespaceNode(commandNode, namespace);
 
 		// Add to registered command nodes
-		registeredNodes.add(commandNode);
-		registeredNodes.add(namespacedCommandNode);
+		registeredNodes.addChild(commandNode);
+		registeredNodes.addChild(namespacedCommandNode);
 
 		// Namespace is not empty on Bukkit forks
 		getBrigadierDispatcher.get().getRoot().addChild(namespacedCommandNode);
@@ -57,7 +57,10 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
 		// Remove nodes from the  dispatcher
-		removeBrigadierCommands(getBrigadierDispatcher.get(), commandName, unregisterNamespaces, c -> true);
+		removeBrigadierCommands(getBrigadierDispatcher.get().getRoot(), commandName, unregisterNamespaces, c -> true);
+
+		// Don't add nodes back after a reload
+		removeBrigadierCommands(registeredNodes, commandName, unregisterNamespaces, c -> true);
 
 		// Update the dispatcher file
 		CommandAPIHandler.getInstance().writeDispatcherToFile();
@@ -65,8 +68,9 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 
 	@Override
 	public void preReloadDataPacks() {
-		for (LiteralCommandNode<Source> commandNode : registeredNodes) {
-			getBrigadierDispatcher.get().getRoot().addChild(commandNode);
+		RootCommandNode<Source> root = getBrigadierDispatcher.get().getRoot();
+		for (CommandNode<Source> commandNode : registeredNodes.getChildren()) {
+			root.addChild(commandNode);
 		}
 	}
 }

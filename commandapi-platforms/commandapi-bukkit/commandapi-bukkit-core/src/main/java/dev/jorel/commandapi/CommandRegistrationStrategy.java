@@ -31,9 +31,8 @@ public abstract class CommandRegistrationStrategy<Source> {
 	}
 
 	// Utility methods
-	protected void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,
+	protected void removeBrigadierCommands(RootCommandNode<Source> root, String commandName,
 										   boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
-		RootCommandNode<?> root = dispatcher.getRoot();
 		Map<String, CommandNode<Source>> children = (Map<String, CommandNode<Source>>) commandNodeChildren.get(root);
 		Map<String, CommandNode<Source>> literals = (Map<String, CommandNode<Source>>) commandNodeLiterals.get(root);
 		Map<String, CommandNode<Source>> arguments = (Map<String, CommandNode<Source>>) commandNodeArguments.get(root);
