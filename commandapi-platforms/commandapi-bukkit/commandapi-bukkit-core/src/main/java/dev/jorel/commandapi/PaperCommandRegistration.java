@@ -7,6 +7,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -14,16 +15,32 @@ import java.util.function.Supplier;
  * changed a bunch of the behind-the-scenes logic.
  */
 public class PaperCommandRegistration<Source> extends CommandRegistrationStrategy<Source> {
-	// References to necessary objects
+	// References to necessary methods
 	private final Supplier<CommandDispatcher<Source>> getBrigadierDispatcher;
+	private final Predicate<CommandNode<Source>> isBukkitCommand;
 
 	// Store registered commands nodes for eventual reloads
 	private final RootCommandNode<Source> registeredNodes = new RootCommandNode<>();
 
-	public PaperCommandRegistration(Supplier<CommandDispatcher<Source>> getBrigadierDispatcher) {
+	public PaperCommandRegistration(
+		Supplier<CommandDispatcher<Source>> getBrigadierDispatcher, Predicate<CommandNode<Source>> isBukkitCommand
+	) {
 		this.getBrigadierDispatcher = getBrigadierDispatcher;
+		this.isBukkitCommand = isBukkitCommand;
 	}
 
+	// Provide access to internal functions that may be useful to developers
+	/**
+	 * Checks if a Brigadier command node came from wrapping a Bukkit command
+	 *
+	 * @param node The CommandNode to check
+	 * @return true if the CommandNode is being handled by Paper's BukkitCommandNode
+	 */
+	public boolean isBukkitCommand(CommandNode<Source> node) {
+		return isBukkitCommand.test(node);
+	}
+
+	// Implement CommandRegistrationStrategy methods
 	@Override
 	public CommandDispatcher<Source> getBrigadierDispatcher() {
 		return getBrigadierDispatcher.get();
@@ -57,10 +74,16 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
 		// Remove nodes from the  dispatcher
-		removeBrigadierCommands(getBrigadierDispatcher.get().getRoot(), commandName, unregisterNamespaces, c -> true);
+		removeBrigadierCommands(getBrigadierDispatcher.get().getRoot(), commandName, unregisterNamespaces,
+			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandNodes
+			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandNodes
+			c -> !unregisterBukkit ^ isBukkitCommand.test(c));
 
-		// Don't add nodes back after a reload
-		removeBrigadierCommands(registeredNodes, commandName, unregisterNamespaces, c -> true);
+		// CommandAPI commands count as non-Bukkit
+		if (!unregisterBukkit) {
+			// Don't add nodes back after a reload
+			removeBrigadierCommands(registeredNodes, commandName, unregisterNamespaces, c -> true);
+		}
 
 		// Update the dispatcher file
 		CommandAPIHandler.getInstance().writeDispatcherToFile();
