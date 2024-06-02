@@ -176,6 +176,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		commandRegistrationStrategy = createCommandRegistrationStrategy();
 	}
 
+	protected CommandRegistrationStrategy<Source> getCommandRegistrationStrategy() {
+		return commandRegistrationStrategy;
+	}
+
 	@Override
 	public void onEnable() {
 		JavaPlugin plugin = config.getPlugin();

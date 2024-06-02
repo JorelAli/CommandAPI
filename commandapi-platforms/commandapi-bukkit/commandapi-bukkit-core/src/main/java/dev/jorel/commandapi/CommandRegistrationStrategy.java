@@ -82,4 +82,6 @@ public abstract class CommandRegistrationStrategy<Source> {
 	public abstract LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace);
 
 	public abstract void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit);
+
+	public abstract void preReloadDataPacks();
 }

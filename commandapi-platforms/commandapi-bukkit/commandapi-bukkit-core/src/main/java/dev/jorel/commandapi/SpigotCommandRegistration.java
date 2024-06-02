@@ -134,7 +134,6 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 
 	@Override
 	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-
 		if (!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
 			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
@@ -296,5 +295,10 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			removeBrigadierCommands(getResourcesDispatcher.get(), commandName, unregisterNamespaces,
 				c -> !unregisterBukkit ^ commandAPIBukkit.isBukkitCommandWrapper(c));
 		}
+	}
+
+	@Override
+	public void preReloadDataPacks() {
+		// Nothing to do
 	}
 }

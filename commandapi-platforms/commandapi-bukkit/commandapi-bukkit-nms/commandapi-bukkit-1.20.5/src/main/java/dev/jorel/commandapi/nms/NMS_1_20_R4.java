@@ -905,7 +905,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 				() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
 			);
 		} else {
-			return new PaperCommandRegistration<>(this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher());
+			return new PaperCommandRegistration<>(() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher());
 		}
 	}
 

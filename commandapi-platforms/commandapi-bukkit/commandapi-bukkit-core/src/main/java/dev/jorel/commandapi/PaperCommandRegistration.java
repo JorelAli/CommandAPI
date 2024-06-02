@@ -2,25 +2,31 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
- * Handles logic for registering commands after Paper build 65, where https://github.com/PaperMC/Paper/pull/8235
+ * Handles logic for registering commands after Paper build 65, where <a href="https://github.com/PaperMC/Paper/pull/8235">https://github.com/PaperMC/Paper/pull/8235</a>
  * changed a bunch of the behind-the-scenes logic.
  */
 public class PaperCommandRegistration<Source> extends CommandRegistrationStrategy<Source> {
 	// References to necessary objects
-	private final CommandDispatcher<Source> brigadierDispatcher;
+	private final Supplier<CommandDispatcher<Source>> getBrigadierDispatcher;
 
-	public PaperCommandRegistration(CommandDispatcher<Source> brigadierDispatcher) {
-		this.brigadierDispatcher = brigadierDispatcher;
+	// Store registered commands nodes for eventual reloads
+	private final List<LiteralCommandNode<Source>> registeredNodes = new ArrayList<>();
+
+	public PaperCommandRegistration(Supplier<CommandDispatcher<Source>> getBrigadierDispatcher) {
+		this.getBrigadierDispatcher = getBrigadierDispatcher;
 	}
 
 	@Override
 	public CommandDispatcher<Source> getBrigadierDispatcher() {
-		return brigadierDispatcher;
+		return getBrigadierDispatcher.get();
 	}
 
 	@Override
@@ -35,20 +41,32 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
-		LiteralCommandNode<Source> builtNode = brigadierDispatcher.register(node);
+		LiteralCommandNode<Source> commandNode = getBrigadierDispatcher.get().register(node);
+		LiteralCommandNode<Source> namespacedCommandNode = CommandAPIHandler.getInstance().namespaceNode(commandNode, namespace);
+
+		// Add to registered command nodes
+		registeredNodes.add(commandNode);
+		registeredNodes.add(namespacedCommandNode);
 
 		// Namespace is not empty on Bukkit forks
-		brigadierDispatcher.getRoot().addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace));
+		getBrigadierDispatcher.get().getRoot().addChild(namespacedCommandNode);
 
-		return builtNode;
+		return commandNode;
 	}
 
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
 		// Remove nodes from the  dispatcher
-		removeBrigadierCommands(brigadierDispatcher, commandName, unregisterNamespaces, c -> true);
+		removeBrigadierCommands(getBrigadierDispatcher.get(), commandName, unregisterNamespaces, c -> true);
 
 		// Update the dispatcher file
 		CommandAPIHandler.getInstance().writeDispatcherToFile();
+	}
+
+	@Override
+	public void preReloadDataPacks() {
+		for (LiteralCommandNode<Source> commandNode : registeredNodes) {
+			getBrigadierDispatcher.get().getRoot().addChild(commandNode);
+		}
 	}
 }
