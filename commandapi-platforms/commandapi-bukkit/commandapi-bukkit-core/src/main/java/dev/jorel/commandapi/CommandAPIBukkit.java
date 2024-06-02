@@ -444,12 +444,12 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		commandRegistrationStrategy.postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
 
-		if(!CommandAPI.canRegister()) {
+		if (!CommandAPI.canRegister()) {
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
 			updateHelpForCommands(List.of(registeredCommand));
 
 			// Sending command dispatcher packets usually happens when Players join the server
-			for(Player p: Bukkit.getOnlinePlayers()) {
+			for (Player p : Bukkit.getOnlinePlayers()) {
 				p.updateCommands();
 			}
 		}
@@ -471,9 +471,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	 *
 	 * @param commandName          the name of the command to unregister
 	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
-	 *                                command that start with a namespace. E.g. `minecraft:command`, `bukkit:command`,
-	 *                                or `plugin:command`. If true, these namespaced versions of a command are also
-	 *                                unregistered.
+	 *                             command that start with a namespace. E.g. `minecraft:command`, `bukkit:command`,
+	 *                             or `plugin:command`. If true, these namespaced versions of a command are also
+	 *                             unregistered.
 	 * @param unregisterBukkit     whether the unregistration system should unregister Vanilla or Bukkit commands. If true,
 	 *                             only Bukkit commands are unregistered, otherwise only Vanilla commands are unregistered.
 	 *                             For the purposes of this parameter, commands registered using the CommandAPI are Vanilla
@@ -488,7 +488,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 		commandRegistrationStrategy.unregister(commandName, unregisterNamespaces, unregisterBukkit);
 
-		if(!CommandAPI.canRegister()) {
+		if (!CommandAPI.canRegister()) {
 			// Help topics (from Bukkit and CommandAPI) are only setup after plugins enable, so we only need to worry
 			//  about removing them once the server is loaded.
 			getHelpMap().remove("/" + commandName);
@@ -631,5 +631,4 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 		return false;
 	}
-
 }

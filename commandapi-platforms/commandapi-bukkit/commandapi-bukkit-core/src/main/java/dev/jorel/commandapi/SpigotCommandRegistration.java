@@ -124,7 +124,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 				 * what are you doing and why?
 				 */
 				Command command = map.getCommand(cmdName);
-				if(command != null && commandAPIBukkit.isVanillaCommandWrapper(command)) {
+				if (command != null && commandAPIBukkit.isVanillaCommandWrapper(command)) {
 					command.setPermission(permNode);
 				}
 			}
@@ -135,7 +135,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	@Override
 	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 
-		if(!CommandAPI.canRegister()) {
+		if (!CommandAPI.canRegister()) {
 			// Usually, when registering commands during server startup, we can just put our commands into the
 			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
 			// it and the CommandAPI do some extra stuff to make everything work, and we move on.
@@ -250,7 +250,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// and there is already a command with this name in the dispatcher
 			// then, the command currently in the dispatcher is supposed to appear as `minecraft:command`
 			CommandNode<Source> currentNode = brigadierDispatcher.getRoot().getChild(namespacedCommand);
-			if(currentNode != null) {
+			if (currentNode != null) {
 				// We'll keep track of everything that should be `minecraft:command` in
 				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
 				// TODO: Ideally, we should be working without this cast to LiteralCommandNode. I don't know if this can fail
@@ -261,7 +261,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
-		if(!unregisterBukkit) {
+		if (!unregisterBukkit) {
 			// Remove nodes from the Vanilla dispatcher
 			// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
 			//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
@@ -271,7 +271,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			CommandAPIHandler.getInstance().writeDispatcherToFile();
 		}
 
-		if(unregisterBukkit || !CommandAPI.canRegister()) {
+		if (unregisterBukkit || !CommandAPI.canRegister()) {
 			// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
 			//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
 			//  moved the Vanilla command into the CommandMap
@@ -280,14 +280,14 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
 			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
 			boolean isMainVanilla = commandAPIBukkit.isVanillaCommandWrapper(knownCommands.get(commandName));
-			if(unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
+			if (unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
 
-			if(unregisterNamespaces) {
+			if (unregisterNamespaces) {
 				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ commandAPIBukkit.isVanillaCommandWrapper(c));
 			}
 		}
 
-		if(!CommandAPI.canRegister()) {
+		if (!CommandAPI.canRegister()) {
 			// If the server is enabled, we have extra cleanup to do
 
 			// Remove commands from the resources dispatcher

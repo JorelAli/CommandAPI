@@ -32,7 +32,7 @@ public abstract class CommandRegistrationStrategy<Source> {
 
 	// Utility methods
 	protected void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,
-										boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
+										   boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
 		RootCommandNode<?> root = dispatcher.getRoot();
 		Map<String, CommandNode<Source>> children = (Map<String, CommandNode<Source>>) commandNodeChildren.get(root);
 		Map<String, CommandNode<Source>> literals = (Map<String, CommandNode<Source>>) commandNodeLiterals.get(root);
@@ -66,9 +66,9 @@ public abstract class CommandRegistrationStrategy<Source> {
 	}
 
 	protected static boolean isThisTheCommandButNamespaced(String commandName, String key) {
-		if(!key.contains(":")) return false;
+		if (!key.contains(":")) return false;
 		String[] split = key.split(":");
-		if(split.length < 2) return false;
+		if (split.length < 2) return false;
 		return split[1].equalsIgnoreCase(commandName);
 	}
 
