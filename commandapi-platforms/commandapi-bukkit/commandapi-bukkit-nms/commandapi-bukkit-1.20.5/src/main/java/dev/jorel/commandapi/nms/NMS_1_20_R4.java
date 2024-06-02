@@ -902,7 +902,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 		if (vanillaCommandDispatcherFieldExists) {
 			return new SpigotCommandRegistration<>(this,
 				this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
-				this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
+				() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
 			);
 		} else {
 			return new PaperCommandRegistration<>(this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher());

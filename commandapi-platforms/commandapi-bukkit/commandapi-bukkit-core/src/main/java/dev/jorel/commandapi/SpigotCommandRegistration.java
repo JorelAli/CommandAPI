@@ -11,6 +11,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Handles logic for registering commands on Spigot and old versions of Paper
@@ -21,7 +22,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 
 	// References to necessary objects
 	private final CommandDispatcher<Source> brigadierDispatcher;
-	private final CommandDispatcher<Source> resourcesDispatcher;
+	private final Supplier<CommandDispatcher<Source>> getResourcesDispatcher;
 
 	// Namespaces
 	private final Set<String> namespacesToFix = new HashSet<>();
@@ -30,11 +31,11 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	// Reflection
 	private final SafeVarHandle<SimpleCommandMap, Map<String, Command>> commandMapKnownCommands;
 
-	public SpigotCommandRegistration(CommandAPIBukkit<Source> commandAPIBukkit, CommandDispatcher<Source> brigadierDispatcher, CommandDispatcher<Source> resourcesDispatcher) {
+	public SpigotCommandRegistration(CommandAPIBukkit<Source> commandAPIBukkit, CommandDispatcher<Source> brigadierDispatcher, Supplier<CommandDispatcher<Source>> getResourcesDispatcher) {
 		this.commandAPIBukkit = commandAPIBukkit;
 
 		this.brigadierDispatcher = brigadierDispatcher;
-		this.resourcesDispatcher = resourcesDispatcher;
+		this.getResourcesDispatcher = getResourcesDispatcher;
 
 		this.commandMapKnownCommands = SafeVarHandle.ofOrNull(SimpleCommandMap.class, "knownCommands", "knownCommands", Map.class);
 	}
@@ -69,6 +70,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 
 	private void fixNamespaces() {
 		Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) commandAPIBukkit.getPaper().getCommandMap());
+		CommandDispatcher<Source> resourcesDispatcher = getResourcesDispatcher.get();
 
 		// Remove namespaces
 		for (String command : namespacesToFix) {
@@ -143,7 +145,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
 
 			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) commandAPIBukkit.getPaper().getCommandMap());
-			RootCommandNode<Source> root = resourcesDispatcher.getRoot();
+			RootCommandNode<Source> root = getResourcesDispatcher.get().getRoot();
 
 			String name = resultantNode.getLiteral();
 			String namespace = registeredCommand.namespace();
@@ -291,7 +293,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// Remove commands from the resources dispatcher
 			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
 			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
-			removeBrigadierCommands(resourcesDispatcher, commandName, unregisterNamespaces,
+			removeBrigadierCommands(getResourcesDispatcher.get(), commandName, unregisterNamespaces,
 				c -> !unregisterBukkit ^ commandAPIBukkit.isBukkitCommandWrapper(c));
 		}
 	}

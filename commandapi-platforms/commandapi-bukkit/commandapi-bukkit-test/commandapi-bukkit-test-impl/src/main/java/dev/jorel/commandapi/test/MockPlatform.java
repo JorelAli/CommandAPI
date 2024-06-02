@@ -71,7 +71,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	@Override
 	public CommandRegistrationStrategy<CLW> createCommandRegistrationStrategy() {
-		return new SpigotCommandRegistration<>(this, dispatcher, resourcesDispatcher);
+		return new SpigotCommandRegistration<>(this, dispatcher, () -> resourcesDispatcher);
 	}
 
 	public CommandDispatcher<CLW> getResourcesDispatcher() {

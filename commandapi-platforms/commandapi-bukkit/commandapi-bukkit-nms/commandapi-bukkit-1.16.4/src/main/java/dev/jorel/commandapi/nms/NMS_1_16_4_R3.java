@@ -487,7 +487,7 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	public CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy() {
 		return new SpigotCommandRegistration<>(this,
 			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a(),
-			this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a()
+			() -> this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a()
 		);
 	}
 

@@ -318,7 +318,7 @@ public class NMS_1_19_4_R3 extends NMS_CommonWithFunctions {
 	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
 		return new SpigotCommandRegistration<>(this,
 			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
-			this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
+			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
 		);
 	}
 

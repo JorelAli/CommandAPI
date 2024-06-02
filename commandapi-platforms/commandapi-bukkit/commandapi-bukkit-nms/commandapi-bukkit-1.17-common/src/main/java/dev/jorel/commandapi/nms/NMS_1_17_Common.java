@@ -316,7 +316,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
 		return new SpigotCommandRegistration<>(this,
 			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
-			this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
+			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
 		);
 	}
 

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
@@ -131,5 +132,18 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable();
+
+		new CommandAPICommand("register")
+			.withArguments(new StringArgument("name"))
+			.executes(info -> {
+				String name = info.args().getUnchecked("name");
+
+				new CommandAPICommand(name)
+					.executes(subinfo -> {
+						subinfo.sender().sendMessage("You ran the " + name + " command");
+					})
+					.register();
+			})
+			.register();
 	}
 }
