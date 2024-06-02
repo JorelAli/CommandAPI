@@ -105,6 +105,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
+	public CommandRegistrationStrategy<Source> getCommandRegistrationStrategy() {
+		return commandRegistrationStrategy;
+	}
+
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
 		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
@@ -174,10 +178,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		paper = new PaperImplementations(isPaperPresent, isFoliaPresent, this);
 
 		commandRegistrationStrategy = createCommandRegistrationStrategy();
-	}
-
-	protected CommandRegistrationStrategy<Source> getCommandRegistrationStrategy() {
-		return commandRegistrationStrategy;
 	}
 
 	@Override

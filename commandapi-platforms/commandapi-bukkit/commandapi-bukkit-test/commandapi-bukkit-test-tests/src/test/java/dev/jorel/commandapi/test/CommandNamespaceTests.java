@@ -3,11 +3,7 @@ package dev.jorel.commandapi.test;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.InternalBukkitConfig;
+import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
@@ -53,8 +49,9 @@ public class CommandNamespaceTests extends TestBase {
 		// Simulate `CraftServer#setVanillaCommands`
 		MockPlatform<Object> mockPlatform = MockPlatform.getInstance();
 		SimpleCommandMap commandMap = mockPlatform.getSimpleCommandMap();
+		SpigotCommandRegistration<Object> spigotCommandRegistration = (SpigotCommandRegistration<Object>) mockPlatform.getCommandRegistrationStrategy();
 		for (CommandNode<Object> node : mockPlatform.getBrigadierDispatcher().getRoot().getChildren()) {
-			commandMap.register("minecraft", mockPlatform.wrapToVanillaCommandWrapper(node));
+			commandMap.register("minecraft", spigotCommandRegistration.wrapToVanillaCommandWrapper(node));
 		}
 
 		// Run the CommandAPI's enable tasks, especially `fixNamespaces`

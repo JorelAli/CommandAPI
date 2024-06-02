@@ -56,7 +56,6 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R4.CraftLootTable;
@@ -87,7 +86,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -898,38 +896,6 @@ public class NMS_1_20_R4 extends NMS_Common {
 	}
 
 	@Override
-	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
-		if (vanillaCommandDispatcherFieldExists) {
-			return new SpigotCommandRegistration<>(this,
-				this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
-				() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
-			);
-		} else {
-			return new PaperCommandRegistration<>(() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher());
-		}
-	}
-
-	@Override
-	public final boolean isVanillaCommandWrapper(Command command) {
-		return command instanceof VanillaCommandWrapper;
-	}
-
-	@Override
-	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
-		// The `vanillaCommandDispatcher` field does not exist on Paper-1.20.6-65 or later,
-		//  but this method should never be called anyway if we're using the `PaperCommandRegistration`
-		//  strategy. Maybe there is a better way to handle the fact that `SpigotCommandRegistration`
-		//  needs to be passed a reference to `CommandAPIBukkit` to access these command wrapper classes
-		//  that Paper registration doesn't worry about.
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
-	}
-
-	@Override
-	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return node.getCommand() instanceof BukkitCommandWrapper;
-	}
-
-	@Override
 	public final void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
 
@@ -1081,4 +1047,19 @@ public class NMS_1_20_R4 extends NMS_Common {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
 	}
 
+	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		if (vanillaCommandDispatcherFieldExists) {
+			return new SpigotCommandRegistration<>(
+				this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+				(SimpleCommandMap) getPaper().getCommandMap(),
+				() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+				command -> command instanceof VanillaCommandWrapper,
+				node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+				node -> node.getCommand() instanceof BukkitCommandWrapper
+			);
+		} else {
+			return new PaperCommandRegistration<>(() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher());
+		}
+	}
 }

@@ -56,7 +56,6 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R3.CraftLootTable;
@@ -87,7 +86,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.logging.LogUtils;
 
 import dev.jorel.commandapi.arguments.ArgumentSubType;
@@ -409,14 +407,6 @@ public class NMS_1_20_R3 extends NMS_Common {
 	@Override
 	public final BlockData getBlockState(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return CraftBlockData.fromData(BlockStateArgument.getBlock(cmdCtx, key).getState());
-	}
-
-	@Override
-	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
-		return new SpigotCommandRegistration<>(this,
-			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
-			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher()
-		);
 	}
 
 	@Override
@@ -838,21 +828,6 @@ public class NMS_1_20_R3 extends NMS_Common {
 	}
 
 	@Override
-	public final boolean isVanillaCommandWrapper(Command command) {
-		return command instanceof VanillaCommandWrapper;
-	}
-
-	@Override
-	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
-	}
-
-	@Override
-	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return node.getCommand() instanceof BukkitCommandWrapper;
-	}
-
-	@Override
 	public final void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
 
@@ -1004,4 +979,15 @@ public class NMS_1_20_R3 extends NMS_Common {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
 	}
 
+	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			(SimpleCommandMap) getPaper().getCommandMap(),
+			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+			command -> command instanceof VanillaCommandWrapper,
+			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> node.getCommand() instanceof BukkitCommandWrapper
+		);
+	}
 }

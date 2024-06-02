@@ -7,10 +7,11 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -18,11 +19,15 @@ import java.util.function.Supplier;
  */
 @RequireField(in = SimpleCommandMap.class, name = "knownCommands", ofType = Map.class)
 public class SpigotCommandRegistration<Source> extends CommandRegistrationStrategy<Source> {
-	private final CommandAPIBukkit<Source> commandAPIBukkit;
-
 	// References to necessary objects
 	private final CommandDispatcher<Source> brigadierDispatcher;
+	private final SimpleCommandMap commandMap;
+
+	// References to necessary methods
 	private final Supplier<CommandDispatcher<Source>> getResourcesDispatcher;
+	private final Predicate<Command> isVanillaCommandWrapper;
+	private final Function<CommandNode<Source>, Command> wrapToVanillaCommandWrapper;
+	private final Predicate<CommandNode<Source>> isBukkitCommandWrapper;
 
 	// Namespaces
 	private final Set<String> namespacesToFix = new HashSet<>();
@@ -31,13 +36,61 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	// Reflection
 	private final SafeVarHandle<SimpleCommandMap, Map<String, Command>> commandMapKnownCommands;
 
-	public SpigotCommandRegistration(CommandAPIBukkit<Source> commandAPIBukkit, CommandDispatcher<Source> brigadierDispatcher, Supplier<CommandDispatcher<Source>> getResourcesDispatcher) {
-		this.commandAPIBukkit = commandAPIBukkit;
-
+	public SpigotCommandRegistration(
+		CommandDispatcher<Source> brigadierDispatcher, SimpleCommandMap commandMap,
+		Supplier<CommandDispatcher<Source>> getResourcesDispatcher, Predicate<Command> isVanillaCommandWrapper,
+		Function<CommandNode<Source>, Command> wrapToVanillaCommandWrapper, Predicate<CommandNode<Source>> isBukkitCommandWrapper
+	) {
 		this.brigadierDispatcher = brigadierDispatcher;
+		this.commandMap = commandMap;
+
 		this.getResourcesDispatcher = getResourcesDispatcher;
+		this.isVanillaCommandWrapper = isVanillaCommandWrapper;
+		this.wrapToVanillaCommandWrapper = wrapToVanillaCommandWrapper;
+		this.isBukkitCommandWrapper = isBukkitCommandWrapper;
 
 		this.commandMapKnownCommands = SafeVarHandle.ofOrNull(SimpleCommandMap.class, "knownCommands", "knownCommands", Map.class);
+	}
+
+	// Provide access to internal functions that may be useful to developers
+
+	/**
+	 * Returns the Brigadier CommandDispatcher used when commands are sent to Players
+	 *
+	 * @return A Brigadier CommandDispatcher
+	 */
+	public CommandDispatcher<Source> getResourcesDispatcher() {
+		return getResourcesDispatcher.get();
+	}
+
+	/**
+	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
+	 *
+	 * @param command The Command to check
+	 * @return true if Command is an instance of VanillaCommandWrapper
+	 */
+	public boolean isVanillaCommandWrapper(Command command) {
+		return isVanillaCommandWrapper.test(command);
+	}
+
+	/**
+	 * Wraps a Brigadier command node as Bukkit's VanillaCommandWrapper
+	 *
+	 * @param node The LiteralCommandNode to wrap
+	 * @return A VanillaCommandWrapper representing the given node
+	 */
+	public Command wrapToVanillaCommandWrapper(CommandNode<Source> node) {
+		return wrapToVanillaCommandWrapper.apply(node);
+	}
+
+	/**
+	 * Checks if a Brigadier command node is being handled by Bukkit's BukkitCommandWrapper
+	 *
+	 * @param node The CommandNode to check
+	 * @return true if the CommandNode is being handled by Bukkit's BukkitCommandWrapper
+	 */
+	public boolean isBukkitCommandWrapper(CommandNode<Source> node) {
+		return isBukkitCommandWrapper.test(node);
 	}
 
 	// Utility methods
@@ -69,7 +122,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	}
 
 	private void fixNamespaces() {
-		Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) commandAPIBukkit.getPaper().getCommandMap());
+		Map<String, Command> knownCommands = commandMapKnownCommands.get(commandMap);
 		RootCommandNode<Source> resourcesRootNode = getResourcesDispatcher.get().getRoot();
 
 		// Remove namespaces
@@ -81,7 +134,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 		// Add back certain minecraft: namespace commands
 		RootCommandNode<Source> brigadierRootNode = brigadierDispatcher.getRoot();
 		for (CommandNode<Source> node : minecraftCommandNamespaces.getChildren()) {
-			knownCommands.put(node.getName(), commandAPIBukkit.wrapToVanillaCommandWrapper(node));
+			knownCommands.put(node.getName(), wrapToVanillaCommandWrapper.apply(node));
 			resourcesRootNode.addChild(node);
 
 			// VanillaCommandWrappers in the CommandMap defer to the Brigadier dispatcher when executing.
@@ -100,7 +153,6 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	 */
 	private void fixPermissions() {
 		// Get the command map to find registered commands
-		CommandMap map = commandAPIBukkit.getPaper().getCommandMap();
 		final Map<String, CommandPermission> permissionsToFix = CommandAPIHandler.getInstance().registeredPermissions;
 
 		if (!permissionsToFix.isEmpty()) {
@@ -122,8 +174,8 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 				 * If anyone dares tries to use testPermission() on this command, seriously,
 				 * what are you doing and why?
 				 */
-				Command command = map.getCommand(cmdName);
-				if (command != null && commandAPIBukkit.isVanillaCommandWrapper(command)) {
+				Command command = commandMap.getCommand(cmdName);
+				if (command != null && isVanillaCommandWrapper.test(command)) {
 					command.setPermission(permNode);
 				}
 			}
@@ -142,7 +194,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
 			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
 
-			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) commandAPIBukkit.getPaper().getCommandMap());
+			Map<String, Command> knownCommands = commandMapKnownCommands.get(commandMap);
 			RootCommandNode<Source> root = getResourcesDispatcher.get().getRoot();
 
 			String name = resultantNode.getLiteral();
@@ -165,7 +217,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 				// We also have to set the permission to simulate the result of `CommandAPIBukkit#fixPermissions`.
 				RootCommandNode<Source> brigadierRootNode = brigadierDispatcher.getRoot();
 				for (CommandNode<Source> node : minecraftNamespacesToFix) {
-					Command minecraftNamespaceCommand = commandAPIBukkit.wrapToVanillaCommandWrapper(node);
+					Command minecraftNamespaceCommand = wrapToVanillaCommandWrapper.apply(node);
 					knownCommands.put(node.getName(), minecraftNamespaceCommand);
 					minecraftNamespaceCommand.setPermission(permNode);
 					brigadierRootNode.addChild(node);
@@ -178,7 +230,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	private void registerCommand(Map<String, Command> knownCommands, RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
 		// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
 		// in `CraftServer#setVanillaCommands`
-		Command command = commandAPIBukkit.wrapToVanillaCommandWrapper(resultantNode);
+		Command command = wrapToVanillaCommandWrapper.apply(resultantNode);
 		knownCommands.putIfAbsent(name, command);
 
 		// Adding permissions to these Commands usually happens in `CommandAPIBukkit#fixPermissions`
@@ -198,7 +250,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 		} else {
 			// A custom namespace should be registered like a separate command, so that it can reference the namespaced
 			//  node, rather than the original unnamespaced node
-			Command namespacedCommand = commandAPIBukkit.wrapToVanillaCommandWrapper(namespacedNode);
+			Command namespacedCommand = wrapToVanillaCommandWrapper.apply(namespacedNode);
 			knownCommands.putIfAbsent(namespacedCommand.getName(), namespacedCommand);
 			namespacedCommand.setPermission(permNode);
 		}
@@ -273,15 +325,15 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
 			//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
 			//  moved the Vanilla command into the CommandMap
-			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) commandAPIBukkit.getPaper().getCommandMap());
+			Map<String, Command> knownCommands = commandMapKnownCommands.get(commandMap);
 
 			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
 			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
-			boolean isMainVanilla = commandAPIBukkit.isVanillaCommandWrapper(knownCommands.get(commandName));
+			boolean isMainVanilla = isVanillaCommandWrapper.test(knownCommands.get(commandName));
 			if (unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
 
 			if (unregisterNamespaces) {
-				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ commandAPIBukkit.isVanillaCommandWrapper(c));
+				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper.test(c));
 			}
 		}
 
@@ -292,7 +344,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
 			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
 			removeBrigadierCommands(getResourcesDispatcher.get().getRoot(), commandName, unregisterNamespaces,
-				c -> !unregisterBukkit ^ commandAPIBukkit.isBukkitCommandWrapper(c));
+				c -> !unregisterBukkit ^ isBukkitCommandWrapper.test(c));
 		}
 	}
 

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -133,16 +134,34 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onEnable() {
 		CommandAPI.onEnable();
 
+		// TODO: Remove these commands
 		new CommandAPICommand("register")
 			.withArguments(new StringArgument("name"))
+			.withOptionalArguments(new StringArgument("namespace"))
 			.executes(info -> {
 				String name = info.args().getUnchecked("name");
+				String namespace = info.args().getOrDefaultUnchecked("namespace", "minecraft");
 
 				new CommandAPICommand(name)
 					.executes(subinfo -> {
 						subinfo.sender().sendMessage("You ran the " + name + " command");
 					})
-					.register();
+					.register(namespace);
+			})
+			.register();
+
+		new CommandAPICommand("unregister")
+			.withArguments(new StringArgument("name"))
+			.withOptionalArguments(
+				new BooleanArgument("unregisterNamespaces"),
+				new BooleanArgument("unregisterBukkit")
+			)
+			.executes(info -> {
+				String name = info.args().getUnchecked("name");
+				boolean unregisterNamespaces = info.args().getOrDefaultUnchecked("unregisterNamespaces", false);
+				boolean unregisterBukkit = info.args().getOrDefaultUnchecked("unregisterBukkit", false);
+
+				CommandAPIBukkit.unregister(name, unregisterNamespaces, unregisterBukkit);
 			})
 			.register();
 	}

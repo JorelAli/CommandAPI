@@ -66,15 +66,14 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 * CommandAPIBukkit implementations *
 	 ************************************/
 
-	private final CommandDispatcher<CLW> dispatcher = new CommandDispatcher<>();
+	private final CommandDispatcher<CLW> brigadierDispatcher = new CommandDispatcher<>();
 	private final CommandDispatcher<CLW> resourcesDispatcher = new CommandDispatcher<>();
 
-	@Override
-	public CommandRegistrationStrategy<CLW> createCommandRegistrationStrategy() {
-		return new SpigotCommandRegistration<>(this, dispatcher, () -> resourcesDispatcher);
+	public CommandDispatcher<CLW> getMockBrigadierDispatcher() {
+		return brigadierDispatcher;
 	}
 
-	public CommandDispatcher<CLW> getResourcesDispatcher() {
+	public CommandDispatcher<CLW> getMockResourcesDispatcher() {
 		return resourcesDispatcher;
 	}
 

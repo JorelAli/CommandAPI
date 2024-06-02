@@ -12,8 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
-import com.mojang.brigadier.tree.CommandNode;
-import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.*;
 import net.minecraft.commands.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -21,7 +20,6 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_19_R1.CraftParticle;
@@ -49,8 +47,6 @@ import com.mojang.brigadier.context.CommandContext;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
-import dev.jorel.commandapi.Brigadier;
-import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
@@ -112,10 +108,19 @@ public class MockNMS extends Enums {
 	public MockNMS(CommandAPIBukkit<?> baseNMS) {
 		super(baseNMS);
 
-		// Stub in our getMinecraftServer implementation
 		CommandAPIBukkit<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
+		// Stub in our getMinecraftServer implementation
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
+		// Stub in our getSimpleCommandMap implementation
+		//  Note that calling `nms.getSimpleCommandMap()` throws a
+		//  class cast exception  (`CraftServer` vs `CommandAPIServerMock`),
+		//  so we have to mock with `doAnswer` instead of `when`
+		Mockito.doAnswer(i -> getSimpleCommandMap()).when(nms).getSimpleCommandMap();
 		super.baseNMS = nms;
+
+		// Initialize baseNMS's paper field (with paper specific implementations disabled)
+		MockPlatform.setField(CommandAPIBukkit.class, "paper",
+			super.baseNMS, new PaperImplementations(false, false, super.baseNMS));
 
 //		initializeArgumentsInArgumentTypeInfos();
 
@@ -266,21 +271,6 @@ public class MockNMS extends Enums {
 	@Override
 	public SimpleCommandMap getSimpleCommandMap() {
 		return ((ServerMock) Bukkit.getServer()).getCommandMap();
-	}
-
-	@Override
-	public boolean isVanillaCommandWrapper(Command command) {
-		return baseNMS.isVanillaCommandWrapper(command);
-	}
-
-	@Override
-	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return baseNMS.wrapToVanillaCommandWrapper(node);
-	}
-
-	@Override
-	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return baseNMS.isBukkitCommandWrapper(node);
 	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
@@ -537,10 +527,16 @@ public class MockNMS extends Enums {
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
 		Mockito.when(minecraftServerMock.getProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
 
-		// Commands object, used when creating VanillaCommandWrappers in NMS#wrapToVanillaCommandWrapper
-		Commands commands = new Commands();
-		MockPlatform.setField(commands.getClass(), "g", "dispatcher", commands, getBrigadierDispatcher());
-		minecraftServerMock.vanillaCommandDispatcher = commands;
+		// Brigadier and resources dispatcher, used in `NMS#createCommandRegistrationStrategy`
+		Commands brigadierCommands = new Commands();
+		MockPlatform.setField(brigadierCommands.getClass(), "g", "dispatcher",
+			brigadierCommands, getMockBrigadierDispatcher());
+		minecraftServerMock.vanillaCommandDispatcher = brigadierCommands;
+
+		Commands resourcesCommands = new Commands();
+		MockPlatform.setField(resourcesCommands.getClass(), "g", "dispatcher",
+			resourcesCommands, getMockResourcesDispatcher());
+		Mockito.when(minecraftServerMock.getCommands()).thenReturn(resourcesCommands);
 
 		return (T) minecraftServerMock;
 	}
@@ -855,5 +851,10 @@ public class MockNMS extends Enums {
 	@Override
 	public Map<String, HelpTopic> getHelpMap() {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
+	}
+
+	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return baseNMS.createCommandRegistrationStrategy();
 	}
 }

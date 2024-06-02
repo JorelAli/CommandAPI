@@ -409,30 +409,6 @@ public interface NMS<CommandListenerWrapper> {
 	Set<NamespacedKey> getTags();
 
 	/**
-	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
-	 * 
-	 * @param command The Command to check
-	 * @return true if Command is an instance of VanillaCommandWrapper
-	 */
-	boolean isVanillaCommandWrapper(Command command);
-
-	/**
-	 * Wraps a Brigadier command node as Bukkit's VanillaCommandWrapper
-	 *
-	 * @param node The LiteralCommandNode to wrap
-	 * @return A VanillaCommandWrapper representing the given node
-	 */
-	Command wrapToVanillaCommandWrapper(CommandNode<CommandListenerWrapper> node);
-
-	/**
-	 * Checks if a Brigadier command node is being handled by Bukkit's BukkitCommandWrapper
-	 *
-	 * @param node The CommandNode to check
-	 * @return true if the CommandNode is being handled by Bukkit's BukkitCommandWrapper
-	 */
-	boolean isBukkitCommandWrapper(CommandNode<CommandListenerWrapper> node);
-
-	/**
 	 * Reloads the datapacks by using the updated the commandDispatcher tree
 	 */
 	void reloadDataPacks();
