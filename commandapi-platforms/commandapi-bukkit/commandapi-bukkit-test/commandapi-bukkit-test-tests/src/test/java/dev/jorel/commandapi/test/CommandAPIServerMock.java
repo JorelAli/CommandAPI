@@ -16,6 +16,7 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -33,6 +34,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.Brigadier;
 import org.mockito.Mockito;
 
@@ -201,6 +203,27 @@ public class CommandAPIServerMock extends ServerMock {
 //		// the raw CraftItemMeta objects for the ItemStackArgument <3
 //		return MockPlatform.getInstance().getItemFactory();
 //	}
+
+	/**
+	 * Creates a new Bukkit {@link Player}. Unlike {@link PlayerMock}, this uses Mockito to mock the CraftPlayer class,
+	 * which allows the returned object to pass through VanillaCommandWrapper#getListener without error.
+	 *
+	 * @return A new {@link Player}.
+	 */
+	public Player setupMockedCraftPlayer() {
+		return setupMockedCraftPlayer("defaultName");
+	}
+
+	/**
+	 * Creates a new Bukkit {@link Player}. Unlike {@link PlayerMock}, this uses Mockito to mock the CraftPlayer class,
+	 * which allows the returned object to pass through VanillaCommandWrapper#getListener without error.
+	 *
+	 * @param name The name for the player
+	 * @return A new {@link Player}.
+	 */
+	public Player setupMockedCraftPlayer(String name) {
+		return MockPlatform.getInstance().setupMockedCraftPlayer(name);
+	}
 
 	// Advancements
 	
