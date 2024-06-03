@@ -476,6 +476,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	@Overridden(in = "1.17 common; 1.18", because = "1.17 uses ArgumentMinecraftKeyRegistered.f instead of ArgumentMinecraftKeyRegistered.e")
+	@Overridden(in = "1.20.5, 1.20.6", because = "ArgumentMinecraftKeyRegistered.e -> ArgumentMinecraftKeyRegistered.c")
 	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
 	}

@@ -666,6 +666,11 @@ public class NMS_1_20_R4 extends NMS_Common {
 		return CraftLootTable.minecraftToBukkit(ResourceLocationArgument.getId(cmdCtx, key));
 	}
 
+	@Override
+	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
+	}
+
 	@Differs(from = "1.20.4", by = "New particle option ColorParticleOption")
 	@Override
 	public final ParticleData<?> getParticle(CommandContext<CommandSourceStack> cmdCtx, String key) {
