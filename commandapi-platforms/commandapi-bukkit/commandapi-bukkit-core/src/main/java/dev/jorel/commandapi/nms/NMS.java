@@ -64,6 +64,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
 import dev.jorel.commandapi.wrappers.MathOperation;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
@@ -392,6 +393,8 @@ public interface NMS<CommandListenerWrapper> {
 	SimpleCommandMap getSimpleCommandMap();
 
 	Object getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType);
+
+    public abstract NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandListenerWrapper> cmdCtx);
 
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider

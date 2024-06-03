@@ -222,7 +222,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	// Requirements //
 	//////////////////
 
-	private Predicate<CommandSender> requirements = s -> true;
+	private Predicate<CommandSender> requirements = CommandPermission.TRUE();
 
 	/**
 	 * Returns the requirements required to run this command
@@ -427,7 +427,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		//  this if statement, like what Literal#createArgumentBuilder does.
 		SuggestionProvider<Source> suggestions = handler.generateBrigadierSuggestions(previousArguments, (Argument) this);
 		ArgumentBuilder<Source, ?> rootBuilder;
-		if (this instanceof Previewable<?, ?> previewable) {
+		if (this instanceof Previewable<?, ?, ?> previewable) {
 			// Handle previewable argument
 			PreviewableArgumentBuilder<Source, ?> builder = PreviewableArgumentBuilder.previewableArgument(
 				nodeName, rawType, 

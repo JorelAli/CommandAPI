@@ -20,41 +20,27 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.command.CommandSender;
-
-import dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.ConsoleCommandSource;
+import com.velocitypowered.api.proxy.Player;
 
 /**
- * A normal command executor for a BlockCommandSender
+ * An enum representing the type of an executor
  */
-@FunctionalInterface
-public interface FeedbackForwardingCommandExecutor extends NormalExecutor<	CommandSender, BukkitFeedbackForwardingCommandSender<CommandSender>> {
+public enum ExecutorType {
 
 	/**
-	 * The code to run when this command is performed
-	 * 
-	 * @param sender The sender of this command (a player, the console etc.)
-	 * @param args The arguments given to this command.
+	 * An executor where the CommandSender is any {@link CommandSource}
 	 */
-	void run(CommandSender sender, CommandArguments args) throws WrapperCommandSyntaxException;
+	ALL,
 
 	/**
-	 * The code to run when this command is performed
-	 *
-	 * @param info The ExecutionInfo for this command
+	 * An executor where the CommandSender is a {@link Player}
 	 */
-	@Override
-	default void run(ExecutionInfo<CommandSender, BukkitFeedbackForwardingCommandSender<CommandSender>> info) throws WrapperCommandSyntaxException {
-		this.run(info.sender(), info.args());
-	}
+	PLAYER,
 
 	/**
-	 * Returns the type of the sender of the current executor.
-	 * @return the type of the sender of the current executor
+	 * An executor where the CommandSender is a {@link ConsoleCommandSource}
 	 */
-	@Override
-	default ExecutorType getType() {
-		return ExecutorType.FEEDBACK_FORWARDING;
-	}
+	CONSOLE;
 }

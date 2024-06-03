@@ -91,9 +91,6 @@ import com.mojang.serialization.DataResult;
 
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -452,9 +449,8 @@ public class NMS_1_20_R4 extends NMS_Common {
 	}
 
 	@Override
-	public CommandSourceStack getBrigadierSourceFromCommandSender(
-			AbstractCommandSender<? extends CommandSender> sender) {
-		return VanillaCommandWrapper.getListener(sender.getSource());
+	public CommandSourceStack getBrigadierSourceFromCommandSender(CommandSender sender) {
+		return VanillaCommandWrapper.getListener(sender);
 	}
 
 	@Differs(from = "1.20.4", by = "Serializer.toJson now needs a Provider")
@@ -784,35 +780,23 @@ public class NMS_1_20_R4 extends NMS_Common {
 	}
 
 	@Override
-	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx,
-			boolean isNative) {
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx) {
 		CommandSourceStack css = cmdCtx.getSource();
 
-		CommandSender sender = css.getBukkitSender();
-		if (sender == null) {
-			// Sender CANNOT be null. This can occur when using a remote console
-			// sender. You can access it directly using
-			// this.<MinecraftServer>getMinecraftServer().remoteConsole
-			// however this may also be null, so delegate to the next most-meaningful
-			// sender.
-			sender = Bukkit.getConsoleSender();
-		}
+		// Get original sender
+		CommandSender sender = getCommandSenderFromCommandSource(css);
+
+		// Get position
 		Vec3 pos = css.getPosition();
 		Vec2 rot = css.getRotation();
 		World world = getWorldForCSS(css);
 		Location location = new Location(world, pos.x(), pos.y(), pos.z(), rot.y, rot.x);
 
+		// Get proxy sender (default to sender if null)
 		Entity proxyEntity = css.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
-		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			if (proxy == null) {
-				proxy = sender;
-			}
+		CommandSender proxy = proxyEntity == null ? sender : proxyEntity.getBukkitEntity();
 
-			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
-		} else {
-			return wrapCommandSender(sender);
-		}
+		return new NativeProxyCommandSender(sender, proxy, location, world);
 	}
 
 	@Override

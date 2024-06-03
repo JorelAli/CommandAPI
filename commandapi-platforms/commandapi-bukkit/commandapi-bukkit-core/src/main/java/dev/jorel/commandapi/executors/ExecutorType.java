@@ -20,40 +20,63 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import com.velocitypowered.api.proxy.ConsoleCommandSource;
-import dev.jorel.commandapi.commandsenders.VelocityConsoleCommandSender;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.ProxiedCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 /**
- * A resulting command executor for a ConsoleCommandSender
+ * An enum representing the type of an executor
  */
-@FunctionalInterface
-public interface ConsoleResultingCommandExecutor extends ResultingExecutor<ConsoleCommandSource, VelocityConsoleCommandSender> {
+public enum ExecutorType {
 
 	/**
-	 * The code to run when this command is performed
-	 *
-	 * @param sender The sender of this command (a player, the console etc.)
-	 * @param args The arguments given to this command.
+	 * An executor where the CommandSender is any {@link CommandSender}
 	 */
-	int run(ConsoleCommandSource sender, CommandArguments args) throws WrapperCommandSyntaxException;
+	ALL,
 
 	/**
-	 * The code to run when this command is performed
-	 *
-	 * @param info The ExecutionInfo for this command
+	 * An executor where the CommandSender is a {@link Player}
 	 */
-	@Override
-	default int run(ExecutionInfo<ConsoleCommandSource, VelocityConsoleCommandSender> info) throws WrapperCommandSyntaxException {
-		return this.run(info.sender(), info.args());
-	}
+	PLAYER,
 
 	/**
-	 * Returns the type of the sender of the current executor.
-	 * @return the type of the sender of the current executor
+	 * An executor where the CommandSender is an {@link Entity}
 	 */
-	@Override
-	default ExecutorType getType() {
-		return ExecutorType.CONSOLE;
-	}
+	ENTITY,
+
+	/**
+	 * An executor where the CommandSender is a {@link ConsoleCommandSender}
+	 */
+	CONSOLE,
+
+	/**
+	 * An executor where the CommandSender is a {@link BlockCommandSender}
+	 */
+	BLOCK,
+
+	/**
+	 * An executor where the CommandSender is a {@link ProxiedCommandSender}
+	 */
+	PROXY,
+
+	/**
+	 * An executor where the CommandSender is (always) a {@link NativeProxyCommandSender}
+	 */
+	NATIVE,
+
+	/**
+	 * An executor where the CommandSender is a {@link RemoteConsoleCommandSender}
+	 */
+	REMOTE,
+
+	/**
+	 * An executor where the CommandSender is a {@code io.papermc.paper.commands.FeedbackForwardingSender}
+	 */
+	FEEDBACK_FORWARDING;
 }

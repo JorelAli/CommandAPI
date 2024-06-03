@@ -108,7 +108,7 @@ public class CustomArgument<T, B> extends Argument<T> {
 		final B parsedInput = base.parseArgument(cmdCtx, key, previousArgs);
 
 		try {
-			return infoParser.apply(new CustomArgumentInfo<>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource(),
+			return infoParser.apply(new CustomArgumentInfo<>(CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()),
 				previousArgs, customresult, parsedInput));
 		} catch (CustomArgumentException e) {
 			throw e.toCommandSyntax(customresult, cmdCtx);

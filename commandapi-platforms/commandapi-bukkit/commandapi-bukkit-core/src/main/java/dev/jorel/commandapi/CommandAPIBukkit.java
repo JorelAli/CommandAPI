@@ -7,25 +7,17 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,7 +29,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -46,24 +37,12 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitEntity;
-import dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitRemoteConsoleCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.help.BukkitHelpTopicWrapper;
 import dev.jorel.commandapi.help.CommandAPIHelpTopic;
 import dev.jorel.commandapi.help.CustomCommandAPIHelpTopic;
 import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
-import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -265,54 +244,11 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	@Unimplemented(because = REQUIRES_CSS)
-	public abstract BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
-
-	@Override
-	@Unimplemented(because = REQUIRES_CSS)
-	public abstract BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
+	public abstract CommandSender getCommandSenderFromCommandSource(Source cs);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT)
-	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
-
-	public BukkitCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
-		if (sender instanceof BlockCommandSender block) {
-			return new BukkitBlockCommandSender(block);
-		}
-		if (sender instanceof ConsoleCommandSender console) {
-			return new BukkitConsoleCommandSender(console);
-		}
-		if (sender instanceof Player player) {
-			return new BukkitPlayer(player);
-		}
-		if (sender instanceof org.bukkit.entity.Entity entity) {
-			return new BukkitEntity(entity);
-		}
-		if (sender instanceof NativeProxyCommandSender nativeProxy) {
-			return new BukkitNativeProxyCommandSender(nativeProxy);
-		}
-		if (sender instanceof ProxiedCommandSender proxy) {
-			return new BukkitProxiedCommandSender(proxy);	
-		}
-		if (sender instanceof RemoteConsoleCommandSender remote) {
-			return new BukkitRemoteConsoleCommandSender(remote);
-		}
-		if (paper.isPaperPresent()) {
-			final Class<? extends CommandSender> FeedbackForwardingSender = paper.getFeedbackForwardingCommandSender();
-			if (FeedbackForwardingSender.isInstance(sender)) {
-				// We literally cannot type this at compile-time, so let's use a placeholder CommandSender instance
-				return new BukkitFeedbackForwardingCommandSender<CommandSender>(FeedbackForwardingSender.cast(sender));
-			}
-
-			final Class<? extends CommandSender> NullCommandSender = paper.getNullCommandSender();
-			if (NullCommandSender != null && NullCommandSender.isInstance(sender)) {
-				// Since this should only be during a function load, this is just a placeholder to evade the exception.
-				return null;
-			}
-
-		}
-		throw new RuntimeException("Failed to wrap CommandSender " + sender + " to a CommandAPI-compatible BukkitCommandSender");
-	}
+	public abstract Source getBrigadierSourceFromCommandSender(CommandSender sender);
 
 	public void registerPermission(String string) {
 		try {
@@ -471,8 +407,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	public abstract void reloadDataPacks();
 
 	@Override
-	public void updateRequirements(AbstractPlayer<?> player) {
-		((Player) player.getSource()).updateCommands();
+	public void updateRequirements(CommandSender player) {
+		((Player) player).updateCommands();
 	}
 
 	@Override
@@ -557,5 +493,30 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				}
 			}
 		}
+	}
+
+	@Override
+	public Predicate<CommandSender> getPermissionCheck(CommandPermission permission) {
+		final Predicate<CommandSender> senderCheck;
+
+		if (permission.equals(CommandPermission.NONE)) {
+			// No permissions always passes
+			senderCheck = CommandPermission.TRUE();
+		} else if (permission.equals(CommandPermission.OP)) {
+			senderCheck = CommandSender::isOp;
+		} else {
+			Optional<String> permissionStringWrapper = permission.getPermission();
+			if (permissionStringWrapper.isPresent()) {
+				String permissionString = permissionStringWrapper.get();
+				// check permission
+				senderCheck = sender -> sender.hasPermission(permissionString);
+			} else {
+				// No permission always passes
+				senderCheck = CommandPermission.TRUE();
+			}
+		}
+
+		// Negate if specified
+		return permission.isNegated() ? senderCheck.negate() : senderCheck;
 	}
 }

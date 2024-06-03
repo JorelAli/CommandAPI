@@ -30,8 +30,6 @@ import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandRegistrationStrategy;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.Overridden;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
@@ -357,12 +355,17 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	public abstract CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
+	public abstract CommandSourceStack getBrigadierSourceFromCommandSender(CommandSender sender);
 
 	@Override
-	public final BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack css) {
+	public final CommandSender getCommandSenderFromCommandSource(CommandSourceStack css) {
 		try {
-			return wrapCommandSender(css.getBukkitSender());
+			CommandSender sender = css.getBukkitSender();
+			// Sender CANNOT be null. This can occur when using a remote console
+			// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
+			// however this may also be null, so delegate to the next most-meaningful sender.
+			return sender == null ? Bukkit.getConsoleSender() : sender;
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -526,7 +529,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Unimplemented(because = NAME_CHANGED, info = "i (1.17)            -> getRotation (1.18) -> l (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getEntity (1.17)    -> getEntity (1.18)   -> g (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getWorld (1.17)     -> getLevel (1.18)    -> f (1.19)")
-	public abstract BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative);
+	public abstract NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftServer")

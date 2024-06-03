@@ -98,9 +98,6 @@ import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.SpigotCommandRegistration;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
@@ -499,14 +496,18 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	}
 
 	@Override
-	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
-		return VanillaCommandWrapper.getListener(senderWrapper.getSource());
+	public CommandListenerWrapper getBrigadierSourceFromCommandSender(CommandSender sender) {
+		return VanillaCommandWrapper.getListener(sender);
 	}
 
 	@Override
-	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
+	public CommandSender getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
-			return wrapCommandSender(clw.getBukkitSender());
+			CommandSender sender = clw.getBukkitSender();
+			// Sender CANNOT be null. This can occur when using a remote console
+			// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
+			// however this may also be null, so delegate to the next most-meaningful sender.
+			return sender == null ? Bukkit.getConsoleSender() : sender;
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -810,31 +811,23 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	}
 
 	@Override
-	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean isNative) {
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandListenerWrapper> cmdCtx) {
 		CommandListenerWrapper clw = cmdCtx.getSource();
 
-		CommandSender sender = clw.getBukkitSender();
-		if (sender == null) {
-			// Sender CANNOT be null. This can occur when using a remote console
-			// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
-			// however this may also be null, so delegate to the next most-meaningful sender.
-			sender = Bukkit.getConsoleSender();
-		}
+		// Get original sender
+		CommandSender sender = getCommandSenderFromCommandSource(clw);
+
+		// Get position
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
 		World world = getWorldForCSS(clw);
 		Location location = new Location(world, pos.getX(), pos.getY(), pos.getZ(), rot.j, rot.i);
 
+		// Get proxy sender (default to sender if null)
 		Entity proxyEntity = clw.getEntity();
-		CommandSender proxy = proxyEntity == null ? null : proxyEntity.getBukkitEntity();
-		if (isNative || (proxy != null && !sender.equals(proxy))) {
-			if (proxy == null) {
-				proxy = sender;
-			}
-			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
-		} else {
-			return wrapCommandSender(sender);
-		}
+		CommandSender proxy = proxyEntity == null ? sender : proxyEntity.getBukkitEntity();
+
+		return new NativeProxyCommandSender(sender, proxy, location, world);
 	}
 
 	@Override

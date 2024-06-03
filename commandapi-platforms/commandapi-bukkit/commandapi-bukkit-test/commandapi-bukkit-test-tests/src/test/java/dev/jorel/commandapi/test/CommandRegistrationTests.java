@@ -14,7 +14,7 @@ import dev.jorel.commandapi.exceptions.DuplicateNodeNameException;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
-import dev.jorel.commandapi.executors.PlayerExecutionInfo;
+import dev.jorel.commandapi.executors.NormalExecutorInfo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -380,8 +380,8 @@ class CommandRegistrationTests extends TestBase {
 		Player player = server.addPlayer();
 
 		// The executor we register first should not be overwritten and should always run
-		PlayerExecutionInfo firstExecutor = info -> {results.set("first");};
-		PlayerExecutionInfo secondExecutor = info -> {results.set("second");};
+		NormalExecutorInfo<Player, ?> firstExecutor = info -> {results.set("first");};
+		NormalExecutorInfo<Player, ?> secondExecutor = info -> {results.set("second");};
 
 		// No arguments
 		new CommandAPICommand("noArguments")

@@ -10,9 +10,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.serialization.JsonOps;
 import dev.jorel.commandapi.*;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
@@ -269,8 +267,7 @@ public class MockNMS extends Enums {
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
-	public CommandSourceStack getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
-		CommandSender sender = senderWrapper.getSource();
+	public CommandSourceStack getBrigadierSourceFromCommandSender(CommandSender sender) {
 		CommandSourceStack css = Mockito.mock(CommandSourceStack.class);
 		Mockito.when(css.getBukkitSender()).thenReturn(sender);
 
@@ -368,6 +365,11 @@ public class MockNMS extends Enums {
 			Mockito.when(css.getRotation()).thenReturn(new Vec2(0, 0));
 		}
 		return css;
+	}
+
+	@Override
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx) {
+		return baseNMS.getNativeProxyCommandSender(cmdCtx);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -569,7 +571,7 @@ public class MockNMS extends Enums {
 		}
 
 		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
-		CommandSourceStack css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(Bukkit.getOnlinePlayers().iterator().next());
 
 		// So for very interesting reasons, Brigadier.getCommandDispatcher()
 		// gives a different result in this method than using getBrigadierDispatcher()
@@ -584,7 +586,7 @@ public class MockNMS extends Enums {
 		}
 
 		ResourceLocation resourceLocation = new ResourceLocation(key.toString());
-		CommandSourceStack css = getBrigadierSourceFromCommandSender(new BukkitPlayer(Bukkit.getOnlinePlayers().iterator().next()));
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(Bukkit.getOnlinePlayers().iterator().next());
 
 		List<CommandFunction> tagFunctions = new ArrayList<>();
 		for(List<String> functionCommands : commands) {
@@ -607,7 +609,7 @@ public class MockNMS extends Enums {
 		Mockito.when(player.getWorld()).thenReturn(world);
 
 		// Provide proper handle as VanillaCommandWrapper expects
-		CommandSourceStack css = getBrigadierSourceFromCommandSender(wrapCommandSender(player));
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(player);
 
 		ServerPlayer handle = Mockito.mock(ServerPlayer.class);
 		Mockito.when(handle.createCommandSourceStack()).thenReturn(css);
@@ -670,17 +672,8 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean forceNative) {
-		return baseNMS.getSenderForCommand(cmdCtx, forceNative);
-	}
-
-	@Override
-	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack clw) {
-		try {
-			return wrapCommandSender(clw.getBukkitSender());
-		} catch (UnsupportedOperationException e) {
-			return null;
-		}
+	public CommandSender getCommandSenderFromCommandSource(CommandSourceStack clw) {
+		return baseNMS.getCommandSenderFromCommandSource(clw);
 	}
 
 	@Override

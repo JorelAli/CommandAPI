@@ -27,14 +27,14 @@ import dev.jorel.commandapi.wrappers.PreviewableFunction;
  * @param <T> The type returned when this argument is parsed.
  */
 public class PreviewableCommandNode<Source, T> extends ArgumentCommandNode<Source, T> {
-    private final PreviewableFunction<?> preview;
+    private final PreviewableFunction<?, ?> preview;
     private final boolean legacy;
 
     // Instead of having a listed and unlisted copy of this class, we can just handle this with this boolean
     private final boolean isListed;
 
 	public PreviewableCommandNode(
-        PreviewableFunction<?> preview, boolean legacy, boolean isListed, 
+        PreviewableFunction<?, ?> preview, boolean legacy, boolean isListed, 
         String name, ArgumentType<T> type, 
         Command<Source> command, Predicate<Source> requirement, CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks, SuggestionProvider<Source> customSuggestions
     ) {
@@ -45,7 +45,7 @@ public class PreviewableCommandNode<Source, T> extends ArgumentCommandNode<Sourc
 	}
 
     // Methods needed to generate a preview
-    public Optional<PreviewableFunction<?>> getPreview() {
+    public Optional<PreviewableFunction<?, ?>> getPreview() {
         return Optional.ofNullable(preview);
     }
 
