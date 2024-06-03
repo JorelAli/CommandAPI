@@ -24,7 +24,7 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.FlattenableArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
-import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
+import dev.jorel.commandapi.executors.ResultingExecutor;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -184,7 +184,7 @@ public final class Converter {
 			permissionNode = CommandPermission.fromString(permission);
 		}
 
-		NativeResultingCommandExecutor executor = (sender, args) -> {
+		ResultingExecutor<NativeProxyCommandSender, ?> executor = (sender, args) -> {
 			org.bukkit.command.Command command = plugin.getCommand(commandName);
 
 			if (command == null) {

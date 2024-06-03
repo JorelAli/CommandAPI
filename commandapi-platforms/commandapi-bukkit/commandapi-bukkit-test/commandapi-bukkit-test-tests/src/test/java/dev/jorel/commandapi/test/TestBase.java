@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
@@ -35,7 +36,7 @@ import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.PaperImplementations;
 import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.executors.PlayerCommandExecutor;
+import dev.jorel.commandapi.executors.NormalExecutor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,7 +92,7 @@ public abstract class TestBase {
 		assertFalse(CommandAPI.canRegister());
 	}
 
-	public static final PlayerCommandExecutor P_EXEC = (player, args) -> {};
+	public static final NormalExecutor<Player, ?> P_EXEC = (player, args) -> {};
 	
 	private void resetAllPotions() {
 		PotionEffectType[] arr = MockPlatform.getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);

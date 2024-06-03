@@ -44,7 +44,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.*;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.CommandConflictException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
@@ -271,7 +270,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param executor Code to run when the command is executed.
 	 * @return A Brigadier Command object that runs the given execution with the given arguments as input.
 	 */
-	public Command<Source> generateBrigadierCommand(List<Argument> args, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor) {
+	public Command<Source> generateBrigadierCommand(List<Argument> args, CommandAPIExecutor<CommandSender> executor) {
 		// We need to make sure our arguments list is never changed
 		//  If we just used the reference to the list, the caller might add arguments that aren't actually previous
 		//  arguments for this suggestion node, and we would be confused because the new arguments don't exist
@@ -279,25 +278,10 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		// Generate our command from executor
 		return cmdCtx -> {
 			// Construct the execution info
-			AbstractCommandSender<? extends CommandSender> sender = platform.getSenderForCommand(cmdCtx, executor.isForceNative());
+			CommandSender sender = platform.getCommandSenderFromCommandSource(cmdCtx.getSource());
 			CommandArguments commandArguments = argsToCommandArgs(cmdCtx, immutableArguments);
 
-			ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> executionInfo = new ExecutionInfo<>() {
-				@Override
-				public CommandSender sender() {
-					return sender.getSource();
-				}
-
-				@Override
-				public AbstractCommandSender<? extends CommandSender> senderWrapper() {
-					return sender;
-				}
-
-				@Override
-				public CommandArguments args() {
-					return commandArguments;
-				}
-			};
+			ExecutionInfo<CommandSender, Source> executionInfo = new ExecutionInfo<>(sender, commandArguments, cmdCtx);
 
 			// Apply the executor
 			return executor.execute(executionInfo);
@@ -375,7 +359,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		return (context, builder) -> {
 			// Construct the suggestion info
 			SuggestionInfo<CommandSender> suggestionInfo = new SuggestionInfo<>(
-				platform.getCommandSenderFromCommandSource(context.getSource()).getSource(),
+				platform.getCommandSenderFromCommandSource(context.getSource()),
 				argsToCommandArgs(context, immutableArguments), builder.getInput(), builder.getRemaining()
 			);
 
@@ -393,44 +377,24 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @return A Predicate that makes sure a Brigadier source object satisfies the given permission and arbitrary requirements.
 	 */
 	public Predicate<Source> generateBrigadierRequirements(CommandPermission permission, Predicate<CommandSender> requirements) {
+		// If requirements are always false, result is always false
+		if (requirements == CommandPermission.FALSE()) return CommandPermission.FALSE();
+
 		// Find the intial check for the given CommandPermission
-		Predicate<AbstractCommandSender<? extends CommandSender>> senderCheck;
-		if (permission.equals(CommandPermission.NONE)) {
-			// No permissions always passes
-			senderCheck = null;
-		} else if (permission.equals(CommandPermission.OP)) {
-			// Check op status
-			senderCheck = AbstractCommandSender::isOp;
-		} else {
-			Optional<String> permissionStringWrapper = permission.getPermission();
-			if (permissionStringWrapper.isPresent()) {
-				String permissionString = permissionStringWrapper.get();
-				// check permission
-				senderCheck = sender -> sender.hasPermission(permissionString);
-			} else {
-				// No permission always passes
-				senderCheck = null;
-			}
-		}
+		Predicate<CommandSender> senderCheck = platform.getPermissionCheck(permission);
 
-		if (senderCheck == null) {
-			// Short circuit permissions check if it doesn't depend on source
-			if (permission.isNegated()) {
-				// A negated NONE permission never passes
-				return source -> false;
-			} else {
-				// Only need to check the requirements
-				return source -> requirements.test(platform.getCommandSenderFromCommandSource(source).getSource());
-			}
-		}
+		// Merge with requirements (unless its always true, which wouldn't add anything)
+		if (requirements != CommandPermission.TRUE()) senderCheck = senderCheck.and(requirements);
 
-		// Negate permission check if appropriate
-		Predicate<AbstractCommandSender<? extends CommandSender>> finalSenderCheck = permission.isNegated() ? senderCheck.negate() : senderCheck;
+		// Short circuit if the final test is always true or false
+		if (senderCheck == CommandPermission.TRUE()) return CommandPermission.TRUE();
+		if (senderCheck == CommandPermission.FALSE()) return CommandPermission.FALSE();
 
-		// Merge permission check and requirements
+		// Otherwise, convert Brigadier Source to CommandSender and run the check
+		final Predicate<CommandSender> finalSenderCheck = senderCheck;
 		return source -> {
-			AbstractCommandSender<? extends CommandSender> sender = platform.getCommandSenderFromCommandSource(source);
-			return finalSenderCheck.test(sender) && requirements.test(sender.getSource());
+			CommandSender sender = platform.getCommandSenderFromCommandSource(source);
+			return finalSenderCheck.test(sender);
 		};
 	}
 

@@ -32,7 +32,6 @@ import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.Literal;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 
 import java.util.Collections;
 import java.util.List;
@@ -206,19 +205,17 @@ public final class Brigadier {
 	 */
 	public static <CommandSender> Object getBrigadierSourceFromCommandSender(CommandSender sender) {
 		CommandAPIPlatform<?, CommandSender, ?> platform = (CommandAPIPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
-		return platform.getBrigadierSourceFromCommandSender(platform.wrapCommandSender(sender));
+		return platform.getBrigadierSourceFromCommandSender(sender);
 	}
 
 	/**
-	 * Returns a Bukkit CommandSender from a Brigadier CommandContext
+	 * Returns the current platform's command sender from a Brigadier CommandContext
 	 * 
 	 * @param cmdCtx the command context to get the CommandSender from
-	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
+	 * @return a command sender from the provided Brigadier CommandContext
 	 */
-	public static <CommandSender> CommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
-		CommandAPIPlatform<?, CommandSender, ?> platform = (CommandAPIPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
-		// For some reason putting this on one line doesn't work - very weird
-		AbstractCommandSender<CommandSender> abstractSender = platform.getSenderForCommand(cmdCtx, false);
-		return abstractSender.getSource();
+	public static <CommandSender, Source> CommandSender getCommandSenderFromContext(CommandContext cmdCtx) {
+		CommandAPIPlatform<?, CommandSender, Source> platform = (CommandAPIPlatform<?, CommandSender, Source>) CommandAPIHandler.getInstance().getPlatform();
+		return platform.getCommandSenderFromCommandSource((Source) cmdCtx.getSource());
 	}
 }

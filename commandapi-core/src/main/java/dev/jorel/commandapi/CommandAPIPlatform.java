@@ -2,17 +2,15 @@ package dev.jorel.commandapi;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @param <Argument> The implementation of AbstractArgument used for the platform
@@ -45,40 +43,22 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	public abstract void onDisable();
 
-	// Converting between CommandSender, AbstractCommandSender, and Brigadier Sources
-
+	// Converting between platform CommandSender and Brigadier Source
 	/**
-	 * Converts a Brigadier CommandContext into an AbstractCommandSender wrapping the platform's CommandSender
-	 *
-	 * @param cmdCtx      A Brigadier CommandContext
-	 * @param forceNative True if the CommandSender should be forced into a native CommandSender
-	 * @return An AbstractCommandSender wrapping the CommandSender represented by the CommandContext
-	 */
-	public abstract AbstractCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
-
-	/**
-	 * Converts the class used by Brigadier when running commands into an AbstractCommandSender wrapping the platform's CommandSender
+	 * Converts the class used by Brigadier when running commands into the platform's CommandSender
 	 *
 	 * @param source The Brigadier source object
-	 * @return An AbstractCommandSender wrapping the CommandSender represented by the source object
+	 * @return The CommandSender represented by the source object
 	 */
-	public abstract AbstractCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source source);
+	public abstract CommandSender getCommandSenderFromCommandSource(Source source);
 
 	/**
-	 * Converts a CommandSender wrapped in an AbstractCommandSender to an object Brigadier can use when running its commands
+	 * Converts a CommandSender to an object Brigadier can use when running its commands
 	 *
-	 * @param sender The CommandSender to convert, wrapped in an AbstractCommandSender
+	 * @param sender The CommandSender to convert
 	 * @return The Brigadier Source object represented by the sender
 	 */
-	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
-
-	/**
-	 * Wraps a CommandSender in an AbstractCommandSender class, the inverse operation to {@link AbstractCommandSender#getSource()}
-	 *
-	 * @param sender The CommandSender to wrap
-	 * @return An AbstractCommandSender with a class appropriate to the underlying class of the CommandSender
-	 */
-	public abstract AbstractCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender);
+	public abstract Source getBrigadierSourceFromCommandSender(CommandSender sender);
 
 	// Some commands have existing suggestion providers
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
@@ -196,13 +176,21 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public abstract void reloadDataPacks();
 
 	/**
-	 * Updates the requirements required for a given player to execute a command.
+	 * Updates the player's view of the requirements for them to execute a command.
 	 *
-	 * @param player the player to update
+	 * @param player the player whose requirements should be updated
 	 */
-	public abstract void updateRequirements(AbstractPlayer<?> player);
+	public abstract void updateRequirements(CommandSender player);
 
 	public abstract Argument newConcreteMultiLiteralArgument(String nodeName, String[] literals);
 
 	public abstract Argument newConcreteLiteralArgument(String nodeName, String literal);
+
+	/**
+	 * Generates a {@link Predicate} that evaluates whether a command sender meets the given permission.
+	 * 
+	 * @param permission The {@link CommandPermission} to check for.
+	 * @return A {@link Predicate} that tests if a command sender meets the given permission.
+	 */
+	public abstract Predicate<CommandSender> getPermissionCheck(CommandPermission permission);
 }

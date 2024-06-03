@@ -76,7 +76,7 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 
 		private String helpString;
 		private CommandPermission permission = CommandPermission.NONE;
-		private Predicate<CommandSender> requirements = sender -> true;
+		private Predicate<CommandSender> requirements = CommandPermission.TRUE();
 
 		private final List<Node<CommandSender>> children;
 

@@ -3,7 +3,7 @@ package dev.jorel.commandapi.test
 import be.seeseemelk.mockbukkit.MockBukkit
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import dev.jorel.commandapi.executors.CommandArguments
-import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.executors.NormalExecutor
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandMap
@@ -87,6 +87,6 @@ abstract class TestBase {
 	}
 
 	companion object {
-		val P_EXEC = PlayerCommandExecutor { _: Player, _: CommandArguments -> }
+		val P_EXEC = NormalExecutor<Player, Any> { _: Player, _: CommandArguments -> }
 	}
 }

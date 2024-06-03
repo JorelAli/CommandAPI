@@ -3,7 +3,6 @@ package dev.jorel.commandapi;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 import java.util.ArrayList;
@@ -232,14 +231,13 @@ public class CommandAPI {
 	}
 
 	/**
-	 * Updates the requirements required for a given player to execute a command.
+	 * Updates the player's view of the requirements for them to execute a command.
 	 *
 	 * @param player the player whose requirements should be updated
 	 */
 	public static <CommandSender, Player extends CommandSender> void updateRequirements(Player player) {
-		@SuppressWarnings("unchecked")
 		CommandAPIPlatform<?, CommandSender, ?> platform = (CommandAPIPlatform<?, CommandSender, ?>) CommandAPIHandler.getInstance().getPlatform();
-		platform.updateRequirements((AbstractPlayer<?>) platform.wrapCommandSender(player));
+		platform.updateRequirements(player);
 	}
 
 	// Produce WrapperCommandSyntaxException

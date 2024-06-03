@@ -25,11 +25,11 @@ public class PreviewableArgumentBuilder<Source, T> extends ArgumentBuilder<Sourc
 	private SuggestionProvider<Source> suggestionsProvider = null;
 
     // `Previewable` information
-    private final PreviewableFunction<?> previewableFunction;
+    private final PreviewableFunction<?, ?> previewableFunction;
 	private final boolean legacy;
 	private final boolean isListed;
 
-	private PreviewableArgumentBuilder(String name, ArgumentType<T> type, PreviewableFunction<?> previewableFunction, boolean legacy, boolean isListed) {
+	private PreviewableArgumentBuilder(String name, ArgumentType<T> type, PreviewableFunction<?, ?> previewableFunction, boolean legacy, boolean isListed) {
 		this.name = name;
 		this.type = type;
 		
@@ -38,7 +38,7 @@ public class PreviewableArgumentBuilder<Source, T> extends ArgumentBuilder<Sourc
 		this.isListed = isListed;
 	}
 
-	public static <Source, T> PreviewableArgumentBuilder<Source, T> previewableArgument(String name, ArgumentType<T> type, PreviewableFunction<?> previewableFunction, boolean legacy, boolean isListed) {
+	public static <Source, T> PreviewableArgumentBuilder<Source, T> previewableArgument(String name, ArgumentType<T> type, PreviewableFunction<?, ?> previewableFunction, boolean legacy, boolean isListed) {
 		return new PreviewableArgumentBuilder<>(name, type, previewableFunction, legacy, isListed);
 	}
 

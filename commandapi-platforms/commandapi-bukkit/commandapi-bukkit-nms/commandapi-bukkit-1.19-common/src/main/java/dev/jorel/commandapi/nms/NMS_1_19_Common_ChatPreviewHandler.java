@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.PreviewInfo;
 import dev.jorel.commandapi.commandnodes.PreviewableCommandNode;
-import dev.jorel.commandapi.commandsenders.BukkitPlayer;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 import io.netty.channel.ChannelDuplexHandler;
@@ -68,7 +67,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 
 		// Return early if the node is not previewable
 		final PreviewableCommandNode<CommandSourceStack, ?> previewableNode = ip.previewableNode;
-		final Optional<PreviewableFunction<?>> preview = previewableNode.getPreview();
+		final Optional<PreviewableFunction<?, ?>> preview = previewableNode.getPreview();
 		if (preview.isEmpty()) {
 			return null;
 		}
@@ -92,7 +91,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 				} catch (CommandSyntaxException e) {
 					throw new WrapperCommandSyntaxException(e);
 				}
-				previewInfo = new PreviewInfo<>(new BukkitPlayer(player), input, chatPreviewQuery, parsedInput);
+				previewInfo = new PreviewInfo<>(player, input, chatPreviewQuery, parsedInput);
 			} else {
 				Component parsedInput;
 				try {
@@ -100,7 +99,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 				} catch (CommandSyntaxException e) {
 					throw new WrapperCommandSyntaxException(e);
 				}
-				previewInfo = new PreviewInfo<>(new BukkitPlayer(player), input, chatPreviewQuery, parsedInput);
+				previewInfo = new PreviewInfo<>(player, input, chatPreviewQuery, parsedInput);
 			}
 
 			component = preview.get().generatePreview(previewInfo);
@@ -136,7 +135,7 @@ public abstract class NMS_1_19_Common_ChatPreviewHandler extends ChannelDuplexHa
 			if(cachedResult != null && cachedResult.fullInput.equals(fullInput)) return cachedResult;
 
 			ParseResults<CommandSourceStack> results = platform.getBrigadierDispatcher()
-				.parse(fullInput, platform.getBrigadierSourceFromCommandSender(new BukkitPlayer(player)));
+				.parse(fullInput, platform.getBrigadierSourceFromCommandSender(player));
 
 			// Get the last node
 			List<ParsedCommandNode<CommandSourceStack>> nodes = results.getContext().getNodes();

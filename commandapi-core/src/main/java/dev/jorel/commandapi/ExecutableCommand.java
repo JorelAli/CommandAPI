@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 import dev.jorel.commandapi.help.CommandAPIHelpTopic;
 import dev.jorel.commandapi.help.EditableHelpTopic;
@@ -42,9 +41,9 @@ extends ExecutableCommand<Impl, CommandSender>
 	 */
 	protected CommandPermission permission = CommandPermission.NONE;
 	/**
-	 * A predicate that a {@link AbstractCommandSender} must pass in order to execute the command
+	 * A predicate that the comamand sender must pass in order to execute the command
 	 */
-	protected Predicate<CommandSender> requirements = s -> true;
+	protected Predicate<CommandSender> requirements = CommandPermission.TRUE();
 
 	// Command help
 	protected CommandAPIHelpTopic<CommandSender> helpTopic = new EditableHelpTopic<>();

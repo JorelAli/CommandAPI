@@ -6,7 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
@@ -16,12 +15,10 @@ import com.mojang.brigadier.tree.RootCommandNode;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
-import com.velocitypowered.api.proxy.Player;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.*;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
@@ -30,6 +27,8 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, CommandSource, CommandSource> {
 
@@ -164,31 +163,15 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 		return CommandAPILogger.fromApacheLog4jLogger(LogManager.getLogger("CommandAPI"));
 	}
 
+	// Velocity's CommandSender and Source are the same, so these two methods are easy
 	@Override
-	public VelocityCommandSender<? extends CommandSource> getSenderForCommand(CommandContext<CommandSource> cmdCtx, boolean forceNative) {
-		// Velocity doesn't have proxy senders, so nothing needs to be done with forceNative
-		return getCommandSenderFromCommandSource(cmdCtx.getSource());
+	public CommandSource getCommandSenderFromCommandSource(CommandSource commandSource) {
+		return commandSource;
 	}
 
 	@Override
-	public VelocityCommandSender<? extends CommandSource> getCommandSenderFromCommandSource(CommandSource cs) {
-		// Given a Brigadier CommandContext source (result of CommandContext.getSource),
-		// we need to convert that to an AbstractCommandSender.
-		if (cs instanceof ConsoleCommandSource ccs)
-			return new VelocityConsoleCommandSender(ccs);
-		if (cs instanceof Player p)
-			return new VelocityPlayer(p);
-		throw new IllegalArgumentException("Unknown CommandSource: " + cs);
-	}
-
-	@Override
-	public VelocityCommandSender<? extends CommandSource> wrapCommandSender(CommandSource commandSource) {
-		return getCommandSenderFromCommandSource(commandSource);
-	}
-
-	@Override
-	public CommandSource getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSource> sender) {
-		return sender.getSource();
+	public CommandSource getBrigadierSourceFromCommandSender(CommandSource sender) {
+		return sender;
 	}
 
 	@Override
@@ -242,7 +225,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	}
 
 	@Override
-	public void updateRequirements(AbstractPlayer<?> player) {
+	public void updateRequirements(CommandSource player) {
 		// TODO Auto-generated method stub
 	}
 
@@ -254,5 +237,31 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	@Override
 	public Argument<String> newConcreteLiteralArgument(String nodeName, String literal) {
 		return new LiteralArgument(nodeName, literal);
+	}
+
+	@Override
+	public Predicate<CommandSource> getPermissionCheck(CommandPermission permission) {
+		final Predicate<CommandSource> senderCheck;
+
+		if (permission.equals(CommandPermission.NONE)) {
+			// No permissions always passes
+			senderCheck = CommandPermission.TRUE();
+		} else if (permission.equals(CommandPermission.OP)) {
+			// Console is op, and other senders (Players) are not
+			senderCheck = ConsoleCommandSource.class::isInstance;
+		} else {
+			Optional<String> permissionStringWrapper = permission.getPermission();
+			if (permissionStringWrapper.isPresent()) {
+				String permissionString = permissionStringWrapper.get();
+				// check permission
+				senderCheck = sender -> sender.hasPermission(permissionString);
+			} else {
+				// No permission always passes
+				senderCheck = CommandPermission.TRUE();
+			}
+		}
+
+		// Negate if specified
+		return permission.isNegated() ? senderCheck.negate() : senderCheck;
 	}
 }
