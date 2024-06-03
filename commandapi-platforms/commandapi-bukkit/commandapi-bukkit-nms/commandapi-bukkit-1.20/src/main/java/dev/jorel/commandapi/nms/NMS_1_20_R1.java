@@ -142,9 +142,9 @@ import java.util.function.ToIntFunction;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.20.
+ * NMS implementation for Minecraft 1.20 and 1.20.1.
  */
-@NMSMeta(compatibleWith = { "1.20" })
+@NMSMeta(compatibleWith = { "1.20", "1.20.1" })
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
