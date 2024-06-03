@@ -14,8 +14,6 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import dev.jorel.commandapi.CommandRegistrationStrategy;
-import dev.jorel.commandapi.SpigotCommandRegistration;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
