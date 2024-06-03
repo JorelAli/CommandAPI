@@ -22,9 +22,7 @@ public class PaperCommandRegistration<Source> extends CommandRegistrationStrateg
 	// Store registered commands nodes for eventual reloads
 	private final RootCommandNode<Source> registeredNodes = new RootCommandNode<>();
 
-	public PaperCommandRegistration(
-		Supplier<CommandDispatcher<Source>> getBrigadierDispatcher, Predicate<CommandNode<Source>> isBukkitCommand
-	) {
+	public PaperCommandRegistration(Supplier<CommandDispatcher<Source>> getBrigadierDispatcher, Predicate<CommandNode<Source>> isBukkitCommand) {
 		this.getBrigadierDispatcher = getBrigadierDispatcher;
 		this.isBukkitCommand = isBukkitCommand;
 	}
