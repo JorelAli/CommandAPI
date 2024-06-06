@@ -45,7 +45,7 @@ open class CommandExecutionTests : TestBase() {
 	// Using a linked map here to keep the values in insertion order, rather
 	//  than in whatever order the hash code feels like, which makes debugging easier
 	private val executorTypeToMockSender: Map<ExecutorType, () -> CommandSender> = linkedMapOf(
-		ExecutorType.PLAYER to { server.setupMockedCraftPlayer() },
+		ExecutorType.PLAYER to { server.addCraftPlayer() },
 		ExecutorType.ENTITY to { SimpleEntityMock(server) },
 		ExecutorType.CONSOLE to { ConsoleCommandSenderMock() },
 		// Apparently `Mockito.mock(BlockCommandSender::class) as CommandSender` is not correct here ¯\_(ツ)_/¯

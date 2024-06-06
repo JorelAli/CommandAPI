@@ -51,14 +51,12 @@ class OnEnableTests extends TestBase {
 	void testOnEnableRegisterAndUnregisterCommand() {
 		enableServer();
 
-		// Add a PlayerMock to the server to listen for calls to `updateCommands()`
-		PlayerMock updateCommandsPlayer = Mockito.spy(new PlayerMock(server, "updateCommandsPlayer"));
-		// Interrupt normal calls to updateCommands, because MockPlayer throws an UnimplementedOperationException
-		Mockito.doNothing().when(updateCommandsPlayer).updateCommands();
+		// Spy a PlayerMock to listen for calls to `updateCommands()`
+		PlayerMock updateCommandsPlayer = Mockito.spy(new PlayerMock(server, "player"));
 		server.addPlayer(updateCommandsPlayer);
 
 		// Get a CraftPlayer for running VanillaCommandWrapper commands
-		Player runCommandsPlayer = server.setupMockedCraftPlayer();
+		Player runCommandsPlayer = MockPlatform.getInstance().wrapPlayerMockIntoCraftPlayer(updateCommandsPlayer);
 		// Give player permission to run command
 		Mockito.when(runCommandsPlayer.hasPermission("permission")).thenReturn(true);
 

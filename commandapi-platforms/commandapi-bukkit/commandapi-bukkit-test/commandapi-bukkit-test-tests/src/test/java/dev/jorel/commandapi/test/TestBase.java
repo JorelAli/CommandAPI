@@ -13,10 +13,13 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,11 +34,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestion;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIVersionHandler;
-import dev.jorel.commandapi.MCVersion;
-import dev.jorel.commandapi.PaperImplementations;
-import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.executors.NormalExecutor;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,8 +82,18 @@ public abstract class TestBase {
 	}
 
 	public void enableServer() {
-		// Run the CommandAPI's enable tasks
 		assertTrue(CommandAPI.canRegister(), "Server was already enabled! Cannot enable twice!");
+
+		// Register minecraft: namespace. MockBukkit doesn't seem to do this on their own
+		// Simulate `CraftServer#setVanillaCommands`
+		MockPlatform<Object> mockPlatform = MockPlatform.getInstance();
+		SimpleCommandMap commandMap = mockPlatform.getSimpleCommandMap();
+		SpigotCommandRegistration<Object> spigotCommandRegistration = (SpigotCommandRegistration<Object>) mockPlatform.getCommandRegistrationStrategy();
+		for (CommandNode<Object> node : mockPlatform.getBrigadierDispatcher().getRoot().getChildren()) {
+			commandMap.register("minecraft", spigotCommandRegistration.wrapToVanillaCommandWrapper(node));
+		}
+
+		// Run the CommandAPI's enable tasks
 		disablePaperImplementations();
 		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
 		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
