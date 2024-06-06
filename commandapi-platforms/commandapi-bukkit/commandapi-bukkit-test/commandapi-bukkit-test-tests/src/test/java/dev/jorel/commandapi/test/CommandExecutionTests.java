@@ -53,7 +53,7 @@ class CommandExecutionTests extends TestBase {
 	{
 		// Not using Map.of here because I want the values to be in insertion order,
 		//  rather than in whatever order the hash code feels like, which makes debugging easier
-		executorTypeToMockSender.put(ExecutorType.PLAYER, () -> server.setupMockedCraftPlayer());
+		executorTypeToMockSender.put(ExecutorType.PLAYER, () -> server.addCraftPlayer());
 		executorTypeToMockSender.put(ExecutorType.ENTITY, () -> new SimpleEntityMock(server));
 		executorTypeToMockSender.put(ExecutorType.CONSOLE, ConsoleCommandSenderMock::new);
 		executorTypeToMockSender.put(ExecutorType.BLOCK, () -> Mockito.mock(BlockCommandSender.class));

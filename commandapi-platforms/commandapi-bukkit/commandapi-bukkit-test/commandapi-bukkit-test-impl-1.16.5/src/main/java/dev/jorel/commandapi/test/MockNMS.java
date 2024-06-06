@@ -56,6 +56,7 @@ import net.minecraft.server.v1_16_R3.CustomFunction;
 import net.minecraft.server.v1_16_R3.CustomFunctionData;
 import net.minecraft.server.v1_16_R3.DispenserRegistry;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
+import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.GameProfilerDisabled;
 import net.minecraft.server.v1_16_R3.GameRules;
 import net.minecraft.server.v1_16_R3.IChatBaseComponent;
@@ -150,6 +151,7 @@ public class MockNMS extends Enums {
 			}
 			return null;
 		});
+		Mockito.when(playerListMock.getPlayers()).thenAnswer(i -> players);
 	}
 
 	/*************************
@@ -294,25 +296,15 @@ public class MockNMS extends Enums {
 //			Mockito.when(clw.getWorld().isInWorldBounds(any(BlockPosition.class))).thenReturn(true);
 			Mockito.when(clw.k()).thenReturn(Anchor.EYES);
 
+			if (entity instanceof CraftPlayer craftPlayer) {
+				// If the sender is a CraftPlayer, it was probably created by `#wrapPlayerMockIntoCraftPlayer`,
+				//  in which case `getHandle` will return what we want.
+				net.minecraft.server.v1_16_R3.Entity nmsEntity = craftPlayer.getHandle();
+				Mockito.when(clw.getEntity()).thenReturn(nmsEntity);
+			}
+
 			// Get mocked MinecraftServer
 			Mockito.when(clw.getServer()).thenAnswer(s -> getMinecraftServer());
-
-			// EntitySelectorArgument
-			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-				EntityPlayer entityPlayerMock = Mockito.mock(EntityPlayer.class);
-				CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
-
-				// Extract these variables first in case the onlinePlayer is a Mockito object itself
-				String name = onlinePlayer.getName();
-				UUID uuid = onlinePlayer.getUniqueId();
-
-				Mockito.when(craftPlayerMock.getName()).thenReturn(name);
-				Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(uuid);
-				Mockito.when(entityPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
-				Mockito.when(entityPlayerMock.getDisplayName()).thenReturn(new ChatComponentText(name)); // ChatArgument, AdventureChatArgument
-				Mockito.when(entityPlayerMock.getScoreboardDisplayName()).thenReturn(new ChatComponentText(name)); // ChatArgument, AdventureChatArgument
-				players.add(entityPlayerMock);
-			}
 
 			// CommandListenerWrapper#levels
 			Mockito.when(clw.p()).thenAnswer(invocation -> {
@@ -480,9 +472,21 @@ public class MockNMS extends Enums {
 			}
 		});
 
+		// EntitySelectorArgument for entities wants to loop over all levels to get all the entities
+		//  We'll just sneakily pass it our players as all the entities
+		WorldServer entityWorld = Mockito.mock(WorldServer.class);
+		Mockito.when(entityWorld.a(any(EntityTypes.class), any())).thenAnswer(invocation -> {
+			EntityTypes<?> type = invocation.getArgument(0);
+			// Make sure we are actually looking for players first
+			if (type == EntityTypes.PLAYER) {
+				return players;
+			}
+			return List.of();
+		});
+		Mockito.when(minecraftServerMock.getWorlds()).thenReturn(List.of(entityWorld));
+
 		// Player lists
 		Mockito.when(minecraftServerMock.getPlayerList()).thenAnswer(i -> playerListMock);
-		Mockito.when(minecraftServerMock.getPlayerList().getPlayers()).thenAnswer(i -> players);
 
 		// PlayerArgument
 		UserCache userCacheMock = Mockito.mock(UserCache.class);
@@ -583,33 +587,46 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public Player setupMockedCraftPlayer(String name) {
-		CraftPlayer player = Mockito.mock(CraftPlayer.class);
+	public Player wrapPlayerMockIntoCraftPlayer(Player playerMock) {
+		// Create player mock objects
+		CraftPlayer craftPlayerMock = Mockito.mock(CraftPlayer.class);
+		EntityPlayer serverPlayerMock = Mockito.mock(EntityPlayer.class);
 
-		// getLocation and getWorld is used when creating the CommandSourceStack in MockNMS
-		WorldServer worldServer = Mockito.mock(WorldServer.class);
+		// Link handle and player
+		Mockito.when(craftPlayerMock.getHandle()).thenReturn(serverPlayerMock);
+		Mockito.when(serverPlayerMock.getBukkitEntity()).thenReturn(craftPlayerMock);
+
+		// Name
+		String name = playerMock.getName();
+
+		Mockito.when(craftPlayerMock.getName()).thenReturn(name);
+		Mockito.when(serverPlayerMock.getName()).thenReturn(name);
+
+		IChatBaseComponent nameComponent = new ChatComponentText(name);
+		Mockito.when(serverPlayerMock.getDisplayName()).thenReturn(nameComponent);
+		Mockito.when(serverPlayerMock.getScoreboardDisplayName()).thenReturn(nameComponent);
+
+		// UUID
+		UUID uuid = playerMock.getUniqueId();
+		Mockito.when(craftPlayerMock.getUniqueId()).thenReturn(uuid);
+
+		// World and Location
+		WorldServer serverLevel = Mockito.mock(WorldServer.class);
 		CraftWorld world = Mockito.mock(CraftWorld.class);
-		Mockito.when(world.getHandle()).thenReturn(worldServer);
-		Mockito.when(worldServer.getWorld()).thenReturn(world);
+		Mockito.when(world.getHandle()).thenReturn(serverLevel);
+		Mockito.when(serverLevel.getWorld()).thenReturn(world);
 
-		Mockito.when(player.getLocation()).thenReturn(new Location(world, 0, 0, 0));
-		Mockito.when(player.getWorld()).thenReturn(world);
+		Mockito.when(craftPlayerMock.getLocation()).thenReturn(new Location(world, 0, 0, 0));
+		Mockito.when(craftPlayerMock.getWorld()).thenReturn(world);
 
 		// Provide proper handle as VanillaCommandWrapper expects
-		CommandListenerWrapper css = getBrigadierSourceFromCommandSender(player);
+		CommandListenerWrapper css = getBrigadierSourceFromCommandSender(craftPlayerMock);
+		Mockito.when(serverPlayerMock.getCommandListener()).thenReturn(css);
 
-		EntityPlayer handle = Mockito.mock(EntityPlayer.class);
-		Mockito.when(handle.getCommandListener()).thenReturn(css);
+		// Add to player list
+		players.add(serverPlayerMock);
 
-		Mockito.when(player.getHandle()).thenReturn(handle);
-
-
-		// getDisplayName and getScoreboardDisplayName are used when CommandSourceStack#withEntity is called
-		IChatBaseComponent nameComponent = new ChatComponentText(name);
-		Mockito.when(handle.getDisplayName()).thenReturn(nameComponent);
-		Mockito.when(handle.getScoreboardDisplayName()).thenReturn(nameComponent);
-
-		return player;
+		return craftPlayerMock;
 	}
 
 	@Override

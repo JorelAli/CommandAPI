@@ -133,8 +133,10 @@ public final class Converter {
 		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE)
 			.withArguments(arguments).executesNative((sender, args) -> {
 				CommandSender proxiedSender = mergeProxySender(sender);
-				return flattenArguments(args, arguments,
-					flattened -> Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", flattened)));
+				return flattenArguments(
+					args, arguments,
+					flattened -> Bukkit.dispatchCommand(proxiedSender, commandName + " " + String.join(" ", flattened))
+				);
 			}).register();
 	}
 
@@ -197,7 +199,7 @@ public final class Converter {
 
 			if (args.count() != 0) {
 				org.bukkit.command.Command finalCommand = command;
-				return flattenArguments(args, arguments, flattened -> finalCommand.execute(proxiedSender, commandName, flattened));
+				return flattenArguments(args, arguments, flattened -> finalCommand.execute(proxiedSender, commandName, flattened.toArray(String[]::new)));
 			} else {
 				return command.execute(proxiedSender, commandName, new String[0]) ? 1 : 0;
 			}
@@ -221,17 +223,23 @@ public final class Converter {
 			.register();
 	}
 
-	private static int flattenArguments(CommandArguments argumentInfo, List<Argument<?>> commandAPIArguments, Function<String[], Boolean> argumentConsumer) {
+	private static int flattenArguments(
+		CommandArguments argumentInfo, List<Argument<?>> commandAPIArguments,
+		Function<List<String>, Boolean> argumentConsumer
+	) {
 		// Most arguments stay the same, just pass through the raw input as given
 		String[] rawArguments = argumentInfo.rawArgs();
-		return flattenArguments(argumentInfo, commandAPIArguments, argumentConsumer, rawArguments, 0);
+		return flattenArguments(argumentInfo, commandAPIArguments, argumentConsumer, rawArguments, new ArrayList<>(), 0);
 	}
 
-	private static int flattenArguments(CommandArguments argumentInfo, List<Argument<?>> commandAPIArguments, Function<String[], Boolean> argumentConsumer,
-										String[] rawArguments, int argumentIndex) {
-		if (argumentIndex > commandAPIArguments.size()) {
+	private static int flattenArguments(
+		CommandArguments argumentInfo, List<Argument<?>> commandAPIArguments,
+		Function<List<String>, Boolean> argumentConsumer,
+		String[] rawArguments, List<String> flattened, int argumentIndex
+	) {
+		if (argumentIndex >= commandAPIArguments.size()) {
 			// Processed all the arguments, use it now
-			return argumentConsumer.apply(rawArguments) ? 1 : 0;
+			return argumentConsumer.apply(flattened) ? 1 : 0;
 		}
 
 		Argument<?> argument = commandAPIArguments.get(argumentIndex);
@@ -241,15 +249,25 @@ public final class Converter {
 			List<String> possibilities = flattenable.flatten(argumentInfo.get(argumentIndex));
 			int successCount = 0;
 			for (String item : possibilities) {
-				rawArguments[argumentIndex] = item;
-				successCount += flattenArguments(argumentInfo, commandAPIArguments, argumentConsumer,
-					rawArguments, argumentIndex + 1);
+				// Branch the flattened list so each possibility stays independent
+				List<String> newFlattened = new ArrayList<>(flattened);
+				newFlattened.addAll(Arrays.asList(item.split(" ")));
+
+				successCount += flattenArguments(
+					argumentInfo, commandAPIArguments,
+					argumentConsumer,
+					rawArguments, newFlattened, argumentIndex + 1
+				);
 			}
 			return successCount;
 		} else {
-			// No processing needed for this argument, move to the next
-			return flattenArguments(argumentInfo, commandAPIArguments, argumentConsumer,
-				rawArguments, argumentIndex + 1);
+			// Just split the raw argument into individual pieces
+			flattened.addAll(Arrays.asList(rawArguments[argumentIndex].split(" ")));
+			return flattenArguments(
+				argumentInfo, commandAPIArguments,
+				argumentConsumer,
+				rawArguments, flattened, argumentIndex + 1
+			);
 		}
 	}
 

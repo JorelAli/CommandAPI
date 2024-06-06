@@ -32,6 +32,7 @@ abstract class TestBase {
 			plugin.onDisable()
 		}
 		MockBukkit.unmock()
+		MockPlatform.unload()
 	}
 
 	fun <T : Any> assertStoresResult(sender: CommandSender, command: String, queue: Mut<T>, expected: T) {
