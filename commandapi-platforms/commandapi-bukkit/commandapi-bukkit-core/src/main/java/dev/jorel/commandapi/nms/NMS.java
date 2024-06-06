@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.CommandRegistrationStrategy;
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -39,7 +39,6 @@ import org.bukkit.World;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -52,7 +51,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -387,20 +385,6 @@ public interface NMS<CommandListenerWrapper> {
 	World getWorldForCSS(CommandListenerWrapper clw);
 
 	/**
-	 * Returns the Brigadier CommandDispatcher from the NMS CommandDispatcher
-	 *
-	 * @return A Brigadier CommandDispatcher
-	 */
-	CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher();
-
-	/**
-	 * Returns the Brigadier CommandDispatcher used when commands are sent to Players
-	 *
-	 * @return A Brigadier CommandDispatcher
-	 */
-	CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher();
-
-	/**
 	 * Returns the Server's internal (OBC) CommandMap
 	 * 
 	 * @return A SimpleCommandMap from the OBC server
@@ -422,30 +406,6 @@ public interface NMS<CommandListenerWrapper> {
 	Set<NamespacedKey> getTags();
 
 	/**
-	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
-	 * 
-	 * @param command The Command to check
-	 * @return true if Command is an instance of VanillaCommandWrapper
-	 */
-	boolean isVanillaCommandWrapper(Command command);
-
-	/**
-	 * Wraps a Brigadier command node as Bukkit's VanillaCommandWrapper
-	 *
-	 * @param node The LiteralCommandNode to wrap
-	 * @return A VanillaCommandWrapper representing the given node
-	 */
-	Command wrapToVanillaCommandWrapper(CommandNode<CommandListenerWrapper> node);
-
-	/**
-	 * Checks if a Brigadier command node is being handled by Bukkit's BukkitCommandWrapper
-	 *
-	 * @param node The CommandNode to check
-	 * @return true if the CommandNode is being handled by Bukkit's BukkitCommandWrapper
-	 */
-	boolean isBukkitCommandWrapper(CommandNode<CommandListenerWrapper> node);
-
-	/**
 	 * Reloads the datapacks by using the updated the commandDispatcher tree
 	 */
 	void reloadDataPacks();
@@ -456,4 +416,5 @@ public interface NMS<CommandListenerWrapper> {
 
 	Message generateMessageFromJson(String json);
 
+	CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy();
 }

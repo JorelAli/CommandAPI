@@ -5,6 +5,7 @@ import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.SpigotCommandRegistration;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -123,20 +124,21 @@ class OnEnableTests extends TestBase {
 			  }
 			}""", getDispatcherString());
 
-		// Make sure command and its aliases exist in the Bukkit CommandMap as VanillaCommandWrappers
+		// Make sure command and its aliases exist in the Bukkit CommandMap
 		SimpleCommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
+		SpigotCommandRegistration<?> spigotCommandRegistration = (SpigotCommandRegistration<?>) CommandAPIBukkit.get().getCommandRegistrationStrategy();
 
 		Command mainCommand = commandMap.getCommand("command");
 		assertNotNull(mainCommand);
-		assertTrue(CommandAPIBukkit.get().isVanillaCommandWrapper(mainCommand));
+		assertTrue(spigotCommandRegistration.isVanillaCommandWrapper(mainCommand));
 
 		Command alias1Command = commandMap.getCommand("alias1");
 		assertNotNull(alias1Command);
-		assertTrue(CommandAPIBukkit.get().isVanillaCommandWrapper(alias1Command));
+		assertTrue(spigotCommandRegistration.isVanillaCommandWrapper(alias1Command));
 
 		Command alias2Command = commandMap.getCommand("alias2");
 		assertNotNull(alias2Command);
-		assertTrue(CommandAPIBukkit.get().isVanillaCommandWrapper(alias2Command));
+		assertTrue(spigotCommandRegistration.isVanillaCommandWrapper(alias2Command));
 
 		// Make sure namespaces were set up as well
 		assertEquals(mainCommand, commandMap.getCommand("minecraft:command"));
@@ -150,7 +152,7 @@ class OnEnableTests extends TestBase {
 
 
 		// Make sure commands were added to 'resources' dispatcher
-		RootCommandNode<?> resourcesRoot = CommandAPIBukkit.get().getResourcesDispatcher().getRoot();
+		RootCommandNode<?> resourcesRoot = MockPlatform.getInstance().getMockResourcesDispatcher().getRoot();
 
 		assertNotNull(resourcesRoot.getChild("command"));
 		assertNotNull(resourcesRoot.getChild("alias1"));

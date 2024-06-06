@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,7 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,14 +24,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,9 +44,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.mojang.brigadier.tree.RootCommandNode;
 
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.Argument;
@@ -71,7 +64,6 @@ import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitRemoteConsoleCommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.NMS;
-import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.kyori.adventure.text.Component;
@@ -80,36 +72,13 @@ import net.md_5.bungee.api.chat.BaseComponent;
 // CommandAPIBukkit is an CommandAPIPlatform, but also needs all of the methods from
 // NMS, so it implements NMS. Our implementation of CommandAPIBukkit is now derived
 // using the version handler (and thus, deferred to our NMS-specific implementations)
-
-@RequireField(in = CommandNode.class, name = "children", ofType = Map.class)
-@RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
-@RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Argument<?>, CommandSender, Source>, NMS<Source> {
 
 	// References to utility classes
 	private static CommandAPIBukkit<?> instance;
 	private static InternalBukkitConfig config;
 	private PaperImplementations paper;
-
-	// Namespaces
-	private final Set<String> namespacesToFix = new HashSet<>();
-	private RootCommandNode<Source> minecraftCommandNamespaces = new RootCommandNode<>();
-
-	// Static VarHandles
-	// I'd like to make the Maps here `Map<String, CommandNode<Source>>`, but these static fields cannot use the type
-	//  parameter Source. We still need to cast to that signature for map, so Map is raw.
-	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeChildren;
-	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeLiterals;
-	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeArguments;
-	private static final SafeVarHandle<SimpleCommandMap, Map<String, Command>> commandMapKnownCommands;
-
-	// Compute all var handles all in one go so we don't do this during main server runtime
-	static {
-		commandNodeChildren = SafeVarHandle.ofOrNull(CommandNode.class, "children", "children", Map.class);
-		commandNodeLiterals = SafeVarHandle.ofOrNull(CommandNode.class, "literals", "literals", Map.class);
-		commandNodeArguments = SafeVarHandle.ofOrNull(CommandNode.class, "arguments", "arguments", Map.class);
-		commandMapKnownCommands = SafeVarHandle.ofOrNull(SimpleCommandMap.class, "knownCommands", "knownCommands", Map.class);
-	}
+	private CommandRegistrationStrategy<Source> commandRegistrationStrategy;
 
 	protected CommandAPIBukkit() {
 		CommandAPIBukkit.instance = this;
@@ -134,6 +103,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		} else {
 			throw new IllegalStateException("Tried to access InternalBukkitConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
 		}
+	}
+
+	public CommandRegistrationStrategy<Source> getCommandRegistrationStrategy() {
+		return commandRegistrationStrategy;
 	}
 
 	@Override
@@ -203,6 +176,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 
 		paper = new PaperImplementations(isPaperPresent, isFoliaPresent, this);
+
+		commandRegistrationStrategy = createCommandRegistrationStrategy();
 	}
 
 	@Override
@@ -210,10 +185,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		JavaPlugin plugin = config.getPlugin();
 
 		new Schedulers(paper).scheduleSyncDelayed(plugin, () -> {
-			// Fix namespaces first thing when starting the server
-			fixNamespaces();
-			// Sort out permissions after the server has finished registering them all
-			fixPermissions();
+			commandRegistrationStrategy.runTasksAfterServerStart();
+
 			if (paper.isFoliaPresent()) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
@@ -235,55 +208,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}, getConfiguration().getPlugin());
 
 		paper.registerReloadHandler(plugin);
-	}
-
-	/*
-	 * Makes permission checks more "Bukkit" like and less "Vanilla Minecraft" like
-	 */
-	private void fixPermissions() {
-		// Get the command map to find registered commands
-		CommandMap map = paper.getCommandMap();
-		final Map<String, CommandPermission> permissionsToFix = CommandAPIHandler.getInstance().registeredPermissions;
-
-		if (!permissionsToFix.isEmpty()) {
-			CommandAPI.logInfo("Linking permissions to commands:");
-
-			for (Map.Entry<String, CommandPermission> entry : permissionsToFix.entrySet()) {
-				String cmdName = entry.getKey();
-				CommandPermission perm = entry.getValue();
-				CommandAPI.logInfo("  " + perm.toString() + " -> /" + cmdName);
-
-				final String permNode = unpackInternalPermissionNodeString(perm);
-
-				/*
-				 * Sets the permission. If you have to be OP to run this command, we set the
-				 * permission to null. Doing so means that Bukkit's "testPermission" will always
-				 * return true, however since the command's permission check occurs internally
-				 * via the CommandAPI, this isn't a problem.
-				 *
-				 * If anyone dares tries to use testPermission() on this command, seriously,
-				 * what are you doing and why?
-				 */
-				Command command = map.getCommand(cmdName);
-				if(command != null && isVanillaCommandWrapper(command)) {
-					command.setPermission(permNode);
-				}
-			}
-		}
-		CommandAPI.logNormal("Linked " + permissionsToFix.size() + " Bukkit permissions to commands");
-	}
-	
-	private String unpackInternalPermissionNodeString(CommandPermission perm) {
-		final Optional<String> optionalPerm = perm.getPermission();
-		if (perm.isNegated() || perm.equals(CommandPermission.NONE) || perm.equals(CommandPermission.OP)) {
-			return "";
-		} else if (optionalPerm.isPresent()) {
-			return optionalPerm.get();
-		} else {
-			throw new IllegalStateException("Invalid permission detected: " + perm +
-				"! This should never happen - if you're seeing this message, please" +
-				"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
-		}
 	}
 
 	/*
@@ -438,33 +362,6 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private void fixNamespaces() {
-		Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
-		CommandDispatcher<Source> resourcesDispatcher = getResourcesDispatcher();
-		// Remove namespaces
-		for (String command : namespacesToFix) {
-			knownCommands.remove(command);
-			removeBrigadierCommands(resourcesDispatcher, command, false, c -> true);
-		}
-
-		// Add back certain minecraft: namespace commands
-		RootCommandNode<Source> resourcesRootNode = resourcesDispatcher.getRoot();
-		RootCommandNode<Source> brigadierRootNode = getBrigadierDispatcher().getRoot();
-		for (CommandNode<Source> node : minecraftCommandNamespaces.getChildren()) {
-			knownCommands.put(node.getName(), wrapToVanillaCommandWrapper(node));
-			resourcesRootNode.addChild(node);
-
-			// VanillaCommandWrappers in the CommandMap defer to the Brigadier dispatcher when executing.
-			// While the minecraft namespace usually does not exist in the Brigadier dispatcher, in the case of a
-			//  command conflict we do need this node to exist separately from the unnamespaced version to keep the
-			//  commands separate.
-			brigadierRootNode.addChild(node);
-		}
-		// Clear minecraftCommandNamespaces for dealing with command conflicts after the server is enabled
-		//  See `CommandAPIBukkit#postCommandRegistration`
-		minecraftCommandNamespaces = new RootCommandNode<>();
-	}
-
 	@Override
 	public void onDisable() {
 		// Nothing to do
@@ -549,136 +446,22 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-		if(!CommandAPI.canRegister()) {
-			// Usually, when registering commands during server startup, we can just put our commands into the
-			// `net.minecraft.server.MinecraftServer#vanillaCommandDispatcher` and leave it. As the server finishes setup,
-			// it and the CommandAPI do some extra stuff to make everything work, and we move on.
-			// So, if we want to register commands while the server is running, we need to do all that extra stuff, and
-			// that is what this code does.
-			// We could probably call all those methods to sync everything up, but in the spirit of avoiding side effects
-			// and avoiding doing things twice for existing commands, this is a distilled version of those methods.
+		commandRegistrationStrategy.postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
 
-			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
-			RootCommandNode<Source> root = getResourcesDispatcher().getRoot();
-
-			String name = resultantNode.getLiteral();
-			String namespace = registeredCommand.namespace();
-			String permNode = unpackInternalPermissionNodeString(registeredCommand.permission());
-
-			registerCommand(knownCommands, root, name, permNode, namespace, resultantNode);
-
-			// Do the same for the aliases
-			for(LiteralCommandNode<Source> node: aliasNodes) {
-				registerCommand(knownCommands, root, node.getLiteral(), permNode, namespace, node);
-			}
-
-			Collection<CommandNode<Source>> minecraftNamespacesToFix = minecraftCommandNamespaces.getChildren();
-			if (!minecraftNamespacesToFix.isEmpty()) {
-				// Adding new `minecraft` namespace nodes to the Brigadier dispatcher
-				//  usually happens in `CommandAPIBukkit#fixNamespaces`.
-				// Note that the previous calls to `CommandAPIBukkit#registerCommand` in this method
-				//  will have already dealt with adding the nodes here to the resources dispatcher.
-				// We also have to set the permission to simulate the result of `CommandAPIBukkit#fixPermissions`.
-				RootCommandNode<Source> brigadierRootNode = getBrigadierDispatcher().getRoot();
-				for (CommandNode<Source> node : minecraftNamespacesToFix) {
-					Command minecraftNamespaceCommand = wrapToVanillaCommandWrapper(node);
-					knownCommands.put(node.getName(), minecraftNamespaceCommand);
-					minecraftNamespaceCommand.setPermission(permNode);
-					brigadierRootNode.addChild(node);
-				}
-				minecraftCommandNamespaces = new RootCommandNode<>();
-			}
-
+		if (!CommandAPI.canRegister()) {
 			// Adding the command to the help map usually happens in `CommandAPIBukkit#onEnable`
 			updateHelpForCommands(List.of(registeredCommand));
 
 			// Sending command dispatcher packets usually happens when Players join the server
-			for(Player p: Bukkit.getOnlinePlayers()) {
+			for (Player p : Bukkit.getOnlinePlayers()) {
 				p.updateCommands();
 			}
 		}
 	}
 
-	private void registerCommand(Map<String, Command> knownCommands, RootCommandNode<Source> root, String name, String permNode, String namespace, LiteralCommandNode<Source> resultantNode) {
-		// Wrapping Brigadier nodes into VanillaCommandWrappers and putting them in the CommandMap usually happens
-		// in `CraftServer#setVanillaCommands`
-		Command command = wrapToVanillaCommandWrapper(resultantNode);
-		knownCommands.putIfAbsent(name, command);
-
-		// Adding permissions to these Commands usually happens in `CommandAPIBukkit#fixPermissions`
-		command.setPermission(permNode);
-
-		// Adding commands to the other (Why bukkit/spigot?!) dispatcher usually happens in `CraftServer#syncCommands`
-		root.addChild(resultantNode);
-
-		// Handle namespace
-		LiteralCommandNode<Source> namespacedNode = CommandAPIHandler.getInstance().namespaceNode(resultantNode, namespace);
-		if (namespace.equals("minecraft")) {
-			// The minecraft namespace version should be registered as a straight alias of the original command, since
-			//  the `minecraft:name` node does not exist in the Brigadier dispatcher, which is referenced by
-			//  VanillaCommandWrapper (note this is not true if there is a command conflict, but
-			//  `CommandAPIBukkit#postCommandRegistration` will deal with this later using `minecraftCommandNamespaces`).
-			knownCommands.putIfAbsent("minecraft:" + name, command);
-		} else {
-			// A custom namespace should be registered like a separate command, so that it can reference the namespaced
-			//  node, rather than the original unnamespaced node
-			Command namespacedCommand = wrapToVanillaCommandWrapper(namespacedNode);
-			knownCommands.putIfAbsent(namespacedCommand.getName(), namespacedCommand);
-			namespacedCommand.setPermission(permNode);
-		}
-		// In both cases, add the node to the resources dispatcher
-		root.addChild(namespacedNode);
-	}
-
 	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
-		RootCommandNode<Source> rootNode = getBrigadierDispatcher().getRoot();
-
-		LiteralCommandNode<Source> builtNode = node.build();
-		String name = node.getLiteral();
-		if (namespace.equals("minecraft")) {
-			if (namespacesToFix.contains("minecraft:" + name)) {
-				// This command wants to exist as `minecraft:name`
-				// However, another command has requested that `minecraft:name` be removed
-				// We'll keep track of everything that should be `minecraft:name` in
-				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
-				minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, "minecraft"));
-			}
-		} else {
-			// Make sure to remove the `minecraft:name` and
-			//  `minecraft:namespace:name` commands Bukkit will create
-			fillNamespacesToFix(name, namespace + ":" + name);
-
-			// Create the namespaced node
-			rootNode.addChild(CommandAPIHandler.getInstance().namespaceNode(builtNode, namespace));
-		}
-
-		// Add the main node to dispatcher
-		//  We needed to wait until after `fillNamespacesToFix` was called to do this, in case a previous 
-		//  `minecraft:name` version of the command needed to be saved separately before this node was added
-		rootNode.addChild(builtNode);
-		
-		return builtNode;
-	}
-
-	private void fillNamespacesToFix(String... namespacedCommands) {
-		for (String namespacedCommand : namespacedCommands) {
-			// We'll remove these commands later when fixNamespaces is called
-			if (!namespacesToFix.add("minecraft:" + namespacedCommand)) {
-				continue;
-			}
-
-			// If this is the first time considering this command for removal
-			// and there is already a command with this name in the dispatcher
-			// then, the command currently in the dispatcher is supposed to appear as `minecraft:command`
-			CommandNode<Source> currentNode = getBrigadierDispatcher().getRoot().getChild(namespacedCommand);
-			if(currentNode != null) {
-				// We'll keep track of everything that should be `minecraft:command` in
-				//  `minecraftCommandNamespaces` and fix this later in `#fixNamespaces`
-				// TODO: Ideally, we should be working without this cast to LiteralCommandNode. I don't know if this can fail
-				minecraftCommandNamespaces.addChild(CommandAPIHandler.getInstance().namespaceNode((LiteralCommandNode<Source>) currentNode, "minecraft"));
-			}
-		}
+		return commandRegistrationStrategy.registerCommandNode(node, namespace);
 	}
 
 	@Override
@@ -692,9 +475,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	 *
 	 * @param commandName          the name of the command to unregister
 	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
-	 *                                command that start with a namespace. E.g. `minecraft:command`, `bukkit:command`,
-	 *                                or `plugin:command`. If true, these namespaced versions of a command are also
-	 *                                unregistered.
+	 *                             command that start with a namespace. E.g. `minecraft:command`, `bukkit:command`,
+	 *                             or `plugin:command`. If true, these namespaced versions of a command are also
+	 *                             unregistered.
 	 * @param unregisterBukkit     whether the unregistration system should unregister Vanilla or Bukkit commands. If true,
 	 *                             only Bukkit commands are unregistered, otherwise only Vanilla commands are unregistered.
 	 *                             For the purposes of this parameter, commands registered using the CommandAPI are Vanilla
@@ -707,41 +490,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	private void unregisterInternal(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
 		CommandAPI.logInfo("Unregistering command /" + commandName);
 
-		if(!unregisterBukkit) {
-			// Remove nodes from the Vanilla dispatcher
-			// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
-			//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
-			removeBrigadierCommands(getBrigadierDispatcher(), commandName, unregisterNamespaces, c -> true);
+		commandRegistrationStrategy.unregister(commandName, unregisterNamespaces, unregisterBukkit);
 
-			// Update the dispatcher file
-			CommandAPIHandler.getInstance().writeDispatcherToFile();
-		}
-
-		if(unregisterBukkit || !CommandAPI.canRegister()) {
-			// We need to remove commands from Bukkit's CommandMap if we're unregistering a Bukkit command, or
-			//  if we're unregistering after the server is enabled, because `CraftServer#setVanillaCommands` will have
-			//  moved the Vanilla command into the CommandMap
-			Map<String, Command> knownCommands = commandMapKnownCommands.get((SimpleCommandMap) paper.getCommandMap());
-
-			// If we are unregistering a Bukkit command, DO NOT unregister VanillaCommandWrappers
-			// If we are unregistering a Vanilla command, ONLY unregister VanillaCommandWrappers
-			boolean isMainVanilla = isVanillaCommandWrapper(knownCommands.get(commandName));
-			if(unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
-
-			if(unregisterNamespaces) {
-				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper(c));
-			}
-		}
-
-		if(!CommandAPI.canRegister()) {
-			// If the server is enabled, we have extra cleanup to do
-
-			// Remove commands from the resources dispatcher
-			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
-			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
-			removeBrigadierCommands(getResourcesDispatcher(), commandName, unregisterNamespaces,
-				c -> !unregisterBukkit ^ isBukkitCommandWrapper(c));
-
+		if (!CommandAPI.canRegister()) {
 			// Help topics (from Bukkit and CommandAPI) are only setup after plugins enable, so we only need to worry
 			//  about removing them once the server is loaded.
 			getHelpMap().remove("/" + commandName);
@@ -753,50 +504,10 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	private void removeBrigadierCommands(CommandDispatcher<Source> dispatcher, String commandName,
-										 boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
-		RootCommandNode<?> root = dispatcher.getRoot();
-		Map<String, CommandNode<Source>> children = (Map<String, CommandNode<Source>>) commandNodeChildren.get(root);
-		Map<String, CommandNode<Source>> literals = (Map<String, CommandNode<Source>>) commandNodeLiterals.get(root);
-		Map<String, CommandNode<Source>> arguments = (Map<String, CommandNode<Source>>) commandNodeArguments.get(root);
-
-		removeCommandFromMapIfCheckPasses(children, commandName, extraCheck);
-		removeCommandFromMapIfCheckPasses(literals, commandName, extraCheck);
-		// Commands should really only be represented as literals, but it is technically possible
-		// to put an ArgumentCommandNode in the root, so we'll check
-		removeCommandFromMapIfCheckPasses(arguments, commandName, extraCheck);
-
-		if (unregisterNamespaces) {
-			removeCommandNamespace(children, commandName, extraCheck);
-			removeCommandNamespace(literals, commandName, extraCheck);
-			removeCommandNamespace(arguments, commandName, extraCheck);
-		}
-	}
-
-	private static <T> void removeCommandNamespace(Map<String, T> map, String commandName, Predicate<T> extraCheck) {
-		for (String key : new HashSet<>(map.keySet())) {
-			if (!isThisTheCommandButNamespaced(commandName, key)) continue;
-
-			removeCommandFromMapIfCheckPasses(map, key, extraCheck);
-		}
-	}
-
-	private static <T> void removeCommandFromMapIfCheckPasses(Map<String, T> map, String key, Predicate<T> extraCheck) {
-		T element = map.get(key);
-		if (element == null) return;
-		if (extraCheck.test(map.get(key))) map.remove(key);
-	}
-
-	private static boolean isThisTheCommandButNamespaced(String commandName, String key) {
-		if(!key.contains(":")) return false;
-		String[] split = key.split(":");
-		if(split.length < 2) return false;
-		return split[1].equalsIgnoreCase(commandName);
-	}
-
 	@Override
-	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
-	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
+	public final CommandDispatcher<Source> getBrigadierDispatcher() {
+		return commandRegistrationStrategy.getBrigadierDispatcher();
+	}
 
 	@Override
 	@Unimplemented(because = {REQUIRES_MINECRAFT_SERVER, VERSION_SPECIFIC_IMPLEMENTATION})
@@ -924,5 +635,4 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 		return false;
 	}
-
 }

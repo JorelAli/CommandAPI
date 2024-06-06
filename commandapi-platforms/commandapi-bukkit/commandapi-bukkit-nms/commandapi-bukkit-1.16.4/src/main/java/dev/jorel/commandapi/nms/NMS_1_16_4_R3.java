@@ -41,7 +41,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.*;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -56,7 +56,6 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_16_R3.CraftLootTable;
@@ -93,9 +92,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -483,16 +479,6 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 	@Override
 	public BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
 		return CraftBlockData.fromData(ArgumentTile.a(cmdCtx, key).a());
-	}
-
-	@Override
-	public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a();
-	}
-
-	@Override
-	public CommandDispatcher<CommandListenerWrapper> getResourcesDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a();
 	}
 
 	@Override
@@ -927,21 +913,6 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		return (clw.getWorld() == null) ? null : clw.getWorld().getWorld();
 	}
 
-	@Override
-	public boolean isVanillaCommandWrapper(Command command) {
-		return command instanceof VanillaCommandWrapper;
-	}
-
-	@Override
-	public Command wrapToVanillaCommandWrapper(CommandNode<CommandListenerWrapper> node) {
-		return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
-	}
-
-	@Override
-	public boolean isBukkitCommandWrapper(CommandNode<CommandListenerWrapper> node) {
-		return node.getCommand() instanceof BukkitCommandWrapper;
-	}
-
 	@Differs(from = "1.16.2", by = "CustomFunctionManager.g -> CustomFunctionManager.h")
 	@Override
 	public void reloadDataPacks() {
@@ -1009,4 +980,15 @@ public class NMS_1_16_4_R3 extends NMSWrapper_1_16_4_R3 {
 		}
 	}
 
+	@Override
+	public CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a(),
+			(SimpleCommandMap) getPaper().getCommandMap(),
+			() -> this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(),
+			command -> command instanceof VanillaCommandWrapper,
+			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> node.getCommand() instanceof BukkitCommandWrapper
+		);
+	}
 }

@@ -58,6 +58,9 @@ public class PaperImplementations {
 
 				@EventHandler
 				public void onServerReloadResources(ServerResourcesReloadedEvent event) {
+					// This event is called after Paper is done with everything command related
+					// which means we can put commands back
+					CommandAPIBukkit.get().getCommandRegistrationStrategy().preReloadDataPacks();
 					CommandAPI.logNormal("/minecraft:reload detected. Reloading CommandAPI commands!");
 					nmsInstance.reloadDataPacks();
 				}

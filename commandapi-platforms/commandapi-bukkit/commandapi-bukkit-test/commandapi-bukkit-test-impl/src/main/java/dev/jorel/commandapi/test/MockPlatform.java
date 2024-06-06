@@ -64,23 +64,15 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 * CommandAPIBukkit implementations *
 	 ************************************/
 
-	private CommandDispatcher<CLW> dispatcher = null;
-	private CommandDispatcher<CLW> resourcesDispatcher = null;
+	private final CommandDispatcher<CLW> brigadierDispatcher = new CommandDispatcher<>();
+	private final CommandDispatcher<CLW> resourcesDispatcher = new CommandDispatcher<>();
 
-	@Override
-	public final CommandDispatcher<CLW> getBrigadierDispatcher() {
-		if (this.dispatcher == null) {
-			this.dispatcher = new CommandDispatcher<>();
-		}
-		return this.dispatcher;
+	public CommandDispatcher<CLW> getMockBrigadierDispatcher() {
+		return brigadierDispatcher;
 	}
 
-	@Override
-	public CommandDispatcher<CLW> getResourcesDispatcher() {
-		if (this.resourcesDispatcher == null) {
-			this.resourcesDispatcher = new CommandDispatcher<>();
-		}
-		return this.resourcesDispatcher;
+	public CommandDispatcher<CLW> getMockResourcesDispatcher() {
+		return resourcesDispatcher;
 	}
 
 	@Override
