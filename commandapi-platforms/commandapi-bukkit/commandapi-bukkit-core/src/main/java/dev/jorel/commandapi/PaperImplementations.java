@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -53,14 +54,24 @@ public class PaperImplementations {
 	 * @param plugin the plugin that the CommandAPI is being used from
 	 */
 	public void registerReloadHandler(Plugin plugin) {
-		if (isPaperPresent && CommandAPIBukkit.getConfiguration().shouldHookPaperReload()) {
+		if (isPaperPresent) {
 			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-
 				@EventHandler
 				public void onServerReloadResources(ServerResourcesReloadedEvent event) {
 					// This event is called after Paper is done with everything command related
 					// which means we can put commands back
 					CommandAPIBukkit.get().getCommandRegistrationStrategy().preReloadDataPacks();
+
+					// Normally, the reloadDataPacks() method is responsible for updating commands for
+					// online players. If, however, datapacks aren't supposed to be reloaded upon /minecraft:reload
+					// we have to do this manually here. This won't have any effect on Spigot and Paper version prior to
+					// paper-1.20.6-65
+					if (!CommandAPIBukkit.getConfiguration().shouldHookPaperReload()) {
+						for (Player player : Bukkit.getOnlinePlayers()) {
+							player.updateCommands();
+						}
+						return;
+					}
 					CommandAPI.logNormal("/minecraft:reload detected. Reloading CommandAPI commands!");
 					nmsInstance.reloadDataPacks();
 				}
