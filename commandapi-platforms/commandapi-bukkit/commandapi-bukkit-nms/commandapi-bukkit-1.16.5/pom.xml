@@ -66,13 +66,6 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-1.16.4</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
 	</dependencies>
 	
 	<build>
