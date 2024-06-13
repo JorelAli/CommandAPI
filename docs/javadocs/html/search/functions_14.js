@@ -32,5 +32,5 @@ var searchData=
   ['worldargument_29',['WorldArgument',['../classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_world_argument.html#a19fb1fc8aa090de5836a864a4c429bc4',1,'dev::jorel::commandapi::arguments::WorldArgument']]],
   ['wrapcommandsender_30',['wrapCommandSender',['../interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#a1e7d67f21471285883d28642927e1831',1,'dev::jorel::commandapi::CommandAPIPlatform']]],
   ['wrappercommandsyntaxexception_31',['WrapperCommandSyntaxException',['../classdev_1_1jorel_1_1commandapi_1_1exceptions_1_1_wrapper_command_syntax_exception.html#a0df2879b5a585f267c1fbe3f288066f2',1,'dev::jorel::commandapi::exceptions::WrapperCommandSyntaxException']]],
-  ['wraptovanillacommandwrapper_32',['wrapToVanillaCommandWrapper',['../interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a870b52b9b0c9759178a89b88d6239a7f',1,'dev::jorel::commandapi::nms::NMS']]]
+  ['wraptovanillacommandwrapper_32',['wrapToVanillaCommandWrapper',['../classdev_1_1jorel_1_1commandapi_1_1_spigot_command_registration.html#a5c1525fd8db7c11c9e5b5480ace40049',1,'dev::jorel::commandapi::SpigotCommandRegistration']]]
 ];

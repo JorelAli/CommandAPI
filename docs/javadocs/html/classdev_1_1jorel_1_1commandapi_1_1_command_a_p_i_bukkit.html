@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.4.1</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.5.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -112,6 +112,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2a9efec1d1d168b06a2c091d5a28224f"><td class="memItemLeft" align="right" valign="top"><a id="a2a9efec1d1d168b06a2c091d5a28224f" name="a2a9efec1d1d168b06a2c091d5a28224f"></a>
 <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html">PaperImplementations</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getPaper</b> ()</td></tr>
 <tr class="separator:a2a9efec1d1d168b06a2c091d5a28224f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa19b99b0b3edfedf9dd862b846d76e37"><td class="memItemLeft" align="right" valign="top"><a id="aa19b99b0b3edfedf9dd862b846d76e37" name="aa19b99b0b3edfedf9dd862b846d76e37"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_registration_strategy.html">CommandRegistrationStrategy</a>&lt; Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCommandRegistrationStrategy</b> ()</td></tr>
+<tr class="separator:aa19b99b0b3edfedf9dd862b846d76e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a262d5d9e49584de913c22705dc341342"><td class="memItemLeft" align="right" valign="top"><a id="a262d5d9e49584de913c22705dc341342" name="a262d5d9e49584de913c22705dc341342"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>onLoad</b> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a>&lt;?&gt; config)</td></tr>
 <tr class="separator:a262d5d9e49584de913c22705dc341342"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,9 +154,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>postCommandRegistrati
 <tr class="memitem:aece1ffd0c2d56bc0f2132cbd766a1db2"><td class="memItemLeft" align="right" valign="top"><a id="aece1ffd0c2d56bc0f2132cbd766a1db2" name="aece1ffd0c2d56bc0f2132cbd766a1db2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>unregister</b> (String commandName, boolean unregisterNamespaces)</td></tr>
 <tr class="separator:aece1ffd0c2d56bc0f2132cbd766a1db2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af28e96bdcc858ba0b0125f59ae1150e7"><td class="memItemLeft" align="right" valign="top">abstract <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#af28e96bdcc858ba0b0125f59ae1150e7">getBrigadierDispatcher</a> ()</td></tr>
-<tr class="memdesc:af28e96bdcc858ba0b0125f59ae1150e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher from the NMS CommandDispatcher.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#af28e96bdcc858ba0b0125f59ae1150e7">More...</a><br /></td></tr>
-<tr class="separator:af28e96bdcc858ba0b0125f59ae1150e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ff50ae17e6d43449ec3f73fe83d26f7"><td class="memItemLeft" align="right" valign="top"><a id="a5ff50ae17e6d43449ec3f73fe83d26f7" name="a5ff50ae17e6d43449ec3f73fe83d26f7"></a>
+final <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getBrigadierDispatcher</b> ()</td></tr>
+<tr class="separator:a5ff50ae17e6d43449ec3f73fe83d26f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1304678debc911409d600e8d5fb56316"><td class="memItemLeft" align="right" valign="top"><a id="a1304678debc911409d600e8d5fb56316" name="a1304678debc911409d600e8d5fb56316"></a>
 abstract void&#160;</td><td class="memItemRight" valign="bottom"><b>createDispatcherFile</b> (File file, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; Source &gt; brigadierDispatcher)  throws IOException</td></tr>
 <tr class="separator:a1304678debc911409d600e8d5fb56316"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -402,9 +405,6 @@ UUID&#160;</td><td class="memItemRight" valign="bottom"><b>getUUID</b> (<a class
 <tr class="memitem:a3eb88c73976964daf7ee5e185a6bf601"><td class="memItemLeft" align="right" valign="top"><a id="a3eb88c73976964daf7ee5e185a6bf601" name="a3eb88c73976964daf7ee5e185a6bf601"></a>
 World&#160;</td><td class="memItemRight" valign="bottom"><b>getWorldForCSS</b> (CommandListenerWrapper clw)</td></tr>
 <tr class="separator:a3eb88c73976964daf7ee5e185a6bf601"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a722caafd3328814e1092961a42cff32b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; CommandListenerWrapper &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a722caafd3328814e1092961a42cff32b">getResourcesDispatcher</a> ()</td></tr>
-<tr class="memdesc:a722caafd3328814e1092961a42cff32b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher used when commands are sent to Players.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a722caafd3328814e1092961a42cff32b">More...</a><br /></td></tr>
-<tr class="separator:a722caafd3328814e1092961a42cff32b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af38561d456f27ae3b16efd0a17e7ba72"><td class="memItemLeft" align="right" valign="top">SimpleCommandMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#af38561d456f27ae3b16efd0a17e7ba72">getSimpleCommandMap</a> ()</td></tr>
 <tr class="memdesc:af38561d456f27ae3b16efd0a17e7ba72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Server's internal (OBC) CommandMap.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#af38561d456f27ae3b16efd0a17e7ba72">More...</a><br /></td></tr>
 <tr class="separator:af38561d456f27ae3b16efd0a17e7ba72"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -417,15 +417,6 @@ SimpleFunctionWrapper[]&#160;</td><td class="memItemRight" valign="bottom"><b>ge
 <tr class="memitem:a9b333d334235baac88839c7082bc3811"><td class="memItemLeft" align="right" valign="top"><a id="a9b333d334235baac88839c7082bc3811" name="a9b333d334235baac88839c7082bc3811"></a>
 Set&lt; NamespacedKey &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTags</b> ()</td></tr>
 <tr class="separator:a9b333d334235baac88839c7082bc3811"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae273287c5957463fc074e17440a12335"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#ae273287c5957463fc074e17440a12335">isVanillaCommandWrapper</a> (<a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a> command)</td></tr>
-<tr class="memdesc:ae273287c5957463fc074e17440a12335"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a Command is an instance of the OBC VanillaCommandWrapper.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#ae273287c5957463fc074e17440a12335">More...</a><br /></td></tr>
-<tr class="separator:ae273287c5957463fc074e17440a12335"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a870b52b9b0c9759178a89b88d6239a7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a870b52b9b0c9759178a89b88d6239a7f">wrapToVanillaCommandWrapper</a> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; CommandListenerWrapper &gt; node)</td></tr>
-<tr class="memdesc:a870b52b9b0c9759178a89b88d6239a7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> command node as Bukkit's VanillaCommandWrapper.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a870b52b9b0c9759178a89b88d6239a7f">More...</a><br /></td></tr>
-<tr class="separator:a870b52b9b0c9759178a89b88d6239a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70b957771cfdd427c4534537cbdf48be"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a70b957771cfdd427c4534537cbdf48be">isBukkitCommandWrapper</a> (<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; CommandListenerWrapper &gt; node)</td></tr>
-<tr class="memdesc:a70b957771cfdd427c4534537cbdf48be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> command node is being handled by Bukkit's BukkitCommandWrapper.  <a href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#a70b957771cfdd427c4534537cbdf48be">More...</a><br /></td></tr>
-<tr class="separator:a70b957771cfdd427c4534537cbdf48be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9b871b125f550a0f504362d5c7babe8"><td class="memItemLeft" align="right" valign="top"><a id="ac9b871b125f550a0f504362d5c7babe8" name="ac9b871b125f550a0f504362d5c7babe8"></a>
 HelpTopic&#160;</td><td class="memItemRight" valign="bottom"><b>generateHelpTopic</b> (String commandName, String shortDescription, String fullDescription, String permission)</td></tr>
 <tr class="separator:ac9b871b125f550a0f504362d5c7babe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -435,6 +426,9 @@ Map&lt; String, HelpTopic &gt;&#160;</td><td class="memItemRight" valign="bottom
 <tr class="memitem:a0c1b55947a4d7c9bf90684f7aad62c69"><td class="memItemLeft" align="right" valign="top"><a id="a0c1b55947a4d7c9bf90684f7aad62c69" name="a0c1b55947a4d7c9bf90684f7aad62c69"></a>
 <a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_message.html">Message</a>&#160;</td><td class="memItemRight" valign="bottom"><b>generateMessageFromJson</b> (String json)</td></tr>
 <tr class="separator:a0c1b55947a4d7c9bf90684f7aad62c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a598ebb028b2e3ad2f6d1bd816c199d2a"><td class="memItemLeft" align="right" valign="top"><a id="a598ebb028b2e3ad2f6d1bd816c199d2a" name="a598ebb028b2e3ad2f6d1bd816c199d2a"></a>
+<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_registration_strategy.html">CommandRegistrationStrategy</a>&lt; CommandListenerWrapper &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createCommandRegistrationStrategy</b> ()</td></tr>
+<tr class="separator:a598ebb028b2e3ad2f6d1bd816c199d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -1463,64 +1457,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>registerBukkitRecipes
 
 </div>
 </div>
-<a id="af28e96bdcc858ba0b0125f59ae1150e7" name="af28e96bdcc858ba0b0125f59ae1150e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af28e96bdcc858ba0b0125f59ae1150e7">&#9670;&nbsp;</a></span>getBrigadierDispatcher()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">abstract <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; Source &gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html">dev.jorel.commandapi.CommandAPIBukkit</a>&lt; Source &gt;.getBrigadierDispatcher </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">abstract</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher from the NMS CommandDispatcher. </p>
-<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher </dd></dl>
-
-<p>Implements <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html#acd3ee418eb2d537f4678f8633f04aa5a">dev.jorel.commandapi.nms.NMS&lt; CommandListenerWrapper &gt;</a>.</p>
-
-</div>
-</div>
-<a id="a722caafd3328814e1092961a42cff32b" name="a722caafd3328814e1092961a42cff32b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a722caafd3328814e1092961a42cff32b">&#9670;&nbsp;</a></span>getResourcesDispatcher()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html">CommandDispatcher</a>&lt; CommandListenerWrapper &gt; <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html">dev.jorel.commandapi.nms.NMS</a>&lt; CommandListenerWrapper &gt;.getResourcesDispatcher </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher used when commands are sent to Players. </p>
-<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> CommandDispatcher </dd></dl>
-
-</div>
-</div>
 <a id="af38561d456f27ae3b16efd0a17e7ba72" name="af38561d456f27ae3b16efd0a17e7ba72"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af38561d456f27ae3b16efd0a17e7ba72">&#9670;&nbsp;</a></span>getSimpleCommandMap()</h2>
 
@@ -1633,76 +1569,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>registerBukkitRecipes
 
 </div>
 </div>
-<a id="a70b957771cfdd427c4534537cbdf48be" name="a70b957771cfdd427c4534537cbdf48be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70b957771cfdd427c4534537cbdf48be">&#9670;&nbsp;</a></span>isBukkitCommandWrapper()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">boolean <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html">dev.jorel.commandapi.nms.NMS</a>&lt; CommandListenerWrapper &gt;.isBukkitCommandWrapper </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; CommandListenerWrapper &gt;&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Checks if a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> command node is being handled by Bukkit's BukkitCommandWrapper. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>The CommandNode to check </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the CommandNode is being handled by Bukkit's BukkitCommandWrapper </dd></dl>
-
-</div>
-</div>
-<a id="ae273287c5957463fc074e17440a12335" name="ae273287c5957463fc074e17440a12335"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae273287c5957463fc074e17440a12335">&#9670;&nbsp;</a></span>isVanillaCommandWrapper()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">boolean <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html">dev.jorel.commandapi.nms.NMS</a>&lt; CommandListenerWrapper &gt;.isVanillaCommandWrapper </td>
-          <td>(</td>
-          <td class="paramtype">Command&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Checks if a Command is an instance of the OBC VanillaCommandWrapper. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">command</td><td>The Command to check </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if Command is an instance of VanillaCommandWrapper </dd></dl>
-
-</div>
-</div>
 <a id="a66536bf65fd8b2639771cfaa258464d9" name="a66536bf65fd8b2639771cfaa258464d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a66536bf65fd8b2639771cfaa258464d9">&#9670;&nbsp;</a></span>reloadDataPacks()</h2>
 
@@ -1785,41 +1651,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>registerBukkitRecipes
 
 </div>
 </div>
-<a id="a870b52b9b0c9759178a89b88d6239a7f" name="a870b52b9b0c9759178a89b88d6239a7f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a870b52b9b0c9759178a89b88d6239a7f">&#9670;&nbsp;</a></span>wrapToVanillaCommandWrapper()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a> <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1nms_1_1_n_m_s.html">dev.jorel.commandapi.nms.NMS</a>&lt; CommandListenerWrapper &gt;.wrapToVanillaCommandWrapper </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_command_node.html">CommandNode</a>&lt; CommandListenerWrapper &gt;&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Wraps a <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_brigadier.html" title="The Brigadier class is used to access some of the internals of the CommandAPI so you can use the Comm...">Brigadier</a> command node as Bukkit's VanillaCommandWrapper. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>The LiteralCommandNode to wrap </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A VanillaCommandWrapper representing the given node </dd></dl>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
@@ -1827,7 +1658,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>registerBukkitRecipes
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html">CommandAPIBukkit</a></li>
 				<li class="footer">
-					Generated on Thu May 9 2024 19:47:35 for CommandAPI 9.4.1 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Thu Jun 13 2024 23:41:21 for CommandAPI 9.5.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>
