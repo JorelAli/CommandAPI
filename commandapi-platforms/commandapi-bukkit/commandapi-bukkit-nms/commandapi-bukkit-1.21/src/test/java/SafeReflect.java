@@ -31,7 +31,7 @@ import net.minecraft.server.CustomFunctionManager;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 
 // Spigot-Mapped reflection
-@RequireField(in = CustomFunctionManager.class, name = "g", ofType = CommandDispatcher.class)
+@RequireField(in = CustomFunctionManager.class, name = "h", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "p", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "e", ofType = Either.class)
