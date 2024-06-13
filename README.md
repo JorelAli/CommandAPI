@@ -409,6 +409,18 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.5.0</b></td>
+            <td valign="top">June 2024</td>
+            <td valign="top">
+                <ul>
+                    <li>Adds support for Minecraft 1.21</li>
+                    <li>Drops support for Minecraft 1.16.1, 1.16.2, 1.16.3 and 1.16.4</li>
+                    <li>Fixes <code>ResourceLocationArgument</code> not working in 1.20.5 and 1.20.6</li>
+                    <li>Fixes <code>/minecraft:reload</code> deleting commands on Paper 1.20.6 (build 65+)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.4.2</b></td>
             <td valign="top">May 2024</td>
             <td valign="top">

@@ -65,6 +65,8 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/buk
 # Velocity #
 ############
 
+# Note to self: velocity_intro.md in the documentation needs pointing to a SNAPSHOT version (so do that manually)
+
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/velocity/maven/README.md
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/velocity/maven/pom.xml
 
