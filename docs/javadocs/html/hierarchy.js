@@ -243,6 +243,7 @@ var hierarchy =
     [ "com.mojang.brigadier.context.CommandContext< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html", null ],
     [ "com.mojang.brigadier.context.CommandContextBuilder< S >", "classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html", null ],
     [ "com.mojang.brigadier.CommandDispatcher< S >", "classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html", null ],
+    [ "com.mojang.brigadier.CommandDispatcher< Source >", "classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html", null ],
     [ "com.mojang.brigadier.exceptions.CommandExceptionType", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_command_exception_type.html", [
       [ "com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic2_command_exception_type.html", null ],
       [ "com.mojang.brigadier.exceptions.Dynamic3CommandExceptionType", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic3_command_exception_type.html", null ],
@@ -252,6 +253,10 @@ var hierarchy =
       [ "com.mojang.brigadier.exceptions.SimpleCommandExceptionType", "classcom_1_1mojang_1_1brigadier_1_1exceptions_1_1_simple_command_exception_type.html", null ]
     ] ],
     [ "dev.jorel.commandapi.CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", null ],
+    [ "dev.jorel.commandapi.CommandRegistrationStrategy< Source >", "classdev_1_1jorel_1_1commandapi_1_1_command_registration_strategy.html", [
+      [ "dev.jorel.commandapi.PaperCommandRegistration< Source >", "classdev_1_1jorel_1_1commandapi_1_1_paper_command_registration.html", null ],
+      [ "dev.jorel.commandapi.SpigotCommandRegistration< Source >", "classdev_1_1jorel_1_1commandapi_1_1_spigot_command_registration.html", null ]
+    ] ],
     [ "Comparable", null, [
       [ "com.mojang.brigadier.suggestion.Suggestion", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestion.html", [
         [ "com.mojang.brigadier.suggestion.IntegerSuggestion", "classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_integer_suggestion.html", null ]

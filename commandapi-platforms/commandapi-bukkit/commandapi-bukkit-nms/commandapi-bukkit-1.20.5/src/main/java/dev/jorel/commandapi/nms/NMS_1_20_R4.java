@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import dev.jorel.commandapi.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -55,7 +56,6 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_20_R4.CraftLootTable;
@@ -86,14 +86,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -210,7 +206,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	private static final Field entitySelectorUsesSelector;
 	// private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
-	private static final Field vanillaCommandDispatcher;
+	private static final boolean vanillaCommandDispatcherFieldExists;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -231,13 +227,16 @@ public class NMS_1_20_R4 extends NMS_Common {
 		// itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "g", "dispatcher");
-		Field commandDispatcher;
+
+		boolean fieldExists;
 		try {
-			commandDispatcher = MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
+			MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
+			fieldExists = true;
 		} catch (NoSuchFieldException | SecurityException e) {
-			commandDispatcher = null;
+			// Expected on Paper-1.20.6-65 or later due to https://github.com/PaperMC/Paper/pull/8235
+			fieldExists = false;
 		}
-		vanillaCommandDispatcher = commandDispatcher;
+		vanillaCommandDispatcherFieldExists = fieldExists;
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -460,11 +459,6 @@ public class NMS_1_20_R4 extends NMS_Common {
 	}
 
 	@Override
-	public final CommandDispatcher<CommandSourceStack> getResourcesDispatcher() {
-		return this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher();
-	}
-
-	@Override
 	public CommandSourceStack getBrigadierSourceFromCommandSender(
 			AbstractCommandSender<? extends CommandSender> sender) {
 		return VanillaCommandWrapper.getListener(sender.getSource());
@@ -664,6 +658,11 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Override
 	public final org.bukkit.loot.LootTable getLootTable(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return CraftLootTable.minecraftToBukkit(ResourceLocationArgument.getId(cmdCtx, key));
+	}
+
+	@Override
+	public NamespacedKey getMinecraftKey(CommandContext<CommandSourceStack> cmdCtx, String key) {
+		return fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key));
 	}
 
 	@Differs(from = "1.20.4", by = "New particle option ColorParticleOption")
@@ -897,25 +896,6 @@ public class NMS_1_20_R4 extends NMS_Common {
 	}
 
 	@Override
-	public final boolean isVanillaCommandWrapper(Command command) {
-		return command instanceof VanillaCommandWrapper;
-	}
-
-	@Override
-	public Command wrapToVanillaCommandWrapper(CommandNode<CommandSourceStack> node) {
-		if (vanillaCommandDispatcher != null) {
-			return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node);
-		} else {
-			return new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().getCommands(), node);
-		}
-	}
-
-	@Override
-	public boolean isBukkitCommandWrapper(CommandNode<CommandSourceStack> node) {
-		return node.getCommand() instanceof BukkitCommandWrapper;
-	}
-
-	@Override
 	public final void reloadDataPacks() {
 		CommandAPI.logNormal("Reloading datapacks...");
 
@@ -1067,4 +1047,31 @@ public class NMS_1_20_R4 extends NMS_Common {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
 	}
 
+	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		if (vanillaCommandDispatcherFieldExists) {
+			return new SpigotCommandRegistration<>(
+				this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+				(SimpleCommandMap) getPaper().getCommandMap(),
+				() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+				command -> command instanceof VanillaCommandWrapper,
+				node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+				node -> node.getCommand() instanceof BukkitCommandWrapper
+			);
+		} else {
+			// This class is Paper-server specific, so we need to use paper's userdev plugin to
+			//  access it directly. That might need gradle, but there might also be a maven version?
+			//  https://discord.com/channels/289587909051416579/1121227200277004398/1246910745761812480
+			Class<?> bukkitCommandNode_bukkitBrigCommand;
+			try {
+				bukkitCommandNode_bukkitBrigCommand = Class.forName("io.papermc.paper.command.brigadier.bukkit.BukkitCommandNode$BukkitBrigCommand");
+			} catch (ClassNotFoundException e) {
+				throw new IllegalStateException("Expected to find class", e);
+			}
+			return new PaperCommandRegistration<>(
+				() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+				node -> bukkitCommandNode_bukkitBrigCommand.isInstance(node.getCommand())
+			);
+		}
+	}
 }

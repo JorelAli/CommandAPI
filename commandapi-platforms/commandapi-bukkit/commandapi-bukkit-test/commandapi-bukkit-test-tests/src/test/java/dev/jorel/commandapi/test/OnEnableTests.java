@@ -2,13 +2,12 @@ package dev.jorel.commandapi.test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.mojang.brigadier.tree.RootCommandNode;
-import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.SpigotCommandRegistration;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
@@ -16,10 +15,7 @@ import org.bukkit.help.HelpTopic;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-
-import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,22 +58,9 @@ class OnEnableTests extends TestBase {
 		server.addPlayer(updateCommandsPlayer);
 
 		// Get a CraftPlayer for running VanillaCommandWrapper commands
-		Player runCommandsPlayer = Mockito.mock(MockPlatform.getInstance().getCraftPlayerClass());
+		Player runCommandsPlayer = server.setupMockedCraftPlayer();
 		// Give player permission to run command
-		Mockito.when(runCommandsPlayer.hasPermission(ArgumentMatchers.eq("permission"))).thenReturn(true);
-		// Get location is used when creating the BrigadierSource in MockNMS
-		Mockito.when(runCommandsPlayer.getLocation()).thenReturn(new Location(null, 0, 0, 0));
-
-		// Provide proper handle as VanillaCommandWrapper expects
-		Method getHandle = assertDoesNotThrow(() -> runCommandsPlayer.getClass().getDeclaredMethod("getHandle"));
-		Object brigadierSource = Brigadier.getBrigadierSourceFromCommandSender(runCommandsPlayer);
-		Object handle = Mockito.mock(getHandle.getReturnType(), invocation -> brigadierSource);
-		// This is a funny quirk of Mockito, but you don't need to put the method call you want to mock inside `when`
-		//  As long as the method is called, `when` knows what you are talking about
-		//  That means we can mock `CraftPlayer#getHandle` indirectly using reflection
-		//  See the additional response in https://stackoverflow.com/a/10131885
-		assertDoesNotThrow(() -> getHandle.invoke(runCommandsPlayer));
-		Mockito.when(null).thenReturn(handle);
+		Mockito.when(runCommandsPlayer.hasPermission("permission")).thenReturn(true);
 
 		// register command while server is enabled
 		Mut<String> results = Mut.of();
@@ -141,20 +124,21 @@ class OnEnableTests extends TestBase {
 			  }
 			}""", getDispatcherString());
 
-		// Make sure command and its aliases exist in the Bukkit CommandMap as VanillaCommandWrappers
+		// Make sure command and its aliases exist in the Bukkit CommandMap
 		SimpleCommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
+		SpigotCommandRegistration<?> spigotCommandRegistration = (SpigotCommandRegistration<?>) CommandAPIBukkit.get().getCommandRegistrationStrategy();
 
 		Command mainCommand = commandMap.getCommand("command");
 		assertNotNull(mainCommand);
-		assertTrue(CommandAPIBukkit.get().isVanillaCommandWrapper(mainCommand));
+		assertTrue(spigotCommandRegistration.isVanillaCommandWrapper(mainCommand));
 
 		Command alias1Command = commandMap.getCommand("alias1");
 		assertNotNull(alias1Command);
-		assertTrue(CommandAPIBukkit.get().isVanillaCommandWrapper(alias1Command));
+		assertTrue(spigotCommandRegistration.isVanillaCommandWrapper(alias1Command));
 
 		Command alias2Command = commandMap.getCommand("alias2");
 		assertNotNull(alias2Command);
-		assertTrue(CommandAPIBukkit.get().isVanillaCommandWrapper(alias2Command));
+		assertTrue(spigotCommandRegistration.isVanillaCommandWrapper(alias2Command));
 
 		// Make sure namespaces were set up as well
 		assertEquals(mainCommand, commandMap.getCommand("minecraft:command"));
@@ -168,7 +152,7 @@ class OnEnableTests extends TestBase {
 
 
 		// Make sure commands were added to 'resources' dispatcher
-		RootCommandNode<?> resourcesRoot = CommandAPIBukkit.get().getResourcesDispatcher().getRoot();
+		RootCommandNode<?> resourcesRoot = MockPlatform.getInstance().getMockResourcesDispatcher().getRoot();
 
 		assertNotNull(resourcesRoot.getChild("command"));
 		assertNotNull(resourcesRoot.getChild("alias1"));

@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.test
 
 import be.seeseemelk.mockbukkit.ServerMock
+import be.seeseemelk.mockbukkit.entity.PlayerMock
 import com.mojang.brigadier.context.StringRange
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.suggestion.Suggestions
@@ -8,6 +9,7 @@ import dev.jorel.commandapi.Brigadier
 import org.bukkit.Keyed
 import org.bukkit.Registry
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import org.bukkit.scoreboard.Criteria
 import org.junit.jupiter.api.Assertions
 import java.util.concurrent.ExecutionException
@@ -66,6 +68,27 @@ class CommandAPIServerMock : ServerMock() {
 			suggestionsAsStrings.add(suggestion.text)
 		}
 		return suggestionsAsStrings
+	}
+
+	/**
+	 * Creates a new Bukkit [Player]. Unlike [PlayerMock], this uses Mockito to mock the CraftPlayer class,
+	 * which allows the returned object to pass through VanillaCommandWrapper#getListener without error.
+	 *
+	 * @return A new [Player].
+	 */
+	fun setupMockedCraftPlayer(): Player {
+		return setupMockedCraftPlayer("defaultName")
+	}
+
+	/**
+	 * Creates a new Bukkit [Player]. Unlike [PlayerMock], this uses Mockito to mock the CraftPlayer class,
+	 * which allows the returned object to pass through VanillaCommandWrapper#getListener without error.
+	 *
+	 * @param name The name for the player
+	 * @return A new [Player].
+	 */
+	fun setupMockedCraftPlayer(name: String?): Player {
+		return MockPlatform.getInstance<Any>().setupMockedCraftPlayer(name)
 	}
 
 	override fun isTickingWorlds(): Boolean {

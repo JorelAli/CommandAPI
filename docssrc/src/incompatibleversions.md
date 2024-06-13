@@ -6,14 +6,6 @@ There are a few arguments that are incompatible with various versions of Minecra
 
 ## Argument changes with respect to Minecraft version
 
-### AngleArgument
-
-Incompatible with Minecraft versions **less than 1.16.2** _(1.16, 1.16.1)_
-
-### ChatArgument
-
-Incompatible with Minecraft version **1.16.1** _(Works on 1.16.2)_
-
 ### ChatArgument's chat preview
 
 Incompatible with Minecraft versions **less than 1.19 and greater than 1.19.2** _(Works on 1.19, 1.19.1 and 1.19.2)_

@@ -19,7 +19,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
@@ -35,7 +34,6 @@ import com.mojang.brigadier.context.ParsedArgument;
 
 import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 
 public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
@@ -66,28 +64,15 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	 * CommandAPIBukkit implementations *
 	 ************************************/
 
-	private CommandDispatcher<CLW> dispatcher = null;
-	private CommandDispatcher<CLW> resourcesDispatcher = null;
+	private final CommandDispatcher<CLW> brigadierDispatcher = new CommandDispatcher<>();
+	private final CommandDispatcher<CLW> resourcesDispatcher = new CommandDispatcher<>();
 
-	@Override
-	public final CommandDispatcher<CLW> getBrigadierDispatcher() {
-		if (this.dispatcher == null) {
-			this.dispatcher = new CommandDispatcher<>();
-		}
-		return this.dispatcher;
+	public CommandDispatcher<CLW> getMockBrigadierDispatcher() {
+		return brigadierDispatcher;
 	}
 
-	@Override
-	public CommandDispatcher<CLW> getResourcesDispatcher() {
-		if (this.resourcesDispatcher == null) {
-			this.resourcesDispatcher = new CommandDispatcher<>();
-		}
-		return this.resourcesDispatcher;
-	}
-
-	@Override
-	public final BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CLW> cmdCtx, boolean forceNative) {
-		return getCommandSenderFromCommandSource(cmdCtx.getSource());
+	public CommandDispatcher<CLW> getMockResourcesDispatcher() {
+		return resourcesDispatcher;
 	}
 
 	@Override
@@ -178,7 +163,7 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	public abstract void addFunction(NamespacedKey key, List<String> commands);
 	public abstract void addTag(NamespacedKey key, List<List<String>> commands);
 
-	public abstract Class<? extends Player> getCraftPlayerClass();
+	public abstract Player setupMockedCraftPlayer(String name);
 
 	/**
 	 * Converts 1.16.5 and below potion effect names to NamespacedKey names. For

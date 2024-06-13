@@ -330,6 +330,7 @@ var annotated_dup =
           [ "CommandAPILogger", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_logger.html", null ],
           [ "CommandAPIPlatform", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html", "interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform" ],
           [ "CommandPermission", "classdev_1_1jorel_1_1commandapi_1_1_command_permission.html", "classdev_1_1jorel_1_1commandapi_1_1_command_permission" ],
+          [ "CommandRegistrationStrategy", "classdev_1_1jorel_1_1commandapi_1_1_command_registration_strategy.html", null ],
           [ "CommandTree", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html", "classdev_1_1jorel_1_1commandapi_1_1_command_tree" ],
           [ "Converter", "classdev_1_1jorel_1_1commandapi_1_1_converter.html", "classdev_1_1jorel_1_1commandapi_1_1_converter" ],
           [ "ExecutableCommand", "classdev_1_1jorel_1_1commandapi_1_1_executable_command.html", "classdev_1_1jorel_1_1commandapi_1_1_executable_command" ],
@@ -338,10 +339,12 @@ var annotated_dup =
           [ "InternalConfig", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html", "classdev_1_1jorel_1_1commandapi_1_1_internal_config" ],
           [ "IStringTooltip", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip.html", "interfacedev_1_1jorel_1_1commandapi_1_1_i_string_tooltip" ],
           [ "MojangMappedVersionHandler", "interfacedev_1_1jorel_1_1commandapi_1_1_mojang_mapped_version_handler.html", null ],
+          [ "PaperCommandRegistration", "classdev_1_1jorel_1_1commandapi_1_1_paper_command_registration.html", "classdev_1_1jorel_1_1commandapi_1_1_paper_command_registration" ],
           [ "PaperImplementations", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html", "classdev_1_1jorel_1_1commandapi_1_1_paper_implementations" ],
           [ "PlatformExecutable", "interfacedev_1_1jorel_1_1commandapi_1_1_platform_executable.html", "interfacedev_1_1jorel_1_1commandapi_1_1_platform_executable" ],
           [ "SafeVarHandle", "classdev_1_1jorel_1_1commandapi_1_1_safe_var_handle.html", null ],
           [ "Schedulers", "classdev_1_1jorel_1_1commandapi_1_1_schedulers.html", null ],
+          [ "SpigotCommandRegistration", "classdev_1_1jorel_1_1commandapi_1_1_spigot_command_registration.html", "classdev_1_1jorel_1_1commandapi_1_1_spigot_command_registration" ],
           [ "StringTooltip", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_string_tooltip" ],
           [ "Tooltip", "classdev_1_1jorel_1_1commandapi_1_1_tooltip.html", "classdev_1_1jorel_1_1commandapi_1_1_tooltip" ]
         ] ]
