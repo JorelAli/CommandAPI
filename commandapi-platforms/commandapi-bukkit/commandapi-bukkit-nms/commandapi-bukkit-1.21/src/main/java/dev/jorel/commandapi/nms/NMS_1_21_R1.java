@@ -39,7 +39,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import dev.jorel.commandapi.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -90,6 +89,12 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.CommandRegistrationStrategy;
+import dev.jorel.commandapi.PaperCommandRegistration;
+import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.SpigotCommandRegistration;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -146,8 +151,6 @@ import net.minecraft.commands.functions.CommandFunction;
 import net.minecraft.commands.functions.InstantiatedFunction;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
@@ -304,9 +307,9 @@ public class NMS_1_21_R1 extends NMS_Common {
 		return new String[] { "1.21" };
 	};
 	
+	@Differs(from = "1.20.6", by = "ItemInput constructor uses a data components patch, instead of a data components map")
 	private static String serializeNMSItemStack(ItemStack is) {
-		final DataComponentMap patchedMap = PatchedDataComponentMap.fromPatch(PatchedDataComponentMap.EMPTY, is.getComponentsPatch());
-		return new ItemInput(is.getItemHolder(), patchedMap).serialize(COMMAND_BUILD_CONTEXT);
+		return new ItemInput(is.getItemHolder(), is.getComponentsPatch()).serialize(COMMAND_BUILD_CONTEXT);
 	}
 
 	@Override
@@ -474,8 +477,9 @@ public class NMS_1_21_R1 extends NMS_Common {
 	@Override
 	public final Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key)
 			throws CommandSyntaxException {
-		return Registry.ENCHANTMENT.get(fromResourceLocation(
-				BuiltInRegistries.ENCHANTMENT.getKey(ResourceArgument.getEnchantment(cmdCtx, key).value())));
+		final net.minecraft.world.item.enchantment.Enchantment enchantment = ResourceArgument.getEnchantment(cmdCtx, key).value();
+		final ResourceLocation resource = this.<MinecraftServer>getMinecraftServer().registryAccess().registryOrThrow(Registries.ENCHANTMENT).getKey(enchantment);
+		return Registry.ENCHANTMENT.get(fromResourceLocation(resource));
 	}
 
 	@Override
@@ -570,9 +574,10 @@ public class NMS_1_21_R1 extends NMS_Common {
 		return result.toArray(new FunctionWrapper[0]);
 	}
 
+	@Differs(from = "1.20.6", by = "ResourceLocation constructor change to static ResourceLocation#fromNamespaceAndPath")
 	@Override
 	public SimpleFunctionWrapper getFunction(NamespacedKey key) {
-		final ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getKey());
+		final ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(key.getNamespace(), key.getKey());
 		Optional<CommandFunction<CommandSourceStack>> commandFunctionOptional = this
 				.<MinecraftServer>getMinecraftServer().getFunctions().get(resourceLocation);
 		if (commandFunctionOptional.isPresent()) {
@@ -862,9 +867,10 @@ public class NMS_1_21_R1 extends NMS_Common {
 		};
 	}
 
+	@Differs(from = "1.20.6", by = "ResourceLocation constructor change to static ResourceLocation#fromNamespaceAndPath")
 	@Override
 	public final SimpleFunctionWrapper[] getTag(NamespacedKey key) {
-		Collection<CommandFunction<CommandSourceStack>> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(new ResourceLocation(key.getNamespace(), key.getKey()));
+		Collection<CommandFunction<CommandSourceStack>> customFunctions = this.<MinecraftServer>getMinecraftServer().getFunctions().getTag(ResourceLocation.fromNamespaceAndPath(key.getNamespace(), key.getKey()));
 		SimpleFunctionWrapper[] convertedCustomFunctions = new SimpleFunctionWrapper[customFunctions.size()];
 		int index = 0;
 		for (CommandFunction<CommandSourceStack> customFunction : customFunctions) {
