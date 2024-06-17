@@ -3,6 +3,7 @@ package dev.jorel.commandapi.test.exceptions;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.DuplicateNodeNameException;
 import dev.jorel.commandapi.test.TestBase;
@@ -94,6 +95,19 @@ public class DuplicateNodeNameExceptionTests extends TestBase {
 			DuplicateNodeNameException.class,
 			"Duplicate node names for listed arguments are not allowed! Going down the [test<MultiLiteralArgument> alice<LiteralArgument> bob<LiteralArgument>] branch, found alice<LiteralArgument>, which had a duplicated node name",
 			commandWithDuplicateListedLiteralArgumentNames::register
+		);
+
+		CommandAPICommand command = new CommandAPICommand("test")
+			.withArguments(
+				new MultiLiteralArgument("literal", "a", "b", "c"),
+				new MultiLiteralArgument("literal", "c", "d", "e")
+			)
+			.executesPlayer(P_EXEC);
+
+		assertThrowsWithMessage(
+			DuplicateNodeNameException.class,
+			"Duplicate node names for listed arguments are not allowed! Going down the [test<MultiLiteralArgument> literal<MultiLiteralArgument>] branch, found literal<MultiLiteralArgument>, which had a duplicated node name",
+			command::register
 		);
 	}
 
