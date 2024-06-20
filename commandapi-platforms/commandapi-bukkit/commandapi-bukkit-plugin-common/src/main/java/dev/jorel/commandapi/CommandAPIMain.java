@@ -20,14 +20,20 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.SafeSuggestions;
+import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.config.BukkitConfigurationAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +139,50 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable();
+
+		List<String> tags = new ArrayList<>();
+		tags.add("hello");
+		tags.add("world");
+
+		new CommandTree("server")
+			.then(
+				new LiteralArgument("add").then(
+					new StringArgument("tag").executes(info -> {
+						String tag = info.args().getUnchecked("tag");
+
+						tags.add(tag);
+					})
+				)
+			)
+			.then(
+				new LiteralArgument("tag").then(
+					new DynamicMultiLiteralArgument("tag", sender -> {
+						if (sender instanceof Player player) {
+							List<String> addPlayer = new ArrayList<>(tags);
+							addPlayer.add(player.getName());
+							return addPlayer;
+						} else {
+							return tags;
+						}
+					}).then(new IntegerArgument("extra").replaceSafeSuggestions(SafeSuggestions.suggest(1, 2, 3))
+						.executes(info -> {
+								String tag = info.args().getUnchecked("tag");
+								int extra = info.args().getUnchecked("extra");
+
+								info.sender().sendMessage(tag + " " + extra);
+							}
+						)
+					))
+			)
+			.register();
+
+		new CommandAPICommand("updateCommands")
+			.executes(info -> {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					CommandAPI.updateRequirements(player);
+				}
+			})
+			.register();
 	}
 
 	/**

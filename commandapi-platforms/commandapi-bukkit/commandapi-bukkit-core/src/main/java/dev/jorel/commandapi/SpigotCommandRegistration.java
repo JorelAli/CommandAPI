@@ -4,7 +4,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
+import dev.jorel.commandapi.commandnodes.DifferentClientNode;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
@@ -283,6 +285,17 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	public void registerCommandNode(LiteralCommandNode<Source> node, String namespace) {
 		CommandAPIHandler<?, ?, Source> commandAPIHandler = CommandAPIHandler.getInstance();
 		RootCommandNode<Source> rootNode = brigadierDispatcher.getRoot();
+
+
+		if (!CommandAPIBukkit.get().getPaper().isPaperPresent()) {
+			// If Paper is not present, then we don't have the AsyncPlayerSendCommandsEvent,
+			//  which allows us to rewrite nodes for a specific client. Best we can do on Spigot
+			//  is rewrite the nodes now for a general client (represented by the console). This
+			//  can still produce interesting server-client de-sync behavior that we want to use.
+			CommandSender console = Bukkit.getConsoleSender();
+			Source source = CommandAPIBukkit.<Source>get().getBrigadierSourceFromCommandSender(console);
+			DifferentClientNode.rewriteAllChildren(source, node);
+		}
 
 		String name = node.getLiteral();
 		if (namespace.equals("minecraft")) {

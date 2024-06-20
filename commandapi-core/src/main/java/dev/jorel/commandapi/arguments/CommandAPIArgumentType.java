@@ -103,6 +103,11 @@ public enum CommandAPIArgumentType {
 	DIMENSION("minecraft:dimension"),
 
 	/**
+	 * The DynamicMultiLiteralArgument
+	 */
+	DYNAMIC_MULTI_LITERAL,
+
+	/**
 	 * The EnchantmentArgument
 	 * 
 	 */
