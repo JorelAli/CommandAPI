@@ -14,11 +14,14 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.command.PlayerAvailableCommandsEvent;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.commandnodes.DifferentClientNode;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
@@ -88,7 +91,15 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 
 	@Override
 	public void onEnable() {
-		// Nothing to do
+		// Register events
+		config.getServer().getEventManager().register(config.getPlugin(), this);
+	}
+
+	@Subscribe
+	@SuppressWarnings("UnstableApiUsage") // This event is marked @Beta
+	public void onCommandsSentToPlayer(PlayerAvailableCommandsEvent event) {
+		// Rewrite nodes to their client-side version when commands are sent to a client
+		DifferentClientNode.rewriteAllChildren(event.getPlayer(), (RootCommandNode<CommandSource>) event.getRootNode());
 	}
 
 	@Override

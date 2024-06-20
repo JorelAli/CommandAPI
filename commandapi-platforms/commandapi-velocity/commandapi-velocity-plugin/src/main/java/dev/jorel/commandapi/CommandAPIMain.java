@@ -7,7 +7,10 @@ import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import dev.jorel.commandapi.arguments.*;
+import net.kyori.adventure.text.Component;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 
@@ -16,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -73,6 +78,42 @@ public class CommandAPIMain {
 	public void onProxyInitialization(ProxyInitializeEvent event) {
 		// Enable
 		CommandAPI.onEnable();
+
+		List<String> tags = new ArrayList<>();
+		tags.add("hello");
+		tags.add("world");
+
+		new CommandTree("proxy")
+			.then(
+				new LiteralArgument("add").then(
+					new StringArgument("tag").executes(info -> {
+						String tag = info.args().getUnchecked("tag");
+
+						tags.add(tag);
+					})
+				)
+			)
+			.then(
+				new LiteralArgument("tag").then(
+					new DynamicMultiLiteralArgument("tag", sender -> {
+						if (sender instanceof Player player) {
+							List<String> addPlayer = new ArrayList<>(tags);
+							addPlayer.add(player.getUsername());
+							return addPlayer;
+						} else {
+							return tags;
+						}
+					}).then(new IntegerArgument("extra").replaceSafeSuggestions(SafeSuggestions.suggest(1, 2, 3))
+						.executes(info -> {
+							String tag = info.args().getUnchecked("tag");
+							int extra = info.args().getUnchecked("extra");
+
+							info.sender().sendMessage(Component.text(tag + " " + extra));
+						})
+					)
+				)
+			)
+			.register();
 	}
 	
 	@Subscribe

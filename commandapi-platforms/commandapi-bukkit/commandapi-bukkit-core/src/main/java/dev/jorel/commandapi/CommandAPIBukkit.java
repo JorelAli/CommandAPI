@@ -182,9 +182,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			public void onServerLoad(ServerLoadEvent event) {
 				CommandAPI.stopCommandRegistration();
 			}
-		}, getConfiguration().getPlugin());
+		}, plugin);
 
-		paper.registerReloadHandler(plugin);
+		paper.registerEvents(plugin);
 	}
 
 	/*
