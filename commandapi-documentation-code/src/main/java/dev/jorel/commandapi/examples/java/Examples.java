@@ -2311,7 +2311,9 @@ new CommandAPICommand("removeeffect")
 final Argument<?> noSelectorSuggestions = new PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest(info ->
     Bukkit.getOnlinePlayers().toArray(new Player[0])
 ));
+/* ANCHOR_END: safeArgumentSuggestions8 */
 
+/* ANCHOR: safeArgumentSuggestions9 */
 // Create the warp command
 new CommandAPICommand("warp")
     // Add our argument
@@ -2323,7 +2325,7 @@ new CommandAPICommand("warp")
     })
     // Register our command
     .register();
-/* ANCHOR_END: safeArgumentSuggestions8 */
+/* ANCHOR_END: safeArgumentSuggestions9 */
 }
 
 class setupShading {

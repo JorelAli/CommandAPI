@@ -2207,7 +2207,9 @@ CommandAPICommand("removeeffect")
 val noSelectorSuggestions = PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest {
     Bukkit.getOnlinePlayers().toTypedArray()
 })
+/* ANCHOR_END: safeArgumentSuggestions8 */
 
+/* ANCHOR: safeArgumentSuggestions9 */
 // Create the warp command
 CommandAPICommand("warp")
     // Add our argument
@@ -2219,7 +2221,7 @@ CommandAPICommand("warp")
     })
     // Register our command
     .register()
-/* ANCHOR_END: safeArgumentSuggestions8 */
+/* ANCHOR_END: safeArgumentSuggestions9 */
 }
 
 class setupShading {
