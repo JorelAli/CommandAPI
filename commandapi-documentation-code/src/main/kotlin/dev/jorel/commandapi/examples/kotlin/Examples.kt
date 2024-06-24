@@ -2179,9 +2179,10 @@ CommandAPICommand("spawnmob")
 /* ANCHOR_END: safeArgumentSuggestions5 */
 
 /* ANCHOR: safeArgumentSuggestions6 */
-val noSelectorSuggestions = PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest {
-    Bukkit.getOnlinePlayers().toTypedArray()
-})
+val noSelectorSuggestions = PlayerArgument("target")
+    .replaceSafeSuggestions(SafeSuggestions.suggest {
+        Bukkit.getOnlinePlayers().toTypedArray()
+    })
 /* ANCHOR_END: safeArgumentSuggestions6 */
 
 /* ANCHOR: safeArgumentSuggestions7 */

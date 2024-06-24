@@ -2281,9 +2281,10 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR_END: safeArgumentSuggestions5 */
 
 /* ANCHOR: safeArgumentSuggestions6 */
-Argument<?> noSelectorSuggestions = new PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest(info ->
-    Bukkit.getOnlinePlayers().toArray(new Player[0])
-));
+Argument<?> noSelectorSuggestions = new PlayerArgument("target")
+    .replaceSafeSuggestions(SafeSuggestions.suggest(info ->
+        Bukkit.getOnlinePlayers().toArray(new Player[0])
+    ));
 /* ANCHOR_END: safeArgumentSuggestions6 */
 
 /* ANCHOR: safeArgumentSuggestions7 */
