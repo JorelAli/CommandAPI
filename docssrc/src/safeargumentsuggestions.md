@@ -210,7 +210,7 @@ Now we register our command as normal:
 
 ### Example - Warp command
 
-When registering a `PlayerArgument` you might notice that it includes `Entity Selectors` (`@a`, `@e`, `@r`, etc.). If you want to avoid those, you can use safe argument suggestions to only suggest the player names. For this example, let us create a /warp command:   
+When registering a `PlayerArgument` you might notice that it includes `Entity Selectors` (`@a`, `@e`, `@r`, etc.). If you want to avoid those, you can use safe argument suggestions to only suggest the player names. For this example, let us create a /warp command:
 ```mccmd
 /warp <player>
 ```
@@ -222,6 +222,7 @@ To get a `PlayerArgument` which only suggests the actual names, we can define it
 ```java,Java
 {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions6}}
 ```
+
 ```kotlin,Kotlin
 {{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions6}}
 ```
