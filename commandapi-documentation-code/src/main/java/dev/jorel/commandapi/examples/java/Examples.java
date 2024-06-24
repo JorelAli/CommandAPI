@@ -2281,6 +2281,22 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR_END: safeArgumentSuggestions5 */
 
 /* ANCHOR: safeArgumentSuggestions6 */
+Argument<?> noSelectorSuggestions = new PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest(info ->
+    Bukkit.getOnlinePlayers().toArray(new Player[0])
+));
+/* ANCHOR_END: safeArgumentSuggestions6 */
+
+/* ANCHOR: safeArgumentSuggestions7 */
+new CommandAPICommand("warp")
+    .withArguments(noSelectorSuggestions)
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args.get("target");
+        player.teleport(target);
+    })
+    .register();
+/* ANCHOR_END: safeArgumentSuggestions7 */
+
+/* ANCHOR: safeArgumentSuggestions8 */
 List<Argument<?>> safeArgs = new ArrayList<>();
 safeArgs.add(new EntitySelectorArgument.OnePlayer("target"));
 safeArgs.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(
@@ -2293,32 +2309,15 @@ safeArgs.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(Saf
             .toArray(PotionEffectType[]::new);
     })
 ));
-/* ANCHOR_END: safeArgumentSuggestions6 */
+/* ANCHOR_END: safeArgumentSuggestions8 */
 
-/* ANCHOR: safeArgumentSuggestions7 */
+/* ANCHOR: safeArgumentSuggestions9 */
 new CommandAPICommand("removeeffect")
     .withArguments(safeArgs)
     .executesPlayer((player, args) -> {
         Player target = (Player) args.get("target");
         PotionEffectType potionEffect = (PotionEffectType) args.get("potioneffect");
         target.removePotionEffect(potionEffect);
-    })
-    .register();
-/* ANCHOR_END: safeArgumentSuggestions7 */
-
-/* ANCHOR: safeArgumentSuggestions8 */
-// Create a player argument which only contains online players, removing the entity selectors (@a, @e, etc)
-Argument<?> noSelectorSuggestions = new PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest(info ->
-    Bukkit.getOnlinePlayers().toArray(new Player[0])
-));
-/* ANCHOR_END: safeArgumentSuggestions8 */
-
-/* ANCHOR: safeArgumentSuggestions9 */
-new CommandAPICommand("warp")
-    .withArguments(noSelectorSuggestions)
-    .executesPlayer((player, args) -> {
-        Player target = (Player) args.get("target");
-        player.teleport(target);
     })
     .register();
 /* ANCHOR_END: safeArgumentSuggestions9 */

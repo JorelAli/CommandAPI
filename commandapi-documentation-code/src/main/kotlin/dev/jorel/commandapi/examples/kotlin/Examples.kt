@@ -2179,6 +2179,22 @@ CommandAPICommand("spawnmob")
 /* ANCHOR_END: safeArgumentSuggestions5 */
 
 /* ANCHOR: safeArgumentSuggestions6 */
+val noSelectorSuggestions = PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest {
+    Bukkit.getOnlinePlayers().toTypedArray()
+})
+/* ANCHOR_END: safeArgumentSuggestions6 */
+
+/* ANCHOR: safeArgumentSuggestions7 */
+CommandAPICommand("warp")
+    .withArguments(noSelectorSuggestions)
+    .executesPlayer(PlayerCommandExecutor { player: Player, args: CommandArguments ->
+        val target = args["target"] as Player
+        player.teleport(target)
+    })
+    .register()
+/* ANCHOR_END: safeArgumentSuggestions7 */
+
+/* ANCHOR: safeArgumentSuggestions8 */
 val safeArgs = mutableListOf<Argument<*>>()
 safeArgs.add(EntitySelectorArgument.OnePlayer("target"))
 safeArgs.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest {
@@ -2189,33 +2205,15 @@ safeArgs.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSug
         target.activePotionEffects.map{ it.type }.toTypedArray()
     })
 )
-/* ANCHOR_END: safeArgumentSuggestions6 */
+/* ANCHOR_END: safeArgumentSuggestions8 */
 
-/* ANCHOR: safeArgumentSuggestions7 */
+/* ANCHOR: safeArgumentSuggestions9 */
 CommandAPICommand("removeeffect")
     .withArguments(safeArgs)
     .executesPlayer(PlayerCommandExecutor { _, args ->
         val target = args["target"] as Player
         val potionEffect = args["potioneffect"] as PotionEffectType
         target.removePotionEffect(potionEffect)
-    })
-    .register()
-/* ANCHOR_END: safeArgumentSuggestions7 */
-
-/* ANCHOR: safeArgumentSuggestions8 */
-// Create a player argument which only contains online players, not including the entity selectors (@a, @e, etc)
-val noSelectorSuggestions = PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest {
-    Bukkit.getOnlinePlayers().toTypedArray()
-})
-/* ANCHOR_END: safeArgumentSuggestions8 */
-
-/* ANCHOR: safeArgumentSuggestions9 */
-// Create the warp command
-CommandAPICommand("warp")
-    .withArguments(noSelectorSuggestions)
-    .executesPlayer(PlayerCommandExecutor { player: Player, args: CommandArguments ->
-        val target = args["target"] as Player
-        player.teleport(target)
     })
     .register()
 /* ANCHOR_END: safeArgumentSuggestions9 */
