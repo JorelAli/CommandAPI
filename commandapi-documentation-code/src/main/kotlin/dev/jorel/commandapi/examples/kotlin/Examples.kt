@@ -2201,6 +2201,25 @@ CommandAPICommand("removeeffect")
     })
     .register()
 /* ANCHOR_END: safeArgumentSuggestions7 */
+
+/* ANCHOR: safeArgumentSuggestions8 */
+// Create a player argument which only contains online players, not including the entity selectors (@a, @e, etc)
+val noSelectorSuggestions = PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest {
+    Bukkit.getOnlinePlayers().toTypedArray()
+})
+
+// Create the warp command
+CommandAPICommand("warp")
+    // Add our argument
+    .withArguments(noSelectorSuggestions)
+    .executesPlayer(PlayerCommandExecutor { player: Player, args: CommandArguments ->
+        // Execute logic
+        val target: Player = args["target"] as Player
+        player.teleport(target)
+    })
+    // Register our command
+    .register()
+/* ANCHOR_END: safeArgumentSuggestions8 */
 }
 
 class setupShading {
