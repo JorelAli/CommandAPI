@@ -2212,14 +2212,11 @@ val noSelectorSuggestions = PlayerArgument("target").replaceSafeSuggestions(Safe
 /* ANCHOR: safeArgumentSuggestions9 */
 // Create the warp command
 CommandAPICommand("warp")
-    // Add our argument
     .withArguments(noSelectorSuggestions)
     .executesPlayer(PlayerCommandExecutor { player: Player, args: CommandArguments ->
-        // Execute logic
-        val target: Player = args["target"] as Player
+        val target = args["target"] as Player
         player.teleport(target)
     })
-    // Register our command
     .register()
 /* ANCHOR_END: safeArgumentSuggestions9 */
 }

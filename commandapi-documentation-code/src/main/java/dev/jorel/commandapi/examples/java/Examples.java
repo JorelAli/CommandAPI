@@ -2308,22 +2308,18 @@ new CommandAPICommand("removeeffect")
 
 /* ANCHOR: safeArgumentSuggestions8 */
 // Create a player argument which only contains online players, removing the entity selectors (@a, @e, etc)
-final Argument<?> noSelectorSuggestions = new PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest(info ->
+Argument<?> noSelectorSuggestions = new PlayerArgument("target").replaceSafeSuggestions(SafeSuggestions.suggest(info ->
     Bukkit.getOnlinePlayers().toArray(new Player[0])
 ));
 /* ANCHOR_END: safeArgumentSuggestions8 */
 
 /* ANCHOR: safeArgumentSuggestions9 */
-// Create the warp command
 new CommandAPICommand("warp")
-    // Add our argument
     .withArguments(noSelectorSuggestions)
     .executesPlayer((player, args) -> {
-        // Execute logic
         Player target = (Player) args.get("target");
         player.teleport(target);
     })
-    // Register our command
     .register();
 /* ANCHOR_END: safeArgumentSuggestions9 */
 }
