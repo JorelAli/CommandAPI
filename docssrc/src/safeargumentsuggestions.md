@@ -242,6 +242,9 @@ Now we can define the rest of the command and include our suggestion inside of i
 
 </div>
 
+And there you have it:
+![WarpCommand](./images/safesuggestionswarpcommand.gif)
+
 </div>
 
 <div class="example">
