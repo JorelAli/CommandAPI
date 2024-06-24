@@ -71,6 +71,49 @@ The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelect
 >
 > The `PlayerArgument` internally uses the `GameProfile` class from Mojang's authlib, which means that this argument has a slight performance overhead compared to using `EntitySelectorArgument.OnePlayer`
 
+<div class="example">
+
+### Example - Warp command
+
+When registering a `PlayerArgument` you might notice that it includes `Entity Selectors` (`@a`, `@e`, `@r`, etc.). If you want to avoid those, you can use safe argument suggestions to only suggest the player names. For this example, let us create a /warp command:
+
+```mccmd
+/warp <player>
+```
+
+To get a `PlayerArgument` which only suggests the actual names, we can define it like this:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentEntities2}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentEntities2}}
+```
+
+</div>
+
+Now we can define the rest of the command and include our suggestion inside of it like this:
+
+<div class="multi-pre">
+
+```java,Java
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentEntities3}}
+```
+
+```kotlin,Kotlin
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentEntities3}}
+```
+
+</div>
+
+And there we have it:
+![WarpCommand](./images/entityselectorplayerexample.gif)
+
+</div>
+
 -----
 
 ## OfflinePlayer argument
@@ -102,15 +145,15 @@ Since we're trying to specify an entity type, we will use the `EntityTypeArgumen
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentEntities2}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentEntities4}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentEntities2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentEntities4}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentEntities2}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentEntities4}}
 ```
 
 </div>

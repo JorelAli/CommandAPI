@@ -411,6 +411,23 @@ CommandAPICommand("remove")
 /* ANCHOR_END: argumentEntities1 */
 
 /* ANCHOR: argumentEntities2 */
+val noSelectorSuggestions = PlayerArgument("target")
+    .replaceSafeSuggestions(SafeSuggestions.suggest {
+        Bukkit.getOnlinePlayers().toTypedArray()
+    })
+/* ANCHOR_END: argumentEntities2 */
+
+/* ANCHOR: argumentEntities3 */
+CommandAPICommand("warp")
+    .withArguments(noSelectorSuggestions)
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val target = args["target"] as Player
+        player.teleport(target)
+    })
+    .register()
+/* ANCHOR_END: argumentEntities3 */
+
+/* ANCHOR: argumentEntities4 */
 CommandAPICommand("spawnmob")
     .withArguments(EntityTypeArgument("entity"))
     .withArguments(IntegerArgument("amount", 1, 100)) // Prevent spawning too many entities
@@ -420,7 +437,7 @@ CommandAPICommand("spawnmob")
         }
     })
     .register()
-/* ANCHOR_END: argumentEntities2 */
+/* ANCHOR_END: argumentEntities4 */
 }
 
 fun argument_function() {
@@ -2179,23 +2196,6 @@ CommandAPICommand("spawnmob")
 /* ANCHOR_END: safeArgumentSuggestions5 */
 
 /* ANCHOR: safeArgumentSuggestions6 */
-val noSelectorSuggestions = PlayerArgument("target")
-    .replaceSafeSuggestions(SafeSuggestions.suggest {
-        Bukkit.getOnlinePlayers().toTypedArray()
-    })
-/* ANCHOR_END: safeArgumentSuggestions6 */
-
-/* ANCHOR: safeArgumentSuggestions7 */
-CommandAPICommand("warp")
-    .withArguments(noSelectorSuggestions)
-    .executesPlayer(PlayerCommandExecutor { player: Player, args: CommandArguments ->
-        val target = args["target"] as Player
-        player.teleport(target)
-    })
-    .register()
-/* ANCHOR_END: safeArgumentSuggestions7 */
-
-/* ANCHOR: safeArgumentSuggestions8 */
 val safeArgs = mutableListOf<Argument<*>>()
 safeArgs.add(EntitySelectorArgument.OnePlayer("target"))
 safeArgs.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest {
@@ -2206,9 +2206,9 @@ safeArgs.add(PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSug
         target.activePotionEffects.map{ it.type }.toTypedArray()
     })
 )
-/* ANCHOR_END: safeArgumentSuggestions8 */
+/* ANCHOR_END: safeArgumentSuggestions6 */
 
-/* ANCHOR: safeArgumentSuggestions9 */
+/* ANCHOR: safeArgumentSuggestions7 */
 CommandAPICommand("removeeffect")
     .withArguments(safeArgs)
     .executesPlayer(PlayerCommandExecutor { _, args ->
@@ -2217,7 +2217,7 @@ CommandAPICommand("removeeffect")
         target.removePotionEffect(potionEffect)
     })
     .register()
-/* ANCHOR_END: safeArgumentSuggestions9 */
+/* ANCHOR_END: safeArgumentSuggestions7 */
 }
 
 class setupShading {

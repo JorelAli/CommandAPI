@@ -303,7 +303,7 @@ commandAPICommand("remove") {
 }
 /* ANCHOR_END: argumentEntities1 */
 
-/* ANCHOR: argumentEntities2 */
+/* ANCHOR: argumentEntities4 */
 commandAPICommand("spawnmob") {
     entityTypeArgument("entity")
     integerArgument("amount", 1, 100) // Prevent spawning too many entities
@@ -313,7 +313,7 @@ commandAPICommand("spawnmob") {
         }
     }
 }
-/* ANCHOR_END: argumentEntities2 */
+/* ANCHOR_END: argumentEntities4 */
 }
 
 fun argument_function() {

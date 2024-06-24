@@ -460,6 +460,23 @@ new CommandAPICommand("remove")
 /* ANCHOR_END: argumentEntities1 */
 
 /* ANCHOR: argumentEntities2 */
+Argument<?> noSelectorSuggestions = new PlayerArgument("target")
+    .replaceSafeSuggestions(SafeSuggestions.suggest(info ->
+        Bukkit.getOnlinePlayers().toArray(new Player[0])
+    ));
+/* ANCHOR_END: argumentEntities2 */
+
+/* ANCHOR: argumentEntities3 */
+new CommandAPICommand("warp")
+    .withArguments(noSelectorSuggestions)
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args.get("target");
+        player.teleport(target);
+    })
+    .register();
+/* ANCHOR_END: argumentEntities3 */
+
+/* ANCHOR: argumentEntities4 */
 new CommandAPICommand("spawnmob")
     .withArguments(new EntityTypeArgument("entity"))
     .withArguments(new IntegerArgument("amount", 1, 100)) // Prevent spawning too many entities
@@ -469,7 +486,7 @@ new CommandAPICommand("spawnmob")
         }
     })
     .register();
-/* ANCHOR_END: argumentEntities2 */
+/* ANCHOR_END: argumentEntities4 */
 }
 
 void argument_function() {
@@ -2281,23 +2298,6 @@ new CommandAPICommand("spawnmob")
 /* ANCHOR_END: safeArgumentSuggestions5 */
 
 /* ANCHOR: safeArgumentSuggestions6 */
-Argument<?> noSelectorSuggestions = new PlayerArgument("target")
-    .replaceSafeSuggestions(SafeSuggestions.suggest(info ->
-        Bukkit.getOnlinePlayers().toArray(new Player[0])
-    ));
-/* ANCHOR_END: safeArgumentSuggestions6 */
-
-/* ANCHOR: safeArgumentSuggestions7 */
-new CommandAPICommand("warp")
-    .withArguments(noSelectorSuggestions)
-    .executesPlayer((player, args) -> {
-        Player target = (Player) args.get("target");
-        player.teleport(target);
-    })
-    .register();
-/* ANCHOR_END: safeArgumentSuggestions7 */
-
-/* ANCHOR: safeArgumentSuggestions8 */
 List<Argument<?>> safeArgs = new ArrayList<>();
 safeArgs.add(new EntitySelectorArgument.OnePlayer("target"));
 safeArgs.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(SafeSuggestions.suggest(
@@ -2310,9 +2310,9 @@ safeArgs.add(new PotionEffectArgument("potioneffect").replaceSafeSuggestions(Saf
             .toArray(PotionEffectType[]::new);
     })
 ));
-/* ANCHOR_END: safeArgumentSuggestions8 */
+/* ANCHOR_END: safeArgumentSuggestions6 */
 
-/* ANCHOR: safeArgumentSuggestions9 */
+/* ANCHOR: safeArgumentSuggestions7 */
 new CommandAPICommand("removeeffect")
     .withArguments(safeArgs)
     .executesPlayer((player, args) -> {
@@ -2321,7 +2321,7 @@ new CommandAPICommand("removeeffect")
         target.removePotionEffect(potionEffect);
     })
     .register();
-/* ANCHOR_END: safeArgumentSuggestions9 */
+/* ANCHOR_END: safeArgumentSuggestions7 */
 }
 
 class setupShading {

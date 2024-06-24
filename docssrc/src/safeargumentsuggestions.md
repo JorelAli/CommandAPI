@@ -208,49 +208,6 @@ Now we register our command as normal:
 
 <div class="example">
 
-### Example - Warp command
-
-When registering a `PlayerArgument` you might notice that it includes `Entity Selectors` (`@a`, `@e`, `@r`, etc.). If you want to avoid those, you can use safe argument suggestions to only suggest the player names. For this example, let us create a /warp command:
-
-```mccmd
-/warp <player>
-```
-
-To get a `PlayerArgument` which only suggests the actual names, we can define it like this:
-
-<div class="multi-pre">
-
-```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions6}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions6}}
-```
-
-</div>
-
-Now we can define the rest of the command and include our suggestion inside of it like this:
-
-<div class="multi-pre">
-
-```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions7}}
-```
-
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions7}}
-```
-
-</div>
-
-And there you have it:
-![WarpCommand](./images/safesuggestionswarpcommand.gif)
-
-</div>
-
-<div class="example">
-
 ### Example - Removing a potion effect from a player
 
 Say we wanted to remove a potion effect from a player. To do this, we'll use the following command syntax:
@@ -264,11 +221,11 @@ Now, we don't want to remove a potion effect that already exists on a player, so
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions8}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions6}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions8}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions6}}
 ```
 
 </div>
@@ -278,11 +235,11 @@ And then we can register our command as normal:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions9}}
+{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:safeArgumentSuggestions7}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions9}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:safeArgumentSuggestions7}}
 ```
 
 </div>
