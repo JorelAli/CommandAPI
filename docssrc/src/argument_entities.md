@@ -73,9 +73,9 @@ The `PlayerArgument` class is very similar _(almost identical)_ to `EntitySelect
 
 <div class="example">
 
-### Example - Warp command
+### Example - PlayerArgument without entity selectors
 
-When registering a `PlayerArgument` you might notice that it includes `Entity Selectors` (`@a`, `@e`, `@r`, etc.). If you want to avoid those, you can use safe argument suggestions to only suggest the player names. For this example, let us create a /warp command:
+When registering a `PlayerArgument` you might notice that it includes `Entity Selectors` (`@a`, `@e`, `@r`, etc.). If you want to avoid those, you can use argument suggestions to only suggest the player names. For this example, let us create a /warp command:
 
 ```mccmd
 /warp <player>
@@ -109,7 +109,7 @@ Now we can define the rest of the command and include our suggestion inside of i
 
 </div>
 
-And there we have it:
+And there we have it! One thing to note is that entity selectors are still a valid input, they are just not included in the suggestions.
 ![WarpCommand](./images/entityselectorplayerexample.gif)
 
 </div>
@@ -153,7 +153,7 @@ Since we're trying to specify an entity type, we will use the `EntityTypeArgumen
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentEntities4}}
+{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentEntities2}}
 ```
 
 </div>
