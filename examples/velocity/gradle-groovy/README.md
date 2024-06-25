@@ -7,7 +7,7 @@ Key points:
 - The `commandapi-velocity-core` dependency is used
 
   ```groovy
-  implementation 'dev.jorel:commandapi-velocity-core:9.5.1'
+  implementation 'dev.jorel:commandapi-velocity-core:9.6.0-SNAPSHOT'
   ```
 
 - In the `@Plugin` annotation, `commandapi` is listed as a dependency:
