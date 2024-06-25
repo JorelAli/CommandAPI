@@ -38,14 +38,16 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	private final Function<SuggestionInfo<CommandSender>, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 	private final boolean text;
+	private boolean skipListValidation = false;
 
-	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text) {
+	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text, boolean skipListValidation) {
 		super(nodeName, text ? StringArgumentType.string() : StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
 		this.supplier = supplier;
 		this.mapper = suggestionsMapper;
 		this.text = text;
+		this.skipListValidation = skipListValidation;
 
 		applySuggestions();
 	}
@@ -148,7 +150,9 @@ public class ListArgumentCommon<T> extends Argument<List> {
 							list.add(entry.getValue());
 						} else {
 							context.setCursor(cursor);
-							throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
+							if (!skipListValidation){
+								throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
+							}
 						}
 					}
 					addedItem = true;
@@ -156,7 +160,9 @@ public class ListArgumentCommon<T> extends Argument<List> {
 			}
 			if(!addedItem) {
 				context.setCursor(cursor);
-				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
+				if (!skipListValidation) {
+					throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
+				}
 			}
 			cursor += str.length() + delimiter.length();
 		}
