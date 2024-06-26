@@ -61,7 +61,7 @@ $$\downarrow$$
 >
 > If you want to disable list validation you can enable the `allowAnyValue` method to set whether any value is allowed. By default, this is disabled.
 >
-> When `allowAnyValue` is set to `true`, any value a player enter will be allowed in the list regardless of the list provided for the argument. Note that duplicate values are still only permitted when `allowDuplicates` is set to `true` too
+> When `allowAnyValue` is set to `true`, any value a player enters will be allowed in the list regardless of the list provided for the argument. Note that duplicate values are still only permitted when `allowDuplicates` is set to `true` too
 >
 > ```java
 > ListArgumentBuilder.allowAnyValue(true);
