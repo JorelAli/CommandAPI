@@ -58,9 +58,9 @@ public class ListArgumentBuilder<T> {
 	}
 
 	/**
-	 * Whether the list verification should be skipped
+	 * Whether any value should be allowed in the list
 	 *
-	 * @param allowAnyValue whether to skip list validation
+	 * @param allowAnyValue whether to allow any value
 	 * @return this list argument builder
 	 */
 	public ListArgumentBuilder<T> allowAnyValue(boolean allowAnyValue) {
