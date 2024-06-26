@@ -460,6 +460,23 @@ new CommandAPICommand("remove")
 /* ANCHOR_END: argumentEntities1 */
 
 /* ANCHOR: argumentEntities2 */
+Argument<?> noSelectorSuggestions = new PlayerArgument("target")
+    .replaceSafeSuggestions(SafeSuggestions.suggest(info ->
+        Bukkit.getOnlinePlayers().toArray(new Player[0])
+    ));
+/* ANCHOR_END: argumentEntities2 */
+
+/* ANCHOR: argumentEntities3 */
+new CommandAPICommand("warp")
+    .withArguments(noSelectorSuggestions)
+    .executesPlayer((player, args) -> {
+        Player target = (Player) args.get("target");
+        player.teleport(target);
+    })
+    .register();
+/* ANCHOR_END: argumentEntities3 */
+
+/* ANCHOR: argumentEntities4 */
 new CommandAPICommand("spawnmob")
     .withArguments(new EntityTypeArgument("entity"))
     .withArguments(new IntegerArgument("amount", 1, 100)) // Prevent spawning too many entities
@@ -469,7 +486,7 @@ new CommandAPICommand("spawnmob")
         }
     })
     .register();
-/* ANCHOR_END: argumentEntities2 */
+/* ANCHOR_END: argumentEntities4 */
 }
 
 void argument_function() {
