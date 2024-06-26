@@ -292,8 +292,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			final String permission = command.permission().getPermission().orElse("");
 			
 			HelpTopic helpTopic;
-			if (command.helpTopic().isPresent()) {
-				helpTopic = (HelpTopic) command.helpTopic().get();
+			final Optional<Object> commandHelpTopic = command.helpTopic();
+			if (commandHelpTopic.isPresent()) {
+				helpTopic = (HelpTopic) commandHelpTopic.get();
 				shortDescription = "";
 			} else {
 				// Generate short description
@@ -328,8 +329,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			helpTopicsToAdd.put(commandPrefix, helpTopic);
 
 			for (String alias : command.aliases()) {
-				if (command.helpTopic().isPresent()) {
-					helpTopic = (HelpTopic) command.helpTopic().get();
+				if (commandHelpTopic.isPresent()) {
+					helpTopic = (HelpTopic) commandHelpTopic.get();
 				} else {
 					StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
 					currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
