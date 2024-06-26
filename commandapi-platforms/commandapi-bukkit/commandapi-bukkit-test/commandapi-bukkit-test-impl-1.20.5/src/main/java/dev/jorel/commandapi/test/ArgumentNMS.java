@@ -782,8 +782,13 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 			Registry<ParticleType<?>> registry = BuiltInRegistries.PARTICLE_TYPE; //CraftRegistry.getMinecraftRegistry(Registries.PARTICLE_TYPE);
 			
 			final ParticleOptions particleOptions = ParticleArgument.getParticle(cmdCtx, key);
-			String nmsKey = registry.getResourceKey(particleOptions.getType()).get().location().getPath();
-			result = new ParticleData(map.get(nmsKey), baseNMS.getParticle(cmdCtx, key).data());
+			final Optional<ResourceKey<ParticleType<?>>> particleResourceKey = registry.getResourceKey(particleOptions.getType());
+			Particle particle = null;
+			if (particleResourceKey.isPresent()) {
+				String nmsKey = particleResourceKey.get().location().getPath();
+				particle = map.get(nmsKey);
+			}
+			result = new ParticleData(particle, baseNMS.getParticle(cmdCtx, key).data());
 		}
 
 		return result;
