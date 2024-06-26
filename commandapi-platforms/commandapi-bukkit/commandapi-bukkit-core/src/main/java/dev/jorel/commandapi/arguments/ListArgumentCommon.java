@@ -38,14 +38,16 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	private final Function<SuggestionInfo<CommandSender>, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 	private final boolean text;
+	private final boolean allowAnyValue;
 
-	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text) {
+	ListArgumentCommon(String nodeName, String delimiter, boolean allowDuplicates, Function<SuggestionInfo<CommandSender>, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper, boolean text, boolean allowAnyValue) {
 		super(nodeName, text ? StringArgumentType.string() : StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
 		this.supplier = supplier;
 		this.mapper = suggestionsMapper;
 		this.text = text;
+		this.allowAnyValue = allowAnyValue;
 
 		applySuggestions();
 	}
@@ -136,7 +138,7 @@ public class ListArgumentCommon<T> extends Argument<List> {
 		final String[] strArr = argument.split(Pattern.quote(delimiter));
 		final StringReader context = new StringReader(argument);
 		for (String str : strArr) {
-			if (!values.containsKey(str)) {
+			if (!allowAnyValue && !values.containsKey(str)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
 			} else if (!allowDuplicates && list.contains(values.get(str))) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);

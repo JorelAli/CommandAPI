@@ -21,6 +21,7 @@ public class ListArgumentBuilder<T> {
 	private final String nodeName;
 	private final String delimiter;
 	private boolean allowDuplicates = false;
+	private boolean allowAnyValue = false;
 
 	/**
 	 * Creates a new ListArgumentBuilder with a specified node name. Defaults the
@@ -53,6 +54,17 @@ public class ListArgumentBuilder<T> {
 	 */
 	public ListArgumentBuilder<T> allowDuplicates(boolean allowDuplicates) {
 		this.allowDuplicates = allowDuplicates;
+		return this;
+	}
+
+	/**
+	 * Whether any value should be allowed in the list
+	 *
+	 * @param allowAnyValue whether to allow any value
+	 * @return this list argument builder
+	 */
+	public ListArgumentBuilder<T> allowAnyValue(boolean allowAnyValue) {
+		this.allowAnyValue = allowAnyValue;
 		return this;
 	}
 
@@ -161,7 +173,7 @@ public class ListArgumentBuilder<T> {
 			 * @return a {@link ListArgument}
 			 */
 			public ListArgument<T> buildGreedy() {
-				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
+				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper, allowAnyValue);
 			}
 			
 			/**
@@ -170,7 +182,7 @@ public class ListArgumentBuilder<T> {
 			 * @return a {@link ListTextArgument}
 			 */
 			public ListTextArgument<T> buildText() {
-				return new ListTextArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper);
+				return new ListTextArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper, allowAnyValue);
 			}
 		}
 	}
