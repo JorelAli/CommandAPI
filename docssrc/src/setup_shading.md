@@ -43,7 +43,7 @@ public class CommandAPIConfig {
 
 The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances.
 
-However, the `CommandAPIConfig` class is abstract and cannot be used to configure the CommandAPI directly. Instead, you must use a subclass of `CommandAPIConfig` that corresponds to the platform you are developing for. For example, when developing for Bukkit, you should use the `CommandAPIBukkiConfig` class.
+However, the `CommandAPIConfig` class is abstract and cannot be used to configure the CommandAPI directly. Instead, you must use a subclass of `CommandAPIConfig` that corresponds to the platform you are developing for. For example, when developing for Bukkit, you should use the `CommandAPIBukkitConfig` class.
 
 <!-- TODO: Add tabs and explanations for other platforms -->
 
@@ -176,21 +176,21 @@ As we're shading the CommandAPI into your plugin, you **don't** need to add `dep
 
 ## Shading with Gradle
 
-To shade the CommandAPI into a Gradle project, we'll use the [Gradle Shadow Plugin](https://imperceptiblethoughts.com/shadow/). Add this to your list of plugins:
+To shade the CommandAPI into a Gradle project, we'll use the [Goooler Gradle Shadow Plugin](https://plugins.gradle.org/plugin/io.github.goooler.shadow). This is a fork of the [Shadow Plugin](https://imperceptiblethoughts.com/shadow/) which supports Java 21. Add this to your list of plugins:
 
 <div class="multi-pre">
 
 ```groovy,build.gradle
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'io.github.goooler.shadow' version '8.1.7'
 }
 ```
 
 ```kotlin,build.gradle.kts
 plugins {
     java
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 ```
 
