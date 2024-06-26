@@ -21,7 +21,7 @@ public class ListArgumentBuilder<T> {
 	private final String nodeName;
 	private final String delimiter;
 	private boolean allowDuplicates = false;
-	private boolean skipListValidation = false;
+	private boolean allowAnyValue = false;
 
 	/**
 	 * Creates a new ListArgumentBuilder with a specified node name. Defaults the
@@ -60,11 +60,11 @@ public class ListArgumentBuilder<T> {
 	/**
 	 * Whether the list verification should be skipped
 	 *
-	 * @param skipListValidation whether to skip list validation
+	 * @param allowAnyValue whether to skip list validation
 	 * @return this list argument builder
 	 */
-	public ListArgumentBuilder<T> skipListValidation(boolean skipListValidation) {
-		this.skipListValidation = skipListValidation;
+	public ListArgumentBuilder<T> allowAnyValue(boolean allowAnyValue) {
+		this.allowAnyValue = allowAnyValue;
 		return this;
 	}
 
@@ -173,7 +173,7 @@ public class ListArgumentBuilder<T> {
 			 * @return a {@link ListArgument}
 			 */
 			public ListArgument<T> buildGreedy() {
-				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper, skipListValidation);
+				return new ListArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper, allowAnyValue);
 			}
 			
 			/**
@@ -182,7 +182,7 @@ public class ListArgumentBuilder<T> {
 			 * @return a {@link ListTextArgument}
 			 */
 			public ListTextArgument<T> buildText() {
-				return new ListTextArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper, skipListValidation);
+				return new ListTextArgument<>(nodeName, delimiter, allowDuplicates, supplier, mapper, allowAnyValue);
 			}
 		}
 	}
