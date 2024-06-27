@@ -38,7 +38,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 /**
  * Tests for the {@link ParticleArgument}
  */
-class ArgumentParticleTests extends TestBase {
+class ArgumentParticle_1_18_Tests extends TestBase {
 
 	/*********
 	 * Setup *
