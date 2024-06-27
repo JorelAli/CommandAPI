@@ -136,9 +136,9 @@
 					<!-- To help with debugging tests, you can specify an include
 					 to limit a build to only run a certain test file. Uncomment
 					 here if you want to do that: -->
-					<!-- <includes>
-						<include>**/ArgumentAxisTests.java</include>
-					</includes> -->
+					 <includes>
+						<include>**/ArgumentParticle*Tests.java</include>
+					</includes> 
 				</configuration>
 			</plugin>
 			<plugin>
@@ -166,8 +166,43 @@
 	</build>
 
 	<profiles>
+
+		<!--
+		   Version-specific compiled tests
+
+		   Certain code from later versions of the Bukkit API do not
+		   compile on lower versions of Minecraft. For example, the
+		   org.bukkit.Color class declares a new method Color#getAlpha
+		   added in 1.19.4 (which isn't present in 1.19.3 or below).
+		   Tests that require testing these methods won't compile for
+		   lower versions of Minecraft, so we've implemented version-specific
+		   compiled tests.
+
+		   Version-specific tests are named with the version at the end
+		   of the class, before "Tests", for example:
+
+		     ArgumentParticleTests -> ArgumentParticle_1_19_3_Tests
+
+		   Classes targeting a specific version are designed to be run
+		   FOR THAT VERSION and below. For example,
+
+		     ArgumentParticle_1_19_3_Tests: Run on 1.19.3 and below
+		     ArgumentParticleTests: Not run on 1.19.3 and below
+
+		   In the case of multiple versioned tests, the "base" class
+		   should be targeting the highest version of Minecraft where
+		   possible. For example:
+
+		     ArgumentParticle_1_20_3_Tests: Run on 1.19.4 - 1.20.3
+		     ArgumentParticle_1_19_3_Tests: Run on 1.13   - 1.19.3
+		     ArgumentParticleTests: Run on 1.20.4 - 1.XX.X
+		-->
+		
 		<profile>
 			<id>Minecraft_1_20_5</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<dependencies>
 				<dependency>
 					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
@@ -204,6 +239,19 @@
 					<version>1.20.2-R0.1-SNAPSHOT</version>
 				</dependency> -->
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_20_5_Mojang</id>
@@ -251,6 +299,19 @@
 					<version>1.20.2-R0.1-SNAPSHOT</version>
 				</dependency> -->
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_20_3</id>
@@ -290,6 +351,19 @@
 					<version>1.20.2-R0.1-SNAPSHOT</version>
 				</dependency> -->
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_20_2</id>
@@ -325,12 +399,22 @@
 					<version>1.20.2-R0.1-SNAPSHOT</version>
 				</dependency> -->
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_20</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<dependencies>
 				<dependency>
 					<!-- Needed for 1.19.4 Brigadier logging. This is also present in
@@ -363,6 +447,19 @@
 					<version>1.20-R0.1-SNAPSHOT</version>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_20_Mojang</id>
@@ -407,6 +504,19 @@
 					<version>1.20-R0.1-SNAPSHOT</version>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_19_4</id>
@@ -442,6 +552,19 @@
 					<version>1.19.4-R0.1-SNAPSHOT</version>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_19_4_Mojang</id>
@@ -486,6 +609,19 @@
 					<version>1.19.4-R0.1-SNAPSHOT</version>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticle_*Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_19_2</id>
@@ -513,6 +649,21 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticleTests.java</testExclude>
+								<testExclude>**/arguments/ArgumentParticle_1_18_Tests.java</testExclude>
+								<testExclude>**/arguments/ArgumentParticle_1_16_5_Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<!-- Yes, this is a very very misleading version of Minecraft. We're actually testing 1.18.1 -->
@@ -542,6 +693,20 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticleTests.java</testExclude>
+								<testExclude>**/arguments/ArgumentParticle_1_19_2_Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_17</id>
@@ -569,6 +734,20 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<testExcludes>
+								<testExclude>**/arguments/ArgumentParticleTests.java</testExclude>
+								<testExclude>**/arguments/ArgumentParticle_1_19_2_Tests.java</testExclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Minecraft_1_16_5</id>
@@ -603,7 +782,9 @@
 						<artifactId>maven-compiler-plugin</artifactId>
 						<configuration>
 							<testExcludes>
-								<testExclude>**/arguments/ArgumentParticle_1_17_Tests.java</testExclude>
+								<testExclude>**/arguments/ArgumentParticleTests.java</testExclude>
+								<testExclude>**/arguments/ArgumentParticle_1_19_2_Tests.java</testExclude>
+								<testExclude>**/arguments/ArgumentParticle_1_18_Tests.java</testExclude>
 							</testExcludes>
 						</configuration>
 					</plugin>
