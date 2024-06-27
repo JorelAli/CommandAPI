@@ -136,9 +136,9 @@
 					<!-- To help with debugging tests, you can specify an include
 					 to limit a build to only run a certain test file. Uncomment
 					 here if you want to do that: -->
-					 <includes>
+					<!-- <includes>
 						<include>**/ArgumentParticle*Tests.java</include>
-					</includes> 
+					</includes> -->
 				</configuration>
 			</plugin>
 			<plugin>
