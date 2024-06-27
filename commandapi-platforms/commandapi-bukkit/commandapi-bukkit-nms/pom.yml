@@ -1,0 +1,23 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-nms
+packaging: pom
+modules: [commandapi-bukkit-nms-common, commandapi-bukkit-1.21, commandapi-bukkit-1.20.5,
+  commandapi-bukkit-1.20.3, commandapi-bukkit-1.20.2, commandapi-bukkit-1.20, commandapi-bukkit-1.19.4,
+  commandapi-bukkit-1.19.3, commandapi-bukkit-1.19-common, commandapi-bukkit-1.19.1,
+  commandapi-bukkit-1.19, commandapi-bukkit-1.18.2, commandapi-bukkit-1.18, commandapi-bukkit-1.17-common,
+  commandapi-bukkit-1.17, commandapi-bukkit-1.17.1, commandapi-bukkit-1.16.5, commandapi-bukkit-nms-dependency,
+  commandapi-bukkit-nms-dependency-mojang-mapped]
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-preprocessor, version: '${project.version}',
+  scope: provided}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    configuration:
+      compilerArgs: {arg: -Xlint}
+      annotationProcessors: [dev.jorel.commandapi.preprocessor.Preprocessor]
+childProjectUrlInheritAppendPath: true

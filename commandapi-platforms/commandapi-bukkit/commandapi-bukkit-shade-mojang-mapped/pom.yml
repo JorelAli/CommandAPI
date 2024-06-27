@@ -1,0 +1,42 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-shade-mojang-mapped
+packaging: jar
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}',
+  scope: compile}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-dependency-mojang-mapped,
+  version: '${project.version}', type: pom}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-vh, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-mojang-mapped, version: '${project.version}'}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-shade-plugin
+    executions:
+    - configuration:
+        promoteTransitiveDependencies: true
+        createSourcesJar: true
+        filters:
+        - artifact: dev.jorel:commandapi-core
+          excludes: [dev/jorel/commandapi/CommandAPIVersionHandler**, dev/jorel/commandapi/MojangMappedVersionHandler**]
+        relocations:
+        - {pattern: org.bukkit.craftbukkit.v1_20_R4, shadedPattern: org.bukkit.craftbukkit}
+        - {pattern: org.bukkit.craftbukkit.v1_21_R1, shadedPattern: org.bukkit.craftbukkit}
+      goals: [shade]
+      id: normal
+      inherited: true
+      phase: package
+      priority: 0
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-jar-plugin
+    executions:
+    - configuration: {classifier: javadoc, classesDirectory: '${basedir}/javadoc'}
+      goals: [jar]
+      id: empty-javadoc-jar
+      inherited: true
+      phase: package
+      priority: 0
+childProjectUrlInheritAppendPath: true

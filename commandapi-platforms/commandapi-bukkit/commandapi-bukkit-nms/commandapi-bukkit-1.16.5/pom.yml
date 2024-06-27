@@ -1,0 +1,31 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit-nms, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-1.16.5
+packaging: jar
+dependencies:
+- {groupId: com.destroystokyo.paper, artifactId: paper-api, version: 1.16.5-R0.1-SNAPSHOT,
+  scope: provided}
+- {groupId: org.spigotmc, artifactId: spigot, version: 1.16.5-R0.1-SNAPSHOT, scope: provided}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}',
+  scope: compile}
+build:
+  plugins:
+  - groupId: org.jacoco
+    artifactId: jacoco-maven-plugin
+    executions:
+    - goals: [prepare-agent]
+      id: default-prepare-agent
+      inherited: true
+      priority: 0
+    - goals: [report]
+      id: report
+      inherited: true
+      phase: verify
+      priority: 0
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: minecraft-libraries, layout: default, url: 'https://libraries.minecraft.net'}
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.io/repository/nms/'}
+- {id: papermc, layout: default, url: 'https://papermc.io/repo/repository/maven-public/'}

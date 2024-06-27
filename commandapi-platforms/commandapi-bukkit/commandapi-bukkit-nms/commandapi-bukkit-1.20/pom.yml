@@ -1,0 +1,65 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit-nms, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-1.20
+packaging: jar
+properties: {spigot.version: 1.20.1-R0.1-SNAPSHOT, minecraft.mappings: 1.20.1-R0.1-SNAPSHOT,
+  paper.version: 1.20.1-R0.1-SNAPSHOT}
+dependencies:
+- {groupId: org.spigotmc, artifactId: spigot, version: '${spigot.version}', scope: test}
+- {groupId: org.spigotmc, artifactId: spigot, version: '${spigot.version}', classifier: remapped-mojang,
+  scope: provided}
+- {groupId: io.papermc.paper, artifactId: paper-api, version: '${paper.version}',
+  scope: provided}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}',
+  scope: compile}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-common, version: '${project.version}',
+  classifier: mojang-mapped, scope: provided}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-jar-plugin
+    executions:
+    - configuration: {classifier: mojang-mapped}
+      goals: [jar]
+      id: Mojang-Mapped
+      inherited: true
+      priority: 0
+  - groupId: net.md-5
+    artifactId: specialsource-maven-plugin
+    version: 1.2.4
+    executions:
+    - configuration: {srgIn: 'org.spigotmc:minecraft-server:${minecraft.mappings}:txt:maps-mojang',
+        reverse: true, remappedDependencies: 'org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-mojang',
+        remappedArtifactAttached: true, remappedClassifierName: remapped-obf}
+      goals: [remap]
+      id: remap-obf
+      inherited: true
+      phase: package
+      priority: 0
+    - configuration: {inputFile: '${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar',
+        srgIn: 'org.spigotmc:minecraft-server:${minecraft.mappings}:csrg:maps-spigot',
+        remappedDependencies: 'org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-obf'}
+      goals: [remap]
+      id: remap-spigot
+      inherited: true
+      phase: package
+      priority: 0
+  - groupId: org.jacoco
+    artifactId: jacoco-maven-plugin
+    executions:
+    - goals: [prepare-agent]
+      id: default-prepare-agent
+      inherited: true
+      priority: 0
+    - goals: [report]
+      id: report
+      inherited: true
+      phase: verify
+      priority: 0
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: minecraft-libraries, layout: default, url: 'https://libraries.minecraft.net'}
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.io/repository/nms/'}
+- {id: papermc, layout: default, url: 'https://papermc.io/repo/repository/maven-public/'}

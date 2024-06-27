@@ -1,0 +1,11 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-test
+packaging: pom
+modules: [commandapi-bukkit-test-impl, commandapi-bukkit-test-impl-1.20.5, commandapi-bukkit-test-impl-1.20.3,
+  commandapi-bukkit-test-impl-1.20.2, commandapi-bukkit-test-impl-1.20, commandapi-bukkit-test-impl-1.19.4,
+  commandapi-bukkit-test-impl-1.19.2, commandapi-bukkit-test-impl-1.18, commandapi-bukkit-test-impl-1.17,
+  commandapi-bukkit-test-impl-1.16.5, commandapi-bukkit-kotlin-test, commandapi-bukkit-test-tests]
+childProjectUrlInheritAppendPath: true

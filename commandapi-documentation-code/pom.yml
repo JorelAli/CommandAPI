@@ -1,0 +1,33 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi, groupId: dev.jorel, relativePath: ../pom.xml, version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-documentation-code
+packaging: jar
+dependencies:
+- {groupId: com.mojang, artifactId: brigadier, version: 1.0.17, scope: provided}
+- {groupId: com.mojang, artifactId: authlib, version: 3.3.39, scope: provided}
+- {groupId: net.kyori, artifactId: adventure-platform-bukkit, version: 4.2.0, scope: test}
+- {groupId: io.papermc.paper, artifactId: paper-api, version: '${paper.version}',
+  scope: provided}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-kotlin, version: '${project.version}'}
+- {groupId: de.tr7zw, artifactId: item-nbt-api, version: 2.11.1}
+- {groupId: org.jetbrains.kotlin, artifactId: kotlin-stdlib, version: '${kotlin.version}'}
+build:
+  plugins:
+  - groupId: org.jetbrains.kotlin
+    artifactId: kotlin-maven-plugin
+    version: ${kotlin.version}
+    configuration: {jvmTarget: 16}
+    executions:
+    - configuration:
+        sourceDirs: ['${project.basedir}/src/main/kotlin/']
+      goals: [test-compile]
+      id: test-compile
+      inherited: true
+      priority: 0
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: minecraft-libraries, layout: default, url: 'https://libraries.minecraft.net'}
+- {id: papermc, layout: default, url: 'https://papermc.io/repo/repository/maven-public/'}
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.org/repository/maven-public/'}

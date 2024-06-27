@@ -1,0 +1,45 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-kotlin, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-kotlin
+packaging: jar
+dependencies:
+- {groupId: io.papermc.paper, artifactId: paper-api, version: '${paper.version}',
+  scope: provided}
+- {groupId: org.jetbrains.kotlin, artifactId: kotlin-stdlib, version: '${kotlin.version}',
+  scope: provided}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}',
+  scope: provided}
+- {groupId: dev.jorel, artifactId: commandapi-core-kotlin, version: '${project.version}'}
+build:
+  plugins:
+  - groupId: org.jetbrains.kotlin
+    artifactId: kotlin-maven-plugin
+    version: ${kotlin.version}
+    configuration: {jvmTarget: 16}
+    executions:
+    - goals: [compile]
+      id: compile
+      inherited: true
+      phase: compile
+      priority: 0
+    - goals: [test-compile]
+      id: test-compile
+      inherited: true
+      phase: test-compile
+      priority: 0
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-jar-plugin
+    executions:
+    - configuration: {classifier: javadoc, classesDirectory: '${basedir}/javadoc'}
+      goals: [jar]
+      id: empty-javadoc-jar
+      inherited: true
+      phase: package
+      priority: 0
+  sourceDirectory: src/main/kotlin
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: papermc, layout: default, url: 'https://papermc.io/repo/repository/maven-public/'}
+- {id: sonatype, layout: default, url: 'https://oss.sonatype.org/content/groups/public/'}

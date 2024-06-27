@@ -1,0 +1,19 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit-test, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-test-impl
+packaging: jar
+properties: {spigot.version: 1.19.2-R0.1-SNAPSHOT}
+dependencies:
+- {groupId: com.mojang, artifactId: brigadier, version: 1.0.17, scope: provided}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+- {groupId: io.papermc.paper, artifactId: paper-api, version: '${spigot.version}',
+  scope: provided}
+- {groupId: org.spigotmc, artifactId: spigot, version: '${spigot.version}', scope: provided}
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.io/repository/nms/'}
+- {id: spigot-repo, layout: default, url: 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+- {id: papermc, layout: default, url: 'https://repo.papermc.io/repository/maven-public/'}
+- {id: minecraft-libraries, layout: default, url: 'https://libraries.minecraft.net'}

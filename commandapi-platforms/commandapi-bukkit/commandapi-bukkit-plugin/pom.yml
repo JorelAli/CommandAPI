@@ -1,0 +1,38 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-plugin
+packaging: jar
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}',
+  scope: compile}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-vh, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-dependency, version: '${project.version}',
+  type: pom}
+- {groupId: io.papermc.paper, artifactId: paper-api, version: '${paper.version}',
+  scope: provided}
+- {groupId: org.spigotmc, artifactId: spigot-api, version: '${paper.version}', scope: provided}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-shade-plugin
+    executions:
+    - configuration:
+        filters:
+        - artifact: dev.jorel:commandapi-core
+          excludes: [dev/jorel/commandapi/CommandAPIVersionHandler**]
+        transformers:
+        - {resource: LICENSE, attr/implementation: org.apache.maven.plugins.shade.resource.AppendingTransformer}
+      goals: [shade]
+      id: default
+      inherited: true
+      phase: package
+      priority: 0
+  resources:
+  - {directory: src/main/resources, filtering: true}
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.org/repository/maven-public/'}
+- {id: spigot-repo, layout: default, url: 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+- {id: papermc, layout: default, url: 'https://papermc.io/repo/repository/maven-public/'}

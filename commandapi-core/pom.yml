@@ -1,0 +1,34 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi, groupId: dev.jorel, relativePath: ../pom.xml, version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-core
+packaging: jar
+dependencies:
+- {groupId: com.mojang, artifactId: brigadier, version: 1.0.17, scope: provided}
+- {groupId: com.mojang, artifactId: authlib, version: 3.3.39, scope: provided}
+- {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.19.0, scope: provided}
+- {groupId: dev.jorel, artifactId: commandapi-preprocessor, version: '${project.version}',
+  scope: provided}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    configuration:
+      compilerArgs: {arg: -Xlint}
+      annotationProcessors: [dev.jorel.commandapi.preprocessor.Preprocessor]
+  - groupId: org.jacoco
+    artifactId: jacoco-maven-plugin
+    executions:
+    - goals: [prepare-agent]
+      id: default-prepare-agent
+      inherited: true
+      priority: 0
+    - goals: [report]
+      id: report
+      inherited: true
+      phase: verify
+      priority: 0
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: minecraft-libraries, layout: default, url: 'https://libraries.minecraft.net'}
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.org/repository/maven-public/'}

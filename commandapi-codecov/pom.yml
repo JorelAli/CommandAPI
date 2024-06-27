@@ -1,0 +1,46 @@
+modelVersion: 4.0.0
+parent: {artifactId: commandapi, groupId: dev.jorel, relativePath: ../pom.xml, version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-codecov
+packaging: jar
+properties: {maven.deploy.skip: true}
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-core, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-test-tests, version: '${project.version}',
+  scope: test}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-common, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.19-common, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.17-common, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.20, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.19.4, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.19.3, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.19.1, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.19, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.18.2, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.18, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.17, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.17.1, version: '${project.version}',
+  classifier: mojang-mapped}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-1.16.5, version: '${project.version}'}
+build:
+  plugins:
+  - groupId: org.jacoco
+    artifactId: jacoco-maven-plugin
+    executions:
+    - goals: [report-aggregate]
+      id: report-aggregate
+      inherited: true
+      phase: verify
+      priority: 0
+childProjectUrlInheritAppendPath: true

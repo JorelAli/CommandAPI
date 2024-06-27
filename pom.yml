@@ -1,0 +1,109 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+groupId: dev.jorel
+artifactId: commandapi
+version: 9.6.0-SNAPSHOT
+packaging: pom
+name: commandapi
+description: A Bukkit/Spigot API for the command UI introduced in Minecraft 1.13
+url: https://github.com/JorelAli/CommandAPI
+licenses:
+- {name: MIT License, url: 'http://www.opensource.org/licenses/mit-license.php'}
+developers:
+- {name: Jorel Ali, id: jorelali, email: maven@jorel.dev, url: 'https://jorel.dev/'}
+scm: 
+  childScmConnectionInheritAppendPath: true
+  childScmDeveloperConnectionInheritAppendPath: true
+  childScmUrlInheritAppendPath: true
+  connection: 'scm:git:git://github.com/JorelAli/CommandAPI.git'
+  developerConnection: 'scm:git:ssh://github.com:JorelAli/CommandAPI.git'
+  tag: HEAD
+  url: 'https://github.com/JorelAli/CommandAPI/tree/master'
+properties:
+  maven.compiler.target: 16
+  auto-service.version: 1.0.1
+  kotlin.version: 1.9.0
+  java.version: 16
+  maven.build.timestamp.format: dd_MMM_yyyy_(hh-mm-ssa)
+  maven.compiler.source: 16
+  sonar.host.url: 'https://sonarcloud.io'
+  project.build.sourceEncoding: UTF-8
+  paper.version: 1.19.4-R0.1-SNAPSHOT
+  sonar.organization: jorel-ali
+  project.reporting.outputEncoding: UTF-8
+modules:
+- commandapi-preprocessor
+- commandapi-core
+- commandapi-platforms
+- commandapi-kotlin
+- commandapi-annotations
+- commandapi-codecov
+distributionManagement:
+  repository: {id: ossrh, layout: default, uniqueVersion: true, url: 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'}
+  snapshotRepository: {id: ossrh, layout: default, uniqueVersion: true, url: 'https://s01.oss.sonatype.org/content/repositories/snapshots'}
+build:
+  defaultGoal: clean install
+  finalName: CommandAPI-${project.version}_${maven.build.timestamp}
+  pluginManagement:
+    plugins:
+    - {groupId: org.apache.maven.plugins, artifactId: maven-jar-plugin, version: 3.2.2}
+    - {groupId: org.apache.maven.plugins, artifactId: maven-source-plugin, version: 3.2.1}
+    - {groupId: org.apache.maven.plugins, artifactId: maven-compiler-plugin, version: 3.10.1}
+    - {groupId: org.apache.maven.plugins, artifactId: maven-shade-plugin, version: 3.3.0}
+    - {groupId: org.apache.maven.plugins, artifactId: maven-javadoc-plugin, version: 3.4.0}
+    - {groupId: org.jacoco, artifactId: jacoco-maven-plugin, version: 0.8.12}
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    configuration:
+      compilerArgs: {arg: -Xlint}
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-jar-plugin
+    configuration:
+      archive:
+        manifest: {addDefaultImplementationEntries: true}
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-source-plugin
+    executions:
+    - goals: [jar-no-fork]
+      id: attach-sources
+      inherited: true
+      priority: 0
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-javadoc-plugin
+    configuration:
+      tags:
+      - {name: apiNote, placement: a, head: 'API Note:'}
+    executions:
+    - goals: [jar]
+      id: attach-javadocs
+      inherited: true
+      priority: 0
+  resources:
+  - directory: .
+    filtering: false
+    includes: [LICENSE]
+  - {directory: src/main/resources, filtering: false}
+profiles:
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-gpg-plugin
+      version: 3.0.1
+      executions:
+      - configuration:
+          gpgArguments: {arg: loopback}
+        goals: [sign]
+        id: sign-artifacts
+        inherited: true
+        phase: verify
+        priority: 0
+    - groupId: org.sonatype.plugins
+      artifactId: nexus-staging-maven-plugin
+      version: 1.6.13
+      extensions: true
+      configuration: {serverId: ossrh, nexusUrl: 'https://s01.oss.sonatype.org/',
+        autoReleaseAfterClose: true}
+  id: ci-cd
+  source: pom
+childProjectUrlInheritAppendPath: true

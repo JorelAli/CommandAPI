@@ -1,0 +1,10 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-platforms, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit
+packaging: pom
+modules: [commandapi-bukkit-core, commandapi-bukkit-nms, commandapi-bukkit-vh, commandapi-bukkit-mojang-mapped,
+  commandapi-bukkit-plugin, commandapi-bukkit-test, commandapi-bukkit-shade, commandapi-bukkit-plugin-mojang-mapped,
+  commandapi-bukkit-shade-mojang-mapped]
+childProjectUrlInheritAppendPath: true

@@ -1,0 +1,232 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit-test, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-test-tests
+packaging: jar
+dependencies:
+- {groupId: org.junit.jupiter, artifactId: junit-jupiter-engine, version: 5.8.2, scope: test}
+- {groupId: com.mojang, artifactId: brigadier, version: 1.2.9, scope: provided}
+- {groupId: org.mockito, artifactId: mockito-core, version: 5.11.0}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl, version: '${project.version}'}
+- {groupId: de.tr7zw, artifactId: item-nbt-api, version: 2.12.4, scope: provided}
+- {groupId: com.saicone.rtag, artifactId: rtag, version: 1.4.4, scope: provided}
+- {groupId: com.github.zafarkhaja, artifactId: java-semver, version: 0.9.0}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-jar-plugin
+    executions:
+    - goals: [test-jar]
+      id: default
+      inherited: true
+      priority: 0
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-surefire-plugin
+    version: 2.22.0
+    configuration:
+      trimStackTrace: false
+      systemPropertyVariables: {profileId: '${project.activeProfiles[0].id}'}
+  - groupId: org.jacoco
+    artifactId: jacoco-maven-plugin
+    executions:
+    - goals: [prepare-agent]
+      id: default-prepare-agent
+      inherited: true
+      priority: 0
+    - goals: [report]
+      id: report
+      inherited: true
+      phase: verify
+      priority: 0
+profiles:
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.23.1, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.20.5, version: '${project.version}',
+    scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.20.5-R0.1-SNAPSHOT}
+  id: Minecraft_1_20_5
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.23.1, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-dependency-mojang-mapped,
+    version: '${project.version}', type: pom}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.20.5, version: '${project.version}',
+    classifier: mojang-mapped, scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.20.5-R0.1-SNAPSHOT, classifier: remapped-mojang}
+  id: Minecraft_1_20_5_Mojang
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.19.0, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.20.3, version: '${project.version}',
+    scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.20.4-R0.1-SNAPSHOT}
+  id: Minecraft_1_20_3
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.19.0, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.20.2, version: '${project.version}',
+    scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.20.2-R0.1-SNAPSHOT}
+  id: Minecraft_1_20_2
+  source: pom
+- activation: {activeByDefault: true}
+  build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.19.0, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.20, version: '${project.version}',
+    scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.20-R0.1-SNAPSHOT}
+  - {groupId: io.papermc.paper, artifactId: paper-api, version: 1.20-R0.1-SNAPSHOT}
+  id: Minecraft_1_20
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.19.0, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-dependency-mojang-mapped,
+    version: '${project.version}', type: pom}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.20, version: '${project.version}',
+    classifier: mojang-mapped, scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.20-R0.1-SNAPSHOT, classifier: remapped-mojang,
+    scope: provided}
+  - {groupId: io.papermc.paper, artifactId: paper-api, version: 1.20-R0.1-SNAPSHOT}
+  id: Minecraft_1_20_Mojang
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.19.0, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.19.4, version: '${project.version}',
+    scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.19.4-R0.1-SNAPSHOT}
+  - {groupId: io.papermc.paper, artifactId: paper-api, version: 1.19.4-R0.1-SNAPSHOT}
+  id: Minecraft_1_19_4
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticle_*Tests.java']
+  dependencies:
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.19.0, scope: provided}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-dependency-mojang-mapped,
+    version: '${project.version}', type: pom}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.19.4, version: '${project.version}',
+    classifier: mojang-mapped, scope: test}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.19.4-R0.1-SNAPSHOT, classifier: remapped-mojang,
+    scope: provided}
+  - {groupId: io.papermc.paper, artifactId: paper-api, version: 1.19.4-R0.1-SNAPSHOT}
+  id: Minecraft_1_19_4_Mojang
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticleTests.java', '**/arguments/ArgumentParticle_1_18_Tests.java',
+          '**/arguments/ArgumentParticle_1_16_5_Tests.java']
+  dependencies:
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.19.2, version: '${project.version}',
+    scope: test}
+  - {groupId: io.papermc.paper, artifactId: paper-api, version: 1.19.2-R0.1-SNAPSHOT}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.19.2-R0.1-SNAPSHOT, scope: provided}
+  id: Minecraft_1_19_2
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticleTests.java', '**/arguments/ArgumentParticle_1_19_2_Tests.java']
+  dependencies:
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.18, version: '${project.version}'}
+  - {groupId: io.papermc.paper, artifactId: paper-api, version: 1.18.1-R0.1-SNAPSHOT}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.18.1-R0.1-SNAPSHOT, scope: provided}
+  id: Minecraft_1_18
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticleTests.java', '**/arguments/ArgumentParticle_1_19_2_Tests.java']
+  dependencies:
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.17, version: '${project.version}'}
+  - {groupId: io.papermc.paper, artifactId: paper-api, version: 1.17-R0.1-SNAPSHOT,
+    scope: provided}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.17-R0.1-SNAPSHOT, scope: provided}
+  id: Minecraft_1_17
+  source: pom
+- build:
+    plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      configuration:
+        testExcludes: ['**/arguments/ArgumentParticleTests.java', '**/arguments/ArgumentParticle_1_19_2_Tests.java',
+          '**/arguments/ArgumentParticle_1_18_Tests.java']
+  dependencies:
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+  - {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.16.5, version: '${project.version}'}
+  - {groupId: com.destroystokyo.paper, artifactId: paper-api, version: 1.16.5-R0.1-SNAPSHOT,
+    scope: provided}
+  - {groupId: org.spigotmc, artifactId: spigot, version: 1.16.5-R0.1-SNAPSHOT, scope: provided}
+  id: Minecraft_1_16_5
+  source: pom
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: codemc-repo-public, layout: default, url: 'https://repo.codemc.io/repository/maven-public/'}
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.io/repository/nms/'}
+- {id: spigot-repo, layout: default, url: 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+- {id: papermc, layout: default, url: 'https://repo.papermc.io/repository/maven-public/'}
+- {id: minecraft-libraries, layout: default, url: 'https://libraries.minecraft.net'}
+- {id: Jitpack, layout: default, url: 'https://jitpack.io'}

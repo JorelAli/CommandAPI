@@ -1,0 +1,18 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi, groupId: dev.jorel, relativePath: ../pom.xml, version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-platforms
+packaging: pom
+profiles:
+- id: Platform.Bukkit
+  modules: [commandapi-bukkit, ../commandapi-kotlin/commandapi-core-kotlin, ../commandapi-kotlin/commandapi-bukkit-kotlin,
+    ../commandapi-documentation-code]
+  source: pom
+- id: Platform.Sponge
+  modules: [commandapi-sponge]
+  source: pom
+- id: Platform.Velocity
+  modules: [commandapi-velocity, ../commandapi-kotlin/commandapi-core-kotlin, ../commandapi-kotlin/commandapi-velocity-kotlin,
+    ../commandapi-documentation-velocity-code]
+  source: pom
+childProjectUrlInheritAppendPath: true

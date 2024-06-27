@@ -1,0 +1,48 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-plugin-mojang-mapped
+packaging: jar
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}',
+  scope: compile}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-dependency-mojang-mapped,
+  version: '${project.version}', type: pom}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-vh, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-mojang-mapped, version: '${project.version}'}
+- {groupId: io.papermc.paper, artifactId: paper-api, version: '${paper.version}',
+  scope: provided}
+- {groupId: org.spigotmc, artifactId: spigot-api, version: '${paper.version}', scope: provided}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-shade-plugin
+    executions:
+    - configuration:
+        filters:
+        - artifact: dev.jorel:commandapi-core
+          excludes: [dev/jorel/commandapi/CommandAPIVersionHandler**, dev/jorel/commandapi/MojangMappedVersionHandler**]
+        relocations:
+        - {pattern: org.bukkit.craftbukkit.v1_20_R4, shadedPattern: org.bukkit.craftbukkit}
+        - {pattern: org.bukkit.craftbukkit.v1_21_R1, shadedPattern: org.bukkit.craftbukkit}
+        transformers:
+        - {resource: LICENSE, attr/implementation: org.apache.maven.plugins.shade.resource.AppendingTransformer}
+      goals: [shade]
+      id: default
+      inherited: true
+      phase: package
+      priority: 0
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-jar-plugin
+    version: 3.4.1
+    configuration:
+      archive:
+        manifestEntries: {paperweight-mappings-namespace: mojang}
+  resources:
+  - {directory: src/main/resources, filtering: true}
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.org/repository/maven-public/'}
+- {id: spigot-repo, layout: default, url: 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+- {id: papermc, layout: default, url: 'https://papermc.io/repo/repository/maven-public/'}

@@ -1,0 +1,46 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit-test, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-kotlin-test
+packaging: jar
+properties: {maven.compiler.target: 16, testSourceDirectory: '${project.basedir}/src/test/kotlin',
+  junit-jupiter.version: 5.8.2, maven.compiler.source: 16, kotlin.compiler.incremental: true}
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-kotlin, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-shade, version: '${project.version}'}
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-test-impl-1.19.2, version: '${project.version}',
+  scope: test}
+- {groupId: org.jetbrains.kotlin, artifactId: kotlin-stdlib, version: '${kotlin.version}'}
+- {groupId: org.junit.jupiter, artifactId: junit-jupiter-api, version: '${junit-jupiter.version}',
+  scope: test}
+- {groupId: org.junit.jupiter, artifactId: junit-jupiter-engine, version: '${junit-jupiter.version}',
+  scope: test}
+- {groupId: org.mockito, artifactId: mockito-core, version: 5.11.0, scope: test}
+- {groupId: com.mojang, artifactId: brigadier, version: 1.0.18}
+- {groupId: io.papermc.paper, artifactId: paper-api, version: 1.19.2-R0.1-SNAPSHOT}
+- {groupId: com.github.seeseemelk, artifactId: MockBukkit-v1.19, version: 2.29.0}
+- {groupId: org.spigotmc, artifactId: spigot, version: 1.19.2-R0.1-SNAPSHOT, scope: provided}
+build:
+  plugins:
+  - groupId: org.jetbrains.kotlin
+    artifactId: kotlin-maven-plugin
+    version: ${kotlin.version}
+    executions:
+    - configuration:
+        sourceDirs: ['${testSourceDirectory}']
+        jvmTarget: 16
+      goals: [test-compile]
+      id: test-compile
+      inherited: true
+      priority: 0
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-surefire-plugin
+    version: 2.22.1
+    configuration: {trimStackTrace: false}
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: codemc-repo, layout: default, url: 'https://repo.codemc.io/repository/nms/'}
+- {id: spigot-repo, layout: default, url: 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+- {id: papermc, layout: default, url: 'https://repo.papermc.io/repository/maven-public/'}
+- {id: minecraft-libraries, layout: default, url: 'https://libraries.minecraft.net'}

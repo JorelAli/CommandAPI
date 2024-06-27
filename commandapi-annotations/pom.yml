@@ -1,0 +1,23 @@
+modelVersion: 4.0.0
+parent: {artifactId: commandapi, groupId: dev.jorel, relativePath: ../pom.xml, version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-annotations
+packaging: jar
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-core, version: '${project.version}'}
+- {groupId: com.google.auto.service, artifactId: auto-service, version: '${auto-service.version}',
+  scope: provided}
+- {groupId: org.spigotmc, artifactId: spigot-api, version: '${paper.version}', scope: provided}
+build:
+  plugins:
+  - groupId: org.apache.maven.plugins
+    artifactId: maven-compiler-plugin
+    executions:
+    - configuration:
+        annotationProcessors: [dev.jorel.commandapi.annotations.Annotations]
+      goals: [testCompile]
+      id: default
+      inherited: true
+      priority: 0
+childProjectUrlInheritAppendPath: true
+repositories:
+- {id: spigot-repo, layout: default, url: 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}

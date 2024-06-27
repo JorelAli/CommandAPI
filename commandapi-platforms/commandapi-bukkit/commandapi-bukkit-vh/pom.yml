@@ -1,0 +1,12 @@
+modelEncoding: UTF-8
+modelVersion: 4.0.0
+parent: {artifactId: commandapi-bukkit, groupId: dev.jorel, relativePath: ../pom.xml,
+  version: 9.6.0-SNAPSHOT}
+artifactId: commandapi-bukkit-vh
+packaging: jar
+dependencies:
+- {groupId: dev.jorel, artifactId: commandapi-bukkit-nms-dependency, version: '${project.version}',
+  type: pom}
+- {groupId: org.spigotmc, artifactId: spigot, version: '${paper.version}', classifier: remapped-mojang,
+  scope: provided}
+childProjectUrlInheritAppendPath: true
