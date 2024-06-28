@@ -72,8 +72,8 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 	}
 
 	private Set<Particle> dodgyParticles = Set.of(
-		Particle.SNOW_SHOVEL, // "item_snowball" -> SNOWBALL
-		Particle.SUSPENDED_DEPTH // "underwater" -> SUSPENDED
+		Particle.valueOf("SNOW_SHOVEL"), // "item_snowball" -> SNOWBALL
+		Particle.valueOf("SUSPENDED_DEPTH") // "underwater" -> SUSPENDED
 	);
 
 	private float round(float value, int n) {
@@ -140,7 +140,7 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		ParticleData<DustOptions> result = (ParticleData<DustOptions>) results.get();
 
 		// Check the particle type is correct
-		assertEquals(Particle.REDSTONE, result.particle());
+		assertEquals(Particle.valueOf("REDSTONE"), result.particle());
 
 		// Check the particle properties
 		assertEquals(4, result.data().getSize());
@@ -180,7 +180,7 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		ParticleData<DustOptions> result = (ParticleData<DustOptions>) results.get();
 
 		// Check the particle type is correct
-		assertEquals(Particle.REDSTONE, result.particle());
+		assertEquals(Particle.valueOf("REDSTONE"), result.particle());
 
 		// Check the particle properties
 		assertEquals(size, result.data().getSize());
@@ -213,7 +213,7 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		ParticleData<DustTransition> result = (ParticleData<DustTransition>) results.get();
 
 		// Check the particle type is correct
-		assertEquals(Particle.DUST_COLOR_TRANSITION, result.particle());
+		assertEquals(Particle.valueOf("DUST_COLOR_TRANSITION"), result.particle());
 
 		// Check the particle properties
 		assertEquals(Color.fromRGB((int) (0.1f * 255), (int) (0.2f * 255), (int) (0.3f * 255)), result.data().getColor());
@@ -248,10 +248,10 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		ParticleData<BlockData> result = (ParticleData<BlockData>) results.get();
 
 		// Check the particle type is correct
-		assertEquals(Particle.BLOCK_CRACK, result.particle());
+		assertEquals(Particle.valueOf("BLOCK_CRACK"), result.particle());
 
 		// Check the particle properties
-		assertEquals(Material.GRASS_BLOCK, result.data().getMaterial());
+		assertEquals(Material.valueOf("GRASS_BLOCK"), result.data().getMaterial());
 		assertTrue(((Snowable) result.data()).isSnowy());
 
 		assertNoMoreResults(results);
@@ -281,7 +281,7 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		ParticleData<ItemStack> result = (ParticleData<ItemStack>) results.get();
 
 		// Check the particle type is correct
-		assertEquals(Particle.ITEM_CRACK, result.particle());
+		assertEquals(Particle.valueOf("ITEM_CRACK"), result.particle());
 
 		// Check the particle properties
 		assertEquals(new ItemStack(Material.APPLE), (ItemStack) result.data());
@@ -351,7 +351,7 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		ParticleData<Vibration> result = (ParticleData<Vibration>) results.get();
 
 		// Check the particle type is correct
-		assertEquals(Particle.VIBRATION, result.particle());
+		assertEquals(Particle.valueOf("VIBRATION"), result.particle());
 
 		// Check the particle properties
 		assertEquals(4, result.data().getArrivalTime());

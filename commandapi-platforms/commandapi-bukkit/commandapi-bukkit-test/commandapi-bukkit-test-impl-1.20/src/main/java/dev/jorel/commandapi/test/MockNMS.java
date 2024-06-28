@@ -865,4 +865,10 @@ public class MockNMS extends Enums {
 	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
 		return baseNMS.createCommandRegistrationStrategy();
 	}
+	
+	@Override
+	public void assertPermissionCheckFails(Player player) {
+		Mockito.verify(player).sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this " +
+			"command. Please contact the server administrators if you believe that this is a mistake.");
+	}
 }

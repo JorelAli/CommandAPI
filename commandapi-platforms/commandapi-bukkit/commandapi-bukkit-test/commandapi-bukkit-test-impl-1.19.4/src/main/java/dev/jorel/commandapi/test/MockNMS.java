@@ -15,6 +15,7 @@ import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import dev.jorel.commandapi.*;
 import net.minecraft.commands.Commands;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -866,5 +867,11 @@ public class MockNMS extends Enums {
 	@Override
 	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
 		return baseNMS.createCommandRegistrationStrategy();
+	}
+	
+	@Override
+	public void assertPermissionCheckFails(Player player) {
+		Mockito.verify(player).sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this " +
+			"command. Please contact the server administrators if you believe that this is a mistake.");
 	}
 }

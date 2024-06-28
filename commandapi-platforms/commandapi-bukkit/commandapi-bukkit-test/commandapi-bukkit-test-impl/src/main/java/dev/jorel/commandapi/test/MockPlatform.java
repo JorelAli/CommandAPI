@@ -235,6 +235,12 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 			super("Unimplemented");
 		}
 	}
+	
+	/**
+	 * @see TestBase#assertPermissionCheckFails
+	 * @param player
+	 */
+	public abstract void assertPermissionCheckFails(Player player);
 
 	/***********************
 	 * Bukkit "enum" lists *

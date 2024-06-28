@@ -60,11 +60,11 @@ class ArgumentEnchantmentTests extends TestBase {
 
 		// /test sharpness
 		server.dispatchCommand(player, "test sharpness");
-		assertEquals(Enchantment.DAMAGE_ALL, results.get());
+		assertEquals(Enchantment.getByName("DAMAGE_ALL"), results.get());
 
 		// /test minecraft:sharpness
 		server.dispatchCommand(player, "test minecraft:sharpness");
-		assertEquals(Enchantment.DAMAGE_ALL, results.get());
+		assertEquals(Enchantment.getByName("DAMAGE_ALL"), results.get());
 
 		// /test blah
 		// Unknown enchantment, blah is not a valid enchantment

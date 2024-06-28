@@ -1,15 +1,14 @@
 package dev.jorel.commandapi.test;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.RootCommandNode;
-import dev.jorel.commandapi.*;
-import dev.jorel.commandapi.arguments.IntegerArgument;
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.isA;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissibleBase;
@@ -22,8 +21,23 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isA;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
+
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandTree;
+import dev.jorel.commandapi.InternalBukkitConfig;
+import dev.jorel.commandapi.SpigotCommandRegistration;
+import dev.jorel.commandapi.arguments.IntegerArgument;
+import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 
 /**
  * Tests for testing if namespaces work correctly
@@ -757,23 +771,6 @@ public class CommandNamespaceTests extends TestBase {
 		);
 
 		assertNoMoreResults(results);
-	}
-
-	void assertPermissionCheckFails(CommandSender sender, String commandLine) {
-		// When the player executes a Brigadier command, Brigadier fully handles the permission check and throws an
-		// exception. However, when a Brigadier command is executed server side (for example with `Bukkit#dispatchCommand`),
-		// VanillaCommandWrapper handles the permission check and sends a message to the sender. We want to make sure the
-		// permission works in both cases.
-		assertThrowsWithMessage(
-			CommandSyntaxException.class,
-			"Unknown or incomplete command, see below for error at position 0: <--[HERE]",
-			() -> server.dispatchThrowableBrigadierCommand(sender, commandLine)
-		);
-
-		Mockito.clearInvocations(sender);
-		server.dispatchCommand(sender, commandLine);
-		Mockito.verify(sender).sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this " +
-			"command. Please contact the server administrators if you believe that this is a mistake.");
 	}
 
 	@ParameterizedTest

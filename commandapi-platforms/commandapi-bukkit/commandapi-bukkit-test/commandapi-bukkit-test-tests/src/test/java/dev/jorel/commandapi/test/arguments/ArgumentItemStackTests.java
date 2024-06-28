@@ -92,7 +92,7 @@ class ArgumentItemStackTests extends TestBase {
 			ItemStack actual = results.get();
 			assertEquals(Material.DIAMOND_SWORD, actual.getType());
 			assertEquals(1, actual.getAmount());
-			assertEquals(1, actual.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
+			assertEquals(1, actual.getEnchantmentLevel(Enchantment.getByName("DAMAGE_ALL")));
 		}
 		
 		// The example on the MinecraftWiki is wrong!

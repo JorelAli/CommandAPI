@@ -47,7 +47,7 @@ class ArgumentEntityTypeTests extends TestBase {
 		return Arrays.stream(MockPlatform.getInstance().getEntityTypes())
 			.filter(e -> e != EntityType.UNKNOWN)
 			.filter(e -> e != EntityType.PLAYER)
-			.filter(e -> e != EntityType.FISHING_HOOK)
+			.filter(e -> e != EntityType.valueOf("FISHING_HOOK"))
 			.filter(e -> { 
 				if (version.equals(MCVersion.V1_19_4)) {
 					return !e.name().equals("CAMEL") && !e.name().equals("SNIFFER");

@@ -11,6 +11,10 @@ import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import io.papermc.paper.advancement.AdvancementDisplay;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
@@ -22,7 +26,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.numbers.BlankFormat;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -60,6 +63,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.mockito.Mockito;
 
 import java.io.File;
@@ -171,57 +175,57 @@ public class MockNMS extends Enums {
 	 *************************/
 
 	private void unregisterAllPotionEffects() {
-		PotionEffectType[] byId = getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);
-		for (int i = 0; i < byId.length; i++) {
-			byId[i] = null;
-		}
-
-		getFieldAs(PotionEffectType.class, "byName", null, Map.class).clear();
-		getFieldAs(PotionEffectType.class, "byKey", null, Map.class).clear();
-		setField(PotionEffectType.class, "acceptingNew", null, true);
+//		PotionEffectType[] byId = getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);
+//		for (int i = 0; i < byId.length; i++) {
+//			byId[i] = null;
+//		}
+//
+//		getFieldAs(PotionEffectType.class, "byName", null, Map.class).clear();
+//		getFieldAs(PotionEffectType.class, "byKey", null, Map.class).clear();
+//		setField(PotionEffectType.class, "acceptingNew", null, true);
 	}
 
 	private void registerDefaultPotionEffects() {
-		for (PotionEffectType type : PotionEffectType.values()) {
-			if (type != null) {
-				return;
-			}
-		}
-		
-		registerPotionEffectType(1, "SPEED", false, 8171462);
-		registerPotionEffectType(2, "SLOWNESS", false, 5926017);
-		registerPotionEffectType(3, "HASTE", false, 14270531);
-		registerPotionEffectType(4, "MINING_FATIGUE", false, 4866583);
-		registerPotionEffectType(5, "STRENGTH", false, 9643043);
-		registerPotionEffectType(6, "INSTANT_HEALTH", true, 16262179);
-		registerPotionEffectType(7, "INSTANT_DAMAGE", true, 4393481);
-		registerPotionEffectType(8, "JUMP_BOOST", false, 2293580);
-		registerPotionEffectType(9, "NAUSEA", false, 5578058);
-		registerPotionEffectType(10, "REGENERATION", false, 13458603);
-		registerPotionEffectType(11, "RESISTANCE", false, 10044730);
-		registerPotionEffectType(12, "FIRE_RESISTANCE", false, 14981690);
-		registerPotionEffectType(13, "WATER_BREATHING", false, 3035801);
-		registerPotionEffectType(14, "INVISIBILITY", false, 8356754);
-		registerPotionEffectType(15, "BLINDNESS", false, 2039587);
-		registerPotionEffectType(16, "NIGHT_VISION", false, 2039713);
-		registerPotionEffectType(17, "HUNGER", false, 5797459);
-		registerPotionEffectType(18, "WEAKNESS", false, 4738376);
-		registerPotionEffectType(19, "POISON", false, 5149489);
-		registerPotionEffectType(20, "WITHER", false, 3484199);
-		registerPotionEffectType(21, "HEALTH_BOOST", false, 16284963);
-		registerPotionEffectType(22, "ABSORPTION", false, 2445989);
-		registerPotionEffectType(23, "SATURATION", true, 16262179);
-		registerPotionEffectType(24, "GLOWING", false, 9740385);
-		registerPotionEffectType(25, "LEVITATION", false, 13565951);
-		registerPotionEffectType(26, "LUCK", false, 3381504);
-		registerPotionEffectType(27, "UNLUCK", false, 12624973);
-		registerPotionEffectType(28, "SLOW_FALLING", false, 16773073);
-		registerPotionEffectType(29, "CONDUIT_POWER", false, 1950417);
-		registerPotionEffectType(30, "DOLPHINS_GRACE", false, 8954814);
-		registerPotionEffectType(31, "BAD_OMEN", false, 745784);
-		registerPotionEffectType(32, "HERO_OF_THE_VILLAGE", false, 4521796);
-		registerPotionEffectType(33, "DARKNESS", false, 2696993);
-		// PotionEffectType.stopAcceptingRegistrations();
+//		for (PotionEffectType type : PotionEffectType.values()) {
+//			if (type != null) {
+//				return;
+//			}
+//		}
+//		
+//		registerPotionEffectType(1, "SPEED", false, 8171462);
+//		registerPotionEffectType(2, "SLOWNESS", false, 5926017);
+//		registerPotionEffectType(3, "HASTE", false, 14270531);
+//		registerPotionEffectType(4, "MINING_FATIGUE", false, 4866583);
+//		registerPotionEffectType(5, "STRENGTH", false, 9643043);
+//		registerPotionEffectType(6, "INSTANT_HEALTH", true, 16262179);
+//		registerPotionEffectType(7, "INSTANT_DAMAGE", true, 4393481);
+//		registerPotionEffectType(8, "JUMP_BOOST", false, 2293580);
+//		registerPotionEffectType(9, "NAUSEA", false, 5578058);
+//		registerPotionEffectType(10, "REGENERATION", false, 13458603);
+//		registerPotionEffectType(11, "RESISTANCE", false, 10044730);
+//		registerPotionEffectType(12, "FIRE_RESISTANCE", false, 14981690);
+//		registerPotionEffectType(13, "WATER_BREATHING", false, 3035801);
+//		registerPotionEffectType(14, "INVISIBILITY", false, 8356754);
+//		registerPotionEffectType(15, "BLINDNESS", false, 2039587);
+//		registerPotionEffectType(16, "NIGHT_VISION", false, 2039713);
+//		registerPotionEffectType(17, "HUNGER", false, 5797459);
+//		registerPotionEffectType(18, "WEAKNESS", false, 4738376);
+//		registerPotionEffectType(19, "POISON", false, 5149489);
+//		registerPotionEffectType(20, "WITHER", false, 3484199);
+//		registerPotionEffectType(21, "HEALTH_BOOST", false, 16284963);
+//		registerPotionEffectType(22, "ABSORPTION", false, 2445989);
+//		registerPotionEffectType(23, "SATURATION", true, 16262179);
+//		registerPotionEffectType(24, "GLOWING", false, 9740385);
+//		registerPotionEffectType(25, "LEVITATION", false, 13565951);
+//		registerPotionEffectType(26, "LUCK", false, 3381504);
+//		registerPotionEffectType(27, "UNLUCK", false, 12624973);
+//		registerPotionEffectType(28, "SLOW_FALLING", false, 16773073);
+//		registerPotionEffectType(29, "CONDUIT_POWER", false, 1950417);
+//		registerPotionEffectType(30, "DOLPHINS_GRACE", false, 8954814);
+//		registerPotionEffectType(31, "BAD_OMEN", false, 745784);
+//		registerPotionEffectType(32, "HERO_OF_THE_VILLAGE", false, 4521796);
+//		registerPotionEffectType(33, "DARKNESS", false, 2696993);
+//		// PotionEffectType.stopAcceptingRegistrations();
 	}
 
 	private void registerPotionEffectType(int id, @NotNull String name, boolean instant, int rgb) {
@@ -230,9 +234,9 @@ public class MockNMS extends Enums {
 	}
 
 	private void unregisterAllEnchantments() {
-		getFieldAs(Enchantment.class, "byName", null, Map.class).clear();
-		getFieldAs(Enchantment.class, "byKey", null, Map.class).clear();
-		setField(Enchantment.class, "acceptingNew", null, true);
+		// getFieldAs(Enchantment.class, "byName", null, Map.class).clear();
+		// getFieldAs(Enchantment.class, "byKey", null, Map.class).clear();
+		// setField(Enchantment.class, "acceptingNew", null, true);
 	}
 
 	private void registerDefaultEnchantments() {
@@ -594,7 +598,7 @@ public class MockNMS extends Enums {
 			if (bukkitObjective == null) {
 				return null;
 			} else {
-				return new Objective(scoreboardServerMock, objectiveName, ObjectiveCriteria.byName(bukkitObjective.getCriteria()).get(), Component.literal(bukkitObjective.getDisplayName()), switch(bukkitObjective.getRenderType()) {
+				return new Objective(scoreboardServerMock, objectiveName, ObjectiveCriteria.byName(bukkitObjective.getCriteria()).get(), net.minecraft.network.chat.Component.literal(bukkitObjective.getDisplayName()), switch(bukkitObjective.getRenderType()) {
 					case HEARTS:
 						yield RenderType.HEARTS;
 					case INTEGER:
@@ -772,29 +776,29 @@ public class MockNMS extends Enums {
 			}
 
 			@Override
-			public @Nullable org.bukkit.advancement.AdvancementDisplay getDisplay() {
+			public @Nullable AdvancementDisplay getDisplay() {
 				throw new IllegalStateException("getDisplay is unimplemented");
 			}
 
-//			@Override
-//			public @NotNull Component displayName() {
-//				throw new IllegalStateException("displayName is unimplemented");
-//			}
-//
-//			@Override
-//			public org.bukkit.advancement.@Nullable Advancement getParent() {
-//				throw new IllegalStateException("getParent is unimplemented");
-//			}
-//
-//			@Override
-//			public @NotNull @Unmodifiable Collection<org.bukkit.advancement.Advancement> getChildren() {
-//				throw new IllegalStateException("getChildren is unimplemented");
-//			}
-//
-//			@Override
-//			public org.bukkit.advancement.@NotNull Advancement getRoot() {
-//				throw new IllegalStateException("getRoot is unimplemented");
-//			}
+			@Override
+			public @NotNull Component displayName() {
+				throw new IllegalStateException("displayName is unimplemented");
+			}
+
+			@Override
+			public org.bukkit.advancement.@Nullable Advancement getParent() {
+				throw new IllegalStateException("getParent is unimplemented");
+			}
+
+			@Override
+			public @NotNull @Unmodifiable Collection<org.bukkit.advancement.Advancement> getChildren() {
+				throw new IllegalStateException("getChildren is unimplemented");
+			}
+
+			@Override
+			public org.bukkit.advancement.@NotNull Advancement getRoot() {
+				throw new IllegalStateException("getRoot is unimplemented");
+			}
 		};
 	}
 
@@ -1013,5 +1017,11 @@ public class MockNMS extends Enums {
 	@Override
 	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
 		return baseNMS.createCommandRegistrationStrategy();
+	}
+	
+	@Override
+	public void assertPermissionCheckFails(Player player) {
+		Mockito.verify(player).sendMessage(Component.text("I'm sorry, but you do not have permission to perform this " + 
+			"command. Please contact the server administrators if you believe that this is in error.").style(Style.style(NamedTextColor.RED)));
 	}
 }

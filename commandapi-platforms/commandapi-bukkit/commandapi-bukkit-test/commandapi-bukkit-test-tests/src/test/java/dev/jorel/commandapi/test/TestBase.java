@@ -2,10 +2,10 @@ package dev.jorel.commandapi.test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,14 +21,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Registry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.function.Executable;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.opentest4j.AssertionFailedError;
 
 import com.mojang.brigadier.LiteralMessage;
@@ -231,5 +236,34 @@ public abstract class TestBase {
 
 	public void assertCommandSuggestsTooltips(CommandSender sender, String command, List<Suggestion> expected) {
 		assertSuggestionListEquals(expected, server.getSuggestionsWithTooltips(sender, command));
+	}
+
+	void assertPermissionCheckFails(Player player, String commandLine) {
+		// When the player executes a Brigadier command, Brigadier fully handles the permission check and throws an
+		// exception. However, when a Brigadier command is executed server side (for example with `Bukkit#dispatchCommand`),
+		// VanillaCommandWrapper handles the permission check and sends a message to the sender. We want to make sure the
+		// permission works in both cases.
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			"Unknown or incomplete command, see below for error at position 0: <--[HERE]",
+			() -> server.dispatchThrowableBrigadierCommand(player, commandLine)
+		);
+
+		Mockito.clearInvocations(player);
+		server.dispatchCommand(player, commandLine);
+		
+		// Checking permissions differs depending on what version of Minecraft we're using.
+		// Later versions of Minecraft (Paper) use Adventure's `CraftPlayer.sendMessage(Component)`
+		// compared to old versions that use `CraftPlayer.sendMessage(String)`. Farm this out to
+		// test NMS implementations. 1.20.3+ uses the Adventure method, everything below doesn't.
+		MockPlatform.getInstance().assertPermissionCheckFails(player);
+		
+		// Adventure variation
+//		Mockito.verify(player).sendMessage(Component.text("I'm sorry, but you do not have permission to perform this " + 
+//			"command. Please contact the server administrators if you believe that this is in error.").style(Style.style(NamedTextColor.RED)));
+		
+		// Spigot variation
+//		Mockito.verify(player).sendMessage(ChatColor.RED + "I'm sorry, but you do not have permission to perform this " +
+//			"command. Plea1se contact the server administrators if you believe that this is a mistake.");
 	}
 }

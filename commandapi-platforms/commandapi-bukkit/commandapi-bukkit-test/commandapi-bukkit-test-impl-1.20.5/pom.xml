@@ -5,7 +5,8 @@
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in
     the Software without restriction, including without limitation the rights to
-    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of
     the Software, and to permit persons to whom the Software is furnished to do so,
     subject to the following conditions:
    
@@ -13,14 +14,17 @@
     copies or substantial portions of the Software.
    
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS
     FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
     COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
 		<artifactId>commandapi-bukkit-test</artifactId>
@@ -33,9 +37,9 @@
 	<artifactId>commandapi-bukkit-test-impl-1.20.5</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.20.5-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.20.5-R0.1-SNAPSHOT</spigot.version>
-		<paper.version>1.20.4-R0.1-SNAPSHOT</paper.version>
+		<minecraft.mappings>1.20.6-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.20.6-R0.1-SNAPSHOT</spigot.version>
+		<paper.version>1.20.6-R0.1-SNAPSHOT</paper.version>
 	</properties>
 
 	<repositories>
@@ -62,6 +66,16 @@
 			<id>minecraft-libraries</id>
 			<url>https://libraries.minecraft.net</url>
 		</repository>
+		<!-- Transitive dependency adventure-bom required for Paper 1.20.5 -->
+		<repository>
+			<id>sonatype-oss-snapshots1</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+		<!-- Bleeding-edge MockBukkit -->
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -78,7 +92,8 @@
 			<version>5.11.0</version>
 		</dependency>
 		<dependency>
-			<!-- This is literally just for testing, we're not actually packaging this -->
+			<!-- This is literally just for testing, we're not actually
+			packaging this -->
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api</artifactId>
 			<version>2.11.2</version>
@@ -102,17 +117,33 @@
 		</dependency>
 
 		<!-- Version-specific dependencies -->
+
+		<dependency>
+			<groupId>com.github.MockBukkit</groupId>
+			<artifactId>MockBukkit</artifactId>
+			<version>v1.20-SNAPSHOT</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.20</artifactId>
+			<version>3.9.0</version>
+		</dependency> -->
+		<dependency>
+			<groupId>io.papermc.paper</groupId>
+			<artifactId>paper-api</artifactId>
+			<version>${paper.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-api</artifactId>
+			<version>4.17.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.20</artifactId>
-			<version>3.9.0</version>
 		</dependency>
 		<!-- <dependency>
 			<groupId>io.papermc.paper</groupId>
@@ -152,9 +183,11 @@
 						</goals>
 						<id>remap-obf</id>
 						<configuration>
-							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:txt:maps-mojang</srgIn>
+							<srgIn>
+								org.spigotmc:minecraft-server:${minecraft.mappings}:txt:maps-mojang</srgIn>
 							<reverse>true</reverse>
-							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-mojang</remappedDependencies>
+							<remappedDependencies>
+								org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-mojang</remappedDependencies>
 							<remappedArtifactAttached>true</remappedArtifactAttached>
 							<remappedClassifierName>remapped-obf</remappedClassifierName>
 						</configuration>
@@ -166,9 +199,12 @@
 						</goals>
 						<id>remap-spigot</id>
 						<configuration>
-							<inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
-							<srgIn>org.spigotmc:minecraft-server:${minecraft.mappings}:csrg:maps-spigot</srgIn>
-							<remappedDependencies>org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-obf</remappedDependencies>
+							<inputFile>
+								${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+							<srgIn>
+								org.spigotmc:minecraft-server:${minecraft.mappings}:csrg:maps-spigot</srgIn>
+							<remappedDependencies>
+								org.spigotmc:spigot:${minecraft.mappings}:jar:remapped-obf</remappedDependencies>
 						</configuration>
 					</execution>
 				</executions>
