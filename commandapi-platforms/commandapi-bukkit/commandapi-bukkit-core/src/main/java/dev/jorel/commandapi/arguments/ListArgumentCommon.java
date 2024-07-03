@@ -132,16 +132,18 @@ public class ListArgumentCommon<T> extends Argument<List> {
 	
 		// If the argument's value is in the list of values, include it
 		List<T> list = new ArrayList<>();
+		Set<String> listKeys = new HashSet<>(); // Set to keep track of duplicates - we can't use the main list because of object hashing
 		final String argument = cmdCtx.getArgument(key, String.class);
 		final String[] strArr = argument.split(Pattern.quote(delimiter));
 		final StringReader context = new StringReader(argument);
 		for (String str : strArr) {
 			if (!values.containsKey(str)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
-			} else if (!allowDuplicates && list.contains(values.get(str))) {
+			} else if (!allowDuplicates && listKeys.contains(str)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
 			} else {
 				list.add(values.get(str));
+				listKeys.add(str);
 			}
 			context.setCursor(context.getCursor() + str.length() + delimiter.length());
 		}
