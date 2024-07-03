@@ -27,6 +27,7 @@ public class CommandAPI {
 	private static boolean loaded;
 	private static InternalConfig config;
 	private static CommandAPILogger logger;
+	private static String loadedStack;
 
 	// Accessing static variables
 
@@ -96,6 +97,14 @@ public class CommandAPI {
 	 */
 	public static void onLoad(CommandAPIConfig<?> config) {
 		if (!loaded) {
+			// Store the current stack trace to help diagnose multi-loading errors
+			final StringBuilder currentStack = new StringBuilder();
+			for (StackTraceElement e : Thread.currentThread().getStackTrace()) {
+				currentStack.append(e.toString());
+				currentStack.append("\n");
+			}
+			CommandAPI.loadedStack = currentStack.toString();
+
 			// Setup variables
 			CommandAPI.config = new InternalConfig(config);
 
@@ -124,6 +133,14 @@ public class CommandAPI {
 			loaded = true;
 		} else {
 			getLogger().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
+			final StringBuilder currentStack = new StringBuilder();
+			for (StackTraceElement e : Thread.currentThread().getStackTrace()) {
+				currentStack.append(e.toString());
+				currentStack.append("\n");
+			}
+			getLogger().severe("The CommandAPI was first loaded here:\n\n" + CommandAPI.loadedStack +
+				"\n\nBut it is now being loaded here:\n\n" + currentStack.toString());
+			
 		}
 	}
 
