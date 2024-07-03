@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
@@ -37,7 +38,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 /**
  * Tests for the {@link ParticleArgument}
  */
-class ArgumentParticleTests extends TestBase {
+class ArgumentParticle_1_18_Tests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -46,24 +47,7 @@ class ArgumentParticleTests extends TestBase {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
-
-		// Disabled for 1.20.3+ due to "reasons"
-		// assumeTrue(version.lessThan(MCVersion.V1_20_3));
-		
-		/**
-		 * From https://misode.github.io/versions/?id=1.20.5-pre1&tab=changelog&tags=command
-		 * 
-		 * Changed the /particle command syntax for particles with extra options:
-
-block redstone_lamp[lit=true] → block{block_state:{Name:"redstone_lamp",Properties:{lit:"true"}}} (also for block_marker, falling_dust, and dust_pillar)
-dust 0.1 0.2 0.3 0.4 → dust{color:[0.1,0.2,0.3],scale:0.4}
-dust_color_transition 0.1 0.2 0.3 0.4 0.5 0.6 0.7 → dust_color_transition{from_color:[0.1,0.2,0.3],scale:0.4,to_color:[0.5,0.6,0.7]}
-entity_effect → entity_effect{color:[0.1,0.2,0.3,0.4]}
-item diamond → item{item:"diamond"}
-sculk_charge 0.1 → sculk_charge{roll:0.1}
-shriek 1 → shriek{delay:1}
-vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3]},arrival_in_ticks:4}
-		 */
+		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_18));
 	}
 
 	@AfterEach
@@ -321,7 +305,6 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		assertEquals(255, result.data().getRed());
 		assertEquals(0, result.data().getGreen());
 		assertEquals(0, result.data().getBlue());
-		assertEquals(255, result.data().getAlpha());
 
 		assertNoMoreResults(results);
 	}
@@ -344,7 +327,8 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
 			server.dispatchCommand(player, "test vibration{destination:{type:\"block\",pos:[1.0,2.0,3.0]},arrival_in_ticks:4}");
 		} else {
-			server.dispatchCommand(player, "test vibration 1.0 2.0 3.0 4");
+			// from from from to to to ticks
+			server.dispatchCommand(player, "test vibration 5.0 6.0 7.0 1.0 2.0 3.0 4");
 		}
 		
 		@SuppressWarnings("unchecked")
@@ -355,8 +339,15 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 
 		// Check the particle properties
 		assertEquals(4, result.data().getArrivalTime());
-		assertInstanceOf(BlockDestination.class, result.data().getDestination());
 		
+		// 1.17 requires declaring origin location, so might as well test it!
+		assertInstanceOf(Location.class, result.data().getOrigin());
+		Location origin = (Location) result.data().getOrigin();
+		assertEquals(5, origin.getBlockX());
+		assertEquals(6, origin.getBlockY());
+		assertEquals(7, origin.getBlockZ());
+		
+		assertInstanceOf(BlockDestination.class, result.data().getDestination());
 		BlockDestination blockDestination = (BlockDestination) result.data().getDestination();
 		assertEquals(1, blockDestination.getLocation().getBlockX());
 		assertEquals(2, blockDestination.getLocation().getBlockY());

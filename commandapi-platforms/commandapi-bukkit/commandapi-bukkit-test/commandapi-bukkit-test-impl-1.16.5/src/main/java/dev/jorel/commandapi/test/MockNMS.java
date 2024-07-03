@@ -520,6 +520,13 @@ public class MockNMS extends Enums {
 			
 			// Command chain length
 			Mockito.when(customFunctionData.b()).thenReturn(65536);
+			
+			// Function execution
+			Mockito.when(customFunctionData.a(any(CustomFunction.class), any(CommandListenerWrapper.class))).thenAnswer(invocation -> {
+				// Call the function?
+				CustomFunction customFunction = invocation.getArgument(0);
+				return customFunction.b().length;
+			});
 
 			return customFunctionData;
 		});
