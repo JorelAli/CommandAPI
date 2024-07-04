@@ -20,27 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.google.gson.JsonObject;
+import dev.jorel.commandapi.*;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -80,8 +70,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -90,12 +78,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkit;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.CommandRegistrationStrategy;
-import dev.jorel.commandapi.SafeVarHandle;
-import dev.jorel.commandapi.SpigotCommandRegistration;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.Differs;
@@ -211,6 +193,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	private static final SafeVarHandle<ArgumentPredicateItemStack, NBTTagCompound> itemStackPredicateArgument;
 	private static final Field customFunctionManagerBrigadierDispatcher;
 	private static final SafeVarHandle<DataPackResources, IReloadableResourceManager> dataPackResources;
+	private static final SafeStaticMethodHandle<Void> argumentRegistrySerializeToJson;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -225,6 +208,8 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		customFunctionManagerBrigadierDispatcher = CommandAPIHandler.getField(CustomFunctionManager.class, "h", "h");
 		dataPackResources = SafeVarHandle.ofOrNull(DataPackResources.class, "b", "b", IReloadableResourceManager.class);
+
+		argumentRegistrySerializeToJson = SafeStaticMethodHandle.ofOrNull(ArgumentRegistry.class, "a", "a", void.class, JsonObject.class, ArgumentType.class);
 	}
 
 	@Differs(from = "1.16.4", by = "Use of non-deprecated NamespacedKey.fromString method")
@@ -397,9 +382,10 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	}
 
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException {
-		Files.write(new GsonBuilder().setPrettyPrinting().create()
-				.toJson(ArgumentRegistry.a(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
+	public Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type) {
+		JsonObject result = new JsonObject();
+		argumentRegistrySerializeToJson.invokeOrNull(result, type);
+		return Optional.ofNullable((JsonObject) result.get("properties"));
 	}
 
 	@Override

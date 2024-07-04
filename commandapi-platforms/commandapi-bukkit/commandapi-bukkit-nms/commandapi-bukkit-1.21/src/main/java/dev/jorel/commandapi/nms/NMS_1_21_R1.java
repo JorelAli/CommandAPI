@@ -20,12 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -39,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -75,8 +73,6 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -92,6 +88,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.CommandRegistrationStrategy;
 import dev.jorel.commandapi.PaperCommandRegistration;
+import dev.jorel.commandapi.SafeStaticMethodHandle;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.SpigotCommandRegistration;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
@@ -206,6 +203,7 @@ public class NMS_1_21_R1 extends NMS_Common {
 	// private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
 	private static final boolean vanillaCommandDispatcherFieldExists;
+	private static final SafeStaticMethodHandle<Void> argumentUtilsSerializeArgumentToJson;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -236,6 +234,8 @@ public class NMS_1_21_R1 extends NMS_Common {
 			fieldExists = false;
 		}
 		vanillaCommandDispatcherFieldExists = fieldExists;
+
+		argumentUtilsSerializeArgumentToJson = SafeStaticMethodHandle.ofOrNull(ArgumentUtils.class, "a", "serializeArgumentToJson", void.class, JsonObject.class, ArgumentType.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -384,10 +384,10 @@ public class NMS_1_21_R1 extends NMS_Common {
 	}
 
 	@Override
-	public final void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
-			throws IOException {
-		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
-				.toJson(ArgumentUtils.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
+	public Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type) {
+		JsonObject result = new JsonObject();
+		argumentUtilsSerializeArgumentToJson.invokeOrNull(result, type);
+		return Optional.ofNullable((JsonObject) result.get("properties"));
 	}
 
 	@Override

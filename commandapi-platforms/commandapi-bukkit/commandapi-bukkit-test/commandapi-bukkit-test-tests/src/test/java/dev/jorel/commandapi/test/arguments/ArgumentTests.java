@@ -92,7 +92,7 @@ class ArgumentTests extends TestBase {
 				      "children": {
 				        "value": {
 				          "type": "argument",
-				          "parser": "brigadier:string",
+				          "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 				          "properties": {
 				            "type": "word"
 				          },

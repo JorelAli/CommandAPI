@@ -5,8 +5,6 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CS
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_MINECRAFT_SERVER;
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -14,6 +12,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.kyori.adventure.text.ComponentLike;
+import com.google.gson.JsonObject;
+import com.mojang.brigadier.arguments.ArgumentType;
+import dev.jorel.commandapi.commandnodes.DifferentClientNode;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
@@ -54,7 +55,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	// References to utility classes
 	private static CommandAPIBukkit<?> instance;
 	private static InternalBukkitConfig config;
-	private PaperImplementations paper;
+	private PaperImplementations<Source> paper;
 	private CommandRegistrationStrategy<Source> commandRegistrationStrategy;
 
 	protected CommandAPIBukkit() {
@@ -70,7 +71,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 		}
 	}
 
-	public PaperImplementations getPaper() {
+	public PaperImplementations<Source> getPaper() {
 		return paper;
 	}
 
@@ -128,7 +129,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 		}
 
-		boolean isPaperPresent = false;
+		boolean isPaperPresent;
 
 		try {
 			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
@@ -141,7 +142,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 		}
 
-		boolean isFoliaPresent = false;
+		boolean isFoliaPresent;
 
 		try {
 			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
@@ -152,7 +153,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			isFoliaPresent = false;
 		}
 
-		paper = new PaperImplementations(isPaperPresent, isFoliaPresent, this);
+		paper = new PaperImplementations<>(isPaperPresent, isFoliaPresent, this);
 
 		commandRegistrationStrategy = createCommandRegistrationStrategy();
 	}
@@ -329,6 +330,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public void registerCommandNode(LiteralCommandNode<Source> node, String namespace) {
+		DifferentClientNode.rewriteAllChildren(null, node, true);
 		commandRegistrationStrategy.registerCommandNode(node, namespace);
 	}
 
@@ -379,8 +381,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	@Unimplemented(because = {REQUIRES_MINECRAFT_SERVER, VERSION_SPECIFIC_IMPLEMENTATION})
-	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> brigadierDispatcher) throws IOException;
-	
+	public abstract Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type);
+
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER) // What are the odds?
 	public abstract <T> T getMinecraftServer();
 

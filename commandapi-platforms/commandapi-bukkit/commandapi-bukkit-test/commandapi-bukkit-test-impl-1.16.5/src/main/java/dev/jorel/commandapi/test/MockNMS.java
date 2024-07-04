@@ -4,14 +4,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
-import java.io.File;
-import java.io.IOException;
 import java.security.CodeSource;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
+import com.google.gson.JsonObject;
+import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.Bukkit;
@@ -40,7 +40,6 @@ import org.mockito.Mockito;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -115,7 +114,7 @@ public class MockNMS extends Enums {
 
 		// Initialize baseNMS's paper field (with paper specific implementations disabled)
 		MockPlatform.setField(CommandAPIBukkit.class, "paper",
-			super.baseNMS, new PaperImplementations(false, false, super.baseNMS));
+			super.baseNMS, new PaperImplementations<>(false, false, super.baseNMS));
 
 		// Initialize WorldVersion (game version)
 		SharedConstants.b();
@@ -357,11 +356,9 @@ public class MockNMS extends Enums {
 		return baseNMS.getNativeProxyCommandSender(cmdCtx);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher dispatcher)
-		throws IOException {
-		baseNMS.createDispatcherFile(file, dispatcher);
+	public Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type) {
+		return baseNMS.getArgumentTypeProperties(type);
 	}
 
 	@Override

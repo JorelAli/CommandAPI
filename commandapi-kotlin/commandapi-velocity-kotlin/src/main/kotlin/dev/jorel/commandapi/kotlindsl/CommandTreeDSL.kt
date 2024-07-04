@@ -37,8 +37,6 @@ inline fun CommandTree.greedyStringArgument(nodeName: String, block: Argument<*>
 inline fun CommandTree.literalArgument(literal: String, block: Argument<*>.() -> Unit = {}): CommandTree= then(LiteralArgument.of(literal, literal).apply(block))
 inline fun CommandTree.literalArgument(nodeName: String, literal: String, block: Argument<*>.() -> Unit = {}): CommandTree= then(LiteralArgument.of(nodeName, literal).apply(block))
 
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, listOf(literals))", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun CommandTree.multiLiteralArgument(vararg literals: String, block: Argument<*>.() -> Unit = {}): CommandTree= then(MultiLiteralArgument(literals).apply(block))
 @Deprecated("This method has been deprecated since version 9.1.0", ReplaceWith("multiLiteralArgument(nodeName, literals)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun CommandTree.multiLiteralArgument(nodeName: String, literals: List<String>, block: Argument<*>.() -> Unit = {}): CommandTree= then(MultiLiteralArgument(nodeName, literals).apply(block))
 
@@ -72,8 +70,6 @@ inline fun Argument<*>.greedyStringArgument(nodeName: String, block: Argument<*>
 inline fun Argument<*>.literalArgument(literal: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument.of(literal, literal).apply(block))
 inline fun Argument<*>.literalArgument(nodeName: String, literal: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(LiteralArgument.of(nodeName, literal).apply(block))
 
-@Deprecated("This version has been deprecated since version 9.0.2", ReplaceWith("multiLiteralArgument(nodeName, listOf(literals))", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
-inline fun Argument<*>.multiLiteralArgument(vararg literals: String, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MultiLiteralArgument(literals).apply(block))
 @Deprecated("This method has been deprecated since version 9.1.0", ReplaceWith("multiLiteralArgument(nodeName, literals)", "dev.jorel.commandapi.kotlindsl.*"), DeprecationLevel.WARNING)
 inline fun Argument<*>.multiLiteralArgument(nodeName: String, literals: List<String>, block: Argument<*>.() -> Unit = {}): Argument<*> = then(MultiLiteralArgument(nodeName, literals).apply(block))
 

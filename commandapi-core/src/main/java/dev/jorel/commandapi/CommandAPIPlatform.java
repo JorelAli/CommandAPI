@@ -1,15 +1,16 @@
 package dev.jorel.commandapi;
 
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -127,15 +128,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 */
 	public abstract CommandDispatcher<Source> getBrigadierDispatcher();
 
-	/**
-	 * Creates a JSON file that describes the hierarchical structure of the commands
-	 * that have been registered by the server.
-	 *
-	 * @param file       The JSON file to write to
-	 * @param dispatcher The Brigadier CommandDispatcher
-	 * @throws IOException When the file fails to be written to
-	 */
-	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> dispatcher) throws IOException;
+	public abstract Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type);
 
 	/**
 	 * @return A new default Logger meant for the CommandAPI to use

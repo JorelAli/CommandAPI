@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,7 +80,7 @@ class ArgumentFlagsTests extends TestBase {
 				              "children": {
 				                "value": {
 				                  "type": "argument",
-				                  "parser": "brigadier:string",
+				                  "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 				                  "properties": {
 				                    "type": "word"
 				                  },
@@ -92,6 +91,23 @@ class ArgumentFlagsTests extends TestBase {
 				                }
 				              }
 				            },
+				            "end1": {
+				              "type": "literal",
+				              "children": {
+				                "value": {
+				                  "type": "argument",
+				                  "argumentType": "com.mojang.brigadier.arguments.IntegerArgumentType",
+				                  "children": {
+				                    "argument": [
+				                      "test",
+				                      "flags",
+				                      "end2",
+				                      "argument"
+				                    ]
+				                  }
+				                }
+				              }
+				            },
 				            "loop2": {
 				              "type": "literal",
 				              "redirect": [
@@ -99,31 +115,12 @@ class ArgumentFlagsTests extends TestBase {
 				                "flags"
 				              ]
 				            },
-				            "end1": {
-				              "type": "literal",
-				              "children": {
-				                "value": {
-				                  "type": "argument",
-				                  "parser": "brigadier:integer",
-				                  "children": {
-				                    "argument": {
-				                      "type": "argument",
-				                      "parser": "brigadier:string",
-				                      "properties": {
-				                        "type": "word"
-				                      },
-				                      "executable": true
-				                    }
-				                  }
-				                }
-				              }
-				            },
 				            "end2": {
 				              "type": "literal",
 				              "children": {
 				                "argument": {
 				                  "type": "argument",
-				                  "parser": "brigadier:string",
+				                  "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 				                  "properties": {
 				                    "type": "word"
 				                  },
@@ -547,9 +544,6 @@ class ArgumentFlagsTests extends TestBase {
 				new CustomArgument<>(
 					new FlagsArgument("color")
 						.loopingBranch(
-							// A DynamicMultiLiteral would be perfect here :P
-							//  https://github.com/JorelAli/CommandAPI/issues/513
-							//  At least, this is how I imagine it would work
 							new StringArgument("channel").replaceSuggestions(ArgumentSuggestions.strings(info -> {
 								Set<String> channelsLeft = new HashSet<>(Set.of("-r", "-g", "-b"));
 								for(CommandArguments previousChannels : info.previousArgs().<List<CommandArguments>>getUnchecked("color")) {

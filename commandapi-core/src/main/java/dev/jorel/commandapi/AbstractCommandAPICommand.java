@@ -20,17 +20,16 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
+import dev.jorel.commandapi.arguments.AbstractArgument.TerminalNodeModifier;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 import dev.jorel.commandapi.exceptions.OptionalArgumentException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * A builder used to create commands to be registered by the CommandAPI.
@@ -261,16 +260,25 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			// Note that `executor#hasAnyExecutors` must be true here
 			//  If not, then `checkPreconditions` would have thrown a `MissingCommandExecutorException` 
-			Function<List<Argument>, Command<Source>> executorCreator = args -> handler.generateBrigadierCommand(args, executor);
+			TerminalNodeModifier<Argument, CommandSender, Source> executorCreator = (builder, args) ->
+				builder.executes(handler.generateBrigadierCommand(args, executor)).build();
 
 			// Stack required arguments
 			// Only the last required argument is executable
-			previousNodeInformation = AbstractArgument.stackArguments(requiredArguments, previousNodeInformation, previousArguments, previousArgumentNames, executorCreator);
+			previousNodeInformation = AbstractArgument.stackArguments(
+				requiredArguments, previousNodeInformation,
+				previousArguments, previousArgumentNames,
+				executorCreator
+			);
 
 			// Add optional arguments
 			for (Argument argument : optionalArguments) {
 				// All optional arguments are executable
-				previousNodeInformation = argument.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames, executorCreator);
+				previousNodeInformation = argument.addArgumentNodes(
+					previousNodeInformation,
+					previousArguments, previousArgumentNames,
+					executorCreator
+				);
 			}
 
 			// Create registered nodes now that all children are generated

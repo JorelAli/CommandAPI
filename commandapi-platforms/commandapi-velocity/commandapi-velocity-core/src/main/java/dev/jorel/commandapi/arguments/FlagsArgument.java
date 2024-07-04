@@ -2,8 +2,8 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.velocitypowered.api.command.CommandSource;
 import dev.jorel.commandapi.executors.CommandArguments;
-import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * @apiNote Yields a {@code List<}{@link CommandArguments}{@code >}
  */
 @SuppressWarnings("rawtypes")
-public class FlagsArgument extends Argument<List> implements FlagsArgumentCommon<FlagsArgument, Argument<?>, CommandSender> {
+public class FlagsArgument extends Argument<List> implements FlagsArgumentCommon<FlagsArgument, Argument<?>, CommandSource> {
 	// Setup information
 	private final List<List<Argument<?>>> loopingBranches = new ArrayList<>();
 	private final List<List<Argument<?>>> terminalBranches = new ArrayList<>();
@@ -71,7 +71,7 @@ public class FlagsArgument extends Argument<List> implements FlagsArgumentCommon
 	}
 
 	@Override
-	public <Source> NodeInformation<CommandSender, Source> addArgumentNodes(NodeInformation<CommandSender, Source> previousNodeInformation, List<Argument<?>> previousArguments, List<String> previousArgumentNames, TerminalNodeModifier<Argument<?>, CommandSender, Source> terminalNodeModifier) {
+	public <Source> NodeInformation<CommandSource, Source> addArgumentNodes(NodeInformation<CommandSource, Source> previousNodeInformation, List<Argument<?>> previousArguments, List<String> previousArgumentNames, TerminalNodeModifier<Argument<?>, CommandSource, Source> terminalNodeModifier) {
 		return FlagsArgumentCommon.super.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames, terminalNodeModifier);
 	}
 }

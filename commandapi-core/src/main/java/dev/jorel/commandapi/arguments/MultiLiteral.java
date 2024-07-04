@@ -8,6 +8,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
 import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
+import dev.jorel.commandapi.arguments.AbstractArgument.TerminalNodeModifier;
 import dev.jorel.commandapi.commandnodes.NamedLiteralArgumentBuilder;
 
 import java.util.ArrayList;
@@ -67,9 +68,9 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	List<Argument> getCombinedArguments();
 
 	/**
-	 * Links to {@link AbstractArgument#finishBuildingNode(ArgumentBuilder, List, Function)}.
+	 * Links to {@link AbstractArgument#finishBuildingNode(ArgumentBuilder, List, TerminalNodeModifier)}.
 	 */
-	<Source> CommandNode<Source> finishBuildingNode(ArgumentBuilder<Source, ?> rootBuilder, List<Argument> previousArguments, Function<List<Argument>, Command<Source>> terminalExecutorCreator);
+	<Source> CommandNode<Source> finishBuildingNode(ArgumentBuilder<Source, ?> rootBuilder, List<Argument> previousArguments, TerminalNodeModifier<Argument, CommandSender, Source> terminalNodeModifier);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDING METHODS                                                                             //
@@ -93,7 +94,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Overrides {@link AbstractArgument#linkNode(NodeInformation, CommandNode, List, List, Function)}.
+	 * Overrides {@link AbstractArgument#linkNode(NodeInformation, CommandNode, List, List, TerminalNodeModifier)}.
 	 * <p>
 	 * Normally, Arguments are only represented by a single node, and so only need to link one node. However, a MultiLiteral
 	 * represents multiple literal node paths, which also need to be generated and inserted into the node structure.
@@ -101,7 +102,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	default <Source> NodeInformation<CommandSender, Source> linkNode(
 		NodeInformation<CommandSender, Source> previousNodeInformation, CommandNode<Source> rootNode,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
-		Function<List<Argument>, Command<Source>> terminalExecutorCreator
+		TerminalNodeModifier<Argument, CommandSender, Source> terminalNodeModifier
 	) {
 		List<CommandNode<Source>> newNodes = new ArrayList<>();
 		// Add root node to previous
@@ -122,7 +123,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				LiteralArgumentBuilder.literal(literals.next());
 
 			// Finish building node
-			CommandNode<Source> literalNode = finishBuildingNode(literalBuilder, previousArguments, terminalExecutorCreator);
+			CommandNode<Source> literalNode = finishBuildingNode(literalBuilder, previousArguments, terminalNodeModifier);
 
 			// Add node to previous
 			for(CommandNode<Source> previousNode : previousNodeInformation.lastCommandNodes()) {
@@ -139,7 +140,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				new RegisteredCommand.Node<>(
 					nodeName, getClass().getSimpleName(), 
 					"(" + String.join("|", getLiterals())+ ")",
-					getCombinedArguments().isEmpty() && terminalExecutorCreator != null, 
+					rootNode.getCommand() != null,
 					getArgumentPermission(), getRequirements(),
 					children
 				)
@@ -147,6 +148,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		);
 
 		// Stack on combined arguments and return last nodes
-		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
+		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalNodeModifier);
 	}
 }

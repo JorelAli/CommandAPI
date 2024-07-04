@@ -8,6 +8,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.RegisteredCommand;
 import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
+import dev.jorel.commandapi.arguments.AbstractArgument.TerminalNodeModifier;
 import dev.jorel.commandapi.commandnodes.NamedLiteralArgumentBuilder;
 
 import java.util.List;
@@ -87,14 +88,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	/**
-	 * Overrides {@link AbstractArgument#linkNode(NodeInformation, CommandNode, List, List, Function)}.
+	 * Overrides {@link AbstractArgument#linkNode(NodeInformation, CommandNode, List, List, TerminalNodeModifier)}.
 	 * <p>
-	 * Normally, Arguments use thier node name as their help string. However, a Literal uses its literal as the help string.
+	 * Normally, Arguments use their node name as their help string. However, a Literal uses its literal as the help string.
 	 */
 	default <Source> NodeInformation<CommandSender, Source> linkNode(
 		NodeInformation<CommandSender, Source> previousNodeInformation, CommandNode<Source> rootNode,
 		List<Argument> previousArguments, List<String> previousArgumentNames,
-		Function<List<Argument>, Command<Source>> terminalExecutorCreator
+		TerminalNodeModifier<Argument, CommandSender, Source> terminalNodeModifier
 	) {
 		// Add rootNode to the previous nodes
 		for(CommandNode<Source> previousNode : previousNodeInformation.lastCommandNodes()) {
@@ -108,7 +109,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			children -> previousNodeInformation.childrenConsumer().createNodeWithChildren(List.of(
 				new RegisteredCommand.Node<>(
 					getNodeName(), getClass().getSimpleName(), getLiteral(), 
-					getCombinedArguments().isEmpty() && terminalExecutorCreator != null, 
+					rootNode.getCommand() != null,
 					getArgumentPermission(), getRequirements(),
 					children
 				)
@@ -116,6 +117,6 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		);
 
 		// Stack on combined arguments and return last nodes
-		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalExecutorCreator);
+		return AbstractArgument.stackArguments(getCombinedArguments(), nodeInformation, previousArguments, previousArgumentNames, terminalNodeModifier);
 	}
 }

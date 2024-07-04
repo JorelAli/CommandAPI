@@ -5,8 +5,10 @@ import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
 import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import com.google.common.collect.Streams;
+import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
@@ -59,8 +61,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mockito.Mockito;
 
-import java.io.File;
-import java.io.IOException;
 import java.security.CodeSource;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -103,7 +103,7 @@ public class MockNMS extends Enums {
 
 		// Initialize baseNMS's paper field (with paper specific implementations disabled)
 		MockPlatform.setField(CommandAPIBukkit.class, "paper",
-			super.baseNMS, new PaperImplementations(false, false, super.baseNMS));
+			super.baseNMS, new PaperImplementations<>(false, false, super.baseNMS));
 
 //		initializeArgumentsInArgumentTypeInfos();
 
@@ -351,11 +351,9 @@ public class MockNMS extends Enums {
 		return baseNMS.getNativeProxyCommandSender(cmdCtx);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher dispatcher)
-		throws IOException {
-		baseNMS.createDispatcherFile(file, dispatcher);
+	public Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type) {
+		return baseNMS.getArgumentTypeProperties(type);
 	}
 
 	@Override

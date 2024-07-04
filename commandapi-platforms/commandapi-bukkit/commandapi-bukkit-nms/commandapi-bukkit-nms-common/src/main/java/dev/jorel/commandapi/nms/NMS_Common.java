@@ -20,7 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import com.mojang.brigadier.CommandDispatcher;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -63,8 +63,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -292,8 +290,9 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19")
-	public abstract void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException;
+	@Unimplemented(because = NAME_CHANGED, introducedIn = "1.19",
+		from = "ArgumentTypes#serializeToJson", to = "ArgumentUtils#serializeArgumentToJson")
+	public abstract Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type);
 
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.20.2")

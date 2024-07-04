@@ -21,8 +21,7 @@
 package dev.jorel.commandapi.nms;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -129,12 +128,9 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -157,6 +153,7 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
+	private static final SafeStaticMethodHandle<Void> argumentUtilsSerializeArgumentToJson;
 
 	// From net.minecraft.server.commands.LocateCommand
 	private static final DynamicCommandExceptionType ERROR_BIOME_INVALID;
@@ -187,6 +184,8 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		serverFunctionLibraryDispatcher = CommandAPIHandler.getField(ServerFunctionLibrary.class, "i", "dispatcher");
+
+		argumentUtilsSerializeArgumentToJson = SafeStaticMethodHandle.ofOrNull(ArgumentUtils.class, "a", "serializeArgumentToJson", void.class, JsonObject.class, ArgumentType.class);
 
 		ERROR_BIOME_INVALID = new DynamicCommandExceptionType(
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
@@ -342,10 +341,10 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public final void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher)
-            throws IOException {
-		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
-			.toJson(ArgumentUtils.serializeNodeToJson(dispatcher, dispatcher.getRoot())));
+	public Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type) {
+		JsonObject result = new JsonObject();
+		argumentUtilsSerializeArgumentToJson.invokeOrNull(result, type);
+		return Optional.ofNullable((JsonObject) result.get("properties"));
 	}
 
 	@Override
