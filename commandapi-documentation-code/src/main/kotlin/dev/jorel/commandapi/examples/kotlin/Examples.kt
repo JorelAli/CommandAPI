@@ -421,7 +421,7 @@ val noSelectorSuggestions = PlayerArgument("target")
 /* ANCHOR: argumentEntities3 */
 CommandAPICommand("warp")
     .withArguments(noSelectorSuggestions)
-    .executesPlayer(PlayerCommandExecutor { player, args ->
+    .executesPlayer(NormalExecutor<Player, Any> { player, args ->
         val target = args["target"] as Player
         player.teleport(target)
     })
