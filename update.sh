@@ -40,6 +40,9 @@ sed -i "s/PROJECT_NUMBER         = $oldVer/PROJECT_NUMBER         = $newVer/" Do
 # Bukkit #
 ##########
 
+# automated-tests-shaded README dose not reference a dependency version
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/bukkit/automated-tests-shaded/pom.xml
+
 # commandtrees README dose not reference a dependency version
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/bukkit/commandtrees/pom.xml
 
