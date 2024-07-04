@@ -22,10 +22,7 @@ package dev.jorel.commandapi.nms;
 
 import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.NAME_CHANGED;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +32,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
+import com.google.gson.JsonObject;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.wrappers.*;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -75,9 +73,6 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Team;
 
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -148,6 +143,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
 	private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
+	private static final SafeStaticMethodHandle<Void> argumentTypesSerializeToJson;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -156,6 +152,8 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "o", "usesSelector");
 		itemInput = SafeVarHandle.ofOrNull(ItemInput.class, "c", "tag", CompoundTag.class);
+
+		argumentTypesSerializeToJson = SafeStaticMethodHandle.ofOrNull(ArgumentTypes.class, "a", "serializeToJson", void.class, JsonObject.class, ArgumentType.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -250,10 +248,10 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public void createDispatcherFile(File file, CommandDispatcher<CommandSourceStack> dispatcher) throws IOException {
-		Files.write(
-				new GsonBuilder().setPrettyPrinting().create()
-					.toJson(ArgumentTypes.serializeNodeToJson(dispatcher, dispatcher.getRoot())), file, StandardCharsets.UTF_8);
+	public Optional<JsonObject> getArgumentTypeProperties(ArgumentType<?> type) {
+		JsonObject result = new JsonObject();
+		argumentTypesSerializeToJson.invokeOrNull(result, type);
+		return Optional.ofNullable((JsonObject) result.get("properties"));
 	}
 
 	@Override

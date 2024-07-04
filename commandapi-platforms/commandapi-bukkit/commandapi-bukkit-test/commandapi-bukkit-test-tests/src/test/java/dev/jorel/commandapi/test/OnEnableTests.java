@@ -85,7 +85,7 @@ class OnEnableTests extends TestBase {
 			      "children": {
 			        "argument": {
 			          "type": "argument",
-			          "parser": "brigadier:string",
+			          "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 			          "properties": {
 			            "type": "word"
 			          },
@@ -179,21 +179,34 @@ class OnEnableTests extends TestBase {
 		Mockito.verify(updateCommandsPlayer, Mockito.times(2)).updateCommands();
 
 		// Make sure main command was removed from tree
-		// Note: The redirects for alias1 and alias2 are no longer listed. This is expected behavior.
-		//  The redirect entry is supposed to point to where the target node is located in the dispatcher.
-		//  Since the main node "command" doesn't exist anymore, the json serializer can't generate a path
-		//  to the target node, and so it just doesn't add anything.
 		//  While the "command" node is no longer in the tree, the alias nodes still have a reference to it
-		//  in their redirect modifier, so they still function perfectly fine as commands.
+		//  as their redirect, so they still function perfectly fine as commands.
 		assertEquals("""
 			{
 			  "type": "root",
 			  "children": {
 			    "alias1": {
-			      "type": "literal"
+			      "type": "literal",
+			      "redirect": {
+			        "type": "literal",
+			        "children": {
+			          "argument": {
+			            "type": "argument",
+			            "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
+			            "properties": {
+			              "type": "word"
+			            },
+			            "executable": true
+			          }
+			        }
+			      }
 			    },
 			    "alias2": {
-			      "type": "literal"
+			      "type": "literal",
+			      "redirect": [
+			        "alias1",
+			        "redirect command"
+			      ]
 			    }
 			  }
 			}""", getDispatcherString());

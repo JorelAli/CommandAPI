@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.commandnodes;
 
+import com.google.gson.JsonArray;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.StringReader;
@@ -19,7 +20,19 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
-public class DynamicMultiLiteralCommandNode<CommandSender, Source> extends DifferentClientNode<Source, String> {
+public class DynamicMultiLiteralCommandNode<CommandSender, Source> extends DifferentClientNode.Argument<Source, String> {
+	static {
+		NodeTypeSerializer.registerSerializer(DynamicMultiLiteralCommandNode.class, (target, type) -> {
+			target.addProperty("type", "dynamicMultiLiteral");
+			target.addProperty("isListed", type.isListed);
+
+			LiteralsCreator<?> literalsCreator = type.literalsCreator;
+			JsonArray literals = new JsonArray();
+			literalsCreator.createLiterals(null).forEach(literals::add);
+			target.add("defaultLiterals", literals);
+		});
+	}
+
 	private final boolean isListed;
 	private final LiteralsCreator<CommandSender> literalsCreator;
 
@@ -46,7 +59,27 @@ public class DynamicMultiLiteralCommandNode<CommandSender, Source> extends Diffe
 
 	// On the client, this node looks like a bunch of literal nodes
 	@Override
-	public List<CommandNode<Source>> rewriteNodeForClient(Source client) {
+	public List<CommandNode<Source>> rewriteNodeForClient(CommandNode<Source> node, Source client, boolean onRegister) {
+		// We only want to rewrite when actually being sent to a client
+		if (onRegister) {
+			// However, we do need to ensure the node currently in the tree is a DynamicMultiLiteralCommandNode,
+			//  and not a copied argument, so we can be properly parsed server-side
+			if (node instanceof DynamicMultiLiteralCommandNode<?,?>) return null; // No rewrite
+
+			CommandNode<Source> result = DynamicMultiLiteralArgumentBuilder
+				.<CommandSender, Source>dynamicMultiLiteral(this.getName(), this.isListed, this.literalsCreator)
+				.executes(node.getCommand())
+				.requires(node.getRequirement())
+				.forward(node.getRedirect(), node.getRedirectModifier(), node.isFork())
+				.build();
+
+			for (CommandNode<Source> child : node.getChildren()) {
+				result.addChild(child);
+			}
+
+			return List.of(result);
+		}
+
 		CommandAPIHandler<?, CommandSender, Source> commandAPIHandler = CommandAPIHandler.getInstance();
 		CommandSender sender = commandAPIHandler.getPlatform().getCommandSenderFromCommandSource(client);
 		List<String> literals = literalsCreator.createLiterals(sender);
@@ -57,10 +90,10 @@ public class DynamicMultiLiteralCommandNode<CommandSender, Source> extends Diffe
 		for (String literal : literals) {
 			LiteralCommandNode<Source> clientNode = new LiteralCommandNode<>(
 				literal,
-				getCommand(), getRequirement(),
-				getRedirect(), getRedirectModifier(), isFork()
+				node.getCommand(), node.getRequirement(),
+				node.getRedirect(), node.getRedirectModifier(), node.isFork()
 			);
-			for (CommandNode<Source> child : getChildren()) {
+			for (CommandNode<Source> child : node.getChildren()) {
 				clientNode.addChild(child);
 			}
 			clientNodes.add(clientNode);

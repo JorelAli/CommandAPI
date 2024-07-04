@@ -294,7 +294,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			//  can still produce interesting server-client de-sync behavior that we want to use.
 			CommandSender console = Bukkit.getConsoleSender();
 			Source source = CommandAPIBukkit.<Source>get().getBrigadierSourceFromCommandSender(console);
-			DifferentClientNode.rewriteAllChildren(source, node);
+			DifferentClientNode.rewriteAllChildren(source, node, false);
 		}
 
 		String name = node.getLiteral();

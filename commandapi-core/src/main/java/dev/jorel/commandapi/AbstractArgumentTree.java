@@ -3,6 +3,7 @@ package dev.jorel.commandapi;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.AbstractArgument.NodeInformation;
+import dev.jorel.commandapi.arguments.AbstractArgument.TerminalNodeModifier;
 import dev.jorel.commandapi.exceptions.MissingCommandExecutorException;
 
 import java.util.ArrayList;
@@ -110,9 +111,21 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			throw new MissingCommandExecutorException(previousArguments, argument);
 		}
 
+		// Create executor, if it exists
+		TerminalNodeModifier<Argument, CommandSender, Source> terminalNodeModifier = (builder, args) -> {
+			if (executor.hasAnyExecutors()) {
+				builder.executes(handler.generateBrigadierCommand(args, executor));
+			}
+
+			return builder.build();
+		};
+
 		// Create node for this argument
-		previousNodeInformation = argument.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames,
-			executor.hasAnyExecutors() ? args -> handler.generateBrigadierCommand(args, executor) : null);
+		previousNodeInformation = argument.addArgumentNodes(
+			previousNodeInformation,
+			previousArguments, previousArgumentNames,
+			terminalNodeModifier
+		);
 
 		// Collect children into our own list
 		List<RegisteredCommand.Node<CommandSender>> childrenNodeInformation = new ArrayList<>();

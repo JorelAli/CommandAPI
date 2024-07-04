@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -30,7 +29,6 @@ import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.executors.CommandArguments;
 
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * An argument that represents multiple LiteralArguments
@@ -54,16 +52,6 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 			throw new BadLiteralException(false);
 		}
 		this.literals = literals;
-	}
-
-	/**
-	 * A multiliteral argument. Takes in string literals which cannot be modified
-	 * @param literals the literals that this argument represents
-	 * @deprecated Use {@link MultiLiteralArgument#MultiLiteralArgument(String, String...)} instead
-	 */
-	@Deprecated(since = "9.0.2", forRemoval = true)
-	public MultiLiteralArgument(final String[] literals) {
-		this(null, literals);
 	}
 
 	/**
@@ -110,7 +98,7 @@ public class MultiLiteralArgument extends Argument<String> implements MultiLiter
 	}
 
 	@Override
-	public <Source> NodeInformation<CommandSource, Source> linkNode(NodeInformation<CommandSource, Source> previousNodeInformation, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator) {
-		return MultiLiteral.super.linkNode(previousNodeInformation, rootNode, previousArguments, previousArgumentNames, terminalExecutorCreator);
+	public <Source> NodeInformation<CommandSource, Source> linkNode(NodeInformation<CommandSource, Source> previousNodeInformation, CommandNode<Source> rootNode, List<Argument<?>> previousArguments, List<String> previousArgumentNames, TerminalNodeModifier<Argument<?>, CommandSource, Source> terminalNodeModifier) {
+		return MultiLiteral.super.linkNode(previousNodeInformation, rootNode, previousArguments, previousArgumentNames, terminalNodeModifier);
 	}
 }

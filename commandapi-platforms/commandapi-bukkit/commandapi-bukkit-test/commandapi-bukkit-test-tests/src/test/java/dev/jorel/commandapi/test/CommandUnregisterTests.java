@@ -32,7 +32,7 @@ class CommandUnregisterTests extends TestBase {
 			      "children": {
 			        "string": {
 			          "type": "argument",
-			          "parser": "brigadier:string",
+			          "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 			          "properties": {
 			            "type": "word"
 			          },
@@ -45,7 +45,7 @@ class CommandUnregisterTests extends TestBase {
 			      "children": {
 			        "string": {
 			          "type": "argument",
-			          "parser": "brigadier:string",
+			          "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 			          "properties": {
 			            "type": "word"
 			          },
@@ -65,7 +65,7 @@ class CommandUnregisterTests extends TestBase {
 			      "children": {
 			        "string": {
 			          "type": "argument",
-			          "parser": "brigadier:string",
+			          "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 			          "properties": {
 			            "type": "word"
 			          },
@@ -85,7 +85,7 @@ class CommandUnregisterTests extends TestBase {
 			      "children": {
 			        "string": {
 			          "type": "argument",
-			          "parser": "brigadier:string",
+			          "argumentType": "com.mojang.brigadier.arguments.StringArgumentType",
 			          "properties": {
 			            "type": "word"
 			          },

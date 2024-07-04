@@ -20,36 +20,41 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-
+import com.google.common.io.Files;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.arguments.AbstractArgument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.CustomProvidedArgument;
+import dev.jorel.commandapi.commandnodes.NodeTypeSerializer;
 import dev.jorel.commandapi.exceptions.CommandConflictException;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import dev.jorel.commandapi.preprocessor.RequireField;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * The "brains" behind the CommandAPI.
@@ -74,19 +79,27 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	private static final Map<ClassCache, Field> FIELDS;
 
 	private static final SafeVarHandle<CommandContext<?>, Map<String, ParsedArgument<?, ?>>> commandContextArguments;
-	// VarHandle seems incapable of setting final fields, so we have to use Field here
-	private static final Field commandNodeChildren;
-	private static final Field commandNodeLiterals;
-	private static final Field commandNodeArguments;
+	// I think these maps need to be raw since the parameter Source is inaccessible, but we want to cast to that
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeChildren;
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeLiterals;
+	private static final SafeVarHandle<CommandNode<?>, Map> commandNodeArguments;
 
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		FIELDS = new HashMap<>();
 
-		commandContextArguments = SafeVarHandle.ofOrNull(CommandContext.class, "arguments", "arguments", Map.class);
-		commandNodeChildren = CommandAPIHandler.getField(CommandNode.class, "children");
-		commandNodeLiterals = CommandAPIHandler.getField(CommandNode.class, "literals");
-		commandNodeArguments = CommandAPIHandler.getField(CommandNode.class, "arguments");
+		commandContextArguments = SafeVarHandle.ofOrNull(CommandContext.class, "arguments", Map.class);
+		commandNodeChildren = SafeVarHandle.ofOrNull(CommandNode.class, "children", Map.class);
+		commandNodeArguments = SafeVarHandle.ofOrNull(CommandNode.class, "arguments", Map.class);
+
+		SafeVarHandle<CommandNode<?>, Map> literals;
+		try {
+			literals = SafeVarHandle.of(CommandNode.class, "literals", "literals", Map.class);
+		} catch (ReflectiveOperationException ignored) {
+			// CommandNode.literals does not exist on Velocity, so we expect this to happen then
+			literals = null;
+		}
+		commandNodeLiterals = literals;
 	}
 
 	final CommandAPIPlatform<Argument, CommandSender, Source> platform;
@@ -416,11 +429,105 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 			try {
 				// Write the dispatcher json
-				platform.createDispatcherFile(file, platform.getBrigadierDispatcher());
+				writeDispatcherToFile(file, platform.getBrigadierDispatcher());
 			} catch (IOException e) {
 				CommandAPI.logError("Failed to write command registration info to " + file.getName() + ": " + e.getMessage());
 			}
 		}
+	}
+
+	/**
+	 * Creates a JSON file that describes the hierarchical structure of the commands
+	 * that have been registered by the server.
+	 *
+	 * @param file       The JSON file to write to
+	 * @param dispatcher The Brigadier CommandDispatcher
+	 * @throws IOException When the file fails to be written to
+	 */
+	public void writeDispatcherToFile(File file, CommandDispatcher<Source> dispatcher) throws IOException {
+		Files.asCharSink(file, StandardCharsets.UTF_8).write(new GsonBuilder().setPrettyPrinting().create()
+			.toJson(serializeNodeToJson(dispatcher.getRoot())));
+	}
+
+	private record Node<Source>(CommandNode<Source> commandNode, Consumer<JsonElement> resultConsumer, String[] path) {
+	}
+
+	public JsonObject serializeNodeToJson(CommandNode<Source> rootNode) {
+		// We preform a breadth-first traversal of the node tree to find the shortest path to each node.
+		//  We prefer that the first path found would not go through a redirect, so nodes found from redirects
+		//  are put in their own lower priority queue. It may be necessary to fully process these nodes though
+		//  in case a node is only accessible via redirects, which may happen for example when the main alias
+		//  of a command is removed.
+		Queue<Node<Source>> nodesToProcess = new LinkedList<>();
+		Queue<Node<Source>> redirectsToProcess = new LinkedList<>();
+		Map<CommandNode<Source>, JsonArray> shortestPath = new IdentityHashMap<>();
+
+		// Extract serialization of the rootNode as our result
+		JsonObject resultHolder = new JsonObject();
+		redirectsToProcess.offer(new Node<>(rootNode, result -> resultHolder.add("result", result), new String[0]));
+
+		Node<Source> node;
+		while ((node = redirectsToProcess.poll()) != null) {
+			nodesToProcess.offer(node);
+
+			while ((node = nodesToProcess.poll()) != null) {
+				CommandNode<Source> commandNode = node.commandNode;
+
+				// Add information to parent
+				JsonArray path = shortestPath.get(commandNode);
+				if (path != null) {
+					// Node has already appeared earlier in the traversal
+					node.resultConsumer.accept(path);
+					continue;
+				}
+				// This is the first time finding this node
+				path = new JsonArray();
+				for (String step : node.path) {
+					path.add(step);
+				}
+				shortestPath.put(commandNode, path);
+
+				JsonObject output = new JsonObject();
+				node.resultConsumer.accept(output);
+
+				// Node type
+				NodeTypeSerializer.addTypeInformation(output, commandNode);
+
+				// Children
+				Collection<CommandNode<Source>> children = commandNode.getChildren();
+				if (!children.isEmpty()) {
+					JsonObject childrenHolder = new JsonObject();
+					output.add("children", childrenHolder);
+
+					for (CommandNode<Source> child : children) {
+						String name = child.getName();
+
+						String[] newPath = new String[node.path.length + 1];
+						System.arraycopy(node.path, 0, newPath, 0, node.path.length);
+						newPath[node.path.length] = name;
+
+						nodesToProcess.offer(new Node<>(child, result -> childrenHolder.add(name, result), newPath));
+					}
+				}
+
+				// Command
+				if (commandNode.getCommand() != null) {
+					output.addProperty("executable", true);
+				}
+
+				// Redirect
+				CommandNode<Source> redirect = commandNode.getRedirect();
+				if (redirect != null) {
+					String[] newPath = new String[node.path.length + 1];
+					System.arraycopy(node.path, 0, newPath, 0, node.path.length);
+					newPath[node.path.length] = "redirect " + redirect.getName();
+
+					redirectsToProcess.offer(new Node<>(redirect, result -> output.add("redirect", result), newPath));
+				}
+			}
+		}
+
+		return resultHolder.getAsJsonObject("result");
 	}
 
 	public LiteralCommandNode<Source> namespaceNode(LiteralCommandNode<Source> original, String namespace) {
@@ -441,51 +548,16 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	}
 
 	public static <Source> Map<String, CommandNode<Source>> getCommandNodeChildren(CommandNode<Source> target) {
-		try {
-			return (Map<String, CommandNode<Source>>) commandNodeChildren.get(target);
-		} catch (IllegalAccessException e) {
-			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
-		}
-	}
-
-	public static <Source> void setCommandNodeChildren(CommandNode<Source> target, Map<String, CommandNode<Source>> children) {
-		try {
-			commandNodeChildren.set(target, children);
-		} catch (IllegalAccessException e) {
-			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
-		}
+		return (Map<String, CommandNode<Source>>) commandNodeChildren.get(target);
 	}
 
 	public static <Source> Map<String, LiteralCommandNode<Source>> getCommandNodeLiterals(CommandNode<Source> target) {
-		try {
-			return (Map<String, LiteralCommandNode<Source>>) commandNodeLiterals.get(target);
-		} catch (IllegalAccessException e) {
-			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
-		}
-	}
-
-	public static <Source> void setCommandNodeLiterals(CommandNode<Source> target, Map<String, LiteralCommandNode<Source>> literals) {
-		try {
-			commandNodeLiterals.set(target, literals);
-		} catch (IllegalAccessException e) {
-			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
-		}
+		if (commandNodeLiterals == null) return null;
+		return (Map<String, LiteralCommandNode<Source>>) commandNodeLiterals.get(target);
 	}
 
 	public static <Source> Map<String, ArgumentCommandNode<Source, ?>> getCommandNodeArguments(CommandNode<Source> target) {
-		try {
-			return (Map<String, ArgumentCommandNode<Source, ?>>) commandNodeArguments.get(target);
-		} catch (IllegalAccessException e) {
-			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
-		}
-	}
-
-	public static <Source> void setCommandNodeArguments(CommandNode<Source> target, Map<String, ArgumentCommandNode<Source, ?>> arguments) {
-		try {
-			commandNodeArguments.set(target, arguments);
-		} catch (IllegalAccessException e) {
-			throw new IllegalStateException("This shouldn't happen. The field should be accessible.", e);
-		}
+		return (Map<String, ArgumentCommandNode<Source, ?>>) commandNodeArguments.get(target);
 	}
 
 	////////////////////////////////

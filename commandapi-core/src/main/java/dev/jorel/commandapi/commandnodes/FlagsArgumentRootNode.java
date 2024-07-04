@@ -1,66 +1,72 @@
 package dev.jorel.commandapi.commandnodes;
 
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.AbstractArgument;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
-public class FlagsArgumentRootNode<Argument
-/// @cond DOX
-extends AbstractArgument<?, ?, Argument, CommandSender>
-/// @endcond
-, CommandSender, Source> extends LiteralCommandNode<Source> {
+public class FlagsArgumentRootNode<Source> extends LiteralCommandNode<Source> {
+	// Ending nodes that loop back should always share the children of this node
+	private final Set<CommandNode<Source>> loopEndNodes = new HashSet<>();
+
+	// Looping nodes also need a hidden reference to this node to fix their redirect when rewriting for the client
+	public static final String HIDDEN_NAME = "commandapi:hiddenRootNode";
+	private final HiddenRedirect<Source> hiddenRedirect;
+
+	public static final class HiddenRedirect<Source> extends ArgumentCommandNode<Source, String> {
+		public HiddenRedirect(CommandNode<Source> redirect) {
+			super(
+				HIDDEN_NAME, StringArgumentType.word(),
+				null, source -> true,
+				null, null, false,
+				null
+			);
+			this.addChild(redirect);
+		}
+
+		// Don't interfere with suggestions
+		@Override
+		public CompletableFuture<Suggestions> listSuggestions(CommandContext<Source> context, SuggestionsBuilder builder) throws CommandSyntaxException {
+			return builder.buildFuture();
+		}
+	}
+
 	public FlagsArgumentRootNode(LiteralCommandNode<Source> literalNode) {
 		super(
 			literalNode.getName(), literalNode.getCommand(), literalNode.getRequirement(),
 			literalNode.getRedirect(), literalNode.getRedirectModifier(), literalNode.isFork()
 		);
+		this.hiddenRedirect = new HiddenRedirect<>(this);
 	}
 
-	// Handle setting up the loop back
-	public void makeChildrenLoopBack(Collection<CommandNode<Source>> nodes, List<Argument> previousArguments) {
-		for (CommandNode<Source> node : nodes) {
-			// Nodes in the `children` map should redirect to this node, so the client doesn't see a child cycle
-			// Nodes in the `arguments`/`literals` maps should have all children of this node as children
-			//  and store all the flag values given
-			Map<String, CommandNode<Source>> children = CommandAPIHandler.getCommandNodeChildren(node);
-			Map<String, LiteralCommandNode<Source>> literals = CommandAPIHandler.getCommandNodeLiterals(node);
-			Map<String, ArgumentCommandNode<Source, ?>> arguments = CommandAPIHandler.getCommandNodeArguments(node);
+	// Handle loops back to here
+	public void addLoopEndNode(CommandNode<Source> node) {
+		node.addChild(hiddenRedirect);
+		loopEndNodes.add(node);
 
-			for (CommandNode<Source> child : node.getChildren()) {
-				// Clone the node, redirect it here, then put the clone into the children map
-				children.put(child.getName(), child.createBuilder().redirect(this).build());
+		for (CommandNode<Source> child : getChildren()) {
+			node.addChild(child);
+		}
+	}
 
-				// Wrap nodes in the `arguments`/`literals` map to extract the flag values on loop
-				CommandNode<Source> finalWrappedNode;
-				if (child instanceof LiteralCommandNode<Source> literalNode) {
-					LiteralCommandNode<Source> wrappedNode =
-						FlagsArgumentEndingNode.wrapNode(literalNode, getName(), previousArguments);
+	@Override
+	public void addChild(CommandNode<Source> node) {
+		super.addChild(node);
 
-					literals.put(literalNode.getName(), wrappedNode);
-					finalWrappedNode = wrappedNode;
-				} else if(child instanceof ArgumentCommandNode<Source,?> argumentNode) {
-					ArgumentCommandNode<Source, ?> wrappedNode =
-						FlagsArgumentEndingNode.wrapNode(argumentNode, getName(), previousArguments);
-
-					arguments.put(argumentNode.getName(), wrappedNode);
-					finalWrappedNode = wrappedNode;
-				} else {
-					throw new IllegalArgumentException("Node must be an argument or literal. Given " + child + " with type " + child.getClass().getName());
-				}
-
-				// These wrapped nodes should always have our children as their children, so let's share map instances
-				CommandAPIHandler.setCommandNodeChildren(finalWrappedNode, CommandAPIHandler.getCommandNodeChildren(this));
-				CommandAPIHandler.setCommandNodeLiterals(finalWrappedNode, CommandAPIHandler.getCommandNodeLiterals(this));
-				CommandAPIHandler.setCommandNodeArguments(finalWrappedNode, CommandAPIHandler.getCommandNodeArguments(this));
-			}
+		for (CommandNode<Source> loopEndNode : loopEndNodes) {
+			loopEndNode.addChild(node);
 		}
 	}
 

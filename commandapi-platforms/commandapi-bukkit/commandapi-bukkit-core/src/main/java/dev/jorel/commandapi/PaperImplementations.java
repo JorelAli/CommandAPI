@@ -99,7 +99,7 @@ public class PaperImplementations<Source> implements Listener {
 
 		// Rewrite nodes to their client-side version when commands are sent to a client
 		Source source = nmsInstance.getBrigadierSourceFromCommandSender(event.getPlayer());
-		DifferentClientNode.rewriteAllChildren(source, (RootCommandNode<Source>) event.getCommandNode());
+		DifferentClientNode.rewriteAllChildren(source, (RootCommandNode<Source>) event.getCommandNode(), false);
 	}
 
 	/**

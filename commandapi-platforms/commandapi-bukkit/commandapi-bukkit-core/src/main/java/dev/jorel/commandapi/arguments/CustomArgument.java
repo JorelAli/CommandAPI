@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.context.CommandContext;
@@ -39,7 +38,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -202,17 +200,16 @@ public class CustomArgument<T, B> extends Argument<T> {
 	public <Source> NodeInformation<CommandSender, Source> addArgumentNodes(
 		NodeInformation<CommandSender, Source> previousNodeInformation,
 		List<Argument<?>> previousArguments, List<String> previousArgumentNames,
-		Function<List<Argument<?>>, Command<Source>> terminalExecutorCreator
+		TerminalNodeModifier<Argument<?>, CommandSender, Source> terminalNodeModifier
 	) {
 		// Node structure is determined by the base argument
 		previousNodeInformation = base.addArgumentNodes(previousNodeInformation, previousArguments, previousArgumentNames,
 			// Replace the base argument with this argument when executing the command
-			terminalExecutorCreator == null ? null :
-				args -> {
-					List<Argument<?>> newArgs = new ArrayList<>(args);
-					newArgs.set(args.indexOf(base), this);
-					return terminalExecutorCreator.apply(newArgs);
-				}
+			(builder, args) -> {
+				List<Argument<?>> newArgs = new ArrayList<>(args);
+				newArgs.set(args.indexOf(base), this);
+				return terminalNodeModifier.finishTerminalNode(builder, newArgs);
+			}
 		);
 
 		// Replace the base argument with this argument when executing the command

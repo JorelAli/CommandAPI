@@ -109,35 +109,41 @@ class ArgumentMultiLiteralTests extends TestBase {
 				        "option2": {
 				          "type": "literal",
 				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option3": {
-				              "type": "literal",
-				              "executable": true
-				            }
+				            "option1": [
+				              "command1",
+				              "option1",
+				              "option1"
+				            ],
+				            "option2": [
+				              "command1",
+				              "option1",
+				              "option2"
+				            ],
+				            "option3": [
+				              "command1",
+				              "option1",
+				              "option3"
+				            ]
 				          }
 				        },
 				        "option3": {
 				          "type": "literal",
 				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option3": {
-				              "type": "literal",
-				              "executable": true
-				            }
+				            "option1": [
+				              "command1",
+				              "option1",
+				              "option1"
+				            ],
+				            "option2": [
+				              "command1",
+				              "option1",
+				              "option2"
+				            ],
+				            "option3": [
+				              "command1",
+				              "option1",
+				              "option3"
+				            ]
 				          }
 				        }
 				      }
@@ -165,35 +171,41 @@ class ArgumentMultiLiteralTests extends TestBase {
 				        "option2": {
 				          "type": "literal",
 				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option3": {
-				              "type": "literal",
-				              "executable": true
-				            }
+				            "option1": [
+				              "command2",
+				              "option1",
+				              "option1"
+				            ],
+				            "option2": [
+				              "command2",
+				              "option1",
+				              "option2"
+				            ],
+				            "option3": [
+				              "command2",
+				              "option1",
+				              "option3"
+				            ]
 				          }
 				        },
 				        "option3": {
 				          "type": "literal",
 				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "executable": true
-				            },
-				            "option3": {
-				              "type": "literal",
-				              "executable": true
-				            }
+				            "option1": [
+				              "command2",
+				              "option1",
+				              "option1"
+				            ],
+				            "option2": [
+				              "command2",
+				              "option1",
+				              "option2"
+				            ],
+				            "option3": [
+				              "command2",
+				              "option1",
+				              "option3"
+				            ]
 				          }
 				        }
 				      }
@@ -220,14 +232,18 @@ class ArgumentMultiLiteralTests extends TestBase {
 				            "option2": {
 				              "type": "literal",
 				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
+				                "option1": [
+				                  "command3",
+				                  "option1",
+				                  "option1",
+				                  "option1"
+				                ],
+				                "option2": [
+				                  "command3",
+				                  "option1",
+				                  "option1",
+				                  "option2"
+				                ]
 				              }
 				            }
 				          }
@@ -235,32 +251,16 @@ class ArgumentMultiLiteralTests extends TestBase {
 				        "option2": {
 				          "type": "literal",
 				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
+				            "option1": [
+				              "command3",
+				              "option1",
+				              "option1"
+				            ],
+				            "option2": [
+				              "command3",
+				              "option1",
+				              "option2"
+				            ]
 				          }
 				        }
 				      }
@@ -287,14 +287,18 @@ class ArgumentMultiLiteralTests extends TestBase {
 				            "option2": {
 				              "type": "literal",
 				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
+				                "option1": [
+				                  "command4",
+				                  "option1",
+				                  "option1",
+				                  "option1"
+				                ],
+				                "option2": [
+				                  "command4",
+				                  "option1",
+				                  "option1",
+				                  "option2"
+				                ]
 				              }
 				            }
 				          }
@@ -302,32 +306,16 @@ class ArgumentMultiLiteralTests extends TestBase {
 				        "option2": {
 				          "type": "literal",
 				          "children": {
-				            "option1": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            },
-				            "option2": {
-				              "type": "literal",
-				              "children": {
-				                "option1": {
-				                  "type": "literal",
-				                  "executable": true
-				                },
-				                "option2": {
-				                  "type": "literal",
-				                  "executable": true
-				                }
-				              }
-				            }
+				            "option1": [
+				              "command4",
+				              "option1",
+				              "option1"
+				            ],
+				            "option2": [
+				              "command4",
+				              "option1",
+				              "option2"
+				            ]
 				          }
 				        }
 				      }
@@ -457,31 +445,6 @@ class ArgumentMultiLiteralTests extends TestBase {
 		// /test bye 5
 		server.dispatchCommand(player, "test bye 5");
 		assertEquals(5, results.get());
-	}
-
-	@Test
-	void executionTestWithArrayConstructor() {
-		Mut<String> results = Mut.of();
-
-		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument(new String[]{"lit1", "lit2", "lit3"}))
-			.executesPlayer(info -> {
-				results.set((String) info.args().get(0));
-			})
-			.register();
-
-		PlayerMock player = server.addPlayer();
-
-		server.dispatchCommand(player, "test lit1");
-		assertEquals("lit1", results.get());
-
-		server.dispatchCommand(player, "test lit2");
-		assertEquals("lit2", results.get());
-
-		server.dispatchCommand(player, "test lit3");
-		assertEquals("lit3", results.get());
-
-		assertNoMoreResults(results);
 	}
 
 	/********************

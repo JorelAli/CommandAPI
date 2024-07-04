@@ -41,7 +41,7 @@ public interface BukkitTypedExecutor<Sender extends CommandSender, Source> exten
                 }
                 case REMOTE -> sender instanceof RemoteConsoleCommandSender;
                 case FEEDBACK_FORWARDING -> {
-                    PaperImplementations paper = CommandAPIBukkit.get().getPaper();
+                    PaperImplementations<?> paper = CommandAPIBukkit.get().getPaper();
                     yield paper.isPaperPresent() && paper.getFeedbackForwardingCommandSender().isInstance(sender);
                 }
             }) {
