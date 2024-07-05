@@ -8,7 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static dev.jorel.commandapi.CommandAPITestUtilities.dispatchCommand;
+import static dev.jorel.commandapi.CommandAPITestUtilities.assertCommandSucceeds;
 
 class PingPongCommandTests {
 	private ServerMock server;
@@ -34,7 +34,7 @@ class PingPongCommandTests {
 	void runCommand() {
 		PlayerMock player = server.addPlayer();
 
-		dispatchCommand(player, "ping");
+		assertCommandSucceeds(player, "ping");
 
 		player.assertSaid("pong!");
 		player.assertNoMoreSaid();

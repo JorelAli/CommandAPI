@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests for loading the {@link MockCommandAPIPlugin}.
+ */
 class MockCommandAPIPluginLoadingTests {
+	// Setup
 	@BeforeEach
 	public void setUp() {
 		MockBukkit.mock();
@@ -19,6 +23,7 @@ class MockCommandAPIPluginLoadingTests {
 		MockBukkit.unmock();
 	}
 
+	// Tests
 	@Test
 	void testMockBukkitLoad() {
 		MockCommandAPIPlugin plugin = MockBukkit.load(MockCommandAPIPlugin.class);

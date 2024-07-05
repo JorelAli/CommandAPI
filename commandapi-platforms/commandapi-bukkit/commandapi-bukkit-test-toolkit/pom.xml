@@ -90,12 +90,15 @@
 	</dependencies>
 
 	<build>
+		<!-- Fill ${project.version} in plugin.yml -->
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<filtering>true</filtering> <!-- Fill ${project.version} in plugin.yml -->
+				<filtering>true</filtering>
 			</resource>
 		</resources>
+
+		<!-- Remove commandapi-core's VersionHandler in favor of ours -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -107,7 +110,6 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<!-- Remove commandapi-core's VersionHandler in favor of ours -->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>
@@ -133,7 +135,36 @@
 				<version>3.3.0</version>
 				<configuration>
 					<trimStackTrace>false</trimStackTrace>
+					<!-- To help with debugging tests, you can specify an include
+					 to limit a build to only run a certain test file. Uncomment
+					 here if you want to do that: -->
+<!--					<includes>-->
+<!--						<include>**/DispatchCommandUtilitiesTests.java</include>-->
+<!--					</includes>-->
 				</configuration>
+			</plugin>
+
+			<!-- Run code coverage report -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<executions>
+					<!-- to avoid bugs in some situations -->
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- create report during maven verify phase -->
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
