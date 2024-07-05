@@ -1,6 +1,4 @@
-# Automated tests
+# Automated tests (shaded)
 
 [//]: # (TODO: Explain)
-A simple example showcasing testing CommandAPI commands
-
-[//]: # (TODO: Add version for shading)
+A simple example showcasing testing CommandAPI commands when your plugin shades the CommandAPI

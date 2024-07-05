@@ -1,6 +1,7 @@
-name: AutomatedTestsShaded
+name: AutomatedTests
 main: io.github.jorelali.Main
 version: 0.0.1
 author: Will Kroboth
 website: https://www.jorel.dev/CommandAPI/
 api-version: 1.13
+depend: [CommandAPI]

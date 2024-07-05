@@ -23,9 +23,21 @@
 			<name>Minecraft Libraries</name>
 			<url>https://libraries.minecraft.net</url>
 		</repository>
+		<repository>
+			<id>papermc</id>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
+		<!-- Compatibility with MockBukkit API -->
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.20</artifactId>
+			<version>3.9.0</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Compatibility with Spigot API-->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
@@ -65,9 +77,25 @@
 			<version>1.0.18</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- Passing this to dependents gets rid of a `SLF4J: No SLF4J providers were found` warning -->
+		<!-- https://stackoverflow.com/questions/54652836/found-slf4j-api-dependency-but-no-providers-were-found -->
+		<!-- This version matches the slf4j-api declared by MockBukkit-1.20 (not sure if other versions are needed) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>1.8.0-beta4</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering> <!-- Fill ${project.version} in plugin.yml -->
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -96,6 +124,16 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+
+			<!-- Run our own tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<trimStackTrace>false</trimStackTrace>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
