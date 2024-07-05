@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dev.jorel</groupId>
-	<artifactId>commandapi-automated-tests-shaded</artifactId>
+	<artifactId>commandapi-automated-tests</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -39,9 +39,9 @@
 		<!-- Main CommandAPI dependency for writing the plugin -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-shade</artifactId>
+			<artifactId>commandapi-bukkit-core</artifactId>
 			<version>9.6.0-SNAPSHOT</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 
 		<!--Adds the Spigot API to write the plugin -->
@@ -71,35 +71,6 @@
 				<configuration>
 					<release>17</release>
 				</configuration>
-			</plugin>
-
-			<!-- Include necessary files from commandapi-bukkit-shade -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.4.1</version>
-				<executions>
-					<execution>
-						<id>shade</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<!-- Minimize jar removes files not referenced by your plugin -->
-							<minimizeJar>true</minimizeJar>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<relocations>
-								<!-- Relocate the CommandAPI to avoid conflicts with other
-									projects that shade a different version of the CommandAPI -->
-								<relocation>
-									<pattern>dev.jorel.commandapi</pattern>
-									<shadedPattern>io.github.jorelali.commandapi</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
 			<!-- Run our automated tests -->

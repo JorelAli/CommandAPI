@@ -84,6 +84,16 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 		return super.wrapCommandSender(cs.bukkitSender());
 	}
 
+	// Logging
+	public boolean ENABLE_LOGGING = false;
+
+	@Override
+	public CommandAPILogger getLogger() {
+		return ENABLE_LOGGING ?
+			super.getLogger() :
+			CommandAPILogger.bindToMethods(msg -> {}, msg -> {}, msg -> {}, (msg, ex) -> {});
+	}
+
 	///////////////////////////
 	// UNIMPLEMENTED METHODS //
 	///////////////////////////
