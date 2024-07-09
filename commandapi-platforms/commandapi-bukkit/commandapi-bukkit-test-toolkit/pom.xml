@@ -62,12 +62,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Compatibility with JUnit API -->
+		<!-- Use Mockito, pass to dependents if they don't provide it themselves -->
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.8.2</version>
-			<scope>provided</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.11.0</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Pass Brigadier to our dependents -->
@@ -86,6 +86,14 @@
 			<artifactId>slf4j-nop</artifactId>
 			<version>1.8.0-beta4</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<!-- Run our own tests with JUnit API -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
