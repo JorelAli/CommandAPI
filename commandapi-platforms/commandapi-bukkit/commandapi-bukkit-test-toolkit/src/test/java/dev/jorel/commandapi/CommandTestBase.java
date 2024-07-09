@@ -3,6 +3,7 @@ package dev.jorel.commandapi;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import dev.jorel.commandapi.executors.CommandExecutionInfo;
 import org.junit.jupiter.api.function.Executable;
 import org.opentest4j.AssertionFailedError;
 
@@ -10,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class CommandTestBase extends CommandAPITestUtilities {
+	// Useful objects
+	public static CommandExecutionInfo DEFAULT_EXECUTOR = info -> {};
+
 	// Setup
 	protected ServerMock server;
 	protected MockCommandAPIPlugin plugin;

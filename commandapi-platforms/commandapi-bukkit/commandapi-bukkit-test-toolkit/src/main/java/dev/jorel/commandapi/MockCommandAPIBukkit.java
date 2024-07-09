@@ -11,8 +11,9 @@ import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.wrappers.*;
+import dev.jorel.commandapi.spying.CommandAPIHandlerSpy;
 import dev.jorel.commandapi.wrappers.Rotation;
+import dev.jorel.commandapi.wrappers.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -35,6 +36,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -51,25 +53,47 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 		MockCommandAPIBukkit.instance = this;
 	}
 
+	// Reflection helpers
+	public static <Target> void setField(Class<? super Target> targetClass, String fieldName, Target target, Object value) {
+		try {
+			Field field = targetClass.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(target, value);
+		} catch (ReflectiveOperationException e) {
+			throw new IllegalArgumentException("Reflection failed", e);
+		}
+	}
+
 	// References to utility classes
+	private CommandAPIHandlerSpy commandAPIHandlerSpy;
 	private CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> commandAPIHandler;
 	private MockCommandRegistrationStrategy commandRegistrationStrategy;
 
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
-		this.commandAPIHandler = (CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource>) CommandAPIHandler.getInstance();
-		this.commandRegistrationStrategy = new MockCommandRegistrationStrategy(commandAPIHandler);
+		// Intercept calls to CommandAPIHandler
+		commandAPIHandlerSpy = new CommandAPIHandlerSpy(CommandAPIHandler.getInstance());
+		commandAPIHandler = commandAPIHandlerSpy.spyHandler();
+		setField(CommandAPIHandler.class, "instance", null, commandAPIHandler);
 
+		// Setup objects
+		commandRegistrationStrategy = new MockCommandRegistrationStrategy(commandAPIHandler);
+
+		// Continue load
 		super.onLoad(config);
+	}
+
+	public CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> getCommandAPIHandler() {
+		return commandAPIHandler;
+	}
+
+	public CommandAPIHandlerSpy getCommandAPIHandlerSpy() {
+		return commandAPIHandlerSpy;
 	}
 
 	@Override
 	public CommandRegistrationStrategy<MockCommandSource> createCommandRegistrationStrategy() {
 		return commandRegistrationStrategy;
-	}
-
-	public CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> getCommandAPIHandler() {
-		return commandAPIHandler;
 	}
 
 	// CommandSender/MockCommandSource methods
@@ -82,6 +106,11 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(MockCommandSource cs) {
 		return super.wrapCommandSender(cs.bukkitSender());
+	}
+
+	@Override
+	public MockCommandSource getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender) {
+		return new MockCommandSource(sender.getSource());
 	}
 
 	// Logging
@@ -97,11 +126,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	///////////////////////////
 	// UNIMPLEMENTED METHODS //
 	///////////////////////////
-
-	@Override
-	public MockCommandSource getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender) {
-		throw new UnimplementedMethodException();
-	}
 
 	@Override
 	public ArgumentType<?> _ArgumentAngle() {
