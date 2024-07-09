@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
+import dev.jorel.commandapi.arguments.IntegerRangeArgumentType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
@@ -123,6 +124,17 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 			CommandAPILogger.bindToMethods(msg -> {}, msg -> {}, msg -> {}, (msg, ex) -> {});
 	}
 
+	// Arguments
+	@Override
+	public ArgumentType<?> _ArgumentIntRange() {
+		return IntegerRangeArgumentType.INSTANCE;
+	}
+
+	@Override
+	public IntegerRange getIntRange(CommandContext<MockCommandSource> cmdCtx, String key) {
+		return IntegerRangeArgumentType.getRange(cmdCtx, key);
+	}
+
 	///////////////////////////
 	// UNIMPLEMENTED METHODS //
 	///////////////////////////
@@ -184,11 +196,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	@Override
 	public ArgumentType<?> _ArgumentFloatRange() {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentIntRange() {
 		throw new UnimplementedMethodException();
 	}
 
@@ -424,11 +431,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	@Override
 	public Set<NamespacedKey> getFunctions() {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
-	public IntegerRange getIntRange(CommandContext<MockCommandSource> cmdCtx, String key) {
 		throw new UnimplementedMethodException();
 	}
 
