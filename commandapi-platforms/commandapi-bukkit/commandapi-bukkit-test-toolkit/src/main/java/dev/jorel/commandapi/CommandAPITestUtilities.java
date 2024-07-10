@@ -52,29 +52,56 @@ public class CommandAPITestUtilities {
 	}
 
 	// Verifying arguments
-	public static ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> getExecutionInfoOfCommand(
-		CommandSender sender, String command
-	) {
+	public static ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>>
+	getExecutionInfo(Runnable executeCommand) {
 		ExecutionQueue executions = getCommandAPIPlatform().getCommandAPIHandlerSpy().getExecutionQueue();
 		executions.clear();
 
-		assertCommandSucceeds(sender, command);
+		executeCommand.run();
 
 		ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> execution = executions.poll();
-		assertNotNull(execution);
+		assertNotNull(execution, "No command executor was not called");
 		executions.assertNoMoreCommandsWereRun();
 
 		return execution;
 	}
 
-	public static void assertCommandRunsWithArguments(CommandSender sender, String command, Object... argumentsArray) {
-		assertArrayEquals(argumentsArray, getExecutionInfoOfCommand(sender, command).args().args(),
+	public static ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>>
+	getExecutionInfoOfSuccessfulCommand(CommandSender sender, String command) {
+		return getExecutionInfo(() -> assertCommandSucceeds(sender, command));
+	}
+
+	public static void assertCommandSucceedsWithArguments(CommandSender sender, String command, Object... argumentsArray) {
+		assertArrayEquals(argumentsArray, getExecutionInfoOfSuccessfulCommand(sender, command).args().args(),
 			"Argument arrays are not equal"
 		);
 	}
 
-	public static void assertCommandRunsWithArguments(CommandSender sender, String command, Map<String, Object> argumentsMap) {
-		assertEquals(argumentsMap, getExecutionInfoOfCommand(sender, command).args().argsMap(),
+	public static void assertCommandSucceedsWithArguments(CommandSender sender, String command, Map<String, Object> argumentsMap) {
+		assertEquals(argumentsMap, getExecutionInfoOfSuccessfulCommand(sender, command).args().argsMap(),
+			"Argument maps are not equal"
+		);
+	}
+
+	public static ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>>
+	getExecutionInfoOfFailingCommand(CommandSender sender, String command, String expectedFailureMessage) {
+		return getExecutionInfo(() -> assertCommandFails(sender, command, expectedFailureMessage));
+	}
+
+	public static void assertCommandFailsWithArguments(
+		CommandSender sender, String command, String expectedFailureMessage,
+		Object... argumentsArray
+	) {
+		assertArrayEquals(argumentsArray, getExecutionInfoOfFailingCommand(sender, command, expectedFailureMessage).args().args(),
+			"Argument arrays are not equal"
+		);
+	}
+
+	public static void assertCommandFailsWithArguments(
+		CommandSender sender, String command, String expectedFailureMessage,
+		Map<String, Object> argumentsMap
+	) {
+		assertEquals(argumentsMap, getExecutionInfoOfFailingCommand(sender, command, expectedFailureMessage).args().argsMap(),
 			"Argument maps are not equal"
 		);
 	}

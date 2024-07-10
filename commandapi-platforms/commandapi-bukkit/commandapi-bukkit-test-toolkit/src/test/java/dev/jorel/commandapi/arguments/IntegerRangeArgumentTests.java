@@ -33,20 +33,20 @@ public class IntegerRangeArgumentTests extends CommandTestBase {
 	@Test
 	void testValidInputs() {
 		// Exact range
-		assertCommandRunsWithArguments(player, "test 10", new IntegerRange(10, 10));
+		assertCommandSucceedsWithArguments(player, "test 10", new IntegerRange(10, 10));
 
 		// Greater than range
-		assertCommandRunsWithArguments(player, "test 10..", IntegerRange.integerRangeGreaterThanOrEq(10));
+		assertCommandSucceedsWithArguments(player, "test 10..", IntegerRange.integerRangeGreaterThanOrEq(10));
 
 		// Less than range
-		assertCommandRunsWithArguments(player, "test ..10", IntegerRange.integerRangeLessThanOrEq(10));
+		assertCommandSucceedsWithArguments(player, "test ..10", IntegerRange.integerRangeLessThanOrEq(10));
 
 		// Between range
-		assertCommandRunsWithArguments(player, "test 5..20", new IntegerRange(5, 20));
+		assertCommandSucceedsWithArguments(player, "test 5..20", new IntegerRange(5, 20));
 
 		// Check integer parsing
-		assertCommandRunsWithArguments(player, "test -10..-5", new IntegerRange(-10, -5));
-		assertCommandRunsWithArguments(player, "test ..-10", IntegerRange.integerRangeLessThanOrEq(-10));
+		assertCommandSucceedsWithArguments(player, "test -10..-5", new IntegerRange(-10, -5));
+		assertCommandSucceedsWithArguments(player, "test ..-10", IntegerRange.integerRangeLessThanOrEq(-10));
 	}
 
 	// Invalid inputs
