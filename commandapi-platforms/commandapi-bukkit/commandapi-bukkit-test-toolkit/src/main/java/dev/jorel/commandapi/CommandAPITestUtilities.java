@@ -17,6 +17,10 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// In places where Assertions methods are called, the Supplier<String> option is used
+//  so that the coverage report shows uncovered code if the tests do not check the scenario
+//  where the assertion fails.
+@SuppressWarnings("ExcessiveLambdaUsage")
 public class CommandAPITestUtilities {
 	public static MockCommandAPIBukkit getCommandAPIPlatform() {
 		return MockCommandAPIBukkit.getInstance();
@@ -30,7 +34,7 @@ public class CommandAPITestUtilities {
 	public static void assertCommandSucceeds(CommandSender sender, String command) {
 		assertDoesNotThrow(
 			() -> dispatchCommand(sender, command),
-			"Expected command dispatch to succeed"
+			() -> "Expected command dispatch to succeed"
 		);
 	}
 
@@ -39,7 +43,7 @@ public class CommandAPITestUtilities {
 		CommandSyntaxException exception = assertThrows(
 			CommandSyntaxException.class,
 			() -> dispatchCommand(sender, command),
-			"Expected command dispatch to fail"
+			() -> "Expected command dispatch to fail"
 		);
 
 		String actualMessage = exception.getMessage();
@@ -60,7 +64,7 @@ public class CommandAPITestUtilities {
 		executeCommand.run();
 
 		ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>> execution = executions.poll();
-		assertNotNull(execution, "No command executor was not called");
+		assertNotNull(execution, () -> "No CommandAPI executor was invoked");
 		executions.assertNoMoreCommandsWereRun();
 
 		return execution;
@@ -73,13 +77,13 @@ public class CommandAPITestUtilities {
 
 	public static void assertCommandSucceedsWithArguments(CommandSender sender, String command, Object... argumentsArray) {
 		assertArrayEquals(argumentsArray, getExecutionInfoOfSuccessfulCommand(sender, command).args().args(),
-			"Argument arrays are not equal"
+			() -> "Argument arrays are not equal"
 		);
 	}
 
 	public static void assertCommandSucceedsWithArguments(CommandSender sender, String command, Map<String, Object> argumentsMap) {
 		assertEquals(argumentsMap, getExecutionInfoOfSuccessfulCommand(sender, command).args().argsMap(),
-			"Argument maps are not equal"
+			() -> "Argument maps are not equal"
 		);
 	}
 
@@ -93,7 +97,7 @@ public class CommandAPITestUtilities {
 		Object... argumentsArray
 	) {
 		assertArrayEquals(argumentsArray, getExecutionInfoOfFailingCommand(sender, command, expectedFailureMessage).args().args(),
-			"Argument arrays are not equal"
+			() -> "Argument arrays are not equal"
 		);
 	}
 
@@ -102,7 +106,7 @@ public class CommandAPITestUtilities {
 		Map<String, Object> argumentsMap
 	) {
 		assertEquals(argumentsMap, getExecutionInfoOfFailingCommand(sender, command, expectedFailureMessage).args().argsMap(),
-			"Argument maps are not equal"
+			() -> "Argument maps are not equal"
 		);
 	}
 
@@ -122,7 +126,7 @@ public class CommandAPITestUtilities {
 		List<String> actualSuggestionStrings = new ArrayList<>(actualSuggestions.size());
 		actualSuggestions.forEach(suggestion -> actualSuggestionStrings.add(suggestion.getText()));
 
-		assertEquals(expectedSuggestions, actualSuggestionStrings, "Suggestions did not match");
+		assertEquals(expectedSuggestions, actualSuggestionStrings, () -> "Suggestions did not match");
 	}
 
 	public static Suggestion makeTooltip(String text, String tooltip) {
@@ -149,7 +153,7 @@ public class CommandAPITestUtilities {
 			expectedSuggestionTooltips.add(suggestion.getTooltip().getString());
 		});
 
-		assertEquals(expectedSuggestionStrings, actualSuggestionStrings, "Suggestions did not match");
-		assertEquals(expectedSuggestionTooltips, actualSuggestionTooltips, "Tooltips did not match");
+		assertEquals(expectedSuggestionStrings, actualSuggestionStrings, () -> "Suggestions did not match");
+		assertEquals(expectedSuggestionTooltips, actualSuggestionTooltips, () -> "Tooltips did not match");
 	}
 }
