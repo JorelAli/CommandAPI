@@ -1,8 +1,10 @@
 package dev.jorel.commandapi.spying;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTestBase;
+import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.executors.ExecutionInfo;
 import org.bukkit.command.CommandSender;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ExecutionQueueTests extends CommandTestBase {
 	// Setup
@@ -24,7 +27,12 @@ class ExecutionQueueTests extends CommandTestBase {
 		queue = getCommandAPIPlatform().getCommandAPIHandlerSpy().getExecutionQueue();
 
 		new CommandAPICommand("test")
-			.executes(DEFAULT_EXECUTOR)
+			.withOptionalArguments(new BooleanArgument("shouldFail"))
+			.executes(info -> {
+				if (info.args().getOrDefaultUnchecked("shouldFail", false)) {
+					throw CommandAPI.failWithString("Command failed");
+				}
+			})
 			.register();
 	}
 
@@ -73,6 +81,26 @@ class ExecutionQueueTests extends CommandTestBase {
 		assertEquals(player2, queue.poll().sender());
 
 		queue.assertNoMoreCommandsWereRun();
+	}
+
+	@Test
+	void testQueueAutoAddOnlyWhenParseSucceeds() {
+		PlayerMock player = server.addPlayer();
+
+		// Parse fails, so the CommandAPI executor is never invoked
+		assertAssertionFails(
+			() -> getExecutionInfoOfFailingCommand(
+				player, "invalid",
+				"Unknown command at position 0: <--[HERE]"
+			),
+			"No CommandAPI executor was invoked ==> expected: not <null>"
+		);
+
+		// Parse succeeds, though the CommandAPI executor throws its own exception
+		assertNotNull(getExecutionInfoOfFailingCommand(
+			player, "test true",
+			"Command failed"
+		));
 	}
 
 	@Test
