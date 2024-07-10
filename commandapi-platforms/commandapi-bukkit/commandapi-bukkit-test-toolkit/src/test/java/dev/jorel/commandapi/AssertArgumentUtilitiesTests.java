@@ -24,7 +24,12 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 				new StringArgument("string"),
 				new BooleanArgument("bool")
 			)
-			.executes(DEFAULT_EXECUTOR)
+			.withOptionalArguments(new BooleanArgument("shouldFail"))
+			.executes(info -> {
+				if (info.args().getOrDefaultUnchecked("shouldFail", false)) {
+					throw CommandAPI.failWithString("Command failed");
+				}
+			})
 			.register();
 
 		player = server.addPlayer();
@@ -38,7 +43,7 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 	// Tests
 	@Test
 	void testSuccessArgumentCheck() {
-		assertCommandRunsWithArguments(
+		assertCommandSucceedsWithArguments(
 			player, "test 10 hello true",
 			Map.of(
 				"int", 10,
@@ -47,19 +52,44 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 			)
 		);
 
-		assertCommandRunsWithArguments(
+		assertCommandFailsWithArguments(
+			player, "test 10 hello true true", "Command failed",
+			Map.of(
+				"int", 10,
+				"string", "hello",
+				"bool", true,
+				"shouldFail", true
+			)
+		);
+
+		assertCommandSucceedsWithArguments(
 			player, "test 10 hello true",
 			10, "hello", true
+		);
+
+		assertCommandFailsWithArguments(
+			player, "test 10 hello true true", "Command failed",
+			10, "hello", true, true
 		);
 	}
 
 	@Test
 	void testSuccessMapOrderDoesNotMatter() {
-		assertCommandRunsWithArguments(
+		assertCommandSucceedsWithArguments(
 			player, "test 10 hello true",
 			Map.of(
 				"bool", true,
 				"int", 10,
+				"string", "hello"
+			)
+		);
+
+		assertCommandFailsWithArguments(
+			player, "test 10 hello true true", "Command failed",
+			Map.of(
+				"bool", true,
+				"int", 10,
+				"shouldFail", true,
 				"string", "hello"
 			)
 		);
@@ -68,7 +98,7 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 	@Test
 	void testFailureInvalidCommand() {
 		assertAssertionFails(
-			() -> assertCommandRunsWithArguments(
+			() -> assertCommandSucceedsWithArguments(
 				player, "invalid 10 hello true",
 				Map.of(
 					"int", 10,
@@ -80,15 +110,36 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 				"==> Unexpected exception thrown: " +
 				"com.mojang.brigadier.exceptions.CommandSyntaxException: Unknown command at position 0: <--[HERE]"
 		);
+		assertAssertionFails(
+			() -> assertCommandFailsWithArguments(
+				player, "invalid 10 hello true true", "Command failed",
+				Map.of(
+					"int", 10,
+					"string", "hello",
+					"bool", true,
+					"shouldFail", true
+				)
+			),
+			"Expected command dispatch to fail with message <Command failed>, " +
+				"but got <Unknown command at position 0: <--[HERE]>"
+		);
 
 		assertAssertionFails(
-			() -> assertCommandRunsWithArguments(
+			() -> assertCommandSucceedsWithArguments(
 				player, "invalid 10 hello true",
 				10, "hello", true
 			),
 			"Expected command dispatch to succeed " +
 				"==> Unexpected exception thrown: " +
 				"com.mojang.brigadier.exceptions.CommandSyntaxException: Unknown command at position 0: <--[HERE]"
+		);
+		assertAssertionFails(
+			() -> assertCommandFailsWithArguments(
+				player, "invalid 10 hello true true", "Command failed",
+				10, "hello", true, true
+			),
+			"Expected command dispatch to fail with message <Command failed>, " +
+				"but got <Unknown command at position 0: <--[HERE]>"
 		);
 	}
 
@@ -101,13 +152,27 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 		);
 
 		assertAssertionFails(
-			() -> assertCommandRunsWithArguments(
+			() -> assertCommandSucceedsWithArguments(
 				player, "test 10 hello true",
 				missingArgument
 			),
 			"Argument maps are not equal " +
 				// The order of keys from Map.of is not guaranteed, so we don't know its String beforehand
 				"==> expected: <" + missingArgument + "> but was: <{int=10, string=hello, bool=true}>"
+		);
+		final Map<String, Object> missingArgumentFails = Map.of(
+			"string", "hello",
+			"bool", true,
+			"shouldFail", true
+		);
+		assertAssertionFails(
+			() -> assertCommandFailsWithArguments(
+				player, "test 10 hello true true", "Command failed",
+				missingArgumentFails
+			),
+			"Argument maps are not equal " +
+				// The order of keys from Map.of is not guaranteed, so we don't know its String beforehand
+				"==> expected: <" + missingArgumentFails + "> but was: <{int=10, string=hello, bool=true, shouldFail=true}>"
 		);
 
 		// Argument wrong key
@@ -117,12 +182,26 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 			"bool", true
 		);
 		assertAssertionFails(
-			() -> assertCommandRunsWithArguments(
+			() -> assertCommandSucceedsWithArguments(
 				player, "test 10 hello true",
 				wrongKey
 			),
 			"Argument maps are not equal " +
 				"==> expected: <" + wrongKey + "> but was: <{int=10, string=hello, bool=true}>"
+		);
+		final Map<String, Object> wrongKeyFails = Map.of(
+			"number", 10,
+			"string", "hello",
+			"bool", true,
+			"shouldFail", true
+		);
+		assertAssertionFails(
+			() -> assertCommandFailsWithArguments(
+				player, "test 10 hello true true", "Command failed",
+				wrongKeyFails
+			),
+			"Argument maps are not equal " +
+				"==> expected: <" + wrongKeyFails + "> but was: <{int=10, string=hello, bool=true, shouldFail=true}>"
 		);
 
 		// Argument wrong value
@@ -132,12 +211,26 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 			"bool", true
 		);
 		assertAssertionFails(
-			() -> assertCommandRunsWithArguments(
+			() -> assertCommandSucceedsWithArguments(
 				player, "test 10 hello true",
 				wrongValue
 			),
 			"Argument maps are not equal " +
 				"==> expected: <" + wrongValue + "> but was: <{int=10, string=hello, bool=true}>"
+		);
+		Map<String, Object> wrongValueFails = Map.of(
+			"int", 5,
+			"string", "hello",
+			"bool", true,
+			"shouldFail", true
+		);
+		assertAssertionFails(
+			() -> assertCommandFailsWithArguments(
+				player, "test 10 hello true true", "Command failed",
+				wrongValueFails
+			),
+			"Argument maps are not equal " +
+				"==> expected: <" + wrongValueFails + "> but was: <{int=10, string=hello, bool=true, shouldFail=true}>"
 		);
 	}
 
@@ -145,19 +238,35 @@ class AssertArgumentUtilitiesTests extends CommandTestBase {
 	void testFailureWrongArrayArguments() {
 		// Argument missing
 		assertAssertionFails(
-			() -> assertCommandRunsWithArguments(
+			() -> assertCommandSucceedsWithArguments(
 				player, "test 10 hello true",
 				"hello", true
 			),
 			"Argument arrays are not equal ==> " +
 				"array lengths differ, expected: <2> but was: <3>"
 		);
+		assertAssertionFails(
+			() -> assertCommandFailsWithArguments(
+				player, "test 10 hello true true", "Command failed",
+				"hello", true, true
+			),
+			"Argument arrays are not equal ==> " +
+				"array lengths differ, expected: <3> but was: <4>"
+		);
 
 		// Arguments out of order
 		assertAssertionFails(
-			() -> assertCommandRunsWithArguments(
+			() -> assertCommandSucceedsWithArguments(
 				player, "test 10 hello true",
 				true, 10, "hello"
+			),
+			"Argument arrays are not equal ==> " +
+				"array contents differ at index [0], expected: <true> but was: <10>"
+		);
+		assertAssertionFails(
+			() -> assertCommandFailsWithArguments(
+				player, "test 10 hello true true", "Command failed",
+				true, 10, "hello", true
 			),
 			"Argument arrays are not equal ==> " +
 				"array contents differ at index [0], expected: <true> but was: <10>"
