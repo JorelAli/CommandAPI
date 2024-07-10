@@ -7,9 +7,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+// Import helper methods from CommandAPITestUtilities
 import static dev.jorel.commandapi.CommandAPITestUtilities.assertCommandSucceeds;
 
 class PingPongCommandTests {
+	// Setup
 	private ServerMock server;
 
 	@BeforeEach
@@ -26,6 +28,7 @@ class PingPongCommandTests {
 		MockBukkit.unmock();
 	}
 
+	// Tests
 	@Test
 	void runCommand() {
 		PlayerMock player = server.addPlayer();
