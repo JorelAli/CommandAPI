@@ -7,7 +7,6 @@ import dev.jorel.commandapi.executors.CommandExecutionInfo;
 import org.junit.jupiter.api.function.Executable;
 import org.opentest4j.AssertionFailedError;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class CommandTestBase extends CommandAPITestUtilities {
@@ -31,7 +30,13 @@ public abstract class CommandTestBase extends CommandAPITestUtilities {
 	@CanIgnoreReturnValue
 	public <T extends Throwable> T assertThrowsWithMessage(Class<T> exceptionClass, Executable executable, String expectedMessage) {
 		T exception = assertThrows(exceptionClass, executable);
-		assertEquals(expectedMessage, exception.getMessage());
+		String actualMessage = exception.getMessage();
+		if (!expectedMessage.equals(actualMessage)) {
+			throw new AssertionFailedError(
+				"Exception messages did not match. Expected <" + expectedMessage + "> but was <" + actualMessage + ">.",
+				expectedMessage, actualMessage, exception
+			);
+		}
 		return exception;
 	}
 
