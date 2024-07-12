@@ -141,6 +141,9 @@ public class ListArgumentBuilder<T> {
 		 * @return this list argument builder
 		 */
 		public ListArgumentBuilderFinished withMapper(Function<T, String> mapper) {
+			if (allowAnyValue && !(mapper instanceof StringTooltip)){
+				throw new IllegalArgumentException("allowAnyValue cannot be used with non-string mappers");
+			}
 			return withStringTooltipMapper(t -> StringTooltip.none(mapper.apply(t)));
 		}
 

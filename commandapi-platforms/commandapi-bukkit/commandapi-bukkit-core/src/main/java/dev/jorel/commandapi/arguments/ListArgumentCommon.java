@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -144,7 +143,13 @@ public class ListArgumentCommon<T> extends Argument<List> {
 			} else if (!allowDuplicates && listKeys.contains(str)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
 			} else {
-				list.add(values.get(str));
+				if (allowAnyValue) {
+					// should only be used with string mappers so we can ignore the cast warning
+					list.add((T) str);
+				}
+				else{
+					list.add(values.get(str));
+				}
 				listKeys.add(str);
 			}
 			context.setCursor(context.getCursor() + str.length() + delimiter.length());
