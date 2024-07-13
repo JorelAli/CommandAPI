@@ -1,6 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandTestBase;
 import dev.jorel.commandapi.wrappers.IntegerRange;
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class IntegerRangeArgumentTests extends CommandTestBase {
+class IntegerRangeArgumentTests extends CommandTestBase {
 	// Setup
 	private PlayerMock player;
 
@@ -52,9 +53,14 @@ public class IntegerRangeArgumentTests extends CommandTestBase {
 	// Invalid inputs
 	@Test
 	void testEmptyInputs() {
+		assertThrowsWithMessage(
+			CommandSyntaxException.class,
+			() -> createContextWithParser(player, "range", IntegerRangeArgumentType.INSTANCE::parse, ""),
+			"Expected value or range of values at position 0: <--[HERE]"
+		);
 		assertCommandFails(
-			player, "test ",
-			"Incorrect argument for command at position 4: test<--[HERE]"
+			player, "test  ",
+			"Expected value or range of values at position 5: test <--[HERE]"
 		);
 		assertCommandFails(
 			player, "test ..",

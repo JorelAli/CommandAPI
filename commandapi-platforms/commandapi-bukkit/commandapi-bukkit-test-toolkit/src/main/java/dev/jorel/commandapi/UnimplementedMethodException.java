@@ -7,4 +7,8 @@ public class UnimplementedMethodException extends RuntimeException {
 	public UnimplementedMethodException() {
 		super("This method has not been implemented - CommandAPI");
 	}
+
+	public UnimplementedMethodException(String reason) {
+		super(reason + " ==> This method has not been implemented - CommandAPI");
+	}
 }
