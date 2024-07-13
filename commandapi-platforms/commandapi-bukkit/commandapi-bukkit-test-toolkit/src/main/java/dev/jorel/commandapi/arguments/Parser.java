@@ -2,6 +2,7 @@ package dev.jorel.commandapi.arguments;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,6 +199,8 @@ public interface Parser<T> {
 
 		public Parser<T> conclude(Parser<T> conclude) {
 			List<Branch<T>> branches = this.branches;
+			if (branches.isEmpty()) return conclude;
+
 			return reader -> {
 				int start = reader.getCursor();
 				for (Branch<T> potential : branches) {
@@ -219,6 +222,10 @@ public interface Parser<T> {
 	////////////////////
 	// Common parsers //
 	////////////////////
+	CommandSyntaxException NEXT_BRANCH = new SimpleCommandExceptionType(
+		() -> "This branch did not match"
+	).create();
+
 	static Void assertCanRead(Function<StringReader, CommandSyntaxException> exception) {
 		return reader -> {
 			if (!reader.canRead()) throw exception.apply(reader);
@@ -237,6 +244,16 @@ public interface Parser<T> {
 				}
 			}
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.literalIncorrect().createWithContext(reader, literal);
+		};
+	}
+
+	static Parser<String> readUntilWithoutEscapeCharacter(char terminator) {
+		return reader -> {
+			int start = reader.getCursor();
+			while (reader.canRead() && reader.peek() != terminator) {
+				reader.skip();
+			}
+			return reader.getString().substring(start, reader.getCursor());
 		};
 	}
 }

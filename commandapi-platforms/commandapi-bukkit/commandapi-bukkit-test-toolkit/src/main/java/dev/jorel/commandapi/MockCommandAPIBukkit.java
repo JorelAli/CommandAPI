@@ -6,10 +6,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.ArgumentSubType;
-import dev.jorel.commandapi.arguments.IntegerRangeArgumentType;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.spying.CommandAPIHandlerSpy;
@@ -126,6 +123,28 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	// Arguments
 	@Override
+	public ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
+		return switch (subType) {
+			case ENTITYSELECTOR_MANY_ENTITIES -> EntitySelectorArgumentType.entities();
+			case ENTITYSELECTOR_MANY_PLAYERS -> EntitySelectorArgumentType.players();
+			case ENTITYSELECTOR_ONE_ENTITY -> EntitySelectorArgumentType.entity();
+			case ENTITYSELECTOR_ONE_PLAYER -> EntitySelectorArgumentType.player();
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
+	}
+
+	@Override
+	public Object getEntitySelector(CommandContext<MockCommandSource> cmdCtx, String key, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
+		return switch (subType) {
+			case ENTITYSELECTOR_MANY_ENTITIES -> EntitySelectorArgumentType.findManyEntities(cmdCtx, key, allowEmpty);
+			case ENTITYSELECTOR_MANY_PLAYERS -> EntitySelectorArgumentType.findManyPlayers(cmdCtx, key, allowEmpty);
+			case ENTITYSELECTOR_ONE_ENTITY -> EntitySelectorArgumentType.findSingleEntity(cmdCtx, key);
+			case ENTITYSELECTOR_ONE_PLAYER -> EntitySelectorArgumentType.findSinglePlayer(cmdCtx, key);
+			default -> throw new IllegalArgumentException("Unexpected value: " + subType);
+		};
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentIntRange() {
 		return IntegerRangeArgumentType.INSTANCE;
 	}
@@ -133,6 +152,26 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	@Override
 	public IntegerRange getIntRange(CommandContext<MockCommandSource> cmdCtx, String key) {
 		return IntegerRangeArgumentType.getRange(cmdCtx, key);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentProfile() {
+		return ProfileArgumentType.INSTANCE;
+	}
+
+	@Override
+	public Player getPlayer(CommandContext<MockCommandSource> cmdCtx, String key) throws CommandSyntaxException {
+		Player target = Bukkit.getPlayer(ProfileArgumentType.getProfiles(cmdCtx, key).iterator().next());
+		if (target == null) {
+			throw ProfileArgumentType.ERROR_UNKNOWN_PLAYER.create();
+		} else {
+			return target;
+		}
+	}
+
+	@Override
+	public OfflinePlayer getOfflinePlayer(CommandContext<MockCommandSource> cmdCtx, String key) throws CommandSyntaxException {
+		return Bukkit.getOfflinePlayer(ProfileArgumentType.getProfiles(cmdCtx, key).iterator().next());
 	}
 
 	///////////////////////////
@@ -181,11 +220,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	@Override
 	public ArgumentType<?> _ArgumentEnchantment() {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentEntity(ArgumentSubType subType) {
 		throw new UnimplementedMethodException();
 	}
 
@@ -241,11 +275,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	@Override
 	public ArgumentType<?> _ArgumentPosition2D() {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
-	public ArgumentType<?> _ArgumentProfile() {
 		throw new UnimplementedMethodException();
 	}
 
@@ -405,11 +434,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext<MockCommandSource> cmdCtx, String key, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
 	public EntityType getEntityType(CommandContext<MockCommandSource> cmdCtx, String key) throws CommandSyntaxException {
 		throw new UnimplementedMethodException();
 	}
@@ -496,16 +520,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	@Override
 	public ParticleData<?> getParticle(CommandContext<MockCommandSource> cmdCtx, String key) {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
-	public Player getPlayer(CommandContext<MockCommandSource> cmdCtx, String key) throws CommandSyntaxException {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
-	public OfflinePlayer getOfflinePlayer(CommandContext<MockCommandSource> cmdCtx, String key) throws CommandSyntaxException {
 		throw new UnimplementedMethodException();
 	}
 
