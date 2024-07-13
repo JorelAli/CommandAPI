@@ -7,6 +7,7 @@ throw CommandAPI.failWithString(String message);
 throw CommandAPI.failWithMessage(Message message);
 throw CommandAPIBukkit.failWithBaseComponents(BaseComponent... message);
 throw CommandAPIBukkit.failWithAdventureComponent(Component message);
+throw CommandAPIBukkit.failWithAdventureComponent(ComponentLike message);
 ```
 
 When the CommandAPI handles the fail method, it will cause the command to return a _success value_ of 0, to indicate failure.

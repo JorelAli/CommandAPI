@@ -409,6 +409,15 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.6.0</b></td>
+            <td valign="top">???</td>
+            <td valign="top">
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/577 Adds a <code>CommandAPIBukkit#failWithAdventureComponent(ComponentLike)</code> method</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.5.1</b></td>
             <td valign="top">June 2024</td>
             <td valign="top">
