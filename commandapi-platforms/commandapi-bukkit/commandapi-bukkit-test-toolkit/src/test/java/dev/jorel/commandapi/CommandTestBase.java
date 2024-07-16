@@ -9,7 +9,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.jorel.commandapi.arguments.Parser;
+import dev.jorel.commandapi.arguments.parser.Parser;
 import dev.jorel.commandapi.executors.CommandExecutionInfo;
 import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.function.Executable;
@@ -65,9 +65,15 @@ public abstract class CommandTestBase extends CommandAPITestUtilities {
 		);
 
 		StringReader reader = new StringReader(input);
-		T result = parser.parse(reader);
+		T result = parser.parseValueOrThrow(reader);
 		contextBuilder.withArgument(key, new ParsedArgument<>(0, reader.getCursor(), result));
 
 		return contextBuilder.build(input);
+	}
+
+	public <T> CommandContext<MockCommandSource> createContextWithParser(
+		CommandSender source, String key, Parser.NoSuggestions<T> parser, String input
+	) throws CommandSyntaxException {
+		return createContextWithParser(source, key, (Parser<T>) parser, input);
 	}
 }

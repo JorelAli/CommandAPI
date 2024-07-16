@@ -2,6 +2,7 @@ package dev.jorel.commandapi;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -22,11 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 //  where the assertion fails.
 @SuppressWarnings("ExcessiveLambdaUsage")
 public class CommandAPITestUtilities {
+	///////////////////////
+	// General utilities //
+	///////////////////////
 	public static MockCommandAPIBukkit getCommandAPIPlatform() {
 		return MockCommandAPIBukkit.getInstance();
 	}
 
-	// Running commands
+	//////////////////////
+	// Running commands //
+	//////////////////////
 	public static void dispatchCommand(CommandSender sender, String command) throws CommandSyntaxException {
 		getCommandAPIPlatform().getBrigadierDispatcher().execute(command, new MockCommandSource(sender));
 	}
@@ -55,7 +61,9 @@ public class CommandAPITestUtilities {
 		return exception;
 	}
 
-	// Verifying arguments
+	/////////////////////////
+	// Verifying arguments //
+	/////////////////////////
 	public static ExecutionInfo<CommandSender, AbstractCommandSender<? extends CommandSender>>
 	getExecutionInfo(Runnable executeCommand) {
 		ExecutionQueue executions = getCommandAPIPlatform().getCommandAPIHandlerSpy().getExecutionQueue();
@@ -110,50 +118,95 @@ public class CommandAPITestUtilities {
 		);
 	}
 
-	// Verifying suggestions
+	///////////////////////////
+	// Verifying suggestions //
+	///////////////////////////
+	// Helper methods
 	public static Suggestions getSuggestions(CommandSender sender, String command) {
 		CommandDispatcher<MockCommandSource> dispatcher = getCommandAPIPlatform().getBrigadierDispatcher();
 		ParseResults<MockCommandSource> parse = dispatcher.parse(command, new MockCommandSource(sender));
 		return dispatcher.getCompletionSuggestions(parse).join();
 	}
 
-	public static void assertCommandSuggests(CommandSender sender, String command, String... expectedSuggestions) {
-		assertCommandSuggests(sender, command, Arrays.asList(expectedSuggestions));
+	public static void assertSuggestionsStartAt(int startingAt, List<Suggestion> suggestions) {
+		for (int i = 0; i < suggestions.size(); i++) {
+			Suggestion suggestion = suggestions.get(i);
+
+			int finalI = i;
+			assertEquals(startingAt, suggestion.getRange().getStart(),
+				() -> "Suggestion #" + finalI + " <" + suggestion + "> started at wrong index"
+			);
+		}
 	}
 
-	public static void assertCommandSuggests(CommandSender sender, String command, List<String> expectedSuggestions){
-		List<Suggestion> actualSuggestions = getSuggestions(sender, command).getList();
+	public static void assertSuggestionEquality(List<String> expectedSuggestions, List<Suggestion> actualSuggestions) {
 		List<String> actualSuggestionStrings = new ArrayList<>(actualSuggestions.size());
 		actualSuggestions.forEach(suggestion -> actualSuggestionStrings.add(suggestion.getText()));
 
 		assertEquals(expectedSuggestions, actualSuggestionStrings, () -> "Suggestions did not match");
 	}
 
-	public static Suggestion makeTooltip(String text, String tooltip) {
-		return new Suggestion(StringRange.at(0), text, () -> tooltip);
-	}
-
-	public static void assertCommandSuggestsTooltips(CommandSender sender, String command, Suggestion... expectedSuggestions) {
-		assertCommandSuggestsTooltips(sender, command, Arrays.asList(expectedSuggestions));
-	}
-
-	public static void assertCommandSuggestsTooltips(CommandSender sender, String command, List<Suggestion> expectedSuggestions) {
-		List<Suggestion> actualSuggestions = getSuggestions(sender, command).getList();
+	public static void assertSuggestionEqualityTooltips(List<Suggestion> expectedSuggestions, List<Suggestion> actualSuggestions) {
 		List<String> actualSuggestionStrings = new ArrayList<>(actualSuggestions.size());
 		List<String> actualSuggestionTooltips = new ArrayList<>(actualSuggestions.size());
 		actualSuggestions.forEach(suggestion -> {
 			actualSuggestionStrings.add(suggestion.getText());
-			actualSuggestionTooltips.add(suggestion.getTooltip().getString());
+
+			Message tooltip = suggestion.getTooltip();
+			actualSuggestionTooltips.add(tooltip == null ? null : tooltip.getString());
 		});
 
 		List<String> expectedSuggestionStrings = new ArrayList<>(expectedSuggestions.size());
 		List<String> expectedSuggestionTooltips = new ArrayList<>(expectedSuggestions.size());
 		expectedSuggestions.forEach(suggestion -> {
 			expectedSuggestionStrings.add(suggestion.getText());
-			expectedSuggestionTooltips.add(suggestion.getTooltip().getString());
+
+			Message tooltip = suggestion.getTooltip();
+			expectedSuggestionTooltips.add(tooltip == null ? null : tooltip.getString());
 		});
 
 		assertEquals(expectedSuggestionStrings, actualSuggestionStrings, () -> "Suggestions did not match");
 		assertEquals(expectedSuggestionTooltips, actualSuggestionTooltips, () -> "Tooltips did not match");
+	}
+
+	// Public assertions
+	public static void assertCommandSuggests(CommandSender sender, String command, String... expectedSuggestions) {
+		assertCommandSuggests(sender, command, Arrays.asList(expectedSuggestions));
+	}
+
+	public static void assertCommandSuggests(CommandSender sender, String command, int startingAt, String... expectedSuggestions) {
+		assertCommandSuggests(sender, command, startingAt, Arrays.asList(expectedSuggestions));
+	}
+
+	public static void assertCommandSuggests(CommandSender sender, String command, List<String> expectedSuggestions) {
+		assertSuggestionEquality(expectedSuggestions, getSuggestions(sender, command).getList());
+	}
+
+	public static void assertCommandSuggests(CommandSender sender, String command, int startingAt, List<String> expectedSuggestions) {
+		List<Suggestion> actualSuggestions = getSuggestions(sender, command).getList();
+		assertSuggestionsStartAt(startingAt, actualSuggestions);
+		assertSuggestionEquality(expectedSuggestions, actualSuggestions);
+	}
+
+	public static Suggestion makeTooltip(String text, String tooltip) {
+		return new Suggestion(StringRange.at(0), text, tooltip == null ? null : () -> tooltip);
+	}
+
+	public static void assertCommandSuggestsTooltips(CommandSender sender, String command, Suggestion... expectedSuggestions) {
+		assertCommandSuggestsTooltips(sender, command, Arrays.asList(expectedSuggestions));
+	}
+
+	public static void assertCommandSuggestsTooltips(CommandSender sender, String command, int startingAt, Suggestion... expectedSuggestions) {
+		assertCommandSuggestsTooltips(sender, command, startingAt, Arrays.asList(expectedSuggestions));
+	}
+
+	public static void assertCommandSuggestsTooltips(CommandSender sender, String command, List<Suggestion> expectedSuggestions) {
+		assertSuggestionEqualityTooltips(expectedSuggestions, getSuggestions(sender, command).getList());
+	}
+
+	public static void assertCommandSuggestsTooltips(CommandSender sender, String command, int startingAt, List<Suggestion> expectedSuggestions) {
+		List<Suggestion> actualSuggestions = getSuggestions(sender, command).getList();
+		assertSuggestionsStartAt(startingAt, actualSuggestions);
+		assertSuggestionEqualityTooltips(expectedSuggestions, actualSuggestions);
 	}
 }

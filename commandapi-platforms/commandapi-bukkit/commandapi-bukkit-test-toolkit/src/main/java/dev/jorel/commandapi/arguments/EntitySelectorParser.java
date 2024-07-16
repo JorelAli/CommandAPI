@@ -3,6 +3,11 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.UnimplementedMethodException;
+import dev.jorel.commandapi.arguments.parser.ParameterGetter;
+import dev.jorel.commandapi.arguments.parser.Parser;
+import dev.jorel.commandapi.arguments.parser.Result;
+import dev.jorel.commandapi.arguments.parser.SuggestionProvider;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
@@ -47,13 +52,13 @@ public class EntitySelectorParser {
 	}
 
 	// Parsing
-	private static Parser.Void isSelectorStart() {
+	private static Parser.VoidNoSuggestions isSelectorStart() {
 		return reader -> {
 			if (!(reader.canRead() && reader.peek() == '@')) throw Parser.NEXT_BRANCH;
 		};
 	}
 
-	private static Parser.Void parseSelector(Parser.ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.VoidNoSuggestions parseSelector(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> {
 			reader.skip(); // skip @
 			if (!reader.canRead()) throw ERROR_MISSING_SELECTOR_TYPE.createWithContext(reader);
@@ -105,13 +110,13 @@ public class EntitySelectorParser {
 		};
 	}
 
-	private static Parser.Void isSelectorOptionsStart() {
+	private static Parser.VoidNoSuggestions isSelectorOptionsStart() {
 		return reader -> {
 			if (!(reader.canRead() && reader.peek() == '[')) throw Parser.NEXT_BRANCH;
 		};
 	}
 
-	private static Parser.Void parseSelectorOptions(Parser.ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.VoidNoSuggestions parseSelectorOptions(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> {
 			// TODO: Implement looping to parse these selector options
 			//  I'm pretty sure it would basically reuse many other object parsers as well, so maybe do those first
@@ -119,7 +124,13 @@ public class EntitySelectorParser {
 		};
 	}
 
-	private static Parser.Void parseNameOrUUID(Parser.ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.VoidNoSuggestions isNameStart() {
+		return reader -> {
+			if (!(reader.canRead() && reader.peek() != ' ')) throw ERROR_INVALID_NAME_OR_UUID.createWithContext(reader);
+		};
+	}
+
+	private static Parser.VoidNoSuggestions parseNameOrUUID(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> {
 			EntitySelectorParser selectorBuilder = selectorBuilderGetter.get();
 
@@ -131,7 +142,7 @@ public class EntitySelectorParser {
 				selectorBuilder.includesEntities = true;
 			} catch (IllegalArgumentException ignored) {
 				// Not a valid UUID string
-				if (input.isEmpty() || input.length() > 16) {
+				if (input.length() > 16) {
 					// Also not a valid player name
 					reader.setCursor(start);
 					throw ERROR_INVALID_NAME_OR_UUID.createWithContext(reader);
@@ -145,27 +156,60 @@ public class EntitySelectorParser {
 		};
 	}
 
-	private static Parser<EntitySelector> conclude(Parser.ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.NoSuggestions<EntitySelector> conclude(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> selectorBuilderGetter.get().build();
 	}
 
+	private static final SuggestionProvider suggestName = (context, builder) -> {
+		String remaining = builder.getRemainingLowerCase();
+
+		Bukkit.getOnlinePlayers().forEach(player -> {
+			String name = player.getName().toLowerCase();
+			if (name.startsWith(remaining)) {
+				builder.suggest(player.getName());
+			}
+		});
+	};
+	private static final SuggestionProvider suggestSelector = (context, builder) -> {
+		builder.suggest("@p", () -> "Nearest player");
+		builder.suggest("@a", () -> "All players");
+		builder.suggest("@r", () -> "Random player");
+		builder.suggest("@s", () -> "Current entity");
+		builder.suggest("@e", () -> "All entities");
+	};
+	private static final SuggestionProvider suggestNameOrSelector = (context, builder) -> {
+		suggestSelector.addSuggestions(context, builder);
+		suggestName.addSuggestions(context, builder);
+	};
+	private static final SuggestionProvider suggestOpenOptions = (context, builder) -> {
+		builder.suggest("[");
+	};
+	private static final SuggestionProvider suggestOptionsKeyOrClose = (context, builder) -> {
+		throw new UnimplementedMethodException("Entity selectors with options are not supported");
+	};
+
 	public static final Parser<EntitySelector> PARSER = Parser
-		.tryParse(reader -> new EntitySelectorParser(), (selectorBuilderGetter, builder) -> builder
-			.tryParse(isSelectorStart(), builder1 -> builder1
-				.tryParse(parseSelector(selectorBuilderGetter), builder2 -> builder2
-					.tryParse(isSelectorOptionsStart(), builder3 -> builder3
-						.tryParse(parseSelectorOptions(selectorBuilderGetter), builder4 -> builder4
-							// Input @?[...]
-							.conclude(conclude(selectorBuilderGetter))
-						).alwaysThrowException()
-					).neverThrowException()
-					// Input @? with no options
-					.conclude(conclude(selectorBuilderGetter))
-				).alwaysThrowException()
-			).neverThrowException()
-			.tryParse(parseNameOrUUID(selectorBuilderGetter), builder1 -> builder1
-				// Input ????? as a name or UUID
-				.conclude(conclude(selectorBuilderGetter))
-			).alwaysThrowException()
+		.tryParse(reader -> Result.withValueAndSuggestions(new EntitySelectorParser(), reader.getCursor(), suggestNameOrSelector),
+			(selectorBuilderGetter, builder) -> builder
+				.tryParse(isSelectorStart(), builder1 -> builder1
+					.tryParse(parseSelector(selectorBuilderGetter).suggests(suggestSelector), builder2 -> builder2
+						.tryParse(isSelectorOptionsStart().suggests(suggestOpenOptions), builder3 -> builder3
+							.tryParse(parseSelectorOptions(selectorBuilderGetter).suggests(suggestOptionsKeyOrClose), builder4 -> builder4
+								// Input @?[...]
+								.conclude(conclude(selectorBuilderGetter))
+							).alwaysThrowException()
+						).neverThrowException()
+						// Input @? with no options
+						.conclude(conclude(selectorBuilderGetter))
+					).alwaysThrowException()
+				).neverThrowException()
+				.tryParse(isNameStart(), builder1 -> builder1
+					.tryParse(parseNameOrUUID(selectorBuilderGetter).suggests(suggestName), builder2 -> builder2
+						// Input ????? as a name or UUID
+						.conclude(conclude(selectorBuilderGetter))
+					).alwaysThrowException()
+				)
+				// Empty input
+				.alwaysThrowException()
 		).alwaysThrowException();
 }

@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.MockCommandSource;
+import dev.jorel.commandapi.arguments.parser.Parser;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 
 import java.util.function.Predicate;
@@ -28,7 +29,7 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 	public static final SimpleCommandExceptionType RANGE_SWAPPED = new SimpleCommandExceptionType(
 		() -> "Min cannot be bigger than max"
 	);
-	private static final Parser<Integer> READ_INT_BEFORE_RANGE = reader -> {
+	private static final Parser.NoSuggestions<Integer> READ_INT_BEFORE_RANGE = reader -> {
 		// Custom parser avoids reading `..` indicator for range as part of a number
 		int start = reader.getCursor();
 
@@ -60,25 +61,25 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 	private static final Parser<IntegerRange> PARSER = Parser
 		.tryParse(Parser.assertCanRead(EMPTY_INPUT::createWithContext), builder -> builder
 			.tryParse(Parser.literal(".."), builder1 -> builder1
-				.tryParse(StringReader::readInt, (high, builder2) -> builder2
+				.tryParseNoSuggestions(StringReader::readInt, (high, builder2) -> builder2
 					// Input ..high
-					.conclude(reader -> IntegerRange.integerRangeLessThanOrEq(high.get()))
+					.concludeNoSuggestions(reader -> IntegerRange.integerRangeLessThanOrEq(high.get()))
 				)
 				// It looks like they tried to input ..high, but high was not a valid int
 				.throwExceptionIfTrue(PASS_INVALID_INT_EXCEPTIONS)
 				// Input just ..
-				.conclude(reader -> {
+				.concludeNoSuggestions(reader -> {
 					// Move cursor to start of ..
 					reader.setCursor(reader.getCursor() - 2);
 					throw EMPTY_INPUT.createWithContext(reader);
 				})
 			).neverThrowException()
-			.tryParse(StringReader::getCursor, (start, builder1) -> builder1
+			.tryParseNoSuggestions(StringReader::getCursor, (start, builder1) -> builder1
 				.tryParse(READ_INT_BEFORE_RANGE, (getLow, builder2) -> builder2
 					.tryParse(Parser.literal(".."), builder3 -> builder3
-						.tryParse(StringReader::readInt, (getHigh, builder4) -> builder4
+						.tryParseNoSuggestions(StringReader::readInt, (getHigh, builder4) -> builder4
 							// Input low..high
-							.conclude(reader -> {
+							.concludeNoSuggestions(reader -> {
 								int low = getLow.get();
 								int high = getHigh.get();
 								if (low > high) {
@@ -92,10 +93,10 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 						// It looked like they tried to input low..high, but high was not a valid int
 						.throwExceptionIfTrue(PASS_INVALID_INT_EXCEPTIONS)
 						// Input low..
-						.conclude(reader -> IntegerRange.integerRangeGreaterThanOrEq(getLow.get()))
+						.concludeNoSuggestions(reader -> IntegerRange.integerRangeGreaterThanOrEq(getLow.get()))
 					).neverThrowException()
 					// Input low
-					.conclude(reader -> {
+					.concludeNoSuggestions(reader -> {
 						int exact = getLow.get();
 						return new IntegerRange(exact, exact);
 					})
@@ -114,7 +115,7 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 
 	@Override
 	public IntegerRange parse(StringReader reader) throws CommandSyntaxException {
-		return PARSER.parse(reader);
+		return PARSER.parseValueOrThrow(reader);
 	}
 
 	public static IntegerRange getRange(CommandContext<MockCommandSource> cmdCtx, String key) {

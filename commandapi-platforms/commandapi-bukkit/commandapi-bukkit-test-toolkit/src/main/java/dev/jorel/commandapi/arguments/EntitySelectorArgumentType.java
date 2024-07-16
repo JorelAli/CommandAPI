@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.MockCommandSource;
-import dev.jorel.commandapi.UnimplementedMethodException;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -52,7 +51,7 @@ public record EntitySelectorArgumentType(boolean singleTarget, boolean playersOn
 
 	@Override
 	public EntitySelector parse(StringReader reader) throws CommandSyntaxException {
-		EntitySelector entityselector = EntitySelectorParser.PARSER.parse(reader);
+		EntitySelector entityselector = EntitySelectorParser.PARSER.parseValueOrThrow(reader);
 		// I don't know why Minecraft does `reader.setCursor(0)` here before throwing exceptions, but it does ¯\_(ツ)_/¯
 		//  That has the goofy result of underlining the whole command when it should really only underline the selector
 		//  This is easily fixed, just store `reader.getCursor()` before parsing the selector
@@ -74,8 +73,7 @@ public record EntitySelectorArgumentType(boolean singleTarget, boolean playersOn
 
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-		// TODO: Add suggestions
-		throw new UnimplementedMethodException();
+		return EntitySelectorParser.PARSER.listSuggestions(context, builder);
 	}
 
 	public static List<? extends Entity> findManyEntities(CommandContext<MockCommandSource> cmdCtx, String key, boolean allowEmpty) throws CommandSyntaxException {

@@ -2,11 +2,13 @@ package dev.jorel.commandapi;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.mojang.brigadier.suggestion.Suggestion;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.command.CommandSender;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -171,6 +173,23 @@ class AssertSuggestionUtilitiesTest extends CommandTestBase {
 			),
 			"Tooltips did not match " +
 				"==> expected: <[First, Second letter, Third letter]> but was: <[First letter, Second letter, Third letter]>"
+		);
+	}
+
+	@Test
+	void testAssertSuggestionsStartAt() {
+		SuggestionsBuilder builder = new SuggestionsBuilder("abc", 1);
+		builder.suggest("bcd");
+		List<Suggestion> suggestions = builder.build().getList();
+
+		// Successful
+		assertSuggestionsStartAt(1, suggestions);
+
+		// Unsuccessful
+		assertAssertionFails(
+			() -> assertSuggestionsStartAt(0, suggestions),
+			"Suggestion #0 <Suggestion{range=StringRange{start=1, end=3}, text='bcd', tooltip='null'}> " +
+				"started at wrong index ==> expected: <0> but was: <1>"
 		);
 	}
 }

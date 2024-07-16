@@ -9,6 +9,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.MockCommandSource;
 import dev.jorel.commandapi.UnimplementedMethodException;
+import dev.jorel.commandapi.arguments.parser.Parser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,7 @@ public class ProfileArgumentType implements ArgumentType<ProfileArgumentType.Res
 			}, builder -> builder
 				.tryParse(EntitySelectorParser.PARSER, (entitySelectorGetter, builder2) -> builder2
 					// Input entity selector
-					.conclude(reader -> {
+					.concludeNoSuggestions(reader -> {
 						EntitySelector entitySelector = entitySelectorGetter.get();
 						if (entitySelector.includesEntities()) {
 							throw EntitySelectorArgumentType.ERROR_ONLY_PLAYERS_ALLOWED.create();
@@ -61,7 +62,7 @@ public class ProfileArgumentType implements ArgumentType<ProfileArgumentType.Res
 		).neverThrowException()
 		.tryParse(Parser.readUntilWithoutEscapeCharacter(' '), (nameGetter, builder) -> builder
 			// Input player name
-			.conclude(reader -> {
+			.concludeNoSuggestions(reader -> {
 				String name = nameGetter.get();
 				return source -> {
 					// TODO: I'm not sure if or how this should check if offline player profiles exist
@@ -76,13 +77,12 @@ public class ProfileArgumentType implements ArgumentType<ProfileArgumentType.Res
 
 	@Override
 	public Result parse(StringReader reader) throws CommandSyntaxException {
-		return PARSER.parse(reader);
+		return PARSER.parseValueOrThrow(reader);
 	}
 
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-		// TODO: Implement suggestions
-		throw new UnimplementedMethodException();
+		return EntitySelectorParser.PARSER.listSuggestions(context, builder);
 	}
 
 	public static Collection<UUID> getProfiles(CommandContext<MockCommandSource> cmdCtx, String key) throws CommandSyntaxException {
