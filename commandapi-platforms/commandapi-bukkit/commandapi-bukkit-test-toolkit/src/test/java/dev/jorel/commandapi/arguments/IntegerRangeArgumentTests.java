@@ -147,4 +147,13 @@ class IntegerRangeArgumentTests extends CommandTestBase {
 			"Min cannot be bigger than max at position 5: test <--[HERE]"
 		);
 	}
+
+	@Test
+	void testNoSuggestions() {
+		assertCommandSuggests(player, "test ");
+		assertCommandSuggests(player, "test 10");
+		assertCommandSuggests(player, "test 10..");
+		assertCommandSuggests(player, "test 10..15");
+		assertCommandSuggests(player, "test ..10");
+	}
 }

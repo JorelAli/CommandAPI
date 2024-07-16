@@ -67,6 +67,28 @@ class ProfileArgumentTypeTests extends CommandTestBase {
 
 	@ParameterizedTest
 	@ValueSource(booleans = {false, true})
+	void testDefaultSuggestions(boolean offlinePlayer) {
+		registerCommand(offlinePlayer);
+
+		server.addPlayer("Player1");
+		server.addPlayer("Player2");
+
+		ConsoleCommandSenderMock console = server.getConsoleSender();
+		assertCommandSuggestsTooltips(
+			console, "test ",
+			5,
+			makeTooltip("@a", "All players"),
+			makeTooltip("@e", "All entities"),
+			makeTooltip("@p", "Nearest player"),
+			makeTooltip("@r", "Random player"),
+			makeTooltip("@s", "Current entity"),
+			makeTooltip("Player1", null),
+			makeTooltip("Player2", null)
+		);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
 	void testEntitySelectorErrors(boolean offlinePlayer) {
 		registerCommand(offlinePlayer);
 		ConsoleCommandSenderMock console = server.getConsoleSender();
@@ -123,6 +145,26 @@ class ProfileArgumentTypeTests extends CommandTestBase {
 
 	@ParameterizedTest
 	@ValueSource(booleans = {false, true})
+	void testEntitySelectorSuggestions(boolean offlinePlayer) {
+		registerCommand(offlinePlayer);
+
+		server.addPlayer("Player1");
+		server.addPlayer("Player2");
+
+		ConsoleCommandSenderMock console = server.getConsoleSender();
+		assertCommandSuggestsTooltips(
+			console, "test @",
+			5,
+			makeTooltip("@a", "All players"),
+			makeTooltip("@e", "All entities"),
+			makeTooltip("@p", "Nearest player"),
+			makeTooltip("@r", "Random player"),
+			makeTooltip("@s", "Current entity")
+		);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
 	void testNameSelectorErrors(boolean offlinePlayer) {
 		registerCommand(offlinePlayer);
 
@@ -157,6 +199,38 @@ class ProfileArgumentTypeTests extends CommandTestBase {
 		assertCommandSucceedsWithArguments(
 			console, "test pLAyeRa",
 			playerA
+		);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {false, true})
+	void testNameSuggestions(boolean offlinePlayer) {
+		registerCommand(offlinePlayer);
+
+		server.addPlayer("alice");
+		server.addPlayer("allan");
+		server.addPlayer("bob");
+
+		ConsoleCommandSenderMock console = server.getConsoleSender();
+
+		// Only suggests names that match remaining
+		assertCommandSuggests(
+			console, "test a",
+			5, "alice", "allan"
+		);
+		assertCommandSuggests(
+			console, "test all",
+			5, "allan"
+		);
+		assertCommandSuggests(
+			console, "test b",
+			5, "bob"
+		);
+
+		// Suggestions are not case-sensitive
+		assertCommandSuggests(
+			console, "test AL",
+			5, "alice", "allan"
 		);
 	}
 }

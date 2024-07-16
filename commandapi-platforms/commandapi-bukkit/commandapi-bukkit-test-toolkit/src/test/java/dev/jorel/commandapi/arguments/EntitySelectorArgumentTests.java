@@ -78,6 +78,25 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 	}
 
 	@Test
+	void testSuggestions_EntitySelectorParser_suggestNameOrSelector() {
+		server.addPlayer("Player1");
+		server.addPlayer("Player2");
+
+		ConsoleCommandSenderMock console = server.getConsoleSender();
+		assertCommandSuggestsTooltips(
+			console, "test multiple entity ",
+			21,
+			makeTooltip("@a", "All players"),
+			makeTooltip("@e", "All entities"),
+			makeTooltip("@p", "Nearest player"),
+			makeTooltip("@r", "Random player"),
+			makeTooltip("@s", "Current entity"),
+			makeTooltip("Player1", null),
+			makeTooltip("Player2", null)
+		);
+	}
+
+	@Test
 	void testErrors_EntitySelectorArgumentType_parse() {
 		// Yes, these errors do start at position 0 on a real server, Minecraft's code specifically tells them to do that
 		PlayerMock player = server.addPlayer();
@@ -218,6 +237,23 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 		assertCommandFails(
 			player, "test multiple entity @h",
 			"Unknown selector type '@h' at position 22: ...e entity @<--[HERE]"
+		);
+	}
+
+	@Test
+	void testSuggestions_EntitySelectorParser_suggestSelector() {
+		server.addPlayer("Player1");
+		server.addPlayer("Player2");
+
+		ConsoleCommandSenderMock console = server.getConsoleSender();
+		assertCommandSuggestsTooltips(
+			console, "test multiple entity @",
+			21,
+			makeTooltip("@a", "All players"),
+			makeTooltip("@e", "All entities"),
+			makeTooltip("@p", "Nearest player"),
+			makeTooltip("@r", "Random player"),
+			makeTooltip("@s", "Current entity")
 		);
 	}
 
@@ -415,6 +451,28 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 	}
 
 	@Test
+	void testSuggestions_EntitySelectorParser_suggestOpenOptions() {
+		ConsoleCommandSenderMock console = server.getConsoleSender();
+
+		// Valid selector starts options
+		assertCommandSuggests(
+			console, "test multiple entity @a",
+			23, "["
+		);
+
+		// Invalid selector suggests overriding with correct selectors
+		assertCommandSuggestsTooltips(
+			console, "test multiple entity @h",
+			21,
+			makeTooltip("@a", "All players"),
+			makeTooltip("@e", "All entities"),
+			makeTooltip("@p", "Nearest player"),
+			makeTooltip("@r", "Random player"),
+			makeTooltip("@s", "Current entity")
+		);
+	}
+
+	@Test
 	void testErrors_EntitySelectorParser_parseNameOrUUID() {
 		PlayerMock player = server.addPlayer();
 
@@ -428,6 +486,35 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 		assertCommandFails(
 			player, "test multiple entity 12345678901234567",
 			"Invalid name or UUID at position 21: ...le entity <--[HERE]"
+		);
+	}
+
+	@Test
+	void testSuggestions_EntitySelectorParser_suggestName() {
+		server.addPlayer("alice");
+		server.addPlayer("allan");
+		server.addPlayer("bob");
+
+		ConsoleCommandSenderMock console = server.getConsoleSender();
+
+		// Only suggests names that match remaining
+		assertCommandSuggests(
+			console, "test multiple entity a",
+			21, "alice", "allan"
+		);
+		assertCommandSuggests(
+			console, "test multiple entity all",
+			21, "allan"
+		);
+		assertCommandSuggests(
+			console, "test multiple entity b",
+			21, "bob"
+		);
+
+		// Suggestions are not case-sensitive
+		assertCommandSuggests(
+			console, "test multiple entity AL",
+			21, "alice", "allan"
 		);
 	}
 
