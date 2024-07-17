@@ -15,8 +15,7 @@ public class CommandAPISpigotConfig extends CommandAPIBukkitConfig<CommandAPISpi
 	 * @return this CommandAPIBukkitConfig
 	 */
 	public CommandAPISpigotConfig skipReloadDatapacks(boolean skip) {
-		this.skipReloadDatapacks = skip;
-		return this;
+		return super.skipReloadDatapacks(skip);
 	}
 
 	@Override

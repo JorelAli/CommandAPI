@@ -576,6 +576,19 @@ CommandAPICommand("gamemode")
 /* ANCHOR_END: argumentMultiLiteral1 */
 }
 
+fun argument_nbt2() {
+/* ANCHOR: argumentNBT2 */
+CommandAPICommand("award")
+    .withArguments(NBTCompoundArgument<NBTContainer>("nbt"))
+    .executes(CommandExecutor { _, args ->
+        val nbt = args["nbt"] as NBTContainer
+
+        // Do something with "nbt" here...
+    })
+    .register()
+/* ANCHOR_END: argumentNBT2 */
+}
+
 fun argument_objectives() {
 /* ANCHOR: argumentObjectives1 */
 CommandAPICommand("sidebar")

@@ -38,12 +38,20 @@ Now, we can configure the CommandAPI using the `CommandAPI.onLoad()` method to u
 
 <div class="multi-pre">
 
-```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentNBT1}}
+```java,Java_(Paper)
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentNBT1}}
 ```
 
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentNBT1}}
+```java,Java_(Spigot)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentNBT1}}
+```
+
+```kotlin,Kotlin_(Paper)
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentNBT1}}
+```
+
+```kotlin,Kotlin_(Spigot)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentNBT1}}
 ```
 
 </div>

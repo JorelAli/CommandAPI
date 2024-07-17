@@ -11,7 +11,6 @@ public abstract class CommandAPIBukkitConfig<T extends CommandAPIBukkitConfig<T>
 	JavaPlugin plugin;
 
 	// Default configuration
-	boolean shouldHookPaperReload = true;
 	boolean skipReloadDatapacks = false;
 
 	/**
@@ -68,6 +67,11 @@ public abstract class CommandAPIBukkitConfig<T extends CommandAPIBukkitConfig<T>
 			return instance();
 		}
 		return super.setNamespace(namespace);
+	}
+
+	public T skipReloadDatapacks(boolean skip) {
+		this.skipReloadDatapacks = skip;
+		return instance();
 	}
 
 	@Override
