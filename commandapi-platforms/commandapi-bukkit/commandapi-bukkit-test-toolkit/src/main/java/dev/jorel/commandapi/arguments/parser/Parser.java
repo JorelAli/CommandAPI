@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -20,19 +19,19 @@ public interface Parser<T> {
 	//////////////////////
 	// Define interface //
 	//////////////////////
-	Result<T> parse(StringReader reader);
+	Result<T> getResult(StringReader reader);
 
-	default T parseValueOrThrow(StringReader reader) throws CommandSyntaxException {
-		Result<T> tResult = parse(reader);
-		if (tResult.exception != null) throw tResult.exception;
-		return tResult.value;
+	default T parse(StringReader reader) throws CommandSyntaxException {
+		Result<T> result = getResult(reader);
+		if (result.exception != null) throw result.exception;
+		return result.value;
 	}
 
 	default <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 		StringReader reader = new StringReader(builder.getInput());
 		reader.setCursor(builder.getStart());
 
-		Result<T> result = parse(reader);
+		Result<T> result = getResult(reader);
 		if (result.suggestions == null) {
 			return builder.buildFuture();
 		}
@@ -41,270 +40,334 @@ public interface Parser<T> {
 		return builder.buildFuture();
 	}
 
-	// Version that matches `ArgumentType#parse`
+	///////////////////
+	// Build parsers //
+	///////////////////
+	// Start builder by reading from input
+	static <T> Argument<T> parse(Parser<T> parser) {
+		return parser::parse;
+	}
+
+	static <T> Argument<T> parse(Argument<T> parser) {
+		return parser;
+	}
+
+	static Literal read(Literal reader) {
+		return reader;
+	}
+
 	@FunctionalInterface
-	interface NoSuggestions<T> extends Parser<T> {
-		T parseNoSuggestions(StringReader reader) throws CommandSyntaxException;
+	interface Argument<T> extends ExceptionHandler<T, TerminalArgument<T>, NonTerminal.Argument<T>> {
+		// Implement parsing logic
+		@Override
+		T parse(StringReader reader) throws CommandSyntaxException;
 
 		@Override
-		default Result<T> parse(StringReader reader) {
+		default Result<T> getResult(StringReader reader) {
 			try {
-				return Result.withValue(parseNoSuggestions(reader));
+				return Result.withValue(parse(reader));
 			} catch (CommandSyntaxException exception) {
 				return Result.withException(exception);
 			}
 		}
 
-		// Can be adapted to include suggestions
-		default Parser<T> suggests(SuggestionProvider suggestions) {
-			return reader -> {
+		// Optionally continue build
+		record WithSuggestions<T>(Argument<T> base, SuggestionProvider suggestions) implements Argument<T> {
+			@Override
+			public T parse(StringReader reader) throws CommandSyntaxException {
+				return base.parse(reader);
+			}
+
+			@Override
+			public Result<T> getResult(StringReader reader) {
 				int suggestionsStart = reader.getCursor();
-				return parse(reader).withSuggestions(suggestionsStart, suggestions);
-			};
+				return Argument.super.getResult(reader).withSuggestions(suggestionsStart, suggestions);
+			}
+		}
+
+		default Argument<T> suggests(SuggestionProvider suggestions) {
+			return new WithSuggestions<>(this, suggestions);
+		}
+
+		@Override
+		default TerminalArgument<T> alwaysMapException(Function<CommandSyntaxException, CommandSyntaxException> map) {
+			return new TerminalArgument<>(this, map);
+		}
+
+		@Override
+		default NonTerminal.Argument<T> mapExceptions(Function<CommandSyntaxException, Optional<CommandSyntaxException>> map) {
+			return new NonTerminal.Argument<>(this, map);
 		}
 	}
 
-	// Versions without return value
 	@FunctionalInterface
-	interface VoidParser extends Parser<Void> {
-	}
-
-	@FunctionalInterface
-	interface VoidNoSuggestions extends VoidParser {
-		void parseNoSuggestions(StringReader reader) throws CommandSyntaxException;
+	interface Literal extends ExceptionHandler<Void, TerminalLiteral, NonTerminal.Literal> {
+		// Implement parsing logic
+		void read(StringReader reader) throws CommandSyntaxException;
 
 		@Override
-		default Result<Void> parse(StringReader reader) {
+		default Result<Void> getResult(StringReader reader) {
 			try {
-				parseNoSuggestions(reader);
+				read(reader);
 				return Result.withValue(null);
 			} catch (CommandSyntaxException exception) {
 				return Result.withException(exception);
 			}
 		}
 
-		// Can be adapted to include suggestions
-		default VoidParser suggests(SuggestionProvider suggestions) {
-			return reader -> {
+		// Optionally continue build
+		record WithSuggestions(Literal base, SuggestionProvider suggestions) implements Literal {
+			@Override
+			public void read(StringReader reader) throws CommandSyntaxException {
+				base.read(reader);
+			}
+
+			@Override
+			public Result<Void> getResult(StringReader reader) {
 				int suggestionsStart = reader.getCursor();
-				return parse(reader).withSuggestions(suggestionsStart, suggestions);
-			};
-		}
-	}
-
-	///////////////////
-	// Build Parsers //
-	///////////////////
-
-	// These methods simply forward to the real builder implementation
-	//  Nice for not having to specify `Parser.Builder.whatever~`
-	static <T, P> Builder.ExceptionHandler<T> tryParse(
-		Parser<P> parameterParser,
-		BiFunction<ParameterGetter<P>, Builder.ResultTypeUnknown, Parser<T>> buildContinue
-	) {
-		return new Builder.ResultTypeUnknown().tryParse(parameterParser, buildContinue);
-	}
-
-	static <T, P> Builder.ExceptionHandler<T> tryParseNoSuggestions(
-		NoSuggestions<P> parameterParser,
-		BiFunction<ParameterGetter<P>, Builder.ResultTypeUnknown, Parser<T>> buildContinue
-	) {
-		return tryParse(parameterParser, buildContinue);
-	}
-
-	static <T> Builder.ExceptionHandler<T> tryParse(VoidParser reader, Function<Builder.ResultTypeUnknown, Parser<T>> buildContinue) {
-		return new Builder.ResultTypeUnknown().tryParse(reader, buildContinue);
-	}
-
-	static <T> Builder.ExceptionHandler<T> tryParse(
-		VoidNoSuggestions reader,
-		Function<Builder.ResultTypeUnknown, Parser<T>> buildContinue
-	) {
-		return tryParse((VoidParser) reader, buildContinue);
-	}
-
-	static <T> Parser<T> conclude(Parser<T> conclude) {
-		return conclude;
-	}
-
-	static <T> Parser<T> concludeNoSuggestions(Parser.NoSuggestions<T> conclude) {
-		return conclude;
-	}
-
-	class Builder<T> {
-
-		// Determine whether exceptions are thrown or we pass onto the next branch
-		@FunctionalInterface
-		public interface ExceptionHandler<T> {
-			Builder<T> mapExceptions(Function<CommandSyntaxException, Optional<CommandSyntaxException>> map);
-
-			default Builder<T> throwExceptionIfTrue(Predicate<CommandSyntaxException> test) {
-				return mapExceptions(exception -> Optional.ofNullable(test.test(exception) ? exception : null));
-			}
-
-			default Builder<T> neverThrowException() {
-				return mapExceptions(exception -> Optional.empty());
-			}
-
-			// These methods can conclude the parser, since we'll always throw before needing to do more processing
-			default Parser<T> alwaysMapException(Function<CommandSyntaxException, CommandSyntaxException> map) {
-				return mapExceptions(map.andThen(Optional::of)).conclude(null);
-			}
-
-			default Parser<T> alwaysThrowException() {
-				return mapExceptions(Optional::of).conclude(null);
+				return Literal.super.getResult(reader).withSuggestions(suggestionsStart, suggestions);
 			}
 		}
 
-		public static class ResultTypeUnknown {
-			// Some Java type-inference magic is happening here :)
-			//  With the syntax of this tree builder, there will only be one call to `ResultTypeUnknown#conclude`
-			//  The type of Parser there can be inferred from the return expression of the functional interface
-			//  This defines T, which is then propagated backward to determine the type of Builder<T>
-			public <T, P> ExceptionHandler<T> tryParse(
-				Parser<P> parameterParser,
-				BiFunction<ParameterGetter<P>, ResultTypeUnknown, Parser<T>> buildContinue
-			) {
-				ParameterGetter<P> getParameter = new ParameterGetter<>();
-				ResultTypeUnknown continueBuilder = new ResultTypeUnknown();
+		default Literal suggests(SuggestionProvider suggestions) {
+			return new WithSuggestions(this, suggestions);
+		}
 
-				Parser<T> continueParser = buildContinue.apply(getParameter, continueBuilder);
+		@Override
+		default TerminalLiteral alwaysMapException(Function<CommandSyntaxException, CommandSyntaxException> map) {
+			return new TerminalLiteral(this, map);
+		}
 
-				return exceptionMap -> {
-					Builder<T> builder = new Builder<>();
-					builder.branches.add(new Branch.Argument<>(parameterParser, getParameter, exceptionMap, continueParser));
-					return builder;
-				};
-			}
+		@Override
+		default NonTerminal.Literal mapExceptions(Function<CommandSyntaxException, Optional<CommandSyntaxException>> map) {
+			return new NonTerminal.Literal(this, map);
+		}
+	}
 
-			public <T, P> ExceptionHandler<T> tryParseNoSuggestions(
-				NoSuggestions<P> parameterParser,
-				BiFunction<ParameterGetter<P>, ResultTypeUnknown, Parser<T>> buildContinue
-			) {
-				return tryParse(parameterParser, buildContinue);
-			}
+	// Define special handling with an exception
+	interface ExceptionHandler<T, NextTerminal extends Parser<T>, NextNonTerminal extends NonTerminal<T>> extends Parser<T> {
+		// Either throw it (or substitute with another exception) to match Parser interface
+		NextTerminal alwaysMapException(Function<CommandSyntaxException, CommandSyntaxException> map);
 
-			public <T> ExceptionHandler<T> tryParse(
-				VoidParser reader,
-				Function<Builder.ResultTypeUnknown, Parser<T>> buildContinue
-			) {
-				ResultTypeUnknown continueBuilder = new ResultTypeUnknown();
+		default NextTerminal alwaysThrowException() {
+			return alwaysMapException(Function.identity());
+		}
 
-				Parser<T> continueParser = buildContinue.apply(continueBuilder);
+		// Or catch it to leave the path unresolved
+		NextNonTerminal mapExceptions(Function<CommandSyntaxException, Optional<CommandSyntaxException>> map);
 
-				return exceptionMap -> {
-					Builder<T> builder = new Builder<>();
-					builder.branches.add(new Branch.Literal<>(reader, exceptionMap, continueParser));
-					return builder;
-				};
-			}
+		default NextNonTerminal throwExceptionIfTrue(Predicate<CommandSyntaxException> test) {
+			return mapExceptions(exception -> Optional.ofNullable(test.test(exception) ? exception : null));
+		}
 
-			public <T> Builder.ExceptionHandler<T> tryParse(
-				VoidNoSuggestions reader,
-				Function<Builder.ResultTypeUnknown, Parser<T>> buildContinue
-			) {
-				return tryParse((VoidParser) reader, buildContinue);
-			}
+		default NextNonTerminal neverThrowException() {
+			return mapExceptions(exception -> Optional.empty());
+		}
+	}
 
-			public <T> Parser<T> conclude(Parser<T> conclude) {
-				return conclude;
-			}
+	private static <T> Result<T> mergeResultSuggestions(Result<T> newResult, Result<?> oldResult) {
+		return newResult.suggestions == null ?
+			newResult.withSuggestions(oldResult.suggestionsStart, oldResult.suggestions) :
+			newResult;
+	}
 
-			public <T> Parser<T> concludeNoSuggestions(Parser.NoSuggestions<T> conclude) {
-				return conclude;
+	record TerminalArgument<T>(
+		Argument<T> parser,
+		Function<CommandSyntaxException, CommandSyntaxException> map
+	) implements Parser<T> {
+		// Implement parsing logic
+		@Override
+		public Result<T> getResult(StringReader reader) {
+			try {
+				return Result.withValue(parser.parse(reader));
+			} catch (CommandSyntaxException exception) {
+				CommandSyntaxException toThrow = map.apply(exception);
+				return Result.withException(toThrow);
 			}
 		}
 
-		// Sane builder Impl since we know T now
-		private final List<Branch<T>> branches = new ArrayList<>();
+		// Optionally continue build
+		// In the case where this returns a value, provide that value as context and keep parsing
+		public <P> Parser<P> continueWith(Function<ParameterGetter<T>, Parser<P>> continueBuild) {
+			ParameterGetter<T> getParameter = new ParameterGetter<>();
 
-		public <P> ExceptionHandler<T> tryParse(
-			Parser<P> parameterParser,
-			BiFunction<ParameterGetter<P>, Builder<T>, Parser<T>> buildContinue
-		) {
-			ParameterGetter<P> getParameter = new ParameterGetter<>();
-			Builder<T> continueBuilder = new Builder<>();
-
-			Parser<T> continueParser = buildContinue.apply(getParameter, continueBuilder);
-
-			return exceptionMap -> {
-				branches.add(new Branch.Argument<>(parameterParser, getParameter, exceptionMap, continueParser));
-				return this;
-			};
-		}
-
-		public <P> ExceptionHandler<T> tryParseNoSuggestions(
-			NoSuggestions<P> parameterParser,
-			BiFunction<ParameterGetter<P>, Builder<T>, Parser<T>> buildContinue
-		) {
-			return tryParse(parameterParser, buildContinue);
-		}
-
-		public ExceptionHandler<T> tryParse(VoidParser reader, Function<Builder<T>, Parser<T>> buildContinue) {
-			Builder<T> continueBuilder = new Builder<>();
-
-			Parser<T> continueParser = buildContinue.apply(continueBuilder);
-
-			return test -> {
-				branches.add(new Branch.Literal<>(reader, test, continueParser));
-				return this;
-			};
-		}
-
-		public ExceptionHandler<T> tryParse(VoidNoSuggestions reader, Function<Builder<T>, Parser<T>> buildContinue) {
-			return tryParse((VoidParser) reader, buildContinue);
-		}
-
-		public Parser<T> conclude(Parser<T> conclude) {
-			List<Branch<T>> branches = this.branches;
-			if (branches.isEmpty()) return conclude;
+			Parser<P> continueParser = continueBuild.apply(getParameter);
 
 			return reader -> {
-				int suggestionsStart = 0;
-				SuggestionProvider suggestions = null;
+				Result<T> parameterResult = parser.getResult(reader);
+
+				if (parameterResult.exception != null) {
+					CommandSyntaxException toThrow = map.apply(parameterResult.exception);
+					return mergeResultSuggestions(Result.withException(toThrow), parameterResult);
+				}
+				getParameter.set(parameterResult.value);
+
+				return mergeResultSuggestions(continueParser.getResult(reader), parameterResult);
+			};
+		}
+	}
+
+	record TerminalLiteral(
+		Literal parser,
+		Function<CommandSyntaxException, CommandSyntaxException> map
+	) implements Parser<Void> {
+		// Implement parsing logic
+		@Override
+		public Result<Void> getResult(StringReader reader) {
+			try {
+				parser.read(reader);
+				return Result.withValue(null);
+			} catch (CommandSyntaxException exception) {
+				CommandSyntaxException toThrow = map.apply(exception);
+				return Result.withException(toThrow);
+			}
+		}
+
+		// Optionally continue build
+		// In the case where the read does not throw an exception, keep parsing
+		public <P> Parser<P> continueWith(Parser<P> continueParser) {
+			return reader -> {
+				Result<Void> parameterResult = parser.getResult(reader);
+
+				if (parameterResult.exception != null) {
+					CommandSyntaxException toThrow = map.apply(parameterResult.exception);
+					return mergeResultSuggestions(Result.withException(toThrow), parameterResult);
+				}
+
+				return mergeResultSuggestions(continueParser.getResult(reader), parameterResult);
+			};
+		}
+	}
+
+	// Not a Parser since it may not finish with a definite value or exception
+	interface NonTerminal<T> {
+		Result<T> getResult(StringReader reader);
+
+		record Argument<T>(
+			Parser.Argument<T> parser,
+			Function<CommandSyntaxException, Optional<CommandSyntaxException>> map
+		) implements NonTerminal<T> {
+			// Implement parsing logic
+			@Override
+			public Result<T> getResult(StringReader reader) {
+				try {
+					return Result.withValue(parser.parse(reader));
+				} catch (CommandSyntaxException exception) {
+					Optional<CommandSyntaxException> toThrow = map.apply(exception);
+					return Result.withException(toThrow.orElse(null));
+				}
+			}
+
+			// Optionally continue build
+			// In the case where this returns a value, provide that value as context and try new branches
+			public <P> NonTerminal<P> continueWith(Function<ParameterGetter<T>, Parser<P>> continueBuild) {
+				ParameterGetter<T> getParameter = new ParameterGetter<>();
+
+				Parser<P> continueParser = continueBuild.apply(getParameter);
+
+				return reader -> {
+					Result<T> parameterResult = parser.getResult(reader);
+
+					if (parameterResult.exception != null) {
+						Optional<CommandSyntaxException> toThrow = map.apply(parameterResult.exception);
+						return mergeResultSuggestions(Result.withException(toThrow.orElse(null)), parameterResult);
+					}
+					getParameter.set(parameterResult.value);
+
+					return mergeResultSuggestions(continueParser.getResult(reader), parameterResult);
+				};
+			}
+		}
+
+		record Literal(
+			Parser.Literal parser,
+			Function<CommandSyntaxException, Optional<CommandSyntaxException>> map
+		) implements NonTerminal<Void> {
+			// Implement parsing logic
+			@Override
+			public Result<Void> getResult(StringReader reader) {
+				try {
+					parser.read(reader);
+					return Result.withValue(null);
+				} catch (CommandSyntaxException exception) {
+					Optional<CommandSyntaxException> toThrow = map.apply(exception);
+					return Result.withException(toThrow.orElse(null));
+				}
+			}
+
+			// Optionally continue build
+			// In the case where the read does not throw an exception, try new branches
+			public <P> NonTerminal<P> continueWith(Parser<P> continueParser) {
+				return reader -> {
+					Result<Void> parameterResult = parser.getResult(reader);
+
+					if (parameterResult.exception != null) {
+						Optional<CommandSyntaxException> toThrow = map.apply(parameterResult.exception);
+						return mergeResultSuggestions(Result.withException(toThrow.orElse(null)), parameterResult);
+					}
+
+					return mergeResultSuggestions(continueParser.getResult(reader), parameterResult);
+				};
+			}
+		}
+	}
+
+	// Try different possibilities
+	static <T> Branches<T> tryParse(NonTerminal<T> branch) {
+		return new Branches<T>().thenTryParse(branch);
+	}
+
+	class Branches<T> {
+		private final List<NonTerminal<T>> possibilities = new ArrayList<>();
+
+		// Check through possibly non-terminal results
+		public Branches<T> thenTryParse(NonTerminal<T> branch) {
+			this.possibilities.add(branch);
+
+			return this;
+		}
+
+		// Conclude with a parser that always resolves
+		public Parser<T> then(Parser<T> parser) {
+			List<NonTerminal<T>> possibilities = this.possibilities;
+
+			return reader -> {
+				Result<T> suggestionsResult = Result.withValue(null);
 
 				int start = reader.getCursor();
-				for (Branch<T> potential : branches) {
-					Result<T> result = potential.parse(reader);
+				for (NonTerminal<T> potential : possibilities) {
+					Result<T> result = potential.getResult(reader);
 
 					if (result.value != null || result.exception != null) {
 						return result;
 					}
 					if (result.suggestions != null) {
-						suggestionsStart = result.suggestionsStart;
-						suggestions = result.suggestions;
+						suggestionsResult = result;
 					}
 
 					// Reset cursor for next try
 					reader.setCursor(start);
 				}
 
-				Result<T> concludeResult = conclude.parse(reader);
-				return concludeResult.suggestions == null ?
-					concludeResult.withSuggestions(suggestionsStart, suggestions) :
-					concludeResult;
+				return mergeResultSuggestions(parser.getResult(reader), suggestionsResult);
 			};
-		}
-
-		public Parser<T> concludeNoSuggestions(Parser.NoSuggestions<T> conclude) {
-			return conclude(conclude);
 		}
 	}
 
-	////////////////////
-	// Common parsers //
-	////////////////////
+	//////////////////////////////////
+	// Common parsers and utilities //
+	//////////////////////////////////
 	CommandSyntaxException NEXT_BRANCH = new SimpleCommandExceptionType(
 		() -> "This branch did not match"
 	).create();
 
-	static VoidNoSuggestions assertCanRead(Function<StringReader, CommandSyntaxException> exception) {
+	static Literal assertCanRead(Function<StringReader, CommandSyntaxException> exception) {
 		return reader -> {
 			if (!reader.canRead()) throw exception.apply(reader);
 		};
 	}
 
-	static VoidNoSuggestions literal(String literal) {
+	static Literal literal(String literal) {
 		return reader -> {
 			if (reader.canRead(literal.length())) {
 				int start = reader.getCursor();
@@ -319,7 +382,7 @@ public interface Parser<T> {
 		};
 	}
 
-	static NoSuggestions<String> readUntilWithoutEscapeCharacter(char terminator) {
+	static Argument<String> readUntilWithoutEscapeCharacter(char terminator) {
 		return reader -> {
 			int start = reader.getCursor();
 			while (reader.canRead() && reader.peek() != terminator) {

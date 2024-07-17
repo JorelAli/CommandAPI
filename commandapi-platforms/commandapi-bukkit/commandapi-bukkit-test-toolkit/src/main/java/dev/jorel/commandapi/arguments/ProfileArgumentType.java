@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.jorel.commandapi.MockCommandSource;
-import dev.jorel.commandapi.UnimplementedMethodException;
 import dev.jorel.commandapi.arguments.parser.Parser;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,50 +33,57 @@ public class ProfileArgumentType implements ArgumentType<ProfileArgumentType.Res
 		() -> "That player does not exist"
 	);
 
-	private static final Parser<Result> PARSER = Parser
-		.tryParse(reader -> {
-				if (!(reader.canRead() && reader.peek() == '@')) throw Parser.NEXT_BRANCH;
-			}, builder -> builder
-				.tryParse(EntitySelectorParser.PARSER, (entitySelectorGetter, builder2) -> builder2
-					// Input entity selector
-					.concludeNoSuggestions(reader -> {
-						EntitySelector entitySelector = entitySelectorGetter.get();
-						if (entitySelector.includesEntities()) {
-							throw EntitySelectorArgumentType.ERROR_ONLY_PLAYERS_ALLOWED.create();
-						}
-						return (Result) source -> {
-							List<Player> players = entitySelector.findPlayers(source);
-							if (players.isEmpty()) {
-								throw EntitySelectorArgumentType.NO_PLAYERS_FOUND.create();
-							}
+	private static final Parser.Literal isSelectorStart = reader -> {
+		if (!(reader.canRead() && reader.peek() == '@')) throw Parser.NEXT_BRANCH;
+	};
 
-							List<UUID> profiles = new ArrayList<>(players.size());
-							for (Player player : players) {
-								profiles.add(player.getUniqueId());
+	private static final Parser<Result> PARSER = Parser
+		.tryParse(Parser.read(isSelectorStart)
+			.neverThrowException()
+			.continueWith(
+				Parser.parse(EntitySelectorParser.PARSER)
+					.alwaysThrowException()
+					.continueWith(selectorGetter -> Parser.parse(
+						reader -> {
+							EntitySelector selector = selectorGetter.get();
+							if (selector.includesEntities()) {
+								throw EntitySelectorArgumentType.ERROR_ONLY_PLAYERS_ALLOWED.create();
 							}
-							return profiles;
-						};
-					})
-				).alwaysThrowException()
-		).neverThrowException()
-		.tryParse(Parser.readUntilWithoutEscapeCharacter(' '), (nameGetter, builder) -> builder
-			// Input player name
-			.concludeNoSuggestions(reader -> {
-				String name = nameGetter.get();
-				return source -> {
-					// TODO: I'm not sure if or how this should check if offline player profiles exist
-					Player player = Bukkit.getPlayerExact(name);
-					if (player == null) {
-						throw ERROR_UNKNOWN_PLAYER.create();
-					}
-					return Collections.singleton(player.getUniqueId());
-				};
-			})
-		).alwaysThrowException();
+							return (Result) source -> {
+								List<Player> players = selector.findPlayers(source);
+								if (players.isEmpty()) {
+									throw EntitySelectorArgumentType.NO_PLAYERS_FOUND.create();
+								}
+
+								List<UUID> profiles = new ArrayList<>(players.size());
+								for (Player player : players) {
+									profiles.add(player.getUniqueId());
+								}
+								return profiles;
+							};
+						}
+					))
+			)
+		).then(Parser.readUntilWithoutEscapeCharacter(' ')
+			.alwaysThrowException()
+			.continueWith(nameGetter -> Parser.parse(
+				reader -> {
+					String name = nameGetter.get();
+					return source -> {
+						// TODO: I'm not sure if or how this should check if offline player profiles exist
+						Player player = Bukkit.getPlayerExact(name);
+						if (player == null) {
+							throw ERROR_UNKNOWN_PLAYER.create();
+						}
+						return Collections.singleton(player.getUniqueId());
+					};
+				}
+			))
+		);
 
 	@Override
 	public Result parse(StringReader reader) throws CommandSyntaxException {
-		return PARSER.parseValueOrThrow(reader);
+		return PARSER.parse(reader);
 	}
 
 	@Override

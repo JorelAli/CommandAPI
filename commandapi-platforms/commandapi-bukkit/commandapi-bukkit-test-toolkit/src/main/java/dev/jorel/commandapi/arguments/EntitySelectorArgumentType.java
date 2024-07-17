@@ -51,7 +51,7 @@ public record EntitySelectorArgumentType(boolean singleTarget, boolean playersOn
 
 	@Override
 	public EntitySelector parse(StringReader reader) throws CommandSyntaxException {
-		EntitySelector entityselector = EntitySelectorParser.PARSER.parseValueOrThrow(reader);
+		EntitySelector entityselector = EntitySelectorParser.PARSER.parse(reader);
 		// I don't know why Minecraft does `reader.setCursor(0)` here before throwing exceptions, but it does ¯\_(ツ)_/¯
 		//  That has the goofy result of underlining the whole command when it should really only underline the selector
 		//  This is easily fixed, just store `reader.getCursor()` before parsing the selector

@@ -29,7 +29,8 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 	public static final SimpleCommandExceptionType RANGE_SWAPPED = new SimpleCommandExceptionType(
 		() -> "Min cannot be bigger than max"
 	);
-	private static final Parser.NoSuggestions<Integer> READ_INT_BEFORE_RANGE = reader -> {
+
+	private static final Parser.Argument<Integer> READ_INT_BEFORE_RANGE = reader -> {
 		// Custom parser avoids reading `..` indicator for range as part of a number
 		int start = reader.getCursor();
 
@@ -54,68 +55,87 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(reader, number);
 		}
 	};
-
-	private static final Predicate<CommandSyntaxException> PASS_INVALID_INT_EXCEPTIONS = exception ->
+	private static final Predicate<CommandSyntaxException> THROW_INVALID_INT_EXCEPTIONS = exception ->
 		exception.getType().equals(CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt());
 
 	private static final Parser<IntegerRange> PARSER = Parser
-		.tryParse(Parser.assertCanRead(EMPTY_INPUT::createWithContext), builder -> builder
-			.tryParse(Parser.literal(".."), builder1 -> builder1
-				.tryParseNoSuggestions(StringReader::readInt, (high, builder2) -> builder2
-					// Input ..high
-					.concludeNoSuggestions(reader -> IntegerRange.integerRangeLessThanOrEq(high.get()))
+		.assertCanRead(EMPTY_INPUT::createWithContext)
+		.alwaysThrowException()
+		.continueWith(
+			Parser.tryParse(Parser.literal("..")
+				.neverThrowException()
+				// Input ..
+				.continueWith(
+					Parser.tryParse(Parser.parse(StringReader::readInt)
+						// It looks like they tried to enter ..high, but high was not a valid int
+						.throwExceptionIfTrue(THROW_INVALID_INT_EXCEPTIONS)
+						// Input ..high
+						.continueWith(high -> Parser.parse(
+							reader -> IntegerRange.integerRangeLessThanOrEq(high.get())
+						))
+					).then(Parser.parse(
+						// Input just ..
+						reader -> {
+							// Move cursor to start of ..
+							reader.setCursor(reader.getCursor() - 2);
+							throw EMPTY_INPUT.createWithContext(reader);
+						}
+					))
 				)
-				// It looks like they tried to input ..high, but high was not a valid int
-				.throwExceptionIfTrue(PASS_INVALID_INT_EXCEPTIONS)
-				// Input just ..
-				.concludeNoSuggestions(reader -> {
-					// Move cursor to start of ..
-					reader.setCursor(reader.getCursor() - 2);
-					throw EMPTY_INPUT.createWithContext(reader);
-				})
-			).neverThrowException()
-			.tryParseNoSuggestions(StringReader::getCursor, (start, builder1) -> builder1
-				.tryParse(READ_INT_BEFORE_RANGE, (getLow, builder2) -> builder2
-					.tryParse(Parser.literal(".."), builder3 -> builder3
-						.tryParseNoSuggestions(StringReader::readInt, (getHigh, builder4) -> builder4
-							// Input low..high
-							.concludeNoSuggestions(reader -> {
-								int low = getLow.get();
-								int high = getHigh.get();
-								if (low > high) {
-									// Reset to start of input
-									reader.setCursor(start.get());
-									throw RANGE_SWAPPED.createWithContext(reader);
+			).then(Parser.parse(StringReader::getCursor)
+				.alwaysThrowException()
+				.continueWith(start ->
+					Parser.parse(READ_INT_BEFORE_RANGE)
+						.alwaysMapException(exception -> {
+							if (exception.getType().equals(CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerExpectedInt())) {
+								// If we didn't find any int to input, this range is empty
+								StringReader context = new StringReader(exception.getInput());
+								context.setCursor(exception.getCursor());
+								return EMPTY_INPUT.createWithContext(context);
+							}
+							// Otherwise throw original exception (invalid integer)
+							return exception;
+						})
+						// Input low
+						.continueWith(getLow ->
+							Parser.tryParse(Parser.literal("..")
+								.neverThrowException()
+								// Input low..
+								.continueWith(
+									Parser.tryParse(Parser.parse(StringReader::readInt)
+										.throwExceptionIfTrue(THROW_INVALID_INT_EXCEPTIONS)
+										.continueWith(getHigh -> Parser.parse(
+											reader -> {
+												int low = getLow.get();
+												int high = getHigh.get();
+												if (low > high) {
+													// Reset to start of input
+													reader.setCursor(start.get());
+													throw RANGE_SWAPPED.createWithContext(reader);
+												}
+												return new IntegerRange(low, high);
+											}
+										))
+									).then(Parser.parse(
+										// Input low..
+										reader -> IntegerRange.integerRangeGreaterThanOrEq(getLow.get())
+									))
+								)
+							).then(Parser.parse(
+								// Input exact
+								reader -> {
+									int exact = getLow.get();
+									return new IntegerRange(exact, exact);
 								}
-								return new IntegerRange(low, high);
-							})
+							))
 						)
-						// It looked like they tried to input low..high, but high was not a valid int
-						.throwExceptionIfTrue(PASS_INVALID_INT_EXCEPTIONS)
-						// Input low..
-						.concludeNoSuggestions(reader -> IntegerRange.integerRangeGreaterThanOrEq(getLow.get()))
-					).neverThrowException()
-					// Input low
-					.concludeNoSuggestions(reader -> {
-						int exact = getLow.get();
-						return new IntegerRange(exact, exact);
-					})
-				).alwaysMapException(exception -> {
-					if (exception.getType().equals(CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerExpectedInt())) {
-						// If we didn't find any int to input, this range is empty
-						StringReader context = new StringReader(exception.getInput());
-						context.setCursor(exception.getCursor());
-						return EMPTY_INPUT.createWithContext(context);
-					}
-					// Otherwise throw original exception
-					return exception;
-				})
-			).alwaysThrowException()
-		).alwaysThrowException();
+				)
+			)
+		);
 
 	@Override
 	public IntegerRange parse(StringReader reader) throws CommandSyntaxException {
-		return PARSER.parseValueOrThrow(reader);
+		return PARSER.parse(reader);
 	}
 
 	public static IntegerRange getRange(CommandContext<MockCommandSource> cmdCtx, String key) {
