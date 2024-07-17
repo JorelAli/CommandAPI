@@ -25,6 +25,7 @@ class PingPongCommandTests {
 
 	@AfterEach
 	public void tearDown() {
+		// Reset for a clean slate next test
 		MockBukkit.unmock();
 	}
 
