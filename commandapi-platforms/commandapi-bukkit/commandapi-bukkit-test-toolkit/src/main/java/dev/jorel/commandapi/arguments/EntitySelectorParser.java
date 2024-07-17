@@ -5,7 +5,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.UnimplementedMethodException;
 import dev.jorel.commandapi.arguments.parser.ParameterGetter;
 import dev.jorel.commandapi.arguments.parser.Parser;
-import dev.jorel.commandapi.arguments.parser.Result;
 import dev.jorel.commandapi.arguments.parser.SuggestionProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -52,13 +51,11 @@ public class EntitySelectorParser {
 	}
 
 	// Parsing
-	private static Parser.VoidNoSuggestions isSelectorStart() {
-		return reader -> {
-			if (!(reader.canRead() && reader.peek() == '@')) throw Parser.NEXT_BRANCH;
-		};
-	}
+	private static final Parser.Literal isSelectorStart = reader -> {
+		if (!(reader.canRead() && reader.peek() == '@')) throw Parser.NEXT_BRANCH;
+	};
 
-	private static Parser.VoidNoSuggestions parseSelector(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.Literal parseSelector(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> {
 			reader.skip(); // skip @
 			if (!reader.canRead()) throw ERROR_MISSING_SELECTOR_TYPE.createWithContext(reader);
@@ -110,13 +107,11 @@ public class EntitySelectorParser {
 		};
 	}
 
-	private static Parser.VoidNoSuggestions isSelectorOptionsStart() {
-		return reader -> {
-			if (!(reader.canRead() && reader.peek() == '[')) throw Parser.NEXT_BRANCH;
-		};
-	}
+	private static final Parser.Literal isSelectorOptionsStart = reader -> {
+		if (!(reader.canRead() && reader.peek() == '[')) throw Parser.NEXT_BRANCH;
+	};
 
-	private static Parser.VoidNoSuggestions parseSelectorOptions(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.Literal parseSelectorOptions(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> {
 			// TODO: Implement looping to parse these selector options
 			//  I'm pretty sure it would basically reuse many other object parsers as well, so maybe do those first
@@ -124,13 +119,11 @@ public class EntitySelectorParser {
 		};
 	}
 
-	private static Parser.VoidNoSuggestions isNameStart() {
-		return reader -> {
-			if (!(reader.canRead() && reader.peek() != ' ')) throw ERROR_INVALID_NAME_OR_UUID.createWithContext(reader);
-		};
-	}
+	private static final Parser.Literal isNameStart = reader -> {
+		if (!(reader.canRead() && reader.peek() != ' ')) throw ERROR_INVALID_NAME_OR_UUID.createWithContext(reader);
+	};
 
-	private static Parser.VoidNoSuggestions parseNameOrUUID(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.Literal parseNameOrUUID(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> {
 			EntitySelectorParser selectorBuilder = selectorBuilderGetter.get();
 
@@ -156,7 +149,7 @@ public class EntitySelectorParser {
 		};
 	}
 
-	private static Parser.NoSuggestions<EntitySelector> conclude(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static Parser.Argument<EntitySelector> conclude(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
 		return reader -> selectorBuilderGetter.get().build();
 	}
 
@@ -181,35 +174,45 @@ public class EntitySelectorParser {
 		suggestSelector.addSuggestions(context, builder);
 		suggestName.addSuggestions(context, builder);
 	};
-	private static final SuggestionProvider suggestOpenOptions = (context, builder) -> {
-		builder.suggest("[");
-	};
+	private static final SuggestionProvider suggestOpenOptions = (context, builder) -> builder.suggest("[");
 	private static final SuggestionProvider suggestOptionsKeyOrClose = (context, builder) -> {
 		throw new UnimplementedMethodException("Entity selectors with options are not supported");
 	};
 
 	public static final Parser<EntitySelector> PARSER = Parser
-		.tryParse(reader -> Result.withValueAndSuggestions(new EntitySelectorParser(), reader.getCursor(), suggestNameOrSelector),
-			(selectorBuilderGetter, builder) -> builder
-				.tryParse(isSelectorStart(), builder1 -> builder1
-					.tryParse(parseSelector(selectorBuilderGetter).suggests(suggestSelector), builder2 -> builder2
-						.tryParse(isSelectorOptionsStart().suggests(suggestOpenOptions), builder3 -> builder3
-							.tryParse(parseSelectorOptions(selectorBuilderGetter).suggests(suggestOptionsKeyOrClose), builder4 -> builder4
-								// Input @?[...]
-								.conclude(conclude(selectorBuilderGetter))
-							).alwaysThrowException()
-						).neverThrowException()
-						// Input @? with no options
-						.conclude(conclude(selectorBuilderGetter))
-					).alwaysThrowException()
-				).neverThrowException()
-				.tryParse(isNameStart(), builder1 -> builder1
-					.tryParse(parseNameOrUUID(selectorBuilderGetter).suggests(suggestName), builder2 -> builder2
-						// Input ????? as a name or UUID
-						.conclude(conclude(selectorBuilderGetter))
-					).alwaysThrowException()
+		.parse(reader -> new EntitySelectorParser())
+		.suggests(suggestNameOrSelector)
+		.alwaysThrowException()
+		.continueWith(selectorBuilder ->
+			Parser.tryParse(Parser.read(isSelectorStart)
+				.neverThrowException()
+				.continueWith(
+					Parser.read(parseSelector(selectorBuilder))
+						.suggests(suggestSelector)
+						.alwaysThrowException()
+						.continueWith(
+							Parser.tryParse(Parser.read(isSelectorOptionsStart)
+								.suggests(suggestOpenOptions)
+								.neverThrowException()
+								.continueWith(
+									Parser.read(parseSelectorOptions(selectorBuilder))
+										.suggests(suggestOptionsKeyOrClose)
+										.alwaysThrowException()
+										// Input @?[???]
+										.continueWith(conclude(selectorBuilder))
+								)
+							).then(conclude(selectorBuilder)) // Input @?
+						)
 				)
-				// Empty input
+			).then(Parser.read(isNameStart)
 				.alwaysThrowException()
-		).alwaysThrowException();
+				.continueWith(
+					Parser.read(parseNameOrUUID(selectorBuilder))
+						.suggests(suggestName)
+						.alwaysThrowException()
+						// Input name or uuid
+						.continueWith(conclude(selectorBuilder))
+				)
+			)
+		);
 }

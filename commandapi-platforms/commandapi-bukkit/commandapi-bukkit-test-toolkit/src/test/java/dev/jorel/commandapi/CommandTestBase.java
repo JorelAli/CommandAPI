@@ -65,14 +65,14 @@ public abstract class CommandTestBase extends CommandAPITestUtilities {
 		);
 
 		StringReader reader = new StringReader(input);
-		T result = parser.parseValueOrThrow(reader);
+		T result = parser.parse(reader);
 		contextBuilder.withArgument(key, new ParsedArgument<>(0, reader.getCursor(), result));
 
 		return contextBuilder.build(input);
 	}
 
 	public <T> CommandContext<MockCommandSource> createContextWithParser(
-		CommandSender source, String key, Parser.NoSuggestions<T> parser, String input
+		CommandSender source, String key, Parser.Argument<T> parser, String input
 	) throws CommandSyntaxException {
 		return createContextWithParser(source, key, (Parser<T>) parser, input);
 	}
