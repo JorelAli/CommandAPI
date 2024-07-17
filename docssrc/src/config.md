@@ -9,9 +9,17 @@ The default `config.yml` is shown below:
 <details>
   <summary><b>config.yml</b></summary>
 
-```yaml
-{{#include ../../commandapi-platforms/commandapi-bukkit/commandapi-bukkit-plugin/src/main/resources/config.yml}}
+<div class="multi-pre">
+
+```yaml,Paper
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-plugin/src/main/resources/config.yml}}
 ```
+
+````yaml,Spigot
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-plugin/src/main/resources/config.yml}}
+````
+
+</div>
 
 </details>
 

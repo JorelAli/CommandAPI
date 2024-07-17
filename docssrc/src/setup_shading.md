@@ -43,31 +43,54 @@ public class CommandAPIConfig {
 
 The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances.
 
-However, the `CommandAPIConfig` class is abstract and cannot be used to configure the CommandAPI directly. Instead, you must use a subclass of `CommandAPIConfig` that corresponds to the platform you are developing for. For example, when developing for Bukkit, you should use the `CommandAPIBukkitConfig` class.
+However, the `CommandAPIConfig` class is abstract and cannot be used to configure the CommandAPI directly. Instead, you must use a subclass of `CommandAPIConfig` that corresponds to the platform you are developing for. For example, when developing for a Bukkit-based server, you should use the `CommandAPIPaperConfig` or the `CommandAPISpigotConfig` class.
 
 <!-- TODO: Add tabs and explanations for other platforms -->
 
-```java
-public class CommandAPIBukkitConfig extends CommandAPIConfig {
-    CommandAPIBukkitConfig(JavaPlugin plugin);
+<div class="multi-pre">
 
-    CommandAPIBukkitConfig shouldHookPaperReload(boolean hooked); // Whether the CommandAPI should hook into the Paper-exclusive ServerResourcesReloadedEvent
-    CommandAPIBukkitConfig skipReloadDatapacks(boolean skip) // Whether the CommandAPI should reload datapacks on server load
+```java,Bukkit
+public abstract class CommandAPIBukkitConfig extends CommandAPIConfig {
+    CommandAPIBukkitConfig skipReloadDatapacks(boolean skip); // Whether the CommandAPI should skip its initial datapack reload step
 }
 ```
 
-In order to create a `CommandAPIBukkitConfig` object, you must give it a reference to your `JavaPlugin` instance. The CommandAPI always uses this to registers events, so it is required when loading the CommandAPI on Bukkit. There are also Bukkit-specific features, such as the `hook-paper-reload` configuration option, which may be configured using a `CommandAPIBukkitConfig` instance.
+```java,Paper
+public class CommandAPIPaperConfig extends CommandAPIBukkitConfig {
+    CommandAPIPaperConfig(JavaPlugin plugin);
+    
+    CommandAPIPaperConfig shouldHookPaperReload(boolean hooked); // Whether the CommandAPI should hook into the Paper-exclusive ServerResourcesReloadedEvent
+}
+```
 
-For example, to load the CommandAPI on Bukkit with all logging disabled, you can use the following:
+```java,Spigot
+public class CommandAPISpigotConfig extends CommandAPIBukkitConfig {
+    CommandAPISpigotConfig(JavaPlugin plugin);
+}
+```
+
+</div>
+
+In order to create a `CommandAPIPaperConfig` or a `CommandAPISpigotConfig` object, you must give it a reference to your `JavaPlugin` instance. The CommandAPI always uses this to registers events, so it is required when loading the CommandAPI on Bukkit. There are also platform-specific features, such as the `hook-paper-reload` configuration option on Paper, which may be configured using a `CommandAPIPaperConfig` instance.
+
+For example, to load the CommandAPI on a Bukkit-based server with all logging disabled, you can use the following:
 
 <div class="multi-pre">
 
-```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:setupShading1}}
+```java,Java_(Paper)
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:setupShading1}}
 ```
 
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading1}}
+```java,Java_(Spigot)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:setupShading1}}
+```
+
+```kotlin,Kotlin_(Paper)
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading1}}
+```
+
+```kotlin,Kotlin_(Spigot)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading1}}
 ```
 
 </div>
@@ -84,12 +107,20 @@ The `onDisable()` method disables the CommandAPI gracefully. This should be plac
 
 <div class="multi-pre">
 
-```java,Java
-public {{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:setupShading2}}
+```java,Java_(Paper)
+public {{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:setupShading2}}
 ```
 
-```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading2}}
+```java,Java_(Spigot)
+public {{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:setupShading2}}
+```
+
+```kotlin,Kotlin_(Paper)
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading2}}
+```
+
+```kotlin,Kotlin_(Spigot)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:setupShading2}}
 ```
 
 </div>
@@ -110,27 +141,48 @@ By default, the CommandAPI is written in the `dev.jorel.commandapi` package. It 
 
 ## Shading with Maven
 
-To shade the CommandAPI into a maven project, you'll need to use the `commandapi-bukkit-shade` dependency, which is optimized for shading and doesn't include plugin-specific files _(such as `plugin.yml`)_. Here you have a choice between the Spigot-mapped version and the Mojang-mapped version. **You do not need to use `commandapi-bukkit-core` if you are shading**:
+When shading the CommandAPI, you have the option to choose between our version for Paper and our version for Spigot. The respective artifacts are the `commandapi-paper-shade` and the `commandapi-spigot-shade` modules. These are optimized for shading and don't include plugin specific files _(such as `plugin.yml`)_.
+You also can choose between a Mojang-mapped and a Spigot-mapped version:
 
 Add the CommandAPI shade dependency:
 
 <div class="multi-pre">
 
-```xml,Spigot_Mappings
+```xml,Paper_(Spigot_Mappings)
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-bukkit-shade</artifactId>
+        <artifactId>commandapi-paper-shade</artifactId>
         <version>9.6.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
 
-```xml,Mojang_Mappings
+```xml,Paper_(Mojang_Mappings)
 <dependencies>
     <dependency>
         <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-bukkit-shade-mojang-mapped</artifactId>
+        <artifactId>commandapi-paper-shade-mojang-mapped</artifactId>
+        <version>9.6.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+
+```xml,Spigot_(Spigot_Mappings)
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-spigot-shade</artifactId>
+        <version>9.6.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+
+```xml,Spigot_(Mojang_Mappings)
+<dependencies>
+    <dependency>
+        <groupId>dev.jorel</groupId>
+        <artifactId>commandapi-spigot-shade-mojang-mapped</artifactId>
         <version>9.6.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
@@ -225,27 +277,51 @@ Next, we declare our dependencies:
 
 <div class="multi-pre">
 
-```groovy,build.gradle_(Spigot_Mappings)
+```groovy,build.gradle_(Spigot_Mappings_(Paper))
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade:9.6.0-SNAPSHOT"
+    implementation "dev.jorel:commandapi-paper-shade:9.6.0-SNAPSHOT"
 }
 ```
 
-```groovy,build.gradle_(Mojang_Mappings)
+```groovy,build.gradle_(Spigot_Mappings_(Spigot))
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0-SNAPSHOT"
+    implementation "dev.jorel:commandapi-spigot-shade:9.6.0-SNAPSHOT"
 }
 ```
 
-```kotlin,build.gradle.kts_(Spigot_Mappings)
+```groovy,build.gradle_(Mojang_Mappings_(Paper))
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade:9.6.0-SNAPSHOT")
+    implementation "dev.jorel:commandapi-paper-shade-mojang-mapped:9.6.0-SNAPSHOT"
 }
 ```
 
-```kotlin,build.gradle.kts_(Mojang_Mappings)
+```groovy,build.gradle_(Mojang_Mappings_(Spigot))
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0-SNAPSHOT")
+    implementation "dev.jorel:commandapi-spigot-shade-mojang-mapped:9.6.0-SNAPSHOT"
+}
+```
+
+```kotlin,build.gradle.kts_(Spigot_Mappings_(Paper))
+dependencies {
+    implementation("dev.jorel:commandapi-paper-shade:9.6.0-SNAPSHOT")
+}
+```
+
+```kotlin,build.gradle.kts_(Spigot_Mappings_(Spigot))
+dependencies {
+    implementation("dev.jorel:commandapi-spigot-shade:9.6.0-SNAPSHOT")
+}
+```
+
+```kotlin,build.gradle.kts_(Mojang_Mappings_(Paper))
+dependencies {
+    implementation("dev.jorel:commandapi-paper-shade-mojang-mapped:9.6.0-SNAPSHOT")
+}
+```
+
+```kotlin,build.gradle.kts_(Mojang_Mappings_(Spigot))
+dependencies {
+    implementation("dev.jorel:commandapi-spigot-shade-mojang-mapped:9.6.0-SNAPSHOT")
 }
 ```
 
@@ -255,10 +331,10 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 
 <div class="multi-pre">
 
-```groovy,build.gradle_(Spigot_Mappings)
+```groovy,build.gradle_(Spigot_Mappings_(Paper))
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.6.0-SNAPSHOT")
+        include dependency("dev.jorel:commandapi-paper-shade:9.6.0-SNAPSHOT")
     }
 
     // TODO: Change this to my own package name
@@ -266,10 +342,10 @@ shadowJar {
 }
 ```
 
-```groovy,build.gradle_(Mojang_Mappings)
+```groovy,build.gradle_(Spigot_Mappings_(Spigot))
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0-SNAPSHOT")
+        include dependency("dev.jorel:commandapi-spigot-shade:9.6.0-SNAPSHOT")
     }
 
     // TODO: Change this to my own package name
@@ -277,10 +353,10 @@ shadowJar {
 }
 ```
 
-```kotlin,build.gradle.kts_(Spigot_Mappings)
-tasks.withType<ShadowJar> {
+```groovy,build.gradle_(Mojang_Mappings_(Paper))
+shadowJar {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.6.0-SNAPSHOT"))
+        include dependency("dev.jorel:commandapi-paper-shade-mojang-mapped:9.6.0-SNAPSHOT")
     }
 
     // TODO: Change this to my own package name
@@ -288,10 +364,54 @@ tasks.withType<ShadowJar> {
 }
 ```
 
-```kotlin,build.gradle.kts_(Mojang_Mappings)
+```groovy,build.gradle_(Mojang_Mappings_(Spigot))
+shadowJar {
+    dependencies {
+        include dependency("dev.jorel:commandapi-spigot-shade-mojang-mapped:9.6.0-SNAPSHOT")
+    }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```kotlin,build.gradle.kts_(Spigot_Mappings_(Paper))
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0-SNAPSHOT"))
+        include(dependency("dev.jorel:commandapi-paper-shade:9.6.0-SNAPSHOT"))
+    }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```kotlin,build.gradle.kts_(Spigot_Mappings_(Spigot))
+tasks.withType<ShadowJar> {
+    dependencies {
+        include(dependency("dev.jorel:commandapi-spigot-shade:9.6.0-SNAPSHOT"))
+    }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```kotlin,build.gradle.kts_(Mojang_Mappings_(Paper))
+tasks.withType<ShadowJar> {
+    dependencies {
+        include(dependency("dev.jorel:commandapi-paper-shade-mojang-mapped:9.6.0-SNAPSHOT"))
+    }
+
+    // TODO: Change this to my own package name
+    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
+}
+```
+
+```kotlin,build.gradle.kts_(Mojang_Mappings_(Spigot))
+tasks.withType<ShadowJar> {
+    dependencies {
+        include(dependency("dev.jorel:commandapi-spigot-shade-mojang-mapped:9.6.0-SNAPSHOT"))
     }
 
     // TODO: Change this to my own package name

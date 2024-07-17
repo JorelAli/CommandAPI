@@ -31,8 +31,7 @@ public class CommandAPIPaperConfig extends CommandAPIBukkitConfig<CommandAPIPape
 	 * @return this CommandAPIBukkitConfig
 	 */
 	public CommandAPIPaperConfig skipReloadDatapacks(boolean skip) {
-		this.skipReloadDatapacks = skip;
-		return this;
+		return super.skipReloadDatapacks(skip);
 	}
 
 	@Override
