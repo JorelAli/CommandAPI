@@ -76,19 +76,6 @@ public void onLoad() {
     );
 }
 /* ANCHOR_END: argumentNBT1 */
-
-void argument_nbt2() {
-    /* ANCHOR: argumentNBT2 */
-    new CommandAPICommand("award")
-        .withArguments(new NBTCompoundArgument<NBTContainer>("nbt"))
-        .executes((sender, args) -> {
-            NBTContainer nbt = (NBTContainer) args.get("nbt");
-
-            // Do something with "nbt" here...
-        })
-        .register();
-    /* ANCHOR_END: argumentNBT2 */
-}
 }
 
 void chatPreview() {
@@ -110,7 +97,7 @@ new CommandAPICommand("broadcast")
     .register();
 /* ANCHOR_END: chatPreview1 */
 
-/* ANCHOR: chatPreview3 */
+/* ANCHOR: chatPreview2 */
 new CommandAPICommand("broadcast")
     .withArguments(new ChatArgument("message").usePreview(true).withPreview(info -> {
         // Convert parsed BaseComponent[] to plain text
@@ -123,7 +110,7 @@ new CommandAPICommand("broadcast")
         Bukkit.spigot().broadcast((BaseComponent[]) args.get("message"));
     })
     .register();
-/* ANCHOR_END: chatPreview3 */
+/* ANCHOR_END: chatPreview2 */
 }
 
 class setupShading {
@@ -131,9 +118,9 @@ JavaPlugin plugin = new JavaPlugin() {
 };
 
 {
-    /* ANCHOR: setupShading1 */
-    CommandAPI.onLoad(new CommandAPISpigotConfig(plugin).silentLogs(true));
-    /* ANCHOR_END: setupShading1 */
+/* ANCHOR: setupShading1 */
+CommandAPI.onLoad(new CommandAPISpigotConfig(plugin).silentLogs(true));
+/* ANCHOR_END: setupShading1 */
 }
 
 /* ANCHOR: setupShading2 */

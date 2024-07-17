@@ -15,9 +15,12 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/kotlinintro.md
 
 # Gradle
-sed -i "s/dev\.jorel:commandapi-bukkit-shade:$oldVer/dev\.jorel:commandapi-bukkit-shade:$newVer/" docssrc/src/setup_shading.md
-sed -i "s/dev\.jorel:commandapi-bukkit-shade-mojang-mapped:$oldVer/dev\.jorel:commandapi-bukkit-shade-mojang-mapped:$newVer/" docssrc/src/setup_shading.md
-sed -i "s/dev\.jorel:commandapi-bukkit-core:$oldVer/dev\.jorel:commandapi-bukkit-core:$newVer/" docssrc/src/setup_dev.md
+sed -i "s/dev\.jorel:commandapi-paper-shade:$oldVer/dev\.jorel:commandapi-paper-shade:$newVer/" docssrc/src/setup_shading.md
+sed -i "s/dev\.jorel:commandapi-spigot-shade:$oldVer/dev\.jorel:commandapi-spigot-shade:$newVer/" docssrc/src/setup_shading.md
+sed -i "s/dev\.jorel:commandapi-paper-shade-mojang-mapped:$oldVer/dev\.jorel:commandapi-paper-shade-mojang-mapped:$newVer/" docssrc/src/setup_shading.md
+sed -i "s/dev\.jorel:commandapi-spigot-shade-mojang-mapped:$oldVer/dev\.jorel:commandapi-spigot-shade-mojang-mapped:$newVer/" docssrc/src/setup_shading.md
+sed -i "s/dev\.jorel:commandapi-paper-core:$oldVer/dev\.jorel:commandapi-paper-core:$newVer/" docssrc/src/setup_dev.md
+sed -i "s/dev\.jorel:commandapi-spigot-core:$oldVer/dev\.jorel:commandapi-spigot-core:$newVer/" docssrc/src/setup_dev.md
 sed -i "s/dev\.jorel:commandapi-annotations:$oldVer/dev\.jorel:commandapi-annotations:$newVer/" docssrc/src/setup_annotations.md
 sed -i "s/dev\.jorel:commandapi-kotlin-bukkit:$oldVer/dev\.jorel:commandapi-kotlin-bukkit:$newVer/" docssrc/src/kotlinintro.md
 sed -i "s/dev\.jorel:commandapi-kotlin-velocity:$oldVer/dev\.jorel:commandapi-kotlin-velocity:$newVer/" docssrc/src/kotlinintro.md

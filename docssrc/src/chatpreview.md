@@ -111,26 +111,26 @@ Say we wanted to make our own `/broadcast` command that allowed the user to use 
 /broadcast <message>
 ```
 
-Because the `ChatArgument` and `AdventureChatArgument` can support entity selectors (such as `@p`), it's best to use the `info.parsedInput()` method to handle parsed entity selectors. In our code, we use the `.withPreview()` method and take the parsed input and convert it to plain text. We then convert the plain text with `&` characters into component text to be displayed to the user.
+Because the `ChatArgument` can support entity selectors (such as `@p`), it's best to use the `info.parsedInput()` method to handle parsed entity selectors. In our code, we use the `.withPreview()` method and take the parsed input and convert it to plain text. We then convert the plain text with `&` characters into component text to be displayed to the user.
 
 For execution, we do the same procedure, because the text that the user enters still has `&` characters that need to be converted into a component.
 
 <div class="multi-pre">
 
-```java,Spigot_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview1}}
-```
-
 ```java,Paper_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview2}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview1}}
 ```
 
-```kotlin,Spigot_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview1}}
+```java,Spigot_(Java)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview1}}
 ```
 
 ```kotlin,Paper_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview2}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview1}}
+```
+
+```kotlin,Spigot_(Kotlin)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview1}}
 ```
 
 </div>
@@ -151,20 +151,20 @@ By using `.usePreview(true)`, we don't have to re-translate `&` formatting codes
 
 <div class="multi-pre">
 
-```java,Spigot_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview3}}
-```
-
 ```java,Paper_(Java)
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview4}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview2}}
 ```
 
-```kotlin,Spigot_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview3}}
+```java,Spigot_(Java)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:chatPreview2}}
 ```
 
 ```kotlin,Paper_(Kotlin)
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview4}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview2}}
+```
+
+```kotlin,Spigot_(Kotlin)
+{{#include ../../commandapi-platforms/commandapi-spigot/commandapi-spigot-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:chatPreview2}}
 ```
 
 </div>

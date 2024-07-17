@@ -28,6 +28,7 @@ import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.BukkitTooltip;
 import dev.jorel.commandapi.CommandAPI;
@@ -68,6 +69,7 @@ import dev.jorel.commandapi.arguments.LootTableArgument;
 import dev.jorel.commandapi.arguments.MapArgumentBuilder;
 import dev.jorel.commandapi.arguments.MathOperationArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.arguments.ObjectiveArgument;
 import dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument;
 import dev.jorel.commandapi.arguments.ParticleArgument;
@@ -729,6 +731,19 @@ new CommandAPICommand("gamemode")
     }) 
     .register();
 /* ANCHOR_END: argumentMultiLiteral1 */
+}
+
+void argument_nbt2() {
+/* ANCHOR: argumentNBT2 */
+new CommandAPICommand("award")
+    .withArguments(new NBTCompoundArgument<NBTContainer>("nbt"))
+    .executes((sender, args) -> {
+        NBTContainer nbt = (NBTContainer) args.get("nbt");
+
+        // Do something with "nbt" here...
+    })
+    .register();
+/* ANCHOR_END: argumentNBT2 */
 }
 
 void argument_objectives() {

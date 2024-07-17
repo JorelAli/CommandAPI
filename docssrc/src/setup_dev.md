@@ -35,16 +35,31 @@ dependencies:
 
 - Add the dependency to your `pom.xml`:
 
-  ```xml
+<div class="multi-pre">
+
+  ```xml,Paper
   <dependencies>
       <dependency>
           <groupId>dev.jorel</groupId>
-          <artifactId>commandapi-bukkit-core</artifactId>
+          <artifactId>commandapi-paper-core</artifactId>
           <version>9.6.0-SNAPSHOT</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>
   ```
+
+  ```xml,Spigot
+  <dependencies>
+      <dependency>
+          <groupId>dev.jorel</groupId>
+          <artifactId>commandapi-spigot-core</artifactId>
+          <version>9.6.0-SNAPSHOT</version>
+          <scope>provided</scope>
+      </dependency>
+  </dependencies>
+  ```
+
+</div>
 
 ## Using Gradle (recommended)
 
@@ -59,11 +74,21 @@ dependencies:
   
 - Add the dependency to your list of dependencies in your `build.gradle` file:
 
-  ```gradle
+<div class="multi-pre">
+
+  ```gradle,Paper
   dependencies {
-      compileOnly "dev.jorel:commandapi-bukkit-core:9.6.0-SNAPSHOT"
+      compileOnly "dev.jorel:commandapi-paper-core:9.6.0-SNAPSHOT"
   }
   ```
+
+  ```gradle,Spigot
+  dependencies {
+      compileOnly "dev.jorel:commandapi-spigot-core:9.6.0-SNAPSHOT"
+  }
+  ```
+
+</div>
 
 ## Manually using the .jar
 
