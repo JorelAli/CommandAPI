@@ -39,19 +39,38 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * An implementation of {@link CommandAPIBukkit} that is compatible with a MockBukkit testing environment.
+ * Does not rely on any version-specific Minecraft code to (ideally) support testing in any version.
+ */
 public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	// Static instance
 	private static MockCommandAPIBukkit instance;
 
+	/**
+	 * @return The {@link MockCommandAPIBukkit} instance currently loaded. This is the same object as is returned by
+	 * {@link CommandAPIBukkit#get()}, but explicitly using the {@link MockCommandAPIBukkit} class.
+	 */
 	public static MockCommandAPIBukkit getInstance() {
 		return instance;
 	}
 
-	public MockCommandAPIBukkit() {
+	protected MockCommandAPIBukkit() {
 		MockCommandAPIBukkit.instance = this;
 	}
 
 	// Reflection helpers
+
+	/**
+	 * Sets a field inside a target object to the given value. Ignores private access or final status.
+	 *
+	 * @param targetClass The {@link Class} that contains the field.
+	 * @param fieldName   The name of the field to change.
+	 * @param target      The object whose field will be changed. If the field is static, this is ignored and can be null.
+	 * @param value       The new value for the field.
+	 * @param <Target>    The type of the target object.
+	 * @throws IllegalArgumentException If the field cannot be set.
+	 */
 	public static <Target> void setField(Class<? super Target> targetClass, String fieldName, Target target, Object value) {
 		try {
 			Field field = targetClass.getDeclaredField(fieldName);
@@ -64,14 +83,13 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	// References to utility classes
 	private CommandAPIHandlerSpy commandAPIHandlerSpy;
-	private CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> commandAPIHandler;
 	private MockCommandRegistrationStrategy commandRegistrationStrategy;
 
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
 		// Intercept calls to CommandAPIHandler
 		commandAPIHandlerSpy = new CommandAPIHandlerSpy(CommandAPIHandler.getInstance());
-		commandAPIHandler = commandAPIHandlerSpy.spyHandler();
+		CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> commandAPIHandler = commandAPIHandlerSpy.spyHandler();
 		setField(CommandAPIHandler.class, "instance", null, commandAPIHandler);
 
 		// Setup objects
@@ -81,10 +99,9 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 		super.onLoad(config);
 	}
 
-	public CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> getCommandAPIHandler() {
-		return commandAPIHandler;
-	}
-
+	/**
+	 * @return The {@link CommandAPIHandlerSpy} object intercepting calls to {@link CommandAPIHandler} methods.
+	 */
 	public CommandAPIHandlerSpy getCommandAPIHandlerSpy() {
 		return commandAPIHandlerSpy;
 	}
@@ -112,6 +129,12 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	}
 
 	// Logging
+	/**
+	 * A global toggle for whether the default logger returned by {@link #getLogger()} should print messages to the
+	 * console. This is {@code false} by default, so not messages will appear. If you don't provide your own logger
+	 * using {@link CommandAPI#setLogger(CommandAPILogger)} and set this to {@code true} before calling
+	 * {@link CommandAPI#onLoad(CommandAPIConfig)}, then the CommandAPI will write messages into the test log.
+	 */
 	public boolean ENABLE_LOGGING = false;
 
 	@Override

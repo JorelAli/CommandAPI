@@ -9,11 +9,14 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
+/**
+ * An implementation of {@link CommandRegistrationStrategy} that handles registering commands in a testing environment.
+ */
 public class MockCommandRegistrationStrategy extends CommandRegistrationStrategy<MockCommandSource> {
 	private final CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> commandAPIHandler;
 	private final CommandDispatcher<MockCommandSource> dispatcher = new CommandDispatcher<>();
 
-	public MockCommandRegistrationStrategy(CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> commandAPIHandler) {
+	protected MockCommandRegistrationStrategy(CommandAPIHandler<Argument<?>, CommandSender, MockCommandSource> commandAPIHandler) {
 		this.commandAPIHandler = commandAPIHandler;
 	}
 
