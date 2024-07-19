@@ -48,7 +48,6 @@
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-platform-bukkit</artifactId>
 			<version>4.2.0</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.papermc.paper</groupId>
@@ -67,6 +66,23 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-kotlin</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Testing examples dependencies -->
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.20</artifactId>
+			<version>3.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-toolkit</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.2</version>
 		</dependency>
 
 		<!-- Other -->

@@ -113,6 +113,13 @@
 - [Using the DSL](./kotlindsl.md)
 - [Delegated properties](./delegated_properties.md)
 
+# Testing Framework
+
+- [Testing Commands](./test_intro.md)
+- [Set Up](./test_setup.md)
+- [Loading Test CommandAPI](./test_loadmockplugin.md)
+- [Testing Utilities](./test_utilities.md)
+
 -----
 
 # Velocity

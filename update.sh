@@ -13,6 +13,7 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/setup_dev.md
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/setup_annotations.md
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/kotlinintro.md
+sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" docssrc/src/test_setup.md
 
 # Gradle
 sed -i "s/dev\.jorel:commandapi-bukkit-shade:$oldVer/dev\.jorel:commandapi-bukkit-shade:$newVer/" docssrc/src/setup_shading.md
