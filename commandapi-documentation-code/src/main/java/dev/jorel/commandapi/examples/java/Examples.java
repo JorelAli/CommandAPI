@@ -20,6 +20,8 @@ package dev.jorel.commandapi.examples.java;
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
@@ -74,6 +76,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -2517,6 +2521,33 @@ new CommandAPICommand("perm")
     )
     .register();
 /* ANCHOR_END: subcommands4 */
+}
+
+class test {
+class Main extends JavaPlugin {
+
+}
+/* ANCHOR: testLoadMockPlugin1 */
+@BeforeEach
+public void setUp() {
+    // Set up MockBukkit server
+    ServerMock server = MockBukkit.mock();
+
+    // Load the CommandAPI plugin
+    MockCommandAPIPlugin.load(config -> config
+        .missingExecutorImplementationMessage("This command cannot be run by %S")
+    );
+
+    // Load our plugin
+    MockBukkit.load(Main.class);
+}
+
+@AfterEach
+public void tearDown() {
+    // Reset for a clean slate next test
+    MockBukkit.unmock();
+}
+/* ANCHOR_END: testLoadMockPlugin1 */
 }
 
 class tooltips {
