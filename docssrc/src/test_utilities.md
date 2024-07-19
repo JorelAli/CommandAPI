@@ -69,7 +69,7 @@ void assertCommandFailsWithArguments(CommandSender sender, String command, Strin
 void assertCommandFailsWithArguments(CommandSender sender, String command, String expectedFailureMessage, Map<String, Object> argumentsMap)
 ```
 
-If you expect the command to succeed, use `assertCommandSucceedsWithArguments`. If you expect the command's executor to throw a [`WrapperCommandSyntaxException`](./commandfailures.md#handling-command-failures), use `assertCommandFailsWithArguments`. You can give these methods either an array or a Map holding all arguments you expect to be present for the command. 
+If you expect the command to succeed, use `assertCommandSucceedsWithArguments`. If you expect the command's executor to throw a [`WrapperCommandSyntaxException`](./commandfailures.md#handling-command-failures), use `assertCommandFailsWithArguments`. You can give these methods either an array or a Map holding all arguments you expect to be present for the command.
 
 Note that if the command input cannot be parsed, the command will fail, but a CommandAPI executor will never be run. In this case, a CommandAPI executor will have never been run, so `assertCommandFailsWithArguments` will not have any arguments to inspect, and the test will fail. You can only successfully use `assertCommandFails` in this situation.
 
