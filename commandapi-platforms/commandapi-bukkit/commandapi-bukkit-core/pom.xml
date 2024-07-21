@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.5.1</version>
+		<version>9.6.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>commandapi-bukkit-core</artifactId>
 	<repositories>
@@ -16,7 +16,7 @@
 		</repository>
 		<repository>
 			<id>papermc</id>
-			<url>https://papermc.io/repo/repository/maven-public/</url>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
 		<repository>
 			<id>codemc-repo</id>

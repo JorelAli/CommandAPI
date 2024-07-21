@@ -148,8 +148,8 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T> T forceGetArgument(CommandContext cmdCtx, String key) {
-		ParsedArgument result = (ParsedArgument) getFieldAs(CommandContext.class, "arguments", cmdCtx, Map.class).get(key);
-		return (T) result.getResult();
+		Map<String, ParsedArgument> result = getFieldAs(CommandContext.class, "arguments", cmdCtx, Map.class);
+		return result == null ? null : (T) result.get(key).getResult();
 	}
 
 	/***************

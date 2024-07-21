@@ -37,7 +37,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 /**
  * Tests for the {@link ParticleArgument}
  */
-class ArgumentParticleTests extends TestBase {
+class ArgumentParticle_1_19_2_Tests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -46,24 +46,7 @@ class ArgumentParticleTests extends TestBase {
 	@BeforeEach
 	public void setUp() {
 		super.setUp();
-
-		// Disabled for 1.20.3+ due to "reasons"
-		// assumeTrue(version.lessThan(MCVersion.V1_20_3));
-		
-		/**
-		 * From https://misode.github.io/versions/?id=1.20.5-pre1&tab=changelog&tags=command
-		 * 
-		 * Changed the /particle command syntax for particles with extra options:
-
-block redstone_lamp[lit=true] → block{block_state:{Name:"redstone_lamp",Properties:{lit:"true"}}} (also for block_marker, falling_dust, and dust_pillar)
-dust 0.1 0.2 0.3 0.4 → dust{color:[0.1,0.2,0.3],scale:0.4}
-dust_color_transition 0.1 0.2 0.3 0.4 0.5 0.6 0.7 → dust_color_transition{from_color:[0.1,0.2,0.3],scale:0.4,to_color:[0.5,0.6,0.7]}
-entity_effect → entity_effect{color:[0.1,0.2,0.3,0.4]}
-item diamond → item{item:"diamond"}
-sculk_charge 0.1 → sculk_charge{roll:0.1}
-shriek 1 → shriek{delay:1}
-vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3]},arrival_in_ticks:4}
-		 */
+		assumeTrue(version.lessThanOrEqualTo(MCVersion.V1_19_2));
 	}
 
 	@AfterEach
@@ -321,7 +304,6 @@ vibration 0.1 0.2 0.3 4 → vibration{destination:{type:"block",pos:[0.1,0.2,0.3
 		assertEquals(255, result.data().getRed());
 		assertEquals(0, result.data().getGreen());
 		assertEquals(0, result.data().getBlue());
-		assertEquals(255, result.data().getAlpha());
 
 		assertNoMoreResults(results);
 	}

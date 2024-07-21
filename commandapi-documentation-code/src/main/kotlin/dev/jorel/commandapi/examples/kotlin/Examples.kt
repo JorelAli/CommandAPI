@@ -411,6 +411,23 @@ CommandAPICommand("remove")
 /* ANCHOR_END: argumentEntities1 */
 
 /* ANCHOR: argumentEntities2 */
+val noSelectorSuggestions = PlayerArgument("target")
+    .replaceSafeSuggestions(SafeSuggestions.suggest {
+        Bukkit.getOnlinePlayers().toTypedArray()
+    })
+/* ANCHOR_END: argumentEntities2 */
+
+/* ANCHOR: argumentEntities3 */
+CommandAPICommand("warp")
+    .withArguments(noSelectorSuggestions)
+    .executesPlayer(PlayerCommandExecutor { player, args ->
+        val target = args["target"] as Player
+        player.teleport(target)
+    })
+    .register()
+/* ANCHOR_END: argumentEntities3 */
+
+/* ANCHOR: argumentEntities4 */
 CommandAPICommand("spawnmob")
     .withArguments(EntityTypeArgument("entity"))
     .withArguments(IntegerArgument("amount", 1, 100)) // Prevent spawning too many entities
@@ -420,7 +437,7 @@ CommandAPICommand("spawnmob")
         }
     })
     .register()
-/* ANCHOR_END: argumentEntities2 */
+/* ANCHOR_END: argumentEntities4 */
 }
 
 fun argument_function() {

@@ -215,7 +215,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	// shouldn't be accessing/depending on any of the contents of the current class instance)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static <Impl extends AbstractCommandAPICommand<Impl, Argument, CommandSender>, Argument extends AbstractArgument<?, ?, Argument, CommandSender>, CommandSender>
-	void flatten(Impl rootCommand, List<Argument> prevArguments, Impl subcommand) {
+	void flatten(Impl rootCommand, List<Argument> prevArguments, Impl subcommand, String namespace) {
 		// Get the list of literals represented by the current subcommand. This
 		// includes the subcommand's name and any aliases for this subcommand
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
@@ -243,11 +243,11 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			rootCommand.withArguments(subcommand.arguments);
 			rootCommand.executor = subcommand.executor;
 			rootCommand.subcommands = new ArrayList<>();
-			rootCommand.register();
+			rootCommand.register(namespace);
 		}
 
 		for (Impl subsubcommand : subcommand.getSubcommands()) {
-			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
+			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand, namespace);
 		}
 	}
 	
@@ -310,7 +310,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		// Convert subcommands into multiliteral arguments
 		for (Impl subcommand : this.subcommands) {
-			flatten(this.copy(), new ArrayList<>(), subcommand);
+			flatten(this.copy(), new ArrayList<>(), subcommand, namespace);
 		}
 	}
 

@@ -28,10 +28,16 @@ To simplify this, the CommandAPI provides a number of methods to generate sugges
 
 ```java
 ArgumentSuggestions strings(String... suggestions);
+ArgumentSuggestions strings(Collection<String>);
 ArgumentSuggestions strings(Function<SuggestionInfo, String[]> suggestions);
+ArgumentSuggestions stringCollection(Function<SuggestionInfo<CommandSender>, Collection<String>>);
 ArgumentSuggestions stringsAsync(Function<SuggestionInfo, CompletableFuture<String[]>> suggestions);
+ArgumentSuggestions stringCollectionAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<Collection<String>>>);
 
 ArgumentSuggestions stringsWithTooltips(IStringTooltip... suggestions);
+ArgumentSuggestions stringsWithTooltips(Collection<IStringTooltip>);
 ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, IStringTooltip[]> suggestions);
+ArgumentSuggestions stringsWithTooltipsCollection(Function<SuggestionInfo<CommandSender>, Collection<IStringTooltip>>);
 ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>> suggestions);
+ArgumentSuggestions stringsWithTooltipsCollectionAsync(Function<SuggestionInfo<CommandSender>, CompletableFuture<Collection<IStringTooltip>>>);
 ```
