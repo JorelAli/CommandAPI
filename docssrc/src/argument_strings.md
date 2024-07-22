@@ -6,7 +6,7 @@ There are three types of arguments that return Java's `String` object. Each have
 
 ## String argument
 
-The `StringArgument` class is used to represent a single word. These words**can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore (_), plus (+), minus (-), period (.) characters.** [(brigadier source)](https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/StringReader.java#L169).
+The `StringArgument` class is used to represent a single word. These words **can only contain alphanumeric characters (A-Z, a-z and 0-9), and the underscore (_), plus (+), minus (-), period (.) characters.** [(brigadier source)](https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/StringReader.java#L169).
 
 Accepted `StringArgument` values:
 
