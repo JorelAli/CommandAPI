@@ -411,7 +411,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			}
 
 			final Class<? extends CommandSender> NullCommandSender = paper.getNullCommandSender();
-			if (NullCommandSender.isInstance(sender)) {
+			if (NullCommandSender != null && NullCommandSender.isInstance(sender)) {
 				// Since this should only be during a function load, this is just a placeholder to evade the exception.
 				return null;
 			}
