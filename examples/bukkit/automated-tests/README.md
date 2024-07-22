@@ -1,8 +1,6 @@
 # Automated tests (unshaded)
 
-A simple example showcasing testing CommandAPI commands with [MockBukkit](https://github.com/MockBukkit/MockBukkit). For more information on the utility provided by the CommandAPI's testing framework, check the documentation [here](TODO).
-
-[//]: # (TODO: Write documentation and add link here)
+A simple example showcasing testing CommandAPI commands with [MockBukkit](https://github.com/MockBukkit/MockBukkit). For more information on the utility provided by the CommandAPI's testing framework, check the documentation [here](https://commandapi-live-docs.jorel.dev/test_intro.html).
 
 Key points:
 
