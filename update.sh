@@ -72,8 +72,6 @@ sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/buk
 # Velocity #
 ############
 
-# Note to self: velocity_intro.md in the documentation needs pointing to a SNAPSHOT version (so do that manually)
-
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/velocity/maven/README.md
 sed -i "s/<version>$oldVer<\/version>/<version>$newVer<\/version>/" examples/velocity/maven/pom.xml
 
@@ -122,3 +120,12 @@ mvn versions:commit -P Platform.Bukkit
 
 mvn versions:set -DnewVersion=$newVer -P Platform.Velocity
 mvn versions:commit -P Platform.Velocity
+
+#######################
+# Manual update notes #
+#######################
+
+echo "IMPORTANT: Manual update notes"
+echo "  ./docssrc/src/velocity_intro.html#adding-the-dependency: \`commandapi-velocity-shade\` dependencies should point to the latest SNAPSHOT version"
+echo "  ./examples/bukkit/automated-tests/README.md: link to \`test_intro.html\` should point to the latest documentation version"
+echo "  ./examples/bukkit/automated-tests-shaded/README.md: link to \`test_intro.html\` should point to the latest documentation version"
