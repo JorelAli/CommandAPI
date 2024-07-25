@@ -22,6 +22,7 @@ public class PaperImplementations {
 	private final boolean isFoliaPresent;
 	private final NMS<?> nmsInstance;
 	private final Class<? extends CommandSender> feedbackForwardingCommandSender;
+	private final Class<? extends CommandSender> nullCommandSender;
 
 	/**
 	 * Constructs a PaperImplementations object
@@ -44,6 +45,15 @@ public class PaperImplementations {
 		}
 		
 		this.feedbackForwardingCommandSender = tempFeedbackForwardingCommandSender;
+
+		Class<? extends CommandSender> tempNullCommandSender = null;
+		try {
+			tempNullCommandSender = (Class<? extends CommandSender>) Class.forName("io.papermc.paper.brigadier.NullCommandSender");
+		} catch (ClassNotFoundException e) {
+			// uhh...
+		}
+
+		this.nullCommandSender = tempNullCommandSender;
 	}
 
 	/**
@@ -113,6 +123,13 @@ public class PaperImplementations {
 	 */
 	public Class<? extends CommandSender> getFeedbackForwardingCommandSender() {
 		return this.feedbackForwardingCommandSender;
+	}
+
+	/**
+	 * @return a class reference pointing to {@code io.papermc.paper.brigadier.NullCommandSender}
+	 */
+	public Class<? extends CommandSender> getNullCommandSender() {
+		return this.nullCommandSender;
 	}
 
 	/**

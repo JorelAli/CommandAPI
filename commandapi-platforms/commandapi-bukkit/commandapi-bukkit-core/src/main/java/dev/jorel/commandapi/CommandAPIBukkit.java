@@ -409,6 +409,13 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				// We literally cannot type this at compile-time, so let's use a placeholder CommandSender instance
 				return new BukkitFeedbackForwardingCommandSender<CommandSender>(FeedbackForwardingSender.cast(sender));
 			}
+
+			final Class<? extends CommandSender> NullCommandSender = paper.getNullCommandSender();
+			if (NullCommandSender != null && NullCommandSender.isInstance(sender)) {
+				// Since this should only be during a function load, this is just a placeholder to evade the exception.
+				return null;
+			}
+
 		}
 		throw new RuntimeException("Failed to wrap CommandSender " + sender + " to a CommandAPI-compatible BukkitCommandSender");
 	}
