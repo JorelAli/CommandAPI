@@ -27,7 +27,10 @@ import dev.jorel.commandapi.executors.CommandArguments;
 import org.bukkit.entity.Player;
 
 /**
- * An argument that represents the Bukkit Player object
+ * An argument that represents the Bukkit Player object.
+ * <p>
+ * Note that this Argument internally references Mojang's authentication servers to resolve
+ * usernames, which gives it a slight performance overhead compared to {@link EntitySelectorArgument.OnePlayer}.
  * 
  * @since 1.1
  */
