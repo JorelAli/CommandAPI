@@ -114,7 +114,8 @@
 							</artifactSet>
 							<useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
 							<!-- Save this jar with the `mojang-mapped` classifier -->
-							<finalName>${project.build.finalName}-mojang-mapped</finalName>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>mojang-mapped</shadedClassifierName>
 						</configuration>
 					</execution>
 					<execution>
