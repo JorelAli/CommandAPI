@@ -19,6 +19,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<!-- This dependency must be placed above commandapi-spigot-vh,
+			because commandapi-spigot-vh depends on commandapi-spigot-nms-dependency -->
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-spigot-nms-dependency-mojang-mapped</artifactId>
 			<version>${project.version}</version>
@@ -52,7 +54,7 @@
 							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
 							<createSourcesJar>true</createSourcesJar>
 							<!-- Remove commandapi-core's VersionHandlers in favor of ours which
-								loads CommandAPIBukkit for the current version, and sets up mojang mappings -->
+								loads CommandAPISpigot for the current version, and sets up mojang mappings -->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>

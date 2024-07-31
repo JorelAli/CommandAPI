@@ -9,6 +9,7 @@
 		<version>9.6.0-SNAPSHOT</version>
 	</parent>
 
+	<!-- TODO: This module is not paper-specific, and not really even bukkit specific. It can probably be made available to all platforms -->
 	<artifactId>commandapi-paper-mojang-mapped</artifactId>
 
 </project>

@@ -2,25 +2,31 @@ package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
+import dev.jorel.commandapi.nms.NMS;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 
-public interface BukkitPlatform<Source> extends CommandAPIPlatform<Argument<?>, CommandSender, Source> {
+import java.util.List;
 
-	@Override
-	default void onLoad(CommandAPIConfig<?> config) {
-		onLoad((CommandAPIBukkitConfig<?>) config);
-	}
+public interface BukkitPlatform<Source> extends CommandAPIPlatform<Argument<?>, CommandSender, Source>, NMS<Source> {
+	// Methods implemented by CommandAPIBukkit that CommandAPISpigot and CommandAPIPaper can use
+	CommandRegistrationStrategy<Source> getCommandRegistrationStrategy();
 
-	<T extends CommandAPIBukkitConfig<T>> void onLoad(CommandAPIBukkitConfig<T> config);
+	void updateHelpForCommands(List<RegisteredCommand> commands);
 
-	CommandMap getCommandMap();
+	// Methods implemented by CommandAPISpigot/CommandAPIPaper that CommandAPIBukkit can use
+	void platformOnLoad(CommandAPIConfig<?> config);
+
+	void platformOnEnable();
+
+	void platformOnDisable();
 
 	@Override
 	BukkitCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender);
 
+	CommandMap getCommandMap();
+
 	Platform activePlatform();
 
 	CommandRegistrationStrategy<Source> createCommandRegistrationStrategy();
-
 }

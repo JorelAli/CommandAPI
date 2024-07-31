@@ -43,7 +43,6 @@ import java.util.function.ToIntFunction;
 
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -70,7 +69,6 @@ import org.bukkit.craftbukkit.v1_16_R3.help.CustomHelpTopic;
 import org.bukkit.craftbukkit.v1_16_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_16_R3.potion.CraftPotionEffectType;
-import org.bukkit.craftbukkit.v1_16_R3.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -116,11 +114,6 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_16_R3.Advancement;
 import net.minecraft.server.v1_16_R3.ArgumentAngle;
 import net.minecraft.server.v1_16_R3.ArgumentBlockPredicate;
@@ -205,7 +198,7 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
-public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
+public abstract class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorCheckPermissions;
@@ -946,4 +939,15 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 		}
 	}
 
+	@Override
+	public CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a(),
+			(SimpleCommandMap) getCommandMap(),
+			() -> this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(),
+			command -> command instanceof VanillaCommandWrapper,
+			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> node.getCommand() instanceof BukkitCommandWrapper
+		);
+	}
 }

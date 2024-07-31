@@ -20,16 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.datafixers.util.Either;
 
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import io.netty.channel.Channel;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.server.ServerFunctionLibrary;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
@@ -42,11 +37,9 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
-public class NMS_1_19_R1 extends NMS_1_19_Common {
-	
+public abstract class NMS_1_19_R1 extends NMS_1_19_Common {
 	@Override
 	public String[] compatibleVersions() {
 		return new String[] { "1.19" };
 	}
-
 }

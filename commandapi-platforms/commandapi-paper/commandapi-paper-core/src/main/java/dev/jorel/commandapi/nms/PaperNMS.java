@@ -15,7 +15,4 @@ public interface PaperNMS<CommandListenerWrapper> {
 	NamedTextColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	Component getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	NMS<?> bukkitNMS();
-
 }

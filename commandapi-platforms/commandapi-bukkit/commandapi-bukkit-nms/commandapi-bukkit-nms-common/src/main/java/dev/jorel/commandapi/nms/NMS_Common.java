@@ -37,16 +37,10 @@ import dev.jorel.commandapi.preprocessor.Overridden;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.*;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.*;
 import net.minecraft.commands.arguments.coordinates.*;
 import net.minecraft.commands.arguments.item.FunctionArgument;
-import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 import org.bukkit.*;
@@ -552,4 +546,11 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
 	public abstract void reloadDataPacks();
+
+	@Override
+	@Unimplemented(because = NAME_CHANGED, info = "MinecraftServer#getCommands() obfuscated differently across multiple versions")
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, info = "Paper rewrote command internals in 1.20.5")
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "VanillaCommandWrapper")
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "BukkitCommandWrapper")
+	public abstract CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy();
 }

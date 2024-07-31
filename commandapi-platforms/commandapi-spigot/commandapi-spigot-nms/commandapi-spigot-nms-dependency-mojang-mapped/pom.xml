@@ -13,26 +13,6 @@
 	<packaging>pom</packaging>
 
 	<dependencies>
-		<!-- Common NMS for 1.17+ -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-spigot-nms-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-spigot-1.19-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-spigot-1.17-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-		</dependency>
-
 		<!-- NMS-specific implementations -->
 		<dependency>
 			<groupId>dev.jorel</groupId>

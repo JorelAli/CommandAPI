@@ -75,7 +75,7 @@
 						</goals>
 						<configuration>
 							<!-- Remove commandapi-core's VersionHandler in favor of ours which
-								loads CommandAPIBukkit for the current version -->
+								loads CommandAPISpigot for the current version, and sets up mojang mappings -->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>

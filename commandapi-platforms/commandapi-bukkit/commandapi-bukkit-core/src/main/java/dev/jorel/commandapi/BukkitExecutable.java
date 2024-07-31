@@ -463,8 +463,8 @@ extends BukkitExecutable<Impl>
 	 * @return this command builder
 	 */
 	default Impl executesFeedbackForwarding(FeedbackForwardingCommandExecutor executor) {
-		if (CommandAPIBukkit.platform().activePlatform() != Platform.PAPER) {
-			throw new PlatformException("Attempted to use a FeedbackForwardingCommandExecutor on a non-paper platform (" + CommandAPIBukkit.platform().activePlatform().name() + ")!");
+		if (CommandAPIBukkit.get().activePlatform() != Platform.PAPER) {
+			throw new PlatformException("Attempted to use a FeedbackForwardingCommandExecutor on a non-paper platform (" + CommandAPIBukkit.get().activePlatform().name() + ")!");
 		}
 		getExecutor().addNormalExecutor(executor);
 		return instance();
@@ -477,8 +477,8 @@ extends BukkitExecutable<Impl>
 	 * @return this command builder
 	 */
 	default Impl executesFeedbackForwarding(FeedbackForwardingExecutionInfo info) {
-		if (CommandAPIBukkit.platform().activePlatform() != Platform.PAPER) {
-			throw new PlatformException("Attempted to use a FeedbackForwardingExecutionInfo on a non-paper platform (" + CommandAPIBukkit.platform().activePlatform().name() + ")!");
+		if (CommandAPIBukkit.get().activePlatform() != Platform.PAPER) {
+			throw new PlatformException("Attempted to use a FeedbackForwardingExecutionInfo on a non-paper platform (" + CommandAPIBukkit.get().activePlatform().name() + ")!");
 		}
 		getExecutor().addNormalExecutor(info);
 		return instance();
@@ -491,8 +491,8 @@ extends BukkitExecutable<Impl>
 	 * @return this command builder
 	 */
 	default Impl executesFeedbackForwarding(FeedbackForwardingResultingCommandExecutor executor) {
-		if (CommandAPIBukkit.platform().activePlatform() != Platform.PAPER) {
-			throw new PlatformException("Attempted to use a FeedbackForwardingResultingCommandExecutor on a non-paper platform (" + CommandAPIBukkit.platform().activePlatform().name() + ")!");
+		if (CommandAPIBukkit.get().activePlatform() != Platform.PAPER) {
+			throw new PlatformException("Attempted to use a FeedbackForwardingResultingCommandExecutor on a non-paper platform (" + CommandAPIBukkit.get().activePlatform().name() + ")!");
 		}
 		getExecutor().addResultingExecutor(executor);
 		return instance();
@@ -505,8 +505,8 @@ extends BukkitExecutable<Impl>
 	 * @return this command builder
 	 */
 	default Impl executesFeedbackForwarding(FeedbackForwardingResultingExecutionInfo info) {
-		if (CommandAPIBukkit.platform().activePlatform() != Platform.PAPER) {
-			throw new PlatformException("Attempted to use a FeedbackForwardingResultingExecutionInfo on a non-paper platform (" + CommandAPIBukkit.platform().activePlatform().name() + ")!");
+		if (CommandAPIBukkit.get().activePlatform() != Platform.PAPER) {
+			throw new PlatformException("Attempted to use a FeedbackForwardingResultingExecutionInfo on a non-paper platform (" + CommandAPIBukkit.get().activePlatform().name() + ")!");
 		}
 		getExecutor().addResultingExecutor(info);
 		return instance();

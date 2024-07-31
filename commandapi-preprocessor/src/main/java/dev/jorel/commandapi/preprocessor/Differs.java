@@ -20,10 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.preprocessor;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Literally just a fancy comment that I can put next to stuff to know how it
@@ -31,6 +28,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
+@Repeatable(DiffersRepeatable.class)
 public @interface Differs {
 	
 	/**

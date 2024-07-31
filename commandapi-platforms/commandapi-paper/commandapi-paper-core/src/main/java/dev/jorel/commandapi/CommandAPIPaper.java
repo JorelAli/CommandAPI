@@ -1,92 +1,47 @@
 package dev.jorel.commandapi;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
-import dev.jorel.commandapi.commandsenders.AbstractPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitBlockCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitConsoleCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitEntity;
-import dev.jorel.commandapi.commandsenders.BukkitFeedbackForwardingCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitPlayer;
-import dev.jorel.commandapi.commandsenders.BukkitProxiedCommandSender;
-import dev.jorel.commandapi.commandsenders.BukkitRemoteConsoleCommandSender;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jorel.commandapi.commandsenders.*;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.nms.PaperNMS;
-import dev.jorel.commandapi.preprocessor.Unimplemented;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.command.RemoteConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+public interface CommandAPIPaper<Source> extends BukkitPlatform<Source>, PaperNMS<Source> {
+	// Loading logic
 
-import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.REQUIRES_CRAFTBUKKIT;
-
-public abstract class CommandAPIPaper<Source> implements BukkitPlatform<Source>, PaperNMS<Source> {
-
-	private static CommandAPIBukkit<?> bukkit;
-	private static CommandAPIPaper<?> paper;
-
-	private boolean isPaperPresent = true;
-	private boolean isFoliaPresent = false;
-	private final Class<? extends CommandSender> feedbackForwardingCommandSender;
-	private final Class<? extends CommandSender> nullCommandSender;
+	// An interface does allow multi-class inheritance, but it does not permit static initialization blocks
+	//  or fields that are not public static final :(. We can at least log success/failure later when we know
+	//  the config and logger are properly set up.
+	boolean isPaperPresent = getClass("io.papermc.paper.event.server.ServerResourcesReloadedEvent") != null;
+	boolean isFoliaPresent = getClass("io.papermc.paper.threadedregions.RegionizedServerInitEvent") != null;
+	Class<? extends CommandSender> feedbackForwardingCommandSender = getClass("io.papermc.paper.commands.FeedbackForwardingSender");
+	Class<? extends CommandSender> nullCommandSender = getClass("io.papermc.paper.brigadier.NullCommandSender");
 
 	@SuppressWarnings("unchecked")
-	protected CommandAPIPaper() {
-		CommandAPIPaper.bukkit = ((CommandAPIBukkit<?>) bukkitNMS());
-		CommandAPIPaper.paper = this;
-
-		Class<? extends CommandSender> tempFeedbackForwardingCommandSender = null;
-		Class<? extends CommandSender> tempNullCommandSender = null;
+	private static <T> Class<T> getClass(String name) {
 		try {
-			tempFeedbackForwardingCommandSender = (Class<? extends CommandSender>) Class.forName("io.papermc.paper.commands.FeedbackForwardingSender");
-			tempNullCommandSender = (Class<? extends CommandSender>) Class.forName("io.papermc.paper.brigadier.NullCommandSender");
+			return (Class<T>) Class.forName(name);
 		} catch (ClassNotFoundException e) {
-			// uhh...
+			return null;
 		}
-
-		this.feedbackForwardingCommandSender = tempFeedbackForwardingCommandSender;
-		this.nullCommandSender = tempNullCommandSender;
-		bukkit.setInstance(this);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <Source> CommandAPIBukkit<Source> getBukkit() {
-		return (CommandAPIBukkit<Source>) bukkit;
+	static <Source> CommandAPIPaper<Source> getPaper() {
+		return (CommandAPIPaper<Source>) CommandAPIBukkit.get();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <Source> CommandAPIPaper<Source> getPaper() {
-		return (CommandAPIPaper<Source>) paper;
-	}
-
-	public static InternalPaperConfig getConfiguration() {
+	static InternalPaperConfig getConfiguration() {
 		return (InternalPaperConfig) CommandAPIBukkit.getConfiguration();
 	}
 
@@ -94,24 +49,48 @@ public abstract class CommandAPIPaper<Source> implements BukkitPlatform<Source>,
 		CommandAPIBukkit.config = config;
 	}
 
+	// Implement BukkitPlatform methods
 	@Override
-	public <T extends CommandAPIBukkitConfig<T>> void onLoad(CommandAPIBukkitConfig<T> config) {
+	default void platformOnLoad(CommandAPIConfig<?> config) {
 		if (config instanceof CommandAPIPaperConfig paperConfig) {
 			CommandAPIPaper.setInternalConfig(new InternalPaperConfig(paperConfig));
 		} else {
-			CommandAPI.logError("CommandAPIBukkit was loaded with non-Bukkit config!");
+			CommandAPI.logError("CommandAPIPaper was loaded with non-Paper config!");
 			CommandAPI.logError("Attempts to access Bukkit-specific config variables will fail!");
 		}
-		bukkit.onLoad();
-		checkPaperDependencies();
+
+		// Check dependencies
+		try {
+			Class.forName("net.kyori.adventure.text.Component");
+			CommandAPI.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
+		} catch (ClassNotFoundException e) {
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
+			}
+		}
+
+		if (isPaperPresent) {
+			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
+		} else {
+			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
+				CommandAPI.logWarning("Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
+			}
+		}
+
+		if (isFoliaPresent) {
+			CommandAPI.logNormal("Hooked into Folia for folia-specific API implementations");
+			CommandAPI.logNormal("Folia support is still in development. Please report any issues to the CommandAPI developers!");
+		}
 	}
 
 	@Override
-	public void onEnable() {
+	@Differs(from = "Spigot", by = "Scheduler logic considers Folia")
+	@Differs(from = "Spigot", by = "ServerResourcesReloadedEvent used to detect `minecraft:reload`")
+	default void platformOnEnable() {
 		JavaPlugin plugin = getConfiguration().getPlugin();
 
 		new Schedulers(isFoliaPresent).scheduleSyncDelayed(plugin, () -> {
-			bukkit.getCommandRegistrationStrategy().runTasksAfterServerStart();
+			getCommandRegistrationStrategy().runTasksAfterServerStart();
 			if (isFoliaPresent) {
 				CommandAPI.logNormal("Skipping initial datapack reloading because Folia was detected");
 			} else {
@@ -119,18 +98,8 @@ public abstract class CommandAPIPaper<Source> implements BukkitPlatform<Source>,
 					reloadDataPacks();
 				}
 			}
-			bukkit.updateHelpForCommands(CommandAPI.getRegisteredCommands());
+			updateHelpForCommands(CommandAPI.getRegisteredCommands());
 		}, 0L);
-
-		// Prevent command registration after server has loaded
-		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-			// We want the lowest priority so that we always get to this first, in case a dependent plugin is using
-			//  CommandAPI features in their own ServerLoadEvent listener for some reason
-			@EventHandler(priority = EventPriority.LOWEST)
-			public void onServerLoad(ServerLoadEvent event) {
-				CommandAPI.stopCommandRegistration();
-			}
-		}, getConfiguration().getPlugin());
 
 		// Basically just a check to ensure we're actually running Paper
 		if (isPaperPresent) {
@@ -139,7 +108,7 @@ public abstract class CommandAPIPaper<Source> implements BukkitPlatform<Source>,
 				public void onServerReloadResources(ServerResourcesReloadedEvent event) {
 					// This event is called after Paper is done with everything command related
 					// which means we can put commands back
-					bukkit.getCommandRegistrationStrategy().preReloadDataPacks();
+					getCommandRegistrationStrategy().preReloadDataPacks();
 
 					// Normally, the reloadDataPacks() method is responsible for updating commands for
 					// online players. If, however, datapacks aren't supposed to be reloaded upon /minecraft:reload
@@ -157,76 +126,19 @@ public abstract class CommandAPIPaper<Source> implements BukkitPlatform<Source>,
 			}, plugin);
 			CommandAPI.logNormal("Hooked into Paper ServerResourcesReloadedEvent");
 		} else {
+			// TODO: Should this note be added to CommandAPISpigot? Previously, running on Spigot would display this note.
 			CommandAPI.logNormal("Did not hook into Paper ServerResourcesReloadedEvent while using commandapi-paper. Are you actually using Paper?");
 		}
 	}
 
 	@Override
-	public void onDisable() {
-		bukkit.onDisable();
-	}
-
-	private void checkPaperDependencies() {
-		try {
-			Class.forName("net.kyori.adventure.text.Component");
-			CommandAPI.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
-		} catch (ClassNotFoundException e) {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
-			}
-		}
-
-		isPaperPresent = false;
-
-		try {
-			Class.forName("io.papermc.paper.event.server.ServerResourcesReloadedEvent");
-			isPaperPresent = true;
-			CommandAPI.logNormal("Hooked into Paper for paper-specific API implementations");
-		} catch (ClassNotFoundException e) {
-			isPaperPresent = false;
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Paper for /minecraft:reload. Consider upgrading to Paper: https://papermc.io/");
-			}
-		}
-
-		isFoliaPresent = false;
-
-		try {
-			Class.forName("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
-			isFoliaPresent = true;
-			CommandAPI.logNormal("Hooked into Folia for folia-specific API implementations");
-			CommandAPI.logNormal("Folia support is still in development. Please report any issues to the CommandAPI developers!");
-		} catch (ClassNotFoundException e) {
-			isFoliaPresent = false;
-		}
-	}
-
-	public CommandMap getCommandMap() {
-		return Bukkit.getCommandMap();
+	default void platformOnDisable() {
+		// Nothing to do
 	}
 
 	@Override
-	public Platform activePlatform() {
-		return Platform.PAPER;
-	}
-
-	@Override
-	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative) {
-		return CommandAPIPaper.<Source>getBukkit().getSenderForCommand(cmdCtx, forceNative);
-	}
-
-	@Override
-	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source source) {
-		return getBukkit().getCommandSenderFromCommandSource(source);
-	}
-
-	@Override
-	public Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender) {
-		return CommandAPIPaper.<Source>getBukkit().getBrigadierSourceFromCommandSender(sender);
-	}
-
-	@Override
-	public BukkitCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
+	@Differs(from = "Spigot", by = "FeedbackForwardingSender and NullCommandSender are possible CommandSender instances")
+	default BukkitCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
 		if (sender instanceof BlockCommandSender block) {
 			return new BukkitBlockCommandSender(block);
 		}
@@ -248,13 +160,11 @@ public abstract class CommandAPIPaper<Source> implements BukkitPlatform<Source>,
 		if (sender instanceof RemoteConsoleCommandSender remote) {
 			return new BukkitRemoteConsoleCommandSender(remote);
 		}
-		final Class<? extends CommandSender> FeedbackForwardingSender = feedbackForwardingCommandSender;
-		if (FeedbackForwardingSender.isInstance(sender)) {
+		if (feedbackForwardingCommandSender.isInstance(sender)) {
 			// We literally cannot type this at compile-time, so let's use a placeholder CommandSender instance
-			return new BukkitFeedbackForwardingCommandSender<CommandSender>(FeedbackForwardingSender.cast(sender));
+			return new BukkitFeedbackForwardingCommandSender<CommandSender>(feedbackForwardingCommandSender.cast(sender));
 		}
-		final Class<? extends CommandSender> NullCommandSender = nullCommandSender;
-		if (NullCommandSender != null && NullCommandSender.isInstance(sender)) {
+		if (nullCommandSender != null && nullCommandSender.isInstance(sender)) {
 			// Since this should only be during a function load, this is just a placeholder to evade the exception.
 			return null;
 		}
@@ -262,68 +172,36 @@ public abstract class CommandAPIPaper<Source> implements BukkitPlatform<Source>,
 	}
 
 	@Override
-	public void registerPermission(String string) {
-		bukkit.registerPermission(string);
+	default CommandMap getCommandMap() {
+		return Bukkit.getCommandMap();
 	}
 
 	@Override
-	public SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider) {
-		return CommandAPIPaper.<Source>getBukkit().getSuggestionProvider(suggestionProvider);
+	default Platform activePlatform() {
+		return Platform.PAPER;
 	}
 
-	@Override
-	public void preCommandRegistration(String commandName) {
-		bukkit.preCommandRegistration(commandName);
+	// TODO: These methods were moved from CommandAPIBukkit. Update the docs that reference this if this is what we want to do.
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an adventure chat component
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 * {@link CommandSyntaxException}
+	 */
+	static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
+		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
 	}
 
-	@Override
-	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
-		CommandAPIPaper.<Source>getBukkit().postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an adventure chat component
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 * {@link CommandSyntaxException}
+	 */
+	static WrapperCommandSyntaxException failWithAdventureComponent(ComponentLike message) {
+		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message.asComponent()));
 	}
-
-	@Override
-	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
-		return CommandAPIPaper.<Source>getBukkit().registerCommandNode(node, namespace);
-	}
-
-	@Override
-	public void unregister(String commandName, boolean unregisterNamespaces) {
-		bukkit.unregister(commandName, unregisterNamespaces);
-	}
-
-	@Override
-	public CommandDispatcher<Source> getBrigadierDispatcher() {
-		return CommandAPIPaper.<Source>getBukkit().getBrigadierDispatcher();
-	}
-
-	@Override
-	public void createDispatcherFile(File file, CommandDispatcher<Source> dispatcher) throws IOException {
-		CommandAPIPaper.<Source>getBukkit().createDispatcherFile(file, dispatcher);
-	}
-
-	@Override
-	public void reloadDataPacks() {
-		bukkit.reloadDataPacks();
-	}
-
-	@Override
-	public void updateRequirements(AbstractPlayer<?> player) {
-		bukkit.updateRequirements(player);
-	}
-
-	@Override
-	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta) {
-		return bukkit.newConcreteCommandAPICommand(meta);
-	}
-
-	@Override
-	public MultiLiteralArgument newConcreteMultiLiteralArgument(String nodeName, String[] literals) {
-		return (MultiLiteralArgument) bukkit.newConcreteMultiLiteralArgument(nodeName, literals);
-	}
-
-	@Override
-	public LiteralArgument newConcreteLiteralArgument(String nodeName, String literal) {
-		return (LiteralArgument) bukkit.newConcreteLiteralArgument(nodeName, literal);
-	}
-
 }

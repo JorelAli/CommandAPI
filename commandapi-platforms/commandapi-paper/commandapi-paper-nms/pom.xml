@@ -14,7 +14,6 @@
 
 	<modules>
 		<module>commandapi-paper-nms-common</module>
-        <module>commandapi-paper-nms-common-mojang-mapped</module>
 
 		<module>commandapi-paper-1.21</module>
 		<module>commandapi-paper-1.20.5</module>

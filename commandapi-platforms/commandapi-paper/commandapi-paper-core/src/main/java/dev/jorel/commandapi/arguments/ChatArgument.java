@@ -76,16 +76,17 @@ public class ChatArgument extends Argument<Component> implements GreedyArgument,
 
 	@Override
 	public <CommandSourceStack> Component parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = CommandAPIPaper.<CommandSourceStack>getBukkit().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
-		Component component = CommandAPIPaper.<CommandSourceStack>getPaper().getChat(cmdCtx, key);
+		CommandAPIPaper<CommandSourceStack> platform = CommandAPIPaper.getPaper();
+		final CommandSender sender = platform.getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
+		Component component = platform.getChat(cmdCtx, key);
 
 		Optional<PreviewableFunction<Component>> previewOptional = getPreview();
 		if (this.usePreview && previewOptional.isPresent() && sender instanceof Player player) {
 			try {
-				Component previewComponent = previewOptional.get()
-					.generatePreview(new PreviewInfo<>(new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key), cmdCtx.getInput(), component));
-
-				component = previewComponent;
+				component = previewOptional.get().generatePreview(new PreviewInfo<>(
+					new BukkitPlayer(player), CommandAPIHandler.getRawArgumentInput(cmdCtx, key),
+					cmdCtx.getInput(), component
+				));
 			} catch (WrapperCommandSyntaxException e) {
 				throw e.getException();
 			}

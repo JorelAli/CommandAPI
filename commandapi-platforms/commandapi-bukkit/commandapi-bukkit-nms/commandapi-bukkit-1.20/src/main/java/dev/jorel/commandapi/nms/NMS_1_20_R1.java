@@ -41,9 +41,6 @@ import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.*;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandFunction;
@@ -145,7 +142,7 @@ import java.util.function.ToIntFunction;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-public class NMS_1_20_R1 extends NMS_CommonWithFunctions {
+public abstract class NMS_1_20_R1 extends NMS_CommonWithFunctions {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -803,5 +800,17 @@ public class NMS_1_20_R1 extends NMS_CommonWithFunctions {
 	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
+	}
+
+	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			(SimpleCommandMap) getCommandMap(),
+			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+			command -> command instanceof VanillaCommandWrapper,
+			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> node.getCommand() instanceof BukkitCommandWrapper
+		);
 	}
 }

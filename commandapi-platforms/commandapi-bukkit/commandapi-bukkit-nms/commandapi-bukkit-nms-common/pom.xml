@@ -81,6 +81,7 @@
 
 	<build>
 		<plugins>
+			<!-- Generate Mojang mapped jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -96,6 +97,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Generate Spigot mapped jar -->
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>

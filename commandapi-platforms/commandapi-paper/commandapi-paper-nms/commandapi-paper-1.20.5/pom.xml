@@ -53,30 +53,26 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- CommandAPI core -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<!-- Merge Bukkit 1.20.5 with Paper common -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-1.20.5</artifactId>
 			<version>${project.version}</version>
 			<classifier>mojang-mapped</classifier>
+			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-paper-nms-common</artifactId>
 			<version>${project.version}</version>
 			<classifier>mojang-mapped</classifier>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<!-- This is always mojang-mapped -->
 			<plugin>
 				<groupId>ca.bkaw</groupId>
 				<artifactId>paper-nms-maven-plugin</artifactId>

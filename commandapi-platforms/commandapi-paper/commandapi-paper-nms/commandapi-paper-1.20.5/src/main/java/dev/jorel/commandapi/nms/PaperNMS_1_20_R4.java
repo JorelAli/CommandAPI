@@ -2,56 +2,41 @@ package dev.jorel.commandapi.nms;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.CommandRegistrationStrategy;
 import dev.jorel.commandapi.PaperCommandRegistration;
-import dev.jorel.commandapi.SpigotCommandRegistration;
+import dev.jorel.commandapi.preprocessor.Differs;
 import io.papermc.paper.command.brigadier.bukkit.BukkitCommandNode;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
+import net.minecraft.commands.arguments.MessageArgument;
+import net.minecraft.network.chat.Component.Serializer;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.command.BukkitCommandWrapper;
-import org.bukkit.craftbukkit.command.VanillaCommandWrapper;
 
-import java.lang.reflect.Field;
-
-public class PaperNMS_1_20_R4 extends PaperNMS_Common {
-
-	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
+public class PaperNMS_1_20_R4 extends NMS_1_20_R4 implements PaperNMS_Common {
 	private static final boolean vanillaCommandDispatcherFieldExists;
-	private static final Commands vanillaCommandDispatcher;
-
-	private NMS_1_20_R4 bukkitNMS;
 
 	static {
-		if (Bukkit.getServer() instanceof CraftServer server) {
-			COMMAND_BUILD_CONTEXT = CommandBuildContext.simple(server.getServer().registryAccess(),
-				server.getServer().getWorldData().enabledFeatures());
-		} else {
-			COMMAND_BUILD_CONTEXT = null;
-		}
-
 		boolean fieldExists;
-		Commands commandDispatcher;
 		try {
-			Field vanillaCommandDispatcherField = MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
-			commandDispatcher = (Commands) vanillaCommandDispatcherField.get(getBukkit().getMinecraftServer());
+			MinecraftServer.class.getDeclaredField("vanillaCommandDispatcher");
 			fieldExists = true;
-		} catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
+		} catch (NoSuchFieldException | SecurityException e) {
 			// Expected on Paper-1.20.6-65 or later due to https://github.com/PaperMC/Paper/pull/8235
-			commandDispatcher = null;
 			fieldExists = false;
 		}
-		vanillaCommandDispatcher = commandDispatcher;
 		vanillaCommandDispatcherFieldExists = fieldExists;
+	}
+
+	@Override
+	@Differs(from = "1.20.4 and earlier", by = "Serializer.toJson now needs a Provider")
+	public Component getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		// TODO: Figure out if an empty provider is suitable here and in `getChatComponent`
+		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(MessageArgument.getMessage(cmdCtx, key), COMMAND_BUILD_CONTEXT));
 	}
 
 	@Override
@@ -61,32 +46,20 @@ public class PaperNMS_1_20_R4 extends PaperNMS_Common {
 	}
 
 	@Override
+	@Differs(from = "1.20.4 and earlier", by = "Serializer.toJson now needs a Provider")
 	public Component getChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(net.minecraft.network.chat.Component.Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key), COMMAND_BUILD_CONTEXT));
+		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key), COMMAND_BUILD_CONTEXT));
 	}
 
 	@Override
-	public NMS<?> bukkitNMS() {
-		if (bukkitNMS == null) {
-			this.bukkitNMS = new NMS_1_20_R4();
-		}
-		return bukkitNMS;
-	}
-
-	@Override
+	@Differs(from = "Spigot", by = "Paper's command internals rewrite requires new registration strategy")
 	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
 		if (vanillaCommandDispatcherFieldExists) {
-			return new SpigotCommandRegistration<>(
-				vanillaCommandDispatcher.getDispatcher(),
-				(SimpleCommandMap) getCommandMap(),
-				() -> bukkitNMS.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
-				command -> command instanceof VanillaCommandWrapper,
-				node -> new VanillaCommandWrapper(vanillaCommandDispatcher, node),
-				node -> node.getCommand() instanceof BukkitCommandWrapper
-			);
+			// Before Paper rewrote command internals, so use Spigot-type strategy
+			return super.createCommandRegistrationStrategy();
 		} else {
 			return new PaperCommandRegistration<>(
-				() -> bukkitNMS.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+				() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
 				node -> {
 					Command<?> command = node.getCommand();
 					return command instanceof BukkitCommandNode.BukkitBrigCommand;
@@ -94,5 +67,4 @@ public class PaperNMS_1_20_R4 extends PaperNMS_Common {
 			);
 		}
 	}
-
 }

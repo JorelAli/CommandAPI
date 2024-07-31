@@ -46,7 +46,7 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
  */
 @NMSMeta(compatibleWith = { "1.17" })
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-public class NMS_1_17 extends NMS_1_17_Common {
+public abstract class NMS_1_17 extends NMS_1_17_Common {
 
 	private static final Field serverFunctionLibraryDispatcher;
 

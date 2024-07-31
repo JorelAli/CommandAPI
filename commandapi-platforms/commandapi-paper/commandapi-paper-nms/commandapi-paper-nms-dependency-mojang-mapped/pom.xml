@@ -13,40 +13,6 @@
 	<packaging>pom</packaging>
 
 	<dependencies>
-		<!-- Common NMS for 1.17+ -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-nms-common-mojang-mapped</artifactId>
-			<version>${project.version}</version>
-			<type>pom</type>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-1.19-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-1.17-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-		</dependency>
-
-		<!-- Common Bukkit NMS for 1.17+ -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-1.17-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-1.19-common</artifactId>
-			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-		</dependency>
-
 		<!-- NMS-specific implementations -->
 		<dependency>
 			<groupId>dev.jorel</groupId>

@@ -57,16 +57,12 @@
 		</dependency>
 
 		<!-- CommandAPI core -->
+		<!-- Mojang-mapped goes first so it takes priority when compiling, Spigot mapped available in remapped final jar -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-core</artifactId>
+			<artifactId>commandapi-paper-nms-common</artifactId>
 			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-preprocessor</artifactId>
-			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
 			<scope>compile</scope>
 		</dependency>
 
@@ -74,29 +70,54 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-paper-nms-common</artifactId>
 			<version>${project.version}</version>
-			<classifier>mojang-mapped</classifier>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<!-- Shade the correct version of transitive dependencies into the jar to match the classifier -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
+				<artifactId>maven-shade-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>Mojang-Mapped</id>
+						<!-- Before remapping, shade mojang-mapped nms dependencies into currently mojang-mapped jar -->
+						<id>mojang-mapped-shade</id>
+						<phase>package</phase>
 						<goals>
-							<goal>jar</goal>
+							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<classifier>mojang-mapped</classifier>
+							<artifactSet>
+								<includes>
+									<include>${project.groupId}:commandapi-paper-nms-common:jar:mojang-mapped</include>
+								</includes>
+							</artifactSet>
+							<useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
+							<!-- Save this jar with the `mojang-mapped` classifier -->
+							<finalName>${project.build.finalName}-mojang-mapped</finalName>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- After remapping, shade spigot-mapped nms dependencies into default spigot-mapped jar -->
+						<id>spigot-mapped-shade</id>
+						<phase>pre-integration-test</phase> <!-- Phase directly after package (when remapping happens) -->
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>${project.groupId}:commandapi-paper-nms-common:jar:</include>
+								</includes>
+							</artifactSet>
+							<useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Generate Spigot mapped jar -->
+			<!-- Remap default jar to spigot mappings -->
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>

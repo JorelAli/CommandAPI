@@ -62,7 +62,6 @@ import org.bukkit.craftbukkit.v1_21_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_21_R1.CraftSound;
 import org.bukkit.craftbukkit.v1_21_R1.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_21_R1.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_21_R1.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_21_R1.help.CustomHelpTopic;
@@ -91,6 +90,7 @@ import com.mojang.serialization.DataResult;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.CommandRegistrationStrategy;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -100,6 +100,7 @@ import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
+import dev.jorel.commandapi.preprocessor.Unimplemented;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -109,11 +110,6 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
@@ -121,11 +117,9 @@ import net.minecraft.commands.CommandResultCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.FunctionInstantiationException;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
@@ -191,6 +185,8 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.ScoreHolder;
 
+import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPECIFIC_IMPLEMENTATION;
+
 // Mojang-Mapped reflection
 /**
  * NMS implementation for Minecraft 1.21
@@ -200,7 +196,7 @@ import net.minecraft.world.scores.ScoreHolder;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 // @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-public class NMS_1_21_R1 extends NMS_Common {
+public abstract class NMS_1_21_R1 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -209,7 +205,7 @@ public class NMS_1_21_R1 extends NMS_Common {
 	private static final boolean vanillaCommandDispatcherFieldExists;
 
 	// Derived from net.minecraft.commands.Commands;
-	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
+	protected static final CommandBuildContext COMMAND_BUILD_CONTEXT;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -1019,4 +1015,7 @@ public class NMS_1_21_R1 extends NMS_Common {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
 	}
 
+	@Override
+	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, info = "Paper rewrote command internals")
+	public abstract CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy();
 }

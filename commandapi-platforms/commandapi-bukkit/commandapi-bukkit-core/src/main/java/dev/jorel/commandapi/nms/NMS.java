@@ -28,9 +28,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import dev.jorel.commandapi.CommandRegistrationStrategy;
 import org.bukkit.Axis;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -68,10 +66,10 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.md_5.bungee.api.chat.BaseComponent;
 
+/**
+ * A collection of methods that are Minecraft server version specific.
+ */
 public interface NMS<CommandListenerWrapper> {
 
 	/**
@@ -404,4 +402,5 @@ public interface NMS<CommandListenerWrapper> {
 
 	Message generateMessageFromJson(String json);
 
+	<T> T getMinecraftServer();
 }

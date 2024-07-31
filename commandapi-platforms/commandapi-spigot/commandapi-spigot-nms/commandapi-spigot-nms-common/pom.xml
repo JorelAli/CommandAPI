@@ -57,11 +57,6 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-nms-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-preprocessor</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
@@ -70,6 +65,7 @@
 
 	<build>
 		<plugins>
+			<!-- Generate Mojang mapped jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -85,6 +81,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Generate Spigot mapped jar -->
 			<plugin>
 				<groupId>net.md-5</groupId>
 				<artifactId>specialsource-maven-plugin</artifactId>
@@ -122,6 +119,7 @@
 	</build>
 
 	<profiles>
+<!--		TODO: Make sure these profiles are being checked like normal `nms-common` -->
 		<profile>
 			<id>Spigot_1_20_4_R3</id>
 			<dependencies>

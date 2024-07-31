@@ -52,7 +52,7 @@
 							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
 							<createSourcesJar>true</createSourcesJar>
 							<!-- Remove commandapi-core's VersionHandler in favor of ours which
-								loads CommandAPIBukkit for the current version -->
+								loads CommandAPIPaper for the current version and sets up mojang mappings -->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>

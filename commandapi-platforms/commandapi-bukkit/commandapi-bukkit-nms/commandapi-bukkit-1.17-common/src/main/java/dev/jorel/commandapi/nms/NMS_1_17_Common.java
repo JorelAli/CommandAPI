@@ -93,9 +93,6 @@ import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
@@ -704,5 +701,17 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 		} else {
 			return null;
 		}
+	}
+	
+	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			(SimpleCommandMap) getCommandMap(),
+			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+			command -> command instanceof VanillaCommandWrapper,
+			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> node.getCommand() instanceof BukkitCommandWrapper
+		);
 	}
 }

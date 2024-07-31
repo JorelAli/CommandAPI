@@ -98,9 +98,6 @@ import dev.jorel.commandapi.commandsenders.BukkitNativeProxyCommandSender;
 import dev.jorel.commandapi.preprocessor.Differs;
 import dev.jorel.commandapi.preprocessor.NMSMeta;
 import dev.jorel.commandapi.preprocessor.RequireField;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.commands.CommandFunction;
 import net.minecraft.commands.CommandFunction.Entry;
 import net.minecraft.commands.CommandSourceStack;
@@ -164,7 +161,7 @@ import net.minecraft.world.phys.Vec3;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-public class NMS_1_18_R2 extends NMS_Common {
+public abstract class NMS_1_18_R2 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -864,5 +861,17 @@ public class NMS_1_18_R2 extends NMS_Common {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			(SimpleCommandMap) getCommandMap(),
+			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+			command -> command instanceof VanillaCommandWrapper,
+			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> node.getCommand() instanceof BukkitCommandWrapper
+		);
 	}
 }

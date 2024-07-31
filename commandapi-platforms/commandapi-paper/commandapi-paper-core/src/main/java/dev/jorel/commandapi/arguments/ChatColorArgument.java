@@ -22,7 +22,6 @@ package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.CommandAPIPaper;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
-import org.bukkit.ChatColor;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -32,11 +31,11 @@ import dev.jorel.commandapi.executors.CommandArguments;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 /**
- * An argument that represents the Bukkit ChatColor object
+ * An argument that represents the Adventure chat color object
  * 
  * @since 1.1
  * 
- * @apiNote Returns a {@link ChatColor} object
+ * @apiNote Returns a {@link NamedTextColor} object
  */
 public class ChatColorArgument extends SafeOverrideableArgument<NamedTextColor, NamedTextColor> {
 

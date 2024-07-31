@@ -40,6 +40,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import dev.jorel.commandapi.*;
+import dev.jorel.commandapi.preprocessor.Overridden;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -107,11 +108,6 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
@@ -119,11 +115,9 @@ import net.minecraft.commands.CommandResultCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.FunctionInstantiationException;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
@@ -200,7 +194,7 @@ import net.minecraft.world.scores.ScoreHolder;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 // @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
-public class NMS_1_20_R4 extends NMS_Common {
+public abstract class NMS_1_20_R4 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorUsesSelector;
@@ -208,7 +202,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	private static final Field serverFunctionLibraryDispatcher;
 
 	// Derived from net.minecraft.commands.Commands;
-	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
+	protected static final CommandBuildContext COMMAND_BUILD_CONTEXT;
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
@@ -1009,5 +1003,19 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
+	}
+
+	@Override
+	@Overridden(in = "Paper 1.20.6", because = "Paper rewrote command internals in 1.20.6-65. " +
+		"1.20.5 still uses this logic, so the method is shared with Spigot here.")
+	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
+		return new SpigotCommandRegistration<>(
+			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			(SimpleCommandMap) getCommandMap(),
+			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+			command -> command instanceof VanillaCommandWrapper,
+			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> node.getCommand() instanceof BukkitCommandWrapper
+		);
 	}
 }

@@ -3,7 +3,6 @@ package dev.jorel.commandapi;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
@@ -14,18 +13,17 @@ import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.AbstractPlayer;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
-import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
-import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.Unimplemented;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
@@ -53,36 +51,22 @@ import static dev.jorel.commandapi.preprocessor.Unimplemented.REASON.VERSION_SPE
 // CommandAPIBukkit needs all of the methods fromNMS, so it implements NMS.
 // Our implementation of CommandAPIBukkit is now derived
 // using the version handler (and thus, deferred to our NMS-specific implementations)
-public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
-
-	// References to utility classes
-	private static BukkitPlatform<?> instance;
-	private static CommandAPIBukkit<?> bukkit;
+public abstract class CommandAPIBukkit<Source> implements BukkitPlatform<Source> {
+	// Loading logic
+	private static CommandAPIBukkit<?> instance;
 	protected static InternalBukkitConfig config;
 	private CommandRegistrationStrategy<Source> commandRegistrationStrategy;
 
 	protected CommandAPIBukkit() {
-		CommandAPIBukkit.bukkit = this;
-	}
-
-	protected <T extends BukkitPlatform<?>> void setInstance(T instance) {
-		CommandAPIBukkit.instance = instance;
+		CommandAPIBukkit.instance = this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <Source> CommandAPIBukkit<Source> get() {
-		if (CommandAPIBukkit.bukkit != null) {
-			return (CommandAPIBukkit<Source>) bukkit;
+		if (CommandAPIBukkit.instance != null) {
+			return (CommandAPIBukkit<Source>) instance;
 		}
 		throw new IllegalStateException("Tried to access CommandAPIBukkit instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T extends BukkitPlatform<?>> T platform() {
-		if (CommandAPIBukkit.instance != null) {
-			return (T) instance;
-		}
-		throw new IllegalStateException("Tried to access the Bukkit platform, but it was null! Are you using CommandAPI features before calling CommandPAI#onLoad?");
 	}
 
 	public static InternalBukkitConfig getConfiguration() {
@@ -92,11 +76,11 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 		throw new IllegalStateException("Tried to access InternalBukkitConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
 	}
 
-	public CommandRegistrationStrategy<Source> getCommandRegistrationStrategy() {
-		return commandRegistrationStrategy;
-	}
-
-	public void onLoad() {
+	// Implement CommandAPIPlatform methods
+	@Override
+	public void onLoad(CommandAPIConfig<?> config) {
+		// Config will be loaded by CommandAPIPaper or CommandAPISpigot based on the server version
+		platformOnLoad(config);
 		checkDependencies();
 	}
 
@@ -108,16 +92,35 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 		}
 		// We don't need to log if no NBT was found, constructing an NBTCompoundArgument without one will do that for us
 
-		try {
-			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPI.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");
-		} catch (ClassNotFoundException e) {
-			if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Spigot for Chat/ChatComponents");
-			}
-		}
+		commandRegistrationStrategy = createCommandRegistrationStrategy();
+	}
 
-		commandRegistrationStrategy = ((BukkitPlatform<Source>) instance).createCommandRegistrationStrategy();
+	@Override
+	public void onEnable() {
+		platformOnEnable();
+
+		// Prevent command registration after server has loaded
+		Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+			// We want the lowest priority so that we always get to this first, in case a dependent plugin is using
+			//  CommandAPI features in their own ServerLoadEvent listener for some reason
+			@EventHandler(priority = EventPriority.LOWEST)
+			public void onServerLoad(ServerLoadEvent event) {
+				CommandAPI.stopCommandRegistration();
+			}
+		}, getConfiguration().getPlugin());
+	}
+
+	@Override
+	public void onDisable() {
+		platformOnDisable();
+
+		// Nothing to do
+	}
+
+	// Implement BukkitPlatform methods
+	@Override
+	public CommandRegistrationStrategy<Source> getCommandRegistrationStrategy() {
+		return commandRegistrationStrategy;
 	}
 
 	/*
@@ -184,7 +187,8 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 		return usages;
 	}
 
-	void updateHelpForCommands(List<RegisteredCommand> commands) {
+	@Override
+	public void updateHelpForCommands(List<RegisteredCommand> commands) {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
 		Set<String> namespacedCommandNames = new HashSet<>();
 
@@ -194,13 +198,13 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 
 			// Namespaced commands shouldn't have a help topic, we should save the namespaced command name
 			namespacedCommandNames.add(generateCommandHelpPrefix(command.commandName(), command.namespace()));
-			
+
 			StringBuilder aliasSb = new StringBuilder();
 			final String shortDescription;
-			
+
 			// Must be empty string, not null as defined by OBC::CustomHelpTopic
 			final String permission = command.permission().getPermission().orElse("");
-			
+
 			HelpTopic helpTopic;
 			final Optional<Object> commandHelpTopic = command.helpTopic();
 			if (commandHelpTopic.isPresent()) {
@@ -217,16 +221,16 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 				} else {
 					shortDescription = "A command by the " + config.getPlugin().getName() + " plugin.";
 				}
-	
+
 				// Generate full description
 				StringBuilder sb = new StringBuilder();
 				if (fullDescriptionOptional.isPresent()) {
 					sb.append(ChatColor.GOLD).append("Description: ").append(ChatColor.WHITE).append(fullDescriptionOptional.get()).append("\n");
 				}
-	
+
 				generateHelpUsage(sb, command);
 				sb.append("\n");
-	
+
 				// Generate aliases. We make a copy of the StringBuilder because we
 				// want to change the output when we register aliases
 				aliasSb = new StringBuilder(sb.toString());
@@ -244,15 +248,15 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 				} else {
 					StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
 					currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
-	
+
 					// We want to get all aliases (including the original command name),
 					// except for the current alias
 					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
 					aliases.add(command.commandName());
 					aliases.remove(alias);
-	
+
 					currentAliasSb.append(String.join(", ", aliases));
-	
+
 					// Don't override the plugin help topic
 					commandPrefix = generateCommandHelpPrefix(alias);
 					helpTopic = generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission);
@@ -273,22 +277,18 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 		}
 	}
 
-	public void onDisable() {
-		// Nothing to do
-	}
-
+	// More CommandAPIPlatform methods
+	@Override
 	@Unimplemented(because = REQUIRES_CSS)
 	public abstract BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<Source> cmdCtx, boolean forceNative);
 
+	@Override
 	@Unimplemented(because = REQUIRES_CSS)
 	public abstract BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(Source cs);
 
+	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT)
 	public abstract Source getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> sender);
-
-	public BukkitCommandSender<? extends CommandSender> wrapCommandSender(CommandSender sender) {
-		return instance.wrapCommandSender(sender);
-	}
 
 	public void registerPermission(String string) {
 		try {
@@ -302,6 +302,7 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 	@Unimplemented(because = REQUIRES_MINECRAFT_SERVER)
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
+	@Override
 	public void preCommandRegistration(String commandName) {
 		// Warn if the command we're registering already exists in this plugin's
 		// plugin.yml file
@@ -321,6 +322,7 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 		}
 	}
 
+	@Override
 	public void postCommandRegistration(RegisteredCommand registeredCommand, LiteralCommandNode<Source> resultantNode, List<LiteralCommandNode<Source>> aliasNodes) {
 		commandRegistrationStrategy.postCommandRegistration(registeredCommand, resultantNode, aliasNodes);
 
@@ -335,10 +337,12 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 		}
 	}
 
+	@Override
 	public LiteralCommandNode<Source> registerCommandNode(LiteralArgumentBuilder<Source> node, String namespace) {
 		return commandRegistrationStrategy.registerCommandNode(node, namespace);
 	}
 
+	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces) {
 		unregisterInternal(commandName, unregisterNamespaces, false);
 	}
@@ -378,10 +382,12 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 		}
 	}
 
+	@Override
 	public final CommandDispatcher<Source> getBrigadierDispatcher() {
 		return commandRegistrationStrategy.getBrigadierDispatcher();
 	}
 
+	@Override
 	@Unimplemented(because = {REQUIRES_MINECRAFT_SERVER, VERSION_SPECIFIC_IMPLEMENTATION})
 	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> brigadierDispatcher) throws IOException;
 
@@ -409,55 +415,26 @@ public abstract class CommandAPIBukkit<Source> implements NMS<Source> {
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
 	public abstract void reloadDataPacks();
 
+	@Override
 	public void updateRequirements(AbstractPlayer<?> player) {
 		((Player) player.getSource()).updateCommands();
 	}
 
+	@Override
 	public Argument<String> newConcreteMultiLiteralArgument(String nodeName, String[] literals) {
 		return new MultiLiteralArgument(nodeName, literals);
 	}
 
+	@Override
 	public Argument<String> newConcreteLiteralArgument(String nodeName, String literal) {
 		return new LiteralArgument(nodeName, literal);
 	}
 
+	@Override
 	public CommandAPICommand newConcreteCommandAPICommand(CommandMetaData<CommandSender> meta) {
 		return new CommandAPICommand(meta);
 	}
 
-	/**
-	 * Forces a command to return a success value of 0
-	 *
-	 * @param message Description of the error message, formatted as an array of base components
-	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
-	 * {@link CommandSyntaxException}
-	 */
-	public static WrapperCommandSyntaxException failWithBaseComponents(BaseComponent... message) {
-		return CommandAPI.failWithMessage(BukkitTooltip.messageFromBaseComponents(message));
-	}
-
-	/**
-	 * Forces a command to return a success value of 0
-	 *
-	 * @param message Description of the error message, formatted as an adventure chat component
-	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
-	 * {@link CommandSyntaxException}
-	 */
-	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
-		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
-	}
-
-	/**
-	 * Forces a command to return a success value of 0
-	 *
-	 * @param message Description of the error message, formatted as an adventure chat component
-	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
-	 * {@link CommandSyntaxException}
-	 */
-	public static WrapperCommandSyntaxException failWithAdventureComponent(ComponentLike message) {
-		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message.asComponent()));
-	}
-	
 	/**
 	 * Initializes the CommandAPI's implementation of an NBT API. If you are shading
 	 * the CommandAPI, you should be using

@@ -43,17 +43,18 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- CommandAPI core -->
+		<!-- Merge Bukkit 1.16.5 with Paper -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-core</artifactId>
+			<artifactId>commandapi-bukkit-1.16.5</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-1.16.5</artifactId>
+			<artifactId>commandapi-paper-core</artifactId>
 			<version>${project.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>

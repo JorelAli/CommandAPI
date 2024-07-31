@@ -25,6 +25,7 @@
 
 	<artifactId>commandapi-bukkit-nms-dependency</artifactId>
 	<packaging>pom</packaging>
+	<!-- TODO: Is this module (and the mojang-mapped version) necessary? -->
 
 	<dependencies>
 		<!-- Common NMS for 1.17+ -->
