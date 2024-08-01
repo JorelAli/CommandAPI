@@ -55,7 +55,7 @@ public class ChatArgument extends Argument<Component> implements GreedyArgument,
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatArgument(String nodeName) {
-		super(nodeName, CommandAPIBukkit.get()._ArgumentChat());
+		super(nodeName, CommandAPIBukkit.get().getNMS()._ArgumentChat());
 
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
@@ -76,7 +76,7 @@ public class ChatArgument extends Argument<Component> implements GreedyArgument,
 
 	@Override
 	public <CommandSourceStack> Component parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		final CommandSender sender = CommandAPIPaper.<CommandSourceStack>getBukkit().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
+		final CommandSender sender = CommandAPIBukkit.<CommandSourceStack>get().getCommandSenderFromCommandSource(cmdCtx.getSource()).getSource();
 		Component component = CommandAPIPaper.<CommandSourceStack>getPaper().getChat(cmdCtx, key);
 
 		Optional<PreviewableFunction<Component>> previewOptional = getPreview();
