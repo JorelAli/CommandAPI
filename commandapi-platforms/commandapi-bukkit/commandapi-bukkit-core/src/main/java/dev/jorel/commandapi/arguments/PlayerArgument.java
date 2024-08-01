@@ -40,7 +40,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PlayerArgument(String nodeName) {
-		super(nodeName, CommandAPIBukkit.get()._ArgumentProfile(), Player::getName);
+		super(nodeName, CommandAPIBukkit.get().getNMS()._ArgumentProfile(), Player::getName);
 	}
 
 	@Override
@@ -55,6 +55,6 @@ public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 	
 	@Override
 	public <CommandSourceStack> Player parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, CommandArguments previousArgs) throws CommandSyntaxException {
-		return CommandAPIBukkit.<CommandSourceStack>get().getPlayer(cmdCtx, key);
+		return CommandAPIBukkit.<CommandSourceStack>get().getNMS().getPlayer(cmdCtx, key);
 	}
 }

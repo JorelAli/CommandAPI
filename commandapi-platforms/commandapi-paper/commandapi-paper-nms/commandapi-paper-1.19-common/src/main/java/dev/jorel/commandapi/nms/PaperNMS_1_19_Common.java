@@ -104,11 +104,11 @@ public abstract class PaperNMS_1_19_Common extends PaperNMS_CommonWithFunctions 
 	@Differs(from = "1.18", by = "MinecraftServer#aA -> MinecraftServer#aC")
 	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
 		return new SpigotCommandRegistration<>(
-			((CommandAPIBukkit<?>) bukkitNMS()).<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
+			bukkitNMS().<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
 			(SimpleCommandMap) getCommandMap(),
-			() -> ((CommandAPIBukkit<?>) bukkitNMS()).<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
+			() -> bukkitNMS().<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
 			command -> command instanceof VanillaCommandWrapper,
-			node -> new VanillaCommandWrapper(((CommandAPIBukkit<?>) bukkitNMS()).<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
+			node -> new VanillaCommandWrapper(bukkitNMS().<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
 			node -> node.getCommand() instanceof BukkitCommandWrapper
 		);
 	}

@@ -205,7 +205,7 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
-public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
+public class NMS_1_16_R3 extends NMS<CommandListenerWrapper> {
 	
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorCheckPermissions;
@@ -470,7 +470,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
-			return wrapCommandSender(clw.getBukkitSender());
+			return CommandAPIBukkit.get().wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -797,7 +797,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 			}
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return wrapCommandSender(sender);
+			return CommandAPIBukkit.get().wrapCommandSender(sender);
 		}
 	}
 
@@ -893,7 +893,8 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 
 		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
 		try {
-			customFunctionManagerBrigadierDispatcher.set(datapackResources.a(), getBrigadierDispatcher());
+			customFunctionManagerBrigadierDispatcher.set(datapackResources.a(),
+				CommandAPIBukkit.<CommandListenerWrapper>get().getBrigadierDispatcher());
 		} catch (IllegalAccessException ignored) {
 			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
@@ -917,7 +918,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 
 			// Register recipes again because reloading datapacks
 			// removes all non-vanilla recipes
-			registerBukkitRecipesSafely(recipes);
+			CommandAPIBukkit.get().registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {
