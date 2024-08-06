@@ -17,7 +17,7 @@ List<Argument> arguments = new ArrayList<>();
 arguments.add(new PlayerArgument("target"));
 ```
 
-The String value is the node that is registered into Minecraft's internal command graph. This is name is also used as a prompt that is shown to a player when they are entering the command.
+The String value is the node that is registered into Minecraft's internal command graph. This name is also used as a prompt that is shown to a player when they are entering the command.
 
 -----
 
