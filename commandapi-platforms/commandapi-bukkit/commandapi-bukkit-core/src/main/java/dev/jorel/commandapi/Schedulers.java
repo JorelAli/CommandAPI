@@ -45,7 +45,7 @@ public class Schedulers {
 
 	public void scheduleAsync(Plugin plugin, Runnable runnable) {
 		if (paperImplementations.isFoliaPresent()) {
-			plugin.getServer().getAsyncScheduler().runNow(this, task -> runnable.run());
+			plugin.getServer().getAsyncScheduler().runNow(plugin, task -> runnable.run());
 		} else {
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, runnable);
 		}
