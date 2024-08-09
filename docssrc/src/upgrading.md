@@ -1,5 +1,39 @@
 # Upgrading guide
 
+## From 9.?.? to 10.0.0
+
+### CommandAPI restructure
+
+#### General module changes
+
+For 10.0.0 the `commandapi-bukkit-xxx` modules have mostly been removed in favour of new platform specific modules that have been made for Paper or Spigot respectively:
+
+- `commandapi-paper-xxx`
+- `commandapi-spigot-xxx`
+
+In order to update please replace your `commandapi-bukkit-xxx` dependency with either `commandapi-paper-xxx` or `commandapi-spigot-xxx`.
+
+<div class="warning">
+
+**Developer's Note:**
+
+The fact that Paper is a fork of Spigot does not mean that the Spigot modules work on Paper. Paper has, especially in newer versions, made changes to internal systems the CommandAPI
+uses. There are no guarantees that the Spigot modules will work on Paper in any kind or form.
+
+On the other hand, if you try to use the Paper modules on Spigot you will face registration issues and potential `NoClassDefFoundError`s, depending on the server version you use.
+There again is no guarantee for any kind of compatibility.
+
+</div>
+
+#### Code changes
+
+The `CommandAPIBukkitConfig` class has been converted into an abstract class and is no longer used to construct a config instance. Instead, use the new `CommandAPIPaperConfig` or
+`CommandAPISpigotConfig` classes, depending on the module you use.
+
+Further changes have been made to arguments that work with components. The classes `AdventureChatArgument`, `AdventureChatComponentArgument` and `AdventureChatColorArgument` have been
+removed. Instead, the `ChatArgument`, `ChatComponentArgument` and `ChatColorArgument` have been implemented platform specific and return different types on Paper and Spigot.
+On Paper, Adventure components are used while Spigot uses BungeeCord components.
+
 ## From 9.2.0 to 9.3.0
 
 The `BukkitTooltip.generateAdvenureComponents` methods have now been deprecated in favour of the correctly named `BukkitTooltip.generateAdventureComponents` methods:
