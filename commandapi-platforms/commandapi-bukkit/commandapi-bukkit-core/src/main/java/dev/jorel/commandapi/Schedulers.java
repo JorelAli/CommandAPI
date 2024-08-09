@@ -37,7 +37,7 @@ public class Schedulers {
 
 	public void scheduleSyncDelayed(Plugin plugin, Runnable runnable, long delay) {
 		if (paperImplementations.isFoliaPresent()) {
-			plugin.getServer().getGlobalRegionScheduler().execute(plugin, runnable);
+			plugin.getServer().getGlobalRegionScheduler().runDelayed(plugin, task -> runnable.run(), delay);
 		} else {
 			plugin.getServer().getScheduler().runTaskLater(plugin, runnable, delay);
 		}
@@ -45,7 +45,7 @@ public class Schedulers {
 
 	public void scheduleAsync(Plugin plugin, Runnable runnable) {
 		if (paperImplementations.isFoliaPresent()) {
-			plugin.getServer().getGlobalRegionScheduler().execute(plugin, runnable);
+			plugin.getServer().getAsyncScheduler().runNow(plugin, task -> runnable.run());
 		} else {
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, runnable);
 		}
