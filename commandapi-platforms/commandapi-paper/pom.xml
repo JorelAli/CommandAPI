@@ -20,8 +20,6 @@
 		<module>commandapi-paper-nms</module>
 		<module>commandapi-paper-shade</module>
 		<module>commandapi-paper-plugin</module>
-		<module>commandapi-paper-plugin-mojang-mapped</module>
-		<module>commandapi-paper-shade-mojang-mapped</module>
 		<module>commandapi-paper-documentation-code</module>
 
 		<!-- Tests do not compile

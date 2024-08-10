@@ -14,16 +14,12 @@
 
 	<dependencies>
 		<!-- We specifically need to add spigot-mapped nms-common because otherwise the always mojang-mapped paper
-		     modules will incorrectly pull in mojang-mapped nms-common -->
-		<!-- TODO: Should there be a single paper jar that just loads with the correct mappings that the version has by
-		      default? E.g. one jar that loads spigot-mapped on 1.19 or whatever and mojang-mapped on 1.21 and similar.
-		      That would mean including both mapped versions of nms-common, which I think is possible through shade
-		      relocation. It is kinda weird that we include the always mojang-mapped 1.21 and 1.20.5 nms modules in jars
-		      that are supposed to be spigot-mapped. Since the jar has spigot-mapped nms-common classes, they don't
-		      work anyway. Even if Paper remaps nms-common to mojang-mappings, remapping the 1.21 and 1.20.5 classes that
-		      are already mojang-mapped doesn't work out and the code can't run anyway. Alternatively, should the spigot-mapped
-		      paper jars include spigot-mapped versions of 1.20.5 and 1.21? CommandAPIPaper does explicitly double check that
-		      its running on Paper, so is running CommandAPIPaper on a Spigot mapped server something that could happen? -->
+		     modules will incorrectly pull in mojang-mapped nms-common. Even though the dependency reduced poms of
+		     those modules have their nms-common dependencies removed (since they reference a relocated version to avoid
+		     conflict with the default spigot-mapped version), Maven will only use the dependency-reduced pom if you
+		     build the modules separately. This is a 9-year-old Maven bug >:( https://issues.apache.org/jira/browse/MNG-5899.
+		     We would like to build everything at once, so we gotta do this. That bug causes other annoying but not detrimental
+		     issues, so it would still be nice to redo the build system a bit to find a different solution for that issue. -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-nms-common</artifactId>

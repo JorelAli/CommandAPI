@@ -22,12 +22,15 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-spigot-vh</artifactId>
 			<version>${project.version}</version>
+			<scope>compile</scope>
 		</dependency>
+
+		<!-- Ensure preprocessor files are not included in the final jar -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-spigot-nms-dependency</artifactId>
+			<artifactId>commandapi-preprocessor</artifactId>
 			<version>${project.version}</version>
-			<type>pom</type>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -46,7 +49,7 @@
 						<configuration>
 							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
 							<createSourcesJar>true</createSourcesJar>
-							<!-- Remove commandapi-core's and commandapi-bukkit-core's VersionHandler in favor of ours which
+							<!-- Remove commandapi-core's VersionHandler in favor of ours which
 								loads CommandAPISpigot for the current version -->
 							<filters>
 								<filter>

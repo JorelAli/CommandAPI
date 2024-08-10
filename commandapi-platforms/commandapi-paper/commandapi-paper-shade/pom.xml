@@ -25,9 +25,16 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-nms-dependency</artifactId>
+			<artifactId>commandapi-paper-mojang-mapped</artifactId>
 			<version>${project.version}</version>
-			<type>pom</type>
+		</dependency>
+
+		<!-- Ensure preprocessor files are not included in the final jar -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-preprocessor</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -47,12 +54,13 @@
 							<promoteTransitiveDependencies>true</promoteTransitiveDependencies>
 							<createSourcesJar>true</createSourcesJar>
 							<!-- Remove commandapi-core's VersionHandler in favor of ours which
-								loads CommandAPIPaper for the current version -->
+								loads CommandAPIPaper for the current version and determines if we are mojang mapped -->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>
 									<excludes>
 										<exclude>dev/jorel/commandapi/CommandAPIVersionHandler**</exclude>
+										<exclude>dev/jorel/commandapi/MojangMappedVersionHandler**</exclude>
 									</excludes>
 								</filter>
 							</filters>

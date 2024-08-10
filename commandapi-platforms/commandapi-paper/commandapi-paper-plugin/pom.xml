@@ -37,14 +37,21 @@
 		</dependency>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-paper-nms-dependency</artifactId>
+			<artifactId>commandapi-paper-mojang-mapped</artifactId>
 			<version>${project.version}</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>io.papermc.paper</groupId>
 			<artifactId>paper-api</artifactId>
 			<version>${paper.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Ensure preprocessor files are not included in the final jar -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-preprocessor</artifactId>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -67,13 +74,14 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<!-- Remove commandapi-core's VersionHandler in favor of ours which
-								loads CommandAPIPaper for the current version -->
+							<!-- Remove commandapi-core's VersionHandlers in favor of ours which
+								loads CommandAPIPaper for the current version and determines if we are mojang mapped -->
 							<filters>
 								<filter>
 									<artifact>dev.jorel:commandapi-core</artifact>
 									<excludes>
 										<exclude>dev/jorel/commandapi/CommandAPIVersionHandler**</exclude>
+										<exclude>dev/jorel/commandapi/MojangMappedVersionHandler**</exclude>
 									</excludes>
 								</filter>
 							</filters>
@@ -85,6 +93,20 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<!-- Add the maven-jar-plugin to mark the plugin as mojang mapped as 1.20.5+ Paper would assume Spigot mappings
+			when a plugin.yml is used. Our 1.20.5+ code is already mojang-mapped, so Paper should not remap us again. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.4.1</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
+						</manifestEntries>
+					</archive>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

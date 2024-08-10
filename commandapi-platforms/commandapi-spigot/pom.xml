@@ -17,11 +17,8 @@
 		<module>commandapi-spigot-core</module>
 		<module>commandapi-spigot-nms</module>
         <module>commandapi-spigot-vh</module>
-        <module>commandapi-spigot-mojang-mapped</module>
 		<module>commandapi-spigot-plugin</module>
 		<module>commandapi-spigot-shade</module>
-		<module>commandapi-spigot-plugin-mojang-mapped</module>
-		<module>commandapi-spigot-shade-mojang-mapped</module>
 		<module>commandapi-spigot-documentation-code</module>
 
 		<!-- Tests do not compile

@@ -33,7 +33,6 @@
 		<module>commandapi-paper-1.16.5</module>
 
 		<module>commandapi-paper-nms-dependency</module>
-		<module>commandapi-paper-nms-dependency-mojang-mapped</module>
 	</modules>
 
 </project>

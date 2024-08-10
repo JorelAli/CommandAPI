@@ -78,6 +78,44 @@
 				<artifactId>paper-nms-maven-plugin</artifactId>
 				<version>1.4.4</version>
 			</plugin>
+			<!-- Relocate mojang-mapped nms to avoid conflict with default spigot-mapped version -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>mojang-mapped-shade</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>${project.groupId}:commandapi-bukkit-1.20.5:jar:mojang-mapped</include>
+									<include>${project.groupId}:commandapi-paper-nms-common:jar:mojang-mapped</include>
+								</includes>
+							</artifactSet>
+							<useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
+							<relocations>
+								<relocation>
+									<pattern>dev.jorel.commandapi.nms</pattern>
+									<shadedPattern>dev.jorel.commandapi.nms.mojangmapped</shadedPattern>
+									<!-- Only relocate the dependencies, not our own file. -->
+									<excludes>
+										<exclude>dev.jorel.commandapi.nms.PaperNMS_1_20_R4</exclude>
+									</excludes>
+								</relocation>
+								<!-- Paper also moves craftbukkit to a version agnostic package -->
+								<relocation>
+									<pattern>org.bukkit.craftbukkit.v1_20_R4</pattern>
+									<shadedPattern>org.bukkit.craftbukkit</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- Allow code coverage -->
 			<plugin>
 				<groupId>org.jacoco</groupId>

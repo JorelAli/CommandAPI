@@ -36,15 +36,17 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-spigot-nms-dependency</artifactId>
-			<version>${project.version}</version>
-			<type>pom</type>
-		</dependency>
-		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>${paper.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Ensure preprocessor files are not included in the final jar -->
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-preprocessor</artifactId>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -67,7 +69,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<!-- Remove commandapi-core's and commandapi-bukkit-core's VersionHandler in favor of ours which
+							<!-- Remove commandapi-core's VersionHandler in favor of ours which
 								loads CommandAPISpigot for the current version -->
 							<filters>
 								<filter>
