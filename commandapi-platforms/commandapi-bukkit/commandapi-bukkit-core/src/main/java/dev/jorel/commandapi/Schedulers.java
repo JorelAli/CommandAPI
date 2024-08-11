@@ -12,7 +12,7 @@ public class Schedulers {
 
 	public int scheduleSyncRepeatingTask(Plugin plugin, Runnable runnable, long delay, long period) {
 		if (paperImplementations.isFoliaPresent()) {
-			plugin.getServer().getGlobalRegionScheduler().runAtFixedRate(plugin, task -> runnable.run(), delay, period);
+			plugin.getServer().getGlobalRegionScheduler().runAtFixedRate(plugin, task -> runnable.run(), delay <= 0 ? 1 : delay, period);
 			return 1;
 		} else {
 			return plugin.getServer().getScheduler().runTaskTimer(plugin, runnable, delay, period).getTaskId();
@@ -37,7 +37,7 @@ public class Schedulers {
 
 	public void scheduleSyncDelayed(Plugin plugin, Runnable runnable, long delay) {
 		if (paperImplementations.isFoliaPresent()) {
-			plugin.getServer().getGlobalRegionScheduler().runDelayed(plugin, task -> runnable.run(), delay);
+			plugin.getServer().getGlobalRegionScheduler().runDelayed(plugin, task -> runnable.run(), delay <= 0 ? 1 : delay);
 		} else {
 			plugin.getServer().getScheduler().runTaskLater(plugin, runnable, delay);
 		}
