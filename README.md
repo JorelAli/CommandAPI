@@ -409,11 +409,19 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
     </thead>
     <tbody>
         <tr>
-            <td valign="top"><b>9.6.0</b></td>
-            <td valign="top">???</td>
+            <td valign="top"><b>9.5.2</b></td>
+            <td valign="top">August 2024</td>
             <td valign="top">
+                <b>Minecraft Version Changes:</b>
                 <ul>
+                    <li>Adds support for Minecraft 1.21.1</li>
+                </ul>
+                <b>CommandAPI Changes:</b>
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/588 Fix Folia scheduling methods using the wrong scheduler implementation</li>
                     <li>https://github.com/JorelAli/CommandAPI/issues/577 Adds a <code>CommandAPIBukkit#failWithAdventureComponent(ComponentLike)</code> method</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/580 Fix running a non-vanilla command on paper in Minecraft functions with the CommandAPI throwing runtime exceptions</li>
+                    <li>Fix namespaces not being propagated when registering subcommands</li>
                 </ul>
             </td>
         </tr>
