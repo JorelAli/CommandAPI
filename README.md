@@ -53,22 +53,23 @@ The list of what version of the CommandAPI you'll need to run on a specific vers
 | **1.16.2**         | v4.0 - 5.12, 8.3.0  - 9.4.2 | 9.4.2                        | 16                                                        |
 | **1.16.3**         | v4.2 - 5.12, 8.3.0  - 9.4.2 | 9.4.2                        | 16                                                        |
 | **1.16.4**         | v5.2 - 5.12, 8.3.0  - 9.4.2 | 9.4.2                        | 16                                                        |
-| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.5.1 | 9.5.1                        | 16                                                        |
-| **1.17**           | 6.0.x - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.17.1**         | 6.1.x - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.18, 1.18.1**   | 6.5.2 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.18.2**         | 6.5.4 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.19**           | 8.3.0 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.19.1**         | 8.5.0 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.19.2**         | 8.5.1 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.19.3**         | 8.7.0 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.19.4**         | 8.8.0 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.20**           | 9.0.2 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.20.1**         | 9.0.3 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.20.2**         | 9.2.0 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.20.3, 1.20.4** | 9.3.0 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.20.5, 1.20.6** | 9.4.0 - 9.5.1               | 9.5.1                        | 16                                                        |
-| **1.21**           | 9.5.0 - 9.5.1               | 9.5.1                        | 16                                                        |
+| **1.16.5**         | v5.7 - 7.0.0, 8.3.0 - 9.5.2 | 9.5.2                        | 16                                                        |
+| **1.17**           | 6.0.x - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.17.1**         | 6.1.x - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.18, 1.18.1**   | 6.5.2 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.18.2**         | 6.5.4 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.19**           | 8.3.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.19.1**         | 8.5.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.19.2**         | 8.5.1 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.19.3**         | 8.7.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.19.4**         | 8.8.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.20**           | 9.0.2 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.20.1**         | 9.0.3 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.20.2**         | 9.2.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.20.3, 1.20.4** | 9.3.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.20.5, 1.20.6** | 9.4.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.21**           | 9.5.0 - 9.5.2               | 9.5.2                        | 16                                                        |
+| **1.21.1**         | 9.5.2                       | 9.5.2                        | 16                                                        |
 
 -----
 
@@ -408,6 +409,23 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td valign="top"><b>9.5.2</b></td>
+            <td valign="top">August 2024</td>
+            <td valign="top">
+                <b>Minecraft Version Changes:</b>
+                <ul>
+                    <li>Adds support for Minecraft 1.21.1</li>
+                </ul>
+                <b>CommandAPI Changes:</b>
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/588 Fix Folia scheduling methods using the wrong scheduler implementation</li>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/577 Adds a <code>CommandAPIBukkit#failWithAdventureComponent(ComponentLike)</code> method</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/580 Fix running a non-vanilla command on paper in Minecraft functions with the CommandAPI throwing runtime exceptions</li>
+                    <li>Fix namespaces not being propagated when registering subcommands</li>
+                </ul>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><b>9.5.1</b></td>
             <td valign="top">June 2024</td>

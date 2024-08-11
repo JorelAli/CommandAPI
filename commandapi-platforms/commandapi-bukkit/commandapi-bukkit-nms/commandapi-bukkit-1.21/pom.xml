@@ -21,15 +21,15 @@
 	<parent>
 		<artifactId>commandapi-bukkit-nms</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.5.1</version>
+		<version>9.5.2</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>commandapi-bukkit-1.21</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.21-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.21.1-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.21.1-R0.1-SNAPSHOT</spigot.version>
 		<paper.version>1.21-R0.1-SNAPSHOT</paper.version>
 	</properties>
 
@@ -44,7 +44,7 @@
 		</repository>
 		<repository>
 			<id>papermc</id>
-			<url>https://papermc.io/repo/repository/maven-public/</url>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
 	</repositories>
 

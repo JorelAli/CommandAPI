@@ -43,7 +43,7 @@ public class CommandAPIConfig {
 
 The `CommandAPIConfig` class follows a typical builder pattern (without you having to run `.build()` at the end), which lets you easily construct configuration instances.
 
-However, the `CommandAPIConfig` class is abstract and cannot be used to configure the CommandAPI directly. Instead, you must use a subclass of `CommandAPIConfig` that corresponds to the platform you are developing for. For example, when developing for Bukkit, you should use the `CommandAPIBukkiConfig` class.
+However, the `CommandAPIConfig` class is abstract and cannot be used to configure the CommandAPI directly. Instead, you must use a subclass of `CommandAPIConfig` that corresponds to the platform you are developing for. For example, when developing for Bukkit, you should use the `CommandAPIBukkitConfig` class.
 
 <!-- TODO: Add tabs and explanations for other platforms -->
 
@@ -52,6 +52,7 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig {
     CommandAPIBukkitConfig(JavaPlugin plugin);
 
     CommandAPIBukkitConfig shouldHookPaperReload(boolean hooked); // Whether the CommandAPI should hook into the Paper-exclusive ServerResourcesReloadedEvent
+    CommandAPIBukkitConfig skipReloadDatapacks(boolean skip) // Whether the CommandAPI should reload datapacks on server load
 }
 ```
 
@@ -120,7 +121,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-shade</artifactId>
-        <version>9.5.1</version>
+        <version>9.5.2</version>
     </dependency>
 </dependencies>
 ```
@@ -130,7 +131,7 @@ Add the CommandAPI shade dependency:
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-shade-mojang-mapped</artifactId>
-        <version>9.5.1</version>
+        <version>9.5.2</version>
     </dependency>
 </dependencies>
 ```
@@ -176,21 +177,21 @@ As we're shading the CommandAPI into your plugin, you **don't** need to add `dep
 
 ## Shading with Gradle
 
-To shade the CommandAPI into a Gradle project, we'll use the [Gradle Shadow Plugin](https://imperceptiblethoughts.com/shadow/). Add this to your list of plugins:
+To shade the CommandAPI into a Gradle project, we'll use the [Goooler Gradle Shadow Plugin](https://plugins.gradle.org/plugin/io.github.goooler.shadow). This is a fork of the [Shadow Plugin](https://imperceptiblethoughts.com/shadow/) which supports Java 21. Add this to your list of plugins:
 
 <div class="multi-pre">
 
 ```groovy,build.gradle
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'io.github.goooler.shadow' version '8.1.7'
 }
 ```
 
 ```kotlin,build.gradle.kts
 plugins {
     java
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 ```
 
@@ -226,25 +227,25 @@ Next, we declare our dependencies:
 
 ```groovy,build.gradle_(Spigot_Mappings)
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade:9.5.1"
+    implementation "dev.jorel:commandapi-bukkit-shade:9.5.2"
 }
 ```
 
 ```groovy,build.gradle_(Mojang_Mappings)
 dependencies {
-    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.1"
+    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.2"
 }
 ```
 
 ```kotlin,build.gradle.kts_(Spigot_Mappings)
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade:9.5.1")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.5.2")
 }
 ```
 
 ```kotlin,build.gradle.kts_(Mojang_Mappings)
 dependencies {
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.1")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.2")
 }
 ```
 
@@ -257,7 +258,7 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 ```groovy,build.gradle_(Spigot_Mappings)
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.5.1")
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.5.2")
     }
 
     // TODO: Change this to my own package name
@@ -268,7 +269,7 @@ shadowJar {
 ```groovy,build.gradle_(Mojang_Mappings)
 shadowJar {
     dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.1")
+        include dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.2")
     }
 
     // TODO: Change this to my own package name
@@ -279,7 +280,7 @@ shadowJar {
 ```kotlin,build.gradle.kts_(Spigot_Mappings)
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.5.1"))
+        include(dependency("dev.jorel:commandapi-bukkit-shade:9.5.2"))
     }
 
     // TODO: Change this to my own package name
@@ -290,7 +291,7 @@ tasks.withType<ShadowJar> {
 ```kotlin,build.gradle.kts_(Mojang_Mappings)
 tasks.withType<ShadowJar> {
     dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.1"))
+        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.2"))
     }
 
     // TODO: Change this to my own package name

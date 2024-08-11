@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['failwithadventurecomponent_0',['failWithAdventureComponent',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a7fdc8a325dc34e99c97dc5ac68c6feb4',1,'dev::jorel::commandapi::CommandAPIBukkit']]],
+  ['failwithadventurecomponent_0',['failWithAdventureComponent',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a7fdc8a325dc34e99c97dc5ac68c6feb4',1,'dev.jorel.commandapi.CommandAPIBukkit.failWithAdventureComponent(Component message)'],['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#af5c56fac38d3257e5083f02a076a0c11',1,'dev.jorel.commandapi.CommandAPIBukkit.failWithAdventureComponent(ComponentLike message)']]],
   ['failwithbasecomponents_1',['failWithBaseComponents',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a0c07184d06a8e32ec0870ebb42a63d09',1,'dev::jorel::commandapi::CommandAPIBukkit']]],
   ['failwithmessage_2',['failWithMessage',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ac65bdae09efea47d7181803d254e4c49',1,'dev::jorel::commandapi::CommandAPI']]],
   ['failwithstring_3',['failWithString',['../classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#a72723e2ed5d0356f6efefa46d70246b4',1,'dev::jorel::commandapi::CommandAPI']]],

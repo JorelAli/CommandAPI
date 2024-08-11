@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.5.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.5.2</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getLength()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_string_range.html#ae20854169009f7efeaf723e6e12ea9c2">com.mojang.brigadier.context.StringRange</a></li>
 <li>getList()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1suggestion_1_1_suggestions.html#ab87e22561f647a65ae90b82f3c6e9805">com.mojang.brigadier.suggestion.Suggestions</a></li>
 <li>getLiteral()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1builder_1_1_literal_argument_builder.html#ac84354871c52db8f1602fe42d4e25cce">com.mojang.brigadier.builder.LiteralArgumentBuilder&lt; S &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1tree_1_1_literal_command_node.html#a6c92de1ff639d96ded00bef849af2bad">com.mojang.brigadier.tree.LiteralCommandNode&lt; S &gt;</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal.html#a4a043413651268babcbd93972ef0edbe">dev.jorel.commandapi.arguments.Literal&lt; Impl &gt;</a>, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html#afb187a0535bac8ddaf503fa046fd04ac">dev.jorel.commandapi.arguments.LiteralArgument</a></li>
-<li>getLiterals()&#160;:&#160;<a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal.html#a7ff320a430e8f7cfa4efa4b8531fe9a9">dev.jorel.commandapi.arguments.MultiLiteral&lt; Impl &gt;</a>, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#ae72253dbfbf61620ae8437f446e53905">dev.jorel.commandapi.arguments.MultiLiteralArgument</a></li>
+<li>getLiterals()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enum_argument.html#ad1dee0c6049772037303b9f8d71d8824">dev.jorel.commandapi.arguments.EnumArgument&lt; T extends Enum &gt;</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal.html#a7ff320a430e8f7cfa4efa4b8531fe9a9">dev.jorel.commandapi.arguments.MultiLiteral&lt; Impl &gt;</a>, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html#ae72253dbfbf61620ae8437f446e53905">dev.jorel.commandapi.arguments.MultiLiteralArgument</a></li>
 <li>getLocation()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_native_proxy_command_sender.html#a53d485d6f208c50d567a27b88e126f39">dev.jorel.commandapi.wrappers.NativeProxyCommandSender</a></li>
 <li>getLocationType()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location2_d_argument.html#a7638e02a072c284ec0033478313ade6e">dev.jorel.commandapi.arguments.Location2DArgument</a>, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_location_argument.html#aac5c362a0de9490916426bd130c48851">dev.jorel.commandapi.arguments.LocationArgument</a></li>
 <li>getLogger()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html#ae73187ddcf07a194f514981c47674b96">dev.jorel.commandapi.CommandAPI</a>, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html#ac43095dd866b7f327b5dbcb4ffab61a1">dev.jorel.commandapi.CommandAPIPlatform&lt; Argument, CommandSender, Source &gt;</a></li>
@@ -165,6 +165,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getNodes()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context.html#a3ca24c5ed2748a41b3a1cb881b774eb4">com.mojang.brigadier.context.CommandContext&lt; S &gt;</a>, <a class="el" href="classcom_1_1mojang_1_1brigadier_1_1context_1_1_command_context_builder.html#a018313263d0985b035ff4c29581047b9">com.mojang.brigadier.context.CommandContextBuilder&lt; S &gt;</a></li>
 <li>getNormalizedPitch()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html#a4fec7bb632a5e1793b6d8210b14ed75c">dev.jorel.commandapi.wrappers.Rotation</a></li>
 <li>getNormalizedYaw()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1wrappers_1_1_rotation.html#a4533ed4cfb21c8e99f6b1a43f28feb9e">dev.jorel.commandapi.wrappers.Rotation</a></li>
+<li>getNullCommandSender()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_paper_implementations.html#ae0d38d7f26be43c2a733ffc37f263d47">dev.jorel.commandapi.PaperImplementations</a></li>
 <li>getOverriddenSuggestions()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#adec57ce0bfb3c28ad13623ed8eaf4d5e">dev.jorel.commandapi.arguments.AbstractArgument&lt; T, Impl, Argument, CommandSender &gt;</a></li>
 <li>getPath()&#160;:&#160;<a class="el" href="classcom_1_1mojang_1_1brigadier_1_1_command_dispatcher.html#aace977cd3ace91c636f4ed829162a167">com.mojang.brigadier.CommandDispatcher&lt; S &gt;</a></li>
 <li>getPermission()&#160;:&#160;<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_permission.html#a7575458ee5b50152a300d3ab9d6638e4">dev.jorel.commandapi.CommandPermission</a>, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable_command.html#a2758bd91ff8f94fbfe56811c8a945253">dev.jorel.commandapi.ExecutableCommand&lt; Impl, CommandSender &gt;</a></li>
@@ -230,7 +231,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 		<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
 			<ul>
 				<li class="footer">
-					Generated on Thu Jun 13 2024 23:41:22 for CommandAPI 9.5.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Sun Aug 11 2024 14:07:36 for CommandAPI 9.5.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

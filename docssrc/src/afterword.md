@@ -73,6 +73,7 @@ I'd like to personally give thanks to my _✨Special Contributors_ in the Comman
 
 - **[willkroboth](https://github.com/willkroboth)**, the first _✨Special Contributor_, recognized for their above-and-beyond contribution to helping new CommandAPI Discord members.
 - **[DerEchtePilz](https://github.com/DerEchtePilz)**, recognized for their significant contribution of creating a Kotlin DSL for the CommandAPI (with the help of Sparky from the CommandAPI Discord server).
+- **[Hawk](https://github.com/XHawk87)**, recognized for becoming the lead developer of the CommandAPI annotation system.
 
 The CommandAPI would not be where it is currently without the community that has been established over the years in the CommandAPI Discord server. As such, I'd like to give a special thanks to some of the most active CommandAPI Discord server members that make the community feel lively:
 
@@ -80,6 +81,7 @@ The CommandAPI would not be where it is currently without the community that has
 - Brought To You By
 - MineNash
 - TheGates
+- Strokkur24
 
 -----
 

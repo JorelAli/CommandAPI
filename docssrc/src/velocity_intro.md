@@ -58,13 +58,13 @@ As mentioned, Velocity can only be accessed with snapshot builds. These snapshot
 
 ```gradle,build.gradle
 dependencies {
-    compile "dev.jorel:commandapi-velocity-shade:9.5.0-SNAPSHOT"
+    implementation "dev.jorel:commandapi-velocity-shade:9.5.0-SNAPSHOT"
 }
 ```
 
 ```gradle,build.gradle.kts
 dependencies {
-    compileOnly("dev.jorel:commandapi-velocity-shade:9.5.0-SNAPSHOT")
+    implementation("dev.jorel:commandapi-velocity-shade:9.5.0-SNAPSHOT")
 }
 ```
 

@@ -1,15 +1,16 @@
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.arguments.AbstractArgument;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
+import dev.jorel.commandapi.arguments.AbstractArgument;
 
 /**
  * This class stores the arguments for this command
@@ -598,6 +599,30 @@ public record CommandArguments(
 		throw new IllegalStateException("Unexpected behaviour detected while building exception message!" +
 			"This should never happen - if you're seeing this message, please" +
 			"contact the developers of the CommandAPI, we'd love to know how you managed to get this error!");
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(args);
+		result = prime * result + Arrays.hashCode(rawArgs);
+		result = prime * result + Objects.hash(argsMap, fullInput, rawArgsMap);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CommandArguments other = (CommandArguments) obj;
+		return Arrays.deepEquals(args, other.args) && Objects.equals(argsMap, other.argsMap)
+				&& Objects.equals(fullInput, other.fullInput) && Arrays.equals(rawArgs, other.rawArgs)
+				&& Objects.equals(rawArgsMap, other.rawArgsMap);
 	}
 
 }

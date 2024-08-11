@@ -131,7 +131,9 @@ var hierarchy =
     ] ],
     [ "dev.jorel.commandapi.arguments.Argument< String >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html", [
       [ "dev.jorel.commandapi.arguments.LiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_literal_argument.html", null ],
-      [ "dev.jorel.commandapi.arguments.MultiLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html", null ],
+      [ "dev.jorel.commandapi.arguments.MultiLiteralArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_multi_literal_argument.html", [
+        [ "dev.jorel.commandapi.arguments.EnumArgument< T extends Enum >", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enum_argument.html", null ]
+      ] ],
       [ "dev.jorel.commandapi.arguments.ObjectiveCriteriaArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_objective_criteria_argument.html", null ],
       [ "dev.jorel.commandapi.arguments.ScoreHolderArgument.Single", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_score_holder_argument_1_1_single.html", null ],
       [ "dev.jorel.commandapi.arguments.StringArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_string_argument.html", null ],

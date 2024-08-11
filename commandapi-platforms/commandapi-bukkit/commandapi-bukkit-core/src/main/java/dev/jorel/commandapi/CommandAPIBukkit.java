@@ -20,6 +20,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
@@ -292,8 +293,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			final String permission = command.permission().getPermission().orElse("");
 			
 			HelpTopic helpTopic;
-			if (command.helpTopic().isPresent()) {
-				helpTopic = (HelpTopic) command.helpTopic().get();
+			final Optional<Object> commandHelpTopic = command.helpTopic();
+			if (commandHelpTopic.isPresent()) {
+				helpTopic = (HelpTopic) commandHelpTopic.get();
 				shortDescription = "";
 			} else {
 				// Generate short description
@@ -328,8 +330,8 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			helpTopicsToAdd.put(commandPrefix, helpTopic);
 
 			for (String alias : command.aliases()) {
-				if (command.helpTopic().isPresent()) {
-					helpTopic = (HelpTopic) command.helpTopic().get();
+				if (commandHelpTopic.isPresent()) {
+					helpTopic = (HelpTopic) commandHelpTopic.get();
 				} else {
 					StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
 					currentAliasSb.append(ChatColor.GOLD).append("Aliases: ").append(ChatColor.WHITE);
@@ -407,6 +409,13 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				// We literally cannot type this at compile-time, so let's use a placeholder CommandSender instance
 				return new BukkitFeedbackForwardingCommandSender<CommandSender>(FeedbackForwardingSender.cast(sender));
 			}
+
+			final Class<? extends CommandSender> NullCommandSender = paper.getNullCommandSender();
+			if (NullCommandSender != null && NullCommandSender.isInstance(sender)) {
+				// Since this should only be during a function load, this is just a placeholder to evade the exception.
+				return null;
+			}
+
 		}
 		throw new RuntimeException("Failed to wrap CommandSender " + sender + " to a CommandAPI-compatible BukkitCommandSender");
 	}
@@ -578,6 +587,17 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	 */
 	public static WrapperCommandSyntaxException failWithAdventureComponent(Component message) {
 		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message));
+	}
+
+	/**
+	 * Forces a command to return a success value of 0
+	 *
+	 * @param message Description of the error message, formatted as an adventure chat component
+	 * @return a {@link WrapperCommandSyntaxException} that wraps Brigadier's
+	 * {@link CommandSyntaxException}
+	 */
+	public static WrapperCommandSyntaxException failWithAdventureComponent(ComponentLike message) {
+		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message.asComponent()));
 	}
 	
 	/**

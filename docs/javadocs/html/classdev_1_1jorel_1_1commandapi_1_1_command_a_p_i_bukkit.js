@@ -36,6 +36,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit =
     [ "_ArgumentVec3", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a8f4f10614673b73fb2efdeb645da52bf", null ],
     [ "compatibleVersions", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a496e1bb1ce16d141e9200cde895f8021", null ],
     [ "failWithAdventureComponent", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a7fdc8a325dc34e99c97dc5ac68c6feb4", null ],
+    [ "failWithAdventureComponent", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#af5c56fac38d3257e5083f02a076a0c11", null ],
     [ "failWithBaseComponents", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a0c07184d06a8e32ec0870ebb42a63d09", null ],
     [ "getSimpleCommandMap", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#af38561d456f27ae3b16efd0a17e7ba72", null ],
     [ "getSuggestionProvider", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#ad40f5c7efcbbde3768bbf3cf237e17bb", null ],

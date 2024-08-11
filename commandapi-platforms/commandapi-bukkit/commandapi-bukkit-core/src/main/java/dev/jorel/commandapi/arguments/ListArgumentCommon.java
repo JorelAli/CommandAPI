@@ -125,40 +125,27 @@ public class ListArgumentCommon<T> extends Argument<List> {
 		final SuggestionInfo<CommandSender> currentInfo = new SuggestionInfo<>(sender, previousArgs, cmdCtx.getInput(), cmdCtx.getArgument(key, String.class));
 		
 		// Get the list of values which this can take
-		Map<IStringTooltip, T> values = new HashMap<>();
+		Map<String, T> values = new HashMap<>();
 		for (T object : supplier.apply(currentInfo)) {
-			values.put(mapper.apply(object), object);
+			values.put(mapper.apply(object).getSuggestion(), object);
 		}
-
+	
 		// If the argument's value is in the list of values, include it
 		List<T> list = new ArrayList<>();
-		String argument = cmdCtx.getArgument(key, String.class);
-		String[] strArr = argument.split(Pattern.quote(delimiter));
-		StringReader context = new StringReader(argument);
-		int cursor = 0;
+		Set<String> listKeys = new HashSet<>(); // Set to keep track of duplicates - we can't use the main list because of object hashing
+		final String argument = cmdCtx.getArgument(key, String.class);
+		final String[] strArr = argument.split(Pattern.quote(delimiter));
+		final StringReader context = new StringReader(argument);
 		for (String str : strArr) {
-			boolean addedItem = false;
-			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
-			for (Entry<IStringTooltip, T> entry : values.entrySet()) {
-				if (entry.getKey().getSuggestion().equals(str)) {
-					if (allowDuplicates) {
-						list.add(entry.getValue());
-					} else {
-						if (!list.contains(entry.getValue())) {
-							list.add(entry.getValue());
-						} else {
-							context.setCursor(cursor);
-							throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
-						}
-					}
-					addedItem = true;
-				}
-			}
-			if(!addedItem) {
-				context.setCursor(cursor);
+			if (!values.containsKey(str)) {
 				throw new SimpleCommandExceptionType(new LiteralMessage("Item is not allowed in list")).createWithContext(context);
+			} else if (!allowDuplicates && listKeys.contains(str)) {
+				throw new SimpleCommandExceptionType(new LiteralMessage("Duplicate arguments are not allowed")).createWithContext(context);
+			} else {
+				list.add(values.get(str));
+				listKeys.add(str);
 			}
-			cursor += str.length() + delimiter.length();
+			context.setCursor(context.getCursor() + str.length() + delimiter.length());
 		}
 		return list;
 	}
