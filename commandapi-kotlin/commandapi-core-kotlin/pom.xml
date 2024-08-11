@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>dev.jorel</groupId>
 		<artifactId>commandapi-kotlin</artifactId>
-		<version>9.5.2</version>
+		<version>9.6.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>commandapi-core-kotlin</artifactId>
