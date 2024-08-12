@@ -410,6 +410,15 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>9.6.0</b></td>
+            <td valign="top">???</td>
+            <td valign="top">
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/594 Adds a config option to allow the CommandAPI to be more lenient when updating to a new minor version (e. g. from 1.21 to 1.21.1)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.5.3</b></td>
             <td valign="top">August 2024</td>
             <td valign="top">
