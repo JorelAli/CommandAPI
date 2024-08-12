@@ -49,11 +49,13 @@ public interface CommandAPIVersionHandler {
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
 	static CommandAPIPlatform<?, ?, ?> getPlatform() {
+		CommandAPIPlatform<?, ?, ?> latestNMS = new NMS_1_21_R1();
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_21_R1();
+			return latestNMS;
 		} else {
 			String version = Bukkit.getBukkitVersion().split("-")[0];
-			return switch (version) {
+			Version minecraftVersion = new Version(version);
+			CommandAPIPlatform<?, ?, ?> platform = switch (version) {
 				case "1.16.5" -> new NMS_1_16_R3();
 				case "1.17" -> new NMS_1_17();
 				case "1.17.1" -> new NMS_1_17_R1();
@@ -68,9 +70,54 @@ public interface CommandAPIVersionHandler {
 				case "1.20.3", "1.20.4" -> new NMS_1_20_R3();
 				case "1.20.5", "1.20.6" -> new NMS_1_20_R4();
 				case "1.21", "1.21.1" -> new NMS_1_21_R1();
-				default -> throw new UnsupportedVersionException(version);
+				default -> null;
 			};
+			if (platform != null) {
+				return platform;
+			} else {
+				if (CommandAPI.getConfiguration().shouldBeMoreLenientForMinorVersions()) {
+					return minecraftVersion.matchesPatch((NMS<?>) latestNMS);
+				}
+				throw new UnsupportedVersionException(version);
+			}
 		}
+	}
+
+	class Version {
+
+		private final String version;
+
+		// The minor version is something like 1.x
+		private final int minor;
+
+		private Version(String version) {
+			this.version = version;
+			String[] versionParts = version.split("\\.");
+			minor = Integer.parseInt(versionParts[1]);
+		}
+
+		private CommandAPIPlatform<?, ?, ?> matchesPatch(NMS<?> latestNMS) {
+			if (minor <= 16) {
+				// We absolutely do not support versions older than 1.16.5
+				// As we match 1.16.5 in the getPlatform() method, this if branch means that
+				// the server is on 1.16.4 or older
+				throw new UnsupportedVersionException(version);
+			} else {
+				// Any other Minecraft that is older or exactly the last version we match in getPlatform()
+				// does not appear here. Furthermore, we do not want to be lenient with 1.x versions so we
+				// can simply return the latest NMS version here if its supported Minecraft version's minor version
+				// is the same as the current Minecraft version
+				String[] supportedNMSVersions = latestNMS.compatibleVersions();
+				int minorVersion = Integer.parseInt(supportedNMSVersions[0].split("\\.")[1]); // Index 1 returns the minor version by SemVer's rules
+				if (this.minor == minorVersion) {
+					return (CommandAPIPlatform<?, ?, ?>) latestNMS;
+				}
+			}
+			// If we end up here, that means the server's current minor version in SemVer terms is newer than the
+			// latest minor version of Minecraft in SemVer terms that this method allows. We do not support that.
+			throw new UnsupportedVersionException(version);
+		}
+
 	}
 
 }
