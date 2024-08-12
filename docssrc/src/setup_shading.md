@@ -257,10 +257,6 @@ Then we add it to the `shadowJar` task configuration and relocate the CommandAPI
 
 ```groovy,build.gradle_(Spigot_Mappings)
 shadowJar {
-    dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade:9.6.0-SNAPSHOT")
-    }
-
     // TODO: Change this to my own package name
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
@@ -268,10 +264,6 @@ shadowJar {
 
 ```groovy,build.gradle_(Mojang_Mappings)
 shadowJar {
-    dependencies {
-        include dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0-SNAPSHOT")
-    }
-
     // TODO: Change this to my own package name
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
@@ -279,10 +271,6 @@ shadowJar {
 
 ```kotlin,build.gradle.kts_(Spigot_Mappings)
 tasks.withType<ShadowJar> {
-    dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade:9.6.0-SNAPSHOT"))
-    }
-
     // TODO: Change this to my own package name
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
@@ -290,10 +278,6 @@ tasks.withType<ShadowJar> {
 
 ```kotlin,build.gradle.kts_(Mojang_Mappings)
 tasks.withType<ShadowJar> {
-    dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0-SNAPSHOT"))
-    }
-
     // TODO: Change this to my own package name
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
