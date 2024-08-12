@@ -120,6 +120,20 @@ use-latest-nms-version: true
 
 -----
 
+### `lenient-for-minor-versions`
+
+Controls whether the CommandAPI should be more lenient when updating to a new Minecraft version.
+
+Similar to the [`use-latest-nms-version`](#use-latest-nms-version) setting, this can allow the CommandAPI to run on a version higher than it officially supports. As an example, this setting can allow updating to 1.21.2 from 1.21.1 but doesn't allow updating to 1.22 from 1.21.2.
+
+<div class="warning">
+
+Take the warning from the [`use-latest-nms-version`](#use-latest-nms-version) and apply it here too. This is _not_ guaranteed to work either and also may cause unexpected side-effects.
+
+</div>
+
+-----
+
 ### `hook-paper-reload`
 
 Controls whether the CommandAPI hooks into the Paper-exclusive `ServerResourcesReloadedEvent` when available.
