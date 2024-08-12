@@ -251,32 +251,18 @@ dependencies {
 
 </div>
 
-Then we add it to the `shadowJar` task configuration and relocate the CommandAPI to your desired location:
+Then you just need to relocate the CommandAPI to your desired location in the `shadowJar` task configuration:
 
 <div class="multi-pre">
 
-```groovy,build.gradle_(Spigot_Mappings)
+```groovy,build.gradle
 shadowJar {
     // TODO: Change this to my own package name
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
 }
 ```
 
-```groovy,build.gradle_(Mojang_Mappings)
-shadowJar {
-    // TODO: Change this to my own package name
-    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
-}
-```
-
-```kotlin,build.gradle.kts_(Spigot_Mappings)
-tasks.withType<ShadowJar> {
-    // TODO: Change this to my own package name
-    relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
-}
-```
-
-```kotlin,build.gradle.kts_(Mojang_Mappings)
+```kotlin,build.gradle.kts
 tasks.withType<ShadowJar> {
     // TODO: Change this to my own package name
     relocate("dev.jorel.commandapi", "my.custom.package.commandapi")
