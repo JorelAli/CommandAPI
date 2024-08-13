@@ -96,8 +96,7 @@ extends CommandAPIConfig<Impl>
 	 * when updating to a minor release of Minecraft. As an example, this setting can allow
 	 * updating to 1.21.2 from 1.21.1 but doesn't allow updating to 1.22 from 1.21.2.
 	 * Unlike {@link #useLatestNMSVersion(boolean)}, this setting does
-	 * not blindly load the latest NMS version and as a result breaks cross version compatibility
-	 * but will actually prefer loading the correct NMS implementation.
+	 * not blindly load the latest NMS version, but will prefer loading the correct NMS implementation when available.
 	 *
 	 * @param value whether the CommandAPI should assume that minor Minecraft releases do not cause incompatibilities
 	 * @return this CommandAPIConfig
