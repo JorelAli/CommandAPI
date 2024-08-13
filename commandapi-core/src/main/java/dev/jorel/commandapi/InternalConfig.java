@@ -40,7 +40,7 @@ public class InternalConfig {
 	// Whether we should use the latest NMS version (which may not be compatible)
 	private final boolean useLatestNMSVersion;
 
-	private final boolean beMoreLenientForMinorVerions;
+	private final boolean beLenientForMinorVersions;
 
 	// The message to display when an executor implementation is missing
 	private final String messageMissingExecutorImplementation;
@@ -67,7 +67,7 @@ public class InternalConfig {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
-		this.beMoreLenientForMinorVerions = config.lenientForMinorVersions;
+		this.beLenientForMinorVersions = config.beLenientForMinorVersions;
 		this.messageMissingExecutorImplementation = config.missingExecutorImplementationMessage;
 		this.dispatcherFile = config.dispatcherFile;
 		this.skipSenderProxy = config.skipSenderProxy;
@@ -100,8 +100,8 @@ public class InternalConfig {
 	/**
 	 * @return Whether the CommandAPI should assume that minor versions of officially unsupported versions do not cause incompatibilities
 	 */
-	public boolean shouldBeMoreLenientForMinorVersions() {
-		return this.beMoreLenientForMinorVerions;
+	public boolean shouldBeLenientForMinorVersions() {
+		return this.beLenientForMinorVersions;
 	}
 
 	/**

@@ -132,6 +132,18 @@ Take the warning from the [`use-latest-nms-version`](#use-latest-nms-version) an
 
 </div>
 
+**Default value**
+
+```yml
+lenient-for-minor-versions: false
+```
+
+**Example value**
+
+```yml
+lenient-for-minor-versions: true
+```
+
 -----
 
 ### `hook-paper-reload`
