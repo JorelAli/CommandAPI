@@ -13,8 +13,8 @@ interface CommandAPIVersionHandler {
 	companion object {
 
 		@JvmStatic
-		fun getPlatform() : CommandAPIPlatform<*, *, *> {
-			return MockNMS(NMS_1_19_1_R1());
+		fun getPlatform() : LoadContext {
+			return LoadContext(MockNMS(NMS_1_19_1_R1())) {}
 		}
 
 	}
