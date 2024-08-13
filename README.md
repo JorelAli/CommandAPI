@@ -414,7 +414,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">???</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/594 Adds a config option to allow the CommandAPI to be more lenient when updating to a new minor version (e. g. from 1.21 to 1.21.1)</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/594 Adds a config option to allow the CommandAPI to be more lenient when updating to a new minor version (e.g. from 1.21 to 1.21.1)</li>
                 </ul>
             </td>
         </tr>

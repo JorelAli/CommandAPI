@@ -44,8 +44,8 @@ use-latest-nms-version: false
 # Be lenient with version checks when loading for new minor Minecraft versions (default: false)
 # If "true", the CommandAPI loads NMS implementations for (potentially unsupported) Minecraft versions.
 # For example, this setting may allow updating from 1.21.1 to 1.21.2 as only the minor version is changing
-# but will not allow an update from 1.21.2 to 1.22
-# Keep in mind that implementations my vary and actually updating the CommandAPI might be necessary.
+# but will not allow an update from 1.21.2 to 1.22.
+# Keep in mind that implementations may vary and actually updating the CommandAPI might be necessary.
 lenient-for-minor-versions: false
 
 # Hook into Paper's ServerResourcesReloadedEvent (default: true)

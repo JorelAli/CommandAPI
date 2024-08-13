@@ -112,6 +112,11 @@ public class CommandAPI {
 			CommandAPIPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
 			new CommandAPIHandler<>(platform);
 
+			if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion() || CommandAPI.getConfiguration().shouldBeLenientForMinorVersions()) {
+				CommandAPI.logWarning("Loading the CommandAPI with a potentially incompatible NMS implementation.");
+				CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
+			}
+
 			// Log platform load
 			final String platformClassHierarchy;
 			{
