@@ -48,13 +48,16 @@ public interface CommandAPIVersionHandler {
 	 *
 	 * @return an instance of NMS which can run on the specified Minecraft version
 	 */
-	static CommandAPIPlatform<?, ?, ?> getPlatform() {
+	static LoadContext getPlatform() {
 		int latestMajorVersion = 21; // Change this for Minecraft's major update
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new NMS_1_21_R1();
+			return new LoadContext(new NMS_1_21_R1(), () -> {
+				CommandAPI.logWarning("Loading the CommandAPI with a potentially incompatible NMS implementation.");
+				CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
+			});
 		} else {
 			String version = Bukkit.getBukkitVersion().split("-")[0];
-			return switch (version) {
+			CommandAPIPlatform<?, ?, ?> platform = switch (version) {
 				case "1.16.5" -> new NMS_1_16_R3();
 				case "1.17" -> new NMS_1_17();
 				case "1.17.1" -> new NMS_1_17_R1();
@@ -69,15 +72,23 @@ public interface CommandAPIVersionHandler {
 				case "1.20.3", "1.20.4" -> new NMS_1_20_R3();
 				case "1.20.5", "1.20.6" -> new NMS_1_20_R4();
 				case "1.21", "1.21.1" -> new NMS_1_21_R1();
-				default -> {
-					int currentMajorVersion = Integer.parseInt(version.split("\\.")[1]);
-					if (CommandAPI.getConfiguration().shouldBeLenientForMinorVersions() && latestMajorVersion == currentMajorVersion) {
-						yield new NMS_1_21_R1();
-					} else {
-						throw new UnsupportedVersionException(version);
-					}
-				}
+				default -> null;
 			};
+			if (platform != null) {
+				return new LoadContext(platform, () -> {});
+			}
+			if (CommandAPI.getConfiguration().shouldBeLenientForMinorVersions()) {
+				int currentMajorVersion = Integer.parseInt(version.split("\\.")[1]);
+				if (latestMajorVersion == currentMajorVersion) {
+					return new LoadContext(new NMS_1_21_R1(), () -> {
+						CommandAPI.logWarning("Loading the CommandAPI with a potentially incompatible NMS implementation.");
+						CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
+					});
+				} else {
+					throw new UnsupportedVersionException(version);
+				}
+			}
+			throw new UnsupportedVersionException(version);
 		}
 	}
 

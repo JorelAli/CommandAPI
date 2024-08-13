@@ -109,13 +109,10 @@ public class CommandAPI {
 			CommandAPI.config = new InternalConfig(config);
 
 			// Initialize handlers
-			CommandAPIPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
+			LoadContext loadContext = CommandAPIVersionHandler.getPlatform();
+			CommandAPIPlatform<?, ?, ?> platform = loadContext.platform();
 			new CommandAPIHandler<>(platform);
-
-			if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion() || CommandAPI.getConfiguration().shouldBeLenientForMinorVersions()) {
-				CommandAPI.logWarning("Loading the CommandAPI with a potentially incompatible NMS implementation.");
-				CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
-			}
+			loadContext.context().run();
 
 			// Log platform load
 			final String platformClassHierarchy;
