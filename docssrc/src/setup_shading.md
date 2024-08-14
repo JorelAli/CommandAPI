@@ -32,7 +32,7 @@ public class CommandAPIConfig {
     CommandAPIConfig verboseOutput(boolean value); // Enables verbose logging
     CommandAPIConfig silentLogs(boolean value);    // Disables ALL logging (except errors)
     CommandAPIConfig useLatestNMSVersion(boolean value); // Whether the latest NMS implementation should be used or not
-    CommandAPIConfig lenientForMinorVersions(boolean value); // Whether the CommandAPI should be more lenient with minor Minecraft versions
+    CommandAPIConfig beLenientForMinorVersions(boolean value); // Whether the CommandAPI should be more lenient with minor Minecraft versions
     CommandAPIConfig missingExecutorImplementationMessage(String value); // Set message to display when executor implementation is missing
     CommandAPIConfig dispatcherFile(File file); // If not null, the CommandAPI will create a JSON file with Brigadier's command tree
     CommandAPIConfig setNamespace(String namespace); // The namespace to use when the CommandAPI registers a command
