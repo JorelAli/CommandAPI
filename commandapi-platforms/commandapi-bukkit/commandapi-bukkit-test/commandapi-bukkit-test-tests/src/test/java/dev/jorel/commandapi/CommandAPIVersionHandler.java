@@ -46,7 +46,7 @@ public interface CommandAPIVersionHandler {
 	static LoadContext getPlatform() {
 		if(profileId == null) {
 			System.out.println("Using default version 1.19.4");
-			return new LoadContext(new MockNMS(new NMS_1_19_4_R3()), () -> {});
+			return new LoadContext(new MockNMS(new NMS_1_19_4_R3()));
 		} else {
 			return new LoadContext(new MockNMS(switch(profileId) {
 				case "Minecraft_1_20_5" -> new NMS_1_20_R4();
