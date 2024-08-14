@@ -46,7 +46,7 @@ use-latest-nms-version: false
 # For example, this setting may allow updating from 1.21.1 to 1.21.2 as only the minor version is changing
 # but will not allow an update from 1.21.2 to 1.22.
 # Keep in mind that implementations may vary and actually updating the CommandAPI might be necessary.
-lenient-for-minor-versions: false
+be-lenient-for-minor-versions: false
 
 # Hook into Paper's ServerResourcesReloadedEvent (default: true)
 # If "true", and the CommandAPI detects it is running on a Paper server, it will
