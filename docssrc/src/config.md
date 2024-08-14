@@ -120,7 +120,7 @@ use-latest-nms-version: true
 
 -----
 
-### `lenient-for-minor-versions`
+### `be-lenient-for-minor-versions`
 
 Controls whether the CommandAPI should be more lenient when updating to a new Minecraft version.
 
@@ -135,13 +135,13 @@ Take the warning from the [`use-latest-nms-version`](#use-latest-nms-version) an
 **Default value**
 
 ```yml
-lenient-for-minor-versions: false
+be-lenient-for-minor-versions: false
 ```
 
 **Example value**
 
 ```yml
-lenient-for-minor-versions: true
+be-lenient-for-minor-versions: true
 ```
 
 -----

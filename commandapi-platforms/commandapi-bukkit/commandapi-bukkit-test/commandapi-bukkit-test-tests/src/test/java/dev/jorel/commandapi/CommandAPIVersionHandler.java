@@ -59,7 +59,7 @@ public interface CommandAPIVersionHandler {
 				case "Minecraft_1_17" -> new NMS_1_17();
 				case "Minecraft_1_16_5" -> new NMS_1_16_R3();
 				default -> throw new IllegalArgumentException("Unexpected value: " + System.getProperty("profileId"));
-			}), () -> {});
+			}));
 		}
 	}
 	

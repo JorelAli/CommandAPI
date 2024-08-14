@@ -14,7 +14,7 @@ interface CommandAPIVersionHandler {
 
 		@JvmStatic
 		fun getPlatform() : LoadContext {
-			return LoadContext(MockNMS(NMS_1_19_1_R1())) {}
+			return LoadContext(MockNMS(NMS_1_19_1_R1()))
 		}
 
 	}
