@@ -1817,6 +1817,27 @@ new CommandAPICommand("break")
     })
     .register();
 /* ANCHOR_END: native1 */
+
+/* ANCHOR: native2 */
+new CommandAPICommand("executeAs")
+    .withArguments(
+        new EntitySelectorArgument.OneEntity("target"),
+        new LocationArgument("location"),
+        new WorldArgument("world"),
+        new CommandArgument("command")
+    )
+    .executes((caller, args) -> {
+        CommandSender callee = args.getUnchecked("target");
+        Location location = args.getUnchecked("location");
+        World world = args.getUnchecked("world");
+        CommandResult command = args.getUnchecked("command");
+
+        assert callee != null && location != null && world != null && command != null;
+
+        command.execute(NativeProxyCommandSender.from(caller, callee, location, world));
+    })
+    .register();
+/* ANCHOR_END: native2 */
 }
 
 void normalExecutors() {

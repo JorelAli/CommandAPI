@@ -1726,6 +1726,25 @@ CommandAPICommand("break")
     })
     .register()
 /* ANCHOR_END: native1 */
+
+/* ANCHOR: native2 */
+CommandAPICommand("executeAs")
+    .withArguments(
+        EntitySelectorArgument.OneEntity("target"),
+        LocationArgument("location"),
+        WorldArgument("world"),
+        CommandArgument("command")
+    )
+    .executes(CommandExecutor { caller, args ->
+        val callee = args["target"] as CommandSender
+        val location = args["location"] as Location
+        val world = args["world"] as World
+        val command = args["command"] as CommandResult
+
+        command.execute(NativeProxyCommandSender.from(caller, callee, location, world))
+    })
+    .register();
+/* ANCHOR_END: native2 */
 }
 
 fun normalExecutors() {

@@ -410,6 +410,15 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
     </thead>
     <tbody>
         <tr>
+            <td valign="top"><b>10.0.0</b></td>
+            <td valign="top">???</td>
+            <td valign="top">
+                <ul>
+                    <li>https://github.com/JorelAli/CommandAPI/issues/477 Fixed <code>NativeProxyCommandSender</code> not being able to run Vanilla (and CommandAPI) commands</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
             <td valign="top"><b>9.6.0</b></td>
             <td valign="top">???</td>
             <td valign="top">

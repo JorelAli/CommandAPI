@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
+import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -34,6 +35,7 @@ import org.bukkit.help.HelpTopic;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.ImmutableMap;
@@ -360,6 +362,32 @@ public class MockNMS extends Enums {
 			Mockito.when(clw.getPosition()).thenReturn(new Vec3D(0, 0, 0));
 			Mockito.when(clw.i()).thenReturn(new Vec2F(0, 0));
 		}
+
+		// NativeProxyCommandSender construction (NMS#createNativeProxyCommandSender)
+		//  Make sure these builder methods work as expected
+		Mockito.when(clw.a(ArgumentMatchers.<Vec3D>any())).thenAnswer(invocation -> {
+			Mockito.when(clw.getPosition()).thenReturn(invocation.getArgument(0));
+			return clw;
+		});
+		Mockito.when(clw.a(ArgumentMatchers.<Vec2F>any())).thenAnswer(invocation -> {
+			Mockito.when(clw.i()).thenReturn(invocation.getArgument(0));
+			return clw;
+		});
+		Mockito.when(clw.a(ArgumentMatchers.<WorldServer>any())).thenAnswer(invocation -> {
+			Mockito.when(clw.getWorld()).thenReturn(invocation.getArgument(0));
+			return clw;
+		});
+		Mockito.when(clw.a(ArgumentMatchers.<net.minecraft.server.v1_16_R3.Entity>any())).thenAnswer(invocation -> {
+			net.minecraft.server.v1_16_R3.Entity entity = invocation.getArgument(0);
+			String name = entity.getDisplayName().getString();
+			IChatBaseComponent displayName = entity.getScoreboardDisplayName();
+
+			Mockito.when(clw.getEntity()).thenReturn(entity);
+			Mockito.when(clw.getName()).thenReturn(name);
+			Mockito.when(clw.getScoreboardDisplayName()).thenReturn(displayName);
+			return clw;
+		});
+
 		return clw;
 	}
 
@@ -632,6 +660,11 @@ public class MockNMS extends Enums {
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative) {
 		return baseNMS.getSenderForCommand(cmdCtx, forceNative);
+	}
+
+	@Override
+	public NativeProxyCommandSender createNativeProxyCommandSender(CommandSender caller, CommandSender callee, Location location, World world) {
+		return baseNMS.createNativeProxyCommandSender(caller, callee, location, world);
 	}
 
 	@Override

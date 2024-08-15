@@ -1,5 +1,39 @@
 # Upgrading guide
 
+[//]: # (TODO: Change 9.3.0 to the correct version)
+
+## From 9.3.0 to 10.0.0
+
+### NativeProxyCommandSender changes
+
+`NativeProxyCommandSender` used to be a class, but this version changed it to an interface. Any code compiled against an earlier version that references any method of `NativeProxyCommandSender` may throw the following `IncompatibleClassChangeError` when run using the new version of the API:
+
+```log
+java.lang.IncompatibleClassChangeError: Found interface dev.jorel.commandapi.wrappers.NativeProxyCommandSender, but class was expected
+```
+
+If this happens, the original code simply needs to be recompiled using the new API version.
+
+Additionally, the constructor of `NativeProxyCommandSender` is no longer available. Instead, the static `from` method should be used:
+
+<div class="multi-pre">
+
+```java,9.3.0
+new NativeProxyCommandSender(caller, callee, location, world)
+```
+
+</div>
+
+$$\downarrow$$
+
+<div class="multi-pre">
+
+```java,10.0.0
+NativeProxyCommandSender.from(caller, callee, location, world)
+```
+
+</div>
+
 ## From 9.2.0 to 9.3.0
 
 The `BukkitTooltip.generateAdvenureComponents` methods have now been deprecated in favour of the correctly named `BukkitTooltip.generateAdventureComponents` methods:
