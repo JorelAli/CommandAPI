@@ -464,7 +464,7 @@ public class ArgumentMultiLiteralTests extends TestBase {
 		Mut<String> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new MultiLiteralArgument(new String[]{"lit1", "lit2", "lit3"}))
+			.withArguments(new MultiLiteralArgument("literals", "lit1", "lit2", "lit3"))
 			.executesPlayer(info -> {
 				results.set((String) info.args().get(0));
 			})
