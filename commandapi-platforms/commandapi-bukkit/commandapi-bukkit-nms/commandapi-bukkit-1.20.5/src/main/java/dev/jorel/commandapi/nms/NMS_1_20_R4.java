@@ -40,7 +40,6 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 import dev.jorel.commandapi.*;
-import net.minecraft.commands.CommandSource;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -64,7 +63,6 @@ import org.bukkit.craftbukkit.v1_20_R4.CraftParticle;
 import org.bukkit.craftbukkit.v1_20_R4.CraftServer;
 import org.bukkit.craftbukkit.v1_20_R4.CraftSound;
 import org.bukkit.craftbukkit.v1_20_R4.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_20_R4.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_20_R4.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_20_R4.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R4.help.CustomHelpTopic;
@@ -108,11 +106,6 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandBuildContext;
@@ -120,11 +113,9 @@ import net.minecraft.commands.CommandResultCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.FunctionInstantiationException;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.ColorArgument;
 import net.minecraft.commands.arguments.ComponentArgument;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
@@ -209,18 +200,15 @@ public class NMS_1_20_R4 extends NMS_Common {
 	private static final Field serverFunctionLibraryDispatcher;
 
 	// Derived from net.minecraft.commands.Commands;
-	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
+	private final CommandBuildContext commandBuildContext;
+
+	public NMS_1_20_R4(CommandBuildContext commandBuildContext) {
+		this.commandBuildContext = commandBuildContext;
+	}
 
 	// Compute all var handles all in one go so we don't do this during main server
 	// runtime
 	static {
-		if (Bukkit.getServer() instanceof CraftServer server) {
-			COMMAND_BUILD_CONTEXT = CommandBuildContext.simple(server.getServer().registryAccess(),
-					server.getServer().getWorldData().getDataConfiguration().enabledFeatures());
-		} else {
-			COMMAND_BUILD_CONTEXT = null;
-		}
-
 		helpMapTopics = SafeVarHandle.ofOrNull(SimpleHelpMap.class, "helpTopics", "helpTopics", Map.class);
 		// For some reason, MethodHandles fails for this field, but Field works okay
 		entitySelectorUsesSelector = CommandAPIHandler.getField(EntitySelector.class, "p", "usesSelector");
@@ -235,23 +223,23 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockPredicate() {
-		return BlockPredicateArgument.blockPredicate(COMMAND_BUILD_CONTEXT);
+		return BlockPredicateArgument.blockPredicate(commandBuildContext);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentBlockState() {
-		return BlockStateArgument.block(COMMAND_BUILD_CONTEXT);
+		return BlockStateArgument.block(commandBuildContext);
 	}
 	
 	@Differs(from = "1.20.4", by = "Now needs a command build context")
 	@Override
 	public ArgumentType<?> _ArgumentChatComponent() {
-		return ComponentArgument.textComponent(COMMAND_BUILD_CONTEXT);
+		return ComponentArgument.textComponent(commandBuildContext);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentEnchantment() {
-		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENCHANTMENT);
+		return ResourceArgument.resource(commandBuildContext, Registries.ENCHANTMENT);
 	}
 
 	@Override
@@ -267,22 +255,22 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 	@Override
 	public final ArgumentType<?> _ArgumentItemPredicate() {
-		return ItemPredicateArgument.itemPredicate(COMMAND_BUILD_CONTEXT);
+		return ItemPredicateArgument.itemPredicate(commandBuildContext);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentItemStack() {
-		return ItemArgument.item(COMMAND_BUILD_CONTEXT);
+		return ItemArgument.item(commandBuildContext);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentParticle() {
-		return ParticleArgument.particle(COMMAND_BUILD_CONTEXT);
+		return ParticleArgument.particle(commandBuildContext);
 	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentSyntheticBiome() {
-		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.BIOME);
+		return ResourceArgument.resource(commandBuildContext, Registries.BIOME);
 	}
 
 	@Override
@@ -295,9 +283,9 @@ public class NMS_1_20_R4 extends NMS_Common {
 		return new String[] { "1.20.5", "1.20.6" };
 	};
 	
-	private static String serializeNMSItemStack(ItemStack is) {
+	private String serializeNMSItemStack(ItemStack is) {
 		final DataComponentMap patchedMap = PatchedDataComponentMap.fromPatch(PatchedDataComponentMap.EMPTY, is.getComponentsPatch());
-		return new ItemInput(is.getItemHolder(), patchedMap).serialize(COMMAND_BUILD_CONTEXT);
+		return new ItemInput(is.getItemHolder(), patchedMap).serialize(commandBuildContext);
 	}
 
 	@Differs(from = "1.20.4", by = "Everything")
@@ -991,7 +979,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	@Override
 	public Message generateMessageFromJson(String json) {
 		// TODO: Same as #getAdventureChatComponent, figure out if an empty provider is suitable here
-		return Serializer.fromJson(json, COMMAND_BUILD_CONTEXT);
+		return Serializer.fromJson(json, commandBuildContext);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1006,11 +994,11 @@ public class NMS_1_20_R4 extends NMS_Common {
 
 	@Override
 	public ArgumentType<?> _ArgumentMobEffect() {
-		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.MOB_EFFECT);
+		return ResourceArgument.resource(commandBuildContext, Registries.MOB_EFFECT);
 	}
 
 	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() {
-		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
+		return ResourceArgument.resource(commandBuildContext, Registries.ENTITY_TYPE);
 	}
 }
