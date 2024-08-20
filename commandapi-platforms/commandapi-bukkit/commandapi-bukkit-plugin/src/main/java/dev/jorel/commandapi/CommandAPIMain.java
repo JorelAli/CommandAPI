@@ -21,13 +21,16 @@
 package dev.jorel.commandapi;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.config.ConfigGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -132,5 +135,40 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable();
+	}
+
+	/**
+	 * In contrast to the superclasses method {@link org.bukkit.plugin.java.JavaPlugin#saveDefaultConfig()},
+	 * this doesn't fail silently if the config.yml already exists but instead will update the config with
+	 * new values if available.
+	 * <p>
+	 * This should fail silently if all values are set already.
+	 */
+	@Override
+	public void saveDefaultConfig() {
+		File configFile = new File(getDataFolder(), "config.yml");
+		if (!getDataFolder().exists()) {
+			getDataFolder().mkdir();
+			try {
+				YamlConfiguration defaultConfig = ConfigGenerator.generateDefaultConfig();
+				defaultConfig.save(configFile);
+			} catch (Exception e) {
+				getLogger().severe("Could not create default config file! This is (probably) a bug.");
+				getLogger().severe("Error message: " + e.getMessage());
+			}
+			return;
+		}
+		// Update the config if necessary
+		YamlConfiguration existingConfig = YamlConfiguration.loadConfiguration(configFile);
+		try {
+			YamlConfiguration updatedConfig = ConfigGenerator.generateWithNewValues(existingConfig);
+			if (updatedConfig == null) {
+				return;
+			}
+			updatedConfig.save(configFile);
+		} catch (Exception e) {
+			getLogger().severe("Could not update config! This is (probably) a bug.");
+			getLogger().severe("Error message: " + e.getMessage());
+		}
 	}
 }
