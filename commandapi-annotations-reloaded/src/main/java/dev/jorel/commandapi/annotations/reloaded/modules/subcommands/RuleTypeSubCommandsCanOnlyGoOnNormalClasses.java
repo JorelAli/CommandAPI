@@ -24,6 +24,7 @@ import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRuleContext;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
@@ -35,7 +36,7 @@ public class RuleTypeSubCommandsCanOnlyGoOnNormalClasses implements SemanticRule
 	@Override
 	public boolean passes(SemanticRuleContext context) {
 		boolean passes = true;
-		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
+		for (Element element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement classElement) {
 				if (classElement.getKind() != ElementKind.CLASS) {
 					context.logging().complain(classElement,

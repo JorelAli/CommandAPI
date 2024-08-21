@@ -38,7 +38,7 @@ public class RuleNonTopLevelTypeSubcommandsCanOnlyGoInsideClasses implements Sem
 	@Override
 	public boolean passes(SemanticRuleContext context) {
 		boolean passes = true;
-		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
+		for (Element element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement classElement) {
                 Element enclosingElement = classElement.getEnclosingElement();
 				if (enclosingElement.getKind() != ElementKind.CLASS &&

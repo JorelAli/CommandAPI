@@ -40,7 +40,7 @@ public class RuleTopLevelSubCommandClassesMustHaveASuperClass implements Semanti
 	@Override
 	public boolean passes(SemanticRuleContext context) {
 		boolean passes = true;
-		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
+		for (Element element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement subcommandElement) {
                 Element enclosingElement = subcommandElement.getEnclosingElement();
 				if (enclosingElement.getKind() == ElementKind.PACKAGE) {

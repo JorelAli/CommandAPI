@@ -41,7 +41,7 @@ public class RuleNonTopLevelTypeSubCommandsMustGoInsideCommandOrSubcommandClasse
 	public boolean passes(SemanticRuleContext context) {
         AnnotationUtils annotationUtils = context.annotationUtils();
 		boolean passes = true;
-		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
+		for (Element element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement classElement) {
                 Element enclosingElement = classElement.getEnclosingElement();
 				if (enclosingElement.getKind() == ElementKind.CLASS) {

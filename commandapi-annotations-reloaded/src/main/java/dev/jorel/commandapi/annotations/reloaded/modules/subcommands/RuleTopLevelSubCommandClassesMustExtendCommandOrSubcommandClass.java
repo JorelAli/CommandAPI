@@ -41,7 +41,7 @@ public class RuleTopLevelSubCommandClassesMustExtendCommandOrSubcommandClass imp
 	public boolean passes(SemanticRuleContext context) {
         AnnotationUtils utils = context.annotationUtils();
 		boolean passes = true;
-		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
+		for (Element element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement subcommandElement) {
                 Element enclosingElement = subcommandElement.getEnclosingElement();
 				if (enclosingElement.getKind() == ElementKind.PACKAGE) {

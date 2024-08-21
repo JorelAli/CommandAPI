@@ -24,6 +24,7 @@ import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRuleContext;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
@@ -35,7 +36,7 @@ public class RuleCommandCanOnlyGoOnTopLevelClasses implements SemanticRule {
 	@Override
 	public boolean passes(SemanticRuleContext context) {
         boolean passing = true;
-		for (var element : context.roundEnv().getElementsAnnotatedWith(Command.class)) {
+		for (Element element : context.roundEnv().getElementsAnnotatedWith(Command.class)) {
 			if (element instanceof TypeElement typeElement) {
 				if (typeElement.getKind() == ElementKind.CLASS &&
 					typeElement.getNestingKind() == NestingKind.TOP_LEVEL) {
