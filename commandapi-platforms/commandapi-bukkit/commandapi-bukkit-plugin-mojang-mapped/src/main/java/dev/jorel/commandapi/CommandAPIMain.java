@@ -22,6 +22,7 @@ package dev.jorel.commandapi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,6 +156,10 @@ public class CommandAPIMain extends JavaPlugin {
 			} catch (Exception e) {
 				getLogger().severe("Could not create default config file! This is (probably) a bug.");
 				getLogger().severe("Error message: " + e.getMessage());
+				getLogger().severe("Stacktrace:");
+				for (StackTraceElement element : e.getStackTrace()) {
+					getLogger().severe(element.toString());
+				}
 			}
 			return;
 		}
@@ -169,6 +174,10 @@ public class CommandAPIMain extends JavaPlugin {
 		} catch (Exception e) {
 			getLogger().severe("Could not update config! This is (probably) a bug.");
 			getLogger().severe("Error message: " + e.getMessage());
+			getLogger().severe("Stacktrace:");
+			for (StackTraceElement element : e.getStackTrace()) {
+				getLogger().severe(element.toString());
+			}
 		}
 	}
 
