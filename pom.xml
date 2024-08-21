@@ -67,6 +67,8 @@
 
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
+		<module>commandapi-annotations-reloaded</module>
+		<module>commandapi-annotations-reloaded-tests</module>
 
 		<!-- Code coverage reports -->
 		<module>commandapi-codecov</module>
