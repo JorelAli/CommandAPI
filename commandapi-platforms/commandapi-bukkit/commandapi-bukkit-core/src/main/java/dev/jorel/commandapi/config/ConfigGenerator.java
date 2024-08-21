@@ -116,7 +116,10 @@ public class ConfigGenerator {
 		for (String sectionName : sections) {
 			configOptions.remove(sectionName);
 		}
-		List<String> defaultConfigOptions = DefaultedBukkitConfig.ALL_OPTIONS.stream().map(option -> option.path()).toList();
+		Set<String> defaultConfigOptions = new HashSet<>();
+		for (CommentedConfigOption<?> defaultConfigOption : DefaultedBukkitConfig.ALL_OPTIONS) {
+			defaultConfigOptions.add(defaultConfigOption.path());
+		}
 		List<String> optionsToRemove = new ArrayList<>();
 		for (String option : configOptions) {
 			if (!defaultConfigOptions.contains(option)) {
