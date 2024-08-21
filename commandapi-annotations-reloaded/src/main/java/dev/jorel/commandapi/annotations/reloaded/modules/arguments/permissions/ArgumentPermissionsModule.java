@@ -39,7 +39,7 @@ public class ArgumentPermissionsModule implements VariableElementAnalyzerParserG
 
 	@Override
 	public void generate(IndentedWriter out, ArgumentPermissionGeneratorContext context) {
-		var permission = context.permission();
+		CommandPermission permission = context.permission();
 		if (permission.equals(CommandPermission.NONE)) {
 			// Do nothing
 			return;

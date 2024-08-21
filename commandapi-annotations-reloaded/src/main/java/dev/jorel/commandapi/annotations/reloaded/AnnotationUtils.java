@@ -39,7 +39,7 @@ public class AnnotationUtils {
 	 * Get the AnnotationMirror for a specific annotation on an element
 	 */
 	public Optional<? extends AnnotationMirror> getAnnotationMirror(Element element, Class<? extends Annotation> annotationClass) {
-		var className = annotationClass.getCanonicalName();
+		String className = annotationClass.getCanonicalName();
 		return element.getAnnotationMirrors().stream()
 			.filter(mirror -> mirror.getAnnotationType().toString().equals(className))
 			.findFirst();
@@ -77,7 +77,7 @@ public class AnnotationUtils {
 	 */
 	@SafeVarargs
 	public final boolean hasAnyAnnotation(Element element, Class<? extends Annotation>... annotationClasses) {
-		for (var annotationClass : annotationClasses) {
+		for (Class<? extends Annotation> annotationClass : annotationClasses) {
 			if (hasAnnotation(element, annotationClass)) {
 				return true;
 			}

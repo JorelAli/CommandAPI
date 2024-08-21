@@ -62,7 +62,7 @@ public class SubcommandsModule implements TypeElementAnalyzerParserGeneratorModu
 
 	@Override
 	public Optional<SubcommandsGeneratorContext> parse(TypeElementParserContext context) {
-		var maybeSubcommandClass = subcommandClassModule.parse(context);
+        Optional<SubcommandClassGeneratorContext> maybeSubcommandClass = subcommandClassModule.parse(context);
 		if (maybeSubcommandClass.isEmpty()) {
 			return Optional.empty();
 		}

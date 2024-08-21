@@ -34,7 +34,7 @@ import javax.lang.model.element.TypeElement;
 public class RuleCommandCanOnlyGoOnTopLevelClasses implements SemanticRule {
 	@Override
 	public boolean passes(SemanticRuleContext context) {
-		var passing = true;
+        boolean passing = true;
 		for (var element : context.roundEnv().getElementsAnnotatedWith(Command.class)) {
 			if (element instanceof TypeElement typeElement) {
 				if (typeElement.getKind() == ElementKind.CLASS &&

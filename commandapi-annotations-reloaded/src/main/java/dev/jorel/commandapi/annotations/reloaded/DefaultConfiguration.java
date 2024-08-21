@@ -109,7 +109,7 @@ public class DefaultConfiguration implements Configuration {
 
 	private SubcommandClassModule getSubcommandClassModule() {
 		BackReference<SubcommandClassModule> subcommandClassModuleRef = new BackReference<>();
-		var subcommandClassModule = new SubcommandClassModule(
+		SubcommandClassModule subcommandClassModule = new SubcommandClassModule(
 			new SubcommandClassesModule(
 				subcommandClassModuleRef
 			), new SubcommandMethodsModule(

@@ -50,14 +50,14 @@ public interface SemanticAnalyzer {
 	default boolean allPass(SemanticRuleContext context) {
 		context.logging().info("Performing %s semantic checks".formatted(getName()));
 		boolean passing = true;
-		for (var rule : rules()) {
+		for (SemanticRule rule : rules()) {
 			if (rule.fails(context)) {
 				passing = false;
 				// Do not fail fast, we want full logs
 			}
 		}
 		context.logging().info("%s semantic checks %s".formatted(getName(), passing ? "passed" : "failed"));
-		for (var analyzer : subAnalyzers()) {
+		for (SemanticAnalyzer analyzer : subAnalyzers()) {
 			if (analyzer.anyFail(context)) {
 				passing = false;
 				// Do not fail fast, we want full logs

@@ -20,10 +20,12 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.subcommands;
 
+import dev.jorel.commandapi.annotations.reloaded.Logging;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.reloaded.modules.commands.CommandNames;
 import dev.jorel.commandapi.annotations.reloaded.parser.ExecutableElementParser;
 import dev.jorel.commandapi.annotations.reloaded.parser.ExecutableElementParserContext;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -36,25 +38,25 @@ import java.util.Optional;
 public class SubcommandMethodNamesStackParser implements ExecutableElementParser<Deque<CommandNames>> {
 	@Override
 	public Optional<Deque<CommandNames>> parse(ExecutableElementParserContext context) {
-		var utils = context.utils();
-		var logging = utils.logging();
-		var subcommands = context.element().getAnnotationsByType(Subcommand.class);
+        ParserUtils utils = context.utils();
+        Logging logging = utils.logging();
+        Subcommand[] subcommands = context.element().getAnnotationsByType(Subcommand.class);
 		if (subcommands.length == 0) {
 			logging.complain(context.element(), "@%s annotation is missing from subcommand method"
 				.formatted(Subcommand.class.getSimpleName()));
 			return Optional.empty();
 		}
-		var valid = true;
-		var stack = new ArrayDeque<CommandNames>();
+        boolean valid = true;
+        ArrayDeque<CommandNames> stack = new ArrayDeque<CommandNames>();
 		for (Subcommand subcommand : subcommands) {
-			var values = subcommand.value();
+            String[] values = subcommand.value();
 			if (values.length == 0) {
 				logging.complain(context.element(), "@%s annotation on method is missing a value"
 					.formatted(Subcommand.class.getSimpleName()));
 				valid = false;
 				continue;
 			}
-			var aliases = values.length > 1 ? Arrays.copyOfRange(values, 1, values.length) : new String[0];
+            String[] aliases = values.length > 1 ? Arrays.copyOfRange(values, 1, values.length) : new String[0];
 			stack.add(new CommandNames(values[0], aliases));
 		}
 		if (!valid) {

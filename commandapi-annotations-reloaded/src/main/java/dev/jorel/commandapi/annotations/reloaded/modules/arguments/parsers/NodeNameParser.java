@@ -34,7 +34,7 @@ import java.util.Optional;
 public class NodeNameParser implements AnnotationParser<Element, AnnotationParserContext<Element>, String> {
 	@Override
 	public Optional<String> parse(AnnotationParserContext<Element> context) {
-		var element = context.element();
+		Element element = context.element();
 		if (element.getAnnotation(NodeName.class) != null) {
 			return Optional.of(element.getAnnotation(NodeName.class).value());
 		} else {

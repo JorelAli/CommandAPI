@@ -20,10 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.commands;
 
+import dev.jorel.commandapi.annotations.reloaded.Logging;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.parser.TypeElementParser;
 import dev.jorel.commandapi.annotations.reloaded.parser.TypeElementParserContext;
 
+import javax.lang.model.element.TypeElement;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -33,9 +36,9 @@ import java.util.Optional;
 public class CommandNamesParser implements TypeElementParser<CommandNames> {
 	@Override
 	public Optional<CommandNames> parse(TypeElementParserContext context) {
-		var commandClass = context.element();
-		var utils = context.utils();
-		var logging = utils.logging();
+        TypeElement commandClass = context.element();
+        ParserUtils utils = context.utils();
+        Logging logging = utils.logging();
 		logging.info(commandClass, "Parsing command names");
 		Command command = commandClass.getAnnotation(Command.class);
 		if (command == null) {
@@ -43,13 +46,13 @@ public class CommandNamesParser implements TypeElementParser<CommandNames> {
 				.formatted(Command.class.getSimpleName()));
 			return Optional.empty();
 		}
-		var names = command.value();
+        String[] names = command.value();
 		if (names.length == 0) {
 			logging.complain(commandClass, "@%s annotation must have at least one value"
 				.formatted(Command.class.getSimpleName()));
 			return Optional.empty();
 		}
-		var aliases = names.length > 1 ? Arrays.copyOfRange(names, 1, names.length) : new String[0];
+        String[] aliases = names.length > 1 ? Arrays.copyOfRange(names, 1, names.length) : new String[0];
 		logging.info(commandClass, "Parsed command names %s and aliases %s"
 			.formatted(names[0], String.join(", ", aliases)));
 		return Optional.of(new CommandNames(names[0], aliases));

@@ -22,8 +22,11 @@ package dev.jorel.commandapi.annotations.reloaded.modules.commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.annotations.reloaded.generators.IndentedWriter;
+import dev.jorel.commandapi.annotations.reloaded.modules.arguments.CommandExecutorMethodArgumentsGeneratorContext;
 import dev.jorel.commandapi.annotations.reloaded.modules.arguments.CommandExecutorMethodArgumentsModule;
+import dev.jorel.commandapi.annotations.reloaded.modules.permissions.CommandExecutorMethodPermissionsGeneratorContext;
 import dev.jorel.commandapi.annotations.reloaded.modules.permissions.CommandExecutorMethodPermissionsModule;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticAnalyzer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.modules.ExecutableElementAnalyzerParserGeneratorModule;
@@ -71,11 +74,11 @@ public class CommandExecutorMethodModule implements ExecutableElementAnalyzerPar
 
 	@Override
 	public Optional<CommandExecutorMethodGeneratorContext> parse(ExecutableElementParserContext context) {
-		var utils = context.utils();
-		var maybeBaseCommandName = commandNameParser.parse(context);
-		var maybePermissions = permissionsModule.parse(context);
-		var maybeArguments = argumentsModule.parse(context);
-		var maybeExecutor = executorModule.parse(context);
+        ParserUtils utils = context.utils();
+        Optional<String> maybeBaseCommandName = commandNameParser.parse(context);
+        Optional<CommandExecutorMethodPermissionsGeneratorContext> maybePermissions = permissionsModule.parse(context);
+        Optional<CommandExecutorMethodArgumentsGeneratorContext> maybeArguments = argumentsModule.parse(context);
+        Optional<CommandExecutorMethodExecutorGeneratorContext> maybeExecutor = executorModule.parse(context);
 		if (
 			maybeBaseCommandName.isEmpty() ||
 			maybePermissions.isEmpty() ||

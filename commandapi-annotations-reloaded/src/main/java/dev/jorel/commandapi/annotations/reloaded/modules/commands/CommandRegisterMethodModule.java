@@ -20,13 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.commands;
 
+import dev.jorel.commandapi.annotations.reloaded.Logging;
 import dev.jorel.commandapi.annotations.reloaded.generators.IndentedWriter;
 import dev.jorel.commandapi.annotations.reloaded.modules.TypeElementAnalyzerParserGeneratorModule;
+import dev.jorel.commandapi.annotations.reloaded.modules.subcommands.SubcommandsGeneratorContext;
 import dev.jorel.commandapi.annotations.reloaded.modules.subcommands.SubcommandsModule;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.parser.TypeElementParserContext;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticAnalyzer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 
+import javax.lang.model.element.TypeElement;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,11 +54,11 @@ public class CommandRegisterMethodModule implements TypeElementAnalyzerParserGen
 
 	@Override
 	public Optional<CommandRegisterMethodGeneratorContext> parse(TypeElementParserContext context) {
-		var element = context.element();
-		var utils = context.utils();
-		var logging = utils.logging();
+		TypeElement element = context.element();
+		ParserUtils utils = context.utils();
+		Logging logging = utils.logging();
 		logging.info(element, "Parsing context");
-		var maybeSubcommandsContext = subcommandsModule.parse(context);
+		Optional<SubcommandsGeneratorContext> maybeSubcommandsContext = subcommandsModule.parse(context);
 		if (maybeSubcommandsContext.isEmpty()) {
 			logging.info(element, "Failed to parse context");
 			return Optional.empty();

@@ -20,14 +20,17 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.subcommands;
 
+import dev.jorel.commandapi.annotations.reloaded.AnnotationUtils;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.annotations.ExternalSubcommand;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRuleContext;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 
 /**
  * A semantic rule that checks that top-level sub-commands extend a command or sub-command class
@@ -36,13 +39,13 @@ public class RuleTopLevelSubCommandClassesMustExtendCommandOrSubcommandClass imp
 
 	@Override
 	public boolean passes(SemanticRuleContext context) {
-		var utils = context.annotationUtils();
+        AnnotationUtils utils = context.annotationUtils();
 		boolean passes = true;
 		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement subcommandElement) {
-				var enclosingElement = subcommandElement.getEnclosingElement();
+                Element enclosingElement = subcommandElement.getEnclosingElement();
 				if (enclosingElement.getKind() == ElementKind.PACKAGE) {
-					var parentClass = subcommandElement.getSuperclass();
+                    TypeMirror parentClass = subcommandElement.getSuperclass();
 					if (parentClass instanceof TypeElement parentElement) {
 						if (!utils.hasAnyAnnotation(parentElement, Command.class, Subcommand.class)) {
 							context.logging().complain(subcommandElement,

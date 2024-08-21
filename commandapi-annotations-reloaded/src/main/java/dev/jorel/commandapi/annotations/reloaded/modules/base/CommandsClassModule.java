@@ -22,6 +22,7 @@ package dev.jorel.commandapi.annotations.reloaded.modules.base;
 
 import dev.jorel.commandapi.annotations.reloaded.generators.CodeGenerator;
 import dev.jorel.commandapi.annotations.reloaded.generators.IndentedWriter;
+import dev.jorel.commandapi.annotations.reloaded.modules.commands.CommandRegisterMethodGeneratorContext;
 import dev.jorel.commandapi.annotations.reloaded.modules.commands.CommandRegisterMethodModule;
 import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.parser.TypeElementParserContext;
@@ -61,7 +62,7 @@ public class CommandsClassModule implements SemanticAnalyzer, CodeGenerator<Comm
 		ZonedDateTime generatorStarted,
 		Set<TypeElement> commandClasses
 	) {
-		var maybeAllContexts = commandClasses.stream()
+        List<Optional<CommandRegisterMethodGeneratorContext>> maybeAllContexts = commandClasses.stream()
 			.map(element -> commandRegisterMethodModule.parse(new TypeElementParserContext(
 				parserUtils,
 				element

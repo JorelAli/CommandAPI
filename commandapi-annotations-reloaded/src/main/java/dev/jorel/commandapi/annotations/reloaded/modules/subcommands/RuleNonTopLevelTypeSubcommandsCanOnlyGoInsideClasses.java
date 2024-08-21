@@ -26,6 +26,7 @@ import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.annotations.ExternalSubcommand;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
@@ -39,7 +40,7 @@ public class RuleNonTopLevelTypeSubcommandsCanOnlyGoInsideClasses implements Sem
 		boolean passes = true;
 		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement classElement) {
-				var enclosingElement = classElement.getEnclosingElement();
+                Element enclosingElement = classElement.getEnclosingElement();
 				if (enclosingElement.getKind() != ElementKind.CLASS &&
 					enclosingElement.getKind() != ElementKind.PACKAGE) {
 					context.logging().complain(classElement,

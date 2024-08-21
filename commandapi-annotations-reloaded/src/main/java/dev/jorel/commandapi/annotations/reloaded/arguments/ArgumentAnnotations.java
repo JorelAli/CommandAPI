@@ -129,8 +129,8 @@ public class ArgumentAnnotations {
 		.collect(Collectors.toCollection(LinkedHashSet::new));
 
 	public static ArgumentAnnotation from(Annotation annotation, String nodeName) {
-		var type = annotation.annotationType();
-		var primitiveType = new PrimitiveType(type.getAnnotation(Primitive.class).value());
+        Class<? extends Annotation> type = annotation.annotationType();
+        PrimitiveType primitiveType = new PrimitiveType(type.getAnnotation(Primitive.class).value());
 		if (annotation instanceof AAdvancementArgument arg) { return new ArgumentAnnotationProperties(type, AdvancementArgument.class, primitiveType, nodeName, arg.optional());
 		} else if (annotation instanceof AAdventureChatArgument arg) { return new ArgumentAnnotationProperties(type, AdventureChatArgument.class, primitiveType, nodeName, arg.optional());
 		} else if (annotation instanceof AAdventureChatComponentArgument arg) { return new ArgumentAnnotationProperties(type, AdventureChatComponentArgument.class, primitiveType, nodeName, arg.optional());

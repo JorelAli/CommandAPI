@@ -113,7 +113,7 @@ public class IndentedWriter {
 	 * @return The buffered text
 	 */
 	public String buffer(Consumer<IndentedWriter> withWriter) {
-		var buffer = new StringWriter();
+        StringWriter buffer = new StringWriter();
 		withWriter.accept(new IndentedWriter(buffer, prefix));
 		return buffer.toString();
 	}
@@ -136,7 +136,7 @@ public class IndentedWriter {
 	 * @see #indent(Consumer)
 	 */
 	public String indentToBuffer(Consumer<IndentedWriter> withWriter) {
-		var buffer = new StringWriter();
+        StringWriter buffer = new StringWriter();
 		withWriter.accept(new IndentedWriter(buffer, prefix + "\t"));
 		return buffer.toString();
 	}

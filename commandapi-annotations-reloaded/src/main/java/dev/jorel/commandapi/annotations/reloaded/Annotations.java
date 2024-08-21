@@ -23,6 +23,8 @@ package dev.jorel.commandapi.annotations.reloaded;
 import com.google.auto.service.AutoService;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.generators.IndentedWriter;
+import dev.jorel.commandapi.annotations.reloaded.modules.base.CommandsClassGeneratorContext;
+import dev.jorel.commandapi.annotations.reloaded.modules.base.CommandsClassModule;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRuleContextData;
 import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 
@@ -36,6 +38,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -75,15 +78,15 @@ public class Annotations extends AbstractProcessor {
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		var logging = new Logging(processingEnv);
-		var baseModule = configuration.getBaseModule();
+		Logging logging = new Logging(processingEnv);
+		CommandsClassModule baseModule = configuration.getBaseModule();
 
 		// We need to do multiple "phases".
 		// Firstly, we perform semantic analysis (checking that we've not got two @Default
 		// annotations, type checking of annotations to method parameter types, ensuring
 		// suggestions map to what they should), ensuring we've not got two commands of
 		// the same name...
-		var semanticsContext = new SemanticRuleContextData(
+		SemanticRuleContextData semanticsContext = new SemanticRuleContextData(
 			logging,
 			processingEnv,
 			roundEnv,
@@ -97,7 +100,7 @@ public class Annotations extends AbstractProcessor {
 		// for each @Command class, which outlines the list of suggestion methods, its
 		// varying types, etc. You can think of this as a lexing/syntax analysis step.
 
-		var commandClasses = roundEnv.getElementsAnnotatedWith(Command.class).stream()
+		TreeSet<TypeElement> commandClasses = roundEnv.getElementsAnnotatedWith(Command.class).stream()
 			.map(TypeElement.class::cast) // Change the type of commandClasses -
 			// we're asserting it's a TypeElement (it literally can't be anything else)
 			.collect(Collectors.toCollection(() -> // We want things sorted :)
@@ -110,13 +113,13 @@ public class Annotations extends AbstractProcessor {
 		}
 
 		logging.info("Parsing contexts");
-		var parserUtils = new ParserUtils(
+		ParserUtils parserUtils = new ParserUtils(
 			logging,
 			processingEnv,
 			configuration.getImportsBuilder(),
 			configuration.getAnnotationUtils()
 		);
-		var maybeContexts = baseModule.parseAllContexts(
+		Optional<CommandsClassGeneratorContext> maybeContexts = baseModule.parseAllContexts(
 			parserUtils,
 			configuration.getCommandsClassName(),
 			ZonedDateTime.now(),
@@ -128,13 +131,13 @@ public class Annotations extends AbstractProcessor {
 			logging.info("Aborting");
 			return true;
 		}
-		var allContexts = maybeContexts.orElseThrow();
+		CommandsClassGeneratorContext allContexts = maybeContexts.orElseThrow();
 		try {
 			logging.info("Generating %s class".formatted(configuration.getCommandsClassName()));
 			JavaFileObject builderFile = processingEnv
 				.getFiler()
 				.createSourceFile(configuration.getCommandsClassName());
-			try (var out = new PrintWriter(builderFile.openWriter())) {
+			try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
 				baseModule.generate(new IndentedWriter(out), allContexts);
 			}
 			logging.info("%s class generated".formatted(configuration.getCommandsClassName()));

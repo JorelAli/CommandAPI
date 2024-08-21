@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.subcommands;
 
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticAnalyzer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.BackReference;
@@ -50,8 +51,8 @@ public class SubcommandClassesModule implements TypeElementAnalyzerParserGenerat
 
 	@Override
 	public Optional<SubcommandClassesGeneratorContext> parse(TypeElementParserContext context) {
-		var utils = context.utils();
-		var subcommandClasses = context.element()
+        ParserUtils utils = context.utils();
+        List<TypeElement> subcommandClasses = context.element()
 			.getEnclosedElements().stream()
 			.filter(element -> element.getAnnotation(Subcommand.class) != null)
 			.filter(element -> element.getKind() == ElementKind.CLASS)
@@ -62,8 +63,8 @@ public class SubcommandClassesModule implements TypeElementAnalyzerParserGenerat
 		if (subcommandClasses.isEmpty()) {
 			return Optional.of(new SubcommandClassesGeneratorContext(Collections.emptyList()));
 		}
-		var subcommandClassModule = subcommandClassModuleRef.get();
-		var maybeSubcommands = subcommandClasses.stream()
+        SubcommandClassModule subcommandClassModule = subcommandClassModuleRef.get();
+        List<Optional<SubcommandClassGeneratorContext>> maybeSubcommands = subcommandClasses.stream()
 			.map(element -> new TypeElementParserContext(utils, element))
 			.map(subcommandClassModule::parse)
 			.toList();
@@ -82,7 +83,7 @@ public class SubcommandClassesModule implements TypeElementAnalyzerParserGenerat
 		if (context.list().isEmpty()) {
 			return;
 		}
-		var subcommandClassModule = subcommandClassModuleRef.get();
+        SubcommandClassModule subcommandClassModule = subcommandClassModuleRef.get();
 		context.list().forEach(subcontext -> subcommandClassModule.generate(out, subcontext));
 	}
 

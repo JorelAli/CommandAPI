@@ -20,10 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.commands;
 
+import dev.jorel.commandapi.annotations.reloaded.AnnotationUtils;
 import dev.jorel.commandapi.annotations.reloaded.parser.ExecutableElementParser;
 import dev.jorel.commandapi.annotations.reloaded.parser.ExecutableElementParserContext;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.parser.TypeElementParserContext;
 
+import javax.lang.model.element.TypeElement;
 import java.util.Optional;
 
 /**
@@ -38,9 +41,9 @@ public class CommandExecutorMethodBaseCommandNameParser implements ExecutableEle
 
 	@Override
 	public Optional<String> parse(ExecutableElementParserContext context) {
-		var utils = context.utils();
-		var annotationUtils = utils.annotationUtils();
-		var topLevelClass = annotationUtils.getTopLevelClass(context.element());
+        ParserUtils utils = context.utils();
+        AnnotationUtils annotationUtils = utils.annotationUtils();
+        TypeElement topLevelClass = annotationUtils.getTopLevelClass(context.element());
 		return commandNamesParser
 			.parse(new TypeElementParserContext(utils, topLevelClass))
 			.map(CommandNames::name);

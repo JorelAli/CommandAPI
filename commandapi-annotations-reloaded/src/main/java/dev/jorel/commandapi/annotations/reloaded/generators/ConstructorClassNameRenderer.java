@@ -27,7 +27,7 @@ public class ConstructorClassNameRenderer implements Renderer<Class<?>> {
 
 	@Override
 	public String render(Class<?> clazz) {
-		var nestHost = clazz.getNestHost();
+        Class<?> nestHost = clazz.getNestHost();
 		if (clazz != nestHost) {
 			return "%s.%s".formatted(render(nestHost), clazz.getSimpleName());
 		} else {

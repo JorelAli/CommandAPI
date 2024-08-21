@@ -20,8 +20,10 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.commands;
 
+import dev.jorel.commandapi.annotations.reloaded.AnnotationUtils;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Executes;
 import dev.jorel.commandapi.annotations.reloaded.generators.IndentedWriter;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticAnalyzer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.modules.TypeElementAnalyzerParserGeneratorModule;
@@ -43,16 +45,17 @@ public class CommandExecutorsModule implements TypeElementAnalyzerParserGenerato
 
 	@Override
 	public void generate(IndentedWriter out, CommandExecutorsGeneratorContext context) {
-		for (var executorContext : context.list()) {
+		for (CommandExecutorMethodGeneratorContext executorContext : context.list()) {
 			commandExecutorMethodModule.generate(out, executorContext);
 		}
 	}
 
 	@Override
 	public Optional<CommandExecutorsGeneratorContext> parse(TypeElementParserContext context) {
-		var utils = context.utils();
-		var annotationUtils = utils.annotationUtils();
-		var maybeExecutors = annotationUtils.getEnclosedMethodsWithAnnotation(context.element(), Executes.class).stream()
+        ParserUtils utils = context.utils();
+        AnnotationUtils annotationUtils = utils.annotationUtils();
+        List<Optional<CommandExecutorMethodGeneratorContext>> maybeExecutors = annotationUtils
+			.getEnclosedMethodsWithAnnotation(context.element(), Executes.class).stream()
 			.map(executorMethod -> new ExecutableElementParserContext(utils, executorMethod))
 			.map(commandExecutorMethodModule::parse)
 			.toList();

@@ -20,8 +20,11 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.subcommands;
 
+import dev.jorel.commandapi.annotations.reloaded.Logging;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.generators.IndentedWriter;
+import dev.jorel.commandapi.annotations.reloaded.modules.commands.CommandExecutorsGeneratorContext;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticAnalyzer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.modules.TypeElementAnalyzerParserGeneratorModule;
@@ -51,20 +54,20 @@ public class SubcommandClassModule implements TypeElementAnalyzerParserGenerator
 
 	@Override
 	public Optional<SubcommandClassGeneratorContext> parse(TypeElementParserContext context) {
-		var utils = context.utils();
-		var logging = utils.logging();
+        ParserUtils utils = context.utils();
+        Logging logging = utils.logging();
 		logging.info(context.element(), "Parsing subcommand class");
-		var maybeSubcommandClasses = subcommandClassesModule.parse(context);
-		var maybeSubcommandMethods = subcommandMethodsModule.parse(context);
-		var maybeCommandExecutors = commandExecutorsModule.parse(context);
+        Optional<SubcommandClassesGeneratorContext> maybeSubcommandClasses = subcommandClassesModule.parse(context);
+        Optional<SubcommandMethodsGeneratorContext> maybeSubcommandMethods = subcommandMethodsModule.parse(context);
+        Optional<CommandExecutorsGeneratorContext> maybeCommandExecutors = commandExecutorsModule.parse(context);
 		if (maybeSubcommandMethods.isEmpty() ||
 			maybeSubcommandClasses.isEmpty() ||
 			maybeCommandExecutors.isEmpty()) {
 			return Optional.empty();
 		}
-		var subcommandClasses = maybeSubcommandClasses.orElseThrow();
-		var subcommandMethods = maybeSubcommandMethods.orElseThrow();
-		var commandExecutors = maybeCommandExecutors.orElseThrow();
+        SubcommandClassesGeneratorContext subcommandClasses = maybeSubcommandClasses.orElseThrow();
+        SubcommandMethodsGeneratorContext subcommandMethods = maybeSubcommandMethods.orElseThrow();
+        CommandExecutorsGeneratorContext commandExecutors = maybeCommandExecutors.orElseThrow();
 		if (subcommandClasses.list().isEmpty() &&
 			subcommandMethods.list().isEmpty() &&
 			commandExecutors.list().isEmpty()) {

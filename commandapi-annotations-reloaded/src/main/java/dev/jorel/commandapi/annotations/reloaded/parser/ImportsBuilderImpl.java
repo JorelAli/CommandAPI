@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.parser;
 
+import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,8 +62,8 @@ public class ImportsBuilderImpl implements ImportsBuilder {
 
 	@Override
 	public String withImport(TypeElement typeElement) {
-		var simpleName = typeElement.getSimpleName().toString();
-		var qualifiedName = typeElement.getQualifiedName();
+        String simpleName = typeElement.getSimpleName().toString();
+        Name qualifiedName = typeElement.getQualifiedName();
 		if (qualifiedName.isEmpty()) {
 			throw new IllegalArgumentException("You can't import an element with no qualified name: %s"
 				.formatted(typeElement));

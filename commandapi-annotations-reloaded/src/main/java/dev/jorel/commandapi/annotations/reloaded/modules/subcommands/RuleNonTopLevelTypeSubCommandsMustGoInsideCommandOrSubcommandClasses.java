@@ -20,12 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.subcommands;
 
+import dev.jorel.commandapi.annotations.reloaded.AnnotationUtils;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRuleContext;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.annotations.ExternalSubcommand;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
@@ -37,11 +39,11 @@ public class RuleNonTopLevelTypeSubCommandsMustGoInsideCommandOrSubcommandClasse
 
 	@Override
 	public boolean passes(SemanticRuleContext context) {
-		var annotationUtils = context.annotationUtils();
+        AnnotationUtils annotationUtils = context.annotationUtils();
 		boolean passes = true;
 		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement classElement) {
-				var enclosingElement = classElement.getEnclosingElement();
+                Element enclosingElement = classElement.getEnclosingElement();
 				if (enclosingElement.getKind() == ElementKind.CLASS) {
 					if (annotationUtils.doesNotHaveAnnotations(enclosingElement, Command.class, Subcommand.class)) {
 						context.logging().complain(classElement,

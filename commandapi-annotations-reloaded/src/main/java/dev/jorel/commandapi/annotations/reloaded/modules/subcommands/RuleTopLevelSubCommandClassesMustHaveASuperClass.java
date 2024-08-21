@@ -26,9 +26,11 @@ import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRuleContext;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 
 /**
  * A semantic rule that checks that top-level sub-commands extend a class
@@ -40,9 +42,9 @@ public class RuleTopLevelSubCommandClassesMustHaveASuperClass implements Semanti
 		boolean passes = true;
 		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement subcommandElement) {
-				var enclosingElement = subcommandElement.getEnclosingElement();
+                Element enclosingElement = subcommandElement.getEnclosingElement();
 				if (enclosingElement.getKind() == ElementKind.PACKAGE) {
-					var parentClass = subcommandElement.getSuperclass();
+                    TypeMirror parentClass = subcommandElement.getSuperclass();
 					if (parentClass.getKind() == TypeKind.NONE) {
 						context.logging().complain(subcommandElement,
 							"Top-level " + Subcommand.class.getSimpleName() +

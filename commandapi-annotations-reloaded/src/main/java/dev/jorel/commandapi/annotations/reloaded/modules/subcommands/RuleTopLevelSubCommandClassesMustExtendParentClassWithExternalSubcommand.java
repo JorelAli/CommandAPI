@@ -20,14 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.subcommands;
 
+import dev.jorel.commandapi.annotations.reloaded.AnnotationUtils;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.annotations.ExternalSubcommand;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRuleContext;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 
 /**
  * A semantic rule that checks that top-level sub-commands extend a class that points to it as an external sub-command
@@ -35,10 +40,10 @@ import javax.lang.model.element.TypeElement;
 public class RuleTopLevelSubCommandClassesMustExtendParentClassWithExternalSubcommand implements SemanticRule {
 
 	private boolean isLinkedExternalSubcommand(SemanticRuleContext context, TypeElement subcommandElement, TypeElement parentElement) {
-		var utils = context.annotationUtils();
-		var elementUtils = context.processingEnv().getElementUtils();
-		var typeUtils = context.processingEnv().getTypeUtils();
-		var className = elementUtils.getBinaryName(subcommandElement).toString();
+        AnnotationUtils utils = context.annotationUtils();
+        Elements elementUtils = context.processingEnv().getElementUtils();
+        Types typeUtils = context.processingEnv().getTypeUtils();
+        String className = elementUtils.getBinaryName(subcommandElement).toString();
 		return utils.getEnclosedElementsWithAnnotation(parentElement, ExternalSubcommand.class)
 			.stream()
 			.flatMap(it -> utils.getAnnotationClassValue(it, ExternalSubcommand.class).stream())
@@ -54,9 +59,9 @@ public class RuleTopLevelSubCommandClassesMustExtendParentClassWithExternalSubco
 		boolean passes = true;
 		for (var element : context.roundEnv().getElementsAnnotatedWith(Subcommand.class)) {
 			if (element instanceof TypeElement subcommandElement) {
-				var enclosingElement = subcommandElement.getEnclosingElement();
+                Element enclosingElement = subcommandElement.getEnclosingElement();
 				if (enclosingElement.getKind() == ElementKind.PACKAGE) {
-					var parentClass = subcommandElement.getSuperclass();
+                    TypeMirror parentClass = subcommandElement.getSuperclass();
 					if (parentClass instanceof TypeElement parentElement) {
 						if (!isLinkedExternalSubcommand(context, subcommandElement, parentElement)) {
 							context.logging().complain(subcommandElement,

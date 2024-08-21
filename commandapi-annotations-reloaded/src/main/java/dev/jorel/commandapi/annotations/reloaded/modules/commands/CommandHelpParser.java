@@ -20,11 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.commands;
 
+import dev.jorel.commandapi.annotations.reloaded.Logging;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Command;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Help;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.parser.TypeElementParser;
 import dev.jorel.commandapi.annotations.reloaded.parser.TypeElementParserContext;
 
+import javax.lang.model.element.TypeElement;
 import java.util.Optional;
 
 /**
@@ -34,9 +37,9 @@ public class CommandHelpParser implements TypeElementParser<CommandHelp> {
 
 	@Override
 	public Optional<CommandHelp> parse(TypeElementParserContext context) {
-		var commandClass = context.element();
-		var utils = context.utils();
-		var logging = utils.logging();
+        TypeElement commandClass = context.element();
+        ParserUtils utils = context.utils();
+        Logging logging = utils.logging();
 		Help helpAnnotation = commandClass.getAnnotation(Help.class);
 		if (helpAnnotation == null) {
 			return Optional.of(new CommandHelp("", ""));

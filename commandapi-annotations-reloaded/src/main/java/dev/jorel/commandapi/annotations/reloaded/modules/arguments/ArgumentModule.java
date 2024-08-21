@@ -20,6 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.arguments;
 
+import dev.jorel.commandapi.annotations.reloaded.arguments.utils.ArgumentAnnotation;
 import dev.jorel.commandapi.annotations.reloaded.generators.InvocationParametersRenderer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticAnalyzer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
@@ -67,8 +68,8 @@ public class ArgumentModule implements VariableElementAnalyzerParserGeneratorMod
 
 	@Override
 	public void generate(IndentedWriter out, ArgumentGeneratorContext context) {
-		var argumentAnnotation = context.argumentAnnotation();
-		var options = out.indentToBuffer(buffer -> {
+        ArgumentAnnotation argumentAnnotation = context.argumentAnnotation();
+        String options = out.indentToBuffer(buffer -> {
 			suggestionsModule.generate(buffer, context.argumentSuggestionsGeneratorContext());
 			permissionsModule.generate(buffer, context.argumentPermissionGeneratorContext());
 			requirementsModule.generate(buffer, context.argumentRequirementsGeneratorContext());

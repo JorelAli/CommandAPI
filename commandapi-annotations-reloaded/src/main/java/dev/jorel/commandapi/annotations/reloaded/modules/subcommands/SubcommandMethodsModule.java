@@ -20,7 +20,10 @@
  *******************************************************************************/
 package dev.jorel.commandapi.annotations.reloaded.modules.subcommands;
 
+import dev.jorel.commandapi.annotations.reloaded.AnnotationUtils;
 import dev.jorel.commandapi.annotations.reloaded.generators.IndentedWriter;
+import dev.jorel.commandapi.annotations.reloaded.modules.commands.CommandExecutorMethodGeneratorContext;
+import dev.jorel.commandapi.annotations.reloaded.parser.ParserUtils;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticAnalyzer;
 import dev.jorel.commandapi.annotations.reloaded.semantics.SemanticRule;
 import dev.jorel.commandapi.annotations.reloaded.annotations.Subcommand;
@@ -44,9 +47,9 @@ public class SubcommandMethodsModule implements TypeElementAnalyzerParserGenerat
 
 	@Override
 	public Optional<SubcommandMethodsGeneratorContext> parse(TypeElementParserContext context) {
-		var utils = context.utils();
-		var annotationUtils = utils.annotationUtils();
-		var maybeSubcommands = annotationUtils
+        ParserUtils utils = context.utils();
+        AnnotationUtils annotationUtils = utils.annotationUtils();
+        List<Optional<CommandExecutorMethodGeneratorContext>> maybeSubcommands = annotationUtils
 			.getEnclosedMethodsWithAnnotation(context.element(), Subcommand.class).stream()
 			.map(element -> new ExecutableElementParserContext(utils, element))
 			.map(commandExecutorMethodModule::parse)
