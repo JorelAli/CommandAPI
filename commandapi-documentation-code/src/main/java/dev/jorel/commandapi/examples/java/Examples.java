@@ -2527,7 +2527,9 @@ class test {
 class Main extends JavaPlugin {
 
 }
-/* ANCHOR: testLoadMockPlugin1 */
+
+class example1 {
+/* ANCHOR: testLoadMockCommandAPI1 */
 @BeforeEach
 public void setUp() {
     // Set up MockBukkit server
@@ -2547,7 +2549,32 @@ public void tearDown() {
     // Reset for a clean slate next test
     MockBukkit.unmock();
 }
-/* ANCHOR_END: testLoadMockPlugin1 */
+/* ANCHOR_END: testLoadMockCommandAPI1 */
+}
+
+class example2 {
+/* ANCHOR: testLoadMockCommandAPI2 */
+public class CustomMockCommandAPIBukkit extends MockCommandAPIBukkit {
+    // Implement a method that usually throws `UnimplementedMethodException`
+    @Override
+    public void reloadDataPacks() {
+        CommandAPI.logInfo("Simulating data pack reload");
+        // Further logic
+    }
+}
+
+@BeforeEach
+public void setUp() {
+    // Set up MockBukkit server
+    MockBukkit.mock();
+
+    // Tell the CommandAPI to use your custom platform implementation
+    CommandAPIVersionHandler.usePlatformImplementation(new CustomMockCommandAPIBukkit());
+
+    // Load CommandAPI and your plugin as mentioned above...
+}
+/* ANCHOR_END: testLoadMockCommandAPI2 */
+}
 }
 
 class tooltips {

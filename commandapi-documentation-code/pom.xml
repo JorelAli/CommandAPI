@@ -56,6 +56,25 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Testing examples dependencies -->
+		<dependency>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.20</artifactId>
+			<version>3.9.0</version>
+		</dependency>
+		<dependency>
+			<!-- Note: This is before the other CommandAPI dependencies so example `testLoadMockCommandAPI2`
+			     can resolve the correct instance of the CommandAPIVersionHandler class -->
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-toolkit</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.2</version>
+		</dependency>
+
 		<!-- CommandAPI -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
@@ -66,23 +85,6 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-bukkit-kotlin</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<!-- Testing examples dependencies -->
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.20</artifactId>
-			<version>3.9.0</version>
-		</dependency>
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-bukkit-test-toolkit</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.8.2</version>
 		</dependency>
 
 		<!-- Other -->
