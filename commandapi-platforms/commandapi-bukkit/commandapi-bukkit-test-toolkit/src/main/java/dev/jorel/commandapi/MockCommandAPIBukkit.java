@@ -135,7 +135,7 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	 * using {@link CommandAPI#setLogger(CommandAPILogger)} and set this to {@code true} before calling
 	 * {@link CommandAPI#onLoad(CommandAPIConfig)}, then the CommandAPI will write messages into the test log.
 	 */
-	public boolean ENABLE_LOGGING = false;
+	public static boolean ENABLE_LOGGING = false;
 
 	@Override
 	public CommandAPILogger getLogger() {
