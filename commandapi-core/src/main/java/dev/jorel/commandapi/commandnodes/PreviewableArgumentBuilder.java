@@ -24,15 +24,15 @@ public class PreviewableArgumentBuilder<Source, T> extends ArgumentBuilder<Sourc
 	private final ArgumentType<T> type;
 	private SuggestionProvider<Source> suggestionsProvider = null;
 
-    // `Previewable` information
-    private final PreviewableFunction<?, ?> previewableFunction;
+	// `Previewable` information
+	private final PreviewableFunction<?, ?> previewableFunction;
 	private final boolean legacy;
 	private final boolean isListed;
 
 	private PreviewableArgumentBuilder(String name, ArgumentType<T> type, PreviewableFunction<?, ?> previewableFunction, boolean legacy, boolean isListed) {
 		this.name = name;
 		this.type = type;
-		
+
 		this.previewableFunction = previewableFunction;
 		this.legacy = legacy;
 		this.isListed = isListed;
@@ -66,10 +66,10 @@ public class PreviewableArgumentBuilder<Source, T> extends ArgumentBuilder<Sourc
 
 	public PreviewableCommandNode<Source, T> build() {
 		final PreviewableCommandNode<Source, T> result = new PreviewableCommandNode<>(
-            previewableFunction, legacy, isListed, 
-            getName(), getType(),
+			previewableFunction, legacy, isListed,
+			getName(), getType(),
 			getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider()
-        );
+		);
 
 		for (final CommandNode<Source> argument : getArguments()) {
 			result.addChild(argument);

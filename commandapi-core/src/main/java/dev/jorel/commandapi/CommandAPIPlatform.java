@@ -45,6 +45,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public abstract void onDisable();
 
 	// Converting between platform CommandSender and Brigadier Source
+
 	/**
 	 * Converts the class used by Brigadier when running commands into the platform's CommandSender
 	 *
@@ -65,14 +66,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public abstract SuggestionProvider<Source> getSuggestionProvider(SuggestionProviders suggestionProvider);
 
 	/**
-	 * Ensures the given String is a valid command namespace on this platform. If the namespace 
+	 * Ensures the given String is a valid command namespace on this platform. If the namespace
 	 * is not valid, this method will return a String that should be used instead.
-	 * 
+	 *
 	 * @param command   The command being registered with the given namespace.
 	 * @param namespace The String that wants to be used as a namespace.
 	 * @return The String that should be used as the namespace. If the given String is a valid namespace, it will be returned.
 	 */
-    public abstract String validateNamespace(ExecutableCommand<?, CommandSender> command, String namespace);
+	public abstract String validateNamespace(ExecutableCommand<?, CommandSender> command, String namespace);
 
 	/**
 	 * Stuff to run before a command is generated. For Bukkit, this involves checking
@@ -93,8 +94,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	/**
 	 * Builds and registers a Brigadier command node.
-	 * 
-	 * @param node The Brigadier {@link LiteralArgumentBuilder} to build and register.
+	 *
+	 * @param node      The Brigadier {@link LiteralArgumentBuilder} to build and register.
 	 * @param namespace The namespace to register the command with.
 	 * @return The built node.
 	 */
@@ -106,8 +107,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	/**
 	 * Registers a Brigadier command node.
-	 * 
-	 * @param node The Brigadier {@link LiteralArgumentBuilder} to register.
+	 *
+	 * @param node      The Brigadier {@link LiteralArgumentBuilder} to register.
 	 * @param namespace The namespace to register the command with.
 	 */
 	public abstract void registerCommandNode(LiteralCommandNode<Source> node, String namespace);
@@ -181,7 +182,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 	/**
 	 * Generates a {@link Predicate} that evaluates whether a command sender meets the given permission.
-	 * 
+	 *
 	 * @param permission The {@link CommandPermission} to check for.
 	 * @return A {@link Predicate} that tests if a command sender meets the given permission.
 	 */

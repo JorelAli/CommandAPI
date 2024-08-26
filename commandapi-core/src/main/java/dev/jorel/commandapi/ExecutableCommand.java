@@ -139,7 +139,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	 *   <li>{@link ExecutableCommand#withHelp(String, String)}</li>
 	 * </ul>
 	 * Further calls to these methods will also be ignored.
-	 * 
+	 *
 	 * @param helpTopic the help topic to use for this command
 	 * @return this command builder
 	 */
@@ -209,7 +209,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	/**
 	 * Sets the short description of this command to be generated using the given {@link ShortDescriptionGenerator}.
 	 * This is the help which is shown in the main /help menu.
-	 * 
+	 *
 	 * @param description The {@link ShortDescriptionGenerator} to use to generate the short description.
 	 * @return this command builder
 	 */
@@ -223,7 +223,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	/**
 	 * Sets the full description of this command to be generated using the given {@link FullDescriptionGenerator}.
 	 * This is the help which is shown in the specific /help page for this command (e.g. /help mycommand).
-	 * 
+	 *
 	 * @param description The {@link FullDescriptionGenerator} to use to generate the full description.
 	 * @return this command builder
 	 */
@@ -237,7 +237,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	/**
 	 * Sets the usage of this command to be generated using the given {@link UsageGenerator}.
 	 * This is the usage which is shown in the specific /help page for this command (e.g. /help mycommand).
-	 * 
+	 *
 	 * @param usage The {@link UsageGenerator} to use to generate the usage.
 	 * @return this command builder
 	 */
@@ -317,7 +317,7 @@ extends ExecutableCommand<Impl, CommandSender>
 
 	/**
 	 * Returns the {@link CommandAPIHelpTopic} for this command
-	 * 
+	 *
 	 * @return the {@link CommandAPIHelpTopic} for this command
 	 */
 	public CommandAPIHelpTopic<CommandSender> getHelpTopic() {
@@ -354,6 +354,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	//////////////////
 	// Registration //
 	//////////////////
+
 	/**
 	 * Overrides a command. Effectively the same as unregistering the command using
 	 * CommandAPI.unregister() and then registering the command using .register()
@@ -373,7 +374,7 @@ extends ExecutableCommand<Impl, CommandSender>
 	/**
 	 * Registers the command with the given namespace.
 	 *
-	 * @param namespace The namespace for this command. This cannot be null, and each platform may impose additional requirements. 
+	 * @param namespace The namespace for this command. This cannot be null, and each platform may impose additional requirements.
 	 *                  See {@link CommandAPIPlatform#validateNamespace(ExecutableCommand, String)}.
 	 * @throws NullPointerException if the namespace is null.
 	 */
@@ -381,7 +382,11 @@ extends ExecutableCommand<Impl, CommandSender>
 		((CommandAPIHandler<?, CommandSender, ?>) CommandAPIHandler.getInstance()).registerCommand(this, namespace);
 	}
 
-	protected static record CommandInformation<CommandSender, Source>(LiteralCommandNode<Source> rootNode, List<LiteralCommandNode<Source>> aliasNodes, RegisteredCommand<CommandSender> command) {
+	protected static record CommandInformation<CommandSender, Source>(
+		LiteralCommandNode<Source> rootNode,
+		List<LiteralCommandNode<Source>> aliasNodes,
+		RegisteredCommand<CommandSender> command
+	) {
 	}
 
 	protected <Source> CommandInformation<CommandSender, Source> createCommandInformation(String namespace) {

@@ -14,19 +14,19 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  */
 public record VelocityNormalTypedExecutor<Sender extends CommandSource>(
 
-    /**
-     * @return The {@link NormalExecutorInfo} to invoke when running this executor.
-     */
-    NormalExecutorInfo<Sender, CommandSource> executor,
+	/**
+	 * @return The {@link NormalExecutorInfo} to invoke when running this executor.
+	 */
+	NormalExecutorInfo<Sender, CommandSource> executor,
 
-    /**
-     * @return The {@link ExecutorType}s that this executor accepts.
-     */
-    ExecutorType... types
+	/**
+	 * @return The {@link ExecutorType}s that this executor accepts.
+	 */
+	ExecutorType... types
 ) implements VelocityTypedExecutor<Sender> {
-    @Override
-    public int executeWith(ExecutionInfo<Sender, CommandSource> info) throws WrapperCommandSyntaxException {
-        executor.run(info);
-        return 1;
-    }
+	@Override
+	public int executeWith(ExecutionInfo<Sender, CommandSource> info) throws WrapperCommandSyntaxException {
+		executor.run(info);
+		return 1;
+	}
 }

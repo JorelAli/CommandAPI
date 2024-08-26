@@ -13,18 +13,18 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  */
 public record VelocityResultingTypedExecutor<Sender extends CommandSource>(
 
-    /**
-     * @return The {@link ResultingExecutorInfo} to invoke when running this executor.
-     */
-    ResultingExecutorInfo<Sender, CommandSource> executor,
+	/**
+	 * @return The {@link ResultingExecutorInfo} to invoke when running this executor.
+	 */
+	ResultingExecutorInfo<Sender, CommandSource> executor,
 
-    /**
-     * @return The {@link ExecutorType}s that this executor accepts.
-     */
-    ExecutorType... types
+	/**
+	 * @return The {@link ExecutorType}s that this executor accepts.
+	 */
+	ExecutorType... types
 ) implements VelocityTypedExecutor<Sender> {
-    @Override
-    public int executeWith(ExecutionInfo<Sender, CommandSource> info) throws WrapperCommandSyntaxException {
-        return executor.run(info);
-    }
+	@Override
+	public int executeWith(ExecutionInfo<Sender, CommandSource> info) throws WrapperCommandSyntaxException {
+		return executor.run(info);
+	}
 }

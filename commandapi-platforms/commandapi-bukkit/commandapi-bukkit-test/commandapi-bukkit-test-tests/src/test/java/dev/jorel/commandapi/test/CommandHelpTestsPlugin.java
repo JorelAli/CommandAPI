@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 public class CommandHelpTestsPlugin extends JavaPlugin {
-    // Additional constructors required for MockBukkit
+	// Additional constructors required for MockBukkit
 	public CommandHelpTestsPlugin() {
 		super();
 	}
@@ -28,8 +28,8 @@ public class CommandHelpTestsPlugin extends JavaPlugin {
 			website: https://www.jorel.dev/CommandAPI/
 			api-version: 1.13
 			commands:
-              registeredCommand:
-              registeredAlias:
-            """.getBytes());
+			  registeredCommand:
+			  registeredAlias:
+			""".getBytes());
 	}
 }
