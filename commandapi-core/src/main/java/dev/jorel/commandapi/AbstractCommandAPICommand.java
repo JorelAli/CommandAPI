@@ -303,7 +303,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				String aliasName = aliasNode.getLiteral();
 				childrenNodes.add(
 					new RegisteredCommand.Node<>(
-						aliasName, rootNodeInformation.className(), aliasName, 
+						aliasName, rootNodeInformation.className(), aliasName,
 						rootNodeInformation.executable(), rootNodeInformation.permission(), rootNodeInformation.requirements(),
 						rootNodeInformation.children()
 					)

@@ -20,39 +20,39 @@ import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
  * @param <Source> The class for executing Brigadier commands.
  */
 public interface BukkitTypedExecutor<Sender extends CommandSender, Source> extends TypedExecutor<CommandSender, Sender, Source> {
-    @Override
-    default ExecutionInfo<Sender, Source> tryForSender(ExecutionInfo<CommandSender, Source> info) {
-        CommandSender sender = info.sender();
+	@Override
+	default ExecutionInfo<Sender, Source> tryForSender(ExecutionInfo<CommandSender, Source> info) {
+		CommandSender sender = info.sender();
 
-        for (ExecutorType type : types()) {
-            // Check if we can cast to the defined sender type
-            if (switch (type) {
-                case ALL -> true;
-                case PLAYER -> sender instanceof Player;
-                case ENTITY -> sender instanceof Entity;
-                case CONSOLE -> sender instanceof ConsoleCommandSender;
-                case BLOCK -> sender instanceof BlockCommandSender;
-                case PROXY -> sender instanceof ProxiedCommandSender;
-                case NATIVE -> {
-                    // If we're a NATIVE executor, always accept and convert sender to a NativeProxyCommandSender
-                    NativeProxyCommandSender proxyCommandSender = CommandAPIBukkit.<Source>get().getNativeProxyCommandSender(info.cmdCtx());
-                    info = info.copyWithNewSender(proxyCommandSender);
-                    yield true;
-                }
-                case REMOTE -> sender instanceof RemoteConsoleCommandSender;
-                case FEEDBACK_FORWARDING -> {
-                    PaperImplementations<?> paper = CommandAPIBukkit.get().getPaper();
-                    yield paper.isPaperPresent() && paper.getFeedbackForwardingCommandSender().isInstance(sender);
-                }
-            }) {
-                return (ExecutionInfo<Sender, Source>) info;
-            }
-        }
-        return null;
-    }
+		for (ExecutorType type : types()) {
+			// Check if we can cast to the defined sender type
+			if (switch (type) {
+				case ALL -> true;
+				case PLAYER -> sender instanceof Player;
+				case ENTITY -> sender instanceof Entity;
+				case CONSOLE -> sender instanceof ConsoleCommandSender;
+				case BLOCK -> sender instanceof BlockCommandSender;
+				case PROXY -> sender instanceof ProxiedCommandSender;
+				case NATIVE -> {
+					// If we're a NATIVE executor, always accept and convert sender to a NativeProxyCommandSender
+					NativeProxyCommandSender proxyCommandSender = CommandAPIBukkit.<Source>get().getNativeProxyCommandSender(info.cmdCtx());
+					info = info.copyWithNewSender(proxyCommandSender);
+					yield true;
+				}
+				case REMOTE -> sender instanceof RemoteConsoleCommandSender;
+				case FEEDBACK_FORWARDING -> {
+					PaperImplementations<?> paper = CommandAPIBukkit.get().getPaper();
+					yield paper.isPaperPresent() && paper.getFeedbackForwardingCommandSender().isInstance(sender);
+				}
+			}) {
+				return (ExecutionInfo<Sender, Source>) info;
+			}
+		}
+		return null;
+	}
 
-    /**
-     * @return The {@link ExecutorType}s that this executor accepts.
-     */
-    ExecutorType[] types();
+	/**
+	 * @return The {@link ExecutorType}s that this executor accepts.
+	 */
+	ExecutorType[] types();
 }

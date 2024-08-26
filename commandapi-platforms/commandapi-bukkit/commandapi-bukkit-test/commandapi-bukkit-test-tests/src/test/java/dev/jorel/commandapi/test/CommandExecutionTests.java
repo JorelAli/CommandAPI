@@ -63,7 +63,7 @@ class CommandExecutionTests extends TestBase {
 		//  server itself will never use its own `org.bukkit.craftbukkit.command.ProxiedNativeCommandSender` class.
 		//  So, if you can make a class cast exception happen on a server, change this mock to `ProxiedCommandSender`
 		//  and fix `executesProxy`, but otherwise we can provide the more specific `NativeProxyCommandSender` class.
-//        executorTypeToMockSender.put(ExecutorType.PROXY, () -> Mockito.mock(ProxiedCommandSender.class));
+//		executorTypeToMockSender.put(ExecutorType.PROXY, () -> Mockito.mock(ProxiedCommandSender.class));
 		executorTypeToMockSender.put(ExecutorType.PROXY, () -> Mockito.mock(NativeProxyCommandSender.class));
 		executorTypeToMockSender.put(ExecutorType.REMOTE, () -> Mockito.mock(RemoteConsoleCommandSender.class));
 	}

@@ -15,19 +15,19 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  */
 public record BukkitNormalTypedExecutor<Sender extends CommandSender, Source>(
 
-    /**
-     * @return The {@link NormalExecutorInfo} to invoke when running this executor.
-     */
-    NormalExecutorInfo<Sender, Source> executor,
+	/**
+	 * @return The {@link NormalExecutorInfo} to invoke when running this executor.
+	 */
+	NormalExecutorInfo<Sender, Source> executor,
 
-    /**
-     * @return The {@link ExecutorType}s that this executor accepts.
-     */
-    ExecutorType... types
+	/**
+	 * @return The {@link ExecutorType}s that this executor accepts.
+	 */
+	ExecutorType... types
 ) implements BukkitTypedExecutor<Sender, Source> {
-    @Override
-    public int executeWith(ExecutionInfo<Sender, Source> info) throws WrapperCommandSyntaxException {
-        executor.run(info);
-        return 1;
-    }
+	@Override
+	public int executeWith(ExecutionInfo<Sender, Source> info) throws WrapperCommandSyntaxException {
+		executor.run(info);
+		return 1;
+	}
 }

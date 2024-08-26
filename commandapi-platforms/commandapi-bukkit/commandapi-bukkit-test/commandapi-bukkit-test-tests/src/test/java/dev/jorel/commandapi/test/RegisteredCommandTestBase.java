@@ -34,10 +34,10 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 	public void tearDown() {
 		super.tearDown();
 	}
-    
-    /*******************
-     * Utility methods *
-     *******************/
+
+	/*******************
+	 * Utility methods *
+	 *******************/
 
 	@SafeVarargs
 	public final void assertCreatedSimpleRegisteredCommand(String name, NodeBuilder args, List<String>... argsAsStr) {
@@ -49,7 +49,7 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 		assertEquals(Arrays.asList(argsAsStr), CommandAPI.getRegisteredCommands().get(0).rootNode().argsAsStr());
 	}
 
-    public RegisteredCommand<CommandSender> simpleRegisteredCommand(String name, String namespace, NodeBuilder args, String... aliases) {
+	public RegisteredCommand<CommandSender> simpleRegisteredCommand(String name, String namespace, NodeBuilder args, String... aliases) {
 		return new RegisteredCommand<>(
 			name, aliases, namespace,
 			new EditableHelpTopic<>(),
@@ -63,12 +63,12 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 		}
 
 		public static List<Node<CommandSender>> children(NodeBuilder... children) {
-            List<Node<CommandSender>> result = new ArrayList<>(children.length);
-            for (NodeBuilder child : children) {
-                result.add(child.build());
-            }
-            return result;
-        }
+			List<Node<CommandSender>> result = new ArrayList<>(children.length);
+			for (NodeBuilder child : children) {
+				result.add(child.build());
+			}
+			return result;
+		}
 
 		private final String nodeName;
 		private final String className;
@@ -103,7 +103,7 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 			this.requirements = requirements;
 			return this;
 		}
- 
+
 		public NodeBuilder withChildren(NodeBuilder... children) {
 			for (NodeBuilder child : children) {
 				this.children.add(child.build());
@@ -116,14 +116,14 @@ public abstract class RegisteredCommandTestBase extends TestBase {
 			return withChildren(Arrays.asList(children));
 		}
 
-        public NodeBuilder withChildren(List<Node<CommandSender>> children) {
-            this.children.addAll(children);
-            return this;
-        }
+		public NodeBuilder withChildren(List<Node<CommandSender>> children) {
+			this.children.addAll(children);
+			return this;
+		}
 
 		public Node<CommandSender> build() {
-			return new Node<CommandSender>(nodeName, className, helpString, executable, permission, requirements, children);
-		}		
+			return new Node<>(nodeName, className, helpString, executable, permission, requirements, children);
+		}
 	}
 
 	@SafeVarargs

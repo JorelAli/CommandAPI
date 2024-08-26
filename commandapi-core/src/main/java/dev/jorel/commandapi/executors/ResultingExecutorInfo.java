@@ -11,12 +11,12 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  */
 @FunctionalInterface
 public interface ResultingExecutorInfo<Sender, Source> {
-    /**
-     * Runs this executor.
-     * 
-     * @param info The {@link ExecutionInfo} for this command.
-     * @return The int result of running this executor.
-     * @throws WrapperCommandSyntaxException if something goes wrong while running this executor.
-     */
+	/**
+	 * Runs this executor.
+	 *
+	 * @param info The {@link ExecutionInfo} for this command.
+	 * @return The int result of running this executor.
+	 * @throws WrapperCommandSyntaxException if something goes wrong while running this executor.
+	 */
 	int run(ExecutionInfo<Sender, Source> info) throws WrapperCommandSyntaxException;
 }

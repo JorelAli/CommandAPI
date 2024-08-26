@@ -8,8 +8,8 @@ import java.util.Optional;
  */
 @FunctionalInterface
 public interface ShortDescriptionGenerator {
-    /**
-     * @return An {@link Optional} {@link String} that is the short description for this command help.
-     */
-    public Optional<String> getShortDescription();
+	/**
+	 * @return An {@link Optional} {@link String} that is the short description for this command help.
+	 */
+	Optional<String> getShortDescription();
 }
