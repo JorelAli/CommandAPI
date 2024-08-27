@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 /**
  * Tests for the {@link MissingCommandExecutorException}.
  */
-public class MissingCommandExecutorExceptionTests extends TestBase {
+class MissingCommandExecutorExceptionTests extends TestBase {
 
 	/*********
 	 * Setup *

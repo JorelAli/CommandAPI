@@ -449,7 +449,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			.toJson(serializeNodeToJson(dispatcher.getRoot())));
 	}
 
-	private record Node<Source>(CommandNode<Source> commandNode, Consumer<JsonElement> resultConsumer, String[] path) {
+	private record Node<Source>(CommandNode<Source> commandNode, Consumer<JsonElement> resultConsumer, JsonArray path) {
 	}
 
 	public JsonObject serializeNodeToJson(CommandNode<Source> rootNode) {
@@ -464,7 +464,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 
 		// Extract serialization of the rootNode as our result
 		JsonObject resultHolder = new JsonObject();
-		redirectsToProcess.offer(new Node<>(rootNode, result -> resultHolder.add("result", result), new String[0]));
+		redirectsToProcess.offer(new Node<>(rootNode, result -> resultHolder.add("result", result), new JsonArray()));
 
 		Node<Source> node;
 		while ((node = redirectsToProcess.poll()) != null) {
@@ -476,17 +476,15 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				// Add information to parent
 				JsonArray path = shortestPath.get(commandNode);
 				if (path != null) {
-					// Node has already appeared earlier in the traversal
+					// Represent this node with the shortest path
 					node.resultConsumer.accept(path);
 					continue;
 				}
-				// This is the first time finding this node
-				path = new JsonArray();
-				for (String step : node.path) {
-					path.add(step);
-				}
-				shortestPath.put(commandNode, path);
 
+				// This is the first time finding this node
+				shortestPath.put(commandNode, node.path);
+
+				// Represent this node with a new object
 				JsonObject output = new JsonObject();
 				node.resultConsumer.accept(output);
 
@@ -502,9 +500,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 					for (CommandNode<Source> child : children) {
 						String name = child.getName();
 
-						String[] newPath = new String[node.path.length + 1];
-						System.arraycopy(node.path, 0, newPath, 0, node.path.length);
-						newPath[node.path.length] = name;
+						JsonArray newPath = node.path.deepCopy();
+						newPath.add(name);
 
 						nodesToProcess.offer(new Node<>(child, result -> childrenHolder.add(name, result), newPath));
 					}
@@ -518,9 +515,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				// Redirect
 				CommandNode<Source> redirect = commandNode.getRedirect();
 				if (redirect != null) {
-					String[] newPath = new String[node.path.length + 1];
-					System.arraycopy(node.path, 0, newPath, 0, node.path.length);
-					newPath[node.path.length] = "redirect " + redirect.getName();
+					JsonArray newPath = node.path.deepCopy();
+					newPath.add("redirect " + redirect.getName());
 
 					redirectsToProcess.offer(new Node<>(redirect, result -> output.add("redirect", result), newPath));
 				}

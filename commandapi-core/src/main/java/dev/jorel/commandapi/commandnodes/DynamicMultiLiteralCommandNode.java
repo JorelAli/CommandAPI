@@ -1,8 +1,6 @@
 package dev.jorel.commandapi.commandnodes;
 
 import com.google.gson.JsonArray;
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -16,9 +14,10 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.DynamicMultiLiteralArgumentCommon.LiteralsCreator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
 
 public class DynamicMultiLiteralCommandNode<CommandSender, Source> extends DifferentClientNode.Argument<Source, String> {
 	static {
@@ -36,16 +35,16 @@ public class DynamicMultiLiteralCommandNode<CommandSender, Source> extends Diffe
 	private final boolean isListed;
 	private final LiteralsCreator<CommandSender> literalsCreator;
 
-	public DynamicMultiLiteralCommandNode(
-		String name, boolean isListed, LiteralsCreator<CommandSender> literalsCreator,
-		Command<Source> command, Predicate<Source> requirement,
-		CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks
-	) {
+	public DynamicMultiLiteralCommandNode(DynamicMultiLiteralArgumentBuilder<CommandSender, Source> builder) {
 		// This mostly acts like a StringArgument
-		super(name, StringArgumentType.word(), command, requirement, redirect, modifier, forks);
+		super(
+			builder.getName(), StringArgumentType.word(),
+			builder.getCommand(), builder.getRequirement(),
+			builder.getRedirect(), builder.getRedirectModifier(), builder.isFork()
+		);
 
-		this.isListed = isListed;
-		this.literalsCreator = literalsCreator;
+		this.isListed = builder.isListed();
+		this.literalsCreator = builder.getLiteralsCreator();
 	}
 
 	// Getters
@@ -64,7 +63,7 @@ public class DynamicMultiLiteralCommandNode<CommandSender, Source> extends Diffe
 		if (onRegister) {
 			// However, we do need to ensure the node currently in the tree is a DynamicMultiLiteralCommandNode,
 			//  and not a copied argument, so we can be properly parsed server-side
-			if (node instanceof DynamicMultiLiteralCommandNode<?,?>) return null; // No rewrite
+			if (node instanceof DynamicMultiLiteralCommandNode<?, ?>) return null; // No rewrite
 
 			CommandNode<Source> result = DynamicMultiLiteralArgumentBuilder
 				.<CommandSender, Source>dynamicMultiLiteral(this.getName(), this.isListed, this.literalsCreator)

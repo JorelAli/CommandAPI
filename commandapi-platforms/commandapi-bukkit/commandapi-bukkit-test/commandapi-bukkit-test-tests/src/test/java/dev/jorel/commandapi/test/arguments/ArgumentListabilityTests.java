@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
  * Tests for the effects of the {@link AbstractArgument#setListed(boolean)} method.
  * Arguments may use different {@link CommandNode} implementation that implement this with separate code.
  */
-public class ArgumentListabilityTests extends TestBase {
+class ArgumentListabilityTests extends TestBase {
 
 	/*********
 	 * Setup *
