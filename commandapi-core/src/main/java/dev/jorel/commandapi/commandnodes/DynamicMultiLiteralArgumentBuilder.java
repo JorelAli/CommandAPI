@@ -43,11 +43,7 @@ public class DynamicMultiLiteralArgumentBuilder<CommandSender, Source> extends A
 	// Create node
 	@Override
 	public DynamicMultiLiteralCommandNode<CommandSender, Source> build() {
-		final DynamicMultiLiteralCommandNode<CommandSender, Source> result = new DynamicMultiLiteralCommandNode<>(
-			name, isListed, literalsCreator,
-			getCommand(), getRequirement(),
-			getRedirect(), getRedirectModifier(), isFork()
-		);
+		final DynamicMultiLiteralCommandNode<CommandSender, Source> result = new DynamicMultiLiteralCommandNode<>(this);
 
 		for (final CommandNode<Source> argument : getArguments()) {
 			result.addChild(argument);

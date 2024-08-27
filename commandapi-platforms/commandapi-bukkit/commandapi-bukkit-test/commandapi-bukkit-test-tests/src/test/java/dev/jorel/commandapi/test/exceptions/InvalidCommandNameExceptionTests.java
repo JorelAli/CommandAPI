@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for the {@link InvalidCommandNameException}.
  */
-public class InvalidCommandNameExceptionTests extends TestBase {
+class InvalidCommandNameExceptionTests extends TestBase {
 
 	/*********
 	 * Setup *

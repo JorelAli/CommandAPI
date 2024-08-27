@@ -1,22 +1,15 @@
 package dev.jorel.commandapi.commandnodes;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
-import com.mojang.brigadier.tree.CommandNode;
-
 import dev.jorel.commandapi.arguments.Previewable;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A special type of {@link ArgumentCommandNode} for {@link Previewable} arguments. Compared to the
@@ -30,18 +23,20 @@ public class PreviewableCommandNode<Source, T> extends ArgumentCommandNode<Sourc
 	private final PreviewableFunction<?, ?> preview;
 	private final boolean legacy;
 
-	// Instead of having a listed and unlisted copy of this class, we can just handle this with this boolean
+	// Instead of having a listed and unlisted copy of this class, we can handle both with this boolean
 	private final boolean isListed;
 
-	public PreviewableCommandNode(
-		PreviewableFunction<?, ?> preview, boolean legacy, boolean isListed,
-		String name, ArgumentType<T> type,
-		Command<Source> command, Predicate<Source> requirement, CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks, SuggestionProvider<Source> customSuggestions
-	) {
-		super(name, type, command, requirement, redirect, modifier, forks, customSuggestions);
-		this.preview = preview;
-		this.legacy = legacy;
-		this.isListed = isListed;
+	public PreviewableCommandNode(PreviewableArgumentBuilder<Source, T> builder) {
+		super(
+			builder.getName(), builder.getType(),
+			builder.getCommand(), builder.getRequirement(),
+			builder.getRedirect(), builder.getRedirectModifier(), builder.isFork(),
+			builder.getSuggestionsProvider()
+		);
+
+		this.preview = builder.getPreviewableFunction();
+		this.legacy = builder.isLegacy();
+		this.isListed = builder.isListed();
 	}
 
 	// Methods needed to generate a preview

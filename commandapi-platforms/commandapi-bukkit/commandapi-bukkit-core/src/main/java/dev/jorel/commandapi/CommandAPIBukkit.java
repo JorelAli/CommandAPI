@@ -64,7 +64,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@SuppressWarnings("unchecked")
 	public static <Source> CommandAPIBukkit<Source> get() {
-		if(CommandAPIBukkit.instance != null) {
+		if (CommandAPIBukkit.instance != null) {
 			return (CommandAPIBukkit<Source>) instance;
 		} else {
 			throw new IllegalStateException("Tried to access CommandAPIBukkit instance, but it was null! Are you using CommandAPI features before calling CommandAPI#onLoad?");
@@ -76,7 +76,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	}
 
 	public static InternalBukkitConfig getConfiguration() {
-		if(config != null) {
+		if (config != null) {
 			return config;
 		} else {
 			throw new IllegalStateException("Tried to access InternalBukkitConfig, but it was null! Did you load the CommandAPI properly with CommandAPI#onLoad?");
@@ -89,7 +89,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 	@Override
 	public void onLoad(CommandAPIConfig<?> config) {
-		if(config instanceof CommandAPIBukkitConfig bukkitConfig) {
+		if (config instanceof CommandAPIBukkitConfig bukkitConfig) {
 			CommandAPIBukkit.setInternalConfig(new InternalBukkitConfig(bukkitConfig));
 		} else {
 			CommandAPI.logError("CommandAPIBukkit was loaded with non-Bukkit config!");
@@ -98,7 +98,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 
 		checkDependencies();
 	}
-	
+
 	private static void setInternalConfig(InternalBukkitConfig internalBukkitConfig) {
 		CommandAPIBukkit.config = internalBukkitConfig;
 	}
@@ -198,9 +198,9 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 			String namespaceAddon = (command.namespace().isEmpty() ? "" : command.namespace() + ":");
 			String commandName = namespaceAddon + command.commandName();
 			CommandAPIHelpTopic<CommandSender> commandAPIHelpTopic = command.helpTopic();
-			
+
 			// Don't override other plugin's help topics
-			if(Bukkit.getPluginCommand(commandName) == null) {
+			if (Bukkit.getPluginCommand(commandName) == null) {
 				final HelpTopic helpTopic;
 				if (commandAPIHelpTopic instanceof BukkitHelpTopicWrapper bukkitHelpTopic) {
 					helpTopic = bukkitHelpTopic.helpTopic();
@@ -214,7 +214,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 				String aliasName = namespaceAddon + alias;
 
 				// Don't override other plugin's help topics
-				if(Bukkit.getPluginCommand(aliasName) != null) {
+				if (Bukkit.getPluginCommand(aliasName) != null) {
 					continue;
 				}
 
@@ -455,7 +455,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	public static WrapperCommandSyntaxException failWithAdventureComponent(ComponentLike message) {
 		return CommandAPI.failWithMessage(BukkitTooltip.messageFromAdventureComponent(message.asComponent()));
 	}
-	
+
 	/**
 	 * Initializes the CommandAPI's implementation of an NBT API. If you are shading
 	 * the CommandAPI, you should be using
@@ -475,7 +475,7 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	public static <T> void initializeNBTAPI(Class<T> nbtContainerClass, Function<Object, T> nbtContainerConstructor) {
 		getConfiguration().lateInitializeNBT(nbtContainerClass, nbtContainerConstructor);
 	}
-	
+
 	protected void registerBukkitRecipesSafely(Iterator<Recipe> recipes) {
 		Recipe recipe;
 		while (recipes.hasNext()) {

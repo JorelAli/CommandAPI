@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 /**
  * Tests for the {@link GreedyArgumentException}.
  */
-public class GreedyArgumentExceptionTests extends TestBase {
+class GreedyArgumentExceptionTests extends TestBase {
 
 	/*********
 	 * Setup *

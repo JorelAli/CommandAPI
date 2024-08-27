@@ -87,7 +87,7 @@ public interface DifferentClientNode<Source> {
 		// Node information
 		private final ArgumentType<T> type;
 
-		public Argument(
+		protected Argument(
 			String name, ArgumentType<T> type,
 			Command<Source> command, Predicate<Source> requirement,
 			CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks
@@ -97,7 +97,7 @@ public interface DifferentClientNode<Source> {
 			//  when `ArgumentCommandNode#createBuilder` is called. It would be nice
 			//  to override `createBuilder` to return this class, but that isn't possible.
 			//  https://github.com/Mojang/brigadier/pull/144 :(
-			super(name, new Type<Source, T>(), command, requirement, redirect, modifier, forks, null);
+			super(name, new Type<>(), command, requirement, redirect, modifier, forks, null);
 
 			((Type<Source, T>) super.getType()).node = this;
 
@@ -164,7 +164,7 @@ public interface DifferentClientNode<Source> {
 	}
 
 	abstract class Literal<Source> extends LiteralCommandNode<Source> implements DifferentClientNode<Source> {
-		public Literal(
+		protected Literal(
 			String literal,
 			Command<Source> command, Predicate<Source> requirement,
 			CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks

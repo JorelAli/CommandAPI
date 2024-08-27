@@ -14,6 +14,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -82,5 +83,21 @@ public class FlagsArgumentRootNode<Source> extends LiteralCommandNode<Source> {
 	@Override
 	public String toString() {
 		return "<flagargstart " + getLiteral() + ">";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof FlagsArgumentRootNode<?> other)) return false;
+
+		if (!Objects.equals(this.hiddenRedirect, other.hiddenRedirect)) return false;
+		return super.equals(other);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(this.hiddenRedirect);
+		result = 31 * result + super.hashCode();
+		return result;
 	}
 }

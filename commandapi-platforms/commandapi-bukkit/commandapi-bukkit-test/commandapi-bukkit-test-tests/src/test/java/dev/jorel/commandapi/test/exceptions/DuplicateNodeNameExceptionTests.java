@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 /**
  * Tests for the {@link DuplicateNodeNameException}.
  */
-public class DuplicateNodeNameExceptionTests extends TestBase {
+class DuplicateNodeNameExceptionTests extends TestBase {
 
 	/*********
 	 * Setup *

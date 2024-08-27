@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
-
 import dev.jorel.commandapi.arguments.Previewable;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
@@ -47,29 +46,39 @@ public class PreviewableArgumentBuilder<Source, T> extends ArgumentBuilder<Sourc
 		return getThis();
 	}
 
-	public SuggestionProvider<Source> getSuggestionsProvider() {
-		return suggestionsProvider;
-	}
-
+	// Getters
 	@Override
 	protected PreviewableArgumentBuilder<Source, T> getThis() {
 		return this;
-	}
-
-	public ArgumentType<T> getType() {
-		return type;
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	public ArgumentType<T> getType() {
+		return type;
+	}
+
+	public SuggestionProvider<Source> getSuggestionsProvider() {
+		return suggestionsProvider;
+	}
+
+	public PreviewableFunction<?, ?> getPreviewableFunction() {
+		return previewableFunction;
+	}
+
+	public boolean isLegacy() {
+		return legacy;
+	}
+
+	public boolean isListed() {
+		return isListed;
+	}
+
+	// Create node
 	public PreviewableCommandNode<Source, T> build() {
-		final PreviewableCommandNode<Source, T> result = new PreviewableCommandNode<>(
-			previewableFunction, legacy, isListed,
-			getName(), getType(),
-			getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider()
-		);
+		final PreviewableCommandNode<Source, T> result = new PreviewableCommandNode<>(this);
 
 		for (final CommandNode<Source> argument : getArguments()) {
 			result.addChild(argument);
