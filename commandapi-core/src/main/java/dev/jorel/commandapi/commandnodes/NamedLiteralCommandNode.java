@@ -21,6 +21,14 @@ import java.util.function.Predicate;
  * @param <Source> The Brigadier Source object for running commands.
  */
 public class NamedLiteralCommandNode<Source> extends LiteralCommandNode<Source> {
+	// Serialization logic
+	static {
+		NodeTypeSerializer.registerSerializer(NamedLiteralCommandNode.class, (target, type) -> {
+			target.addProperty("type", "namedLiteral");
+			target.addProperty("nodeName", type.nodeName);
+		});
+	}
+
 	private final String nodeName;
 
 	public NamedLiteralCommandNode(String nodeName, String literal, Command<Source> command, Predicate<Source> requirement, CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks) {

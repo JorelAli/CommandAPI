@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.commandnodes;
 
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -33,7 +34,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	) {
 		if (node instanceof LiteralCommandNode<Source> literalNode) {
 			return new LiteralNode<>(literalNode, flagsArgumentName, previousArguments);
-		} else if (node instanceof ArgumentCommandNode<Source,?> argumentNode) {
+		} else if (node instanceof ArgumentCommandNode<Source, ?> argumentNode) {
 			return new ArgumentNode<>(argumentNode, flagsArgumentName, previousArguments);
 		} else {
 			throw new IllegalArgumentException("Node must be an argument or literal. Given " + node + " with type " + node.getClass().getName());
@@ -130,6 +131,21 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/// @endcond
 	, CommandSender, Source>
 		extends DifferentClientNode.Literal<Source> implements FlagsArgumentEndingNode<Argument, CommandSender, Source> {
+		// Serialization logic
+		static {
+			NodeTypeSerializer.registerSerializer(LiteralNode.class, (target, type) -> {
+				target.addProperty("type", "flagArgumentEndingLiteral");
+				target.addProperty("flagsArgumentName", type.flagsArgumentName);
+
+				LiteralCommandNode<?> wrappedNode = type.literalNode;
+
+				JsonObject subProperties = new JsonObject();
+				subProperties.addProperty("name", wrappedNode.getName());
+				NodeTypeSerializer.addTypeInformation(subProperties, wrappedNode);
+				target.add("wrappedNode", subProperties);
+			});
+		}
+
 		// Set information
 		private final LiteralCommandNode<Source> literalNode;
 		private final String flagsArgumentName;
@@ -193,7 +209,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) return true;
-			if (!(obj instanceof LiteralNode<?,?,?> other)) return false;
+			if (!(obj instanceof LiteralNode<?, ?, ?> other)) return false;
 			return Objects.equals(this.literalNode, other.literalNode)
 				&& Objects.equals(this.flagsArgumentName, other.flagsArgumentName)
 				&& Objects.equals(this.previousArguments, other.previousArguments);
@@ -216,6 +232,22 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	/// @endcond
 	, CommandSender, Source, T>
 		extends DifferentClientNode.Argument<Source, T> implements FlagsArgumentEndingNode<Argument, CommandSender, Source> {
+		// Serialization logic
+		static {
+			NodeTypeSerializer.registerSerializer(ArgumentNode.class, (target, type) -> {
+				target.addProperty("type", "flagArgumentEndingArgument");
+				target.addProperty("flagsArgumentName", type.flagsArgumentName);
+
+				ArgumentCommandNode<?, ?> wrappedNode = type.argumentNode;
+
+				JsonObject subProperties = new JsonObject();
+				subProperties.addProperty("name", wrappedNode.getName());
+				NodeTypeSerializer.addTypeInformation(subProperties, wrappedNode);
+				target.add("wrappedNode", subProperties);
+			});
+		}
+
+		// Set information
 		private final ArgumentCommandNode<Source, T> argumentNode;
 		private final String flagsArgumentName;
 		private final List<Argument> previousArguments;
@@ -284,7 +316,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) return true;
-			if (!(obj instanceof ArgumentNode<?,?,?, ?> other)) return false;
+			if (!(obj instanceof ArgumentNode<?, ?, ?, ?> other)) return false;
 			return Objects.equals(this.argumentNode, other.argumentNode)
 				&& Objects.equals(this.flagsArgumentName, other.flagsArgumentName)
 				&& Objects.equals(this.previousArguments, other.previousArguments);

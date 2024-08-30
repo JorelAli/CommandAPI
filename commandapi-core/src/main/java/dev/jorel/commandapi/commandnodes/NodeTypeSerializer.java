@@ -64,7 +64,5 @@ public interface NodeTypeSerializer<T extends CommandNode> {
 			CommandAPIHandler.getInstance().getPlatform()
 				.getArgumentTypeProperties(argumentType).ifPresent(properties -> target.add("properties", properties));
 		}));
-		// TODO: Add serializers for custom nodes
-		//  Probably do this within the node classes so they can otherwise be removed by jar minimization
 	}
 }

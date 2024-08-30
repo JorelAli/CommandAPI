@@ -1,10 +1,12 @@
 package dev.jorel.commandapi.commandnodes;
 
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
+import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.Previewable;
 import dev.jorel.commandapi.wrappers.PreviewableFunction;
 
@@ -20,6 +22,23 @@ import java.util.Optional;
  * @param <T> The type returned when this argument is parsed.
  */
 public class PreviewableCommandNode<Source, T> extends ArgumentCommandNode<Source, T> {
+	// Serialization logic
+	static {
+		NodeTypeSerializer.registerSerializer(PreviewableCommandNode.class, (target, type) -> {
+			ArgumentType<?> argumentType = type.getType();
+
+			target.addProperty("type", "previewableArgument");
+			target.addProperty("hasPreview", type.preview != null);
+			target.addProperty("legacy", type.legacy);
+			target.addProperty("listed", type.isListed);
+
+			target.addProperty("argumentType", argumentType.getClass().getName());
+
+			CommandAPIHandler.getInstance().getPlatform()
+				.getArgumentTypeProperties(argumentType).ifPresent(properties -> target.add("properties", properties));
+		});
+	}
+
 	private final PreviewableFunction<?, ?> preview;
 	private final boolean legacy;
 
