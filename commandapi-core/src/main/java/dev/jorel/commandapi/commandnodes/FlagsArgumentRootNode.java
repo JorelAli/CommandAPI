@@ -19,6 +19,13 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class FlagsArgumentRootNode<Source> extends LiteralCommandNode<Source> {
+	// Serialization logic
+	static {
+		NodeTypeSerializer.registerSerializer(FlagsArgumentRootNode.class, (target, type) ->
+			target.addProperty("type", "flagsArgumentRootNode")
+		);
+	}
+
 	// Ending nodes that loop back should always share the children of this node
 	private final Set<CommandNode<Source>> loopEndNodes = new HashSet<>();
 
@@ -27,6 +34,13 @@ public class FlagsArgumentRootNode<Source> extends LiteralCommandNode<Source> {
 	private final HiddenRedirect<Source> hiddenRedirect;
 
 	public static final class HiddenRedirect<Source> extends ArgumentCommandNode<Source, String> {
+		// Serialization logic
+		static {
+			NodeTypeSerializer.registerSerializer(HiddenRedirect.class, (target, type) ->
+				target.addProperty("type", "flagArgumentHiddenRedirect")
+			);
+		}
+
 		public HiddenRedirect(CommandNode<Source> redirect) {
 			super(
 				HIDDEN_NAME, StringArgumentType.word(),

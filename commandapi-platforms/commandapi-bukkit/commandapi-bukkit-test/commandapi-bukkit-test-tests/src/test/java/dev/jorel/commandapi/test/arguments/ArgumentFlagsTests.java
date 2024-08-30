@@ -73,7 +73,7 @@ class ArgumentFlagsTests extends TestBase {
 				      "type": "literal",
 				      "children": {
 				        "flags": {
-				          "type": "literal",
+				          "type": "flagsArgumentRootNode",
 				          "children": {
 				            "loop1": {
 				              "type": "literal",

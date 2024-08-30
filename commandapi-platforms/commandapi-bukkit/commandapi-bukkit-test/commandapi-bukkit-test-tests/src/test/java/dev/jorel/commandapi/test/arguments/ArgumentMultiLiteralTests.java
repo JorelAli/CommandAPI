@@ -86,24 +86,29 @@ class ArgumentMultiLiteralTests extends TestBase {
 				      "type": "literal",
 				      "children": {
 				        "option1": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "executable": true
 				            },
 				            "option2": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "executable": true
 				            },
 				            "option3": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "executable": true
 				            }
 				          }
 				        },
 				        "option2": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": [
 				              "command1",
@@ -123,7 +128,8 @@ class ArgumentMultiLiteralTests extends TestBase {
 				          }
 				        },
 				        "option3": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": [
 				              "command1",
@@ -148,24 +154,29 @@ class ArgumentMultiLiteralTests extends TestBase {
 				      "type": "literal",
 				      "children": {
 				        "option1": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "executable": true
 				            },
 				            "option2": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "executable": true
 				            },
 				            "option3": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "executable": true
 				            }
 				          }
 				        },
 				        "option2": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": [
 				              "command2",
@@ -185,7 +196,8 @@ class ArgumentMultiLiteralTests extends TestBase {
 				          }
 				        },
 				        "option3": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": [
 				              "command2",
@@ -210,23 +222,28 @@ class ArgumentMultiLiteralTests extends TestBase {
 				      "type": "literal",
 				      "children": {
 				        "option1": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "children": {
 				                "option1": {
-				                  "type": "literal",
+				                  "type": "namedLiteral",
+				                  "nodeName": "literal3",
 				                  "executable": true
 				                },
 				                "option2": {
-				                  "type": "literal",
+				                  "type": "namedLiteral",
+				                  "nodeName": "literal3",
 				                  "executable": true
 				                }
 				              }
 				            },
 				            "option2": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "children": {
 				                "option1": [
 				                  "command3",
@@ -245,7 +262,8 @@ class ArgumentMultiLiteralTests extends TestBase {
 				          }
 				        },
 				        "option2": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": [
 				              "command3",
@@ -265,23 +283,28 @@ class ArgumentMultiLiteralTests extends TestBase {
 				      "type": "literal",
 				      "children": {
 				        "option1": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "children": {
 				                "option1": {
-				                  "type": "literal",
+				                  "type": "namedLiteral",
+				                  "nodeName": "literal3",
 				                  "executable": true
 				                },
 				                "option2": {
-				                  "type": "literal",
+				                  "type": "namedLiteral",
+				                  "nodeName": "literal3",
 				                  "executable": true
 				                }
 				              }
 				            },
 				            "option2": {
-				              "type": "literal",
+				              "type": "namedLiteral",
+				              "nodeName": "literal2",
 				              "children": {
 				                "option1": [
 				                  "command4",
@@ -300,7 +323,8 @@ class ArgumentMultiLiteralTests extends TestBase {
 				          }
 				        },
 				        "option2": {
-				          "type": "literal",
+				          "type": "namedLiteral",
+				          "nodeName": "literal1",
 				          "children": {
 				            "option1": [
 				              "command4",

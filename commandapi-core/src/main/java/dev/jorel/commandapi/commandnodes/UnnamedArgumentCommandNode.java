@@ -10,6 +10,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
+import dev.jorel.commandapi.CommandAPIHandler;
 
 import java.util.function.Predicate;
 
@@ -21,6 +22,19 @@ import java.util.function.Predicate;
  * @param <T> The type returned when this argument is parsed.
  */
 public class UnnamedArgumentCommandNode<Source, T> extends ArgumentCommandNode<Source, T> {
+	// Serialization logic
+	static {
+		NodeTypeSerializer.registerSerializer(UnnamedArgumentCommandNode.class, (target, type) -> {
+			ArgumentType<?> argumentType = type.getType();
+
+			target.addProperty("type", "unnamedArgument");
+			target.addProperty("argumentType", argumentType.getClass().getName());
+
+			CommandAPIHandler.getInstance().getPlatform()
+				.getArgumentTypeProperties(argumentType).ifPresent(properties -> target.add("properties", properties));
+		});
+	}
+
 	public UnnamedArgumentCommandNode(String name, ArgumentType<T> type, Command<Source> command, Predicate<Source> requirement, CommandNode<Source> redirect, RedirectModifier<Source> modifier, boolean forks, SuggestionProvider<Source> customSuggestions) {
 		super(name, type, command, requirement, redirect, modifier, forks, customSuggestions);
 	}
