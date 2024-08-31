@@ -36,6 +36,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.CustomProvidedArgument;
@@ -257,8 +258,7 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		if (mergeTarget == null) return; // The `nodeToRegister` does not already exist, no conflict possible
 
 		// Add node to path
-		List<String> path = new ArrayList<>();
-		path.addAll(pathSoFar);
+		List<String> path = new ArrayList<>(pathSoFar);
 		path.add(nodeToRegister.getName());
 
 		if (nodeToRegister.getCommand() != null && mergeTarget.getCommand() != null) {
@@ -409,6 +409,71 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 			CommandSender sender = platform.getCommandSenderFromCommandSource(source);
 			return finalSenderCheck.test(sender);
 		};
+	}
+
+	/////////////////////////////
+	// SECTION: Unregistration //
+	/////////////////////////////
+	/**
+	 * Unregisters a command
+	 *
+	 * @param command the name of the command to unregister
+	 * @param unregisterNamespaces whether the unregistration system should attempt to remove versions of the
+	 *                                command that start with a namespace. E.g. `minecraft:command`, `bukkit:command`,
+	 *                                or `plugin:command`. If true, these namespaced versions of a command are also
+	 *                                unregistered.
+	 */
+	public void unregister(String command, boolean unregisterNamespaces) {
+		// Remove command from `registeredCommands`
+		registeredCommands.remove(command);
+		if (unregisterNamespaces) removeCommandNamespace(registeredCommands, command, e -> true);
+
+		// Platform-specific unregistration logic
+		platform.unregister(command, unregisterNamespaces);
+
+		// Update the dispatcher file
+		writeDispatcherToFile();
+	}
+
+
+	protected void removeBrigadierCommands(RootCommandNode<Source> root, String commandName,
+										   boolean unregisterNamespaces, Predicate<CommandNode<Source>> extraCheck) {
+		Map<String, CommandNode<Source>> children = CommandAPIHandler.getCommandNodeChildren(root);
+		Map<String, LiteralCommandNode<Source>> literals = CommandAPIHandler.getCommandNodeLiterals(root);
+		Map<String, ArgumentCommandNode<Source, ?>> arguments = CommandAPIHandler.getCommandNodeArguments(root);
+
+		removeCommandFromMapIfCheckPasses(children, commandName, extraCheck);
+		if (literals != null) removeCommandFromMapIfCheckPasses(literals, commandName, extraCheck);
+		// Commands should really only be represented as literals, but it is technically possible
+		// to put an ArgumentCommandNode in the root, so we'll check
+		removeCommandFromMapIfCheckPasses(arguments, commandName, extraCheck);
+
+		if (unregisterNamespaces) {
+			removeCommandNamespace(children, commandName, extraCheck);
+			if (literals != null) removeCommandNamespace(literals, commandName, extraCheck);
+			removeCommandNamespace(arguments, commandName, extraCheck);
+		}
+	}
+
+	protected static <T> void removeCommandNamespace(Map<String, ? extends T> map, String commandName, Predicate<T> extraCheck) {
+		for (String key : new HashSet<>(map.keySet())) {
+			if (!isThisTheCommandButNamespaced(commandName, key)) continue;
+
+			removeCommandFromMapIfCheckPasses(map, key, extraCheck);
+		}
+	}
+
+	protected static <T> void removeCommandFromMapIfCheckPasses(Map<String, ? extends T> map, String key, Predicate<T> extraCheck) {
+		T element = map.get(key);
+		if (element == null) return;
+		if (extraCheck.test(element)) map.remove(key);
+	}
+
+	protected static boolean isThisTheCommandButNamespaced(String commandName, String key) {
+		if (!key.contains(":")) return false;
+		String[] split = key.split(":");
+		if (split.length < 2) return false;
+		return split[1].equalsIgnoreCase(commandName);
 	}
 
 	////////////////////////////////

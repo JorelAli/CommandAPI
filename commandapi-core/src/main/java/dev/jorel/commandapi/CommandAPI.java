@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -265,14 +264,13 @@ public class CommandAPI {
 	}
 
 	// Command registration and unregistration
-
 	/**
 	 * Unregisters a command
 	 *
 	 * @param command the name of the command to unregister
 	 */
 	public static void unregister(String command) {
-		CommandAPIHandler.getInstance().getPlatform().unregister(command, false);
+		CommandAPIHandler.getInstance().unregister(command, false);
 	}
 
 	/**
@@ -285,7 +283,7 @@ public class CommandAPI {
 	 *                                unregistered.
 	 */
 	public static void unregister(String command, boolean unregisterNamespaces) {
-		CommandAPIHandler.getInstance().getPlatform().unregister(command, unregisterNamespaces);
+		CommandAPIHandler.getInstance().unregister(command, unregisterNamespaces);
 	}
 
 	/**
@@ -307,6 +305,6 @@ public class CommandAPI {
 	 */
 	public static <CommandSender> List<RegisteredCommand<CommandSender>> getRegisteredCommands() {
 		CommandAPIHandler<?, CommandSender, ?> handler = CommandAPIHandler.getInstance();
-		return Collections.unmodifiableList(new ArrayList<>(handler.registeredCommands.values()));
+		return List.copyOf(handler.registeredCommands.values());
 	}
 }
