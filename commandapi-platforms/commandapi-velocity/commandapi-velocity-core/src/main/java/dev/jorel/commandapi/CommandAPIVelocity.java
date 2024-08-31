@@ -32,7 +32,6 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 	private static CommandAPIVelocity instance;
 	private static InternalVelocityConfig config;
 
-	private CommandManager commandManager;
 	private CommandDispatcher<CommandSource> dispatcher;
 
 	public CommandAPIVelocity() {
@@ -64,7 +63,7 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 			CommandAPI.logError("Attempts to access Velocity-specific config variables will fail!");
 		}
 
-		commandManager = getConfiguration().getServer().getCommandManager();
+		CommandManager commandManager = getConfiguration().getServer().getCommandManager();
 
 		// We can't use a SafeVarHandle here because we don't have direct access to the
 		//  `com.velocitypowered.proxy.command.VelocityCommandManager` class that holds the field.
@@ -111,7 +110,9 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces) {
-		commandManager.unregister(commandName);
+		CommandAPIHandler<?, ?, CommandSource> handler = CommandAPIHandler.getInstance();
+
+		handler.removeBrigadierCommands(getBrigadierDispatcher().getRoot(), commandName, unregisterNamespaces, c -> true);
 	}
 
 	@Override
@@ -178,14 +179,15 @@ public class CommandAPIVelocity implements CommandAPIPlatform<Argument<?>, Comma
 
 	@Override
 	public void registerCommandNode(LiteralCommandNode<CommandSource> node, String namespace) {
+		RootCommandNode<CommandSource> root = getBrigadierDispatcher().getRoot();
+
 		// Register the main node
-		getBrigadierDispatcher().getRoot().addChild(node);
+		root.addChild(node);
 
 		// Register the namespaced node if it is not empty
 		if (!namespace.isEmpty()) {
-			getBrigadierDispatcher().getRoot().addChild(
-				CommandAPIHandler.<Argument<?>, CommandSource, CommandSource>getInstance().namespaceNode(node, namespace)
-			);
+			CommandAPIHandler<?, ?, CommandSource> handler = CommandAPIHandler.getInstance();
+			root.addChild(handler.namespaceNode(node, namespace));
 		}
 	}
 

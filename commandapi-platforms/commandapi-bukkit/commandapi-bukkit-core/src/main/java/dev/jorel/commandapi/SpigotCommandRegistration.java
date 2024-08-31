@@ -127,13 +127,14 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 	}
 
 	private void fixNamespaces() {
+		CommandAPIHandler<?, ?, Source> handler = CommandAPIHandler.getInstance();
 		Map<String, Command> knownCommands = commandMapKnownCommands.get(commandMap);
 		RootCommandNode<Source> resourcesRootNode = getResourcesDispatcher.get().getRoot();
 
 		// Remove namespaces
 		for (String command : namespacesToFix) {
 			knownCommands.remove(command);
-			removeBrigadierCommands(resourcesRootNode, command, false, c -> true);
+			handler.removeBrigadierCommands(resourcesRootNode, command, false, c -> true);
 		}
 
 		// Add back certain minecraft: namespace commands
@@ -344,14 +345,13 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 
 	@Override
 	public void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
+		CommandAPIHandler<?, ?, Source> handler = CommandAPIHandler.getInstance();
+
 		if (!unregisterBukkit) {
 			// Remove nodes from the Vanilla dispatcher
 			// This dispatcher doesn't usually have namespaced version of commands (those are created when commands
 			//  are transferred to Bukkit's CommandMap), but if they ask, we'll do it
-			removeBrigadierCommands(brigadierDispatcher.getRoot(), commandName, unregisterNamespaces, c -> true);
-
-			// Update the dispatcher file
-			CommandAPIHandler.getInstance().writeDispatcherToFile();
+			handler.removeBrigadierCommands(brigadierDispatcher.getRoot(), commandName, unregisterNamespaces, c -> true);
 		}
 
 		if (unregisterBukkit || !CommandAPI.canRegister()) {
@@ -366,7 +366,7 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			if (unregisterBukkit ^ isMainVanilla) knownCommands.remove(commandName);
 
 			if (unregisterNamespaces) {
-				removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper.test(c));
+				CommandAPIHandler.removeCommandNamespace(knownCommands, commandName, c -> unregisterBukkit ^ isVanillaCommandWrapper.test(c));
 			}
 		}
 
@@ -374,9 +374,9 @@ public class SpigotCommandRegistration<Source> extends CommandRegistrationStrate
 			// If the server is enabled, we have extra cleanup to do
 
 			// Remove commands from the resources dispatcher
-			// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
-			// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
-			removeBrigadierCommands(getResourcesDispatcher.get().getRoot(), commandName, unregisterNamespaces,
+			handler.removeBrigadierCommands(getResourcesDispatcher.get().getRoot(), commandName, unregisterNamespaces,
+				// If we are unregistering a Bukkit command, ONLY unregister BukkitCommandWrappers
+				// If we are unregistering a Vanilla command, DO NOT unregister BukkitCommandWrappers
 				c -> !unregisterBukkit ^ isBukkitCommandWrapper.test(c));
 		}
 	}

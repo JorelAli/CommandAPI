@@ -354,6 +354,17 @@ public abstract class CommandAPIBukkit<Source> implements CommandAPIPlatform<Arg
 	 *                             commands, and commands registered by other plugin using Bukkit API are Bukkit commands.
 	 */
 	public static void unregister(String commandName, boolean unregisterNamespaces, boolean unregisterBukkit) {
+		if (!unregisterBukkit) {
+			// If we're unregistering vanilla commands (which includes CommandAPI commands),
+			//  attempt to remove their information from the `registeredCommands` map.
+			//  `CommandAPIHandler#unregister` usually does this, but this method bypasses that.
+			CommandAPIHandler<?, CommandSender, ?> handler = CommandAPIHandler.getInstance();
+			Map<String, RegisteredCommand<CommandSender>> registeredCommands = handler.registeredCommands;
+
+			registeredCommands.remove(commandName);
+			if (unregisterNamespaces) CommandAPIHandler.removeCommandNamespace(registeredCommands, commandName, e -> true);
+		}
+
 		CommandAPIBukkit.get().unregisterInternal(commandName, unregisterNamespaces, unregisterBukkit);
 	}
 
