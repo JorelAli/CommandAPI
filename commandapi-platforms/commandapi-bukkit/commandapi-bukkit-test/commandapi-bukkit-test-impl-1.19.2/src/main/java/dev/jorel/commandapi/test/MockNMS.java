@@ -43,7 +43,6 @@ import org.mockito.Mockito;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
 
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.enchantments.EnchantmentMock;
@@ -350,8 +349,8 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx) {
-		return baseNMS.getNativeProxyCommandSender(cmdCtx);
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandSourceStack css) {
+		return baseNMS.getNativeProxyCommandSender(sender, css);
 	}
 
 	@Override

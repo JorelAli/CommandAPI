@@ -311,6 +311,12 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
+	protected boolean isProxyEntity(CommandSender sender, CommandSourceStack css) {
+		Entity proxyEntity = css.getEntity();
+		return proxyEntity != null && !sender.equals(proxyEntity.getBukkitEntity());
+	}
+
+	@Override
 	public final World getDimension(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return DimensionArgument.getDimension(cmdCtx, key).getWorld();
 	}
@@ -568,12 +574,7 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 	}
 
 	@Override
-	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx) {
-		CommandSourceStack css = cmdCtx.getSource();
-
-		// Get original sender
-		CommandSender sender = getCommandSenderFromCommandSource(css);
-
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandSourceStack css) {
 		// Get position
 		Vec3 pos = css.getPosition();
 		Vec2 rot = css.getRotation();

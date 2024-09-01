@@ -305,6 +305,12 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
+	protected boolean isProxyEntity(CommandSender sender, CommandSourceStack css) {
+		Entity proxyEntity = css.getEntity();
+		return proxyEntity != null && !sender.equals(proxyEntity.getBukkitEntity());
+	}
+
+	@Override
 	public Enchantment getEnchantment(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return Enchantment.getByKey(fromResourceLocation(Registry.ENCHANTMENT.getKey(ItemEnchantmentArgument.getEnchantment(cmdCtx, key))));
 	}
@@ -582,12 +588,7 @@ public abstract class NMS_1_17_Common extends NMS_Common {
 	}
 
 	@Override
-	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx) {
-		CommandSourceStack css = cmdCtx.getSource();
-
-		// Get original sender
-		CommandSender sender = getCommandSenderFromCommandSource(css);
-
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandSourceStack css) {
 		// Get position
 		Vec3 pos = css.getPosition();
 		Vec2 rot = css.getRotation();

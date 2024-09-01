@@ -35,7 +35,7 @@ public interface BukkitTypedExecutor<Sender extends CommandSender, Source> exten
 				case PROXY -> sender instanceof ProxiedCommandSender;
 				case NATIVE -> {
 					// If we're a NATIVE executor, always accept and convert sender to a NativeProxyCommandSender
-					NativeProxyCommandSender proxyCommandSender = CommandAPIBukkit.<Source>get().getNativeProxyCommandSender(info.cmdCtx());
+					NativeProxyCommandSender proxyCommandSender = CommandAPIBukkit.<Source>get().getNativeProxyCommandSender(sender, info.cmdCtx().getSource());
 					info = info.copyWithNewSender(proxyCommandSender);
 					yield true;
 				}

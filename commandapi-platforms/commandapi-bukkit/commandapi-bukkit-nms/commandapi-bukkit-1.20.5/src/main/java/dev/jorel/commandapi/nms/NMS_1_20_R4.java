@@ -452,6 +452,12 @@ public class NMS_1_20_R4 extends NMS_Common {
 		return VanillaCommandWrapper.getListener(sender);
 	}
 
+	@Override
+	protected boolean isProxyEntity(CommandSender sender, CommandSourceStack css) {
+		Entity proxyEntity = css.getEntity();
+		return proxyEntity != null && !sender.equals(proxyEntity.getBukkitEntity());
+	}
+
 	@Differs(from = "1.20.4", by = "Serializer.toJson now needs a Provider")
 	@Override
 	public final BaseComponent[] getChat(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
@@ -779,12 +785,7 @@ public class NMS_1_20_R4 extends NMS_Common {
 	}
 
 	@Override
-	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx) {
-		CommandSourceStack css = cmdCtx.getSource();
-
-		// Get original sender
-		CommandSender sender = getCommandSenderFromCommandSource(css);
-
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandSourceStack css) {
 		// Get position
 		Vec3 pos = css.getPosition();
 		Vec2 rot = css.getRotation();
