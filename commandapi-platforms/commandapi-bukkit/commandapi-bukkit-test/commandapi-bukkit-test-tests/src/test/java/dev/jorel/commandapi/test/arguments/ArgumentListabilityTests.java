@@ -10,6 +10,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 /**
  * Tests for the effects of the {@link AbstractArgument#setListed(boolean)} method.
  * Arguments may use different {@link CommandNode} implementation that implement this with separate code.
@@ -128,6 +130,29 @@ class ArgumentListabilityTests extends TestBase {
 
 		assertStoresResult(sender, "test 10 def", results, 10);
 		assertStoresResult(sender, "test 1 2", results, 1);
+
+		assertNoMoreResults(results);
+	}
+
+	@Test
+	void testUnlistedDynamicMultiLiteralArguments() {
+		Mut<String> results = Mut.of();
+		Player sender = server.addPlayer();
+
+		new CommandAPICommand("test")
+			.withArguments(
+				new DynamicMultiLiteralArgument("literal", s -> List.of("a", "b", "c")).setListed(false),
+				new DynamicMultiLiteralArgument("literal", s -> List.of("d", "e", "f")),
+				new DynamicMultiLiteralArgument("literal", s -> List.of("g", "h", "i")).setListed(false)
+			)
+			.executes(info -> {
+				results.set(info.args().getUnchecked("literal"));
+			})
+			.register();
+
+		assertStoresResult(sender, "test a d g", results, "d");
+		assertStoresResult(sender, "test b e h", results, "e");
+		assertStoresResult(sender, "test c f i", results, "f");
 
 		assertNoMoreResults(results);
 	}
