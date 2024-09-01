@@ -24,8 +24,6 @@ import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import dev.jorel.commandapi.nms.*;
 import org.bukkit.Bukkit;
 
-import java.util.function.Supplier;
-
 /**
  * This file handles the NMS version to be loaded. The CommandAPIVersionHandler
  * file within the commandapi-core module is NOT used at compile time. Instead,
@@ -52,9 +50,8 @@ public interface CommandAPIVersionHandler {
 	 */
 	static LoadContext getPlatform() {
 		String latestMajorVersion = "21"; // Change this for Minecraft's major update
-		Supplier<CommandAPIPlatform<?, ?, ?>> latestNMS = NMS_1_21_R1::new;
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new LoadContext(latestNMS.get(), () -> {
+			return new LoadContext(new NMS_1_21_R1(), () -> {
 				CommandAPI.logWarning("Loading the CommandAPI with the latest and potentially incompatible NMS implementation.");
 				CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
 			});
@@ -83,7 +80,7 @@ public interface CommandAPIVersionHandler {
 			if (CommandAPI.getConfiguration().shouldBeLenientForMinorVersions()) {
 				String currentMajorVersion = version.split("\\.")[1];
 				if (latestMajorVersion.equals(currentMajorVersion)) {
-					return new LoadContext(latestNMS.get(), () -> {
+					return new LoadContext(new NMS_1_21_R1(), () -> {
 						CommandAPI.logWarning("Loading the CommandAPI with a potentially incompatible NMS implementation.");
 						CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
 					});
