@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests for {@link NodeTypeSerializer#addTypeInformation(JsonObject, CommandNode)}
  * via {@link CommandAPIHandler#serializeNodeToJson(CommandNode)}
  */
-class NodeTypeSerializerTests extends TestBase {
+public class NodeTypeSerializerTests extends TestBase {
 
 	/*********
 	 * Setup *
@@ -41,11 +41,10 @@ class NodeTypeSerializerTests extends TestBase {
 		super.tearDown();
 	}
 
-	private RootCommandNode<?> getArgumentNodes(Argument<?> argument) {
-		RootCommandNode<?> root = new RootCommandNode<>();
+	public static <Source> RootCommandNode<Source> getArgumentNodes(Argument<?> argument) {
+		RootCommandNode<Source> root = new RootCommandNode<>();
 		NodeInformation<CommandSender, ?> previousNodeInformation = new NodeInformation<>(
-			List.of(root), children -> {
-		}
+			List.of(root), children -> {}
 		);
 		argument.addArgumentNodes(
 			previousNodeInformation, new ArrayList<>(), new ArrayList<>(), (builder, args) -> builder.build()
@@ -53,12 +52,12 @@ class NodeTypeSerializerTests extends TestBase {
 		return root;
 	}
 
-	private <Source> JsonObject serialize(CommandNode<Source> node) {
+	public static <Source> JsonObject serialize(CommandNode<Source> node) {
 		CommandAPIHandler<?, ?, Source> handler = CommandAPIHandler.getInstance();
 		return handler.serializeNodeToJson(node);
 	}
 
-	private String prettyJsonString(JsonObject object) {
+	public static String prettyJsonString(JsonObject object) {
 		return new GsonBuilder().setPrettyPrinting().create().toJson(object);
 	}
 
