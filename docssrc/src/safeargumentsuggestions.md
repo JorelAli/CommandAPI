@@ -216,7 +216,7 @@ Say we wanted to remove a potion effect from a player. To do this, we'll use the
 /removeeffect <player> <potioneffect>
 ```
 
-Now, we don't want to remove a potion effect that already exists on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `previousArguments()` method, as it allows us to access the previously defined `<player>` argument.
+Now, we don't want to remove a potion effect that doesn't exist on a player, so instead we'll use the safe arguments to find a list of potion effects on the target player and then only suggest those potion effects. To do this, we'll use the `previousArguments()` method, as it allows us to access the previously defined `<player>` argument.
 
 <div class="multi-pre">
 
