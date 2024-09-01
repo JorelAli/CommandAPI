@@ -68,9 +68,12 @@
 		<!-- Outputs -->
 		<module>commandapi-annotations</module>
 
+		<!-- General and platform documentation -->
+		<!-- Documentation needs work, does not build independently -->
+		<module>commandapi-documentation-code</module>
 		<!-- Code coverage reports -->
 		<module>commandapi-codecov</module>
-	</modules>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

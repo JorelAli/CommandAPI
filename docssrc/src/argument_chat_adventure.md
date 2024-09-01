@@ -1,12 +1,14 @@
 # Adventure chat arguments
 
-> **Developer's Note:**
->
-> The two following classes, `AdventureChatComponentArgument` and `AdventureChatArgument` depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a `PaperAdventureNotFoundException`
-
 From Paper 1.16.5 build #473 onwards, Paper now includes [Kyori's Adventure API](https://github.com/KyoriPowered/adventure-platform). This library is a replacement of the BungeeCord chat API and has all of the same functionality as the BungeeCord chat API (and more!). The documentation for this API can be found [here](https://docs.adventure.kyori.net/index.html).
 
 Since this functions very similar to the Spigot chat arguments, this page won't reiterate everything about how it works, we'll just outline some examples of how to use these arguments instead.
+Additionally, the names used here may be confusing as they are the same names as on the [Spigot chat arguments](./argument_chat_spigot.md) page but have different return types. This is because the classes on this page are only accessible using `commandapi-paper-core` or `commandapi-paper-shade`
+while the arguments on the Spigot chat arguments page are only available when using `commandapi-spigot-core` or `commandapi-spigot-shade`.
+
+> **Developer's Note:**
+>
+> The three following classes, `ChatColorArgument`, `ChatComponentArgument` and `ChatArgument` depend on a Paper based server which has the Adventure library. If you use this class on a server without the Adventure library, it will throw a `PaperAdventureNotFoundException`
 
 -----
 
@@ -14,7 +16,7 @@ Since this functions very similar to the Spigot chat arguments, this page won't 
 
 ![Chatcolor argument in-game, displaying a list of Minecraft chat colors](./images/arguments/chatcolor.png)
 
-The `AdventureChatColorArgument` class is used to represent a given chat color (e.g. red or green). This argument returns the `NamedTextColor` object. If `reset` is passed to this argument, this will return `NamedTextColor.WHITE`.
+The `ChatColorArgument` class is used to represent a given chat color (e.g. red or green). This argument returns the `NamedTextColor` object. If `reset` is passed to this argument, this will return `NamedTextColor.WHITE`.
 
 <div class="example">
 
@@ -31,15 +33,15 @@ We then use the `ChatColorArgument` to change the player's name color:
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatAdventure1}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatAdventure1}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure1}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure1}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure1}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure1}}
 ```
 
 </div>
@@ -50,7 +52,7 @@ We then use the `ChatColorArgument` to change the player's name color:
 
 ## Adventure chat component argument
 
-The `AdventureChatComponentArgument` class accepts raw chat-based JSON as valid input, as declared [here](https://minecraft.wiki/w/Raw_JSON_text_format). This is converted into Adventure's `Component` class.
+The `ChatComponentArgument` class accepts raw chat-based JSON as valid input, as declared [here](https://minecraft.wiki/w/Raw_JSON_text_format). This is converted into Adventure's `Component` class.
 
 <div class="example">
 
@@ -67,15 +69,15 @@ We can construct a book using the Adventure API's `Book.book(Component, Componen
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatAdventure2}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatAdventure2}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure2}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure2}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure2}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure2}}
 ```
 
 </div>
@@ -86,13 +88,13 @@ We can construct a book using the Adventure API's `Book.book(Component, Componen
 
 ## Adventure chat argument
 
-The `AdventureChatArgument` class is the equivalent Adventure API class for the `ChatArgument` - it represents infinitely long strings similar to the `GreedyStringArgument` and allows entity selectors such as `@e`, `@p` and so on. The `AdventureChatArgument` returns a `Component`, similar to the `AdventureChatComponentArgument`.
+The `ChatArgument` represents infinitely long strings similar to the `GreedyStringArgument` and allows entity selectors such as `@e`, `@p` and so on. The `ChatArgument` returns a `Component`, similar to the `ChatComponentArgument`.
 
 <div class="example">
 
 ### Example - Sending personalized messages to players
 
-We'll take the same example from the `ChatArgument` class, but using the `AdventureChatArgument` instead - We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:
+We want to create a personalized message broadcasted to all users using a chat component that allows entity selectors. For this command, we want the following syntax:
 
 ```mccmd
 /pbroadcast <message>
@@ -103,15 +105,15 @@ In order to broadcast an Adventure `Component` to all players on the server, we 
 <div class="multi-pre">
 
 ```java,Java
-{{#include ../../commandapi-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatAdventure3}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/java/dev/jorel/commandapi/examples/java/Examples.java:argumentChatAdventure3}}
 ```
 
 ```kotlin,Kotlin
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure3}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/Examples.kt:argumentChatAdventure3}}
 ```
 
 ```kotlin,Kotlin_DSL
-{{#include ../../commandapi-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure3}}
+{{#include ../../commandapi-platforms/commandapi-paper/commandapi-paper-documentation-code/src/main/kotlin/dev/jorel/commandapi/examples/kotlin/ExamplesKotlinDSL.kt:argumentChatAdventure3}}
 ```
 
 </div>
