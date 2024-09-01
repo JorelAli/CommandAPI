@@ -39,6 +39,7 @@ import org.bukkit.World;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -404,7 +405,7 @@ public interface NMS<CommandListenerWrapper> {
 
 	Object getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key, ArgumentSubType subType);
 
-    public abstract NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandListenerWrapper> cmdCtx);
+    NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandListenerWrapper css);
 
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider

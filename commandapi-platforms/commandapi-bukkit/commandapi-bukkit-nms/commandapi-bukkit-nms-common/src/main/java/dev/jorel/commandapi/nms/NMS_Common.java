@@ -369,16 +369,32 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 
 	@Override
 	public final CommandSender getCommandSenderFromCommandSource(CommandSourceStack css) {
+		CommandSender sender;
 		try {
-			CommandSender sender = css.getBukkitSender();
-			// Sender CANNOT be null. This can occur when using a remote console
-			// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
-			// however this may also be null, so delegate to the next most-meaningful sender.
-			return sender == null ? Bukkit.getConsoleSender() : sender;
+			sender = css.getBukkitSender();
 		} catch (UnsupportedOperationException e) {
+			// We expect this to happen when the source is `CommandSource.NULL`,
+			//  which is used when parsing data pack functions
 			return null;
 		}
+
+		// Sender CANNOT be null. This can occur when using a remote console
+		// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
+		// however this may also be null, so delegate to the next most-meaningful sender.
+		if (sender == null) {
+			sender = Bukkit.getConsoleSender();
+		}
+
+		// Check for a proxy entity
+		if (isProxyEntity(sender, css)) {
+			return getNativeProxyCommandSender(sender, css);
+		}
+
+		return sender;
 	}
+
+	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftEntity")
+	protected abstract boolean isProxyEntity(CommandSender sender, CommandSourceStack css);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftWorld", info = "CraftWorld is implicitly referenced by ServerLevel#getWorld, due to package renaming, it can't resolve at runtime")
@@ -538,7 +554,7 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Unimplemented(because = NAME_CHANGED, info = "i (1.17)            -> getRotation (1.18) -> l (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getEntity (1.17)    -> getEntity (1.18)   -> g (1.19)")
 	@Unimplemented(because = NAME_CHANGED, info = "getWorld (1.17)     -> getLevel (1.18)    -> f (1.19)")
-	public abstract NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx);
+	public abstract NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandSourceStack css);
 
 	@Override
 	@Unimplemented(because = REQUIRES_CRAFTBUKKIT, classNamed = "CraftServer")

@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.minecraft.SharedConstants;
@@ -357,8 +356,8 @@ public class MockNMS extends Enums {
 	}
 
 	@Override
-	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandSourceStack> cmdCtx) {
-		return baseNMS.getNativeProxyCommandSender(cmdCtx);
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandSourceStack css) {
+		return baseNMS.getNativeProxyCommandSender(sender, css);
 	}
 
 	@Override

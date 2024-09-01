@@ -498,15 +498,29 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 
 	@Override
 	public CommandSender getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
+		CommandSender sender;
 		try {
-			CommandSender sender = clw.getBukkitSender();
-			// Sender CANNOT be null. This can occur when using a remote console
-			// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
-			// however this may also be null, so delegate to the next most-meaningful sender.
-			return sender == null ? Bukkit.getConsoleSender() : sender;
+			sender = clw.getBukkitSender();
 		} catch (UnsupportedOperationException e) {
+			// We expect this to happen when the source is `CommandSource.NULL`,
+			//  which is used when parsing data pack functions
 			return null;
 		}
+
+		// Sender CANNOT be null. This can occur when using a remote console
+		// sender. You can access it directly using this.<MinecraftServer>getMinecraftServer().remoteConsole
+		// however this may also be null, so delegate to the next most-meaningful sender.
+		if (sender == null) {
+			sender = Bukkit.getConsoleSender();
+		}
+
+		// Check for a proxy entity
+		Entity proxyEntity = clw.getEntity();
+		if (proxyEntity != null && !sender.equals(proxyEntity.getBukkitEntity())) {
+			return getNativeProxyCommandSender(sender, clw);
+		}
+
+		return sender;
 	}
 
 	@Override
@@ -807,12 +821,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	}
 
 	@Override
-	public NativeProxyCommandSender getNativeProxyCommandSender(CommandContext<CommandListenerWrapper> cmdCtx) {
-		CommandListenerWrapper clw = cmdCtx.getSource();
-
-		// Get original sender
-		CommandSender sender = getCommandSenderFromCommandSource(clw);
-
+	public NativeProxyCommandSender getNativeProxyCommandSender(CommandSender sender, CommandListenerWrapper clw) {
 		// Get position
 		Vec3D pos = clw.getPosition();
 		Vec2F rot = clw.i();
