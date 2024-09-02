@@ -641,31 +641,12 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public static <CommandSource> String getRawArgumentInput(CommandContext<CommandSource> cmdCtx, String key) {
 		final ParsedArgument<?, ?> parsedArgument = commandContextArguments.get(cmdCtx).get(key);
 
-		// TODO: Issue #310: Parsing this argument via /execute run <blah> doesn't have the value in
-		//  the arguments for this command context (most likely because it's a redirected command).
-		//  We need to figure out how to handle this case.
-
-		// TODO: What is this talking about? https://github.com/JorelAli/CommandAPI/issues/310
-
-		// TODO: Oh, I might have figured out what's wrong
-		//  https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/CommandDispatcher.java#L239
-		//  Redirects work by adding children onto a context builder
-		//  Seen in that line, the source of the command is copied onto the context, but the arguments are not
-		//  The child context is the one used to run the commands, so the argument doesn't exist when the command is being run
-		//  This is currently also affecting MultiLiteralArguments since they use redirects now
-		//  I feel like this is a bug in Brigadier, but maybe there is a reason for this?
-		//  I hope there is at least a work around
-		//  https://github.com/Mojang/brigadier/issues/137
-		if (parsedArgument != null) {
-			// Sanity check: See https://github.com/JorelAli/CommandAPI/wiki/Implementation-details#chatcomponentargument-raw-arguments
-			StringRange range = parsedArgument.getRange();
-			if (range.getEnd() > cmdCtx.getInput().length()) {
-				range = StringRange.between(range.getStart(), cmdCtx.getInput().length());
-			}
-			return range.get(cmdCtx.getInput());
-		} else {
-			return "";
+		// Sanity check: See https://github.com/JorelAli/CommandAPI/wiki/Implementation-details#chatcomponentargument-raw-arguments
+		StringRange range = parsedArgument.getRange();
+		if (range.getEnd() > cmdCtx.getInput().length()) {
+			range = StringRange.between(range.getStart(), cmdCtx.getInput().length());
 		}
+		return range.get(cmdCtx.getInput());
 	}
 
 	/**
@@ -677,6 +658,13 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @throws CommandSyntaxException If an argument is improperly formatted and cannot be parsed
 	 */
 	public CommandArguments argsToCommandArgs(CommandContext<Source> cmdCtx, List<Argument> args) throws CommandSyntaxException {
+		// https://github.com/JorelAli/CommandAPI/issues/310 & https://github.com/Mojang/brigadier/issues/137
+		//  If a command goes through a redirect, Brigadier puts all context after the redirect into the child
+		//  CommandContext. When executing a command, Brigadier will pass us the child context. However, when
+		//  suggesting a command, Brigadier passes us the root context for some reason. Assuming the behavior
+		//  when executing a command is correct, when suggesting commands we should use the last child.
+		cmdCtx = cmdCtx.getLastChild();
+
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
