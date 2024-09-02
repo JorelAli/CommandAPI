@@ -565,7 +565,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 					for (CommandNode<Source> child : children) {
 						String name = child.getName();
 
-						JsonArray newPath = node.path.deepCopy();
+						JsonArray newPath = new JsonArray();
+						newPath.addAll(node.path);
 						newPath.add(name);
 
 						nodesToProcess.offer(new Node<>(child, result -> childrenHolder.add(name, result), newPath));
@@ -580,7 +581,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 				// Redirect
 				CommandNode<Source> redirect = commandNode.getRedirect();
 				if (redirect != null) {
-					JsonArray newPath = node.path.deepCopy();
+					JsonArray newPath = new JsonArray();
+					newPath.addAll(node.path);
 					newPath.add("redirect " + redirect.getName());
 
 					redirectsToProcess.offer(new Node<>(redirect, result -> output.add("redirect", result), newPath));
