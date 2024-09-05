@@ -3,6 +3,7 @@ package dev.jorel.commandapi.config;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,19 +111,8 @@ public class DefaultedBukkitConfig {
 		), new ArrayList<>()
 	);
 
-	public static final Map<String, CommentedConfigOption<?>> ALL_OPTIONS = Map.ofEntries(
-		Map.entry("verbose-outputs", VERBOSE_OUTPUTS),
-		Map.entry("silent-logs", SILENT_LOGS),
-		Map.entry("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION),
-		Map.entry("create-dispatcher-json", CREATE_DISPATCHER_JSON),
-		Map.entry("use-latest-nms-version", USE_LATEST_NMS_VERSION),
-		Map.entry("be-lenient-for-minor-versions", BE_LENIENT_FOR_MINOR_VERSIONS),
-		Map.entry("hook-paper-reload", SHOULD_HOOK_PAPER_RELOAD),
-		Map.entry("skip-initial-datapack-reload", SKIP_RELOAD_DATAPACKS),
-		Map.entry("plugins-to-convert", PLUGINS_TO_CONVERT),
-		Map.entry("other-commands-to-convert", OTHER_COMMANDS_TO_CONVERT),
-		Map.entry("skip-sender-proxy", SKIP_SENDER_PROXY)
-	);
+	public static final Map<String, CommentedConfigOption<?>> ALL_OPTIONS = new LinkedHashMap<>();
+	public static final Map<String, CommentedConfigOption<?>> ALL_SECTIONS = new LinkedHashMap<>();
 
 	public static final CommentedConfigOption<?> SECTION_MESSAGE = new CommentedConfigOption<>(
 		List.of(
@@ -131,8 +121,20 @@ public class DefaultedBukkitConfig {
 		), null
 	);
 
-	public static final Map<String, CommentedConfigOption<?>> ALL_SECTIONS = Map.of(
-		"messages", SECTION_MESSAGE
-	);
+	static {
+		ALL_OPTIONS.put("verbose-outputs", VERBOSE_OUTPUTS);
+		ALL_OPTIONS.put("silent-logs", SILENT_LOGS);
+		ALL_OPTIONS.put("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION);
+		ALL_OPTIONS.put("create-dispatcher-json", CREATE_DISPATCHER_JSON);
+		ALL_OPTIONS.put("use-latest-nms-version", USE_LATEST_NMS_VERSION);
+		ALL_OPTIONS.put("be-lenient-for-minor-versions", BE_LENIENT_FOR_MINOR_VERSIONS);
+		ALL_OPTIONS.put("hook-paper-reload", SHOULD_HOOK_PAPER_RELOAD);
+		ALL_OPTIONS.put("skip-initial-datapack-reload", SKIP_RELOAD_DATAPACKS);
+		ALL_OPTIONS.put("plugins-to-convert", PLUGINS_TO_CONVERT);
+		ALL_OPTIONS.put("other-commands-to-convert", OTHER_COMMANDS_TO_CONVERT);
+		ALL_OPTIONS.put("skip-sender-proxy", SKIP_SENDER_PROXY);
+
+		ALL_SECTIONS.put("messages", SECTION_MESSAGE);
+	}
 
 }
