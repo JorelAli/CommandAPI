@@ -1,6 +1,5 @@
 package dev.jorel.commandapi.config;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.ApiStatus;
@@ -8,6 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,13 +19,13 @@ public class ConfigGenerator {
 	public static YamlConfiguration generateDefaultConfig() throws InvalidConfigurationException {
 		YamlConfiguration config = new YamlConfiguration();
 		Set<String> sections = new HashSet<>();
-		for (CommentedConfigOption<?> commentedConfigOption : DefaultedBukkitConfig.ALL_OPTIONS) {
-			String path = commentedConfigOption.path();
+		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : DefaultedBukkitConfig.ALL_OPTIONS.entrySet()) {
+			String path = commentedConfigOption.getKey();
 
 			tryCreateSection(config, path, sections);
 
-			config.set(path, commentedConfigOption.option());
-			config.setComments(path, commentedConfigOption.comment());
+			config.set(path, commentedConfigOption.getValue().option());
+			config.setComments(path, commentedConfigOption.getValue().comment());
 		}
 		return process(config.saveToString());
 	}
@@ -37,8 +37,8 @@ public class ConfigGenerator {
 
 		boolean wasConfigUpdated = false;
 		Set<String> sections = new HashSet<>();
-		for (CommentedConfigOption<?> commentedConfigOption : DefaultedBukkitConfig.ALL_OPTIONS) {
-			String path = commentedConfigOption.path();
+		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : DefaultedBukkitConfig.ALL_OPTIONS.entrySet()) {
+			String path = commentedConfigOption.getKey();
 
 			// Update config option
 			if (existingConfig.contains(path)) {
@@ -47,7 +47,7 @@ public class ConfigGenerator {
 			} else {
 				wasConfigUpdated = true;
 				tryCreateSection(config, path, sections);
-				config.set(path, commentedConfigOption.option());
+				config.set(path, commentedConfigOption.getValue().option());
 			}
 
 			// Update config option comments
@@ -57,12 +57,12 @@ public class ConfigGenerator {
 			// As a result, we wrap them in new ArrayLists first to be able to compare them
 			List<String> existingComment = new ArrayList<>(existingConfig.getComments(path));
 			existingComment.removeIf(Objects::isNull);
-			List<String> defaultComment = new ArrayList<>(commentedConfigOption.comment());
+			List<String> defaultComment = new ArrayList<>(commentedConfigOption.getValue().comment());
 
 			if (!existingComment.equals(defaultComment)) {
 				wasConfigUpdated = true;
 			}
-			config.setComments(path, commentedConfigOption.comment());
+			config.setComments(path, commentedConfigOption.getValue().comment());
 		}
 		if (shouldRemoveValues) {
 			wasConfigUpdated = true;
@@ -93,11 +93,7 @@ public class ConfigGenerator {
 				String sectionName = sectionNames[i];
 				if (!existingSections.contains(sectionName)) {
 					config.createSection(sectionName);
-					for (CommentedConfigOption<?> commentedSection : DefaultedBukkitConfig.ALL_SECTIONS) {
-						if (commentedSection.path().equals(sectionName)) {
-							config.setComments(sectionName, commentedSection.comment());
-						}
-					}
+					config.setComments(sectionName, DefaultedBukkitConfig.ALL_SECTIONS.get(sectionName).comment());
 				}
 				existingSections.add(sectionName);
 			}
@@ -106,27 +102,18 @@ public class ConfigGenerator {
 
 	private static boolean shouldRemoveOptions(YamlConfiguration config) {
 		Set<String> configOptions = config.getKeys(true);
-		List<String> sections = new ArrayList<>();
-		for (String configOption : configOptions) {
-			ConfigurationSection section = config.getConfigurationSection(configOption);
-			if (section != null) {
-				sections.add(configOption);
-			}
-		}
-		for (String sectionName : sections) {
-			configOptions.remove(sectionName);
-		}
-		Set<String> defaultConfigOptions = new HashSet<>();
-		for (CommentedConfigOption<?> defaultConfigOption : DefaultedBukkitConfig.ALL_OPTIONS) {
-			defaultConfigOptions.add(defaultConfigOption.path());
-		}
-		List<String> optionsToRemove = new ArrayList<>();
+		configOptions.removeIf(config::isConfigurationSection);
+
+		Set<String> defaultConfigOptions = DefaultedBukkitConfig.ALL_OPTIONS.keySet();
+
+		boolean shouldRemoveOptions = false;
 		for (String option : configOptions) {
 			if (!defaultConfigOptions.contains(option)) {
-				optionsToRemove.add(option);
+				shouldRemoveOptions = true;
+				break;
 			}
 		}
-		return !optionsToRemove.isEmpty();
+		return shouldRemoveOptions;
 	}
 
 }
