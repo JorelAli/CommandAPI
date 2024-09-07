@@ -12,40 +12,7 @@ import java.util.Map;
  */
 @SuppressWarnings("ClassEscapesDefinedScope")
 @ApiStatus.Internal
-public class DefaultedBukkitConfig {
-
-	public static final CommentedConfigOption<Boolean> VERBOSE_OUTPUTS = new CommentedConfigOption<>(
-		List.of(
-			"Verbose outputs (default: false)",
-			"If \"true\", outputs command registration and unregistration logs in the console"
-		), false
-	);
-
-	public static final CommentedConfigOption<Boolean> SILENT_LOGS = new CommentedConfigOption<>(
-		List.of(
-			"Silent logs (default: false)",
-			"If \"true\", turns off all logging from the CommandAPI, except for errors."
-		), false
-	);
-
-	public static final CommentedConfigOption<String> MISSING_EXECUTOR_IMPLEMENTATION = new CommentedConfigOption<>(
-		List.of(
-			"Missing executor implementation (default: \"This command has no implementations for %s\")",
-			"The message to display to senders when a command has no executor. Available",
-			"parameters are:",
-			"  %s - the executor class (lowercase)",
-			"  %S - the executor class (normal case)"
-		), "This command has no implementations for %s"
-	);
-
-	public static final CommentedConfigOption<Boolean> CREATE_DISPATCHER_JSON = new CommentedConfigOption<>(
-		List.of(
-			"Create dispatcher JSON (default: false)",
-			"If \"true\", the CommandAPI creates a command_registration.json file showing the",
-			"mapping of registered commands. This is designed to be used by developers -",
-			"setting this to \"false\" will improve command registration performance."
-		), false
-	);
+public class DefaultedBukkitConfig extends DefaultedConfig {
 
 	public static final CommentedConfigOption<Boolean> USE_LATEST_NMS_VERSION = new CommentedConfigOption<>(
 		List.of(
@@ -111,30 +78,48 @@ public class DefaultedBukkitConfig {
 		), new ArrayList<>()
 	);
 
-	public static final Map<String, CommentedConfigOption<?>> ALL_OPTIONS = new LinkedHashMap<>();
-	public static final Map<String, CommentedConfigOption<?>> ALL_SECTIONS = new LinkedHashMap<>();
-
-	public static final CommentedConfigOption<?> SECTION_MESSAGE = new CommentedConfigOption<>(
+	public static final CommentedSection SECTION_MESSAGE = new CommentedSection(
 		List.of(
 			"Messages",
 			"Controls messages that the CommandAPI displays to players"
-		), null
+		)
 	);
 
-	static {
-		ALL_OPTIONS.put("verbose-outputs", VERBOSE_OUTPUTS);
-		ALL_OPTIONS.put("silent-logs", SILENT_LOGS);
-		ALL_OPTIONS.put("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION);
-		ALL_OPTIONS.put("create-dispatcher-json", CREATE_DISPATCHER_JSON);
-		ALL_OPTIONS.put("use-latest-nms-version", USE_LATEST_NMS_VERSION);
-		ALL_OPTIONS.put("be-lenient-for-minor-versions", BE_LENIENT_FOR_MINOR_VERSIONS);
-		ALL_OPTIONS.put("hook-paper-reload", SHOULD_HOOK_PAPER_RELOAD);
-		ALL_OPTIONS.put("skip-initial-datapack-reload", SKIP_RELOAD_DATAPACKS);
-		ALL_OPTIONS.put("plugins-to-convert", PLUGINS_TO_CONVERT);
-		ALL_OPTIONS.put("other-commands-to-convert", OTHER_COMMANDS_TO_CONVERT);
-		ALL_OPTIONS.put("skip-sender-proxy", SKIP_SENDER_PROXY);
+	private DefaultedBukkitConfig() {}
 
-		ALL_SECTIONS.put("messages", SECTION_MESSAGE);
+	public static DefaultedBukkitConfig createDefault() {
+		DefaultedBukkitConfig config = new DefaultedBukkitConfig();
+		config.allOptions.put("verbose-outputs", VERBOSE_OUTPUTS);
+		config.allOptions.put("silent-logs", SILENT_LOGS);
+		config.allOptions.put("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION);
+		config.allOptions.put("create-dispatcher-json", CREATE_DISPATCHER_JSON);
+		config.allOptions.put("use-latest-nms-version", USE_LATEST_NMS_VERSION);
+		config.allOptions.put("be-lenient-for-minor-versions", BE_LENIENT_FOR_MINOR_VERSIONS);
+		config.allOptions.put("hook-paper-reload", SHOULD_HOOK_PAPER_RELOAD);
+		config.allOptions.put("skip-initial-datapack-reload", SKIP_RELOAD_DATAPACKS);
+		config.allOptions.put("plugins-to-convert", PLUGINS_TO_CONVERT);
+		config.allOptions.put("other-commands-to-convert", OTHER_COMMANDS_TO_CONVERT);
+		config.allOptions.put("skip-sender-proxy", SKIP_SENDER_PROXY);
+
+		config.allSections.put("messages", SECTION_MESSAGE);
+
+		return config;
 	}
 
+	public static DefaultedBukkitConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {
+		DefaultedBukkitConfig config = new DefaultedBukkitConfig();
+
+		config.allOptions.putAll(options);
+		config.allSections.putAll(sections);
+
+		return config;
+	}
+
+	public Map<String, CommentedConfigOption<?>> getAllOptions() {
+		return allOptions;
+	}
+
+	public Map<String, CommentedSection> getAllSections() {
+		return allSections;
+	}
 }

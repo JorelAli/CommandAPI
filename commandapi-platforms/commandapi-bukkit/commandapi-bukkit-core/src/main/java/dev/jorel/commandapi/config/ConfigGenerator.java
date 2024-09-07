@@ -14,12 +14,28 @@ import java.util.Set;
 @ApiStatus.Internal
 public class ConfigGenerator {
 
-	private ConfigGenerator() {}
+	private final DefaultedBukkitConfig defaultedBukkitConfig;
 
-	public static YamlConfiguration generateDefaultConfig() throws InvalidConfigurationException {
+	private ConfigGenerator() {
+		this.defaultedBukkitConfig = DefaultedBukkitConfig.createDefault();
+	}
+
+	private ConfigGenerator(DefaultedBukkitConfig defaultedBukkitConfig) {
+		this.defaultedBukkitConfig = defaultedBukkitConfig;
+	}
+
+	public static ConfigGenerator createNew() {
+		return new ConfigGenerator();
+	}
+
+	public static ConfigGenerator createNew(DefaultedBukkitConfig defaultedBukkitConfig) {
+		return new ConfigGenerator(defaultedBukkitConfig);
+	}
+
+	public YamlConfiguration generateDefaultConfig() throws InvalidConfigurationException {
 		YamlConfiguration config = new YamlConfiguration();
 		Set<String> sections = new HashSet<>();
-		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : DefaultedBukkitConfig.ALL_OPTIONS.entrySet()) {
+		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultedBukkitConfig.getAllOptions().entrySet()) {
 			String path = commentedConfigOption.getKey();
 
 			tryCreateSection(config, path, sections);
@@ -30,14 +46,14 @@ public class ConfigGenerator {
 		return process(config.saveToString());
 	}
 
-	public static YamlConfiguration generateWithNewValues(YamlConfiguration existingConfig) throws InvalidConfigurationException {
+	public YamlConfiguration generateWithNewValues(YamlConfiguration existingConfig) throws InvalidConfigurationException {
 		YamlConfiguration config = new YamlConfiguration();
 
 		boolean shouldRemoveValues = shouldRemoveOptions(existingConfig);
 
 		boolean wasConfigUpdated = false;
 		Set<String> sections = new HashSet<>();
-		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : DefaultedBukkitConfig.ALL_OPTIONS.entrySet()) {
+		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultedBukkitConfig.getAllOptions().entrySet()) {
 			String path = commentedConfigOption.getKey();
 
 			// Update config option
@@ -70,7 +86,7 @@ public class ConfigGenerator {
 		return (wasConfigUpdated) ? process(config.saveToString()) : null;
 	}
 
-	private static YamlConfiguration process(String configAsString) throws InvalidConfigurationException {
+	private YamlConfiguration process(String configAsString) throws InvalidConfigurationException {
 		String[] configStrings = configAsString.split("\n");
 		StringBuilder configBuilder = new StringBuilder();
 		for (String configString : configStrings) {
@@ -84,7 +100,7 @@ public class ConfigGenerator {
 		return config;
 	}
 
-	private static void tryCreateSection(YamlConfiguration config, String path, Set<String> existingSections) {
+	private void tryCreateSection(YamlConfiguration config, String path, Set<String> existingSections) {
 		if (path.contains(".")) {
 			// We have to create a section, or multiple if applicable, first, if it doesn't exist already
 			String[] sectionNames = path.split("\\.");
@@ -93,18 +109,21 @@ public class ConfigGenerator {
 				String sectionName = sectionNames[i];
 				if (!existingSections.contains(sectionName)) {
 					config.createSection(sectionName);
-					config.setComments(sectionName, DefaultedBukkitConfig.ALL_SECTIONS.get(sectionName).comment());
+					List<String> comment = defaultedBukkitConfig.getAllSections().get(sectionName).comment();
+					if (comment != null) {
+						config.setComments(sectionName, comment);
+					}
 				}
 				existingSections.add(sectionName);
 			}
 		}
 	}
 
-	private static boolean shouldRemoveOptions(YamlConfiguration config) {
+	private boolean shouldRemoveOptions(YamlConfiguration config) {
 		Set<String> configOptions = config.getKeys(true);
 		configOptions.removeIf(config::isConfigurationSection);
 
-		Set<String> defaultConfigOptions = DefaultedBukkitConfig.ALL_OPTIONS.keySet();
+		Set<String> defaultConfigOptions = defaultedBukkitConfig.getAllOptions().keySet();
 
 		boolean shouldRemoveOptions = false;
 		for (String option : configOptions) {

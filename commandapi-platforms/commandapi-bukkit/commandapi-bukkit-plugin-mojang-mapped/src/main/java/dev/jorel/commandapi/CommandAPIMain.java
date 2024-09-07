@@ -148,10 +148,11 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void saveDefaultConfig() {
 		File configFile = new File(getDataFolder(), "config.yml");
+		ConfigGenerator configGenerator = ConfigGenerator.createNew();
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdir();
 			try {
-				YamlConfiguration defaultConfig = ConfigGenerator.generateDefaultConfig();
+				YamlConfiguration defaultConfig = configGenerator.generateDefaultConfig();
 				defaultConfig.save(configFile);
 			} catch (Exception e) {
 				getLogger().severe("Could not create default config file! This is (probably) a bug.");
@@ -166,7 +167,7 @@ public class CommandAPIMain extends JavaPlugin {
 		// Update the config if necessary
 		YamlConfiguration existingConfig = YamlConfiguration.loadConfiguration(configFile);
 		try {
-			YamlConfiguration updatedConfig = ConfigGenerator.generateWithNewValues(existingConfig);
+			YamlConfiguration updatedConfig = configGenerator.generateWithNewValues(existingConfig);
 			if (updatedConfig == null) {
 				return;
 			}
