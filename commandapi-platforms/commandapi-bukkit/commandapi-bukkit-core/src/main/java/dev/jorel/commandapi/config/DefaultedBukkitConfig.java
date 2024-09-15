@@ -78,32 +78,28 @@ public class DefaultedBukkitConfig extends DefaultedConfig {
 		), new ArrayList<>()
 	);
 
-	public static final CommentedSection SECTION_MESSAGE = new CommentedSection(
-		List.of(
-			"Messages",
-			"Controls messages that the CommandAPI displays to players"
-		)
-	);
-
-	private DefaultedBukkitConfig() {}
+	private DefaultedBukkitConfig() {
+	}
 
 	public static DefaultedBukkitConfig createDefault() {
-		DefaultedBukkitConfig config = new DefaultedBukkitConfig();
-		config.allOptions.put("verbose-outputs", VERBOSE_OUTPUTS);
-		config.allOptions.put("silent-logs", SILENT_LOGS);
-		config.allOptions.put("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION);
-		config.allOptions.put("create-dispatcher-json", CREATE_DISPATCHER_JSON);
-		config.allOptions.put("use-latest-nms-version", USE_LATEST_NMS_VERSION);
-		config.allOptions.put("be-lenient-for-minor-versions", BE_LENIENT_FOR_MINOR_VERSIONS);
-		config.allOptions.put("hook-paper-reload", SHOULD_HOOK_PAPER_RELOAD);
-		config.allOptions.put("skip-initial-datapack-reload", SKIP_RELOAD_DATAPACKS);
-		config.allOptions.put("plugins-to-convert", PLUGINS_TO_CONVERT);
-		config.allOptions.put("other-commands-to-convert", OTHER_COMMANDS_TO_CONVERT);
-		config.allOptions.put("skip-sender-proxy", SKIP_SENDER_PROXY);
-
-		config.allSections.put("messages", SECTION_MESSAGE);
-
-		return config;
+		return DefaultedBukkitConfig.create(
+			Map.ofEntries(
+				Map.entry("verbose-outputs", VERBOSE_OUTPUTS),
+				Map.entry("silent-logs", SILENT_LOGS),
+				Map.entry("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION),
+				Map.entry("create-dispatcher-json", CREATE_DISPATCHER_JSON),
+				Map.entry("use-latest-nms-version", USE_LATEST_NMS_VERSION),
+				Map.entry("be-lenient-for-minor-versions", BE_LENIENT_FOR_MINOR_VERSIONS),
+				Map.entry("hook-paper-reload", SHOULD_HOOK_PAPER_RELOAD),
+				Map.entry("skip-initial-datapack-reload", SKIP_RELOAD_DATAPACKS),
+				Map.entry("plugins-to-convert", PLUGINS_TO_CONVERT),
+				Map.entry("other-commands-to-convert", OTHER_COMMANDS_TO_CONVERT),
+				Map.entry("skip-sender-proxy", SKIP_SENDER_PROXY)
+			),
+			Map.ofEntries(
+				Map.entry("messages", SECTION_MESSAGE)
+			)
+		);
 	}
 
 	public static DefaultedBukkitConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {
@@ -113,13 +109,5 @@ public class DefaultedBukkitConfig extends DefaultedConfig {
 		config.allSections.putAll(sections);
 
 		return config;
-	}
-
-	public Map<String, CommentedConfigOption<?>> getAllOptions() {
-		return allOptions;
-	}
-
-	public Map<String, CommentedSection> getAllSections() {
-		return allSections;
 	}
 }

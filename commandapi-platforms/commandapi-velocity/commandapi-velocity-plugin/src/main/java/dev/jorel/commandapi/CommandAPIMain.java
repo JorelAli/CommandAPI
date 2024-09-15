@@ -8,12 +8,17 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import dev.jorel.commandapi.config.ConfigGenerator;
+import dev.jorel.commandapi.config.ConfigurationAdapter;
+import dev.jorel.commandapi.config.DefaultedVelocityConfig;
+import dev.jorel.commandapi.config.VelocityConfigurationAdapter;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
@@ -34,16 +39,35 @@ public class CommandAPIMain {
 	public CommandAPIMain(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
 		// Try to find the config file
 		Path configFile = dataDirectory.resolve("config.yml");
+		YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+			.nodeStyle(NodeStyle.BLOCK)
+			.path(configFile)
+			.build();
 
 		// If the config doesn't exist, load it from the resources
-		if(!Files.exists(configFile)) {
+		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultedVelocityConfig.createDefault());
+		if (!Files.exists(configFile)) {
 			try {
 				Files.createDirectories(configFile.getParent());
 			} catch (IOException ignored) {
 			}
 
-			try (InputStream defaultConfig = getClass().getClassLoader().getResourceAsStream("config.yml")) {
-				Files.copy(defaultConfig, configFile);
+			try {
+				ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> velocityConfigurationAdapter = new VelocityConfigurationAdapter(loader, loader.createNode());
+				configGenerator.populateDefaultConfig(velocityConfigurationAdapter);
+				loader.save(velocityConfigurationAdapter.config());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			try {
+				// If the config does exist, update it if necessary
+				CommentedConfigurationNode existingYamlConfig = loader.load();
+				ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> existingConfig = new VelocityConfigurationAdapter(loader, existingYamlConfig);
+				ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
+				if (updatedConfig != null) {
+					loader.save(updatedConfig.config());
+				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -52,7 +76,7 @@ public class CommandAPIMain {
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;
 		try {
-			configYAML = YamlConfigurationLoader.builder().path(configFile).build().load();
+			configYAML = loader.load();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -74,13 +98,13 @@ public class CommandAPIMain {
 		// Enable
 		CommandAPI.onEnable();
 	}
-	
+
 	@Subscribe
 	public void onProxyShutdown(ProxyShutdownEvent event) {
 		// Shut down
 		CommandAPI.onDisable();
 	}
-	
+
 	// On /velocity reload
 	@Subscribe
 	public void onProxyReload(ProxyReloadEvent event) {

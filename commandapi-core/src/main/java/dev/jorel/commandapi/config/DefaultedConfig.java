@@ -10,8 +10,8 @@ import java.util.Map;
 @ApiStatus.Internal
 public abstract class DefaultedConfig {
 
-	final Map<String, CommentedConfigOption<?>> allOptions = new LinkedHashMap<>();
-	final Map<String, CommentedSection> allSections = new LinkedHashMap<>();
+	protected final Map<String, CommentedConfigOption<?>> allOptions = new LinkedHashMap<>();
+	protected final Map<String, CommentedSection> allSections = new LinkedHashMap<>();
 
 	public static final CommentedConfigOption<Boolean> VERBOSE_OUTPUTS = new CommentedConfigOption<>(
 		List.of(
@@ -45,5 +45,20 @@ public abstract class DefaultedConfig {
 			"setting this to \"false\" will improve command registration performance."
 		), false
 	);
+
+	public static final CommentedSection SECTION_MESSAGE = new CommentedSection(
+		List.of(
+			"Messages",
+			"Controls messages that the CommandAPI displays to players"
+		)
+	);
+
+	public final Map<String, CommentedConfigOption<?>> getAllOptions() {
+		return allOptions;
+	}
+
+	public final Map<String, CommentedSection> getAllSections() {
+		return allSections;
+	}
 
 }

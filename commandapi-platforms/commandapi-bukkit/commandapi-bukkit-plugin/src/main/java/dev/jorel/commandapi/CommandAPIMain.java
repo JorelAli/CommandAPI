@@ -27,7 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dev.jorel.commandapi.config.BukkitConfigurationAdapter;
 import dev.jorel.commandapi.config.ConfigGenerator;
+import dev.jorel.commandapi.config.ConfigurationAdapter;
+import dev.jorel.commandapi.config.DefaultedBukkitConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -147,12 +150,13 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void saveDefaultConfig() {
 		File configFile = new File(getDataFolder(), "config.yml");
-		ConfigGenerator configGenerator = ConfigGenerator.createNew();
+		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultedBukkitConfig.createDefault());
 		if (!getDataFolder().exists()) {
 			getDataFolder().mkdir();
 			try {
-				YamlConfiguration defaultConfig = configGenerator.generateDefaultConfig();
-				defaultConfig.save(configFile);
+				ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> bukkitConfigurationAdapter = new BukkitConfigurationAdapter(new YamlConfiguration());
+				configGenerator.populateDefaultConfig(bukkitConfigurationAdapter);
+				bukkitConfigurationAdapter.config().save(configFile);
 			} catch (Exception e) {
 				getLogger().severe("Could not create default config file! This is (probably) a bug.");
 				getLogger().severe("Error message: " + e.getMessage());
@@ -164,13 +168,14 @@ public class CommandAPIMain extends JavaPlugin {
 			return;
 		}
 		// Update the config if necessary
-		YamlConfiguration existingConfig = YamlConfiguration.loadConfiguration(configFile);
 		try {
-			YamlConfiguration updatedConfig = configGenerator.generateWithNewValues(existingConfig);
+			YamlConfiguration existingYamlConfig = YamlConfiguration.loadConfiguration(configFile);
+			ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> existingConfig = new BukkitConfigurationAdapter(existingYamlConfig);
+			ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
 			if (updatedConfig == null) {
 				return;
 			}
-			updatedConfig.save(configFile);
+			updatedConfig.config().save(configFile);
 		} catch (Exception e) {
 			getLogger().severe("Could not update config! This is (probably) a bug.");
 			getLogger().severe("Error message: " + e.getMessage());
