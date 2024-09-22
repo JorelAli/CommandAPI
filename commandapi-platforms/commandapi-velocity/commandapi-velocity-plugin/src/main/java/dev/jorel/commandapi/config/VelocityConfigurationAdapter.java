@@ -1,5 +1,6 @@
 package dev.jorel.commandapi.config;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("ConfusingArgumentToVarargsMethod")
+@ApiStatus.Internal
 public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config) implements ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> {
 
 	@Override
