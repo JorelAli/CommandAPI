@@ -76,6 +76,11 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 	}
 
 	@Override
+	public ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> complete() {
+		return this;
+	}
+
+	@Override
 	public ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> createNew() {
 		return new VelocityConfigurationAdapter(loader, loader.createNode());
 	}

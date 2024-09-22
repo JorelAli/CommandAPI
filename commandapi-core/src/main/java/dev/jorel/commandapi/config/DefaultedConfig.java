@@ -14,36 +14,36 @@ public abstract class DefaultedConfig {
 	protected final Map<String, CommentedSection> allSections = new LinkedHashMap<>();
 
 	public static final CommentedConfigOption<Boolean> VERBOSE_OUTPUTS = new CommentedConfigOption<>(
-		List.of(
+		new String[]{
 			"Verbose outputs (default: false)",
 			"If \"true\", outputs command registration and unregistration logs in the console"
-		), false
+		}, false
 	);
 
 	public static final CommentedConfigOption<Boolean> SILENT_LOGS = new CommentedConfigOption<>(
-		List.of(
+		new String[] {
 			"Silent logs (default: false)",
 			"If \"true\", turns off all logging from the CommandAPI, except for errors."
-		), false
+		}, false
 	);
 
 	public static final CommentedConfigOption<String> MISSING_EXECUTOR_IMPLEMENTATION = new CommentedConfigOption<>(
-		List.of(
+		new String[]{
 			"Missing executor implementation (default: \"This command has no implementations for %s\")",
 			"The message to display to senders when a command has no executor. Available",
 			"parameters are:",
 			"  %s - the executor class (lowercase)",
 			"  %S - the executor class (normal case)"
-		), "This command has no implementations for %s"
+		}, "This command has no implementations for %s"
 	);
 
 	public static final CommentedConfigOption<Boolean> CREATE_DISPATCHER_JSON = new CommentedConfigOption<>(
-		List.of(
+		new String[]{
 			"Create dispatcher JSON (default: false)",
 			"If \"true\", the CommandAPI creates a command_registration.json file showing the",
 			"mapping of registered commands. This is designed to be used by developers -",
 			"setting this to \"false\" will improve command registration performance."
-		), false
+		}, false
 	);
 
 	public static final CommentedSection SECTION_MESSAGE = new CommentedSection(

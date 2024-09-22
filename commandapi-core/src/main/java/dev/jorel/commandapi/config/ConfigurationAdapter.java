@@ -21,6 +21,8 @@ public interface ConfigurationAdapter<Configuration, DefaultConfiguration extend
 
 	void tryCreateSection(String key, DefaultConfiguration defaultConfiguration);
 
+	ConfigurationAdapter<Configuration, DefaultConfiguration> complete();
+
 	Configuration config();
 
 	ConfigurationAdapter<Configuration, DefaultConfiguration> createNew();

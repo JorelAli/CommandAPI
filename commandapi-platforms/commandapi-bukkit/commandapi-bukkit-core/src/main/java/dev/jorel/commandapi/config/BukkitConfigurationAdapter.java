@@ -1,11 +1,13 @@
 package dev.jorel.commandapi.config;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -30,14 +32,16 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 
 	@Override
 	public String[] getComment(String key) {
-		List<String> comments = config.getStringList(key);
+		List<String> comments = new ArrayList<>(config.getComments(key));
 		comments.removeIf(Objects::isNull);
 		return comments.toArray(new String[0]);
 	}
 
 	@Override
 	public Set<String> getKeys() {
-		return config.getKeys(false);
+		Set<String> keys = new HashSet<>(config.getKeys(true));
+		keys.removeIf(config::isConfigurationSection);
+		return keys;
 	}
 
 	@Override
@@ -60,7 +64,7 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 		List<String> sectionCandidates = new ArrayList<>(Arrays.asList(paths).subList(0, paths.length - 1));
 
 		// Create new sections
-		ConfigurationSection root = null;
+		ConfigurationSection section = null;
 		StringBuilder pathSoFar = new StringBuilder();
 		for (String sectionCandidate : sectionCandidates) {
 			if (pathSoFar.isEmpty()) {
@@ -68,36 +72,45 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 			} else {
 				pathSoFar.append(".").append(sectionCandidate);
 			}
-			if (keys.contains(sectionCandidate) && root == null) {
-				root = config.getConfigurationSection(sectionCandidate);
-			} else if (root == null) {
-				root = config.createSection(sectionCandidate);
-				root.setComments(sectionCandidate, defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment());
+
+			if (keys.contains(sectionCandidate) && section == null) {
+				section = config.getConfigurationSection(sectionCandidate);
+			} else if (section == null) {
+				section = config.createSection(sectionCandidate);
+				config.setComments(pathSoFar.toString(), defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment());
 			} else {
-				ConfigurationSection section = root.getConfigurationSection(sectionCandidate);
-				if (section == null) {
-					root = root.createSection(sectionCandidate);
-					root.setComments(sectionCandidate, defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment());
+				ConfigurationSection currentSection = section.getConfigurationSection(sectionCandidate);
+				if (currentSection == null) {
+					section = section.createSection(sectionCandidate);
+					config.setComments(pathSoFar.toString(), defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment());
 				} else {
-					root = section;
+					section = currentSection;
 				}
 			}
 		}
 	}
 
 	@Override
-	public ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> createNew() {
-		return new BukkitConfigurationAdapter(new YamlConfiguration());
+	public ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> complete() {
+		String[] configStrings = config.saveToString().split("\n");
+		StringBuilder configBuilder = new StringBuilder();
+		for (String configString : configStrings) {
+			configBuilder.append(configString).append("\n");
+			if (!configString.contains("#")) {
+				configBuilder.append("\n");
+			}
+		}
+		try {
+			config.loadFromString(configBuilder.toString());
+		} catch (InvalidConfigurationException e) {
+			e.printStackTrace(System.err);
+		}
+		return this;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		BukkitConfigurationAdapter that = (BukkitConfigurationAdapter) o;
-		String thisConfigString = config.saveToString();
-		String thatConfigString = that.config.saveToString();
-		return thisConfigString.equals(thatConfigString);
+	public ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> createNew() {
+		return new BukkitConfigurationAdapter(new YamlConfiguration());
 	}
 
 }

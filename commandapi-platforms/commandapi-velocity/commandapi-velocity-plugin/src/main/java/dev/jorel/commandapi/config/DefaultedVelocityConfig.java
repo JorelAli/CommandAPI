@@ -2,6 +2,7 @@ package dev.jorel.commandapi.config;
 
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @SuppressWarnings("ClassEscapesDefinedScope")
@@ -11,16 +12,18 @@ public class DefaultedVelocityConfig extends DefaultedConfig {
 	private DefaultedVelocityConfig() {}
 
 	public static DefaultedVelocityConfig createDefault() {
+		Map<String, CommentedConfigOption<?>> options = new LinkedHashMap<>();
+		options.put("verbose-outputs", VERBOSE_OUTPUTS);
+		options.put("silent-logs", SILENT_LOGS);
+		options.put("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION);
+		options.put("create-dispatcher-json", CREATE_DISPATCHER_JSON);
+
+		Map<String, CommentedSection> sections = new LinkedHashMap<>();
+		sections.put("messages", SECTION_MESSAGE);
+
 		return DefaultedVelocityConfig.create(
-			Map.ofEntries(
-				Map.entry("verbose-outputs", VERBOSE_OUTPUTS),
-				Map.entry("silent-logs", SILENT_LOGS),
-				Map.entry("messages.missing-executor-implementation", MISSING_EXECUTOR_IMPLEMENTATION),
-				Map.entry("create-dispatcher-json", CREATE_DISPATCHER_JSON)
-			),
-			Map.ofEntries(
-				Map.entry("messages", SECTION_MESSAGE)
-			)
+			options,
+			sections
 		);
 	}
 

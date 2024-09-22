@@ -3,6 +3,7 @@ package dev.jorel.commandapi.config;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class ConfigGenerator {
 	public <T, C extends DefaultedConfig> void populateDefaultConfig(ConfigurationAdapter<T, C> adapter) {
 		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultedConfig.getAllOptions().entrySet()) {
 			adapter.setValue(commentedConfigOption.getKey(), commentedConfigOption.getValue().option());
-			adapter.setComment(commentedConfigOption.getKey(), commentedConfigOption.getValue().comment().toArray(new String[0]));
+			adapter.setComment(commentedConfigOption.getKey(), commentedConfigOption.getValue().comment());
 		}
 	}
 
@@ -47,23 +48,25 @@ public class ConfigGenerator {
 			}
 
 			// Update config option comment
-			String[] defaultComment = commentedConfigOption.getValue().comment().toArray(new String[0]);
+			String[] defaultComment = commentedConfigOption.getValue().comment();
 			String[] configComment = existingConfig.getComment(path);
 
 			if (!Arrays.equals(defaultComment, configComment)) {
 				wasConfigUpdated = true;
 			}
 
-			updatedConfig.setComment(path, commentedConfigOption.getValue().comment().toArray(new String[0]));
+			updatedConfig.setComment(path, commentedConfigOption.getValue().comment());
 		}
 		if (shouldRemoveValues) {
 			wasConfigUpdated = true;
 		}
-		return (wasConfigUpdated) ? updatedConfig : null;
+		System.out.println(wasConfigUpdated);
+		return (wasConfigUpdated) ? updatedConfig.complete() : null;
 	}
 
 	private <T, C extends DefaultedConfig> boolean shouldRemoveOptions(ConfigurationAdapter<T, C> config) {
 		Set<String> configOptions = config.getKeys();
+		configOptions.forEach(System.out::println);
 		Set<String> defaultConfigOptions = defaultedConfig.getAllOptions().keySet();
 
 		boolean shouldRemoveOptions = false;
