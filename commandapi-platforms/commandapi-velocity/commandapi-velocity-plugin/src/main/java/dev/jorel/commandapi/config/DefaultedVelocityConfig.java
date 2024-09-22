@@ -1,12 +1,9 @@
 package dev.jorel.commandapi.config;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @SuppressWarnings("ClassEscapesDefinedScope")
-@ApiStatus.Internal
 public class DefaultedVelocityConfig extends DefaultedConfig {
 
 	private DefaultedVelocityConfig() {}
