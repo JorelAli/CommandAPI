@@ -55,7 +55,7 @@ be-lenient-for-minor-versions: false
 # function which allows CommandAPI commands to be used in datapacks.
 # If you set this to false, CommandAPI commands may not work inside datapacks after
 # reloading datapacks.
-hook-paper-reload: false
+hook-paper-reload: true
 
 # Skips the initial datapack reload when the server loads (default: false)
 # If "true", the CommandAPI will not reload datapacks when the server has finished
