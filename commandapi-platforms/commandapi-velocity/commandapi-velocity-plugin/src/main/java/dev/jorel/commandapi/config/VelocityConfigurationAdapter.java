@@ -48,11 +48,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 
 	@Override
 	public Set<String> getKeys() {
-		Set<String> keys = new HashSet<>();
-		for (Object key : config.childrenMap().keySet()) {
-			keys.add((String) key);
-		}
-		return keys;
+		return new HashSet<>(nestedOptions(config));
 	}
 
 	@Override
@@ -131,6 +127,21 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 	@SuppressWarnings("ConfusingArgumentToVarargsMethod")
 	private CommentedConfigurationNode node(String path) {
 		return config.node(path.split("\\."));
+	}
+
+	private Set<String> nestedOptions(ConfigurationNode node) {
+		Set<String> keys = new HashSet<>();
+		for (Object key : node.childrenMap().keySet()) {
+			ConfigurationNode nestedNode = node.childrenMap().get(key);
+			if (nestedNode.childrenMap().isEmpty()) {
+				keys.add((String) key);
+			} else {
+				for (String nestedKey : nestedOptions(nestedNode)) {
+					keys.add(key + "." + nestedKey);
+				}
+			}
+		}
+		return keys;
 	}
 
 }
