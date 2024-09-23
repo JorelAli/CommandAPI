@@ -44,7 +44,7 @@ public class CommandAPIMain {
 			.path(configFile)
 			.build();
 
-		new VelocityConfigurationAdapter(null, null).saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), null);
+		new VelocityConfigurationAdapter(null, null, null).saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), null);
 
 		// If the config doesn't exist, load it from the resources
 

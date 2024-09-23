@@ -11,12 +11,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config) implements ConfigurationAdapter<ConfigurationNode> {
+public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config, DefaultVelocityConfig defaultVelocityConfig) implements ConfigurationAdapter<ConfigurationNode> {
 
 	@Override
 	public void setValue(String key, Object value) {
@@ -43,7 +45,9 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 
 	@Override
 	public String[] getComment(String key) {
-		return new String[0];
+		CommentedConfigOption<?> option = defaultVelocityConfig.getAllOptions().get(key);
+		CommentedSection section = defaultVelocityConfig.getAllSections().get(key);
+		return option != null ? option.comment() : section.comment();
 	}
 
 	@Override
@@ -89,7 +93,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 
 	@Override
 	public ConfigurationAdapter<ConfigurationNode> createNew() {
-		return new VelocityConfigurationAdapter(loader, loader.createNode());
+		return new VelocityConfigurationAdapter(loader, loader.createNode(), DefaultVelocityConfig.createDefault());
 	}
 
 	@Override
@@ -98,12 +102,13 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 			.nodeStyle(NodeStyle.BLOCK)
 			.file(configFile)
 			.build();
-		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultVelocityConfig.createDefault());
+		DefaultVelocityConfig defaultConfig = DefaultVelocityConfig.createDefault();
+		ConfigGenerator configGenerator = ConfigGenerator.createNew(defaultConfig);
 		if (!directory.exists()) {
 			directory.mkdirs();
 
 			try {
-				ConfigurationAdapter<ConfigurationNode> velocityConfigurationAdapter = new VelocityConfigurationAdapter(configLoader, configLoader.createNode());
+				ConfigurationAdapter<ConfigurationNode> velocityConfigurationAdapter = new VelocityConfigurationAdapter(configLoader, configLoader.createNode(), defaultConfig);
 				configGenerator.populateDefaultConfig(velocityConfigurationAdapter);
 				configLoader.save(velocityConfigurationAdapter.config());
 			} catch (IOException e) {
@@ -113,7 +118,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 			try {
 				// If the config does exist, update it if necessary
 				CommentedConfigurationNode existingYamlConfig = configLoader.load();
-				ConfigurationAdapter<ConfigurationNode> existingConfig = new VelocityConfigurationAdapter(configLoader, existingYamlConfig);
+				ConfigurationAdapter<ConfigurationNode> existingConfig = new VelocityConfigurationAdapter(configLoader, existingYamlConfig, defaultConfig);
 				ConfigurationAdapter<ConfigurationNode> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
 				if (updatedConfig != null) {
 					configLoader.save(updatedConfig.config());
