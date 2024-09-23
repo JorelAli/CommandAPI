@@ -77,14 +77,7 @@ public class ConfigGenerator {
 		Set<String> configOptions = config.getKeys();
 		Set<String> defaultConfigOptions = defaultConfig.getAllOptions().keySet();
 
-		boolean shouldRemoveOptions = false;
-		for (String option : configOptions) {
-			if (!defaultConfigOptions.contains(option)) {
-				shouldRemoveOptions = true;
-				break;
-			}
-		}
-		return shouldRemoveOptions;
+		return !defaultConfigOptions.containsAll(configOptions);
 	}
 
 }
