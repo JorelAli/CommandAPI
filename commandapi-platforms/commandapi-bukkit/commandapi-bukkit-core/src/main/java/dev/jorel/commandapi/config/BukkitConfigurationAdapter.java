@@ -5,15 +5,17 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @ApiStatus.Internal
-public record BukkitConfigurationAdapter(YamlConfiguration config) implements ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> {
+public record BukkitConfigurationAdapter(YamlConfiguration config) implements ConfigurationAdapter<YamlConfiguration> {
 
 	@Override
 	public void setValue(String key, Object value) {
@@ -50,7 +52,7 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 	}
 
 	@Override
-	public void tryCreateSection(String key, DefaultedBukkitConfig defaultedBukkitConfig) {
+	public void tryCreateSection(String key, DefaultConfig defaultedBukkitConfig) {
 		if (!key.contains(".")) {
 			return;
 		}
@@ -77,12 +79,12 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 				section = config.getConfigurationSection(sectionCandidate);
 			} else if (section == null) {
 				section = config.createSection(sectionCandidate);
-				config.setComments(pathSoFar.toString(), defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment());
+				config.setComments(pathSoFar.toString(), Arrays.asList(defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment()));
 			} else {
 				ConfigurationSection currentSection = section.getConfigurationSection(sectionCandidate);
 				if (currentSection == null) {
 					section = section.createSection(sectionCandidate);
-					config.setComments(pathSoFar.toString(), defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment());
+					config.setComments(pathSoFar.toString(), Arrays.asList(defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment()));
 				} else {
 					section = currentSection;
 				}
@@ -91,7 +93,7 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 	}
 
 	@Override
-	public ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> complete() {
+	public ConfigurationAdapter<YamlConfiguration> complete() {
 		String[] configStrings = config.saveToString().split("\n");
 		StringBuilder configBuilder = new StringBuilder();
 		for (String configString : configStrings) {
@@ -109,8 +111,46 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 	}
 
 	@Override
-	public ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> createNew() {
+	public ConfigurationAdapter<YamlConfiguration> createNew() {
 		return new BukkitConfigurationAdapter(new YamlConfiguration());
+	}
+
+	@Override
+	public void saveDefaultConfig(File directory, File configFile, Logger logger) {
+		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultBukkitConfig.createDefault());
+		if (!directory.exists()) {
+			directory.mkdir();
+			try {
+				ConfigurationAdapter<YamlConfiguration> bukkitConfigurationAdapter = new BukkitConfigurationAdapter(new YamlConfiguration());
+				configGenerator.populateDefaultConfig(bukkitConfigurationAdapter);
+				bukkitConfigurationAdapter.config().save(configFile);
+			} catch (Exception e) {
+				logger.severe("Could not create default config file! This is (probably) a bug.");
+				logger.severe("Error message: " + e.getMessage());
+				logger.severe("Stacktrace:");
+				for (StackTraceElement element : e.getStackTrace()) {
+					logger.severe(element.toString());
+				}
+			}
+			return;
+		}
+		// Update the config if necessary
+		try {
+			YamlConfiguration existingYamlConfig = YamlConfiguration.loadConfiguration(configFile);
+			ConfigurationAdapter<YamlConfiguration> existingConfig = new BukkitConfigurationAdapter(existingYamlConfig);
+			ConfigurationAdapter<YamlConfiguration> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
+			if (updatedConfig == null) {
+				return;
+			}
+			updatedConfig.config().save(configFile);
+		} catch (Exception e) {
+			logger.severe("Could not update config! This is (probably) a bug.");
+			logger.severe("Error message: " + e.getMessage());
+			logger.severe("Stacktrace:");
+			for (StackTraceElement element : e.getStackTrace()) {
+				logger.severe(element.toString());
+			}
+		}
 	}
 
 }

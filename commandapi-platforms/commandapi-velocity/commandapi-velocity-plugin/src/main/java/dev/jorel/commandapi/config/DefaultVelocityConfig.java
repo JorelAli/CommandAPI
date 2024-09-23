@@ -3,12 +3,11 @@ package dev.jorel.commandapi.config;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@SuppressWarnings("ClassEscapesDefinedScope")
-public class DefaultedVelocityConfig extends DefaultedConfig {
+public class DefaultVelocityConfig extends DefaultConfig {
 
-	private DefaultedVelocityConfig() {}
+	private DefaultVelocityConfig() {}
 
-	public static DefaultedVelocityConfig createDefault() {
+	public static DefaultVelocityConfig createDefault() {
 		Map<String, CommentedConfigOption<?>> options = new LinkedHashMap<>();
 		options.put("verbose-outputs", VERBOSE_OUTPUTS);
 		options.put("silent-logs", SILENT_LOGS);
@@ -18,14 +17,14 @@ public class DefaultedVelocityConfig extends DefaultedConfig {
 		Map<String, CommentedSection> sections = new LinkedHashMap<>();
 		sections.put("messages", SECTION_MESSAGE);
 
-		return DefaultedVelocityConfig.create(
+		return DefaultVelocityConfig.create(
 			options,
 			sections
 		);
 	}
 
-	public static DefaultedVelocityConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {
-		DefaultedVelocityConfig config = new DefaultedVelocityConfig();
+	public static DefaultVelocityConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {
+		DefaultVelocityConfig config = new DefaultVelocityConfig();
 
 		config.allOptions.putAll(options);
 		config.allSections.putAll(sections);

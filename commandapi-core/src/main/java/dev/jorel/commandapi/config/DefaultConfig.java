@@ -3,12 +3,10 @@ package dev.jorel.commandapi.config;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("ClassEscapesDefinedScope")
 @ApiStatus.Internal
-public abstract class DefaultedConfig {
+public abstract class DefaultConfig {
 
 	protected final Map<String, CommentedConfigOption<?>> allOptions = new LinkedHashMap<>();
 	protected final Map<String, CommentedSection> allSections = new LinkedHashMap<>();
@@ -47,10 +45,10 @@ public abstract class DefaultedConfig {
 	);
 
 	public static final CommentedSection SECTION_MESSAGE = new CommentedSection(
-		List.of(
+		new String[]{
 			"Messages",
 			"Controls messages that the CommandAPI displays to players"
-		)
+		}
 	);
 
 	public final Map<String, CommentedConfigOption<?>> getAllOptions() {

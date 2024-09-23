@@ -7,12 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Default config values for the plugin's config.yml file
- */
-@SuppressWarnings("ClassEscapesDefinedScope")
 @ApiStatus.Internal
-public class DefaultedBukkitConfig extends DefaultedConfig {
+public class DefaultBukkitConfig extends DefaultConfig {
 
 	public static final CommentedConfigOption<Boolean> USE_LATEST_NMS_VERSION = new CommentedConfigOption<>(
 		new String[] {
@@ -42,7 +38,7 @@ public class DefaultedBukkitConfig extends DefaultedConfig {
 			"function which allows CommandAPI commands to be used in datapacks.",
 			"If you set this to false, CommandAPI commands may not work inside datapacks after",
 			"reloading datapacks."
-		}, false
+		}, true
 	);
 
 	public static final CommentedConfigOption<Boolean> SKIP_RELOAD_DATAPACKS = new CommentedConfigOption<>(
@@ -78,10 +74,10 @@ public class DefaultedBukkitConfig extends DefaultedConfig {
 		}, new ArrayList<>()
 	);
 
-	private DefaultedBukkitConfig() {
+	private DefaultBukkitConfig() {
 	}
 
-	public static DefaultedBukkitConfig createDefault() {
+	public static DefaultBukkitConfig createDefault() {
 		Map<String, CommentedConfigOption<?>> options = new LinkedHashMap<>();
 		options.put("verbose-outputs", VERBOSE_OUTPUTS);
 		options.put("silent-logs", SILENT_LOGS);
@@ -98,14 +94,14 @@ public class DefaultedBukkitConfig extends DefaultedConfig {
 		Map<String, CommentedSection> sections = new LinkedHashMap<>();
 		sections.put("messages", SECTION_MESSAGE);
 
-		return DefaultedBukkitConfig.create(
+		return DefaultBukkitConfig.create(
 			options,
 			sections
 		);
 	}
 
-	public static DefaultedBukkitConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {
-		DefaultedBukkitConfig config = new DefaultedBukkitConfig();
+	public static DefaultBukkitConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {
+		DefaultBukkitConfig config = new DefaultBukkitConfig();
 
 		config.allOptions.putAll(options);
 		config.allSections.putAll(sections);

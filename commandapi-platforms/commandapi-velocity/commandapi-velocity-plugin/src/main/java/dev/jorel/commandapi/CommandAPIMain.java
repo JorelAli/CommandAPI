@@ -10,7 +10,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.jorel.commandapi.config.ConfigGenerator;
 import dev.jorel.commandapi.config.ConfigurationAdapter;
-import dev.jorel.commandapi.config.DefaultedVelocityConfig;
+import dev.jorel.commandapi.config.DefaultVelocityConfig;
 import dev.jorel.commandapi.config.VelocityConfigurationAdapter;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -44,34 +44,10 @@ public class CommandAPIMain {
 			.path(configFile)
 			.build();
 
-		// If the config doesn't exist, load it from the resources
-		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultedVelocityConfig.createDefault());
-		if (!Files.exists(configFile)) {
-			try {
-				Files.createDirectories(configFile.getParent());
-			} catch (IOException ignored) {
-			}
+		new VelocityConfigurationAdapter(null, null).saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), null);
 
-			try {
-				ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> velocityConfigurationAdapter = new VelocityConfigurationAdapter(loader, loader.createNode());
-				configGenerator.populateDefaultConfig(velocityConfigurationAdapter);
-				loader.save(velocityConfigurationAdapter.config());
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		} else {
-			try {
-				// If the config does exist, update it if necessary
-				CommentedConfigurationNode existingYamlConfig = loader.load();
-				ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> existingConfig = new VelocityConfigurationAdapter(loader, existingYamlConfig);
-				ConfigurationAdapter<ConfigurationNode, DefaultedVelocityConfig> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
-				if (updatedConfig != null) {
-					loader.save(updatedConfig.config());
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}
+		// If the config doesn't exist, load it from the resources
+
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;

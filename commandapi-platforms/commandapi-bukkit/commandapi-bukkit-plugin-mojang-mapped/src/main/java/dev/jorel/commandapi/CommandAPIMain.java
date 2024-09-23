@@ -23,7 +23,7 @@ package dev.jorel.commandapi;
 import dev.jorel.commandapi.config.BukkitConfigurationAdapter;
 import dev.jorel.commandapi.config.ConfigGenerator;
 import dev.jorel.commandapi.config.ConfigurationAdapter;
-import dev.jorel.commandapi.config.DefaultedBukkitConfig;
+import dev.jorel.commandapi.config.DefaultBukkitConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -140,7 +140,7 @@ public class CommandAPIMain extends JavaPlugin {
 	}
 
 	/**
-	 * In contrast to the superclasses method {@link org.bukkit.plugin.java.JavaPlugin#saveDefaultConfig()},
+	 * In contrast to the superclass' method {@link org.bukkit.plugin.java.JavaPlugin#saveDefaultConfig()},
 	 * this doesn't fail silently if the config.yml already exists but instead will update the config with
 	 * new values if available.
 	 * <p>
@@ -149,40 +149,7 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void saveDefaultConfig() {
 		File configFile = new File(getDataFolder(), "config.yml");
-		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultedBukkitConfig.createDefault());
-		if (!getDataFolder().exists()) {
-			getDataFolder().mkdir();
-			try {
-				ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> bukkitConfigurationAdapter = new BukkitConfigurationAdapter(new YamlConfiguration());
-				configGenerator.populateDefaultConfig(bukkitConfigurationAdapter);
-				bukkitConfigurationAdapter.config().save(configFile);
-			} catch (Exception e) {
-				getLogger().severe("Could not create default config file! This is (probably) a bug.");
-				getLogger().severe("Error message: " + e.getMessage());
-				getLogger().severe("Stacktrace:");
-				for (StackTraceElement element : e.getStackTrace()) {
-					getLogger().severe(element.toString());
-				}
-			}
-			return;
-		}
-		// Update the config if necessary
-		try {
-			YamlConfiguration existingYamlConfig = YamlConfiguration.loadConfiguration(configFile);
-			ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> existingConfig = new BukkitConfigurationAdapter(existingYamlConfig);
-			ConfigurationAdapter<YamlConfiguration, DefaultedBukkitConfig> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
-			if (updatedConfig == null) {
-				return;
-			}
-			updatedConfig.config().save(configFile);
-		} catch (Exception e) {
-			getLogger().severe("Could not update config! This is (probably) a bug.");
-			getLogger().severe("Error message: " + e.getMessage());
-			getLogger().severe("Stacktrace:");
-			for (StackTraceElement element : e.getStackTrace()) {
-				getLogger().severe(element.toString());
-			}
-		}
+		new BukkitConfigurationAdapter(null).saveDefaultConfig(getDataFolder(), configFile, getLogger());
 	}
 
 }

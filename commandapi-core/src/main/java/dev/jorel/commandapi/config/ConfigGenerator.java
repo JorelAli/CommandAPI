@@ -3,47 +3,47 @@ package dev.jorel.commandapi.config;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 @ApiStatus.Internal
 public class ConfigGenerator {
 
-	private final DefaultedConfig defaultedConfig;
+	private final DefaultConfig defaultConfig;
 
-	private ConfigGenerator(DefaultedConfig defaultedConfig) {
-		this.defaultedConfig = defaultedConfig;
+	private ConfigGenerator(DefaultConfig defaultConfig) {
+		this.defaultConfig = defaultConfig;
 	}
 
-	public static ConfigGenerator createNew(DefaultedConfig defaultedConfig) {
-		return new ConfigGenerator(defaultedConfig);
+	public static ConfigGenerator createNew(DefaultConfig defaultConfig) {
+		return new ConfigGenerator(defaultConfig);
 	}
 
-	public <T, C extends DefaultedConfig> void populateDefaultConfig(ConfigurationAdapter<T, C> adapter) {
-		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultedConfig.getAllOptions().entrySet()) {
+	public <T> void populateDefaultConfig(ConfigurationAdapter<T> adapter) {
+		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultConfig.getAllOptions().entrySet()) {
+			adapter.tryCreateSection(commentedConfigOption.getKey(), defaultConfig);
 			adapter.setValue(commentedConfigOption.getKey(), commentedConfigOption.getValue().option());
 			adapter.setComment(commentedConfigOption.getKey(), commentedConfigOption.getValue().comment());
 		}
+		adapter.complete();
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T, C extends DefaultedConfig> ConfigurationAdapter<T, C> generateWithNewValues(ConfigurationAdapter<T, C> existingConfig) {
-		ConfigurationAdapter<T, C> updatedConfig = existingConfig.createNew();
+	public <T> ConfigurationAdapter<T> generateWithNewValues(ConfigurationAdapter<T> existingConfig) {
+		ConfigurationAdapter<T> updatedConfig = existingConfig.createNew();
 
 		boolean shouldRemoveValues = shouldRemoveOptions(existingConfig);
 
 		boolean wasConfigUpdated = false;
-		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultedConfig.getAllOptions().entrySet()) {
+		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultConfig.getAllOptions().entrySet()) {
 			String path = commentedConfigOption.getKey();
 
 			// Update config option
 			if (existingConfig.contains(path)) {
-				updatedConfig.tryCreateSection(path, (C) defaultedConfig);
+				updatedConfig.tryCreateSection(path, defaultConfig);
 				updatedConfig.setValue(path, existingConfig.getValue(path));
 			} else {
 				wasConfigUpdated = true;
-				updatedConfig.tryCreateSection(path, (C) defaultedConfig);
+				updatedConfig.tryCreateSection(path, defaultConfig);
 				updatedConfig.setValue(path, commentedConfigOption.getValue().option());
 			}
 
@@ -57,17 +57,25 @@ public class ConfigGenerator {
 
 			updatedConfig.setComment(path, commentedConfigOption.getValue().comment());
 		}
+		for (Map.Entry<String, CommentedSection> commentedSection : defaultConfig.getAllSections().entrySet()) {
+			String[] defaultComment = commentedSection.getValue().comment();
+			String[] configComment = existingConfig.getComment(commentedSection.getKey());
+
+			if (!Arrays.equals(defaultComment, configComment)) {
+				wasConfigUpdated = true;
+			}
+
+			updatedConfig.setComment(commentedSection.getKey(), commentedSection.getValue().comment());
+		}
 		if (shouldRemoveValues) {
 			wasConfigUpdated = true;
 		}
-		System.out.println(wasConfigUpdated);
 		return (wasConfigUpdated) ? updatedConfig.complete() : null;
 	}
 
-	private <T, C extends DefaultedConfig> boolean shouldRemoveOptions(ConfigurationAdapter<T, C> config) {
+	private <T> boolean shouldRemoveOptions(ConfigurationAdapter<T> config) {
 		Set<String> configOptions = config.getKeys();
-		configOptions.forEach(System.out::println);
-		Set<String> defaultConfigOptions = defaultedConfig.getAllOptions().keySet();
+		Set<String> defaultConfigOptions = defaultConfig.getAllOptions().keySet();
 
 		boolean shouldRemoveOptions = false;
 		for (String option : configOptions) {

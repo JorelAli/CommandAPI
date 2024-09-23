@@ -2,10 +2,12 @@ package dev.jorel.commandapi.config;
 
 import org.jetbrains.annotations.ApiStatus;
 
+import java.io.File;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @ApiStatus.Internal
-public interface ConfigurationAdapter<Configuration, DefaultConfiguration extends DefaultedConfig> {
+public interface ConfigurationAdapter<Configuration> {
 
 	void setValue(String key, Object value);
 
@@ -19,12 +21,14 @@ public interface ConfigurationAdapter<Configuration, DefaultConfiguration extend
 
 	boolean contains(String key);
 
-	void tryCreateSection(String key, DefaultConfiguration defaultConfiguration);
+	void tryCreateSection(String key, DefaultConfig defaultConfiguration);
 
-	ConfigurationAdapter<Configuration, DefaultConfiguration> complete();
+	ConfigurationAdapter<Configuration> complete();
 
 	Configuration config();
 
-	ConfigurationAdapter<Configuration, DefaultConfiguration> createNew();
+	ConfigurationAdapter<Configuration> createNew();
+
+	void saveDefaultConfig(File directory, File configFile, Logger logger);
 
 }
