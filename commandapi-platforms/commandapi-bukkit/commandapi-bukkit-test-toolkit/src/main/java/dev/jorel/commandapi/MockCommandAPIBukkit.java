@@ -14,6 +14,8 @@ import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
@@ -128,7 +130,7 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 		return new MockCommandSource(sender.getSource());
 	}
 
-	// Logging
+	// Miscellaneous methods
 	/**
 	 * A global toggle for whether the default logger returned by {@link #getLogger()} should print messages to the
 	 * console. This is {@code false} by default, so not messages will appear. If you don't provide your own logger
@@ -142,6 +144,14 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 		return ENABLE_LOGGING ?
 			super.getLogger() :
 			CommandAPILogger.bindToMethods(msg -> {}, msg -> {}, msg -> {}, (msg, ex) -> {});
+	}
+
+	@Override
+	public Message generateMessageFromJson(String json) {
+		Component component = GsonComponentSerializer.gson().deserialize(json);
+		String text = PlainTextComponentSerializer.plainText().serialize(component);
+
+		return () -> text;
 	}
 
 	// Arguments
@@ -643,11 +653,6 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	@Override
 	public Map<String, HelpTopic> getHelpMap() {
-		throw new UnimplementedMethodException();
-	}
-
-	@Override
-	public Message generateMessageFromJson(String json) {
 		throw new UnimplementedMethodException();
 	}
 }

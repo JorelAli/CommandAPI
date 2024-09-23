@@ -3,7 +3,6 @@ package dev.jorel.commandapi.arguments.parser;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
@@ -352,43 +351,5 @@ public interface Parser<T> {
 				return mergeResultSuggestions(parser.getResult(reader), suggestionsResult);
 			};
 		}
-	}
-
-	//////////////////////////////////
-	// Common parsers and utilities //
-	//////////////////////////////////
-	CommandSyntaxException NEXT_BRANCH = new SimpleCommandExceptionType(
-		() -> "This branch did not match"
-	).create();
-
-	static Literal assertCanRead(Function<StringReader, CommandSyntaxException> exception) {
-		return reader -> {
-			if (!reader.canRead()) throw exception.apply(reader);
-		};
-	}
-
-	static Literal literal(String literal) {
-		return reader -> {
-			if (reader.canRead(literal.length())) {
-				int start = reader.getCursor();
-				int end = start + literal.length();
-
-				if (reader.getString().substring(start, end).equals(literal)) {
-					reader.setCursor(end);
-					return;
-				}
-			}
-			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.literalIncorrect().createWithContext(reader, literal);
-		};
-	}
-
-	static Argument<String> readUntilWithoutEscapeCharacter(char terminator) {
-		return reader -> {
-			int start = reader.getCursor();
-			while (reader.canRead() && reader.peek() != terminator) {
-				reader.skip();
-			}
-			return reader.getString().substring(start, reader.getCursor());
-		};
 	}
 }

@@ -34,19 +34,19 @@ public record EntitySelectorArgumentType(boolean singleTarget, boolean playersOn
 
 	// ArgumentType implementation
 	public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_ENTITY = new SimpleCommandExceptionType(
-		() -> "Only one entity is allowed, but the provided selector allows more than one"
+		ArgumentUtilities.translatedMessage("argument.entity.toomany")
 	);
 	public static final SimpleCommandExceptionType ERROR_NOT_SINGLE_PLAYER = new SimpleCommandExceptionType(
-		() -> "Only one player is allowed, but the provided selector allows more than one"
+		ArgumentUtilities.translatedMessage("argument.player.toomany")
 	);
 	public static final SimpleCommandExceptionType ERROR_ONLY_PLAYERS_ALLOWED = new SimpleCommandExceptionType(
-		() -> "Only players may be affected by this command, but the provided selector includes entities"
+		ArgumentUtilities.translatedMessage("argument.player.entities")
 	);
 	public static final SimpleCommandExceptionType NO_ENTITIES_FOUND = new SimpleCommandExceptionType(
-		() -> "No entity was found"
+		ArgumentUtilities.translatedMessage("argument.entity.notfound.entity")
 	);
 	public static final SimpleCommandExceptionType NO_PLAYERS_FOUND = new SimpleCommandExceptionType(
-		() -> "No player was found"
+		ArgumentUtilities.translatedMessage("argument.entity.notfound.player")
 	);
 
 	@Override

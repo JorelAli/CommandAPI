@@ -24,10 +24,10 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 	//  but MockBukkit doesn't seem to currently support that: https://github.com/MockBukkit/MockBukkit/issues/1040.
 	//  For now, just grabbing the literal strings from https://gist.github.com/sppmacd/82af47c83b225d4ffd33bb0c27b0d932.
 	public static final SimpleCommandExceptionType EMPTY_INPUT = new SimpleCommandExceptionType(
-		() -> "Expected value or range of values"
+		ArgumentUtilities.translatedMessage("argument.range.empty")
 	);
 	public static final SimpleCommandExceptionType RANGE_SWAPPED = new SimpleCommandExceptionType(
-		() -> "Min cannot be bigger than max"
+		ArgumentUtilities.translatedMessage("argument.range.swapped")
 	);
 
 	private static final Parser.Argument<Integer> READ_INT_BEFORE_RANGE = reader -> {
@@ -58,11 +58,11 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 	private static final Predicate<CommandSyntaxException> THROW_INVALID_INT_EXCEPTIONS = exception ->
 		exception.getType().equals(CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt());
 
-	private static final Parser<IntegerRange> PARSER = Parser
+	private static final Parser<IntegerRange> PARSER = ArgumentUtilities
 		.assertCanRead(EMPTY_INPUT::createWithContext)
 		.alwaysThrowException()
 		.continueWith(
-			Parser.tryParse(Parser.literal("..")
+			Parser.tryParse(ArgumentUtilities.literal("..")
 				.neverThrowException()
 				// Input ..
 				.continueWith(
@@ -98,7 +98,7 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 						})
 						// Input low
 						.continueWith(getLow ->
-							Parser.tryParse(Parser.literal("..")
+							Parser.tryParse(ArgumentUtilities.literal("..")
 								.neverThrowException()
 								// Input low..
 								.continueWith(

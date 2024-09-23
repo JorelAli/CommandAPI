@@ -33,8 +33,8 @@
 		<!-- Compatibility with MockBukkit API -->
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.20</artifactId>
-			<version>3.9.0</version>
+			<artifactId>MockBukkit-v1.21</artifactId>
+			<version>3.120.4</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -89,10 +89,12 @@
 		</dependency>
 
 		<!-- Run our own tests with JUnit API -->
+		<!-- Note: This version matches the artifactId `junit-jupiter` dependency transitively inherited
+		     from `MockBukkit-v1.21`. If it doesn't match, the tests might fail with class not found errors. -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.8.2</version>
+			<version>5.11.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
