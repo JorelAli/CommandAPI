@@ -12,4 +12,6 @@ Many methods have not yet been implemented in the test toolkit. Most notably, on
 
 If a test ends up calling a method that has not yet been implemented, an `UnimplementedMethodException` will be thrown, causing the test to fail. If you see an `UnimplementedMethodException`, please tell us about it with a [GitHub Issue](https://github.com/JorelAli/CommandAPI/issues) or a message in the CommandAPI Discord. Pull requests are also always welcome!
 
+In the short term, you can try to resolve an `UnimplementedMethodException` by implementing the method yourself. The process for doing that is described [here](./test_loadmockcommandapi.md#loading-a-custom-commandapi-platform-implementation).
+
 </div>
