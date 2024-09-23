@@ -16,16 +16,13 @@ import java.util.function.Predicate;
 public class EntitySelectorParser {
 	// Errors
 	public static final SimpleCommandExceptionType ERROR_INVALID_NAME_OR_UUID = new SimpleCommandExceptionType(
-		() -> "Invalid name or UUID"
+		ArgumentUtilities.translatedMessage("argument.entity.invalid")
 	);
 	public static final DynamicCommandExceptionType ERROR_UNKNOWN_SELECTOR_TYPE = new DynamicCommandExceptionType(
-		object -> {
-			String message = "Unknown selector type '%s'".formatted(object);
-			return () -> message;
-		}
+		object -> ArgumentUtilities.translatedMessage("argument.entity.selector.unknown", object)
 	);
 	public static final SimpleCommandExceptionType ERROR_MISSING_SELECTOR_TYPE = new SimpleCommandExceptionType(
-		() -> "Missing selector type"
+		ArgumentUtilities.translatedMessage("argument.entity.selector.missing")
 	);
 
 	// State for building a selector
@@ -52,7 +49,7 @@ public class EntitySelectorParser {
 
 	// Parsing
 	private static final Parser.Literal isSelectorStart = reader -> {
-		if (!(reader.canRead() && reader.peek() == '@')) throw Parser.NEXT_BRANCH;
+		if (!(reader.canRead() && reader.peek() == '@')) throw ArgumentUtilities.NEXT_BRANCH;
 	};
 
 	private static Parser.Literal parseSelector(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
@@ -108,7 +105,7 @@ public class EntitySelectorParser {
 	}
 
 	private static final Parser.Literal isSelectorOptionsStart = reader -> {
-		if (!(reader.canRead() && reader.peek() == '[')) throw Parser.NEXT_BRANCH;
+		if (!(reader.canRead() && reader.peek() == '[')) throw ArgumentUtilities.NEXT_BRANCH;
 	};
 
 	private static Parser.Literal parseSelectorOptions(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
@@ -164,11 +161,11 @@ public class EntitySelectorParser {
 		});
 	};
 	private static final SuggestionProvider suggestSelector = (context, builder) -> {
-		builder.suggest("@p", () -> "Nearest player");
-		builder.suggest("@a", () -> "All players");
-		builder.suggest("@r", () -> "Random player");
-		builder.suggest("@s", () -> "Current entity");
-		builder.suggest("@e", () -> "All entities");
+		builder.suggest("@p", ArgumentUtilities.translatedMessage("argument.entity.selector.nearestPlayer"));
+		builder.suggest("@a", ArgumentUtilities.translatedMessage("argument.entity.selector.allPlayers"));
+		builder.suggest("@r", ArgumentUtilities.translatedMessage("argument.entity.selector.randomPlayer"));
+		builder.suggest("@s", ArgumentUtilities.translatedMessage("argument.entity.selector.self"));
+		builder.suggest("@e", ArgumentUtilities.translatedMessage("argument.entity.selector.allEntities"));
 	};
 	private static final SuggestionProvider suggestNameOrSelector = (context, builder) -> {
 		suggestSelector.addSuggestions(context, builder);

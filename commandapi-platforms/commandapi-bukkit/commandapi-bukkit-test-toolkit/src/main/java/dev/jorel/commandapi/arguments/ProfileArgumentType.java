@@ -30,11 +30,11 @@ public class ProfileArgumentType implements ArgumentType<ProfileArgumentType.Res
 	}
 
 	public static final SimpleCommandExceptionType ERROR_UNKNOWN_PLAYER = new SimpleCommandExceptionType(
-		() -> "That player does not exist"
+		ArgumentUtilities.translatedMessage("argument.player.unknown")
 	);
 
 	private static final Parser.Literal isSelectorStart = reader -> {
-		if (!(reader.canRead() && reader.peek() == '@')) throw Parser.NEXT_BRANCH;
+		if (!(reader.canRead() && reader.peek() == '@')) throw ArgumentUtilities.NEXT_BRANCH;
 	};
 
 	private static final Parser<Result> PARSER = Parser
@@ -64,7 +64,7 @@ public class ProfileArgumentType implements ArgumentType<ProfileArgumentType.Res
 						}
 					))
 			)
-		).then(Parser.readUntilWithoutEscapeCharacter(' ')
+		).then(ArgumentUtilities.readUntilWithoutEscapeCharacter(' ')
 			.alwaysThrowException()
 			.continueWith(nameGetter -> Parser.parse(
 				reader -> {
