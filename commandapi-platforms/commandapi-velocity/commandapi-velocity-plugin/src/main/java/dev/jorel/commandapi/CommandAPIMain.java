@@ -39,19 +39,17 @@ public class CommandAPIMain {
 	public CommandAPIMain(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
 		// Try to find the config file
 		Path configFile = dataDirectory.resolve("config.yml");
-		YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
-			.nodeStyle(NodeStyle.BLOCK)
-			.path(configFile)
-			.build();
 
+		// Create or update config
 		new VelocityConfigurationAdapter(null, null, null).saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), null);
-
-		// If the config doesn't exist, load it from the resources
-
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;
 		try {
+			YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+				.nodeStyle(NodeStyle.BLOCK)
+				.path(configFile)
+				.build();
 			configYAML = loader.load();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
