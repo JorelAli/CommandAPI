@@ -8,18 +8,13 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import dev.jorel.commandapi.config.ConfigGenerator;
-import dev.jorel.commandapi.config.ConfigurationAdapter;
-import dev.jorel.commandapi.config.DefaultVelocityConfig;
 import dev.jorel.commandapi.config.VelocityConfigurationAdapter;
-import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -41,7 +36,7 @@ public class CommandAPIMain {
 		Path configFile = dataDirectory.resolve("config.yml");
 
 		// Create or update config
-		new VelocityConfigurationAdapter(null, null, null).saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), null);
+		VelocityConfigurationAdapter.createDummyInstance().saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), null);
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;

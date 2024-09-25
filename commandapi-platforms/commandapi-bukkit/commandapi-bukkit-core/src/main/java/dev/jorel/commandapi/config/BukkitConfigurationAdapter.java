@@ -17,6 +17,10 @@ import java.util.logging.Logger;
 @ApiStatus.Internal
 public record BukkitConfigurationAdapter(YamlConfiguration config) implements ConfigurationAdapter<YamlConfiguration> {
 
+	public static BukkitConfigurationAdapter createDummyInstance() {
+		return new BukkitConfigurationAdapter(null);
+	}
+
 	@Override
 	public void setValue(String key, Object value) {
 		config.set(key, value);

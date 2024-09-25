@@ -20,22 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
+import dev.jorel.commandapi.config.BukkitConfigurationAdapter;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import dev.jorel.commandapi.config.BukkitConfigurationAdapter;
-import dev.jorel.commandapi.config.ConfigGenerator;
-import dev.jorel.commandapi.config.ConfigurationAdapter;
-import dev.jorel.commandapi.config.DefaultBukkitConfig;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Main CommandAPI plugin entrypoint
@@ -149,6 +145,6 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void saveDefaultConfig() {
 		File configFile = new File(getDataFolder(), "config.yml");
-		new BukkitConfigurationAdapter(null).saveDefaultConfig(getDataFolder(), configFile, getLogger());
+		BukkitConfigurationAdapter.createDummyInstance().saveDefaultConfig(getDataFolder(), configFile, getLogger());
 	}
 }
