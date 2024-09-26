@@ -1,11 +1,8 @@
 package dev.jorel.commandapi.config;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@ApiStatus.Internal
 public abstract class DefaultConfig {
 
 	protected final Map<String, CommentedConfigOption<?>> allOptions = new LinkedHashMap<>();

@@ -3,7 +3,6 @@ package dev.jorel.commandapi.config;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@ApiStatus.Internal
 public record BukkitConfigurationAdapter(YamlConfiguration config) implements ConfigurationAdapter<YamlConfiguration> {
 
 	public static BukkitConfigurationAdapter createDummyInstance() {

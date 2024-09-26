@@ -1,13 +1,10 @@
 package dev.jorel.commandapi.config;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@ApiStatus.Internal
 public class DefaultBukkitConfig extends DefaultConfig {
 
 	public static final CommentedConfigOption<Boolean> USE_LATEST_NMS_VERSION = new CommentedConfigOption<>(

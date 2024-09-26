@@ -1,12 +1,9 @@
 package dev.jorel.commandapi.config;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
-@ApiStatus.Internal
 public class ConfigGenerator {
 
 	private final DefaultConfig defaultConfig;

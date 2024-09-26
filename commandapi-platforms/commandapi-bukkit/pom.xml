@@ -24,6 +24,9 @@
 		<module>commandapi-bukkit-vh</module>
 		<module>commandapi-bukkit-mojang-mapped</module>
 
+		<!-- Common Bukkit plugin classes -->
+		<module>commandapi-bukkit-plugin-common</module>
+
 		<!-- Outputs -->
 		<module>commandapi-bukkit-plugin</module>
 		<module>commandapi-bukkit-shade</module>

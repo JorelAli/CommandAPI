@@ -1,12 +1,9 @@
 package dev.jorel.commandapi.config;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.io.File;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@ApiStatus.Internal
 public interface ConfigurationAdapter<Configuration> {
 
 	void setValue(String key, Object value);
