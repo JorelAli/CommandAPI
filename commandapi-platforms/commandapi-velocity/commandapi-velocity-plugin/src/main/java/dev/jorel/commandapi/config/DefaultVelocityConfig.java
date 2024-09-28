@@ -17,10 +17,7 @@ public class DefaultVelocityConfig extends DefaultConfig {
 		Map<String, CommentedSection> sections = new LinkedHashMap<>();
 		sections.put("messages", SECTION_MESSAGE);
 
-		return DefaultVelocityConfig.create(
-			options,
-			sections
-		);
+		return DefaultVelocityConfig.create(options, sections);
 	}
 
 	public static DefaultVelocityConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {

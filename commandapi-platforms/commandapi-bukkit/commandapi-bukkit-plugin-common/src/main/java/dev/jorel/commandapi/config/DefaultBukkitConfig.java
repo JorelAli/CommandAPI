@@ -91,10 +91,7 @@ public class DefaultBukkitConfig extends DefaultConfig {
 		Map<String, CommentedSection> sections = new LinkedHashMap<>();
 		sections.put("messages", SECTION_MESSAGE);
 
-		return DefaultBukkitConfig.create(
-			options,
-			sections
-		);
+		return DefaultBukkitConfig.create(options, sections);
 	}
 
 	public static DefaultBukkitConfig create(Map<String, CommentedConfigOption<?>> options, Map<String, CommentedSection> sections) {
