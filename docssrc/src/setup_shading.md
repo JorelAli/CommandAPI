@@ -178,21 +178,21 @@ As we're shading the CommandAPI into your plugin, you **don't** need to add `dep
 
 ## Shading with Gradle
 
-To shade the CommandAPI into a Gradle project, we'll use the [Goooler Gradle Shadow Plugin](https://plugins.gradle.org/plugin/io.github.goooler.shadow). This is a fork of the [Shadow Plugin](https://imperceptiblethoughts.com/shadow/) which supports Java 21. Add this to your list of plugins:
+To shade the CommandAPI into a Gradle project, we'll use the [GradleUp Shadow Plugin](https://gradleup.com/shadow/). Add this to your list of plugins:
 
 <div class="multi-pre">
 
 ```groovy,build.gradle
 plugins {
     id 'java'
-    id 'io.github.goooler.shadow' version '8.1.7'
+    id 'com.gradleup.shadow' version '8.3.3'
 }
 ```
 
 ```kotlin,build.gradle.kts
 plugins {
     java
-    id("io.github.goooler.shadow") version "8.1.7"
+    id("com.gradleup.shadow") version "8.3.3"
 }
 ```
 
