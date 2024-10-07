@@ -5,6 +5,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -112,12 +113,15 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 	public void saveDefaultConfig(File directory, File configFile, Logger logger) {
 		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultBukkitConfig.createDefault());
 		if (!directory.exists()) {
-			directory.mkdir();
+			boolean createdDirectory = directory.mkdirs();
+			if (!createdDirectory) {
+				logger.severe("Failed to create directory for the CommandAPI's config.yml file!");
+			}
 			try {
 				ConfigurationAdapter<YamlConfiguration> bukkitConfigurationAdapter = new BukkitConfigurationAdapter(new YamlConfiguration());
 				configGenerator.populateDefaultConfig(bukkitConfigurationAdapter);
 				bukkitConfigurationAdapter.config().save(configFile);
-			} catch (Exception e) {
+			} catch (IOException e) {
 				logger.severe("Could not create default config file! This is (probably) a bug.");
 				logger.severe("Error message: " + e.getMessage());
 				logger.severe("Stacktrace:");
@@ -136,7 +140,7 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 				return;
 			}
 			updatedConfig.config().save(configFile);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.severe("Could not update config! This is (probably) a bug.");
 			logger.severe("Error message: " + e.getMessage());
 			logger.severe("Stacktrace:");

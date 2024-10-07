@@ -97,14 +97,21 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 		DefaultVelocityConfig defaultConfig = DefaultVelocityConfig.createDefault();
 		ConfigGenerator configGenerator = ConfigGenerator.createNew(defaultConfig);
 		if (!directory.exists()) {
-			directory.mkdirs();
-
+			boolean createdDirectory = directory.mkdirs();
+			if (!createdDirectory) {
+				logger.severe("Failed to create directory for the CommandAPI's config.yml file!");
+			}
 			try {
 				ConfigurationAdapter<ConfigurationNode> velocityConfigurationAdapter = new VelocityConfigurationAdapter(configLoader, configLoader.createNode(), defaultConfig);
 				configGenerator.populateDefaultConfig(velocityConfigurationAdapter);
 				configLoader.save(velocityConfigurationAdapter.config());
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				logger.severe("Could not create default config file! This is (probably) a bug.");
+				logger.severe("Error message: " + e.getMessage());
+				logger.severe("Stacktrace:");
+				for (StackTraceElement element : e.getStackTrace()) {
+					logger.severe(element.toString());
+				}
 			}
 		} else {
 			try {
@@ -116,7 +123,12 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 					configLoader.save(updatedConfig.config());
 				}
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				logger.severe("Could not update config! This is (probably) a bug.");
+				logger.severe("Error message: " + e.getMessage());
+				logger.severe("Stacktrace:");
+				for (StackTraceElement element : e.getStackTrace()) {
+					logger.severe(element.toString());
+				}
 			}
 		}
 	}

@@ -36,7 +36,7 @@ public class CommandAPIMain {
 		Path configFile = dataDirectory.resolve("config.yml");
 
 		// Create or update config
-		VelocityConfigurationAdapter.createDummyInstance().saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), null);
+		VelocityConfigurationAdapter.createDummyInstance().saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), logger);
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;
