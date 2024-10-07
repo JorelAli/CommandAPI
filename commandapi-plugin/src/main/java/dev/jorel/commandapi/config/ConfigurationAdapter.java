@@ -18,7 +18,7 @@ public interface ConfigurationAdapter<Configuration> {
 
 	boolean contains(String key);
 
-	void tryCreateSection(String key, DefaultConfig defaultConfiguration);
+	void tryCreateSection(String key);
 
 	ConfigurationAdapter<Configuration> complete();
 

@@ -54,39 +54,30 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 	}
 
 	@Override
-	public void tryCreateSection(String key, DefaultConfig defaultedBukkitConfig) {
+	public void tryCreateSection(String key) {
 		if (!key.contains(".")) {
 			return;
 		}
 
 		// Collect config keys
-		Set<String> keys = getKeys();
+		Set<String> keys = config.getKeys(true);
 		keys.removeIf(k -> !config.isConfigurationSection(k));
 
 		// Collect sections
-		String[] paths = key.split("\\.");
-		List<String> sectionCandidates = new ArrayList<>(Arrays.asList(paths).subList(0, paths.length - 1));
+		String[] sectionCandidates = key.split("\\.");
+		sectionCandidates = Arrays.copyOf(sectionCandidates, sectionCandidates.length - 1);
 
 		// Create new sections
 		ConfigurationSection section = null;
-		StringBuilder pathSoFar = new StringBuilder();
 		for (String sectionCandidate : sectionCandidates) {
-			if (pathSoFar.isEmpty()) {
-				pathSoFar.append(sectionCandidate);
-			} else {
-				pathSoFar.append(".").append(sectionCandidate);
-			}
-
 			if (keys.contains(sectionCandidate) && section == null) {
 				section = config.getConfigurationSection(sectionCandidate);
 			} else if (section == null) {
 				section = config.createSection(sectionCandidate);
-				config.setComments(pathSoFar.toString(), Arrays.asList(defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment()));
 			} else {
 				ConfigurationSection currentSection = section.getConfigurationSection(sectionCandidate);
 				if (currentSection == null) {
 					section = section.createSection(sectionCandidate);
-					config.setComments(pathSoFar.toString(), Arrays.asList(defaultedBukkitConfig.getAllSections().get(pathSoFar.toString()).comment()));
 				} else {
 					section = currentSection;
 				}

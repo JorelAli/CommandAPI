@@ -18,7 +18,7 @@ public class ConfigGenerator {
 
 	public <T> void populateDefaultConfig(ConfigurationAdapter<T> adapter) {
 		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultConfig.getAllOptions().entrySet()) {
-			adapter.tryCreateSection(commentedConfigOption.getKey(), defaultConfig);
+			adapter.tryCreateSection(commentedConfigOption.getKey());
 			adapter.setValue(commentedConfigOption.getKey(), commentedConfigOption.getValue().option());
 			adapter.setComment(commentedConfigOption.getKey(), commentedConfigOption.getValue().comment());
 		}
@@ -36,11 +36,11 @@ public class ConfigGenerator {
 
 			// Update config option
 			if (existingConfig.contains(path)) {
-				updatedConfig.tryCreateSection(path, defaultConfig);
+				updatedConfig.tryCreateSection(path);
 				updatedConfig.setValue(path, existingConfig.getValue(path));
 			} else {
 				wasConfigUpdated = true;
-				updatedConfig.tryCreateSection(path, defaultConfig);
+				updatedConfig.tryCreateSection(path);
 				updatedConfig.setValue(path, commentedConfigOption.getValue().option());
 			}
 

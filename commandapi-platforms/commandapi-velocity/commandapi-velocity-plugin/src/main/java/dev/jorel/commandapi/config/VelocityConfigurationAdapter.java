@@ -32,6 +32,14 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 
 	@Override
 	public void setComment(String key, String[] comment) {
+		StringBuilder commentBuilder = new StringBuilder();
+		for (int i = 0; i < comment.length; i++) {
+			if (i > 0) {
+				commentBuilder.append("\n");
+			}
+			commentBuilder.append(comment[i]);
+		}
+		node(key).comment(commentBuilder.toString());
 	}
 
 	@Override
@@ -53,7 +61,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 
 	@Override
 	public Set<String> getKeys() {
-		return new HashSet<>(nestedOptions(config));
+		return nestedOptions(config);
 	}
 
 	@Override
@@ -62,24 +70,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 	}
 
 	@Override
-	public void tryCreateSection(String key, DefaultConfig defaultedVelocityConfig) {
-		if (!key.contains(".")) {
-			return;
-		}
-		String[] path = key.split("\\.");
-		List<String> sectionCandidates = new ArrayList<>(Arrays.asList(path).subList(0, path.length - 1));
-
-		StringBuilder pathSoFar = new StringBuilder();
-		for (String section : sectionCandidates) {
-			if (pathSoFar.isEmpty()) {
-				pathSoFar.append(section);
-			} else {
-				pathSoFar.append(".").append(section);
-			}
-			if (node(pathSoFar.toString()).comment() == null) {
-				node(pathSoFar.toString()).comment(String.join("\n", defaultedVelocityConfig.getAllSections().get(pathSoFar.toString()).comment()));
-			}
-		}
+	public void tryCreateSection(String key) {
 	}
 
 	@Override
