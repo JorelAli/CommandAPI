@@ -119,8 +119,8 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 			}
 			try {
 				ConfigurationAdapter<YamlConfiguration> bukkitConfigurationAdapter = new BukkitConfigurationAdapter(new YamlConfiguration());
-				configGenerator.generate(bukkitConfigurationAdapter);
-				bukkitConfigurationAdapter.config().save(configFile);
+				ConfigurationAdapter<YamlConfiguration> generatedConfig = configGenerator.generate(bukkitConfigurationAdapter);
+				generatedConfig.config().save(configFile);
 			} catch (IOException e) {
 				logger.severe("Could not create default config file! This is (probably) a bug.");
 				logger.severe("Error message: " + e.getMessage());
