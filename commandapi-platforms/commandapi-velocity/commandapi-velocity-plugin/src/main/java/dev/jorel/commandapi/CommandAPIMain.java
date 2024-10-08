@@ -8,13 +8,13 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import dev.jorel.commandapi.config.VelocityConfigurationAdapter;
 import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -35,24 +35,17 @@ public class CommandAPIMain {
 		// Try to find the config file
 		Path configFile = dataDirectory.resolve("config.yml");
 
-		// If the config doesn't exist, load it from the resources
-		if(!Files.exists(configFile)) {
-			try {
-				Files.createDirectories(configFile.getParent());
-			} catch (IOException ignored) {
-			}
-
-			try (InputStream defaultConfig = getClass().getClassLoader().getResourceAsStream("config.yml")) {
-				Files.copy(defaultConfig, configFile);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}
+		// Create or update config
+		VelocityConfigurationAdapter.createDummyInstance().saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), logger);
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;
 		try {
-			configYAML = YamlConfigurationLoader.builder().path(configFile).build().load();
+			YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+				.nodeStyle(NodeStyle.BLOCK)
+				.path(configFile)
+				.build();
+			configYAML = loader.load();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -74,13 +67,13 @@ public class CommandAPIMain {
 		// Enable
 		CommandAPI.onEnable();
 	}
-	
+
 	@Subscribe
 	public void onProxyShutdown(ProxyShutdownEvent event) {
 		// Shut down
 		CommandAPI.onDisable();
 	}
-	
+
 	// On /velocity reload
 	@Subscribe
 	public void onProxyReload(ProxyReloadEvent event) {

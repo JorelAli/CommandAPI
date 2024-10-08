@@ -40,6 +40,11 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-plugin</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

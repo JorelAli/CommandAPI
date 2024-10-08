@@ -20,17 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import dev.jorel.commandapi.config.BukkitConfigurationAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Main CommandAPI plugin entrypoint
@@ -133,4 +134,18 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onEnable() {
 		CommandAPI.onEnable();
 	}
+
+	/**
+	 * In contrast to the superclass' method {@link org.bukkit.plugin.java.JavaPlugin#saveDefaultConfig()},
+	 * this doesn't fail silently if the config.yml already exists but instead will update the config with
+	 * new values if available.
+	 * <p>
+	 * This should fail silently if all values are set already.
+	 */
+	@Override
+	public void saveDefaultConfig() {
+		File configFile = new File(getDataFolder(), "config.yml");
+		BukkitConfigurationAdapter.createDummyInstance().saveDefaultConfig(getDataFolder(), configFile, getLogger());
+	}
+
 }
