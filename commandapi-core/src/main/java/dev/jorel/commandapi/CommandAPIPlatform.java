@@ -9,6 +9,7 @@ import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.AbstractPlayer;
+import dev.jorel.commandapi.network.CommandAPIMessenger;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,6 +120,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 *                                or `plugin:command`
 	 */
 	public abstract void unregister(String commandName, boolean unregisterNamespaces);
+
+	/**
+	 * Creates a new {@link CommandAPIMessenger} for this platform. This is only intended to be called once by
+	 * {@link CommandAPIHandler} when it is enabling the CommandAPI.
+	 *
+	 * @return The new {@link CommandAPIMessenger} that was created.
+	 */
+	public abstract CommandAPIMessenger<?, ?> setupMessenger();
 
 	/**
 	 * @return The Brigadier CommandDispatcher tree being used by the platform's server
