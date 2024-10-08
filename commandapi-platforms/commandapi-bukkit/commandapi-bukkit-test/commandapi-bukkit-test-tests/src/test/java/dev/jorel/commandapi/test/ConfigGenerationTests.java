@@ -6,6 +6,7 @@ import dev.jorel.commandapi.config.CommentedSection;
 import dev.jorel.commandapi.config.ConfigGenerator;
 import dev.jorel.commandapi.config.ConfigurationAdapter;
 import dev.jorel.commandapi.config.DefaultBukkitConfig;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -143,6 +145,17 @@ public class ConfigGenerationTests {
 		), updatedAdapter);
 	}
 
+	@Test
+	public void testNestedSections() {
+		CommentedConfigOption<Boolean> subSubOption = new CommentedConfigOption<>(new String[0], false);
+
+		bukkitConfig.getAllOptions().put("root.nested.option", subSubOption);
+		generator = ConfigGenerator.createNew(bukkitConfig);
+		BukkitConfigurationAdapter updatedAdapter = (BukkitConfigurationAdapter) generator.generate(adapter);
+
+		validateSections(List.of("root", "nested"), "option", updatedAdapter.config());
+	}
+
 	// Test methods
 	public void validateConfigOptions(Set<String> options, BukkitConfigurationAdapter adapter) {
 		boolean containsAll;
@@ -172,6 +185,23 @@ public class ConfigGenerationTests {
 			if (!isAbsent) {
 				throw new IllegalStateException("Config option '" + option + "' does still exist!");
 			}
+		}
+	}
+
+	public void validateSections(List<String> sections, String expectedOption, YamlConfiguration config) {
+		ConfigurationSection root = config.getConfigurationSection(sections.get(0));
+		if (root == null) {
+			throw new IllegalStateException("Section '" + sections.get(0) + "' does not exist!");
+		}
+		for (int i = 1; i < sections.size(); i++) {
+			root = root.getConfigurationSection(sections.get(i));
+			if (root == null) {
+				throw new IllegalStateException("Section '" + sections.get(i) + "' does not exist!");
+			}
+		}
+		Object expectedValue = root.get(expectedOption);
+		if (expectedValue == null) {
+			throw new IllegalStateException("Expected option '" + expectedOption + "' was not found in section '" + root.getName() + "'!");
 		}
 	}
 
