@@ -8,10 +8,7 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -103,7 +100,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 			}
 			try {
 				ConfigurationAdapter<ConfigurationNode> velocityConfigurationAdapter = new VelocityConfigurationAdapter(configLoader, configLoader.createNode(), defaultConfig);
-				configGenerator.populateDefaultConfig(velocityConfigurationAdapter);
+				configGenerator.generate(velocityConfigurationAdapter);
 				configLoader.save(velocityConfigurationAdapter.config());
 			} catch (IOException e) {
 				logger.severe("Could not create default config file! This is (probably) a bug.");
@@ -118,7 +115,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 				// If the config does exist, update it if necessary
 				CommentedConfigurationNode existingYamlConfig = configLoader.load();
 				ConfigurationAdapter<ConfigurationNode> existingConfig = new VelocityConfigurationAdapter(configLoader, existingYamlConfig, defaultConfig);
-				ConfigurationAdapter<ConfigurationNode> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
+				ConfigurationAdapter<ConfigurationNode> updatedConfig = configGenerator.generate(existingConfig);
 				if (updatedConfig != null) {
 					configLoader.save(updatedConfig.config());
 				}
