@@ -16,7 +16,7 @@ import dev.jorel.commandapi.test.MockNMS;
  * file within the commandapi-core module is NOT used at run time. Instead, the platform modules
  * replace this class with their own version that handles loads the correct class for their version
  */
-public interface CommandAPIVersionHandler {
+public abstract class CommandAPIVersionHandler {
 	
 	public static final String profileId = getProfileId();
 	public static final boolean IS_MOJANG_MAPPED = isMojangMapped();

@@ -48,6 +48,12 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-toolkit</artifactId>
+			<version>${project.version}</version>
+			<!-- This should not have the test scope because it contains classes whose coverage we want to analyze -->
+		</dependency>
 		
 		<!-- From commandapi-bukkit-nms-dependency-mojang-mapped -->
 		

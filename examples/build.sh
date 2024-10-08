@@ -9,7 +9,7 @@ echo "Building Maven examples"
 for folder in $(find $PWD -name "pom.xml" -print0 | xargs -0 dirname); do
 	if [[ ! $folder =~ "maven-shaded-tests" ]]; then
 		# The parentheses are required to only change the directory for the command so the second find $PWD does not break
-		(cd "$folder" && mvn clean package)
+		(cd "$folder" && mvn clean verify)
 	fi
 done
 

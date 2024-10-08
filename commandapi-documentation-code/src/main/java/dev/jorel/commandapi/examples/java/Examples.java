@@ -20,6 +20,8 @@ package dev.jorel.commandapi.examples.java;
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.ParseResults;
@@ -74,6 +76,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -2517,6 +2521,60 @@ new CommandAPICommand("perm")
     )
     .register();
 /* ANCHOR_END: subcommands4 */
+}
+
+class test {
+class Main extends JavaPlugin {
+
+}
+
+class example1 {
+/* ANCHOR: testLoadMockCommandAPI1 */
+@BeforeEach
+public void setUp() {
+    // Set up MockBukkit server
+    ServerMock server = MockBukkit.mock();
+
+    // Load the CommandAPI plugin
+    MockCommandAPIPlugin.load(config -> config
+        .missingExecutorImplementationMessage("This command cannot be run by %S")
+    );
+
+    // Load our plugin
+    MockBukkit.load(Main.class);
+}
+
+@AfterEach
+public void tearDown() {
+    // Reset for a clean slate next test
+    MockBukkit.unmock();
+}
+/* ANCHOR_END: testLoadMockCommandAPI1 */
+}
+
+class example2 {
+/* ANCHOR: testLoadMockCommandAPI2 */
+public class CustomMockCommandAPIBukkit extends MockCommandAPIBukkit {
+    // Implement a method that usually throws `UnimplementedMethodException`
+    @Override
+    public void reloadDataPacks() {
+        CommandAPI.logInfo("Simulating data pack reload");
+        // Further logic
+    }
+}
+
+@BeforeEach
+public void setUp() {
+    // Set up MockBukkit server
+    MockBukkit.mock();
+
+    // Tell the CommandAPI to use your custom platform implementation
+    CommandAPIVersionHandler.usePlatformImplementation(new CustomMockCommandAPIBukkit());
+
+    // Load CommandAPI and your plugin as mentioned above...
+}
+/* ANCHOR_END: testLoadMockCommandAPI2 */
+}
 }
 
 class tooltips {
