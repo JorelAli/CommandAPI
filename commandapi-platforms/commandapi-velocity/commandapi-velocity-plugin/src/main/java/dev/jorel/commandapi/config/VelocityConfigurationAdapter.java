@@ -29,14 +29,7 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 
 	@Override
 	public void setComment(String key, String[] comment) {
-		StringBuilder commentBuilder = new StringBuilder();
-		for (int i = 0; i < comment.length; i++) {
-			if (i > 0) {
-				commentBuilder.append("\n");
-			}
-			commentBuilder.append(comment[i]);
-		}
-		node(key).comment(commentBuilder.toString());
+		node(key).comment(String.join("\n", comment));
 	}
 
 	@Override
