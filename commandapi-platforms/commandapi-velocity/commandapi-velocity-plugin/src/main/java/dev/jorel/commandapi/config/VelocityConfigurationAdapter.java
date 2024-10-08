@@ -3,7 +3,6 @@ package dev.jorel.commandapi.config;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
-import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
@@ -14,8 +13,8 @@ import java.util.logging.Logger;
 
 public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config, DefaultVelocityConfig defaultVelocityConfig) implements ConfigurationAdapter<ConfigurationNode> {
 
-	public static VelocityConfigurationAdapter createDummyInstance() {
-		return new VelocityConfigurationAdapter(null, null, null);
+	public static VelocityConfigurationAdapter createDummyInstance(YamlConfigurationLoader loader) {
+		return new VelocityConfigurationAdapter(loader, null, null);
 	}
 
 	@Override
@@ -80,10 +79,6 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 
 	@Override
 	public void saveDefaultConfig(File directory, File configFile, Logger logger) {
-		YamlConfigurationLoader configLoader = YamlConfigurationLoader.builder()
-			.nodeStyle(NodeStyle.BLOCK)
-			.file(configFile)
-			.build();
 		DefaultVelocityConfig defaultConfig = DefaultVelocityConfig.createDefault();
 		ConfigGenerator configGenerator = ConfigGenerator.createNew(defaultConfig);
 		if (!directory.exists()) {
@@ -92,9 +87,9 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 				logger.severe("Failed to create directory for the CommandAPI's config.yml file!");
 			}
 			try {
-				ConfigurationAdapter<ConfigurationNode> velocityConfigurationAdapter = new VelocityConfigurationAdapter(configLoader, configLoader.createNode(), defaultConfig);
+				ConfigurationAdapter<ConfigurationNode> velocityConfigurationAdapter = new VelocityConfigurationAdapter(loader, loader.createNode(), defaultConfig);
 				configGenerator.generate(velocityConfigurationAdapter);
-				configLoader.save(velocityConfigurationAdapter.config());
+				loader.save(velocityConfigurationAdapter.config());
 			} catch (IOException e) {
 				logger.severe("Could not create default config file! This is (probably) a bug.");
 				logger.severe("Error message: " + e.getMessage());
@@ -106,11 +101,11 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 		} else {
 			try {
 				// If the config does exist, update it if necessary
-				CommentedConfigurationNode existingYamlConfig = configLoader.load();
-				ConfigurationAdapter<ConfigurationNode> existingConfig = new VelocityConfigurationAdapter(configLoader, existingYamlConfig, defaultConfig);
+				CommentedConfigurationNode existingYamlConfig = loader.load();
+				ConfigurationAdapter<ConfigurationNode> existingConfig = new VelocityConfigurationAdapter(loader, existingYamlConfig, defaultConfig);
 				ConfigurationAdapter<ConfigurationNode> updatedConfig = configGenerator.generate(existingConfig);
 				if (updatedConfig != null) {
-					configLoader.save(updatedConfig.config());
+					loader.save(updatedConfig.config());
 				}
 			} catch (IOException e) {
 				logger.severe("Could not update config! This is (probably) a bug.");
