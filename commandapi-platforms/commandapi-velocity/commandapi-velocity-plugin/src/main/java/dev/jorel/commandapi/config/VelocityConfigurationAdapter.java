@@ -11,7 +11,17 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config, DefaultVelocityConfig defaultVelocityConfig) implements ConfigurationAdapter<ConfigurationNode> {
+public class VelocityConfigurationAdapter extends ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> {
+
+	private final YamlConfigurationLoader loader;
+	private final CommentedConfigurationNode config;
+	private final DefaultVelocityConfig defaultVelocityConfig;
+
+	public VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config, DefaultVelocityConfig defaultVelocityConfig) {
+		this.loader = loader;
+		this.config = config;
+		this.defaultVelocityConfig = defaultVelocityConfig;
+	}
 
 	public static VelocityConfigurationAdapter createDummyInstance(YamlConfigurationLoader loader) {
 		return new VelocityConfigurationAdapter(loader, null, null);
@@ -68,54 +78,28 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 	}
 
 	@Override
-	public ConfigurationAdapter<ConfigurationNode> complete() {
+	public ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> complete() {
 		return this;
 	}
 
 	@Override
-	public ConfigurationAdapter<ConfigurationNode> createNew() {
-		return new VelocityConfigurationAdapter(loader, loader.createNode(), DefaultVelocityConfig.createDefault());
+	public ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> createNew() {
+		return new VelocityConfigurationAdapter(loader, loader.createNode(), createDefaultConfig());
 	}
 
 	@Override
-	public void saveDefaultConfig(File directory, File configFile, Logger logger) {
-		DefaultVelocityConfig defaultConfig = DefaultVelocityConfig.createDefault();
-		ConfigGenerator configGenerator = ConfigGenerator.createNew(defaultConfig);
-		if (!directory.exists()) {
-			boolean createdDirectory = directory.mkdirs();
-			if (!createdDirectory) {
-				logger.severe("Failed to create directory for the CommandAPI's config.yml file!");
-			}
-			try {
-				ConfigurationAdapter<ConfigurationNode> velocityConfigurationAdapter = new VelocityConfigurationAdapter(loader, loader.createNode(), defaultConfig);
-				configGenerator.generate(velocityConfigurationAdapter);
-				loader.save(velocityConfigurationAdapter.config());
-			} catch (IOException e) {
-				logger.severe("Could not create default config file! This is (probably) a bug.");
-				logger.severe("Error message: " + e.getMessage());
-				logger.severe("Stacktrace:");
-				for (StackTraceElement element : e.getStackTrace()) {
-					logger.severe(element.toString());
-				}
-			}
-		} else {
-			try {
-				// If the config does exist, update it if necessary
-				CommentedConfigurationNode existingYamlConfig = loader.load();
-				ConfigurationAdapter<ConfigurationNode> existingConfig = new VelocityConfigurationAdapter(loader, existingYamlConfig, defaultConfig);
-				ConfigurationAdapter<ConfigurationNode> updatedConfig = configGenerator.generate(existingConfig);
-				if (updatedConfig != null) {
-					loader.save(updatedConfig.config());
-				}
-			} catch (IOException e) {
-				logger.severe("Could not update config! This is (probably) a bug.");
-				logger.severe("Error message: " + e.getMessage());
-				logger.severe("Stacktrace:");
-				for (StackTraceElement element : e.getStackTrace()) {
-					logger.severe(element.toString());
-				}
-			}
-		}
+	public DefaultVelocityConfig createDefaultConfig() {
+		return DefaultVelocityConfig.createDefault();
+	}
+
+	@Override
+	public ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> loadFromFile(File file) throws IOException {
+		return new VelocityConfigurationAdapter(loader, loader.load(), createDefaultConfig());
+	}
+
+	@Override
+	public void saveToFile(File file) throws IOException {
+		loader.save(config);
 	}
 
 	@SuppressWarnings("ConfusingArgumentToVarargsMethod")
