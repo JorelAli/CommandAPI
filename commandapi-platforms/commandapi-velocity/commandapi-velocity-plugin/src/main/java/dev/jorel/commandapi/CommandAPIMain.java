@@ -35,16 +35,17 @@ public class CommandAPIMain {
 		// Try to find the config file
 		Path configFile = dataDirectory.resolve("config.yml");
 
+		YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+			.nodeStyle(NodeStyle.BLOCK)
+			.path(configFile)
+			.build();
+
 		// Create or update config
-		VelocityConfigurationAdapter.createDummyInstance().saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), logger);
+		VelocityConfigurationAdapter.createDummyInstance(loader).saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), logger);
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;
 		try {
-			YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
-				.nodeStyle(NodeStyle.BLOCK)
-				.path(configFile)
-				.build();
 			configYAML = loader.load();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
