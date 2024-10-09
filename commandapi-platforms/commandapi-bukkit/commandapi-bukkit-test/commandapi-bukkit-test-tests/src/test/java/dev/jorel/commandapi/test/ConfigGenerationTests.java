@@ -18,7 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ConfigGenerationTests {
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class ConfigGenerationTests {
 
 	private CommentedConfigOption<Boolean> silentLogs;
 	private CommentedConfigOption<Boolean> verboseOutputs;
@@ -61,7 +67,7 @@ public class ConfigGenerationTests {
 		Map<String, CommentedSection> sections = new LinkedHashMap<>();
 		sections.put("messages", messages);
 
-		ConfigurationAdapter<YamlConfiguration> adapter = new BukkitConfigurationAdapter(new YamlConfiguration());
+		ConfigurationAdapter<YamlConfiguration, DefaultBukkitConfig> adapter = new BukkitConfigurationAdapter(new YamlConfiguration());
 		bukkitConfig = DefaultBukkitConfig.create(options, sections);
 		generator = ConfigGenerator.createNew(bukkitConfig);
 		this.adapter = (BukkitConfigurationAdapter) generator.generate(adapter);
@@ -78,15 +84,48 @@ public class ConfigGenerationTests {
 		this.adapter = null;
 	}
 
+	// Test methods
+	private void validateConfigOptions(Set<String> options, BukkitConfigurationAdapter adapter) {
+		for (String option : options) {
+			assertTrue(adapter.contains(option), "Config option '" + option + "' does not exist!");
+		}
+	}
+
+	private void validateConfigOptionComments(Map<String, String[]> comments, BukkitConfigurationAdapter adapter) {
+		for (String option : comments.keySet()) {
+			String[] expectedComment = comments.get(option);
+			String[] generatedComment = adapter.getComment(option);
+			assertArrayEquals(expectedComment, generatedComment, "Config option comment for option '" + option + "' does not exist or was incorrect!");
+		}
+	}
+
+	private void validateConfigOptionsAbsent(Set<String> options, BukkitConfigurationAdapter adapter) {
+		for (String option : options) {
+			assertFalse(adapter.contains(option), "Config option '" + option + "' does still exist!");
+		}
+	}
+
+	private void validateSections(List<String> sections, String expectedOption, YamlConfiguration config) {
+		ConfigurationSection root = config.getConfigurationSection(sections.get(0));
+		assertNotNull(root, "Section '" + sections.get(0) + "' does not exist!");
+
+		for (int i = 1; i < sections.size(); i++) {
+			root = root.getConfigurationSection(sections.get(i));
+			assertNotNull(root, "Section '" + sections.get(i) + "' does not exist!");
+		}
+		Object expectedValue = root.get(expectedOption);
+		assertNotNull(expectedValue, "Expected option '" + expectedOption + "' was not found in section '" + root.getName() + "'!");
+	}
+
 	@Test
-	public void testDefaultConfigOptionGeneration() {
+	void testDefaultConfigOptionGeneration() {
 		validateConfigOptions(Set.of(
 			"silent-logs", "verbose-outputs", "messages.missing-executor-implementation"
 		), adapter);
 	}
 
 	@Test
-	public void testDefaultConfigOptionCommentGeneration() {
+	void testDefaultConfigOptionCommentGeneration() {
 		validateConfigOptionComments(Map.ofEntries(
 			Map.entry("silent-logs", silentLogs.comment()),
 			Map.entry("verbose-outputs", verboseOutputs.comment()),
@@ -96,7 +135,7 @@ public class ConfigGenerationTests {
 	}
 
 	@Test
-	public void testConfigOptionAddition() {
+	void testConfigOptionAddition() {
 		CommentedConfigOption<Boolean> createDispatcherJson = new CommentedConfigOption<>(new String[] {
 			"Create dispatcher JSON (default: false)",
 			"If \"true\", the CommandAPI creates a command_registration.json file showing the",
@@ -122,7 +161,7 @@ public class ConfigGenerationTests {
 	}
 
 	@Test
-	public void testConfigOptionDeletion() {
+	void testConfigOptionDeletion() {
 		bukkitConfig.getAllOptions().remove("silent-logs");
 		generator = ConfigGenerator.createNew(bukkitConfig);
 		BukkitConfigurationAdapter updatedAdapter = (BukkitConfigurationAdapter) generator.generate(adapter);
@@ -131,7 +170,7 @@ public class ConfigGenerationTests {
 	}
 
 	@Test
-	public void testConfigOptionCommentUpdate() {
+	void testConfigOptionCommentUpdate() {
 		silentLogs = new CommentedConfigOption<>(new String[] {
 			"Defines if silent logs should happen"
 		}, false);
@@ -146,7 +185,7 @@ public class ConfigGenerationTests {
 	}
 
 	@Test
-	public void testNestedSections() {
+	void testNestedSections() {
 		CommentedConfigOption<Boolean> subSubOption = new CommentedConfigOption<>(new String[0], false);
 
 		bukkitConfig.getAllOptions().put("root.nested.option", subSubOption);
@@ -156,53 +195,9 @@ public class ConfigGenerationTests {
 		validateSections(List.of("root", "nested"), "option", updatedAdapter.config());
 	}
 
-	// Test methods
-	public void validateConfigOptions(Set<String> options, BukkitConfigurationAdapter adapter) {
-		boolean containsAll;
-		for (String option : options) {
-			containsAll = adapter.contains(option);
-			if (!containsAll) {
-				throw new IllegalStateException("Config option '" + option + "' does not exist!");
-			}
-		}
-	}
-
-	public void validateConfigOptionComments(Map<String, String[]> comments, BukkitConfigurationAdapter adapter) {
-		boolean correctComment;
-		for (String option : comments.keySet()) {
-			String[] generatedComment = adapter.getComment(option);
-			correctComment = Arrays.equals(comments.get(option), generatedComment);
-			if (!correctComment) {
-				throw new IllegalStateException("Config option comment for option '" + option + "' does not exist or was incorrect!");
-			}
-		}
-	}
-
-	public void validateConfigOptionsAbsent(Set<String> options, BukkitConfigurationAdapter adapter) {
-		boolean isAbsent;
-		for (String option : options) {
-			isAbsent = !adapter.contains(option);
-			if (!isAbsent) {
-				throw new IllegalStateException("Config option '" + option + "' does still exist!");
-			}
-		}
-	}
-
-	public void validateSections(List<String> sections, String expectedOption, YamlConfiguration config) {
-		ConfigurationSection root = config.getConfigurationSection(sections.get(0));
-		if (root == null) {
-			throw new IllegalStateException("Section '" + sections.get(0) + "' does not exist!");
-		}
-		for (int i = 1; i < sections.size(); i++) {
-			root = root.getConfigurationSection(sections.get(i));
-			if (root == null) {
-				throw new IllegalStateException("Section '" + sections.get(i) + "' does not exist!");
-			}
-		}
-		Object expectedValue = root.get(expectedOption);
-		if (expectedValue == null) {
-			throw new IllegalStateException("Expected option '" + expectedOption + "' was not found in section '" + root.getName() + "'!");
-		}
+	@Test
+	void testConfigUpdateNotNeeded() {
+		assertNull(generator.generate(adapter));
 	}
 
 }
