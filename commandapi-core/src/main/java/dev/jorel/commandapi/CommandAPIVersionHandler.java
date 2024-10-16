@@ -5,7 +5,7 @@ package dev.jorel.commandapi;
  * file within the commandapi-core module is NOT used at run time. Instead, the platform modules
  * replace this class with their own version that handles loads the correct class for their version.
  */
-public interface CommandAPIVersionHandler {
+public abstract class CommandAPIVersionHandler {
 
 	/**
 	 * Returns an instance of the version's implementation of CommandAPIPlatform.
