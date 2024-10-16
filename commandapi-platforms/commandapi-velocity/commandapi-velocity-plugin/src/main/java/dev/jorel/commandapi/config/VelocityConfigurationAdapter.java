@@ -5,15 +5,13 @@ import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config, DefaultVelocityConfig defaultVelocityConfig) implements ConfigurationAdapter<ConfigurationNode> {
 
-	public static VelocityConfigurationAdapter createDummyInstance(YamlConfigurationLoader loader) {
+	public static VelocityConfigurationAdapter createMinimalInstance(YamlConfigurationLoader loader) {
 		return new VelocityConfigurationAdapter(loader, null, null);
 	}
 

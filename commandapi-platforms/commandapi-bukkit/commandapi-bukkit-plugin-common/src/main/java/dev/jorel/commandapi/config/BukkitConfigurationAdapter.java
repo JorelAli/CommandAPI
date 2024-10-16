@@ -12,11 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public record BukkitConfigurationAdapter(YamlConfiguration config, File configFile) implements ConfigurationAdapter<YamlConfiguration> {
 
-	public static BukkitConfigurationAdapter createDummyInstance(File configFile) {
+	public static BukkitConfigurationAdapter createMinimalInstance(File configFile) {
 		return new BukkitConfigurationAdapter(null, configFile);
 	}
 
