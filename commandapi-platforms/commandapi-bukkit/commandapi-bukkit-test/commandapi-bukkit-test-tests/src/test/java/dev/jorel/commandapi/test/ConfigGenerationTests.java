@@ -67,7 +67,7 @@ class ConfigGenerationTests {
 		Map<String, CommentedSection> sections = new LinkedHashMap<>();
 		sections.put("messages", messages);
 
-		ConfigurationAdapter<YamlConfiguration> adapter = new BukkitConfigurationAdapter(new YamlConfiguration());
+		ConfigurationAdapter<YamlConfiguration> adapter = new BukkitConfigurationAdapter(new YamlConfiguration(), null);
 		bukkitConfig = DefaultBukkitConfig.create(options, sections);
 		generator = ConfigGenerator.createNew(bukkitConfig);
 		this.adapter = (BukkitConfigurationAdapter) generator.generate(adapter);

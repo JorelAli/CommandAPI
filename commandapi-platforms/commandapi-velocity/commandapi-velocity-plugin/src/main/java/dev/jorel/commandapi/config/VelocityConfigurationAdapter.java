@@ -83,12 +83,12 @@ public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, Comme
 	}
 
 	@Override
-	public ConfigurationAdapter<ConfigurationNode> loadFromFile(File file) throws IOException {
+	public ConfigurationAdapter<ConfigurationNode> loadFromFile() throws IOException {
 		return new VelocityConfigurationAdapter(loader, loader.load(), createDefaultConfig());
 	}
 
 	@Override
-	public void saveToFile(File file) throws IOException {
+	public void saveToFile() throws IOException {
 		loader.save(config);
 	}
 

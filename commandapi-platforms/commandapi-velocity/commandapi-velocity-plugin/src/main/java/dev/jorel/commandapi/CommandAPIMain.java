@@ -41,7 +41,7 @@ public class CommandAPIMain {
 			.build();
 
 		// Create or update config
-		VelocityConfigurationAdapter.createDummyInstance(loader).saveDefaultConfig(configFile.getParent().toFile(), configFile.toFile(), logger);
+		VelocityConfigurationAdapter.createDummyInstance(loader).saveDefaultConfig(configFile.getParent().toFile(), logger);
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;

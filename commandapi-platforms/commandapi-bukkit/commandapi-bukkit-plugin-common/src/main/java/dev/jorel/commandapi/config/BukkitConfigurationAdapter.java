@@ -14,10 +14,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public record BukkitConfigurationAdapter(YamlConfiguration config) implements ConfigurationAdapter<YamlConfiguration> {
+public record BukkitConfigurationAdapter(YamlConfiguration config, File configFile) implements ConfigurationAdapter<YamlConfiguration> {
 
-	public static BukkitConfigurationAdapter createDummyInstance() {
-		return new BukkitConfigurationAdapter(null);
+	public static BukkitConfigurationAdapter createDummyInstance(File configFile) {
+		return new BukkitConfigurationAdapter(null, configFile);
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 
 	@Override
 	public ConfigurationAdapter<YamlConfiguration> createNew() {
-		return new BukkitConfigurationAdapter(new YamlConfiguration());
+		return new BukkitConfigurationAdapter(new YamlConfiguration(), configFile);
 	}
 
 	@Override
@@ -116,14 +116,14 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 	}
 
 	@Override
-	public ConfigurationAdapter<YamlConfiguration> loadFromFile(File file) {
-		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-		return new BukkitConfigurationAdapter(config);
+	public ConfigurationAdapter<YamlConfiguration> loadFromFile() {
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		return new BukkitConfigurationAdapter(config, configFile);
 	}
 
 	@Override
-	public void saveToFile(File file) throws IOException {
-		config.save(file);
+	public void saveToFile() throws IOException {
+		config.save(configFile);
 	}
 
 }

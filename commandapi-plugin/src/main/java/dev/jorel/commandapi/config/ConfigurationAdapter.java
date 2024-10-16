@@ -29,11 +29,11 @@ public interface ConfigurationAdapter<Configuration> {
 
 	DefaultConfig createDefaultConfig();
 
-	ConfigurationAdapter<Configuration> loadFromFile(File file) throws IOException;
+	ConfigurationAdapter<Configuration> loadFromFile() throws IOException;
 
-	void saveToFile(File file) throws IOException;
+	void saveToFile() throws IOException;
 
-	default void saveDefaultConfig(File directory, File configFile, Logger logger) {
+	default void saveDefaultConfig(File directory, Logger logger) {
 		ConfigGenerator generator = ConfigGenerator.createNew(createDefaultConfig());
 		ConfigurationAdapter<Configuration> existingConfig;
 		if (!directory.exists()) {
@@ -43,7 +43,7 @@ public interface ConfigurationAdapter<Configuration> {
 			existingConfig = createNew();
 		} else {
 			try {
-				existingConfig = loadFromFile(configFile);
+				existingConfig = loadFromFile();
 			} catch (IOException e) {
 				logger.severe("Failed to load the config file!");
 				logger.severe("Error message: " + e.getMessage());
@@ -59,7 +59,7 @@ public interface ConfigurationAdapter<Configuration> {
 			return;
 		}
 		try {
-			updatedConfig.saveToFile(configFile);
+			updatedConfig.saveToFile();
 		} catch (IOException e) {
 			logger.severe("Failed to save the config file!");
 			logger.severe("Error message: " + e.getMessage());
