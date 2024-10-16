@@ -67,7 +67,7 @@ class ConfigGenerationTests {
 		Map<String, CommentedSection> sections = new LinkedHashMap<>();
 		sections.put("messages", messages);
 
-		ConfigurationAdapter<YamlConfiguration, DefaultBukkitConfig> adapter = new BukkitConfigurationAdapter(new YamlConfiguration());
+		ConfigurationAdapter<YamlConfiguration> adapter = new BukkitConfigurationAdapter(new YamlConfiguration());
 		bukkitConfig = DefaultBukkitConfig.create(options, sections);
 		generator = ConfigGenerator.createNew(bukkitConfig);
 		this.adapter = (BukkitConfigurationAdapter) generator.generate(adapter);
@@ -106,12 +106,11 @@ class ConfigGenerationTests {
 	}
 
 	private void validateSections(List<String> sections, String expectedOption, YamlConfiguration config) {
-		ConfigurationSection root = config.getConfigurationSection(sections.get(0));
-		assertNotNull(root, "Section '" + sections.get(0) + "' does not exist!");
+		ConfigurationSection root = config;
 
-		for (int i = 1; i < sections.size(); i++) {
-			root = root.getConfigurationSection(sections.get(i));
-			assertNotNull(root, "Section '" + sections.get(i) + "' does not exist!");
+		for (String section : sections) {
+			root = root.getConfigurationSection(section);
+			assertNotNull(root, "Section '" + section + "' does not exist!");
 		}
 		Object expectedValue = root.get(expectedOption);
 		assertNotNull(expectedValue, "Expected option '" + expectedOption + "' was not found in section '" + root.getName() + "'!");

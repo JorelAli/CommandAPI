@@ -16,8 +16,8 @@ public class ConfigGenerator {
 		return new ConfigGenerator(defaultConfig);
 	}
 
-	public <T, C extends DefaultConfig> ConfigurationAdapter<T, C> generate(ConfigurationAdapter<T, C> existingConfig) {
-		ConfigurationAdapter<T, C> updatedConfig = existingConfig.createNew();
+	public <T> ConfigurationAdapter<T> generate(ConfigurationAdapter<T> existingConfig) {
+		ConfigurationAdapter<T> updatedConfig = existingConfig.createNew();
 
 		boolean shouldRemoveValues = shouldRemoveOptions(existingConfig);
 
@@ -61,7 +61,7 @@ public class ConfigGenerator {
 		return (wasConfigUpdated) ? updatedConfig.complete() : null;
 	}
 
-	private <T, C extends DefaultConfig> boolean shouldRemoveOptions(ConfigurationAdapter<T, C> config) {
+	private <T> boolean shouldRemoveOptions(ConfigurationAdapter<T> config) {
 		Set<String> configOptions = config.getKeys();
 		Set<String> defaultConfigOptions = defaultConfig.getAllOptions().keySet();
 

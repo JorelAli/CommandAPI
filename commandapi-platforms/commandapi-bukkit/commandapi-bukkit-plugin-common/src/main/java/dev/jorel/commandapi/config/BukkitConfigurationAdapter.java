@@ -14,13 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class BukkitConfigurationAdapter extends ConfigurationAdapter<YamlConfiguration, DefaultBukkitConfig> {
-
-	private final YamlConfiguration config;
-
-	public BukkitConfigurationAdapter(YamlConfiguration config) {
-		this.config = config;
-	}
+public record BukkitConfigurationAdapter(YamlConfiguration config) implements ConfigurationAdapter<YamlConfiguration> {
 
 	public static BukkitConfigurationAdapter createDummyInstance() {
 		return new BukkitConfigurationAdapter(null);
@@ -93,7 +87,7 @@ public class BukkitConfigurationAdapter extends ConfigurationAdapter<YamlConfigu
 	}
 
 	@Override
-	public ConfigurationAdapter<YamlConfiguration, DefaultBukkitConfig> complete() {
+	public ConfigurationAdapter<YamlConfiguration> complete() {
 		String[] configStrings = config.saveToString().split("\n");
 		StringBuilder configBuilder = new StringBuilder();
 		for (String configString : configStrings) {
@@ -110,13 +104,9 @@ public class BukkitConfigurationAdapter extends ConfigurationAdapter<YamlConfigu
 		return this;
 	}
 
-	@Override
-	public YamlConfiguration config() {
-		return config;
-	}
 
 	@Override
-	public ConfigurationAdapter<YamlConfiguration, DefaultBukkitConfig> createNew() {
+	public ConfigurationAdapter<YamlConfiguration> createNew() {
 		return new BukkitConfigurationAdapter(new YamlConfiguration());
 	}
 
@@ -126,7 +116,7 @@ public class BukkitConfigurationAdapter extends ConfigurationAdapter<YamlConfigu
 	}
 
 	@Override
-	public ConfigurationAdapter<YamlConfiguration, DefaultBukkitConfig> loadFromFile(File file) {
+	public ConfigurationAdapter<YamlConfiguration> loadFromFile(File file) {
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 		return new BukkitConfigurationAdapter(config);
 	}

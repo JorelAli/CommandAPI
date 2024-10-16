@@ -11,17 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class VelocityConfigurationAdapter extends ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> {
-
-	private final YamlConfigurationLoader loader;
-	private final CommentedConfigurationNode config;
-	private final DefaultVelocityConfig defaultVelocityConfig;
-
-	public VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config, DefaultVelocityConfig defaultVelocityConfig) {
-		this.loader = loader;
-		this.config = config;
-		this.defaultVelocityConfig = defaultVelocityConfig;
-	}
+public record VelocityConfigurationAdapter(YamlConfigurationLoader loader, CommentedConfigurationNode config, DefaultVelocityConfig defaultVelocityConfig) implements ConfigurationAdapter<ConfigurationNode> {
 
 	public static VelocityConfigurationAdapter createDummyInstance(YamlConfigurationLoader loader) {
 		return new VelocityConfigurationAdapter(loader, null, null);
@@ -78,12 +68,12 @@ public class VelocityConfigurationAdapter extends ConfigurationAdapter<Configura
 	}
 
 	@Override
-	public ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> complete() {
+	public ConfigurationAdapter<ConfigurationNode> complete() {
 		return this;
 	}
 
 	@Override
-	public ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> createNew() {
+	public ConfigurationAdapter<ConfigurationNode> createNew() {
 		return new VelocityConfigurationAdapter(loader, loader.createNode(), createDefaultConfig());
 	}
 
@@ -93,7 +83,7 @@ public class VelocityConfigurationAdapter extends ConfigurationAdapter<Configura
 	}
 
 	@Override
-	public ConfigurationAdapter<ConfigurationNode, DefaultVelocityConfig> loadFromFile(File file) throws IOException {
+	public ConfigurationAdapter<ConfigurationNode> loadFromFile(File file) throws IOException {
 		return new VelocityConfigurationAdapter(loader, loader.load(), createDefaultConfig());
 	}
 
