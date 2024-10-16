@@ -75,11 +75,11 @@
 
 		<!-- Passing this to dependents gets rid of a `SLF4J: No SLF4J providers were found` warning -->
 		<!-- https://stackoverflow.com/questions/54652836/found-slf4j-api-dependency-but-no-providers-were-found -->
-		<!-- This version matches the slf4j-api declared by MockBukkit-1.20 (not sure if other versions are needed) -->
+		<!-- This version matches the slf4j-api declared by our dependency on paper-api through MockBukkit-1.21 -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-nop</artifactId>
-			<version>1.8.0-beta4</version>
+			<version>2.0.9</version>
 			<scope>compile</scope>
 		</dependency>
 

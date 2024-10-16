@@ -8,12 +8,13 @@ When you add the dependencies for MockBukkit and `commandapi-bukkit-test-toolkit
 
 <div class="multi-pre">
 
-```xml,Plugin_Dependency
+```xml,Maven
 <dependencies>
+    <!-- See https://github.com/MockBukkit/MockBukkit?tab=readme-ov-file#mag-usage for latest version -->
     <dependency>
         <groupId>com.github.seeseemelk</groupId>
-        <artifactId>MockBukkit-v1.20</artifactId>
-        <version>3.9.0</version>
+        <artifactId>MockBukkit-v1.21</artifactId>
+        <version>3.128.0</version>
         <scope>test</scope>
     </dependency>
 
@@ -24,6 +25,7 @@ When you add the dependencies for MockBukkit and `commandapi-bukkit-test-toolkit
         <scope>test</scope>
     </dependency>
 
+    <!-- May be the shade dependency and/or mojang-mapped -->
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-core</artifactId>
@@ -31,13 +33,15 @@ When you add the dependencies for MockBukkit and `commandapi-bukkit-test-toolkit
         <scope>provided</scope>
     </dependency>
 
+    <!-- Can also be paper-api -->
     <dependency>
         <groupId>org.spigotmc</groupId>
         <artifactId>spigot-api</artifactId>
-        <version>1.20.6-R0.1-SNAPSHOT</version>
+        <version>1.21.1-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
 
+    <!-- See https://junit.org/junit5/ for latest version -->
     <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
@@ -47,43 +51,41 @@ When you add the dependencies for MockBukkit and `commandapi-bukkit-test-toolkit
 </dependencies>
 ```
 
-```xml,Shading_CommandAPI
-<dependencies>
-    <dependency>
-        <groupId>com.github.seeseemelk</groupId>
-        <artifactId>MockBukkit-v1.20</artifactId>
-        <version>3.9.0</version>
-        <scope>test</scope>
-    </dependency>
 
-    <dependency>
-        <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-bukkit-test-toolkit</artifactId>
-        <version>9.6.0-SNAPSHOT</version>
-        <scope>test</scope>
-    </dependency>
+```groovy,Gradle_(build.gradle)
+dependencies {
+	// See https://github.com/MockBukkit/MockBukkit?tab=readme-ov-file#mag-usage for latest version
+	testImplementation 'com.github.seeseemelk:MockBukkit-v1.21:3.128.0'
 
-    <dependency>
-        <groupId>dev.jorel</groupId>
-        <artifactId>commandapi-bukkit-shade</artifactId>
-        <version>9.6.0-SNAPSHOT</version>
-        <scope>compile</scope>
-    </dependency>
+	testImplementation 'dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT'
 
-    <dependency>
-        <groupId>org.spigotmc</groupId>
-        <artifactId>spigot-api</artifactId>
-        <version>1.20.6-R0.1-SNAPSHOT</version>
-        <scope>provided</scope>
-    </dependency>
+	// May be the shade dependency and/or mojang-mapped
+	implementation 'dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT'
 
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>5.8.2</version>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
+	// Can also be paper-api
+	implementation 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+
+	// See https://junit.org/junit5/ for latest version
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+```
+
+```kotlin,Kotlin_Gradle_(build.gradle.kts)
+dependencies {
+	// See https://github.com/MockBukkit/MockBukkit?tab=readme-ov-file#mag-usage for latest version
+	testImplementation('com.github.seeseemelk:MockBukkit-v1.21:3.128.0')
+
+	testImplementation('dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT')
+
+	// May be the shade dependency and/or mojang-mapped
+	implementation('dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT')
+
+	// Can also be paper-api
+	implementation('org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT')
+
+	// See https://junit.org/junit5/ for latest version
+	testImplementation('org.junit.jupiter:junit-jupiter-engine:5.8.2')
+}
 ```
 
 </div>
