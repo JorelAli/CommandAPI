@@ -52,7 +52,9 @@ public interface Parser<T> {
 	 */
 	default T parse(StringReader reader) throws CommandSyntaxException {
 		Result<T> result = getResult(reader);
-		if (result.exception != null) throw result.exception;
+		if (result.exception != null) {
+			throw result.exception;
+		}
 		return result.value;
 	}
 

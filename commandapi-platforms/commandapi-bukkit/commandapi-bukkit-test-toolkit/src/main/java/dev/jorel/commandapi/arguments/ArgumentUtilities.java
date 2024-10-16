@@ -73,7 +73,9 @@ public class ArgumentUtilities {
 	 */
 	public static Parser.Literal assertCanRead(Function<StringReader, CommandSyntaxException> exception) {
 		return reader -> {
-			if (!reader.canRead()) throw exception.apply(reader);
+			if (!reader.canRead()) {
+				throw exception.apply(reader);
+			}
 		};
 	}
 
