@@ -31,6 +31,9 @@
 
 	<dependencies>
 		<!-- Compatibility with MockBukkit API -->
+		<!-- This provides transitive access to spigot-api and paper-api
+		      If we listed our own dependency for those, we could put a different version, which often causes problems
+		      Since we aren't just using MockBukkit for tests, we can rely on this dependency for the Spigot/Paper api -->
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
 			<artifactId>MockBukkit-v1.21</artifactId>
@@ -38,19 +41,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Compatibility with Spigot API-->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.20.6-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Compatibility with Adventure API -->
 		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-platform-bukkit</artifactId>
-			<version>4.2.0</version>
+			<version>4.3.4</version>
 			<scope>provided</scope>
 		</dependency>
 
