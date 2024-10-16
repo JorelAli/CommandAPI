@@ -166,6 +166,7 @@ public class EntitySelectorParser {
 		builder.suggest("@r", ArgumentUtilities.translatedMessage("argument.entity.selector.randomPlayer"));
 		builder.suggest("@s", ArgumentUtilities.translatedMessage("argument.entity.selector.self"));
 		builder.suggest("@e", ArgumentUtilities.translatedMessage("argument.entity.selector.allEntities"));
+		builder.suggest("@n", ArgumentUtilities.translatedMessage("argument.entity.selector.nearestEntity"));
 	};
 	private static final SuggestionProvider suggestNameOrSelector = (context, builder) -> {
 		suggestSelector.addSuggestions(context, builder);
