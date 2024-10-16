@@ -47,7 +47,6 @@ public class Main {
 	@Subscribe
 	public void onProxyInitialization(ProxyInitializeEvent event) {
 		// Enable the CommandAPI
-		// Not actually necessary rn because CommandAPI doesn't do anything when enabling on Velocity yet
 		CommandAPI.onEnable();
 	}
 }

@@ -1,0 +1,9 @@
+name: CommandAPINetworking
+main: dev.jorel.commandapi.CommandAPINetworkingMain
+version: ${project.version}
+description: A barebones plugin that only handles plugin messages sent by the CommandAPI
+authors:
+  - Will Kroboth
+website: https://www.jorel.dev/CommandAPI/
+api-version: 1.13
+folia-supported: true
