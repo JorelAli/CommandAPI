@@ -16,16 +16,7 @@ public class ConfigGenerator {
 		return new ConfigGenerator(defaultConfig);
 	}
 
-	public <T> void populateDefaultConfig(ConfigurationAdapter<T> adapter) {
-		for (Map.Entry<String, CommentedConfigOption<?>> commentedConfigOption : defaultConfig.getAllOptions().entrySet()) {
-			adapter.tryCreateSection(commentedConfigOption.getKey());
-			adapter.setValue(commentedConfigOption.getKey(), commentedConfigOption.getValue().option());
-			adapter.setComment(commentedConfigOption.getKey(), commentedConfigOption.getValue().comment());
-		}
-		adapter.complete();
-	}
-
-	public <T> ConfigurationAdapter<T> generateWithNewValues(ConfigurationAdapter<T> existingConfig) {
+	public <T> ConfigurationAdapter<T> generate(ConfigurationAdapter<T> existingConfig) {
 		ConfigurationAdapter<T> updatedConfig = existingConfig.createNew();
 
 		boolean shouldRemoveValues = shouldRemoveOptions(existingConfig);

@@ -12,12 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Logger;
 
-public record BukkitConfigurationAdapter(YamlConfiguration config) implements ConfigurationAdapter<YamlConfiguration> {
+public record BukkitConfigurationAdapter(YamlConfiguration config, File configFile) implements ConfigurationAdapter<YamlConfiguration> {
 
-	public static BukkitConfigurationAdapter createDummyInstance() {
-		return new BukkitConfigurationAdapter(null);
+	public static BukkitConfigurationAdapter createMinimalInstance(File configFile) {
+		return new BukkitConfigurationAdapter(null, configFile);
 	}
 
 	@Override
@@ -104,50 +103,26 @@ public record BukkitConfigurationAdapter(YamlConfiguration config) implements Co
 		return this;
 	}
 
+
 	@Override
 	public ConfigurationAdapter<YamlConfiguration> createNew() {
-		return new BukkitConfigurationAdapter(new YamlConfiguration());
+		return new BukkitConfigurationAdapter(new YamlConfiguration(), configFile);
 	}
 
 	@Override
-	public void saveDefaultConfig(File directory, File configFile, Logger logger) {
-		ConfigGenerator configGenerator = ConfigGenerator.createNew(DefaultBukkitConfig.createDefault());
-		if (!directory.exists()) {
-			boolean createdDirectory = directory.mkdirs();
-			if (!createdDirectory) {
-				logger.severe("Failed to create directory for the CommandAPI's config.yml file!");
-			}
-			try {
-				ConfigurationAdapter<YamlConfiguration> bukkitConfigurationAdapter = new BukkitConfigurationAdapter(new YamlConfiguration());
-				configGenerator.populateDefaultConfig(bukkitConfigurationAdapter);
-				bukkitConfigurationAdapter.config().save(configFile);
-			} catch (IOException e) {
-				logger.severe("Could not create default config file! This is (probably) a bug.");
-				logger.severe("Error message: " + e.getMessage());
-				logger.severe("Stacktrace:");
-				for (StackTraceElement element : e.getStackTrace()) {
-					logger.severe(element.toString());
-				}
-			}
-			return;
-		}
-		// Update the config if necessary
-		try {
-			YamlConfiguration existingYamlConfig = YamlConfiguration.loadConfiguration(configFile);
-			ConfigurationAdapter<YamlConfiguration> existingConfig = new BukkitConfigurationAdapter(existingYamlConfig);
-			ConfigurationAdapter<YamlConfiguration> updatedConfig = configGenerator.generateWithNewValues(existingConfig);
-			if (updatedConfig == null) {
-				return;
-			}
-			updatedConfig.config().save(configFile);
-		} catch (IOException e) {
-			logger.severe("Could not update config! This is (probably) a bug.");
-			logger.severe("Error message: " + e.getMessage());
-			logger.severe("Stacktrace:");
-			for (StackTraceElement element : e.getStackTrace()) {
-				logger.severe(element.toString());
-			}
-		}
+	public DefaultBukkitConfig createDefaultConfig() {
+		return DefaultBukkitConfig.createDefault();
+	}
+
+	@Override
+	public ConfigurationAdapter<YamlConfiguration> loadFromFile() {
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		return new BukkitConfigurationAdapter(config, configFile);
+	}
+
+	@Override
+	public void saveToFile() throws IOException {
+		config.save(configFile);
 	}
 
 }

@@ -145,7 +145,7 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void saveDefaultConfig() {
 		File configFile = new File(getDataFolder(), "config.yml");
-		BukkitConfigurationAdapter.createDummyInstance().saveDefaultConfig(getDataFolder(), configFile, getLogger());
+		BukkitConfigurationAdapter.createMinimalInstance(configFile).saveDefaultConfig(getDataFolder(), getLogger());
 	}
 
 }
