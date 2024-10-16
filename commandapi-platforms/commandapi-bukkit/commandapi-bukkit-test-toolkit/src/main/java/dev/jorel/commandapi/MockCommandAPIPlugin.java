@@ -42,7 +42,9 @@ public class MockCommandAPIPlugin extends JavaPlugin {
 	public void onLoad() {
 		CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this);
 
-		if (configureSettings != null) configureSettings.accept(config);
+		if (configureSettings != null) {
+			configureSettings.accept(config);
+		}
 		configureSettings = null; // Reset to avoid configs persisting between tests
 
 		CommandAPI.onLoad(config);
