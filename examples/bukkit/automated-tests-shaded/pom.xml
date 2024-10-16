@@ -22,8 +22,8 @@
 		<!-- Otherwise, MockBukkit can get pretty cranky -->
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.20</artifactId>
-			<version>3.9.0</version>
+			<artifactId>MockBukkit-v1.21</artifactId>
+			<version>3.128.0</version>
 			<scope>test</scope>
 		</dependency>
 

@@ -10,8 +10,8 @@ Key points:
 <dependencies>
 	<dependency>
 		<groupId>com.github.seeseemelk</groupId>
-		<artifactId>MockBukkit-v1.20</artifactId>
-		<version>3.9.0</version>
+		<artifactId>MockBukkit-v1.21</artifactId>
+		<version>3.128.0</version>
 		<scope>test</scope>
 	</dependency>
 
@@ -29,10 +29,11 @@ Key points:
 		<scope>provided</scope>
 	</dependency>
 
+	<!-- Can also be paper-api -->
 	<dependency>
 		<groupId>org.spigotmc</groupId>
 		<artifactId>spigot-api</artifactId>
-		<version>1.20.6-R0.1-SNAPSHOT</version>
+		<version>1.21.1-R0.1-SNAPSHOT</version>
 		<scope>provided</scope>
 	</dependency>
 
