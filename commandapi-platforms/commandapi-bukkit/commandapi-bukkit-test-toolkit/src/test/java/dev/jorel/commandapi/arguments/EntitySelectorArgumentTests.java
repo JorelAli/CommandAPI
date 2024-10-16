@@ -88,6 +88,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 			21,
 			makeTooltip("@a", "All players"),
 			makeTooltip("@e", "All entities"),
+			makeTooltip("@n", "Nearest entity"),
 			makeTooltip("@p", "Nearest player"),
 			makeTooltip("@r", "Random player"),
 			makeTooltip("@s", "Current entity"),
@@ -251,6 +252,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 			21,
 			makeTooltip("@a", "All players"),
 			makeTooltip("@e", "All entities"),
+			makeTooltip("@n", "Nearest entity"),
 			makeTooltip("@p", "Nearest player"),
 			makeTooltip("@r", "Random player"),
 			makeTooltip("@s", "Current entity")
@@ -466,6 +468,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 			21,
 			makeTooltip("@a", "All players"),
 			makeTooltip("@e", "All entities"),
+			makeTooltip("@n", "Nearest entity"),
 			makeTooltip("@p", "Nearest player"),
 			makeTooltip("@r", "Random player"),
 			makeTooltip("@s", "Current entity")

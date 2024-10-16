@@ -79,6 +79,7 @@ class ProfileArgumentTypeTests extends CommandTestBase {
 			5,
 			makeTooltip("@a", "All players"),
 			makeTooltip("@e", "All entities"),
+			makeTooltip("@n", "Nearest entity"),
 			makeTooltip("@p", "Nearest player"),
 			makeTooltip("@r", "Random player"),
 			makeTooltip("@s", "Current entity"),
@@ -157,6 +158,7 @@ class ProfileArgumentTypeTests extends CommandTestBase {
 			5,
 			makeTooltip("@a", "All players"),
 			makeTooltip("@e", "All entities"),
+			makeTooltip("@n", "Nearest entity"),
 			makeTooltip("@p", "Nearest player"),
 			makeTooltip("@r", "Random player"),
 			makeTooltip("@s", "Current entity")

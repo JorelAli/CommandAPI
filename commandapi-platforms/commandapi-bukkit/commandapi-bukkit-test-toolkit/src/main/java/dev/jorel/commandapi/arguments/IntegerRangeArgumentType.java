@@ -20,9 +20,6 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 	}
 
 	// ArgumentType implementation
-	//  I'd like to use the translation keys for these error messages,
-	//  but MockBukkit doesn't seem to currently support that: https://github.com/MockBukkit/MockBukkit/issues/1040.
-	//  For now, just grabbing the literal strings from https://gist.github.com/sppmacd/82af47c83b225d4ffd33bb0c27b0d932.
 	public static final SimpleCommandExceptionType EMPTY_INPUT = new SimpleCommandExceptionType(
 		ArgumentUtilities.translatedMessage("argument.range.empty")
 	);
