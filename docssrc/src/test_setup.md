@@ -51,40 +51,39 @@ When you add the dependencies for MockBukkit and `commandapi-bukkit-test-toolkit
 </dependencies>
 ```
 
-
 ```groovy,Gradle_(build.gradle)
 dependencies {
-	// See https://github.com/MockBukkit/MockBukkit?tab=readme-ov-file#mag-usage for latest version
-	testImplementation 'com.github.seeseemelk:MockBukkit-v1.21:3.128.0'
+    // See https://github.com/MockBukkit/MockBukkit?tab=readme-ov-file#mag-usage for latest version
+    testImplementation 'com.github.seeseemelk:MockBukkit-v1.21:3.128.0'
 
-	testImplementation 'dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT'
+    testImplementation 'dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT'
 
-	// May be the shade dependency and/or mojang-mapped
-	implementation 'dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT'
+    // May be the shade dependency and/or mojang-mapped
+    implementation 'dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT'
 
-	// Can also be paper-api
-	implementation 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+    // Can also be paper-api
+    implementation 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
 
-	// See https://junit.org/junit5/ for latest version
-	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    // See https://junit.org/junit5/ for latest version
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 ```
 
 ```kotlin,Kotlin_Gradle_(build.gradle.kts)
 dependencies {
-	// See https://github.com/MockBukkit/MockBukkit?tab=readme-ov-file#mag-usage for latest version
-	testImplementation('com.github.seeseemelk:MockBukkit-v1.21:3.128.0')
+    // See https://github.com/MockBukkit/MockBukkit?tab=readme-ov-file#mag-usage for latest version
+    testImplementation('com.github.seeseemelk:MockBukkit-v1.21:3.128.0')
 
-	testImplementation('dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT')
+    testImplementation('dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT')
 
-	// May be the shade dependency and/or mojang-mapped
-	implementation('dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT')
+    // May be the shade dependency and/or mojang-mapped
+    implementation('dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT')
 
-	// Can also be paper-api
-	implementation('org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT')
+    // Can also be paper-api
+    implementation('org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT')
 
-	// See https://junit.org/junit5/ for latest version
-	testImplementation('org.junit.jupiter:junit-jupiter-engine:5.8.2')
+    // See https://junit.org/junit5/ for latest version
+    testImplementation('org.junit.jupiter:junit-jupiter-engine:5.8.2')
 }
 ```
 
