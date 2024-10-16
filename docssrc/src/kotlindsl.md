@@ -145,7 +145,9 @@ We want to create a `/give` command with the following syntax:
 /optionalArgument give <item> <amount>
 ```
 
-To declare an argument as optional you need to set the `optional` value to `true`:
+When using a CommandTree, you can do this by using the same executor in two places.
+
+When using a CommandAPICommand, you can create an optional Argument by setting the `optional` value to `true`:
 
 <div class="multi-pre">
 
