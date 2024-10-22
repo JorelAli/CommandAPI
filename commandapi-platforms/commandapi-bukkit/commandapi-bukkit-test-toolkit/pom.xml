@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
 			<artifactId>MockBukkit-v1.21</artifactId>
-			<version>3.128.0</version>
+			<version>3.133.2</version>
 			<scope>provided</scope>
 		</dependency>
 
