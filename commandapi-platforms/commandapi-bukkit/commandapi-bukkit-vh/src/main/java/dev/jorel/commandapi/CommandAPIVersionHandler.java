@@ -51,7 +51,7 @@ public interface CommandAPIVersionHandler {
 	static LoadContext getPlatform() {
 		String latestMajorVersion = "21"; // Change this for Minecraft's major update
 		if (CommandAPI.getConfiguration().shouldUseLatestNMSVersion()) {
-			return new LoadContext(new NMS_1_21_R1(), () -> {
+			return new LoadContext(new NMS_1_21_R2(), () -> {
 				CommandAPI.logWarning("Loading the CommandAPI with the latest and potentially incompatible NMS implementation.");
 				CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
 			});
@@ -72,6 +72,7 @@ public interface CommandAPIVersionHandler {
 				case "1.20.3", "1.20.4" -> new NMS_1_20_R3();
 				case "1.20.5", "1.20.6" -> new NMS_1_20_R4();
 				case "1.21", "1.21.1" -> new NMS_1_21_R1();
+				case "1.21.2" -> new NMS_1_21_R2();
 				default -> null;
 			};
 			if (platform != null) {
@@ -80,7 +81,7 @@ public interface CommandAPIVersionHandler {
 			if (CommandAPI.getConfiguration().shouldBeLenientForMinorVersions()) {
 				String currentMajorVersion = version.split("\\.")[1];
 				if (latestMajorVersion.equals(currentMajorVersion)) {
-					return new LoadContext(new NMS_1_21_R1(), () -> {
+					return new LoadContext(new NMS_1_21_R2(), () -> {
 						CommandAPI.logWarning("Loading the CommandAPI with a potentially incompatible NMS implementation.");
 						CommandAPI.logWarning("While you may find success with this, further updates might be necessary to fully support the version you are using.");
 					});
