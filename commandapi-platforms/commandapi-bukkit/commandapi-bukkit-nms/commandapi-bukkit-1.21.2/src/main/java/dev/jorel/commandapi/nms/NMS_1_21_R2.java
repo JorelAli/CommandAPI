@@ -201,7 +201,7 @@ import net.minecraft.world.scores.ScoreHolder;
 /**
  * NMS implementation for Minecraft 1.21.2
  */
-@NMSMeta(compatibleWith = { "1.21", "1.21.1" })
+@NMSMeta(compatibleWith = { "1.21.2" })
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 // @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
@@ -307,7 +307,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.21", "1.21.1" };
+		return new String[] { "1.21.2" };
 	};
 	
 	@Differs(from = "1.20.6", by = "ItemInput constructor uses a data components patch, instead of a data components map")
@@ -404,6 +404,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 		return new CustomHelpTopic(commandName, shortDescription, fullDescription, permission);
 	}
 
+	@Differs(from = "1.21.1", by = "Uses ResourceKeyArgument instead of ResourceLocationArgument")
 	@Override
 	public Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key)
 			throws CommandSyntaxException {
@@ -764,6 +765,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 		};
 	}
 
+	@Differs(from = "1.21.1", by = "Uses ResourceKeyArgument instead of ResourceLocationArgument")
 	@Override
 	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		RecipeHolder<?> recipe = ResourceKeyArgument.getRecipe(cmdCtx, key);
