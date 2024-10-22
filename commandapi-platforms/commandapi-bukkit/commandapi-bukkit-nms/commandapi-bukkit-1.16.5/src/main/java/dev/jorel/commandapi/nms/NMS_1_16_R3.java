@@ -237,6 +237,11 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentAdvancement() {
+		return _ArgumentMinecraftKeyRegistered();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentAngle() { return ArgumentAngle.a(); }
 
 	@Override
@@ -314,6 +319,11 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 
 	@Override
 	public ArgumentType<?> _ArgumentProfile() { return ArgumentProfile.a(); }
+
+	@Override
+	public ArgumentType<?> _ArgumentRecipe() {
+		return _ArgumentMinecraftKeyRegistered();
+	}
 
 	@Override
 	public ArgumentType<?> _ArgumentRotation() { return ArgumentRotation.a(); }

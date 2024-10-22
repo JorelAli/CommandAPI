@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import be.seeseemelk.mockbukkit.help.HelpMapMock;
+import com.mojang.brigadier.arguments.ArgumentType;
 import dev.jorel.commandapi.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -251,6 +252,16 @@ public class MockNMS extends Enums {
 	/**************************
 	 * MockPlatform overrides *
 	 **************************/
+
+	@Override
+	public ArgumentType<?> _ArgumentAdvancement() {
+		return baseNMS._ArgumentAdvancement();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRecipe() {
+		return baseNMS._ArgumentRecipe();
+	}
 
 	@Override
 	public ItemFactory getItemFactory() {

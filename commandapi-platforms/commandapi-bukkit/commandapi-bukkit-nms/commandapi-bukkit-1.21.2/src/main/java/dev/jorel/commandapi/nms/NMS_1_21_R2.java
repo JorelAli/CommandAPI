@@ -41,6 +41,7 @@ import java.util.function.ToIntFunction;
 
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.profiling.Profiler;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -250,6 +251,11 @@ public class NMS_1_21_R2 extends NMS_Common {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentAdvancement() {
+		return ResourceKeyArgument.key(Registries.ADVANCEMENT);
+	}
+
+	@Override
 	public final ArgumentType<?> _ArgumentBlockPredicate() {
 		return BlockPredicateArgument.blockPredicate(COMMAND_BUILD_CONTEXT);
 	}
@@ -293,6 +299,11 @@ public class NMS_1_21_R2 extends NMS_Common {
 	@Override
 	public final ArgumentType<?> _ArgumentParticle() {
 		return ParticleArgument.particle(COMMAND_BUILD_CONTEXT);
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRecipe() {
+		return ResourceKeyArgument.key(Registries.RECIPE);
 	}
 
 	@Override
@@ -769,7 +780,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 	@Override
 	public final Recipe getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		RecipeHolder<?> recipe = ResourceKeyArgument.getRecipe(cmdCtx, key);
-		return new ComplexRecipeImpl(fromResourceLocation(recipe.id().location()), recipe.toBukkitRecipe());
+		return new ComplexRecipeImpl(fromResourceLocation(recipe.id().registry()), recipe.toBukkitRecipe());
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import be.seeseemelk.mockbukkit.potion.MockPotionEffectType;
 import com.google.common.collect.Streams;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
@@ -233,6 +234,16 @@ public class MockNMS extends Enums {
 	/**************************
 	 * MockPlatform overrides *
 	 **************************/
+
+	@Override
+	public ArgumentType<?> _ArgumentAdvancement() {
+		return baseNMS._ArgumentAdvancement();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRecipe() {
+		return baseNMS._ArgumentRecipe();
+	}
 
 	@Override
 	public ItemFactory getItemFactory() {
