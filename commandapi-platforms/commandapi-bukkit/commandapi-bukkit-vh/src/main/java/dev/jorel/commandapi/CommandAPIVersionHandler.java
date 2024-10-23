@@ -72,7 +72,7 @@ public interface CommandAPIVersionHandler {
 				case "1.20.3", "1.20.4" -> new NMS_1_20_R3();
 				case "1.20.5", "1.20.6" -> new NMS_1_20_R4();
 				case "1.21", "1.21.1" -> new NMS_1_21_R1();
-				case "1.21.2" -> new NMS_1_21_R2();
+				case "1.21.2", "1.21.3" -> new NMS_1_21_R2();
 				default -> null;
 			};
 			if (platform != null) {
