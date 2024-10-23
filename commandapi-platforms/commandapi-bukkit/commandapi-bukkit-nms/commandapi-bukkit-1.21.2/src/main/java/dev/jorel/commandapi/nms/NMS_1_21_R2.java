@@ -250,6 +250,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
 	}
 
+	@Differs(from = "1.21.1", by = "New advancement argument implementation")
 	@Override
 	public ArgumentType<?> _ArgumentAdvancement() {
 		return ResourceKeyArgument.key(Registries.ADVANCEMENT);
@@ -301,6 +302,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 		return ParticleArgument.particle(COMMAND_BUILD_CONTEXT);
 	}
 
+	@Differs(from = "1.21.1", by = "New recipe argument implementation")
 	@Override
 	public ArgumentType<?> _ArgumentRecipe() {
 		return ResourceKeyArgument.key(Registries.RECIPE);
@@ -354,10 +356,10 @@ public class NMS_1_21_R2 extends NMS_Common {
 	 * @param css the command source stack to execute this command
 	 * @return the result of our function. This is either 0 is the command failed, or greater than 0 if the command succeeded
 	 */
+	@Differs(from = "1.21.1", by = "Use Profiler.get() instead of MinecraftServer.getProfiler()")
 	private final int runCommandFunction(CommandFunction<CommandSourceStack> commandFunction, CommandSourceStack css) {
 		// Profile the function. We want to simulate the execution sequence exactly
-//		ProfilerFiller profiler = this.<MinecraftServer>getMinecraftServer().getProfiler();
-		ProfilerFiller profiler = Profiler.get(); // TODO ?
+		ProfilerFiller profiler = Profiler.get();
 		profiler.push(() -> "function " + commandFunction.id());
 
 		// Store our function result
