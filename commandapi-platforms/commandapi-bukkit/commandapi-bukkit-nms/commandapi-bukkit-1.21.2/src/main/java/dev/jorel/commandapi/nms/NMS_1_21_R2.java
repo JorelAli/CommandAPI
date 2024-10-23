@@ -39,10 +39,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import net.minecraft.commands.arguments.ResourceKeyArgument;
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.profiling.Profiler;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -136,6 +132,7 @@ import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.ParticleArgument;
 import net.minecraft.commands.arguments.RangeArgument;
 import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ScoreHolderArgument;
 import net.minecraft.commands.arguments.ScoreboardSlotArgument;
@@ -155,6 +152,7 @@ import net.minecraft.commands.functions.CommandFunction;
 import net.minecraft.commands.functions.InstantiatedFunction;
 import net.minecraft.commands.synchronization.ArgumentUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.DustColorTransitionOptions;
@@ -185,13 +183,16 @@ import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.SimpleReloadInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Unit;
+import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldDataConfiguration;
+import net.minecraft.world.level.block.entity.FuelValues;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.phys.Vec2;
@@ -207,6 +208,7 @@ import net.minecraft.world.scores.ScoreHolder;
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 // @RequireField(in = ItemInput.class, name = "tag", ofType = CompoundTag.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
+@RequireField(in = MinecraftServer.class, name = "fuelValues", ofType = FuelValues.class)
 public class NMS_1_21_R2 extends NMS_Common {
 
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
@@ -214,6 +216,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 	// private static final SafeVarHandle<ItemInput, CompoundTag> itemInput;
 	private static final Field serverFunctionLibraryDispatcher;
 	private static final boolean vanillaCommandDispatcherFieldExists;
+	private static final SafeVarHandle<MinecraftServer, FuelValues> minecraftServerFuelValues;
 
 	// Derived from net.minecraft.commands.Commands;
 	private static final CommandBuildContext COMMAND_BUILD_CONTEXT;
@@ -244,6 +247,8 @@ public class NMS_1_21_R2 extends NMS_Common {
 			fieldExists = false;
 		}
 		vanillaCommandDispatcherFieldExists = fieldExists;
+		
+		minecraftServerFuelValues = SafeVarHandle.ofOrNull(MinecraftServer.class, "fuelValues", "fuelValues", FuelValues.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
@@ -974,6 +979,10 @@ public class NMS_1_21_R2 extends NMS_Common {
 			MultiPackResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA,
 					packResources);
 
+			// TODO: I'm not sure if this is sufficient anymore - Do we not want to load tags for existing
+			// registries here as well?
+			// List<PendingTags<?>> TagList = TagLoader.loadTagsForExistingRegistries(resourceManager, this.<MinecraftServer>getMinecraftServer().registries().compositeAccess());
+
 			// Not using packResources, because we really really want this to work
 			CompletableFuture<?> simpleReloadInstance = SimpleReloadInstance.create(resourceManager,
 					serverResources.managers().listeners(), this.<MinecraftServer>getMinecraftServer().executor,
@@ -990,6 +999,8 @@ public class NMS_1_21_R2 extends NMS_Common {
 			this.<MinecraftServer>getMinecraftServer().resources = serverResources;
 			this.<MinecraftServer>getMinecraftServer().server.syncCommands();
 			this.<MinecraftServer>getMinecraftServer().getPackRepository().setSelected(collection);
+			
+			final FeatureFlagSet enabledFeatures = this.<MinecraftServer>getMinecraftServer().getWorldData().getDataConfiguration().enabledFeatures();
 
 			// this.<MinecraftServer>getMinecraftServer().getSelectedPacks
 			Collection<String> selectedIDs = this.<MinecraftServer>getMinecraftServer().getPackRepository()
@@ -1001,11 +1012,11 @@ public class NMS_1_21_R2 extends NMS_Common {
 			disabledIDs.removeIf(enabledIDs::contains);
 
 			this.<MinecraftServer>getMinecraftServer().getWorldData()
-					.setDataConfiguration(new WorldDataConfiguration(new DataPackConfig(enabledIDs, disabledIDs),
-							this.<MinecraftServer>getMinecraftServer().getWorldData().getDataConfiguration()
-									.enabledFeatures()));
+					.setDataConfiguration(new WorldDataConfiguration(new DataPackConfig(enabledIDs, disabledIDs), enabledFeatures));
 			// this.<MinecraftServer>getMinecraftServer().resources.managers().updateRegistryTags(registryAccess);
-			this.<MinecraftServer>getMinecraftServer().resources.managers().updateStaticRegistryTags(); // TODO
+			this.<MinecraftServer>getMinecraftServer().resources.managers().updateStaticRegistryTags(); // TODO: Review this
+			this.<MinecraftServer>getMinecraftServer().resources.managers().getRecipeManager().finalizeRecipeLoading(enabledFeatures);
+
 			// May need to be commented out, may not. Comment it out just in case.
 			// For some reason, calling getPlayerList().saveAll() may just hang
 			// the server indefinitely. Not sure why!
@@ -1014,6 +1025,13 @@ public class NMS_1_21_R2 extends NMS_Common {
 			// this.<MinecraftServer>getMinecraftServer().getFunctions().replaceLibrary(this.<MinecraftServer>getMinecraftServer().resources.managers().getFunctionLibrary());
 			this.<MinecraftServer>getMinecraftServer().getStructureManager()
 					.onResourceManagerReload(this.<MinecraftServer>getMinecraftServer().resources.resourceManager());
+			
+			// Set fuel values with the new loaded fuel values from the list of enabled features
+			minecraftServerFuelValues.set(this.<MinecraftServer>getMinecraftServer(),
+				FuelValues.vanillaBurnTimes(this.<MinecraftServer>getMinecraftServer().registries().compositeAccess(),
+						enabledFeatures
+				)
+			);
 		});
 
 		// Step 4: Block the thread until everything's done

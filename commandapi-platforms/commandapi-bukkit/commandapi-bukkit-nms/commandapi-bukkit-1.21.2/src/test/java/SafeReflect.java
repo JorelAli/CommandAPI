@@ -28,6 +28,8 @@ import com.mojang.datafixers.util.Either;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.server.CustomFunctionManager;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.block.entity.FuelValues;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 
 // Spigot-Mapped reflection
@@ -35,4 +37,5 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 @RequireField(in = EntitySelector.class, name = "p", ofType = boolean.class)
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = EntityPositionSource.class, name = "e", ofType = Either.class)
+@RequireField(in = MinecraftServer.class, name = "fuelValues", ofType = FuelValues.class)
 public class SafeReflect {}
