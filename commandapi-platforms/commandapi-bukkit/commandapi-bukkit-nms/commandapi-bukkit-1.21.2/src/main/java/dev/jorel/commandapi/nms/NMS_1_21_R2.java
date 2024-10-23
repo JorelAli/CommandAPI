@@ -248,7 +248,7 @@ public class NMS_1_21_R2 extends NMS_Common {
 		}
 		vanillaCommandDispatcherFieldExists = fieldExists;
 		
-		minecraftServerFuelValues = SafeVarHandle.ofOrNull(MinecraftServer.class, "fuelValues", "fuelValues", FuelValues.class);
+		minecraftServerFuelValues = SafeVarHandle.ofOrNull(MinecraftServer.class, "aE", "fuelValues", FuelValues.class);
 	}
 
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
