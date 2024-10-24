@@ -41,7 +41,7 @@ import org.bukkit.Bukkit;
  * depends on CommandListenerWrapper and then our main NMS_VERSION class extends
  * that.
  */
-public interface CommandAPIVersionHandler {
+public abstract class CommandAPIVersionHandler {
 
 	/**
 	 * Returns an instance of the current running version's implementation of the Bukkit NMS.
