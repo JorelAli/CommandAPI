@@ -411,8 +411,13 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
     <tbody>
         <tr>
             <td valign="top"><b>9.6.0</b></td>
-            <td valign="top">???</td>
+            <td valign="top">October 2024</td>
             <td valign="top">
+                <b>Minecraft Version Changes:</b>
+                <ul>
+                    <li>Adds support for Minecraft 1.21.2 and 1.21.3</li>
+                </ul>
+                <b>CommandAPI Changes:</b>
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/pull/594 Adds a config option to allow the CommandAPI to be more lenient when updating to a new minor version (e.g. from 1.21 to 1.21.1)</li>
                 </ul>
