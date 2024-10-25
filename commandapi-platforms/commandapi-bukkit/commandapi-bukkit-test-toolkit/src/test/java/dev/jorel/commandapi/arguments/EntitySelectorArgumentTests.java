@@ -72,7 +72,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 
 		assertThrowsWithMessage(
 			CommandSyntaxException.class,
-			() -> createContextWithParser(player, "entities", EntitySelectorParser.PARSER, ""),
+			() -> createContextWithParser(player, "entities", EntitySelectorParser.parser, ""),
 			"Invalid name or UUID at position 0: <--[HERE]"
 		);
 	}
@@ -195,7 +195,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 
 		// Entities
 		CommandContext<MockCommandSource> entitiesContext = createContextWithParser(
-			player1, "entities", EntitySelectorParser.PARSER, "@e"
+			player1, "entities", EntitySelectorParser.parser, "@e"
 		);
 
 		if (twoEntities) {
@@ -210,7 +210,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 
 		// Players
 		CommandContext<MockCommandSource> playersContext = createContextWithParser(
-			player1, "players", EntitySelectorParser.PARSER, "@a"
+			player1, "players", EntitySelectorParser.parser, "@a"
 		);
 
 		if (twoEntities) {
@@ -587,7 +587,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 		//  Note that a command like `test multiple player <uuid>` will fail b/c uuid selector includes entities,
 		//  but you can still ask an uuid selector to find players directly
 		CommandContext<MockCommandSource> playerUUIDContext = createContextWithParser(
-			console, "players", EntitySelectorParser.PARSER, playerUUID.toString()
+			console, "players", EntitySelectorParser.parser, playerUUID.toString()
 		);
 		assertEquals(
 			List.of(player),
@@ -595,7 +595,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 		);
 
 		CommandContext<MockCommandSource> entityUUIDContext = createContextWithParser(
-			console, "players", EntitySelectorParser.PARSER, entityUUID.toString()
+			console, "players", EntitySelectorParser.parser, entityUUID.toString()
 		);
 		assertEquals(
 			List.of(),
@@ -603,7 +603,7 @@ class EntitySelectorArgumentTests extends CommandTestBase {
 		);
 
 		CommandContext<MockCommandSource> otherUUIDContext = createContextWithParser(
-			console, "players", EntitySelectorParser.PARSER, otherUUID.toString()
+			console, "players", EntitySelectorParser.parser, otherUUID.toString()
 		);
 		assertEquals(
 			List.of(),

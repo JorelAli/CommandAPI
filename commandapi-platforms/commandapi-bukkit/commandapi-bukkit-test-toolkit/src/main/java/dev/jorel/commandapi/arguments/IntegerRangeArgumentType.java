@@ -7,8 +7,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.MockCommandSource;
 import dev.jorel.commandapi.arguments.parser.Parser;
+import dev.jorel.commandapi.arguments.parser.ParserArgument;
+import dev.jorel.commandapi.arguments.parser.ParserLiteral;
+import dev.jorel.commandapi.arguments.parser.Result;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
@@ -27,8 +31,15 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 		ArgumentUtilities.translatedMessage("argument.range.swapped")
 	);
 
-	private static final Parser.Argument<Integer> READ_INT_BEFORE_RANGE = reader -> {
-		// Custom parser avoids reading `..` indicator for range as part of a number
+	private static final Predicate<CommandSyntaxException> throwInvalidIntExceptions = exception ->
+		exception.getType().equals(CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt());
+
+	private static final ParserLiteral rangeIndicator = ArgumentUtilities.literal("..");
+
+	private static final ParserArgument<Integer> readHigh = StringReader::readInt;
+
+	private static final ParserArgument<Integer> readLow = reader -> {
+		// Acts like `StringReader#readInt`, but avoids reading `..` indicator for range as part of a number
 		int start = reader.getCursor();
 
 		while (reader.canRead()) {
@@ -52,87 +63,80 @@ public class IntegerRangeArgumentType implements ArgumentType<IntegerRange> {
 			throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(reader, number);
 		}
 	};
-	private static final Predicate<CommandSyntaxException> THROW_INVALID_INT_EXCEPTIONS = exception ->
-		exception.getType().equals(CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt());
 
-	private static final Parser<IntegerRange> PARSER = ArgumentUtilities
-		.assertCanRead(EMPTY_INPUT::createWithContext)
-		.alwaysThrowException()
-		.continueWith(
-			Parser.tryParse(ArgumentUtilities.literal("..")
-				.neverThrowException()
-				// Input ..
-				.continueWith(
-					Parser.tryParse(Parser.parse(StringReader::readInt)
-						// It looks like they tried to enter ..high, but high was not a valid int
-						.throwExceptionIfTrue(THROW_INVALID_INT_EXCEPTIONS)
-						// Input ..high
-						.continueWith(high -> Parser.parse(
-							reader -> IntegerRange.integerRangeLessThanOrEq(high.get())
-						))
-					).then(Parser.parse(
-						// Input just ..
-						reader -> {
-							// Move cursor to start of ..
-							reader.setCursor(reader.getCursor() - 2);
-							throw EMPTY_INPUT.createWithContext(reader);
-						}
-					))
-				)
-			).then(Parser.parse(StringReader::getCursor)
-				.alwaysThrowException()
-				.continueWith(start ->
-					Parser.parse(READ_INT_BEFORE_RANGE)
-						.alwaysMapException(exception -> {
-							if (exception.getType().equals(CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerExpectedInt())) {
-								// If we didn't find any int to input, this range is empty
-								StringReader context = new StringReader(exception.getInput());
-								context.setCursor(exception.getCursor());
-								return EMPTY_INPUT.createWithContext(context);
+	public static final Parser<IntegerRange> parser = reader -> {
+		if (!reader.canRead()) {
+			return Result.withException(EMPTY_INPUT.createWithContext(reader));
+		}
+
+		Function<CommandSyntaxException, Result<IntegerRange>> handleNumberReadFailure = Result.wrapFunctionResult(exception -> {
+			if (throwInvalidIntExceptions.test(exception)) {
+				// Tried to input a number, but it was not a valid int
+				throw exception;
+			}
+
+			// Nothing looking like a number was found, empty input
+			throw EMPTY_INPUT.createWithContext(reader);
+		});
+
+		int start = reader.getCursor();
+		return rangeIndicator.getResult(reader).continueWith(
+			// Input ..
+			// Try to read ..high
+			success -> readHigh.getResult(reader).continueWith(
+				// Successfully input ..high
+				Result.wrapFunctionResult(IntegerRange::integerRangeLessThanOrEq),
+				// Either input a high that was not an int, or just an empty .. input
+				handleNumberReadFailure
+			),
+			// No range indicator yet
+			// Try to read low
+			failure -> readLow.getResult(reader).continueWith(
+				// Successfully read low
+				// Try to read low..
+				low -> rangeIndicator.getResult(reader).continueWith(
+					// Successfully read low..
+					// Try to read low..high
+					success -> readHigh.getResult(reader).continueWith(
+						// Successfully read low..high
+						Result.wrapFunctionResult(high -> {
+							if (low > high) {
+								throw RANGE_SWAPPED.createWithContext(reader);
 							}
-							// Otherwise throw original exception (invalid integer)
-							return exception;
+							return new IntegerRange(low, high);
+						}),
+						// Either input a high that was not an int, or just low..
+						Result.wrapFunctionResult(exception -> {
+							if (throwInvalidIntExceptions.test(exception)) {
+								// Tried to input low..high, but high was not an int
+								throw exception;
+							}
+
+							// Input low..
+							return IntegerRange.integerRangeGreaterThanOrEq(low);
 						})
-						// Input low
-						.continueWith(getLow ->
-							Parser.tryParse(ArgumentUtilities.literal("..")
-								.neverThrowException()
-								// Input low..
-								.continueWith(
-									Parser.tryParse(Parser.parse(StringReader::readInt)
-										.throwExceptionIfTrue(THROW_INVALID_INT_EXCEPTIONS)
-										.continueWith(getHigh -> Parser.parse(
-											reader -> {
-												int low = getLow.get();
-												int high = getHigh.get();
-												if (low > high) {
-													// Reset to start of input
-													reader.setCursor(start.get());
-													throw RANGE_SWAPPED.createWithContext(reader);
-												}
-												return new IntegerRange(low, high);
-											}
-										))
-									).then(Parser.parse(
-										// Input low..
-										reader -> IntegerRange.integerRangeGreaterThanOrEq(getLow.get())
-									))
-								)
-							).then(Parser.parse(
-								// Input exact
-								reader -> {
-									int exact = getLow.get();
-									return new IntegerRange(exact, exact);
-								}
-							))
-						)
-				)
+					),
+					// Didn't find the range indicator
+					// Input is just low
+					Result.wrapFunctionResult(failure2 -> new IntegerRange(low, low))
+				),
+				// Either input a low that was not an int, or just an empty input
+				handleNumberReadFailure
 			)
+		).continueWith(
+			// If we return an IntegerRange, keep that
+			Result.wrapFunctionResult(success -> success),
+			// For some reason, Minecraft explicitly maps all exceptions to underline the start of the reader input
+			// Even something like `..1.0`, which by my intuition should underline `1.0` to show it is not an integer
+			Result.wrapFunctionResult(exception -> {
+				throw new CommandSyntaxException(exception.getType(), exception.getRawMessage(), exception.getInput(), start);
+			})
 		);
+	};
 
 	@Override
 	public IntegerRange parse(StringReader reader) throws CommandSyntaxException {
-		return PARSER.parse(reader);
+		return parser.parse(reader);
 	}
 
 	public static IntegerRange getRange(CommandContext<MockCommandSource> cmdCtx, String key) {

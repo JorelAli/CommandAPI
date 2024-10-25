@@ -3,14 +3,16 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.UnimplementedMethodException;
-import dev.jorel.commandapi.arguments.parser.ParameterGetter;
 import dev.jorel.commandapi.arguments.parser.Parser;
+import dev.jorel.commandapi.arguments.parser.ParserLiteral;
+import dev.jorel.commandapi.arguments.parser.Result;
 import dev.jorel.commandapi.arguments.parser.SuggestionProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class EntitySelectorParser {
@@ -48,16 +50,12 @@ public class EntitySelectorParser {
 	}
 
 	// Parsing
-	private static final Parser.Literal isSelectorStart = reader -> {
-		if (!(reader.canRead() && reader.peek() == '@')) throw ArgumentUtilities.NEXT_BRANCH;
-	};
-
-	private static Parser.Literal parseSelector(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
-		return reader -> {
+	private static ParserLiteral parseSelector(EntitySelectorParser selectorBuilder) {
+		return Parser.read(reader -> {
 			reader.skip(); // skip @
 			if (!reader.canRead()) throw ERROR_MISSING_SELECTOR_TYPE.createWithContext(reader);
 			char selectorCode = reader.read();
-			EntitySelectorParser selectorBuilder = selectorBuilderGetter.get();
+
 			switch (selectorCode) {
 				case 'p' -> {
 					selectorBuilder.maxResults = 1;
@@ -101,14 +99,10 @@ public class EntitySelectorParser {
 					throw ERROR_UNKNOWN_SELECTOR_TYPE.createWithContext(reader, "@" + selectorCode);
 				}
 			}
-		};
+		}).suggests(suggestSelector);
 	}
 
-	private static final Parser.Literal isSelectorOptionsStart = reader -> {
-		if (!(reader.canRead() && reader.peek() == '[')) throw ArgumentUtilities.NEXT_BRANCH;
-	};
-
-	private static Parser.Literal parseSelectorOptions(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
+	private static ParserLiteral parseSelectorOptions(EntitySelectorParser selectorBuilder) {
 		return reader -> {
 			// TODO: Implement looping to parse these selector options
 			//  I'm pretty sure it would basically reuse many other object parsers as well, so maybe do those first
@@ -116,14 +110,8 @@ public class EntitySelectorParser {
 		};
 	}
 
-	private static final Parser.Literal isNameStart = reader -> {
-		if (!(reader.canRead() && reader.peek() != ' ')) throw ERROR_INVALID_NAME_OR_UUID.createWithContext(reader);
-	};
-
-	private static Parser.Literal parseNameOrUUID(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
-		return reader -> {
-			EntitySelectorParser selectorBuilder = selectorBuilderGetter.get();
-
+	private static ParserLiteral parseNameOrUUID(EntitySelectorParser selectorBuilder) {
+		return Parser.read(reader -> {
 			int start = reader.getCursor();
 			String input = reader.readString();
 			try {
@@ -132,7 +120,7 @@ public class EntitySelectorParser {
 				selectorBuilder.includesEntities = true;
 			} catch (IllegalArgumentException ignored) {
 				// Not a valid UUID string
-				if (input.length() > 16) {
+				if (input.isEmpty() || input.length() > 16) {
 					// Also not a valid player name
 					reader.setCursor(start);
 					throw ERROR_INVALID_NAME_OR_UUID.createWithContext(reader);
@@ -143,11 +131,7 @@ public class EntitySelectorParser {
 			}
 
 			selectorBuilder.maxResults = 1;
-		};
-	}
-
-	private static Parser.Argument<EntitySelector> conclude(ParameterGetter<EntitySelectorParser> selectorBuilderGetter) {
-		return reader -> selectorBuilderGetter.get().build();
+		}).suggests(suggestName);
 	}
 
 	private static final SuggestionProvider suggestName = (context, builder) -> {
@@ -173,44 +157,43 @@ public class EntitySelectorParser {
 		suggestName.addSuggestions(context, builder);
 	};
 	private static final SuggestionProvider suggestOpenOptions = (context, builder) -> builder.suggest("[");
-	private static final SuggestionProvider suggestOptionsKeyOrClose = (context, builder) -> {
-		throw new UnimplementedMethodException("Entity selectors with options are not supported");
-	};
 
-	public static final Parser<EntitySelector> PARSER = Parser
-		.parse(reader -> new EntitySelectorParser())
-		.suggests(suggestNameOrSelector)
-		.alwaysThrowException()
-		.continueWith(selectorBuilder ->
-			Parser.tryParse(Parser.read(isSelectorStart)
-				.neverThrowException()
-				.continueWith(
-					Parser.read(parseSelector(selectorBuilder))
-						.suggests(suggestSelector)
-						.alwaysThrowException()
-						.continueWith(
-							Parser.tryParse(Parser.read(isSelectorOptionsStart)
-								.suggests(suggestOpenOptions)
-								.neverThrowException()
-								.continueWith(
-									Parser.read(parseSelectorOptions(selectorBuilder))
-										.suggests(suggestOptionsKeyOrClose)
-										.alwaysThrowException()
-										// Input @?[???]
-										.continueWith(conclude(selectorBuilder))
-								)
-							).then(conclude(selectorBuilder)) // Input @?
-						)
-				)
-			).then(Parser.read(isNameStart)
-				.alwaysThrowException()
-				.continueWith(
-					Parser.read(parseNameOrUUID(selectorBuilder))
-						.suggests(suggestName)
-						.alwaysThrowException()
-						// Input name or uuid
-						.continueWith(conclude(selectorBuilder))
-				)
-			)
+	public static final Parser<EntitySelector> parser = reader -> {
+		if (!reader.canRead()) {
+			// Empty input
+			return Result.withExceptionAndSuggestions(ERROR_INVALID_NAME_OR_UUID.createWithContext(reader), reader.getCursor(), suggestNameOrSelector);
+		}
+
+		// Build our selector
+		EntitySelectorParser selectorBuilder = new EntitySelectorParser();
+		Function<Result.Void, Result<EntitySelector>> conclude = Result.wrapFunctionResult(success -> selectorBuilder.build());
+
+		if (reader.peek() == '@') {
+			// Looks like selector
+			return parseSelector(selectorBuilder).getResult(reader).continueWith(
+				// Successfully read selector
+				success -> {
+					if (reader.canRead() && reader.peek() == '[') {
+						// Looks like includes selector options
+						return parseSelectorOptions(selectorBuilder).getResult(reader).continueWith(
+							// If successful, build the final selector
+							conclude
+							// Otherwise, pass original exception
+						);
+					}
+
+					// Otherwise, valid selector, but suggest opening options
+					return Result.withValueAndSuggestions(selectorBuilder.build(), reader.getCursor(), suggestOpenOptions);
+				}
+				// Otherwise pass original exception
+			);
+		}
+
+		// Looks like name/uuid
+		return parseNameOrUUID(selectorBuilder).getResult(reader).continueWith(
+			// If successful, build the final selector
+			conclude
+			// Otherwise pass original exception
 		);
+	};
 }

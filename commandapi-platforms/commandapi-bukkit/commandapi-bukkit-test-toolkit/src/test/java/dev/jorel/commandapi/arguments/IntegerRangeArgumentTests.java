@@ -79,13 +79,14 @@ class IntegerRangeArgumentTests extends CommandTestBase {
 			player, "test 1.0..",
 			"Invalid integer '1.0' at position 5: test <--[HERE]"
 		);
+		// Yes, Minecraft underlines the whole range when complaining about the last number
 		assertCommandFails(
 			player, "test 0..1.0",
-			"Invalid integer '1.0' at position 8: test 0..<--[HERE]"
+			"Invalid integer '1.0' at position 5: test <--[HERE]"
 		);
 		assertCommandFails(
 			player, "test ..1.0",
-			"Invalid integer '1.0' at position 7: test ..<--[HERE]"
+			"Invalid integer '1.0' at position 5: test <--[HERE]"
 		);
 	}
 

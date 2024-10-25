@@ -4,13 +4,11 @@ import com.mojang.brigadier.Message;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.BuiltInExceptionProvider;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import dev.jorel.commandapi.BukkitTooltip;
-import dev.jorel.commandapi.arguments.parser.Parser;
+import dev.jorel.commandapi.arguments.parser.ParserArgument;
+import dev.jorel.commandapi.arguments.parser.ParserLiteral;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-
-import java.util.function.Function;
 
 /**
  * Utilities for creating mock argument parsers
@@ -53,42 +51,17 @@ public class ArgumentUtilities {
 	}
 
 	// Parser utilities
-	/**
-	 * A placeholder {@link CommandSyntaxException} that a parser can throw if it doesn't match the input.
-	 * Typically, this exception will be caught immediately using {@link Parser.ExceptionHandler#neverThrowException()},
-	 * and parsing will continue to the next branch in a {@link Parser#tryParse(Parser.NonTerminal)} chain.
-	 */
-	public static final CommandSyntaxException NEXT_BRANCH = new SimpleCommandExceptionType(
-		() -> "This branch did not match"
-	).create();
 
 	/**
-	 * Returns a new {@link Parser.Literal}. When the returned parser is invoked, if {@link StringReader#canRead()}
-	 * returns {@code false}, then a {@link CommandSyntaxException} will be thrown according to the given {@code exception}
-	 * {@link Function}. If {@link StringReader#canRead()} returns {@code true}, then the returned parser succeeds.
-	 *
-	 * @param exception A {@link Function} that creates a {@link CommandSyntaxException} when the input
-	 * {@link StringReader} does not have any more characters to read.
-	 * @return A {@link Parser.Literal} that checks if the input {@link StringReader} has characters to read.
-	 */
-	public static Parser.Literal assertCanRead(Function<StringReader, CommandSyntaxException> exception) {
-		return reader -> {
-			if (!reader.canRead()) {
-				throw exception.apply(reader);
-			}
-		};
-	}
-
-	/**
-	 * Returns a new {@link Parser.Literal}. When the returned parser is invoked, it tries to read the given
+	 * Returns a new {@link ParserLiteral}. When the returned parser is invoked, it tries to read the given
 	 * {@code literal} String from the input {@link StringReader}. If the {@code literal} is present, this parser
 	 * succeeds and moves {@link StringReader#getCursor()} to the end of the {@code literal}. Otherwise, this parser
 	 * will fail and throw a {@link CommandSyntaxException} with type {@link BuiltInExceptionProvider#literalIncorrect()}.
 	 *
 	 * @param literal The exact String that is expected to be at the start of the input {@link StringReader}.
-	 * @return A {@link Parser.Literal} that checks if the {@code literal} String can be read from the input {@link StringReader}.
+	 * @return A {@link ParserLiteral} that checks if the {@code literal} String can be read from the input {@link StringReader}.
 	 */
-	public static Parser.Literal literal(String literal) {
+	public static ParserLiteral literal(String literal) {
 		return reader -> {
 			if (reader.canRead(literal.length())) {
 				int start = reader.getCursor();
@@ -104,7 +77,7 @@ public class ArgumentUtilities {
 	}
 
 	/**
-	 * Returns a new {@link Parser.Argument} that reads characters from the input {@link StringReader} until it reaches
+	 * Returns a new {@link ParserArgument} that reads characters from the input {@link StringReader} until it reaches
 	 * the given terminator character. If the terminator character is not found, the entire
 	 * {@link StringReader#getRemaining()} String will be read.
 	 * <p>
@@ -116,11 +89,11 @@ public class ArgumentUtilities {
 	 * if this happens.
 	 *
 	 * @param terminator The character to stop reading at.
-	 * @return A {@link Parser.Argument} that reads until it finds the given terminator. Note that the returned String will
+	 * @return A {@link ParserArgument} that reads until it finds the given terminator. Note that the returned String will
 	 * include the terminator at the end, unless the end of the input {@link StringReader} is reached without finding the
 	 * terminator.
 	 */
-	public static Parser.Argument<String> readUntilWithoutEscapeCharacter(char terminator) {
+	public static ParserArgument<String> readUntilWithoutEscapeCharacter(char terminator) {
 		return reader -> {
 			int start = reader.getCursor();
 
