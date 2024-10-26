@@ -71,6 +71,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentAdvancement() {
+		return baseNMS._ArgumentAdvancement();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		return baseNMS._ArgumentAngle();
 	}
@@ -204,6 +209,11 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	@Override
 	public ArgumentType<?> _ArgumentProfile() {
 		return baseNMS._ArgumentProfile();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRecipe() {
+		return baseNMS._ArgumentRecipe();
 	}
 
 	@Override
