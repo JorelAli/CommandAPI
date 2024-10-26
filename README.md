@@ -421,6 +421,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 <b>CommandAPI Changes:</b>
                 <ul>
                     <li>https://github.com/JorelAli/CommandAPI/pull/594 Adds a config option to allow the CommandAPI to be more lenient when updating to a new minor version (e.g. from 1.21 to 1.21.1)</li>
+                    <li>https://github.com/JorelAli/CommandAPI/pull/596, https://github.com/JorelAli/CommandAPI/pull/605 The plugin's <code>config.yml</code> file will be updated when config options are added or removed</li>
                 </ul>
             </td>
         </tr>
