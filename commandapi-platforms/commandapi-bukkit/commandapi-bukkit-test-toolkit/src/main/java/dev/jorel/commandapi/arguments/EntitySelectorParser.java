@@ -53,9 +53,11 @@ public class EntitySelectorParser {
 	private static ParserLiteral parseSelector(EntitySelectorParser selectorBuilder) {
 		return Parser.read(reader -> {
 			reader.skip(); // skip @
-			if (!reader.canRead()) throw ERROR_MISSING_SELECTOR_TYPE.createWithContext(reader);
-			char selectorCode = reader.read();
+			if (!reader.canRead()) {
+				throw ERROR_MISSING_SELECTOR_TYPE.createWithContext(reader);
+			}
 
+			char selectorCode = reader.read();
 			switch (selectorCode) {
 				case 'p' -> {
 					selectorBuilder.maxResults = 1;

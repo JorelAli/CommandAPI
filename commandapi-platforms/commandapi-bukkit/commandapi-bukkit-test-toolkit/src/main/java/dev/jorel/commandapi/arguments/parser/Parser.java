@@ -48,8 +48,7 @@ public interface Parser<T> {
 	 * @throws CommandSyntaxException If the input is malformed.
 	 */
 	default T parse(StringReader reader) throws CommandSyntaxException {
-		Result<T> result = getResult(reader);
-		return result.throwOrReturn();
+		return getResult(reader).throwOrReturn();
 	}
 
 	/**
