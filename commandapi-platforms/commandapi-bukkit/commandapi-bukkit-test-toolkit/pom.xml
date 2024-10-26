@@ -41,14 +41,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Compatibility with Adventure API -->
-		<dependency>
-			<groupId>net.kyori</groupId>
-			<artifactId>adventure-platform-bukkit</artifactId>
-			<version>4.3.4</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Compatibility with CommandAPI Bukkit API -->
 		<dependency>
 			<groupId>dev.jorel</groupId>

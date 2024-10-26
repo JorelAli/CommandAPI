@@ -59,10 +59,10 @@ dependencies {
     testImplementation 'dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT'
 
     // May be the shade dependency and/or mojang-mapped
-    implementation 'dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT'
+    compileOnly 'dev.jorel:commandapi-bukkit-core:9.6.0-SNAPSHOT'
 
     // Can also be paper-api
-    implementation 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
 
     // See https://junit.org/junit5/ for latest version
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -77,10 +77,10 @@ dependencies {
     testImplementation('dev.jorel.commandapi-bukkit-test-toolkit:9.6.0-SNAPSHOT')
 
     // May be the shade dependency and/or mojang-mapped
-    implementation('dev.jorel:commandapi-bukkit-plugin:9.6.0-SNAPSHOT')
+    compileOnly('dev.jorel:commandapi-bukkit-core:9.6.0-SNAPSHOT')
 
     // Can also be paper-api
-    implementation('org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT')
+    compileOnly('org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT')
 
     // See https://junit.org/junit5/ for latest version
     testImplementation('org.junit.jupiter:junit-jupiter-engine:5.8.2')

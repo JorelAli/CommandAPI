@@ -22,8 +22,8 @@ sed -i "s/dev\.jorel:commandapi-bukkit-core:$oldVer/dev\.jorel:commandapi-bukkit
 sed -i "s/dev\.jorel:commandapi-annotations:$oldVer/dev\.jorel:commandapi-annotations:$newVer/" docssrc/src/setup_annotations.md
 sed -i "s/dev\.jorel:commandapi-bukkit-kotlin:$oldVer/dev\.jorel:commandapi-bukkit-kotlin:$newVer/" docssrc/src/kotlinintro.md
 sed -i "s/dev\.jorel:commandapi-velocity-kotlin:$oldVer/dev\.jorel:commandapi-velocity-kotlin:$newVer/" docssrc/src/kotlinintro.md
-sed -i "s/dev\.jorel:commandapi-bukkit-plugin:$oldVer/dev\.jorel:commandapi-bukkit-test-toolkit:$newVer/" docssrc/src/test_setup.md
-sed -i "s/dev\.jorel:commandapi-bukkit-plugin:$oldVer/dev\.jorel:commandapi-bukkit-plugin:$newVer/" docssrc/src/test_setup.md
+sed -i "s/dev\.jorel:commandapi-bukkit-test-toolkit:$oldVer/dev\.jorel:commandapi-bukkit-test-toolkit:$newVer/" docssrc/src/test_setup.md
+sed -i "s/dev\.jorel:commandapi-bukkit-core:$oldVer/dev\.jorel:commandapi-bukkit-core:$newVer/" docssrc/src/test_setup.md
 
 # mdBook documentation
 sed -i "s/$oldVer/$newVer/" docssrc/book.toml
