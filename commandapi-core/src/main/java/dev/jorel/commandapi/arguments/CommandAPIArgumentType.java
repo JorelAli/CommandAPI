@@ -103,6 +103,11 @@ public enum CommandAPIArgumentType {
 	DIMENSION("minecraft:dimension"),
 
 	/**
+	 * The DynamicMultiLiteralArgument
+	 */
+	DYNAMIC_MULTI_LITERAL,
+
+	/**
 	 * The EnchantmentArgument
 	 * 
 	 */
@@ -122,6 +127,11 @@ public enum CommandAPIArgumentType {
 	 * The EnvironmentArgument
 	 */
 	ENVIRONMENT("api:environment"),
+
+	/**
+	 * The FlagsArgument
+	 */
+	FLAGS_ARGUMENT,
 
 	/**
 	 * The FloatRangeArgument

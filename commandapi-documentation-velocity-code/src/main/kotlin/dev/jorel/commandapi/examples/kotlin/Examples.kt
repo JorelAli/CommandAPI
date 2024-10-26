@@ -9,7 +9,7 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.CommandAPIVelocity
 import dev.jorel.commandapi.CommandAPIVelocityConfig
 import dev.jorel.commandapi.arguments.IntegerArgument
-import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.executors.NormalExecutor
 import net.kyori.adventure.text.Component
 import org.slf4j.Logger
 import java.util.concurrent.ThreadLocalRandom
@@ -22,7 +22,7 @@ fun velocityIntro() {
 CommandAPICommand("randomnumber")
     .withArguments(IntegerArgument("min"))
     .withArguments(IntegerArgument("max"))
-    .executesPlayer(PlayerCommandExecutor { player, args ->
+    .executesPlayer(NormalExecutor { player, args ->
         val min = args["min"] as Int
         val max = args["max"] as Int
         val random = ThreadLocalRandom.current()
