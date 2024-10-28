@@ -2,10 +2,10 @@
 authors = ["JorelAli"]
 multilingual = false
 src = "src"
-title = "CommandAPI Documentation v9.6.1"
+title = "CommandAPI Documentation v9.6.2-SNAPSHOT"
 
 [build]
-build-dir = "./../docs/9.6.1"
+build-dir = "./../docs/9.6.2-SNAPSHOT"
 create-missing = false
 
 [output.html]

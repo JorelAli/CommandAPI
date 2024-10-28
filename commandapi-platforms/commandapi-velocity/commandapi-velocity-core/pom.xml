@@ -7,7 +7,7 @@
 	<parent>
 		<artifactId>commandapi-velocity</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.6.1</version>
+		<version>9.6.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>commandapi-velocity-core</artifactId>
