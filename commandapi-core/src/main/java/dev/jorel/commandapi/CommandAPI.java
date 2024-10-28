@@ -109,8 +109,10 @@ public class CommandAPI {
 			CommandAPI.config = new InternalConfig(config);
 
 			// Initialize handlers
-			CommandAPIPlatform<?, ?, ?> platform = CommandAPIVersionHandler.getPlatform();
+			LoadContext loadContext = CommandAPIVersionHandler.getPlatform();
+			CommandAPIPlatform<?, ?, ?> platform = loadContext.platform();
 			new CommandAPIHandler<>(platform);
+			loadContext.context().run();
 
 			// Log platform load
 			final String platformClassHierarchy;

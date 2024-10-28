@@ -75,6 +75,11 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public interface NMS<CommandListenerWrapper> {
 
 	/**
+	 * @return Advancement argument (api:advancement)
+	 */
+	ArgumentType<?> _ArgumentAdvancement();
+
+	/**
 	 * @return Angle argument (minecraft:angle)
 	 */
 	ArgumentType<?> _ArgumentAngle();
@@ -192,6 +197,11 @@ public interface NMS<CommandListenerWrapper> {
 	 * @return Player argument (minecraft:game_profile)
 	 */
 	ArgumentType<?> _ArgumentProfile();
+
+	/**
+	 * @return Recipe argument (api:recipe)
+	 */
+	ArgumentType<?> _ArgumentRecipe();
 
 	/**
 	 * @return Rotation argument (minecraft:rotation)

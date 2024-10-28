@@ -1,1 +1,1 @@
-# commandapi-shade
+# commandapi-bukkit-shade

@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.5.2</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.6.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -117,6 +117,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a685dcaf578e4b6582e45b054de3652b3"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a685dcaf578e4b6582e45b054de3652b3">useLatestNMSVersion</a> (boolean value)</td></tr>
 <tr class="memdesc:a685dcaf578e4b6582e45b054de3652b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should run the latest available version of NMS support, regardless of Minecraft version.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a685dcaf578e4b6582e45b054de3652b3">More...</a><br /></td></tr>
 <tr class="separator:a685dcaf578e4b6582e45b054de3652b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e965a89619b3733138dc4fe6923fc6d"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a6e965a89619b3733138dc4fe6923fc6d">beLenientForMinorVersions</a> (boolean value)</td></tr>
+<tr class="memdesc:a6e965a89619b3733138dc4fe6923fc6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should load a (potentially unsupported) NMS version when updating to a minor release of Minecraft.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a6e965a89619b3733138dc4fe6923fc6d">More...</a><br /></td></tr>
+<tr class="separator:a6e965a89619b3733138dc4fe6923fc6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5317ba92a442bf3aa71a3c03416c612"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#aa5317ba92a442bf3aa71a3c03416c612">missingExecutorImplementationMessage</a> (String value)</td></tr>
 <tr class="memdesc:aa5317ba92a442bf3aa71a3c03416c612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the message to display to users when a command has no executor.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#aa5317ba92a442bf3aa71a3c03416c612">More...</a><br /></td></tr>
 <tr class="separator:aa5317ba92a442bf3aa71a3c03416c612"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,6 +146,34 @@ Impl&#160;</td><td class="memItemRight" valign="bottom"><b>addSkipSenderProxy</b
 <div class="textblock"><p >A class to contain information about how to configure the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> during its loading step. </p>
 <p >You shouldn't use this class directly. Instead, use an appropriate subclass that corresponds to the platform you are developing for. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6e965a89619b3733138dc4fe6923fc6d" name="a6e965a89619b3733138dc4fe6923fc6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e965a89619b3733138dc4fe6923fc6d">&#9670;&nbsp;</a></span>beLenientForMinorVersions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">dev.jorel.commandapi.CommandAPIConfig</a>&lt; Impl &gt;.beLenientForMinorVersions </td>
+          <td>(</td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should load a (potentially unsupported) NMS version when updating to a minor release of Minecraft. </p>
+<p >As an example, this setting can allow updating to 1.21.2 from 1.21.1 but doesn't allow updating to 1.22 from 1.21.2. Unlike <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html#a685dcaf578e4b6582e45b054de3652b3">useLatestNMSVersion(boolean)</a></code>, this setting does not blindly load the latest NMS version, but will prefer loading the correct NMS implementation when available.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>whether the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a> should assume that minor Minecraft releases do not cause incompatibilities </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html" title="A class to contain information about how to configure the CommandAPI during its loading step.">CommandAPIConfig</a> </dd></dl>
+
+</div>
+</div>
 <a id="a7649fe88bd406fab65fbcbc3b9ae87f8" name="a7649fe88bd406fab65fbcbc3b9ae87f8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7649fe88bd406fab65fbcbc3b9ae87f8">&#9670;&nbsp;</a></span>dispatcherFile()</h2>
 
@@ -379,7 +410,7 @@ S - the executor class (normal case) </li>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_config.html">CommandAPIConfig</a></li>
 				<li class="footer">
-					Generated on Sun Aug 11 2024 14:07:34 for CommandAPI 9.5.2 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Mon Oct 28 2024 14:25:41 for CommandAPI 9.6.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

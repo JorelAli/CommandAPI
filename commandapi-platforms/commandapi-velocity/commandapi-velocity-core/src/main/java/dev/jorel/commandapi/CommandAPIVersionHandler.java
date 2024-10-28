@@ -1,7 +1,7 @@
 package dev.jorel.commandapi;
 
 public interface CommandAPIVersionHandler {
-	static CommandAPIPlatform<?, ?, ?> getPlatform() {
-		return new CommandAPIVelocity();
+	static LoadContext getPlatform() {
+		return new LoadContext(new CommandAPIVelocity());
 	}
 }

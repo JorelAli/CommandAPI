@@ -39,6 +39,7 @@ extends CommandAPIConfig<Impl>
 	boolean verboseOutput = false;
 	boolean silentLogs = false;
 	boolean useLatestNMSVersion = false;
+	boolean beLenientForMinorVersions = false;
 	String missingExecutorImplementationMessage = "This command has no implementations for %s";
 
 	File dispatcherFile = null;
@@ -87,6 +88,21 @@ extends CommandAPIConfig<Impl>
 	 */
 	public Impl useLatestNMSVersion(boolean value) {
 		this.useLatestNMSVersion = value;
+		return instance();
+	}
+
+	/**
+	 * Sets whether the CommandAPI should load a (potentially unsupported) NMS version
+	 * when updating to a minor release of Minecraft. As an example, this setting can allow
+	 * updating to 1.21.2 from 1.21.1 but doesn't allow updating to 1.22 from 1.21.2.
+	 * Unlike {@link #useLatestNMSVersion(boolean)}, this setting does
+	 * not blindly load the latest NMS version, but will prefer loading the correct NMS implementation when available.
+	 *
+	 * @param value whether the CommandAPI should assume that minor Minecraft releases do not cause incompatibilities
+	 * @return this CommandAPIConfig
+	 */
+	public Impl beLenientForMinorVersions(boolean value) {
+		this.beLenientForMinorVersions = value;
 		return instance();
 	}
 

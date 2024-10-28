@@ -8,13 +8,13 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
+import dev.jorel.commandapi.config.VelocityConfigurationAdapter;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -35,34 +35,28 @@ public class CommandAPIMain {
 		// Try to find the config file
 		Path configFile = dataDirectory.resolve("config.yml");
 
-		// If the config doesn't exist, load it from the resources
-		if(!Files.exists(configFile)) {
-			try {
-				Files.createDirectories(configFile.getParent());
-			} catch (IOException ignored) {
-			}
+		YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
+			.nodeStyle(NodeStyle.BLOCK)
+			.path(configFile)
+			.build();
 
-			try (InputStream defaultConfig = getClass().getClassLoader().getResourceAsStream("config.yml")) {
-				Files.copy(defaultConfig, configFile);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		}
+		// Create or update config
+		VelocityConfigurationAdapter.createMinimalInstance(loader).saveDefaultConfig(configFile.getParent().toFile(), logger);
 
 		// Load the file as a yaml node
 		ConfigurationNode configYAML;
 		try {
-			configYAML = YAMLConfigurationLoader.builder().setPath(configFile).build().load();
+			configYAML = loader.load();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
 		// Configure the CommandAPI
 		CommandAPIVelocityConfig config = new CommandAPIVelocityConfig(server, this)
-			.verboseOutput(configYAML.getNode("verbose-outputs").getBoolean())
-			.silentLogs(configYAML.getNode("silent-logs").getBoolean())
-			.missingExecutorImplementationMessage(configYAML.getNode("messages", "missing-executor-implementation").getString())
-			.dispatcherFile(configYAML.getNode("create-dispatcher-json").getBoolean() ? new File(dataDirectory.toFile(), "command_registration.json") : null);
+			.verboseOutput(configYAML.node("verbose-outputs").getBoolean())
+			.silentLogs(configYAML.node("silent-logs").getBoolean())
+			.missingExecutorImplementationMessage(configYAML.node("messages", "missing-executor-implementation").getString())
+			.dispatcherFile(configYAML.node("create-dispatcher-json").getBoolean() ? new File(dataDirectory.toFile(), "command_registration.json") : null);
 
 		// Load
 		CommandAPI.setLogger(CommandAPILogger.fromJavaLogger(logger));
@@ -74,13 +68,13 @@ public class CommandAPIMain {
 		// Enable
 		CommandAPI.onEnable();
 	}
-	
+
 	@Subscribe
 	public void onProxyShutdown(ProxyShutdownEvent event) {
 		// Shut down
 		CommandAPI.onDisable();
 	}
-	
+
 	// On /velocity reload
 	@Subscribe
 	public void onProxyReload(ProxyReloadEvent event) {

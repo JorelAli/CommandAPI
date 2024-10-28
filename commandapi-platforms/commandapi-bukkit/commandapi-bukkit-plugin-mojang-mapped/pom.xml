@@ -25,7 +25,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.5.3</version>
+		<version>9.6.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -85,6 +85,11 @@
 			<version>${paper.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-plugin-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -140,7 +145,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.4.1</version>
+				<version>3.4.2</version>
 				<configuration>
 					<archive>
 						<manifestEntries>
@@ -148,6 +153,19 @@
 						</manifestEntries>
 					</archive>
 				</configuration>
+				<executions>
+					<execution>
+						<id>empty-javadoc-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>javadoc</classifier>
+							<classesDirectory>${basedir}/javadoc</classesDirectory>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

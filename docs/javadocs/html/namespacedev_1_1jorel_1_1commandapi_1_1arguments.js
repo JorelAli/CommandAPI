@@ -25,7 +25,6 @@ var namespacedev_1_1jorel_1_1commandapi_1_1arguments =
     [ "EnchantmentArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enchantment_argument" ],
     [ "EntitySelectorArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_selector_argument" ],
     [ "EntityTypeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_entity_type_argument" ],
-    [ "EnumArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enum_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_enum_argument" ],
     [ "FloatArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_argument" ],
     [ "FloatRangeArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_float_range_argument" ],
     [ "FunctionArgument", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_function_argument" ],

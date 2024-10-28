@@ -25,7 +25,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>9.5.3</version>
+	<version>9.6.0</version>
 	<packaging>pom</packaging>
 
 	<name>commandapi</name>
@@ -60,6 +60,9 @@
 
 		<!-- Main core code -->
 		<module>commandapi-core</module>
+
+		<!-- Plugin core code -->
+		<module>commandapi-plugin</module>
 
 		<!-- Platform implementations (includes documentation code) -->
 		<module>commandapi-platforms</module>
@@ -115,27 +118,35 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.2.2</version>
+					<version>3.4.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
+					<!-- Using 3.3.1 or later gives issues with executing the
+					 build multiple times for some reason. Instead of trying to
+					 figure out why and making our project compatible with it,
+					 because I'm in a rush to release so I can go have a nap,
+					 I'm just gonna leave it as 3.2.1 for now. You can read more
+					 about the issue here:
+					 https://stackoverflow.com/questions/76305897/maven-build-fails-after-upgrading-to-maven-source-plugin-from-3-2-1-to-3-3-0
+					-->
 					<version>3.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.10.1</version>
+					<version>3.13.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-shade-plugin</artifactId>
-					<version>3.3.0</version>
+					<version>3.6.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.4.0</version>
+					<version>3.10.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.jacoco</groupId>

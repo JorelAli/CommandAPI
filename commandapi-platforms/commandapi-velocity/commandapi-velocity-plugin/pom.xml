@@ -7,7 +7,7 @@
 	<parent>
 		<artifactId>commandapi-velocity</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.5.3</version>
+		<version>9.6.0</version>
 	</parent>
 
 	<artifactId>commandapi-velocity-plugin</artifactId>
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>com.velocitypowered</groupId>
 			<artifactId>velocity-api</artifactId>
-			<version>3.1.1</version>
+			<version>3.3.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -39,6 +39,11 @@
 			<artifactId>commandapi-velocity-core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-plugin</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

@@ -94,6 +94,11 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	}
 
 	@Override
+	public ArgumentType<?> _ArgumentAdvancement() {
+		return ResourceLocationArgument.id();
+	}
+
+	@Override
 	public final ArgumentType<?> _ArgumentAngle() {
 		return AngleArgument.angle();
 	}
@@ -188,6 +193,11 @@ public abstract class NMS_Common extends CommandAPIBukkit<CommandSourceStack> {
 	@Override
 	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION, introducedIn = "1.19.3")
 	public abstract ArgumentType<?> _ArgumentParticle();
+
+	@Override
+	public ArgumentType<?> _ArgumentRecipe() {
+		return ResourceLocationArgument.id();
+	}
 
 	@Override
 	public final ArgumentType<?> _ArgumentPosition() {

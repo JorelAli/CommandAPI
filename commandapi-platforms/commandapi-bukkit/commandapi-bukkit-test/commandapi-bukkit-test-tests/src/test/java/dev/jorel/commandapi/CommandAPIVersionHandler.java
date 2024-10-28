@@ -43,12 +43,12 @@ public interface CommandAPIVersionHandler {
 		}
 	}
 	
-	static CommandAPIPlatform<?, ?, ?> getPlatform() {
+	static LoadContext getPlatform() {
 		if(profileId == null) {
 			System.out.println("Using default version 1.19.4");
-			return new MockNMS(new NMS_1_19_4_R3());
+			return new LoadContext(new MockNMS(new NMS_1_19_4_R3()));
 		} else {
-			return new MockNMS(switch(profileId) {
+			return new LoadContext(new MockNMS(switch(profileId) {
 				case "Minecraft_1_20_5" -> new NMS_1_20_R4();
 				case "Minecraft_1_20_3" -> new NMS_1_20_R3();
 				case "Minecraft_1_20_2" -> new NMS_1_20_R2();
@@ -59,7 +59,7 @@ public interface CommandAPIVersionHandler {
 				case "Minecraft_1_17" -> new NMS_1_17();
 				case "Minecraft_1_16_5" -> new NMS_1_16_R3();
 				default -> throw new IllegalArgumentException("Unexpected value: " + System.getProperty("profileId"));
-			});
+			}));
 		}
 	}
 	
