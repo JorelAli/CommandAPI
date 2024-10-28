@@ -123,7 +123,15 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>3.3.1</version>
+					<!-- Using 3.3.1 or later gives issues with executing the
+					 build multiple times for some reason. Instead of trying to
+					 figure out why and making our project compatible with it,
+					 because I'm in a rush to release so I can go have a nap,
+					 I'm just gonna leave it as 3.2.1 for now. You can read more
+					 about the issue here:
+					 https://stackoverflow.com/questions/76305897/maven-build-fails-after-upgrading-to-maven-source-plugin-from-3-2-1-to-3-3-0
+					-->
+					<version>3.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
