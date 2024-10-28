@@ -1,0 +1,6 @@
+name: CommandAPI
+main: dev.jorel.commandapi.MockCommandAPIPlugin
+version: ${project.version}
+author: Will Kroboth
+website: https://www.jorel.dev/CommandAPI/
+api-version: 1.13
