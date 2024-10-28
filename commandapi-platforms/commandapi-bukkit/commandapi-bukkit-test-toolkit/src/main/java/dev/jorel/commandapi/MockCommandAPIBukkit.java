@@ -212,6 +212,11 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 	///////////////////////////
 
 	@Override
+	public ArgumentType<?> _ArgumentAdvancement() {
+		throw new UnimplementedMethodException();
+	}
+
+	@Override
 	public ArgumentType<?> _ArgumentAngle() {
 		throw new UnimplementedMethodException();
 	}
@@ -308,6 +313,11 @@ public class MockCommandAPIBukkit extends CommandAPIBukkit<MockCommandSource> {
 
 	@Override
 	public ArgumentType<?> _ArgumentPosition2D() {
+		throw new UnimplementedMethodException();
+	}
+
+	@Override
+	public ArgumentType<?> _ArgumentRecipe() {
 		throw new UnimplementedMethodException();
 	}
 
