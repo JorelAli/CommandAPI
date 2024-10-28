@@ -25,7 +25,7 @@
 	<parent>
 		<artifactId>commandapi-bukkit</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.6.0</version>
+		<version>9.6.1</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -90,6 +90,10 @@
 								</relocation>
 								<relocation>
 									<pattern>org.bukkit.craftbukkit.v1_21_R1</pattern>
+									<shadedPattern>org.bukkit.craftbukkit</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>org.bukkit.craftbukkit.v1_21_R2</pattern>
 									<shadedPattern>org.bukkit.craftbukkit</shadedPattern>
 								</relocation>
 							</relocations>
