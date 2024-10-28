@@ -139,7 +139,7 @@ Add the CommandAPI shade dependency:
 
 </div>
 
-You can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence using version `3.3.0` (compatible with Java 16):
+You can shade the CommandAPI easily by adding the `maven-shade-plugin` to your build sequence:
 
 ```xml
 <build>
@@ -147,7 +147,7 @@ You can shade the CommandAPI easily by adding the `maven-shade-plugin` to your b
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.3.0</version>
+            <version>3.6.0</version>
             <executions>
                 <execution>
                     <id>shade</id>
