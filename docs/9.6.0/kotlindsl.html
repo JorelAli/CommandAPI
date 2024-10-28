@@ -1,0 +1,433 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Using the DSL - CommandAPI Documentation v9.6.0</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fontawesome/css/fontawesome.css">
+        <link rel="stylesheet" href="fontawesome/css/brands.css">
+        <link rel="stylesheet" href="fontawesome/css/solid.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="style.css">
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Server Owner Usage</li><li class="chapter-item expanded "><a href="installation.html">Installation for server owners</a></li><li class="chapter-item expanded "><a href="config.html">Configuration for server owners</a></li><li class="chapter-item expanded "><a href="conversionforowners.html">Command conversion</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="conversionforownerssingle.html">Single command conversion</a></li><li class="chapter-item expanded "><a href="conversionforownerssingleargs.html">Single command conversion (with arguments)</a></li><li class="chapter-item expanded "><a href="conversionentityselectors.html">Entity selectors</a></li></ol></li><li class="chapter-item expanded "><a href="skippingproxysenders.html">Skipping proxy senders</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Setup</li><li class="chapter-item expanded "><a href="setup_dev.html">Setting up your development environment</a></li><li class="chapter-item expanded "><a href="setup_shading.html">Shading the CommandAPI in your plugins</a></li><li class="chapter-item expanded "><a href="setup_annotations.html">Using the annotation system</a></li><li class="chapter-item expanded affix "><li class="part-title">Creating Commands</li><li class="chapter-item expanded "><a href="commandregistration.html">Command registration</a></li><li class="chapter-item expanded "><a href="commandunregistration.html">Command unregistration</a></li><li class="chapter-item expanded "><a href="commandexecutors.html">Command executors</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="normalexecutors.html">Normal command executors</a></li><li class="chapter-item expanded "><a href="proxysender.html">Proxied commandsenders</a></li><li class="chapter-item expanded "><a href="native.html">Native commandsenders</a></li><li class="chapter-item expanded "><a href="resultingcommandexecutors.html">Resulting command executors</a></li><li class="chapter-item expanded "><a href="commandfailures.html">Handling command failures</a></li></ol></li><li class="chapter-item expanded "><a href="arguments.html">Command arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commandarguments.html">CommandArguments</a></li><li class="chapter-item expanded "><a href="optional_arguments.html">Optional arguments</a></li><li class="chapter-item expanded "><a href="listed.html">Listed arguments</a></li><li class="chapter-item expanded "><a href="argumentsuggestions.html">Argument suggestions</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="suggestionsinfo.html">The SuggestionsInfo record</a></li><li class="chapter-item "><a href="stringargumentsuggestions.html">String argument suggestions</a></li><li class="chapter-item "><a href="safeargumentsuggestions.html">Safely typed argument suggestions</a></li><li class="chapter-item "><a href="tooltips.html">Argument suggestions with tooltips</a></li><li class="chapter-item "><a href="asyncsuggestions.html">Asynchronous suggestions</a></li></ol></li><li class="chapter-item expanded "><a href="argumenttypes.html">Argument types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_primitives.html">Primitive arguments</a></li><li class="chapter-item "><a href="argument_range.html">Ranged arguments</a></li><li class="chapter-item "><a href="argument_strings.html">String arguments</a></li><li class="chapter-item "><a href="category_positional_arguments.html">Positional arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_locations.html">Location arguments</a></li><li class="chapter-item "><a href="argument_rotation.html">Rotation arguments</a></li><li class="chapter-item "><a href="argument_axis.html">AxisArguments</a></li></ol></li><li class="chapter-item "><a href="argument_chats.html">Chat arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_chat_spigot.html">Spigot chat arguments</a></li><li class="chapter-item "><a href="argument_chat_adventure.html">Adventure chat arguments</a></li><li class="chapter-item "><a href="chatpreview.html">Chat preview</a></li></ol></li><li class="chapter-item "><a href="argument_entities.html">Entity & player arguments</a></li><li class="chapter-item "><a href="category_scoreboard_arguments.html">Scoreboard arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_scoreboards.html">Scoreboard arguments</a></li><li class="chapter-item "><a href="argument_objectives.html">Objective arguments</a></li><li class="chapter-item "><a href="argument_team.html">Team arguments</a></li></ol></li><li class="chapter-item "><a href="category_miscellaneous_arguments.html">Miscellaneous arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_angle.html">Angle arguments</a></li><li class="chapter-item "><a href="advancementargument.html">Advancement arguments</a></li><li class="chapter-item "><a href="argument_biome.html">Biome arguments</a></li><li class="chapter-item "><a href="argument_blockstate.html">BlockState arguments</a></li><li class="chapter-item "><a href="argument_enchantment.html">Enchantment arguments</a></li><li class="chapter-item "><a href="argument_itemstack.html">Itemstack arguments</a></li><li class="chapter-item "><a href="argument_loottable.html">LootTable argument</a></li><li class="chapter-item "><a href="argument_mathoperation.html">MathOperation arguments</a></li><li class="chapter-item "><a href="argument_namespacedkey.html">NamespacedKey arguments</a></li><li class="chapter-item "><a href="argument_particles.html">Particle arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_particle_old.html">Particle data (before 1.20.5)</a></li><li class="chapter-item "><a href="argument_particle_new.html">Particle data (1.20.5+)</a></li></ol></li><li class="chapter-item "><a href="argument_potion.html">Potion effect arguments</a></li><li class="chapter-item "><a href="argument_recipe.html">Recipe arguments</a></li><li class="chapter-item "><a href="argument_sound.html">Sound arguments</a></li><li class="chapter-item "><a href="argument_time.html">Time arguments</a></li><li class="chapter-item "><a href="argument_uuid.html">UUID arguments</a></li><li class="chapter-item "><a href="argument_world.html">World arguments</a></li></ol></li><li class="chapter-item "><a href="predicateargs.html">Predicate arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_blockpredicate.html">Block predicate arguments</a></li><li class="chapter-item "><a href="argument_itemstackpredicate.html">ItemStack predicate arguments</a></li></ol></li><li class="chapter-item "><a href="argument_nbt.html">NBT arguments</a></li><li class="chapter-item "><a href="category_literal_arguments.html">Literal arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_literal.html">Literal arguments</a></li><li class="chapter-item "><a href="argument_multiliteral.html">Multi literal arguments</a></li></ol></li><li class="chapter-item "><a href="argument_list.html">List arguments</a></li><li class="chapter-item "><a href="argument_map.html">Map arguments</a></li><li class="chapter-item "><a href="argument_command.html">Command arguments</a></li><li class="chapter-item "><a href="argument_custom.html">Custom arguments</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="functions.html">Functions & Tags</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="functionsetup.html">Setting up functions & tags</a></li><li class="chapter-item expanded "><a href="simplefunctionwrapper.html">The SimpleFunctionWrapper class</a></li><li class="chapter-item expanded "><a href="functionwrapper.html">The FunctionWrapper class</a></li><li class="chapter-item expanded "><a href="argument_function.html">Function arguments</a></li></ol></li><li class="chapter-item expanded "><a href="permissions.html">Permissions</a></li><li class="chapter-item expanded "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="aliases.html">Aliases</a></li><li class="chapter-item expanded "><a href="help.html">Help</a></li><li class="chapter-item expanded "><a href="subcommands.html">Subcommands</a></li><li class="chapter-item expanded "><a href="commandtrees.html">Command trees</a></li><li class="chapter-item expanded affix "><li class="part-title">Annotation-based Commands</li><li class="chapter-item expanded "><a href="annotationsintro.html">Annotation-based commands</a></li><li class="chapter-item expanded "><a href="annotations.html">Annotations</a></li><li class="chapter-item expanded "><a href="registeringannotations.html">Registering annotation-based commands</a></li><li class="chapter-item expanded affix "><li class="part-title">Kotlin-based Commands</li><li class="chapter-item expanded "><a href="kotlinintro.html">Kotlin-based commands</a></li><li class="chapter-item expanded "><a href="kotlindsl.html" class="active">Using the DSL</a></li><li class="chapter-item expanded "><a href="delegated_properties.html">Delegated properties</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Velocity</li><li class="chapter-item expanded "><a href="velocity_intro.html">Velocity</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Utilities</li><li class="chapter-item expanded "><a href="conversion.html">Command conversion</a></li><li class="chapter-item expanded "><a href="reloading.html">Plugin reloading</a></li><li class="chapter-item expanded affix "><li class="part-title">Internal CommandAPI</li><li class="chapter-item expanded "><a href="internal.html">Internal CommandAPI</a></li><li class="chapter-item expanded "><a href="brigadier.html">Brigadier + CommandAPI</a></li><li class="chapter-item expanded "><a href="brigadiersuggestions.html">Brigadier Suggestions</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Java Tips</li><li class="chapter-item expanded "><a href="predicatetips.html">Predicate tips</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Contribution</li><li class="chapter-item expanded "><a href="contributionintro.html">Introduction</a></li><li class="chapter-item expanded "><a href="projectstructure.html">Project Structure</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="upgrading.html">Upgrading guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="upgrading_old.html">Upgrading guide (pre-9.0.0)</a></li></ol></li><li class="chapter-item expanded "><a href="faq.html">FAQ</a></li><li class="chapter-item expanded affix "><a href="incompatibleversions.html">Incompatible version information</a></li><li class="chapter-item expanded affix "><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="afterword.html">Afterword</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fas fa-palette"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="skepter">Skepter Likes Purple</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CommandAPI Documentation v9.6.0</h1>
+
+                    <div class="right-buttons">
+                        <a href="https://www.jorel.dev/CommandAPI/" title="Back to main CommandAPI page" aria-label="Back to main CommandAPI page">
+                            <i id="home-button" class="fas fa-home"></i>
+                        </a>
+                        <a href="https://ko-fi.com/jorelali" title="Donate (ko-fi)" aria-label="Donate (ko-fi)">
+                            <i id="donate-button" class="fas fa-donate"></i>
+                        </a>
+                        <a href="https://discord.com/invite/G4SzSxZ" title="Discord" aria-label="Discord">
+                            <i id="discord-button" class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Page table of contents -->
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        
+                        <h1 id="using-the-dsl"><a class="header" href="#using-the-dsl">Using the DSL</a></h1>
+<h2 id="defining-a-simple-message-command"><a class="header" href="#defining-a-simple-message-command">Defining a simple message command</a></h2>
+<p>As a first example and to take a first look at the Kotlin DSL syntax, we will first create a simple command to send messages to a player.</p>
+<div class="example">
+<h3 id="example---sending-a-message-to-a-player-using-the-kotlin-dsl"><a class="header" href="#example---sending-a-message-to-a-player-using-the-kotlin-dsl">Example - Sending a message to a player using the Kotlin DSL</a></h3>
+<p>We want to create a command that lets us send a message to a player. To do this, we want to register a command with the following syntax:</p>
+<pre><code class="language-mccmd">/sendmessageto &lt;player&gt; &lt;msg&gt;
+</code></pre>
+<p>We can then use the following command registration:</p>
+<div class="multi-pre">
+<pre><code class="language-kotlin CommandTree">commandTree(&quot;sendmessageto&quot;) {
+    playerArgument(&quot;player&quot;) { // Defines a new PlayerArgument(&quot;player&quot;)
+        greedyStringArgument(&quot;msg&quot;) { // Defines a new GreedyStringArgument(&quot;msg&quot;)
+            anyExecutor { _, args -&gt; // Command can be executed by anyone and anything (such as entities, the console, etc.)
+                val player: Player = args[&quot;player&quot;] as Player
+                val message: String = args[&quot;msg&quot;] as String
+                player.sendMessage(message)
+            }
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin CommandAPICommand">commandAPICommand(&quot;sendmessageto&quot;) {
+    playerArgument(&quot;player&quot;) // Defines a new PlayerArgument(&quot;player&quot;)
+    greedyStringArgument(&quot;msg&quot;) // Defines a new GreedyStringArgument(&quot;msg&quot;)
+    anyExecutor { _, args -&gt; // Command can be executed by anyone and anything (such as entities, the console, etc.)
+        val player: Player = args[&quot;player&quot;] as Player
+        val message: String = args[&quot;msg&quot;] as String
+        player.sendMessage(message)
+    }
+}
+</code></pre>
+</div>
+<p>Here you can see some interesting things:</p>
+<ul>
+<li>You do not need to call the <code>.register()</code> method when using the DSL</li>
+<li>You do not need to initialise any arguments</li>
+</ul>
+</div>
+<hr />
+<h2 id="executors"><a class="header" href="#executors">Executors</a></h2>
+<p>The Kotlin DSL also provides executors to execute your command. You've seen the <code>anyExecutor</code> in the example above.</p>
+<p>To find out, which DSL executor corresponds to &quot;normal&quot; executors, you can refer to the table below:</p>
+<div class="table-wrapper"><table><thead><tr><th>DSL normal executor</th><th>DSL resulting executor</th><th>DSL normal execution info</th><th>DSL resulting execution info</th><th>&quot;normal&quot; Executor</th></tr></thead><tbody>
+<tr><td><code>anyExecutor()</code></td><td><code>anyResultingExecutor()</code></td><td><code>anyExecutionInfo()</code></td><td><code>anyResultingExecutionInfo</code></td><td><code>executes()</code></td></tr>
+<tr><td><code>playerExecutor()</code></td><td><code>playerResultingExecutor()</code></td><td><code>playerExecutionInfo()</code></td><td><code>playerResultingExecutionInfo()</code></td><td><code>executesPlayer()</code></td></tr>
+<tr><td><code>entityExecutor()</code></td><td><code>entityResultingExecutor()</code></td><td><code>entityExecutionInfo()</code></td><td><code>entityResultingExecutionInfo()</code></td><td><code>executesEntity()</code></td></tr>
+<tr><td><code>consoleExecutor()</code></td><td><code>consoleResultingExecutor()</code></td><td><code>consoleExecutionInfo()</code></td><td><code>consoleResultingExecutionInfo()</code></td><td><code>executesConsole()</code></td></tr>
+<tr><td><code>commandBlockExecutor()</code></td><td><code>commandBlockResultingExecutor()</code></td><td><code>commandBlockExecutionInfo()</code></td><td><code>commandBlockResultingExecutionInfo()</code></td><td><code>executesCommandBlock()</code></td></tr>
+<tr><td><code>proxyExecutor()</code></td><td><code>proxyResultingExecutor()</code></td><td><code>proxyExecutionInfo()</code></td><td><code>proxyResultingExecutionInfo()</code></td><td><code>executesProxy()</code></td></tr>
+<tr><td><code>nativeExecutor()</code></td><td><code>nativeResultingExecutor()</code></td><td><code>nativeExecutionInfo()</code></td><td><code>nativeResultingExecutionInfo()</code></td><td><code>executesNative()</code></td></tr>
+<tr><td><code>remoteConsoleExecutor()</code></td><td><code>remoteConsoleResultingExecutor()</code></td><td><code>remoteConsoleExecutionInfo()</code></td><td><code>remoteConsoleResultingExecutionInfo()</code></td><td><code>executesRemoteConsole()</code></td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="arguments"><a class="header" href="#arguments">Arguments</a></h2>
+<p>The DSL implements almost every argument with a method. You've seen the <code>playerArgument()</code> and the <code>greedyStringArgument()</code> method in the example at the top of this page.</p>
+<p>The way arguments are implemented is pretty straight forward: It's basically the argument class' name, but as a method. So if you wanted to use a <code>ItemStackArgument</code> in your command, you would use the <code>itemStackArgument()</code> method of the DSL.</p>
+<p>One thing to note is that the DSL also features every existing constructor. This means if you want to use an <code>IntegerArgument</code> with a minimum of <code>0</code> and a maximum of <code>10</code>, you normally would implement it like this:</p>
+<pre><code class="language-java">new IntegerArgument(&quot;integer&quot;, 0, 10)
+</code></pre>
+<p>However, when using this DSL it is implemented like this:</p>
+<pre><code class="language-kotlin">integerArgument(&quot;integer&quot;, 0, 10)
+</code></pre>
+<div class="warning">
+<p><strong>Developer's Note:</strong></p>
+<p>There are a few arguments not having a method which directly corresponds to their respective argument.</p>
+<p>These arguments most likely use a builder pattern and because of that require further implementation by the user.</p>
+<p>To use these arguments, the DSL also provides the <code>argument()</code> method which takes in any argument as a parameter.</p>
+</div>
+<hr />
+<h2 id="editing-arguments"><a class="header" href="#editing-arguments">Editing arguments</a></h2>
+<p>When using the DSL, you might want to modify the behaviour of certain arguments by adding requirements or suggestions to them.</p>
+<p>To give you a general idea how you could accomplish that, the <code>sendMessageTo</code> command is adding a broadcast option which should only be executed by server operators.</p>
+<div class="multi-pre">
+<pre><code class="language-kotlin CommandTree">commandTree(&quot;sendMessageTo&quot;) {
+    playerArgument(&quot;player&quot;) {
+        greedyStringArgument(&quot;msg&quot;) {
+            playerExecutor { _, args -&gt;
+                val player: Player = args[&quot;player&quot;] as Player
+                val message: String = args[&quot;msg&quot;] as String
+                player.sendMessage(message)
+            }
+        }
+    }
+    literalArgument(&quot;broadcast&quot;) {
+        withRequirement { sender: CommandSender -&gt; sender.isOp } // Applies the requirement to the broadcast literal argument
+        /* add more methods here that modify argument behaviour */
+        greedyStringArgument(&quot;msg&quot;) {
+            playerExecutor { _, args -&gt;
+                val message: String = args[&quot;msg&quot;] as String
+                Bukkit.broadcastMessage(message)
+            }
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin CommandAPICommand">commandAPICommand(&quot;sendMessageTo&quot;) {
+    playerArgument(&quot;player&quot;)
+    greedyStringArgument(&quot;msg&quot;)
+    playerExecutor { _, args -&gt;
+        val player: Player = args[&quot;player&quot;] as Player
+        val message: String = args[&quot;msg&quot;] as String
+        player.sendMessage(message)
+    }
+}
+
+commandAPICommand(&quot;sendMessageTo&quot;) {
+    literalArgument(&quot;broadcast&quot;) {
+        withRequirement { sender: CommandSender -&gt; sender.isOp } // Applies the requirement to the broadcast literal argument
+        /* add more methods here that modify argument behaviour */
+    }
+    greedyStringArgument(&quot;msg&quot;)
+    playerExecutor { _, args -&gt;
+        val message: String = args[&quot;msg&quot;] as String
+        Bukkit.broadcastMessage(message)
+    }
+}
+</code></pre>
+</div>
+<p>Notice how you can just add the requirement in a CommandTree by adding it to the argument block where you also define the next arguments and the executor.</p>
+<p>However, when modifying the behaviour of an argument in a CommandAPICommand you have to add an extra block where you can implement the additional behaviour.</p>
+<h3 id="adding-requirements-to-commands"><a class="header" href="#adding-requirements-to-commands">Adding requirements to commands</a></h3>
+<p>Expanding on the previous example where we added a requirement to a single argument, we now also want to add a requirement to a whole command.</p>
+<p>This works similar to how argument behaviour is modified in a CommandTree:</p>
+<div class="multi-pre">
+<pre><code class="language-kotlin CommandTree">commandTree(&quot;commandRequirement&quot;) {
+    withRequirement { sender: CommandSender -&gt; sender.isOp}
+    playerExecutor { player, _ -&gt;
+        player.sendMessage(&quot;This command can only be executed by players who are server operators.&quot;)
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin CommandAPICommand">commandAPICommand(&quot;commandRequirement&quot;) {
+    withRequirement { sender: CommandSender -&gt; sender.isOp}
+    playerExecutor { player, _ -&gt;
+        player.sendMessage(&quot;This command can only be executed by players who are server operators.&quot;)
+    }
+}
+</code></pre>
+</div>
+<hr />
+<h2 id="more-examples"><a class="header" href="#more-examples">More examples</a></h2>
+<p>Now, a few more examples are shown to demonstrate the use of this DSL a little more:</p>
+<div class="example">
+<h3 id="example---implementing-optional-arguments-with-the-kotlin-dsl"><a class="header" href="#example---implementing-optional-arguments-with-the-kotlin-dsl">Example - Implementing optional arguments with the Kotlin DSL</a></h3>
+<p>We want to create a <code>/give</code> command with the following syntax:</p>
+<pre><code class="language-mccmd">/optionalArgument give &lt;item&gt;
+/optionalArgument give &lt;item&gt; &lt;amount&gt;
+</code></pre>
+<p>To declare an argument as optional you need to set the <code>optional</code> value to <code>true</code>:</p>
+<div class="multi-pre">
+<pre><code class="language-kotlin CommandTree">commandTree(&quot;optionalArgument&quot;) {
+    literalArgument(&quot;give&quot;) {
+        itemStackArgument(&quot;item&quot;) {
+            integerArgument(&quot;amount&quot;, optional = true) {
+                playerExecutor { player, args -&gt;
+                    // This command will let you execute:
+                    // &quot;/optionalArgument give minecraft:stick&quot;
+                    // &quot;/optionalArgument give minecraft:stick 5&quot;
+                    val itemStack: ItemStack = args[&quot;item&quot;] as ItemStack
+                    val amount: Int = args.getOptional(&quot;amount&quot;).orElse(1) as Int
+                    itemStack.amount = amount
+                    player.inventory.addItem(itemStack)
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin CommandAPICommand">commandAPICommand(&quot;optionalArgument&quot;) {
+    literalArgument(&quot;give&quot;)
+    itemStackArgument(&quot;item&quot;)
+    integerArgument(&quot;amount&quot;, optional = true) // This sets the argument as optional
+    playerExecutor { player, args -&gt;
+        // This command will let you execute:
+        // &quot;/optionalArgument give minecraft:stick&quot;
+        // &quot;/optionalArgument give minecraft:stick 5&quot;
+        val itemStack: ItemStack = args[&quot;item&quot;] as ItemStack
+        val amount: Int = args.getOptional(&quot;amount&quot;).orElse(1) as Int
+        itemStack.amount = amount
+        player.inventory.addItem(itemStack)
+    }
+}
+</code></pre>
+</div>
+</div>
+<div class="example">
+<h3 id="example---replacing-suggestions-using-the-kotlin-dsl"><a class="header" href="#example---replacing-suggestions-using-the-kotlin-dsl">Example - Replacing suggestions using the Kotlin DSL</a></h3>
+<p>We want to create a command with the following syntax to demonstrate replacing suggestions using the Kotlin DSL:</p>
+<pre><code class="language-mccmd">/replaceSuggestions &lt;strings&gt;
+</code></pre>
+<p>Replacing suggestions works similar to how you would add a requirement to an argument as shown in <a href="#editing-arguments">Editing arguments</a>.</p>
+<p>You just have to use the <code>replaceSuggestions</code> method this time:</p>
+<div class="multi-pre">
+<pre><code class="language-kotlin CommandTree">commandTree(&quot;replaceSuggestions&quot;) {
+    stringArgument(&quot;strings&quot;) {
+        replaceSuggestions(ArgumentSuggestions.strings(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;)) // Replaces the suggestions for the &quot;strings&quot; StringArgument
+        playerExecutor { player, args -&gt;
+            player.sendMessage(&quot;You chose option ${args[&quot;strings&quot;] as String}!&quot;)
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin CommandAPICommand">commandAPICommand(&quot;replaceSuggestions&quot;) {
+    stringArgument(&quot;strings&quot;) {
+        replaceSuggestions(ArgumentSuggestions.strings(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;)) // Replaces the suggestions for the &quot;strings&quot; StringArgument
+    }
+    playerExecutor { player, args -&gt;
+        player.sendMessage(&quot;You chose option ${args[&quot;strings&quot;] as String}!&quot;)
+    }
+}
+</code></pre>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="kotlinintro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+
+                            <a rel="next" href="delegated_properties.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="kotlinintro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+
+                    <a rel="next" href="delegated_properties.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="sidebar.js"></script>
+        <script type="text/javascript" src="mccmd.js"></script>
+        <script type="text/javascript" src="kotlin-dsl.js"></script>
+        <script type="text/javascript" src="jszip.min.js"></script>
+        <script type="text/javascript" src="yaml.min.js"></script>
+        <script type="text/javascript" src="pluginyml.js"></script>
+
+
+    </body>
+</html>

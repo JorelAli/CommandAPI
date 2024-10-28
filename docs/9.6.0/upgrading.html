@@ -1,0 +1,625 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Upgrading guide - CommandAPI Documentation v9.6.0</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fontawesome/css/fontawesome.css">
+        <link rel="stylesheet" href="fontawesome/css/brands.css">
+        <link rel="stylesheet" href="fontawesome/css/solid.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="style.css">
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Server Owner Usage</li><li class="chapter-item expanded "><a href="installation.html">Installation for server owners</a></li><li class="chapter-item expanded "><a href="config.html">Configuration for server owners</a></li><li class="chapter-item expanded "><a href="conversionforowners.html">Command conversion</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="conversionforownerssingle.html">Single command conversion</a></li><li class="chapter-item expanded "><a href="conversionforownerssingleargs.html">Single command conversion (with arguments)</a></li><li class="chapter-item expanded "><a href="conversionentityselectors.html">Entity selectors</a></li></ol></li><li class="chapter-item expanded "><a href="skippingproxysenders.html">Skipping proxy senders</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Setup</li><li class="chapter-item expanded "><a href="setup_dev.html">Setting up your development environment</a></li><li class="chapter-item expanded "><a href="setup_shading.html">Shading the CommandAPI in your plugins</a></li><li class="chapter-item expanded "><a href="setup_annotations.html">Using the annotation system</a></li><li class="chapter-item expanded affix "><li class="part-title">Creating Commands</li><li class="chapter-item expanded "><a href="commandregistration.html">Command registration</a></li><li class="chapter-item expanded "><a href="commandunregistration.html">Command unregistration</a></li><li class="chapter-item expanded "><a href="commandexecutors.html">Command executors</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="normalexecutors.html">Normal command executors</a></li><li class="chapter-item expanded "><a href="proxysender.html">Proxied commandsenders</a></li><li class="chapter-item expanded "><a href="native.html">Native commandsenders</a></li><li class="chapter-item expanded "><a href="resultingcommandexecutors.html">Resulting command executors</a></li><li class="chapter-item expanded "><a href="commandfailures.html">Handling command failures</a></li></ol></li><li class="chapter-item expanded "><a href="arguments.html">Command arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commandarguments.html">CommandArguments</a></li><li class="chapter-item expanded "><a href="optional_arguments.html">Optional arguments</a></li><li class="chapter-item expanded "><a href="listed.html">Listed arguments</a></li><li class="chapter-item expanded "><a href="argumentsuggestions.html">Argument suggestions</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="suggestionsinfo.html">The SuggestionsInfo record</a></li><li class="chapter-item "><a href="stringargumentsuggestions.html">String argument suggestions</a></li><li class="chapter-item "><a href="safeargumentsuggestions.html">Safely typed argument suggestions</a></li><li class="chapter-item "><a href="tooltips.html">Argument suggestions with tooltips</a></li><li class="chapter-item "><a href="asyncsuggestions.html">Asynchronous suggestions</a></li></ol></li><li class="chapter-item expanded "><a href="argumenttypes.html">Argument types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_primitives.html">Primitive arguments</a></li><li class="chapter-item "><a href="argument_range.html">Ranged arguments</a></li><li class="chapter-item "><a href="argument_strings.html">String arguments</a></li><li class="chapter-item "><a href="category_positional_arguments.html">Positional arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_locations.html">Location arguments</a></li><li class="chapter-item "><a href="argument_rotation.html">Rotation arguments</a></li><li class="chapter-item "><a href="argument_axis.html">AxisArguments</a></li></ol></li><li class="chapter-item "><a href="argument_chats.html">Chat arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_chat_spigot.html">Spigot chat arguments</a></li><li class="chapter-item "><a href="argument_chat_adventure.html">Adventure chat arguments</a></li><li class="chapter-item "><a href="chatpreview.html">Chat preview</a></li></ol></li><li class="chapter-item "><a href="argument_entities.html">Entity & player arguments</a></li><li class="chapter-item "><a href="category_scoreboard_arguments.html">Scoreboard arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_scoreboards.html">Scoreboard arguments</a></li><li class="chapter-item "><a href="argument_objectives.html">Objective arguments</a></li><li class="chapter-item "><a href="argument_team.html">Team arguments</a></li></ol></li><li class="chapter-item "><a href="category_miscellaneous_arguments.html">Miscellaneous arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_angle.html">Angle arguments</a></li><li class="chapter-item "><a href="advancementargument.html">Advancement arguments</a></li><li class="chapter-item "><a href="argument_biome.html">Biome arguments</a></li><li class="chapter-item "><a href="argument_blockstate.html">BlockState arguments</a></li><li class="chapter-item "><a href="argument_enchantment.html">Enchantment arguments</a></li><li class="chapter-item "><a href="argument_itemstack.html">Itemstack arguments</a></li><li class="chapter-item "><a href="argument_loottable.html">LootTable argument</a></li><li class="chapter-item "><a href="argument_mathoperation.html">MathOperation arguments</a></li><li class="chapter-item "><a href="argument_namespacedkey.html">NamespacedKey arguments</a></li><li class="chapter-item "><a href="argument_particles.html">Particle arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_particle_old.html">Particle data (before 1.20.5)</a></li><li class="chapter-item "><a href="argument_particle_new.html">Particle data (1.20.5+)</a></li></ol></li><li class="chapter-item "><a href="argument_potion.html">Potion effect arguments</a></li><li class="chapter-item "><a href="argument_recipe.html">Recipe arguments</a></li><li class="chapter-item "><a href="argument_sound.html">Sound arguments</a></li><li class="chapter-item "><a href="argument_time.html">Time arguments</a></li><li class="chapter-item "><a href="argument_uuid.html">UUID arguments</a></li><li class="chapter-item "><a href="argument_world.html">World arguments</a></li></ol></li><li class="chapter-item "><a href="predicateargs.html">Predicate arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_blockpredicate.html">Block predicate arguments</a></li><li class="chapter-item "><a href="argument_itemstackpredicate.html">ItemStack predicate arguments</a></li></ol></li><li class="chapter-item "><a href="argument_nbt.html">NBT arguments</a></li><li class="chapter-item "><a href="category_literal_arguments.html">Literal arguments</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="argument_literal.html">Literal arguments</a></li><li class="chapter-item "><a href="argument_multiliteral.html">Multi literal arguments</a></li></ol></li><li class="chapter-item "><a href="argument_list.html">List arguments</a></li><li class="chapter-item "><a href="argument_map.html">Map arguments</a></li><li class="chapter-item "><a href="argument_command.html">Command arguments</a></li><li class="chapter-item "><a href="argument_custom.html">Custom arguments</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="functions.html">Functions & Tags</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="functionsetup.html">Setting up functions & tags</a></li><li class="chapter-item expanded "><a href="simplefunctionwrapper.html">The SimpleFunctionWrapper class</a></li><li class="chapter-item expanded "><a href="functionwrapper.html">The FunctionWrapper class</a></li><li class="chapter-item expanded "><a href="argument_function.html">Function arguments</a></li></ol></li><li class="chapter-item expanded "><a href="permissions.html">Permissions</a></li><li class="chapter-item expanded "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="aliases.html">Aliases</a></li><li class="chapter-item expanded "><a href="help.html">Help</a></li><li class="chapter-item expanded "><a href="subcommands.html">Subcommands</a></li><li class="chapter-item expanded "><a href="commandtrees.html">Command trees</a></li><li class="chapter-item expanded affix "><li class="part-title">Annotation-based Commands</li><li class="chapter-item expanded "><a href="annotationsintro.html">Annotation-based commands</a></li><li class="chapter-item expanded "><a href="annotations.html">Annotations</a></li><li class="chapter-item expanded "><a href="registeringannotations.html">Registering annotation-based commands</a></li><li class="chapter-item expanded affix "><li class="part-title">Kotlin-based Commands</li><li class="chapter-item expanded "><a href="kotlinintro.html">Kotlin-based commands</a></li><li class="chapter-item expanded "><a href="kotlindsl.html">Using the DSL</a></li><li class="chapter-item expanded "><a href="delegated_properties.html">Delegated properties</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Velocity</li><li class="chapter-item expanded "><a href="velocity_intro.html">Velocity</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Utilities</li><li class="chapter-item expanded "><a href="conversion.html">Command conversion</a></li><li class="chapter-item expanded "><a href="reloading.html">Plugin reloading</a></li><li class="chapter-item expanded affix "><li class="part-title">Internal CommandAPI</li><li class="chapter-item expanded "><a href="internal.html">Internal CommandAPI</a></li><li class="chapter-item expanded "><a href="brigadier.html">Brigadier + CommandAPI</a></li><li class="chapter-item expanded "><a href="brigadiersuggestions.html">Brigadier Suggestions</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Java Tips</li><li class="chapter-item expanded "><a href="predicatetips.html">Predicate tips</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">CommandAPI Contribution</li><li class="chapter-item expanded "><a href="contributionintro.html">Introduction</a></li><li class="chapter-item expanded "><a href="projectstructure.html">Project Structure</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="upgrading.html" class="active">Upgrading guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="upgrading_old.html">Upgrading guide (pre-9.0.0)</a></li></ol></li><li class="chapter-item expanded "><a href="faq.html">FAQ</a></li><li class="chapter-item expanded affix "><a href="incompatibleversions.html">Incompatible version information</a></li><li class="chapter-item expanded affix "><a href="troubleshooting.html">Troubleshooting</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="afterword.html">Afterword</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fas fa-palette"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="skepter">Skepter Likes Purple</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">CommandAPI Documentation v9.6.0</h1>
+
+                    <div class="right-buttons">
+                        <a href="https://www.jorel.dev/CommandAPI/" title="Back to main CommandAPI page" aria-label="Back to main CommandAPI page">
+                            <i id="home-button" class="fas fa-home"></i>
+                        </a>
+                        <a href="https://ko-fi.com/jorelali" title="Donate (ko-fi)" aria-label="Donate (ko-fi)">
+                            <i id="donate-button" class="fas fa-donate"></i>
+                        </a>
+                        <a href="https://discord.com/invite/G4SzSxZ" title="Discord" aria-label="Discord">
+                            <i id="discord-button" class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://github.com/JorelAli/CommandAPI" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Page table of contents -->
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        
+                        <h1 id="upgrading-guide"><a class="header" href="#upgrading-guide">Upgrading guide</a></h1>
+<h2 id="from-920-to-930"><a class="header" href="#from-920-to-930">From 9.2.0 to 9.3.0</a></h2>
+<p>The <code>BukkitTooltip.generateAdvenureComponents</code> methods have now been deprecated in favour of the correctly named <code>BukkitTooltip.generateAdventureComponents</code> methods:</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.2.0">BukkitTooltip.generateAdvenureComponents()
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.3.0">BukkitTooltip.generateAdventureComponents()
+</code></pre>
+</div>
+<hr />
+<h2 id="from-903-to-910"><a class="header" href="#from-903-to-910">From 9.0.3 to 9.1.0</a></h2>
+<h3 id="multiliteralargument-changes"><a class="header" href="#multiliteralargument-changes">MultiLiteralArgument changes</a></h3>
+<p>All <code>MultiLiteralArgument</code> constructors have been deprecated in 9.1.0! Instead the new <code>MultiLiteralArgument</code> constructor should be used:</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.3">withArguments(new MultiLiteralArgument(&quot;gamemodes&quot;, List.of(&quot;survival&quot;, &quot;creative&quot;, &quot;adventure&quot;, &quot;spectator&quot;)))
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.1.0">withArguments(new MultiLiteralArgument(&quot;gamemodes&quot;, &quot;survival&quot;, &quot;creative&quot;, &quot;adventure&quot;, &quot;spectator&quot;))
+</code></pre>
+</div>
+<h3 id="commandarguments-changes"><a class="header" href="#commandarguments-changes">CommandArguments changes</a></h3>
+<p>For 9.1.0 all deprecated methods are no longer deprecated. To learn about all the methods now available, refer to the <a href="./commandarguments.html">CommandArguments</a> page.</p>
+<hr />
+<h2 id="from-901-to-902"><a class="header" href="#from-901-to-902">From 9.0.1 to 9.0.2</a></h2>
+<h3 id="multiliteralargument-and-literalargument-changes"><a class="header" href="#multiliteralargument-and-literalargument-changes">MultiLiteralArgument and LiteralArgument changes</a></h3>
+<p>In previous versions, the ability has been introduced to access arguments by their node names. However, while this was possible for every other argument, it wasn't possible for <code>MultiLiteralArgument</code>s. This was now changed because the values from the <code>MultiLiteralArgument</code> are included in the <a href="./commandarguments.html"><code>CommandArguments</code></a> of a command.</p>
+<p>Therefore, the current constructor has been deprecated and the new one should be used:</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.1">withArguments(new MultiLiteralArgument(&quot;survival&quot;, &quot;creative&quot;, &quot;adventure&quot;, &quot;spectator&quot;))
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.2">withArguments(new MultiLiteralArgument(&quot;gamemodes&quot;, List.of(&quot;survival&quot;, &quot;creative&quot;, &quot;adventure&quot;, &quot;spectator&quot;)))
+</code></pre>
+</div>
+<p>Because it is possible to list <code>LiteralArgument</code>s in the <a href="./commandarguments.html"><code>CommandArguments</code></a> of a command, there was also an additional constructor add to the <code>LiteralArgument</code> class. The other one is not deprecated.</p>
+<p>Now, the <code>LiteralArgument</code> class contains two possible constructors:</p>
+<pre><code class="language-java">public LiteralArgument(String literal) // Recommended if the literal is not listed
+public LiteralArgument(String nodeName, String literal)
+</code></pre>
+<hr />
+<h2 id="from-900-to-901"><a class="header" href="#from-900-to-901">From 9.0.0 to 9.0.1</a></h2>
+<h3 id="customargumentexception-changes"><a class="header" href="#customargumentexception-changes">CustomArgumentException changes</a></h3>
+<p>For 9.0.1, the <code>CustomArgumentException</code> constructors have been deprecated and should no longer be used. Instead, use the <code>CustomArgumentException</code> static factory methods:</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">throw new CustomArgumentException(new MessageBuilder(...));
+throw new CustomArgumentException(&quot;Error message&quot;);
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.1">throw CustomArgumentException.fromMessageBuilder(new MessageBuilder(...));
+throw CustomArgumentException.fromString(&quot;Error message&quot;);
+</code></pre>
+</div>
+<h3 id="commandarguments-changes-1"><a class="header" href="#commandarguments-changes-1">CommandArguments changes</a></h3>
+<p>For 9.0.1 the various <code>CommandArguments#getOrDefault()</code> and <code>CommandArguments#getOrDefaultUnchecked()</code> have been deprecated and should no longer be used. Instead, use the <code>CommandArguments#getOptional()</code> and <code>CommandArguments#getOptionalUnchecked()</code> methods:</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0_(Not_using_unchecked)">new CommandAPICommand(&quot;mycommand&quot;)
+    .withOptionalArguments(new StringArgument(&quot;string&quot;))
+    .executes((sender, args) -&gt; {
+        String string = (String) args.getOrDefault(&quot;string&quot;, &quot;Default Value&quot;);
+    })
+    .register();
+</code></pre>
+<pre><code class="language-java 9.0.0_(Using_unchecked)">new CommandAPICommand(&quot;mycommand&quot;)
+    .withOptionalArguments(new StringArgument(&quot;string&quot;))
+    .executes((sender, args) -&gt; {
+        String string = args.getOrDefaultUnchecked(&quot;string&quot;, &quot;Default Value&quot;);
+    })
+    .register();
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.1_(Not_using_unchecked)">new CommandAPICommand(&quot;mycommand&quot;)
+    .withOptionalArguments(new StringArgument(&quot;string&quot;))
+    .executes((sender, args) -&gt; {
+        String string = (String) args.getOptional(&quot;string&quot;).orElse(&quot;Default Value&quot;);
+    })
+    .register();
+</code></pre>
+<pre><code class="language-java 9.0.1_(Using_unchecked)">new CommandAPICommand(&quot;mycommand&quot;)
+    .withOptionalArguments(new StringArgument(&quot;string&quot;))
+    .executes((sender, args) -&gt; {
+        String string = args.getOptionalUnchecked(&quot;string&quot;).orElse(&quot;Default Value&quot;);
+    })
+    .register();
+</code></pre>
+</div>
+<hr />
+<h2 id="from-88x-to-900"><a class="header" href="#from-88x-to-900">From 8.8.x to 9.0.0</a></h2>
+<p>CommandAPI 9.0.0 is arguably the biggest change in the CommandAPI's project structure and usage. This update was designed to allow the CommandAPI to be generalized for other platforms (e.g. Velocity, Fabric, Sponge), and as a result <strong>this update is incompatible with previous versions of the CommandAPI</strong>.</p>
+<p>All deprecated methods from 8.8.x have been removed in this update. Please ensure that you use the relevant replacement methods (these are described in the JavaDocs for the various deprecated methods) before upgrading to 9.0.0.</p>
+<hr />
+<h3 id="project-dependencies"><a class="header" href="#project-dependencies">Project dependencies</a></h3>
+<p>For Bukkit/Spigot/Paper plugins, the <code>commandapi-core</code> and <code>commandapi-shade</code> modules should no longer be used. Instead, use the new <code>commandapi-bukkit-core</code> and <code>commandapi-bukkit-shade</code> modules:</p>
+<div class="linked-multi-pre">
+<pre><code class="language-xml Maven">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;artifactId&gt;commandapi-core&lt;/artifactId&gt;
+        &lt;version&gt;9.0.0&lt;/version&gt;
+        &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<pre><code class="language-xml Maven_(shaded)">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;artifactId&gt;commandapi-shade&lt;/artifactId&gt;
+        &lt;version&gt;9.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<pre><code class="language-gradle Gradle">dependencies {
+    compileOnly &quot;dev.jorel:commandapi-core:9.0.0&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin Kotlin_Gradle">dependencies {
+    compileOnly(&quot;dev.jorel:commandapi-core:9.0.0&quot;)
+}
+</code></pre>
+<pre><code class="language-gradle Gradle_(shaded)">dependencies {
+    implementation &quot;dev.jorel:commandapi-shade:9.0.0&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin Kotlin_Gradle_(shaded)">dependencies {
+    implementation(&quot;dev.jorel:commandapi-shade:9.0.0&quot;)
+}
+</code></pre>
+<p>$$\downarrow$$</p>
+<pre><code class="language-xml Maven">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;artifactId&gt;commandapi-bukkit-core&lt;/artifactId&gt;
+        &lt;version&gt;9.0.0&lt;/version&gt;
+        &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<pre><code class="language-xml Maven_(shaded)">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;artifactId&gt;commandapi-bukkit-shade&lt;/artifactId&gt;
+        &lt;version&gt;9.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<pre><code class="language-gradle Gradle">dependencies {
+    compileOnly &quot;dev.jorel:commandapi-bukkit-core:9.0.0&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin Kotlin_Gradle">dependencies {
+    compileOnly(&quot;dev.jorel:commandapi-bukkit-core:9.0.0&quot;)
+}
+</code></pre>
+<pre><code class="language-gradle Gradle_(shaded)">dependencies {
+    implementation &quot;dev.jorel:commandapi-bukkit-shade:9.0.0&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin Kotlin_Gradle_(shaded)">dependencies {
+    implementation(&quot;dev.jorel:commandapi-bukkit-shade:9.0.0&quot;)
+}
+</code></pre>
+</div>
+<p>Additionally, when using the Kotlin DSL for Bukkit, instead of using <code>commandapi-kotlin</code>, use <code>commandapi-bukkit-kotlin</code>:</p>
+<div class="linked-multi-pre">
+<pre><code class="language-xml Maven">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;artifactId&gt;commandapi-kotlin&lt;/artifactId&gt;
+        &lt;version&gt;9.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<pre><code class="language-gradle Gradle">dependencies {
+    implementation &quot;dev.jorel:commandapi-kotlin:9.0.0&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin Kotlin_Gradle">dependencies {
+    implementation(&quot;dev.jorel:commandapi-kotlin:9.0.0&quot;)
+}
+</code></pre>
+<p>$$\downarrow$$</p>
+<pre><code class="language-xml Maven">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;dev.jorel&lt;/groupId&gt;
+        &lt;artifactId&gt;commandapi-bukkit-kotlin&lt;/artifactId&gt;
+        &lt;version&gt;9.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<pre><code class="language-gradle Gradle">dependencies {
+    implementation &quot;dev.jorel:commandapi-bukkit-kotlin:9.0.0&quot;
+}
+</code></pre>
+<pre><code class="language-kotlin Kotlin_Gradle">dependencies {
+    implementation(&quot;dev.jorel:commandapi-bukkit-kotlin:9.0.0&quot;)
+}
+</code></pre>
+</div>
+<hr />
+<h3 id="loading-and-enabling-the-commandapi-when-shading"><a class="header" href="#loading-and-enabling-the-commandapi-when-shading">Loading and enabling the CommandAPI when shading</a></h3>
+<p>The <code>CommandAPI.onLoad()</code> method has changed in this update. Instead of using the <code>CommandAPIConfig</code> object, use the <code>CommandAPIBukkitConfig</code> and pass in the current plugin reference (<code>this</code>).</p>
+<p>and <code>CommandAPI.onEnable()</code> method has also changed, and now no longer requires the plugin reference (<code>this</code>), as it is now included in <code>CommandAPI.onLoad()</code> instead.:</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">public void onLoad() {
+    CommandAPI.onLoad(new CommandAPIConfig());
+}
+
+public void onEnable() {
+    CommandAPI.onEnable(this);
+}
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">public void onLoad() {
+    CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+}
+
+public void onEnable() {
+    CommandAPI.onEnable();
+}
+</code></pre>
+</div>
+<hr />
+<h3 id="accessing-arguments"><a class="header" href="#accessing-arguments">Accessing arguments</a></h3>
+<p>Arguments for commands are no longer an <code>Object[]</code> and have now been replaced with a more powerful <code>CommandArguments</code> object. This object now lets you access arguments in a number of ways:</p>
+<h4 id="using-the-argsgetint-method"><a class="header" href="#using-the-argsgetint-method">Using the <code>args.get(int)</code> method</a></h4>
+<p>If you're in a rush and just want to upgrade quickly, call the <code>.get(int)</code> method instead of accessing the arguments using the array access notation:</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">new CommandAPICommand(&quot;cmd&quot;)
+    .withArguments(new StringArgument(&quot;mystring&quot;))
+    .withArguments(new PotionEffectArgument(&quot;mypotion&quot;))
+    .withArguments(new LocationArgument(&quot;mylocation&quot;))
+    .executes((sender, args) -&gt; {
+        String stringArg = (String) args[0];
+        PotionEffectType potionArg = (PotionEffectType) args[1];
+        Location locationArg = (Location) args[2];
+    })
+    .register();
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">new CommandAPICommand(&quot;cmd&quot;)
+    .withArguments(new StringArgument(&quot;mystring&quot;))
+    .withArguments(new PotionEffectArgument(&quot;mypotion&quot;))
+    .withArguments(new LocationArgument(&quot;mylocation&quot;))
+    .executes((sender, args) -&gt; {
+        String stringArg = (String) args.get(0);
+        PotionEffectType potionArg = (PotionEffectType) args.get(1);
+        Location locationArg = (Location) args.get(2);
+    })
+    .register();
+</code></pre>
+</div>
+<h4 id="using-the-argsgetstring-method-recommended"><a class="header" href="#using-the-argsgetstring-method-recommended">Using the <code>args.get(String)</code> method <em>(recommended)</em></a></h4>
+<p>The CommandAPI introduces a new <code>args.get(String)</code> method to access arguments using the argument node name. This method also makes your code much more compatible with optional arguments:</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">new CommandAPICommand(&quot;cmd&quot;)
+    .withArguments(new StringArgument(&quot;mystring&quot;))
+    .withArguments(new PotionEffectArgument(&quot;mypotion&quot;))
+    .withArguments(new LocationArgument(&quot;mylocation&quot;))
+    .executes((sender, args) -&gt; {
+        String stringArg = (String) args[0];
+        PotionEffectType potionArg = (PotionEffectType) args[1];
+        Location locationArg = (Location) args[2];
+    })
+    .register();
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">new CommandAPICommand(&quot;cmd&quot;)
+    .withArguments(new StringArgument(&quot;mystring&quot;))
+    .withArguments(new PotionEffectArgument(&quot;mypotion&quot;))
+    .withArguments(new LocationArgument(&quot;mylocation&quot;))
+    .executes((sender, args) -&gt; {
+        String stringArg = (String) args.get(&quot;mystring&quot;);
+        PotionEffectType potionArg = (PotionEffectType) args.get(&quot;mypotion&quot;);
+        Location locationArg = (Location) args.get(&quot;mylocation&quot;);
+    })
+    .register();
+</code></pre>
+</div>
+<hr />
+<h3 id="commandapi-helper-methods"><a class="header" href="#commandapi-helper-methods"><code>CommandAPI</code> helper methods</a></h3>
+<p>The <code>CommandAPI.failWithBaseComponents(message)</code> and <code>CommandAPI.failWithAdventureComponent(message)</code> methods have now been moved from <code>CommandAPI</code> to <code>CommandAPIBukkit</code>, because these methods are Bukkit/Spigot/Paper specific and don't exist for other platforms (e.g. Velocity, Fabric, Sponge):</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">CommandAPI.failWithBaseComponents(...);
+CommandAPI.failWithAdventureComponent(...);
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">CommandAPIBukkit.failWithBaseComponents(...);
+CommandAPIBukkit.failWithAdventureComponent(...);
+</code></pre>
+</div>
+<hr />
+<h3 id="removal-of-the-environmentargument"><a class="header" href="#removal-of-the-environmentargument">Removal of the <code>EnvironmentArgument</code></a></h3>
+<p>The <code>EnvironmentArgument</code> has been removed in this update, as it was implemented incorrectly and is not fit for purpose. Instead, the CommandAPI has the more accurate <code>WorldArgument</code>.</p>
+<hr />
+<h3 id="changes-to-the-teamargument"><a class="header" href="#changes-to-the-teamargument">Changes to the <code>TeamArgument</code></a></h3>
+<p>The <code>TeamArgument</code> has been updated to no longer use a <code>String</code> as its return type. Instead, you can now just use a <code>Team</code> object directly:</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">new CommandAPICommand(&quot;team&quot;)
+    .withArguments(new TeamArgument(&quot;team&quot;))
+    .executes((sender, args) -&gt; {
+        String teamName = (String) args.get(&quot;team&quot;);
+        Team team = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(teamName);
+    })
+    .register();
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">new CommandAPICommand(&quot;team&quot;)
+    .withArguments(new TeamArgument(&quot;team&quot;))
+    .executes((sender, args) -&gt; {
+        Team team = (Team) args.get(&quot;team&quot;);
+    })
+    .register();
+</code></pre>
+</div>
+<hr />
+<h3 id="changes-to-the-objectiveargument"><a class="header" href="#changes-to-the-objectiveargument">Changes to the <code>ObjectiveArgument</code></a></h3>
+<p>The <code>ObjectiveArgument</code> has been updated to no longer use a <code>String</code> as its return type. Instead, you can now just use an <code>Objective</code> object directly:</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">new CommandAPICommand(&quot;objective&quot;)
+    .withArguments(new ObjectiveArgument(&quot;objective&quot;))
+    .executes((sender, args) -&gt; {
+        String objectiveName = (String) args.get(&quot;objective&quot;);
+        Objective objective = Bukkit.getScoreboardManager().getMainScoreboard().getObjective(objectiveName);
+    })
+    .register();
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">new CommandAPICommand(&quot;objective&quot;)
+    .withArguments(new ObjectiveArgument(&quot;objective&quot;))
+    .executes((sender, args) -&gt; {
+        Objective objective = (Objective) args.get(&quot;objective&quot;);
+    })
+    .register();
+</code></pre>
+</div>
+<hr />
+<h3 id="changes-to-the-listargumentbuilder"><a class="header" href="#changes-to-the-listargumentbuilder">Changes to the <code>ListArgumentBuilder</code></a></h3>
+<p>The <code>ListArgumentBuilder</code> no longer has <code>withList(Function&lt;CommandSender, Collection&lt;T&gt;&gt; list)</code> and instead uses <code>SuggestionInfo</code> to have <code>withList(Function&lt;SuggestionInfo&lt;CommandSender&gt;, Collection&lt;T&gt;&gt; list)</code>.</p>
+<p>This now allows you to access more information when generating a list dynamically instead of just the command sender. To access the original command sender, you can use the <code>sender()</code> method from <code>SuggestionInfo</code>:</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">ListArgument&lt;?&gt; arg = new ListArgumentBuilder&lt;&gt;(&quot;values&quot;, &quot;, &quot;)
+    .withList(sender -&gt; List.of(&quot;cat&quot;, &quot;wolf&quot;, &quot;axolotl&quot;, sender.getName()))
+    .withStringMapper()
+    .buildGreedy();
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">ListArgument&lt;?&gt; arg = new ListArgumentBuilder&lt;&gt;(&quot;values&quot;, &quot;, &quot;)
+    .withList(info -&gt; List.of(&quot;cat&quot;, &quot;wolf&quot;, &quot;axolotl&quot;, info.sender().getName()))
+    .withStringMapper()
+    .buildGreedy();
+</code></pre>
+</div>
+<hr />
+<h3 id="changes-to-the-rotation-wrapper"><a class="header" href="#changes-to-the-rotation-wrapper">Changes to the <code>Rotation</code> wrapper</a></h3>
+<p>The <code>Rotation</code> class now uses a constructor which has the <strong>yaw first, and the pitch second</strong>, instead of the pitch first and the yaw second.</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">new Rotation(20, 80); // Yaw = 80, Pitch = 20
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">new Rotation(20, 80); // Yaw = 20, Pitch = 80
+</code></pre>
+</div>
+<hr />
+<h3 id="changes-to-the-scoreboardslot-wrapper"><a class="header" href="#changes-to-the-scoreboardslot-wrapper">Changes to the <code>ScoreboardSlot</code> wrapper</a></h3>
+<p>The <code>ScoreboardSlot</code> wrapper is now an enum that has direct support for sidebar team colors, via the <code>SIDEBAR_TEAM_###</code> enum values, for example <code>SIDEBAR_TEAM_RED</code>;</p>
+<div class="multi-pre">
+<pre><code class="language-java 8.8.x">ScoreboardSlot slot = // Some ScoreboardSlot
+DisplaySlot displaySlot = slot.getDisplaySlot(); // Returns PLAYER_LIST, SIDEBAR or BELOW_NAME
+
+// Extract the color if necessary
+if (slot.hasTeamColor()) {
+    ChatColor color = slot.getTeamColor();
+}
+</code></pre>
+</div>
+<p>$$\downarrow$$</p>
+<div class="multi-pre">
+<pre><code class="language-java 9.0.0">ScoreboardSlot slot = // Some ScoreboardSlot
+DisplaySlot displaySlot = slot.getDisplaySlot(); // Returns PLAYER_LIST, BELOW_NAME or SIDEBAR_TEAM_###
+</code></pre>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="projectstructure.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+
+                            <a rel="next" href="upgrading_old.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="projectstructure.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+
+                    <a rel="next" href="upgrading_old.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="sidebar.js"></script>
+        <script type="text/javascript" src="mccmd.js"></script>
+        <script type="text/javascript" src="kotlin-dsl.js"></script>
+        <script type="text/javascript" src="jszip.min.js"></script>
+        <script type="text/javascript" src="yaml.min.js"></script>
+        <script type="text/javascript" src="pluginyml.js"></script>
+
+
+    </body>
+</html>
