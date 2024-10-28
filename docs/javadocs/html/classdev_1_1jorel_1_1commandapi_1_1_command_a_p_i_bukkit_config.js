@@ -1,6 +1,7 @@
 var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config =
 [
     [ "CommandAPIBukkitConfig", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a6a6fda0ae086184fe959de1719341494", null ],
+    [ "beLenientForMinorVersions", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a6e965a89619b3733138dc4fe6923fc6d", null ],
     [ "dispatcherFile", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7649fe88bd406fab65fbcbc3b9ae87f8", null ],
     [ "missingExecutorImplementationMessage", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#aa5317ba92a442bf3aa71a3c03416c612", null ],
     [ "shouldHookPaperReload", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit_config.html#a7e0da4e4c64919cd058a19539e4af849", null ],

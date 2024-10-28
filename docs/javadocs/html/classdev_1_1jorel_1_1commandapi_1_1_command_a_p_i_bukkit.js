@@ -1,5 +1,6 @@
 var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit =
 [
+    [ "_ArgumentAdvancement", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#ae312ffdd0ab9b2bc7c860c502819f635", null ],
     [ "_ArgumentAngle", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a99296e72e48bc7b248d87eb6c0b48e9c", null ],
     [ "_ArgumentAxis", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a9a9cf304f59b9e0cf1e9396968e1f14b", null ],
     [ "_ArgumentBlockPredicate", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#ac8d218ba067cf14b9393acd098fdaf82", null ],
@@ -23,6 +24,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit =
     [ "_ArgumentPosition", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a309bfd726a34722c43dc078d01250620", null ],
     [ "_ArgumentPosition2D", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a55b2c9b040b11c786f162e0bc43fa3dd", null ],
     [ "_ArgumentProfile", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a01e059c24179bd2e00b6d2f172750415", null ],
+    [ "_ArgumentRecipe", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#ab3564f859ce56c685ba8d5fdabcac224", null ],
     [ "_ArgumentRotation", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#a25e9e99b869fbb0103f3278911b02dad", null ],
     [ "_ArgumentScoreboardCriteria", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#afda59517aa429f8f42b2d4ffa30461c2", null ],
     [ "_ArgumentScoreboardObjective", "classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_bukkit.html#adac4251d8275592f4f04a7cfb45e56e4", null ],

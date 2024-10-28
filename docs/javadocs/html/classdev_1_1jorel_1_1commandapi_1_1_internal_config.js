@@ -8,6 +8,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_internal_config =
     [ "getNBTContainerConstructor", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html#a818de5f4dad94200d3d355704da1b816", null ],
     [ "hasSilentLogs", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html#a2a2055ce8ca1fea238cff316655eddea", null ],
     [ "hasVerboseOutput", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html#a7b158ac1ec9a9ee0f807893c15fc2bf7", null ],
+    [ "shouldBeLenientForMinorVersions", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html#aadd05d2bb05c7704e67fb1b695c933d3", null ],
     [ "shouldSkipSenderProxy", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html#a0f327ff59e435371a601a1eac415b7fe", null ],
     [ "shouldUseLatestNMSVersion", "classdev_1_1jorel_1_1commandapi_1_1_internal_config.html#ad870a7b8a974fba9bde5cb25c5faa6c8", null ]
 ];
