@@ -72,8 +72,8 @@
 		<module>commandapi-annotations</module>
 
 		<!-- General and platform documentation -->
-		<!-- Documentation needs work, does not build independently -->
-		<module>commandapi-documentation-code</module>
+		<!-- Documentation doesn't compile right now, TODO: test toolkit needs update
+		<module>commandapi-documentation-code</module> -->
 		<!-- Code coverage reports -->
 		<module>commandapi-codecov</module>
     </modules>

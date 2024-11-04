@@ -23,8 +23,8 @@
 		<!-- Common Bukkit plugin classes -->
 		<module>commandapi-bukkit-plugin-common</module>
 
-		<!-- Test toolkit -->
-		<module>commandapi-bukkit-test-toolkit</module>
+		<!-- Test toolkit - needs work => TODO
+		<module>commandapi-bukkit-test-toolkit</module> -->
 
 		<!-- Tests do not compile at this time. This is a big todo
 		<module>commandapi-bukkit-test</module>-->
