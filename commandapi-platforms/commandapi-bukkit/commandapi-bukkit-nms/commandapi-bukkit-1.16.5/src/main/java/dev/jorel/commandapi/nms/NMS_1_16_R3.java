@@ -205,7 +205,7 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
 @RequireField(in = ArgumentPredicateItemStack.class, name = "c", ofType = NBTTagCompound.class)
-public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
+public class NMS_1_16_R3 extends NMS<CommandListenerWrapper> {
 	
 	private static final SafeVarHandle<SimpleHelpMap, Map<String, HelpTopic>> helpMapTopics;
 	private static final Field entitySelectorCheckPermissions;
@@ -426,33 +426,6 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 		return ArgumentMinecraftKeyRegistered.a(cmdCtx, key).bukkit;
 	}
 
-	/*
-	 * ADVENTURE START
-	 * These methods use the Adventure API, but the Adventure API isn't present
-	 * in paper until Minecraft 1.16.5. We assume that the developer is shading
-	 * Adventure manually (or otherwise), using https://docs.advntr.dev/platform/bukkit.html
-	 */
-
-	@Override
-	public final Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public final NamedTextColor getAdventureChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		final Integer color = ArgumentChatFormat.a(cmdCtx, key).e();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.ofExact(color);
-	}
-
-	@Override
-	public final Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
-	}
-
-	/*
-	 * ADVENTURE END
-	 */
-
 	@Override
 	public float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) { return ArgumentAngle.a(cmdCtx, key); }
 
@@ -500,21 +473,6 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	}
 
 	@Override
-	public BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChat.a(cmdCtx, key)));
-	}
-
-	@Override
-	public ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return CraftChatMessage.getColor(ArgumentChatFormat.a(cmdCtx, key));
-	}
-
-	@Override
-	public BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return ComponentSerializer.parse(ChatSerializer.a(ArgumentChatComponent.a(cmdCtx, key)));
-	}
-
-	@Override
 	public CommandListenerWrapper getBrigadierSourceFromCommandSender(AbstractCommandSender<? extends CommandSender> senderWrapper) {
 		return VanillaCommandWrapper.getListener(senderWrapper.getSource());
 	}
@@ -522,7 +480,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandListenerWrapper clw) {
 		try {
-			return wrapCommandSender(clw.getBukkitSender());
+			return CommandAPIBukkit.get().wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -849,7 +807,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 			}
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return wrapCommandSender(sender);
+			return CommandAPIBukkit.get().wrapCommandSender(sender);
 		}
 	}
 
@@ -945,7 +903,8 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 
 		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
 		try {
-			customFunctionManagerBrigadierDispatcher.set(datapackResources.a(), getBrigadierDispatcher());
+			customFunctionManagerBrigadierDispatcher.set(datapackResources.a(),
+				CommandAPIBukkit.<CommandListenerWrapper>get().getBrigadierDispatcher());
 		} catch (IllegalAccessException ignored) {
 			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
@@ -969,7 +928,7 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 
 			// Register recipes again because reloading datapacks
 			// removes all non-vanilla recipes
-			registerBukkitRecipesSafely(recipes);
+			CommandAPIBukkit.get().registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {
@@ -998,15 +957,4 @@ public class NMS_1_16_R3 extends CommandAPIBukkit<CommandListenerWrapper> {
 		}
 	}
 
-	@Override
-	public CommandRegistrationStrategy<CommandListenerWrapper> createCommandRegistrationStrategy() {
-		return new SpigotCommandRegistration<>(
-			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.a(),
-			(SimpleCommandMap) getPaper().getCommandMap(),
-			() -> this.<MinecraftServer>getMinecraftServer().getCommandDispatcher().a(),
-			command -> command instanceof VanillaCommandWrapper,
-			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
-			node -> node.getCommand() instanceof BukkitCommandWrapper
-		);
-	}
 }

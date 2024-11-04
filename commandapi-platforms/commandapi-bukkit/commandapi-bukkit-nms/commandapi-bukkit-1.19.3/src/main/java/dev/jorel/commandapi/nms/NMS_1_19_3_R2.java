@@ -272,17 +272,6 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
 	}
 
-	@Override
-	public NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		final Integer color = ColorArgument.getColor(cmdCtx, key).getColor();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
-	}
-
-	@Override
-	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
-	}
-
 	@Differs(from = "1.19.2", by = "Now uses ResourceArgument instead of ResourceOrTagLocationArgument")
 	@Override
 	public final Object getBiome(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
@@ -600,7 +589,7 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 			}
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return wrapCommandSender(sender);
+			return CommandAPIBukkit.get().wrapCommandSender(sender);
 		}
 	}
 
@@ -696,7 +685,8 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
+			serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(),
+				CommandAPIBukkit.<CommandSourceStack>get().getBrigadierDispatcher());
 		} catch (IllegalAccessException ignored) {
 			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
@@ -787,7 +777,7 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 
 			// Register recipes again because reloading datapacks
 			// removes all non-vanilla recipes
-			registerBukkitRecipesSafely(recipes);
+			CommandAPIBukkit.get().registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {
@@ -824,18 +814,5 @@ public class NMS_1_19_3_R2 extends NMS_CommonWithFunctions {
 	@Override
 	public ArgumentType<?> _ArgumentEntitySummon() {
 		return ResourceArgument.resource(COMMAND_BUILD_CONTEXT, Registries.ENTITY_TYPE);
-	}
-
-	@Override
-	@Differs(from = "1.19, 1.19.1, 1.19.2", by = "MinecraftServer#aC -> MinecraftServer#aB")
-	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
-		return new SpigotCommandRegistration<>(
-			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
-			(SimpleCommandMap) getPaper().getCommandMap(),
-			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
-			command -> command instanceof VanillaCommandWrapper,
-			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
-			node -> node.getCommand() instanceof BukkitCommandWrapper
-		);
 	}
 }

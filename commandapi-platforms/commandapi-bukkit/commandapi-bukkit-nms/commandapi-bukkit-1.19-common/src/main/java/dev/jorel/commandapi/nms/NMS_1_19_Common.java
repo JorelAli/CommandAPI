@@ -196,63 +196,6 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 			arg -> net.minecraft.network.chat.Component.translatable("commands.locatebiome.invalid", arg));
 	}
 
-	@Override
-	public void onEnable() {
-		super.onEnable();
-
-		JavaPlugin plugin = getConfiguration().getPlugin();
-		// Enable chat preview if the server allows it
-		if (Bukkit.shouldSendChatPreviews()) {
-			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-
-				@EventHandler
-				public void onPlayerJoin(PlayerJoinEvent e) {
-					hookChatPreview(plugin, e.getPlayer());
-				}
-
-				@EventHandler
-				public void onPlayerQuit(PlayerQuitEvent e) {
-					unhookChatPreview(e.getPlayer());
-				}
-
-			}, plugin);
-			CommandAPI.logNormal("Chat preview enabled");
-		} else {
-			CommandAPI.logNormal("Chat preview is not available");
-		}
-	}
-
-	/**
-	 * Hooks into the chat previewing system
-	 *
-	 * @param plugin the plugin (for async calls)
-	 * @param player the player to hook
-	 */
-	@Unimplemented(because = VERSION_SPECIFIC_IMPLEMENTATION)
-	protected abstract void hookChatPreview(Plugin plugin, Player player);
-
-	/**
-	 * Unhooks a player from the chat previewing system. This should be
-	 * called when the player quits and when the plugin is disabled
-	 *
-	 * @param player the player to unhook
-	 */
-	private void unhookChatPreview(Player player) {
-		final Channel channel = ((CraftPlayer) player).getHandle().connection.connection.channel;
-		if (channel.pipeline().get("CommandAPI_" + player.getName()) != null) {
-			channel.eventLoop().submit(() -> channel.pipeline().remove("CommandAPI_" + player.getName()));
-		}
-	}
-
-	@Override
-	public void onDisable() {
-		super.onDisable();
-
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			unhookChatPreview(player);
-		}
-	}
-
 	private static NamespacedKey fromResourceLocation(ResourceLocation key) {
 		return NamespacedKey.fromString(key.getNamespace() + ":" + key.getPath());
 	}
@@ -360,17 +303,6 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 	@Override
 	public Advancement getAdvancement(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return ResourceLocationArgument.getAdvancement(cmdCtx, key).bukkit;
-	}
-
-	@Override
-	public NamedTextColor getAdventureChatColor(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		final Integer color = ColorArgument.getColor(cmdCtx, key).getColor();
-		return color == null ? NamedTextColor.WHITE : NamedTextColor.namedColor(color);
-	}
-
-	@Override
-	public final Component getAdventureChatComponent(CommandContext<CommandSourceStack> cmdCtx, String key) {
-		return GsonComponentSerializer.gson().deserialize(Serializer.toJson(ComponentArgument.getComponent(cmdCtx, key)));
 	}
 
 	@Differs(from = "1.18.2", by = "Biomes now go via the registry. Also have to manually implement ERROR_BIOME_INVALID")
@@ -712,7 +644,7 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 		if (isNative || (proxy != null && !sender.equals(proxy))) {
 			return new BukkitNativeProxyCommandSender(new NativeProxyCommandSender(sender, proxy, location, world));
 		} else {
-			return wrapCommandSender(sender);
+			return CommandAPIBukkit.get().wrapCommandSender(sender);
 		}
 	}
 
@@ -802,7 +734,8 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
+			serverFunctionLibraryDispatcher.set(serverResources.managers().getFunctionLibrary(),
+				CommandAPIBukkit.<CommandSourceStack>get().getBrigadierDispatcher());
 		} catch (IllegalAccessException ignored) {
 			// Shouldn't happen, CommandAPIHandler#getField makes it accessible
 		}
@@ -893,7 +826,7 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 
 			// Register recipes again because reloading datapacks
 			// removes all non-vanilla recipes
-			registerBukkitRecipesSafely(recipes);
+			CommandAPIBukkit.get().registerBukkitRecipesSafely(recipes);
 
 			CommandAPI.logNormal("Finished reloading datapacks");
 		} catch (Exception e) {
@@ -920,18 +853,5 @@ public abstract class NMS_1_19_Common extends NMS_CommonWithFunctions {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	@Differs(from = "1.18", by = "MinecraftServer#aA -> MinecraftServer#aC")
-	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
-		return new SpigotCommandRegistration<>(
-			this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher.getDispatcher(),
-			(SimpleCommandMap) getPaper().getCommandMap(),
-			() -> this.<MinecraftServer>getMinecraftServer().getCommands().getDispatcher(),
-			command -> command instanceof VanillaCommandWrapper,
-			node -> new VanillaCommandWrapper(this.<MinecraftServer>getMinecraftServer().vanillaCommandDispatcher, node),
-			node -> node.getCommand() instanceof BukkitCommandWrapper
-		);
 	}
 }
