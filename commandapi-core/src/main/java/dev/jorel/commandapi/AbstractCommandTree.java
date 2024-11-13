@@ -19,7 +19,7 @@ extends AbstractCommandTree<Impl, Argument, CommandSender>
 /// @cond DOX
 extends AbstractArgument<?, ?, Argument, CommandSender>
 /// @endcond
-, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
+, 	CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
 	private final List<AbstractArgumentTree<?, Argument, CommandSender>> arguments = new ArrayList<>();
 
@@ -41,6 +41,21 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public Impl then(final AbstractArgumentTree<?, Argument, CommandSender> tree) {
 		this.arguments.add(tree);
 		return instance();
+	}
+
+	@SafeVarargs
+	public final Impl thenNested(final AbstractArgumentTree<?, Argument, CommandSender>... trees) {
+		int length = trees.length;
+		if (length == 0) {
+			return instance();
+		}
+
+		AbstractArgumentTree<?, Argument, CommandSender> combined = trees[length - 1];
+		for (int i = length - 2; i >= 0; i--) {
+			combined = trees[i].then(combined);
+		}
+
+		return then(combined);
 	}
 
 	/**

@@ -1,8 +1,12 @@
 package dev.jorel.commandapi.test.dsltests
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock
+import dev.jorel.commandapi.arguments.LiteralArgument
+import dev.jorel.commandapi.arguments.StringArgument
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
+import dev.jorel.commandapi.kotlindsl.nested
+import dev.jorel.commandapi.kotlindsl.nestedArguments
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.jorel.commandapi.test.Mut
 import dev.jorel.commandapi.test.TestBase
@@ -95,4 +99,89 @@ class CommandTreeTests : TestBase() {
 		assertNoMoreResults(results)
 	}
 
+	@Test
+	fun testThenNestedHalfDSLVer() {
+		val results: Mut<String> = Mut.of()
+
+		commandTree("test") {
+			nestedArguments(
+				LiteralArgument("one"),
+				LiteralArgument("two"),
+				LiteralArgument("three")
+			) {
+				playerExecutor { player, _ ->
+					results.set("/test one two three")
+				}
+				nestedArguments(
+					LiteralArgument("four"),
+					LiteralArgument("five")
+				) {
+					playerExecutor { player, _ ->
+						results.set("/test one two three four five")
+					}
+				}
+			}
+		}
+
+		val player: PlayerMock = server.addPlayer()
+
+		// /test one two three
+		server.dispatchCommand(player, "test one two three")
+		assertEquals("/test one two three", results.get())
+
+		// /test one two three four five
+		server.dispatchCommand(player, "test one two three four five")
+		assertEquals("/test one two three four five", results.get())
+
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
+
+		// /test three
+		assertCommandFailsWith(player, "test three", "Incorrect argument for command at position 5: test <--[HERE]")
+
+		assertNoMoreResults(results)
+	}
+
+	@Test
+	fun testThenNestedFullDSLVer() {
+		val results: Mut<String> = Mut.of()
+
+		commandTree("test") {
+			nested {
+				literalArgument("one")
+				literalArgument("two")
+				literalArgument("three") {
+					playerExecutor { player, _ ->
+						results.set("/test one two three")
+					}
+					nested {
+						literalArgument("four")
+						literalArgument("five") {
+							playerExecutor { player, _ ->
+								results.set("/test one two three four five")
+							}
+						}
+					}
+				}
+			}
+		}
+
+		val player: PlayerMock = server.addPlayer()
+
+		// /test one two three
+		server.dispatchCommand(player, "test one two three")
+		assertEquals("/test one two three", results.get())
+
+		// /test one two three four five
+		server.dispatchCommand(player, "test one two three four five")
+		assertEquals("/test one two three four five", results.get())
+
+		// /test
+		assertCommandFailsWith(player, "test", "Unknown or incomplete command, see below for error at position 4: test<--[HERE]")
+
+		// /test three
+		assertCommandFailsWith(player, "test three", "Incorrect argument for command at position 5: test <--[HERE]")
+
+		assertNoMoreResults(results)
+	}
 }

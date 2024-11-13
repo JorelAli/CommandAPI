@@ -60,6 +60,21 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		return instance();
 	}
 
+	@SafeVarargs
+	public final Impl thenNested(final AbstractArgumentTree<?, Argument, CommandSender>... trees) {
+		int length = trees.length;
+		if (length == 0) {
+			return instance();
+		}
+
+		AbstractArgumentTree<?, Argument, CommandSender> combined = trees[length - 1];
+		for (int i = length - 2; i >= 0; i--) {
+			combined = trees[i].then(combined);
+		}
+
+		return then(combined);
+	}
+
 	List<Execution<CommandSender, Argument>> getExecutions() {
 		List<Execution<CommandSender, Argument>> executions = new ArrayList<>();
 		// If this is executable, add its execution

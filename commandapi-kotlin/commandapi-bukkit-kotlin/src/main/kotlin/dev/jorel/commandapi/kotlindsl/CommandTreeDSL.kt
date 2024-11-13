@@ -17,6 +17,18 @@ inline fun CommandTree.argument(base: Argument<*>, block: Argument<*>.() -> Unit
 
 inline fun CommandTree.optionalArgument(base: Argument<*>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(base.setOptional(true).setOptional(optional).apply(block))
 
+inline fun CommandTree.nestedArguments(vararg arguments: Argument<*>,block: Argument<*>.() -> Unit = {}): CommandTree = thenNested(*(arguments.also { it.last().apply(block) }))
+inline fun CommandTree.nested(block: CommandTree.() -> Unit): CommandTree {
+	val arguments = mutableListOf<AbstractArgumentTree<*, Argument<*>?, CommandSender?>?>()
+	object : CommandTree("commandWhichWontBeRegistered") {
+		override fun then(tree: AbstractArgumentTree<*, Argument<*>?, CommandSender?>?): CommandTree? {
+			arguments.add(tree)
+			return this
+		}
+	}.block()
+	return thenNested(*arguments.toTypedArray())
+}
+
 // Integer arguments
 inline fun CommandTree.integerArgument(nodeName: String, min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(IntegerArgument(nodeName, min, max).setOptional(optional).apply(block))
 inline fun CommandTree.integerRangeArgument(nodeName: String, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(IntegerRangeArgument(nodeName).setOptional(optional).apply(block))
@@ -122,6 +134,18 @@ inline fun CommandTree.functionArgument(nodeName: String, optional: Boolean = fa
 inline fun Argument<*>.argument(base: Argument<*>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.setOptional(optional).apply(block))
 
 inline fun Argument<*>.optionalArgument(base: Argument<*>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.setOptional(true).setOptional(optional).apply(block))
+
+inline fun Argument<*>.nestedArguments(vararg arguments: Argument<*>, block: Argument<*>.() -> Unit = {}): Argument<*> = thenNested(*(arguments.also { it.last().apply(block) }))
+inline fun Argument<*>.nested(block: Argument<*>.() -> Unit): Argument<*> {
+	val arguments = mutableListOf<AbstractArgumentTree<*, Argument<*>?, CommandSender?>?>()
+	object : LiteralArgument("argumentWhichWontBeRegistered") {
+		override fun then(tree: AbstractArgumentTree<*, Argument<*>?, CommandSender?>?): Argument<String?>? {
+			arguments.add(tree)
+			return this
+		}
+	}.block()
+	return thenNested(*arguments.toTypedArray())
+}
 
 // Integer arguments
 inline fun Argument<*>.integerArgument(nodeName: String, min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(IntegerArgument(nodeName, min, max).setOptional(optional).apply(block))
