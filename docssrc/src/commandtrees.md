@@ -106,7 +106,7 @@ CommandTree("example")
                         .then(StringArgument("arg5")
                             .executes { ... })))))
     .register()
-``` 
+```
 
 ```kotlin,Kotlin DSL
 commandTree("example") {
@@ -141,7 +141,7 @@ new CommandTree("example")
             .executes(...)
     ) 
 ```
-    
+
 ```kotlin,Kotlin
 CommandTree("example")
     .thenNested(

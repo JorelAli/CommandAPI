@@ -17,7 +17,7 @@ inline fun CommandTree.argument(base: Argument<*>, block: Argument<*>.() -> Unit
 
 inline fun CommandTree.optionalArgument(base: Argument<*>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): CommandTree = then(base.setOptional(true).setOptional(optional).apply(block))
 
-inline fun CommandTree.nestedArguments(vararg arguments: Argument<*>,block: Argument<*>.() -> Unit = {}): CommandTree = thenNested(*(arguments.also { it.last().apply(block) }))
+inline fun CommandTree.nestedArguments(vararg arguments: Argument<*>,block: Argument<*>.() -> Unit = {}): CommandTree = thenNested(*arguments.also { it.last().apply(block) })
 inline fun CommandTree.nested(block: CommandTree.() -> Unit): CommandTree {
 	val arguments = mutableListOf<AbstractArgumentTree<*, Argument<*>?, CommandSender?>?>()
 	object : CommandTree("commandWhichWontBeRegistered") {
@@ -135,7 +135,7 @@ inline fun Argument<*>.argument(base: Argument<*>, optional: Boolean = false, bl
 
 inline fun Argument<*>.optionalArgument(base: Argument<*>, optional: Boolean = false, block: Argument<*>.() -> Unit = {}): Argument<*> = then(base.setOptional(true).setOptional(optional).apply(block))
 
-inline fun Argument<*>.nestedArguments(vararg arguments: Argument<*>, block: Argument<*>.() -> Unit = {}): Argument<*> = thenNested(*(arguments.also { it.last().apply(block) }))
+inline fun Argument<*>.nestedArguments(vararg arguments: Argument<*>, block: Argument<*>.() -> Unit = {}): Argument<*> = thenNested(*arguments.also { it.last().apply(block) })
 inline fun Argument<*>.nested(block: Argument<*>.() -> Unit): Argument<*> {
 	val arguments = mutableListOf<AbstractArgumentTree<*, Argument<*>?, CommandSender?>?>()
 	object : LiteralArgument("argumentWhichWontBeRegistered") {
