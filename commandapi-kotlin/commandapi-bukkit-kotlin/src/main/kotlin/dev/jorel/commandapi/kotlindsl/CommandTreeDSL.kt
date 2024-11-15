@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.function.Predicate
 
+const val WILL_NOT_REGISTER = "will-not-reg"
+
 inline fun commandTree(name: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register()
 inline fun commandTree(name: String, namespace: String, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register(namespace)
 inline fun commandTree(name: String, namespace: JavaPlugin, tree: CommandTree.() -> Unit = {}) = CommandTree(name).apply(tree).register(namespace)
@@ -20,7 +22,7 @@ inline fun CommandTree.optionalArgument(base: Argument<*>, optional: Boolean = f
 inline fun CommandTree.nestedArguments(vararg arguments: Argument<*>,block: Argument<*>.() -> Unit = {}): CommandTree = thenNested(*arguments.also { it.last().apply(block) })
 inline fun CommandTree.nested(block: CommandTree.() -> Unit): CommandTree {
 	val arguments = mutableListOf<AbstractArgumentTree<*, Argument<*>?, CommandSender?>?>()
-	object : CommandTree("commandWhichWontBeRegistered") {
+	object : CommandTree(WILL_NOT_REGISTER) {
 		override fun then(tree: AbstractArgumentTree<*, Argument<*>?, CommandSender?>?): CommandTree? {
 			arguments.add(tree)
 			return this
@@ -138,7 +140,7 @@ inline fun Argument<*>.optionalArgument(base: Argument<*>, optional: Boolean = f
 inline fun Argument<*>.nestedArguments(vararg arguments: Argument<*>, block: Argument<*>.() -> Unit = {}): Argument<*> = thenNested(*arguments.also { it.last().apply(block) })
 inline fun Argument<*>.nested(block: Argument<*>.() -> Unit): Argument<*> {
 	val arguments = mutableListOf<AbstractArgumentTree<*, Argument<*>?, CommandSender?>?>()
-	object : LiteralArgument("argumentWhichWontBeRegistered") {
+	object : LiteralArgument(WILL_NOT_REGISTER) {
 		override fun then(tree: AbstractArgumentTree<*, Argument<*>?, CommandSender?>?): Argument<String?>? {
 			arguments.add(tree)
 			return this
