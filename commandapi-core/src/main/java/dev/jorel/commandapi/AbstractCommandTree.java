@@ -19,7 +19,7 @@ extends AbstractCommandTree<Impl, Argument, CommandSender>
 /// @cond DOX
 extends AbstractArgument<?, ?, Argument, CommandSender>
 /// @endcond
-, 	CommandSender> extends ExecutableCommand<Impl, CommandSender> {
+, CommandSender> extends ExecutableCommand<Impl, CommandSender> {
 
 	private final List<AbstractArgumentTree<?, Argument, CommandSender>> arguments = new ArrayList<>();
 
