@@ -50,25 +50,6 @@ public class CommandAPIBukkitConfig extends CommandAPIConfig<CommandAPIBukkitCon
 		this.skipReloadDatapacks = skip;
 		return this;
 	}
-	
-	/**
-	 * Sets whether the CommandAPI should use Mojang mappings as opposed to Spigot's mappings
-	 * for internal calls. If set to true, the CommandAPI will use Mojang mappings.
-	 * 
-	 * @param useMojangMappings whether the CommandAPI should use Mojang mappings for internal calls
-	 * @return this CommandAPIBukkitConfig
-	 * @deprecated Use the `commandapi-bukkit-shade-mojang-mapped` depdendency instead of `commandapi-bukkit-shade` if you want to use mojang mappings.
-	 */
-	@Deprecated(since = "9.4.1", forRemoval = true)
-	public CommandAPIBukkitConfig useMojangMappings(boolean useMojangMappings) {
-		// A little unconventional, but we really don't need to implement mojang mapping flags
-		// all over the place, we want it to have as minimal interaction as possible so it can
-		// be used by the test framework as a global static flag. Also, we want to set this
-		// as early as possible in the CommandAPI's loading sequence, including before loading
-		// an NMS class, which setup reflection based on `USING_MOJANG_MAPPINGS`.
-		SafeVarHandle.USING_MOJANG_MAPPINGS = useMojangMappings;
-		return this;
-	}
 
 	/**
 	 * @return this CommandAPIBukkitConfig

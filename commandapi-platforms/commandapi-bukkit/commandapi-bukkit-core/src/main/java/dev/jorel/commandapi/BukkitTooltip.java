@@ -83,46 +83,11 @@ public class BukkitTooltip<S> extends Tooltip<S> {
 	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an adventure {@link Component}
 	 * @param suggestions array of suggestions to provide to the user
 	 *
-	 * @deprecated This method has been deprecated in favour of {@link BukkitTooltip#generateAdventureComponents(Function, Object[])}
-	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
-	 * 	tooltips
-	 */
-	@Deprecated(forRemoval = true, since = "9.3.0")
-	@SafeVarargs
-	public static <S> Collection<Tooltip<S>> generateAdvenureComponents(Function<S, Component> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, BukkitTooltip::ofAdventureComponent, suggestions);
-	}
-
-	/**
-	 * Constructs a collection of {@link Tooltip <S>} objects from an array of suggestions, and a function which generates a
-	 * tooltip formatted as an adventure {@link Component} for each suggestion
-	 *
-	 * @param <S> the object that the argument suggestions use
-	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an adventure {@link Component}
-	 * @param suggestions array of suggestions to provide to the user
-	 *
 	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
 	 * 	tooltips
 	 */
 	@SafeVarargs
 	public static <S> Collection<Tooltip<S>> generateAdventureComponents(Function<S, Component> tooltipGenerator, S... suggestions) {
-		return generate(tooltipGenerator, BukkitTooltip::ofAdventureComponent, suggestions);
-	}
-
-	/**
-	 * Constructs a collection of {@link Tooltip <S>} objects from a collection of suggestions, and a function which generates a
-	 * tooltip formatted as an adventure {@link Component} for each suggestion
-	 *
-	 * @param <S> the object that the argument suggestions use
-	 * @param tooltipGenerator function which returns a formatted tooltip for the suggestion, an adventure {@link Component}
-	 * @param suggestions collection of suggestions to provide to the user
-	 *
-	 * @deprecated This method has been deprecated in favour of {@link BukkitTooltip#generateAdventureComponents(Function, Collection)}
-	 * @return a collection of {@link Tooltip <S>} objects from the provided suggestions, with the generated formatted
-	 * 	tooltips
-	 */
-	@Deprecated(forRemoval = true, since = "9.3.0")
-	public static <S> Collection<Tooltip<S>> generateAdvenureComponents(Function<S, Component> tooltipGenerator, Collection<S> suggestions) {
 		return generate(tooltipGenerator, BukkitTooltip::ofAdventureComponent, suggestions);
 	}
 

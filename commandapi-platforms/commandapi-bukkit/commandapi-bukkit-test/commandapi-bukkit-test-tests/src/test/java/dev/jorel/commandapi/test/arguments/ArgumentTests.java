@@ -117,8 +117,8 @@ class ArgumentTests extends TestBase {
 		assertEquals("success Hello_world", player.nextMessage());
 
 		// Negative tests from the documentation
-		assertInvalidSyntax(player, "test hello@email.com");
-		assertInvalidSyntax(player, "test yesn't");
+		assertCommandFailsWith(player, "test hello@email.com", "Expected whitespace to end one argument, but found trailing data at position 10: test hello<--[HERE]");
+		assertCommandFailsWith(player, "test yesn't", "Expected whitespace to end one argument, but found trailing data at position 9: test yesn<--[HERE]");
 	}
 
 	@Test
@@ -358,7 +358,7 @@ class ArgumentTests extends TestBase {
 		server.dispatchCommand(player, "test APlayer");
 		assertEquals(player, results.get());
 		
-		assertInvalidSyntax(player, "test BPlayer");
+		assertCommandFailsWith(player, "test BPlayer", "That player does not exist");
 		
 		assertNoMoreResults(results);
 	}
