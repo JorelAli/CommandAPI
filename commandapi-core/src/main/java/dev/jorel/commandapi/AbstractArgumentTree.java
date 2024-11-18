@@ -3,6 +3,7 @@ package dev.jorel.commandapi;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,19 +69,31 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param trees The child branches to add in a chain.
 	 * @return this tree node
 	 */
-	@SafeVarargs
-	public final Impl thenNested(final AbstractArgumentTree<?, Argument, CommandSender>... trees) {
-		int length = trees.length;
+	public final Impl thenNested(List<AbstractArgumentTree<?, Argument, CommandSender>> trees) {
+		int length = trees.size();
 		if (length == 0) {
 			return instance();
 		}
 
-		AbstractArgumentTree<?, Argument, CommandSender> combined = trees[length - 1];
+		AbstractArgumentTree<?, Argument, CommandSender> combined = trees.get(length - 1);
 		for (int i = length - 2; i >= 0; i--) {
-			combined = trees[i].then(combined);
+			combined = trees.get(i).then(combined);
 		}
 
 		return then(combined);
+	}
+
+	/**
+	 * Creates a chain of child branches starting at this node
+	 * <p>
+	 * {@code thenNested(a, b, c)} is equivalent to {@link #then}{@code (a.then(b.then(c)))}.
+	 *
+	 * @param trees The child branches to add in a chain.
+	 * @return this tree node
+	 */
+	@SafeVarargs
+	public final Impl thenNested(final AbstractArgumentTree<?, Argument, CommandSender>... trees) {
+		return thenNested(Arrays.asList(trees));
 	}
 
 	List<Execution<CommandSender, Argument>> getExecutions() {
