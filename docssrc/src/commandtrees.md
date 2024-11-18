@@ -80,7 +80,7 @@ In this example, we have our normal `/sayhi` command using the `executes()` meth
 
 </div>
 
-### uses nested arguments to reduce indentation levels
+### Reduce indentation with nested argument
 
 sometimes we will need such a CommandTree:
 
