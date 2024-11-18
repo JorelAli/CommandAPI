@@ -126,7 +126,7 @@ commandTree("example") {
 
 </div>
 
-well, there's too much indentation, we can use nested arguments to reduce the indentation levels:
+Well, there's too much indentation. We can use nested arguments to reduce the indentation levels:
 
 <div class="multi-pre">
 
