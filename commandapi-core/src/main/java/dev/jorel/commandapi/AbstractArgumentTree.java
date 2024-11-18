@@ -60,6 +60,14 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 		return instance();
 	}
 
+	/**
+	 * Creates a chain of child branches starting at this node
+	 * <p>
+	 * {@code thenNested(a, b, c)} is equivalent to {@link #then}{@code (a.then(b.then(c)))}.
+	 *
+	 * @param trees The child branches to add in a chain.
+	 * @return this tree node
+	 */
 	@SafeVarargs
 	public final Impl thenNested(final AbstractArgumentTree<?, Argument, CommandSender>... trees) {
 		int length = trees.length;
