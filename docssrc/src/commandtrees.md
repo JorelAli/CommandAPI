@@ -108,7 +108,7 @@ CommandTree("example")
     .register()
 ```
 
-```kotlin,Kotlin DSL
+```kotlin,Kotlin_DSL
 commandTree("example") {
     literalArgument("arg1") {
         stringArgument("arg2") {
