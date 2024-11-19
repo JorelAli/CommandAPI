@@ -154,7 +154,7 @@ CommandTree("example")
     )
 ```
 
-```kotlin,Kotlin DSL
+```kotlin,Kotlin_DSL
 commandTree("example") {
     nested {
         literalArgument("arg1")
