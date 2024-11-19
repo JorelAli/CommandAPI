@@ -28,7 +28,7 @@ inline fun CommandTree.nested(block: CommandTree.() -> Unit): CommandTree {
 			return this
 		}
 	}.block()
-	return thenNested(*arguments.toTypedArray())
+	return thenNested(arguments)
 }
 
 // Integer arguments
@@ -146,7 +146,7 @@ inline fun Argument<*>.nested(block: Argument<*>.() -> Unit): Argument<*> {
 			return this
 		}
 	}.block()
-	return thenNested(*arguments.toTypedArray())
+	return thenNested(arguments)
 }
 
 // Integer arguments
