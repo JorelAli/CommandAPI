@@ -2,7 +2,6 @@ package dev.jorel.commandapi.test.dsltests
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock
 import dev.jorel.commandapi.arguments.LiteralArgument
-import dev.jorel.commandapi.arguments.StringArgument
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.jorel.commandapi.kotlindsl.nested
