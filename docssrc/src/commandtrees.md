@@ -82,7 +82,7 @@ In this example, we have our normal `/sayhi` command using the `executes()` meth
 
 ### Reduce indentation with nested argument
 
-sometimes we will need such a CommandTree:
+Sometimes we will need such a `CommandTree`:
 
 <div class="multi-pre">
 
