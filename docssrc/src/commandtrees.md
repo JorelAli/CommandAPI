@@ -102,9 +102,9 @@ CommandTree("example")
     .then(LiteralArgument("arg1")
         .then(StringArgument("arg2")
             .then(StringArgument("arg3")
-                    .then(DoubleArgument("arg4", 0)
-                        .then(StringArgument("arg5")
-                            .executes { ... })))))
+                .then(DoubleArgument("arg4", 0)
+                    .then(StringArgument("arg5")
+                        .executes { ... })))))
     .register()
 ```
 
