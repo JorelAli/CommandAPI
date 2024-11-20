@@ -80,6 +80,108 @@ In this example, we have our normal `/sayhi` command using the `executes()` meth
 
 </div>
 
+### Reduce indentation with nested arguments
+
+Sometimes we will need such a `CommandTree`:
+
+<div class="multi-pre">
+
+```java,Java
+new CommandTree("example")
+    .then(new LiteralArgument("arg1")
+        .then(new StringArgument("arg2")
+            .then(new StringArgument("arg3")
+                .then(new DoubleArgument("arg4", 0)
+                    .then(new StringArgument("arg5"))
+                        .executes(...)))))
+    .register();
+```
+
+```kotlin,Kotlin
+CommandTree("example")
+    .then(LiteralArgument("arg1")
+        .then(StringArgument("arg2")
+            .then(StringArgument("arg3")
+                .then(DoubleArgument("arg4", 0)
+                    .then(StringArgument("arg5")
+                        .executes { ... })))))
+    .register()
+```
+
+```kotlin,Kotlin_DSL
+commandTree("example") {
+    literalArgument("arg1") {
+        stringArgument("arg2") {
+            stringArgument("arg3") {
+                doubleArgument("arg4", 0.0) {
+                    stringArgument("arg5") {
+                        anyExecutor { ... }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+</div>
+
+Well, there's too much indentation. We can use nested arguments to reduce the indentation levels:
+
+<div class="multi-pre">
+
+```java,Java
+new CommandTree("example")
+    .thenNested(
+        new LiteralArgument("arg1"),
+        new StringArgument("arg2"),
+        new StringArgument("arg3"),
+        new DoubleArgument("arg4", 0),
+        new StringArgument("arg5")
+            .executes(...)
+    ) 
+```
+
+```kotlin,Kotlin
+CommandTree("example")
+    .thenNested(
+        LiteralArgument("arg1"),
+        StringArgument("arg2"),
+        StringArgument("arg3"),
+        DoubleArgument("arg4", 0),
+        StringArgument("arg5")
+            .executes { ... }
+    )
+```
+
+```kotlin,Kotlin_DSL
+commandTree("example") {
+    nested {
+        literalArgument("arg1")
+        stringArgument("arg2")
+        stringArgument("arg3")
+        doubleArgument("arg4", 0.0)
+        stringArgument("arg5") {
+            anyExecutor { ... }
+        }
+    }
+}
+// or
+commandTree("example") {
+    nestedArguments(
+        LiteralArgument("arg1"),
+        StringArgument("arg2"),
+        StringArgument("arg3"),
+        DoubleArgument("arg4", 0.0),
+        StringArgument("arg5")
+    ) {
+        anyExecutor { ... }
+    }
+}
+```
+
+</div>
+
 -----
 
 That's effectively all of the basics of command trees! We start by writing a normal command, use `executes()` to make it executable and use `then()` to add additional paths to our command. Finally, we finish up with `register()` to register our command. Below, I've included a few more examples showcasing how to design commands using command trees.
