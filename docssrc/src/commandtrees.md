@@ -89,11 +89,11 @@ Sometimes we will need such a `CommandTree`:
 ```java,Java
 new CommandTree("example")
     .then(new LiteralArgument("arg1")
-    .then(new StringArgument("arg2")
-        .then(new StringArgument("arg3")
-            .then(new DoubleArgument("arg4", 0)
-                .then(new StringArgument("arg5"))
-                    .executes(...)))))
+        .then(new StringArgument("arg2")
+            .then(new StringArgument("arg3")
+                .then(new DoubleArgument("arg4", 0)
+                    .then(new StringArgument("arg5"))
+                        .executes(...)))))
     .register();
 ```
 
