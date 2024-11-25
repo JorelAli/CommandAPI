@@ -33,7 +33,7 @@
 **Downloads & Documentation:**
 
 - <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [All downloads](https://github.com/JorelAli/CommandAPI/releases)
-- <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/books_icon_143050.png"></img> [Documentation (includes usage for server owners!)](https://www.jorel.dev/CommandAPI/)
+- <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/books_icon_143050.png"></img> [Documentation (includes usage for server owners!)](https://commandapi.jorel.dev/latest.html)
 
 **Other**
 
@@ -113,7 +113,7 @@ Still not convinced? In addition to all of the above, the CommandAPI also provid
 - **Safe suggestion generation** - The CommandAPI offers compile-time type safety for specific arguments
 - **Precise permission support** - Apply permissions to specific arguments - you need perms to even _see_ the argument
 - **Fast updates** - Consistently supports new Minecraft versions within a week of their release
-- [**Insanely detailed documentation**](https://www.jorel.dev/CommandAPI/) - Trust me, you've never seen a plugin documentation look so good.
+- [**Insanely detailed documentation**](https://commandapi.jorel.dev/latest.html) - Trust me, you've never seen a plugin documentation look so good.
 
 -----
 
