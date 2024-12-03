@@ -134,6 +134,10 @@
 									<pattern>org.bukkit.craftbukkit.v1_21_R2</pattern>
 									<shadedPattern>org.bukkit.craftbukkit</shadedPattern>
 								</relocation>
+								<relocation>
+									<pattern>org.bukkit.craftbukkit.v1_21_R3</pattern>
+									<shadedPattern>org.bukkit.craftbukkit</shadedPattern>
+								</relocation>
 							</relocations>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
