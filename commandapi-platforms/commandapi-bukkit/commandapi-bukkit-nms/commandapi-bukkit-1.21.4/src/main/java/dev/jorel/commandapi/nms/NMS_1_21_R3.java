@@ -46,6 +46,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
+import org.bukkit.Particle.Trail;
 import org.bukkit.Registry;
 import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
@@ -162,6 +163,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
 import net.minecraft.core.particles.ShriekParticleOption;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.TrailParticleOption;
 import net.minecraft.core.particles.VibrationParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -729,10 +731,21 @@ public class NMS_1_21_R3 extends NMS_Common {
 			return new ParticleData<Float>(particle, Float.valueOf(options.roll()));
 		} else if (particleOptions instanceof ColorParticleOption options) {
 			return getParticleDataAsColorParticleOption(particle, options);
+		} else if (particleOptions instanceof TrailParticleOption options) {
+			return getParticleDataAsTrailParticleOption(cmdCtx, particle, options);
 		} else {
 			CommandAPI.getLogger().warning("Invalid particle data type for " + particle.getDataType().toString());
 			return new ParticleData<Void>(particle, null);
 		}
+	}
+
+	private ParticleData<Trail> getParticleDataAsTrailParticleOption(CommandContext<CommandSourceStack> cmdCtx,
+			Particle particle, TrailParticleOption options) {
+		final Level level = cmdCtx.getSource().getLevel();
+		final Vec3 target = options.target();
+		final Location targetLocation = new Location(level.getWorld(), target.x, target.y, target.z);
+		final Color color = Color.fromARGB(options.color());
+		return new ParticleData<Trail>(particle, new Trail(targetLocation, color, options.duration()));
 	}
 
 	private ParticleData<Color> getParticleDataAsColorParticleOption(Particle particle,
