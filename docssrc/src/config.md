@@ -144,7 +144,7 @@ Controls whether the CommandAPI should generate a `command_registration.json` fi
 
 This is primarily designed to be used by developers. Setting this to `false` will slightly improve command registration performance.
 
-The `command_registration.json` JSON representation of commands is in the same format as Minecraft's [_Data Generators_ Commands report](https://wiki.vg/Data_Generators#Commands_report). The format is Brigadier's command graph - more information about the JSON format can be found [here](https://wiki.vg/Command_Data).
+The `command_registration.json` JSON representation of commands is in the same format as Minecraft's [_Data Generators_ Commands report](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Data_Generators#Commands_report). The format is Brigadier's command graph - more information about the JSON format can be found [here](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Command_Data).
 
 **Default value**
 

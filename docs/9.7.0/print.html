@@ -713,7 +713,7 @@ skip-sender-proxy: []
 <h3 id="create-dispatcher-json"><a class="header" href="#create-dispatcher-json"><code>create-dispatcher-json</code></a></h3>
 <p>Controls whether the CommandAPI should generate a <code>command_registration.json</code> file showing the mapping of registered commands.</p>
 <p>This is primarily designed to be used by developers. Setting this to <code>false</code> will slightly improve command registration performance.</p>
-<p>The <code>command_registration.json</code> JSON representation of commands is in the same format as Minecraft's <a href="https://wiki.vg/Data_Generators#Commands_report"><em>Data Generators</em> Commands report</a>. The format is Brigadier's command graph - more information about the JSON format can be found <a href="https://wiki.vg/Command_Data">here</a>.</p>
+<p>The <code>command_registration.json</code> JSON representation of commands is in the same format as Minecraft's <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Data_Generators#Commands_report"><em>Data Generators</em> Commands report</a>. The format is Brigadier's command graph - more information about the JSON format can be found <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Command_Data">here</a>.</p>
 <p><strong>Default value</strong></p>
 <pre><code class="language-yml">create-dispatcher-json: false
 </code></pre>
@@ -8849,7 +8849,7 @@ arguments.add(PlayerArgument(&quot;player&quot;)
 <hr />
 <h2 id="updating-requirements"><a class="header" href="#updating-requirements">Updating requirements</a></h2>
 <p>Finally, the part you've all been waiting for - how to update requirements. With the way requirements work, they need to be updated manually. To illustrate why this is the case, I'll explain using <a href="./requirements.html#example---perks-based-on-a-players-level">the example of the /repair command</a>:</p>
-<p>When a player joins the game, the server tells the client the list of all commands that the client can run <em>(don't worry, this is completely normal, as declared <a href="https://wiki.vg/Protocol#Declare_Commands">here</a>)</em>. Let's say that the player has joined and has less than 30 levels.</p>
+<p>When a player joins the game, the server tells the client the list of all commands that the client can run <em>(don't worry, this is completely normal, as declared <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Commands">here</a>)</em>. Let's say that the player has joined and has less than 30 levels.</p>
 <p>When a player has less than 30 levels, they are unable to execute the <code>/repair</code> command, because the list of commands that the server sent to the client did not contain the <code>/repair</code> command. Eventually, the player will fight some mobs or mine some ores and eventually will reach 30 levels. Despite this, the player's client doesn't actually know that they're now able to use the <code>/repair</code> command until the server tells them. As such, the server needs to somehow update the requirements that a player has so a player knows they can run the command.</p>
 <p>The CommandAPI handles this in a very simple method call:</p>
 <pre><code class="language-java">CommandAPI.updateRequirements(player);
