@@ -40,7 +40,7 @@ Here's the list of changes to the documentation between each update. You can vie
 ### Documentation changes 9.4.1 \\(\rightarrow\\) 9.7.0
 
 - Updates [Particle data (1.20.5+)](./argument_particle_new.md) page with new `Trail` particle information.
-- Adds new [`thenNested()`](.commandtrees.md#reduce-indentation-with-nested-arguments) method to command trees.
+- Adds new [`thenNested()`](./commandtrees.md#reduce-indentation-with-nested-arguments) method to command trees.
 - Adds [tools](./test_intro.md) for running unit tests on commands.
 
 ### Documentation changes 9.4.0 \\(\rightarrow\\) 9.4.1
