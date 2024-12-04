@@ -10,7 +10,7 @@ Key points:
   <dependency>
       <groupId>dev.jorel</groupId>
       <artifactId>commandapi-velocity-core</artifactId>
-      <version>9.6.2-SNAPSHOT</version>
+      <version>9.7.0</version>
       <scope>provided</scope>
   </dependency>
   ```

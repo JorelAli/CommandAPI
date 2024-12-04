@@ -21,7 +21,7 @@ When you add the dependencies for MockBukkit and `commandapi-bukkit-test-toolkit
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-test-toolkit</artifactId>
-        <version>9.6.2-SNAPSHOT</version>
+        <version>9.7.0</version>
         <scope>test</scope>
     </dependency>
 
@@ -29,7 +29,7 @@ When you add the dependencies for MockBukkit and `commandapi-bukkit-test-toolkit
     <dependency>
         <groupId>dev.jorel</groupId>
         <artifactId>commandapi-bukkit-core</artifactId>
-        <version>9.6.2-SNAPSHOT</version>
+        <version>9.7.0</version>
         <scope>provided</scope>
     </dependency>
 
@@ -59,7 +59,7 @@ dependencies {
     testImplementation 'dev.jorel.commandapi-bukkit-test-toolkit:9.6.2-SNAPSHOT'
 
     // May be the shade dependency and/or mojang-mapped
-    compileOnly 'dev.jorel:commandapi-bukkit-core:9.6.2-SNAPSHOT'
+    compileOnly 'dev.jorel:commandapi-bukkit-core:9.7.0'
 
     // Can also be paper-api
     compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
@@ -77,7 +77,7 @@ dependencies {
     testImplementation('dev.jorel.commandapi-bukkit-test-toolkit:9.6.2-SNAPSHOT')
 
     // May be the shade dependency and/or mojang-mapped
-    compileOnly('dev.jorel:commandapi-bukkit-core:9.6.2-SNAPSHOT')
+    compileOnly('dev.jorel:commandapi-bukkit-core:9.7.0')
 
     // Can also be paper-api
     compileOnly('org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT')

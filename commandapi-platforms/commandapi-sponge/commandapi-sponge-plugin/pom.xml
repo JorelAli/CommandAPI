@@ -7,7 +7,7 @@
 	<parent>
 		<artifactId>commandapi-sponge</artifactId>
 		<groupId>dev.jorel</groupId>
-		<version>9.6.2-SNAPSHOT</version>
+		<version>9.7.0</version>
 	</parent>
 
 	<artifactId>commandapi-sponge-plugin</artifactId>
