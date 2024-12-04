@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>dev.jorel</groupId>
 		<artifactId>commandapi</artifactId>
-		<version>9.6.1</version>
+		<version>9.7.0</version>
 	</parent>
 
 	<artifactId>commandapi-codecov</artifactId>
@@ -57,6 +57,12 @@
 			<artifactId>commandapi-bukkit-test-tests</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-bukkit-test-toolkit</artifactId>
+			<version>${project.version}</version>
+			<!-- This should not have the test scope because it contains classes whose coverage we want to analyze -->
 		</dependency>
 		
 		<!-- From commandapi-bukkit-nms-dependency-mojang-mapped -->

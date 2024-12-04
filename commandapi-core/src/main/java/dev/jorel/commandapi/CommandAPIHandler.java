@@ -185,9 +185,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	 * @param executor   code to be ran when the command is executed
 	 * @param converted  True if this command is being converted from another plugin, and false otherwise
 	 * @return a brigadier command which is registered internally
-	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<Source> generateCommand(Argument[] args, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
+	public Command<Source> generateCommand(Argument[] args, CommandAPIExecutor<CommandSender, AbstractCommandSender<? extends CommandSender>> executor, boolean converted) {
 
 		// Generate our command from executor
 		return cmdCtx -> {

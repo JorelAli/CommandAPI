@@ -136,7 +136,8 @@ extends AbstractArgument<?, ?, Argument, CommandSender>
 	public abstract void createDispatcherFile(File file, CommandDispatcher<Source> dispatcher) throws IOException;
 
 	/**
-	 * @return A new default Logger meant for the CommandAPI to use
+	 * @return A new default Logger meant for the CommandAPI to use. This logger will be used by the CommandAPI
+	 * if one is not set using {@link CommandAPI#setLogger(CommandAPILogger)}.
 	 */
 	public default CommandAPILogger getLogger() {
 		return new CommandAPILogger() {

@@ -2,10 +2,10 @@
 authors = ["JorelAli"]
 multilingual = false
 src = "src"
-title = "CommandAPI Documentation v9.6.1"
+title = "CommandAPI Documentation v9.7.0"
 
 [build]
-build-dir = "./../docs/9.6.1"
+build-dir = "./../docs/9.7.0"
 create-missing = false
 
 [output.html]
@@ -30,7 +30,7 @@ level = 2
 [output.linkcheck]
 # Should we check links on the internet? Enabling this option adds a
 # non-negligible performance impact
-follow-web-links = true
+follow-web-links = false 
 
 # Are we allowed to link to files outside of the book's root directory? This
 # may help prevent linking to sensitive files (e.g. "../../../../etc/shadow")

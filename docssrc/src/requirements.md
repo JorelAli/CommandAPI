@@ -158,7 +158,7 @@ What's important to note in this example is that if you spend the time to set up
 
 Finally, the part you've all been waiting for - how to update requirements. With the way requirements work, they need to be updated manually. To illustrate why this is the case, I'll explain using [the example of the /repair command](./requirements.md#example---perks-based-on-a-players-level):
 
-When a player joins the game, the server tells the client the list of all commands that the client can run _(don't worry, this is completely normal, as declared [here](https://wiki.vg/Protocol#Declare_Commands))_. Let's say that the player has joined and has less than 30 levels.
+When a player joins the game, the server tells the client the list of all commands that the client can run _(don't worry, this is completely normal, as declared [here](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Commands))_. Let's say that the player has joined and has less than 30 levels.
 
 When a player has less than 30 levels, they are unable to execute the `/repair` command, because the list of commands that the server sent to the client did not contain the `/repair` command. Eventually, the player will fight some mobs or mine some ores and eventually will reach 30 levels. Despite this, the player's client doesn't actually know that they're now able to use the `/repair` command until the server tells them. As such, the server needs to somehow update the requirements that a player has so a player knows they can run the command.
 

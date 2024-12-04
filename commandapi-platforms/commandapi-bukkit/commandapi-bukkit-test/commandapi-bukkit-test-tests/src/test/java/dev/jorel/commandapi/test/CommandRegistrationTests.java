@@ -707,4 +707,45 @@ class CommandRegistrationTests extends TestBase {
 			getDispatcherString()
 		);
 	}
+
+	@Test
+	void testCommandTreeThenNested() {
+		// Make sure dispatcher is cleared from any previous tests
+		CommandAPIHandler.getInstance().writeDispatcherToFile();
+
+		// Register a command using the new `thenNested` method
+		new CommandTree("test").thenNested(
+			new LiteralArgument("a"),
+			new LiteralArgument("b"),
+			new LiteralArgument("c")
+				.executesPlayer(P_EXEC)
+		).register();
+
+		// Command added to tree
+		assertEquals("""
+			{
+			  "type": "root",
+			  "children": {
+			    "test": {
+			      "type": "literal",
+			      "children": {
+			        "a": {
+			          "type": "literal",
+			          "children": {
+			            "b": {
+			              "type": "literal",
+			              "children": {
+			                "c": {
+			                  "type": "literal",
+			                  "executable": true
+			                }
+			              }
+			            }
+			          }
+			        }
+			      }
+			    }
+			  }
+			}""", getDispatcherString());
+	}
 }

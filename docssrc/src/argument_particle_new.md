@@ -111,6 +111,21 @@ The particle argument requires additional data for a particle depending on what 
         </td>
     </tr>
     <tr>
+        <td><code>TRAIL</code></td>
+        <td>
+            <pre>trail{color:[<b>red</b>,<b>green</b>,<b>blue</b>],target:[<b>x</b>,<b>y</b>,<b>z</b>],duration:<b>duration</b>}</pre>
+            <ul style="padding-left: 1.5em;">
+                <li><b><code>red</code></b> - number for red, between 0.0 and 1.0</li>
+                <li><b><code>green</code></b> - number for green, between 0.0 and 1.0</li>
+                <li><b><code>blue</code></b> - number for blue, between 0.0 and 1.0</li>
+                <li><b><code>x</code></b> - decimal x-coordinate to move the particle to</li>
+                <li><b><code>y</code></b> - decimal y-coordinate to move the particle to</li>
+                <li><b><code>z</code></b> - decimal z-coordinate to move the particle to</li>
+                <li><b><code>duration</code></b> - ime in ticks to take to move towards its destination</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
         <td><code>VIBRATION</code></td>
         <td>
             <pre>vibration{destination:{type:"block",pos:[<b>x</b>,<b>y</b>,<b>z</b>]},<br>arrival_in_ticks:<b>ticks</b>}</pre>

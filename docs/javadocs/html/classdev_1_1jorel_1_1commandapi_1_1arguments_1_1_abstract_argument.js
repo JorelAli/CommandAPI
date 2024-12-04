@@ -23,6 +23,8 @@ var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument =
     [ "setListed", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#afb5fa76f3c42799f5dc4994f70da62af", null ],
     [ "setOptional", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#ae95d53db783dbd2ba07bc5e6bb37e3d4", null ],
     [ "then", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#afe07d9fe9215ca839c7affe4160b9d65", null ],
+    [ "thenNested", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#abf81491a87d243c6c6ababa7a224b668", null ],
+    [ "thenNested", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#ad6d35b5d7fc8d98b270743617613172f", null ],
     [ "withPermission", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#a11d647c10b4e8a36e4482751afe1e34f", null ],
     [ "withPermission", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#ae2d9ea33859764a002568d5911a74758", null ],
     [ "withRequirement", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html#a1b988f370df7625d4d0777ffd5fd6432", null ]
