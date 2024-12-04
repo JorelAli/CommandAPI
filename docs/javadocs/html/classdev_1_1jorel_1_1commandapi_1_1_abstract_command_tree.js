@@ -16,6 +16,8 @@ var classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree =
     [ "setPermission", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#acbc79c411bcaffec2bb7cc7cf744c111", null ],
     [ "setRequirements", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#ab76a3eac7863346ff906942057844c57", null ],
     [ "then", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972", null ],
+    [ "thenNested", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#ab2b6eb1127e51aed76cc4c50b7929b9d", null ],
+    [ "thenNested", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a2fd6dd0862403001cfcd3d27105cc5b2", null ],
     [ "withAliases", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#acaa0bea48daab3496827476521b1a81b", null ],
     [ "withFullDescription", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#a6e3ed81e60de88d282f5e929eedcdd77", null ],
     [ "withHelp", "classdev_1_1jorel_1_1commandapi_1_1_abstract_command_tree.html#ab05ba0add4eca27f4ff50255687f8fb5", null ],

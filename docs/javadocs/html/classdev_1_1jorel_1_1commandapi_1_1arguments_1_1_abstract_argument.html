@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.6.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.7.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -188,6 +188,12 @@ String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td
 <tr class="memitem:afe07d9fe9215ca839c7affe4160b9d65"><td class="memItemLeft" align="right" valign="top">Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#afe07d9fe9215ca839c7affe4160b9d65">then</a> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt; tree)</td></tr>
 <tr class="memdesc:afe07d9fe9215ca839c7affe4160b9d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a child branch on this node.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#afe07d9fe9215ca839c7affe4160b9d65">More...</a><br /></td></tr>
 <tr class="separator:afe07d9fe9215ca839c7affe4160b9d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6d35b5d7fc8d98b270743617613172f"><td class="memItemLeft" align="right" valign="top">final Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#ad6d35b5d7fc8d98b270743617613172f">thenNested</a> (List&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt; &gt; trees)</td></tr>
+<tr class="memdesc:ad6d35b5d7fc8d98b270743617613172f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a chain of child branches starting at this node.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#ad6d35b5d7fc8d98b270743617613172f">More...</a><br /></td></tr>
+<tr class="separator:ad6d35b5d7fc8d98b270743617613172f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf81491a87d243c6c6ababa7a224b668"><td class="memItemLeft" align="right" valign="top">final Impl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#abf81491a87d243c6c6ababa7a224b668">thenNested</a> (final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt;... trees)</td></tr>
+<tr class="memdesc:abf81491a87d243c6c6ababa7a224b668"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a chain of child branches starting at this node.  <a href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#abf81491a87d243c6c6ababa7a224b668">More...</a><br /></td></tr>
+<tr class="separator:abf81491a87d243c6c6ababa7a224b668"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b832fb173c83dca863be802b89f2f4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html">CommandAPIExecutor</a>&lt; CommandSender, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_command_sender.html">AbstractCommandSender</a>&lt;? extends CommandSender &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_executable.html#a9b832fb173c83dca863be802b89f2f4f">getExecutor</a> ()</td></tr>
 <tr class="memdesc:a9b832fb173c83dca863be802b89f2f4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the executors that this command has.  <a href="classdev_1_1jorel_1_1commandapi_1_1_executable.html#a9b832fb173c83dca863be802b89f2f4f">More...</a><br /></td></tr>
 <tr class="separator:a9b832fb173c83dca863be802b89f2f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -936,6 +942,78 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="abf81491a87d243c6c6ababa7a224b668" name="abf81491a87d243c6c6ababa7a224b668"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf81491a87d243c6c6ababa7a224b668">&#9670;&nbsp;</a></span>thenNested() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">dev.jorel.commandapi.AbstractArgumentTree</a>&lt; Impl, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt;.thenNested </td>
+          <td>(</td>
+          <td class="paramtype">final <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt;...&#160;</td>
+          <td class="paramname"><em>trees</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a chain of child branches starting at this node. </p>
+<p ><code class="JavaDocCode">thenNested(a, b, c)</code> is equivalent to <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#afe07d9fe9215ca839c7affe4160b9d65">then</a></code><code class="JavaDocCode">(a.then(b.then(c)))</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">trees</td><td>The child branches to add in a chain. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this tree node </dd></dl>
+
+</div>
+</div>
+<a id="ad6d35b5d7fc8d98b270743617613172f" name="ad6d35b5d7fc8d98b270743617613172f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6d35b5d7fc8d98b270743617613172f">&#9670;&nbsp;</a></span>thenNested() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final Impl <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">dev.jorel.commandapi.AbstractArgumentTree</a>&lt; Impl, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt;.thenNested </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html">AbstractArgumentTree</a>&lt;?, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender &gt; &gt;&#160;</td>
+          <td class="paramname"><em>trees</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a chain of child branches starting at this node. </p>
+<p ><code class="JavaDocCode">thenNested(a, b, c)</code> is equivalent to <code><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_abstract_argument_tree.html#afe07d9fe9215ca839c7affe4160b9d65">then</a></code><code class="JavaDocCode">(a.then(b.then(c)))</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">trees</td><td>The child branches to add in a chain. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this tree node </dd></dl>
+
+</div>
+</div>
 <a id="a11d647c10b4e8a36e4482751afe1e34f" name="a11d647c10b4e8a36e4482751afe1e34f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a11d647c10b4e8a36e4482751afe1e34f">&#9670;&nbsp;</a></span>withPermission() <span class="overload">[1/2]</span></h2>
 
@@ -1025,7 +1103,7 @@ Protected Attributes</h2></td></tr>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="namespacedev_1_1jorel_1_1commandapi_1_1arguments.html">arguments</a></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_abstract_argument.html">AbstractArgument</a></li>
 				<li class="footer">
-					Generated on Mon Oct 28 2024 14:25:42 for CommandAPI 9.6.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Wed Dec 4 2024 19:42:36 for CommandAPI 9.7.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>

@@ -39,5 +39,7 @@ var classdev_1_1jorel_1_1commandapi_1_1_command_tree =
     [ "executesRemoteConsole", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#af451c1e6dd5feb6678d675710dea0f2e", null ],
     [ "register", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a4d5c97ead75459f23d909bf3805f0ddf", null ],
     [ "register", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a8885bdc174fd566bc77475285e9ba27c", null ],
-    [ "then", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972", null ]
+    [ "then", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a2b18f25a41e52e8a2c2e8583da231972", null ],
+    [ "thenNested", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#ab2b6eb1127e51aed76cc4c50b7929b9d", null ],
+    [ "thenNested", "classdev_1_1jorel_1_1commandapi_1_1_command_tree.html#a2fd6dd0862403001cfcd3d27105cc5b2", null ]
 ];

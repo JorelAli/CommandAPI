@@ -27,7 +27,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="cmdapilogosmall.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.6.0</span>
+   <div id="projectname">CommandAPI<span id="projectnumber">&#160;9.7.0</span>
    </div>
    <div id="projectbrief">An API for the command UI introduced in Minecraft 1.13</div>
   </td>
@@ -112,6 +112,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>onDisable</b> ()</td>
 <tr class="memitem:a214f69b197a8ff80fe4d83604178db56"><td class="memItemLeft" align="right" valign="top"><a id="a214f69b197a8ff80fe4d83604178db56" name="a214f69b197a8ff80fe4d83604178db56"></a>
 <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1_command_a_p_i_platform.html">CommandAPIPlatform</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPlatform</b> ()</td></tr>
 <tr class="separator:a214f69b197a8ff80fe4d83604178db56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99fb50168e6e1b8dc7d0cd65b6113ece"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; Source &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a99fb50168e6e1b8dc7d0cd65b6113ece">generateCommand</a> (<a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>[] args, <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html">CommandAPIExecutor</a>&lt; CommandSender, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_command_sender.html">AbstractCommandSender</a>&lt;? extends CommandSender &gt; &gt; executor, boolean converted)</td></tr>
+<tr class="memdesc:a99fb50168e6e1b8dc7d0cd65b6113ece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a command to be registered by the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>.  <a href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html#a99fb50168e6e1b8dc7d0cd65b6113ece">More...</a><br /></td></tr>
+<tr class="separator:a99fb50168e6e1b8dc7d0cd65b6113ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff2df7bc964e54cb8720d5a4b3f00572"><td class="memItemLeft" align="right" valign="top"><a id="aff2df7bc964e54cb8720d5a4b3f00572" name="aff2df7bc964e54cb8720d5a4b3f00572"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>writeDispatcherToFile</b> ()</td></tr>
 <tr class="separator:aff2df7bc964e54cb8720d5a4b3f00572"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,6 +157,51 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a99fb50168e6e1b8dc7d0cd65b6113ece" name="a99fb50168e6e1b8dc7d0cd65b6113ece"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99fb50168e6e1b8dc7d0cd65b6113ece">&#9670;&nbsp;</a></span>generateCommand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfacecom_1_1mojang_1_1brigadier_1_1_command.html">Command</a>&lt; Source &gt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">dev.jorel.commandapi.CommandAPIHandler</a>&lt; <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>, CommandSender, Source &gt;.generateCommand </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_argument.html">Argument</a>[]&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_executor.html">CommandAPIExecutor</a>&lt; CommandSender, <a class="el" href="interfacedev_1_1jorel_1_1commandapi_1_1commandsenders_1_1_abstract_command_sender.html">AbstractCommandSender</a>&lt;? extends CommandSender &gt; &gt;&#160;</td>
+          <td class="paramname"><em>executor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>converted</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generates a command to be registered by the <a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i.html" title="Class to register commands with the 1.13 command UI.">CommandAPI</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td>set of ordered argument pairs which contain the prompt text and their argument types </td></tr>
+    <tr><td class="paramname">executor</td><td>code to be ran when the command is executed </td></tr>
+    <tr><td class="paramname">converted</td><td>True if this command is being converted from another plugin, and false otherwise </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a brigadier command which is registered internally </dd></dl>
+
+</div>
+</div>
 <a id="a09a409d73dbcbe15529b026412b084e8" name="a09a409d73dbcbe15529b026412b084e8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a09a409d73dbcbe15529b026412b084e8">&#9670;&nbsp;</a></span>getField() <span class="overload">[1/2]</span></h2>
 
@@ -363,7 +411,7 @@ Protected Member Functions</h2></td></tr>
 			<ul>
 				<li class="navelem"><b>dev</b></li><li class="navelem"><b>jorel</b></li><li class="navelem"><b>commandapi</b></li><li class="navelem"><a class="el" href="classdev_1_1jorel_1_1commandapi_1_1_command_a_p_i_handler.html">CommandAPIHandler</a></li>
 				<li class="footer">
-					Generated on Mon Oct 28 2024 14:25:41 for CommandAPI 9.6.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
+					Generated on Wed Dec 4 2024 19:42:35 for CommandAPI 9.7.0 using <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3.
 					Flat theme modified from <a href="https://github.com/kcwongjoe/doxygen_theme_flat_design" target="_new">kcwongjoe/doxygen_theme_flat_design</a>. MIT License.
 				</li>
 			</ul>
