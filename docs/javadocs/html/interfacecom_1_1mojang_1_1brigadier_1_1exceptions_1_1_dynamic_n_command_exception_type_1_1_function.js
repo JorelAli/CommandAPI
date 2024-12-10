@@ -1,4 +1,0 @@
-var interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_n_command_exception_type_1_1_function =
-[
-    [ "apply", "interfacecom_1_1mojang_1_1brigadier_1_1exceptions_1_1_dynamic_n_command_exception_type_1_1_function.html#a1fd49a8c63517c0a406f96109ebff4a8", null ]
-];
