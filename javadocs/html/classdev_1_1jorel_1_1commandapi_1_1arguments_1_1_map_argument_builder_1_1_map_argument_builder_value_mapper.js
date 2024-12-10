@@ -1,5 +1,0 @@
-var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_value_mapper =
-[
-    [ "MapArgumentBuilderSuggestsKey", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_v6873fe5d662808fc28bf1787735d7a29" ],
-    [ "withValueMapper", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_map_argument_builder_1_1_map_argument_builder_value_mapper.html#a89f276e15b5f9ef27c4f216eb1b2a4f9", null ]
-];

@@ -1,7 +1,0 @@
-var classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builder_suggests =
-[
-    [ "ListArgumentBuilderFinished", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builderf8b22eb51070fbe57649eff900a572ca.html", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builderf8b22eb51070fbe57649eff900a572ca" ],
-    [ "withMapper", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builder_suggests.html#abe5a347b66fa371287a6070d64990903", null ],
-    [ "withStringMapper", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builder_suggests.html#ad278970a06c301a01ca496e5bebc5e35", null ],
-    [ "withStringTooltipMapper", "classdev_1_1jorel_1_1commandapi_1_1arguments_1_1_list_argument_builder_1_1_list_argument_builder_suggests.html#a8e8ebb5e58d4cae3717951ad183a5817", null ]
-];
