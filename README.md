@@ -9,17 +9,17 @@
 
 <div align="center">
 
-![GitHub](https://img.shields.io/github/license/JorelAli/CommandAPI?style=flat-square)
+![GitHub](https://img.shields.io/github/license/CommandAPI/CommandAPI?style=flat-square)
 ![Maven Central](https://img.shields.io/maven-central/v/dev.jorel/commandapi?style=flat-square)
 [![Join us on Discord](https://img.shields.io/discord/745416925924032523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2&style=flat-square)](https://discord.gg/G4SzSxZ)
 <br>
-[![CodeFactor](https://img.shields.io/codefactor/grade/github/JorelAli/CommandAPI/master?style=flat-square)](https://www.codefactor.io/repository/github/jorelali/commandapi)
-![GitHub Workflow Status (master)](https://img.shields.io/github/actions/workflow/status/JorelAli/CommandAPI/build.yml?branch=master&style=flat-square)
-![GitHub Workflow Status (dev/dev)](https://img.shields.io/github/actions/workflow/status/JorelAli/CommandAPI/build.yml?branch=dev/dev&label=dev%20build&style=flat-square)
+[![CodeFactor](https://img.shields.io/codefactor/grade/github/CommandAPI/CommandAPI/master?style=flat-square)](https://www.codefactor.io/repository/github/commandapi/commandapi)
+![GitHub Workflow Status (master)](https://img.shields.io/github/actions/workflow/status/CommandAPI/CommandAPI/build.yml?branch=master&style=flat-square)
+![GitHub Workflow Status (dev/dev)](https://img.shields.io/github/actions/workflow/status/CommandAPI/CommandAPI/build.yml?branch=dev/dev&label=dev%20build&style=flat-square)
 ![Spiget Download Size](https://img.shields.io/spiget/download-size/62353?style=flat-square)
 <br>
 ![Spiget Downloads](https://img.shields.io/spiget/downloads/62353?label=Total%20Spigot%20Downloads&style=flat-square)
-![GitHub all releases](https://img.shields.io/github/downloads/JorelAli/CommandAPI/total?label=Total%20GitHub%20Downloads&style=flat-square)
+![GitHub all releases](https://img.shields.io/github/downloads/CommandAPI/CommandAPI/total?label=Total%20GitHub%20Downloads&style=flat-square)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/commandapi?label=Total%20Modrinth%20Downloads&style=flat-square)
 </div>
 
@@ -32,7 +32,7 @@
 
 **Downloads & Documentation:**
 
-- <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [All downloads](https://github.com/JorelAli/CommandAPI/releases)
+- <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/download_arrow_icon_143023.png"></img> [All downloads](https://github.com/CommandAPI/CommandAPI/releases)
 - <img width="20px" src="https://icon-icons.com/icons2/2348/PNG/512/books_icon_143050.png"></img> [Documentation (includes usage for server owners!)](https://commandapi.jorel.dev/latest.html)
 
 **Other**
@@ -330,7 +330,7 @@ The CommandAPI is built using the Maven build tool - if you don't have it, you c
 - Clone the repository using your preferred method, or with the command below:
 
   ```bash
-  git clone https://github.com/JorelAli/CommandAPI.git
+  git clone https://github.com/CommandAPI/CommandAPI.git
   ```
 
 - Run `mvn clean install -P Platform.Bukkit`
@@ -396,7 +396,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
 
   **'True' custom arguments and server-side argument implementations**
 
-  Through some brief testing of the [regex-mod branch](https://github.com/JorelAli/CommandAPI/tree/dev/regex-mod) and my [MinecraftRegexArgumentMod](https://github.com/JorelAli/MinecraftRegexArgumentMod) repository, it was discovered that 'true' custom arguments (arguments with a custom implementation of the returned type and parser) are possible with the aid of a client-sided mod. Additionally, this functionality also works _without_ a client-sided mod, assuming this is only used server-side. This can be useful for server-only datapacks, functions and tags, as well as command blocks. It is possible that this may lead into being ported to Fabric, but there are no concrete plans to do so as of now.
+  Through some brief testing of the [regex-mod branch](https://github.com/CommandAPI/CommandAPI/tree/dev/regex-mod) and my [MinecraftRegexArgumentMod](https://github.com/JorelAli/MinecraftRegexArgumentMod) repository, it was discovered that 'true' custom arguments (arguments with a custom implementation of the returned type and parser) are possible with the aid of a client-sided mod. Additionally, this functionality also works _without_ a client-sided mod, assuming this is only used server-side. This can be useful for server-only datapacks, functions and tags, as well as command blocks. It is possible that this may lead into being ported to Fabric, but there are no concrete plans to do so as of now.
 
 -----
 
@@ -446,8 +446,8 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 </ul>
                 <b>CommandAPI Changes:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/594 Adds a config option to allow the CommandAPI to be more lenient when updating to a new minor version (e.g. from 1.21 to 1.21.1)</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/596, https://github.com/JorelAli/CommandAPI/pull/605 The plugin's <code>config.yml</code> file will be updated when config options are added or removed</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/594 Adds a config option to allow the CommandAPI to be more lenient when updating to a new minor version (e.g. from 1.21 to 1.21.1)</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/596, https://github.com/CommandAPI/CommandAPI/pull/605 The plugin's <code>config.yml</code> file will be updated when config options are added or removed</li>
                 </ul>
             </td>
         </tr>
@@ -470,9 +470,9 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 </ul>
                 <b>CommandAPI Changes:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/588 Fix Folia scheduling methods using the wrong scheduler implementation</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/577 Adds a <code>CommandAPIBukkit#failWithAdventureComponent(ComponentLike)</code> method</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/580 Fix running a non-vanilla command on paper in Minecraft functions with the CommandAPI throwing runtime exceptions</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/588 Fix Folia scheduling methods using the wrong scheduler implementation</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/577 Adds a <code>CommandAPIBukkit#failWithAdventureComponent(ComponentLike)</code> method</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/580 Fix running a non-vanilla command on paper in Minecraft functions with the CommandAPI throwing runtime exceptions</li>
                     <li>Fix namespaces not being propagated when registering subcommands</li>
                 </ul>
             </td>
@@ -503,7 +503,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">May 2024</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/555 Hotfix CommandAPI not loading correctly on Paper 1.20.6 build 65+ servers</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/555 Hotfix CommandAPI not loading correctly on Paper 1.20.6 build 65+ servers</li>
                 </ul>
             </td>
         </tr>
@@ -513,8 +513,8 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">
                 <b>CommandAPI Changes:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/551 Fixes mojang-mapped versions of the CommandAPI causing errors in certain Minecraft versions</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/552 Adds a configuration option to disable datapack reloading on server load</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/551 Fixes mojang-mapped versions of the CommandAPI causing errors in certain Minecraft versions</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/552 Adds a configuration option to disable datapack reloading on server load</li>
                 </ul>
             </td>
         </tr>
@@ -524,15 +524,15 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">
                 <b>CommandAPI Changes:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/495 Adds a parameter to <code>EntitySelectorArgument</code> to allow failure when no entity lists are empty</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/367, https://github.com/JorelAli/CommandAPI/pull/509 Adds the ability to register commands with a custom namespace</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/523 Exposed more details of the <code>CommandPermission</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/536, https://github.com/JorelAli/CommandAPI/pull/537 Fixes <code>MultiLiteralArgument</code> help displaying the node name instead of the literal text</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/495 Adds a parameter to <code>EntitySelectorArgument</code> to allow failure when no entity lists are empty</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/367, https://github.com/CommandAPI/CommandAPI/pull/509 Adds the ability to register commands with a custom namespace</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/523 Exposed more details of the <code>CommandPermission</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/536, https://github.com/CommandAPI/CommandAPI/pull/537 Fixes <code>MultiLiteralArgument</code> help displaying the node name instead of the literal text</li>
                     <li>Fixed implementation issues with <code>FunctionArgument</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/490 Adds (experimental) support for Mojang-mapped servers via the CommandAPI config</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/524 Fixes <code>CommandAPIBukkit.get().getTags()</code> erroring in 1.20.4</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/540 Add methods to "safe-cast" arguments to <code>CommandArguments</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/541 Adds support for a <code>NamespacedKey</code> variant for the <code>PotionEffectArgument</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/490 Adds (experimental) support for Mojang-mapped servers via the CommandAPI config</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/524 Fixes <code>CommandAPIBukkit.get().getTags()</code> erroring in 1.20.4</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/540 Add methods to "safe-cast" arguments to <code>CommandArguments</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/541 Adds support for a <code>NamespacedKey</code> variant for the <code>PotionEffectArgument</code></li>
                 </ul>
                 <b>Minecraft Version Changes:</b>
                 <ul>
@@ -550,11 +550,11 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 <ul>
                     <li>Adds support for Minecraft 1.20.3 and 1.20.4</li>
                     <li>Fixed bug where calling <code>SimpleFunctionWrapper.getTag()</code> on 1.19+ would throw an error</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/499 Fix typo in Adventure methods for tooltips</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/499 Fix typo in Adventure methods for tooltips</li>
                     <li>Adds <code>ExecutionInfo</code> executors for the Kotlin DSL</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/497 Adds support for <code>RemoteConsoleCommandSender</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/497 Adds support for <code>RemoteConsoleCommandSender</code></li>
                     <li>Fixed <code>executesFeedbackForwarding()</code> not checking for a <code>FeedbackForwardingCommandSender</code> correctly thus allowing every executor to execute the command</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/473 Fix RGB colors in <code>CustomArgument.CustomArgumentException#fromString</code> creating the wrong colors</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/473 Fix RGB colors in <code>CustomArgument.CustomArgumentException#fromString</code> creating the wrong colors</li>
                 </ul>
             </td>
         </tr>
@@ -563,9 +563,9 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">September 2023</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/487 Added support for disabling integer centering for location arguments</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/488 Fixed calling CommandAPI commands with <code>Bukkit.createCommandSender()</code> not working on paper</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/482 Adds Kotlin DSL support for delegated properties</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/487 Added support for disabling integer centering for location arguments</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/488 Fixed calling CommandAPI commands with <code>Bukkit.createCommandSender()</code> not working on paper</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/482 Adds Kotlin DSL support for delegated properties</li>
                     <li>Fixed a bug where the CommandAPI would throw errors when unregistering commands when a command exists with a <code>:</code> at the end of its name</li>
                 </ul>
             </td>
@@ -576,9 +576,9 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">
                 <ul>
                     <li>Fixed the CommandAPI disabling datapacks on Paper 1.20.1 #40+ because it thought it was running on a Folia server</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/459 Added the ability to access raw arguments in the command executor</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/469 Adds <code>AdventureChatColorArgument</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/417 Added the ability for commands to be registered and unregistered while the server is running</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/459 Added the ability to access raw arguments in the command executor</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/469 Adds <code>AdventureChatColorArgument</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/417 Added the ability for commands to be registered and unregistered while the server is running</li>
                 </ul>
             </td>
         </tr>
@@ -588,7 +588,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">
                 <ul>
                     <li>
-                        https://github.com/JorelAli/CommandAPI/pull/455 Reworked the <code>MapArgument</code> with various features, including:
+                        https://github.com/CommandAPI/CommandAPI/pull/455 Reworked the <code>MapArgument</code> with various features, including:
                         <ul>
                             <li>Optional quotes around keys and values</li>
                             <li>No restriction on the characters that are allowed in a key (previously only letters, digits, and underscore)</li>
@@ -607,8 +607,8 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 <b>CommandAPI changes:</b>
                 <ul>
                     <li>Add the ability to retrieve <code>LiteralArgument</code>s and <code>MultiLiteralArgument</code>s by their node names</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/363 Adds <code>withUsage()</code> method to customise command usage info</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/371 Updates default short description to now mention the plugin creating the command</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/363 Adds <code>withUsage()</code> method to customise command usage info</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/371 Updates default short description to now mention the plugin creating the command</li>
                     <li>Fixed literal arguments in command conversion causing errors due to parsing problems</li>
                     <li>Adds support for Minecraft 1.20</li>
                 </ul>
@@ -627,8 +627,8 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 <ul>
                     <li>Fixed <code>MapArgument</code> not always allowing player names as keys</li>
                     <li>Fixed <code>/execute as ...</code> not working due to casting to a player instead of a proxied sender</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/441 Added <code>CommandArguments#count()</code> utility method</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/440 Added several <code>CommandArguments#getOptional()</code> methods</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/441 Added <code>CommandArguments#count()</code> utility method</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/440 Added several <code>CommandArguments#getOptional()</code> methods</li>
                     <li>Fixed bug where <code>IntegerArgument</code> would fail to compile due to a missing Brigadier dependency</li>
                     <li>Added basic support for Folia</li>
                     <li>Added support for the <code>CustomArgumentException</code> to accept Adventure and Spigot text components</li>
@@ -642,16 +642,16 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 <b>⚠️ This version is incompatible with any plugin that used the CommandAPI version 8.X.X or below! (See documentation for more information)</b><br>
                 <b>New features:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/360, https://github.com/JorelAli/CommandAPI/pull/369 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/162, https://github.com/JorelAli/CommandAPI/issues/387, https://github.com/JorelAli/CommandAPI/pull/393 Added optional arguments</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/399, https://github.com/JorelAli/CommandAPI/pull/418 Added a <code>MapArgument</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/360, https://github.com/CommandAPI/CommandAPI/pull/369 Made executor methods now use <code>CommandArguments</code> to allow for accessing arguments by name instead of index</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/162, https://github.com/CommandAPI/CommandAPI/issues/387, https://github.com/CommandAPI/CommandAPI/pull/393 Added optional arguments</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/388 Added new <code>hook-paper-reload</code> config option to toggle whether the CommandAPI hooks into <code>/minecraft:reload</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/399, https://github.com/CommandAPI/CommandAPI/pull/418 Added a <code>MapArgument</code></li>
                     <li>Reworked the implementation of <code>ItemArgument</code>, so the <code>ItemStack</code> count is correctly reflected and <code>ItemMeta</code> is properly assigned</li>
                     <li>Made the <code>TeamArgument</code> return a <code>Team</code> instead of a String</li>
                     <li>Made the <code>ObjectiveArgument</code> return a <code>Objective</code> instead of a String</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/391 Made the CommandAPI only complain about commands registered in a <code>plugin.yml</code> if this <code>plugin.yml</code> belongs to the plugin calling the CommandAPI</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/422 Added a way to access the raw command a player typed from the executor</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/431 Added a way to access more info to construct lists for the <code>ListArgumentBuilder</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/391 Made the CommandAPI only complain about commands registered in a <code>plugin.yml</code> if this <code>plugin.yml</code> belongs to the plugin calling the CommandAPI</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/422 Added a way to access the raw command a player typed from the executor</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/431 Added a way to access more info to construct lists for the <code>ListArgumentBuilder</code></li>
                     <li>Added support for sidebar team colors using an enum for <code>ScoreboardSlot</code></li>
                 </ul>
                 <b>Kotlin DSL changes:</b>
@@ -663,7 +663,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 <b>Bug fixes:</b>
                 <ul>
                     <li>Fixed <code>commandapi-preprocessor</code> appearing in the plugin and shaded jar file</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/390 Fixed <code>.executesNative()</code>'s CommandSender's <code>getLocation()</code> method returning the wrong pitch and yaw</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/390 Fixed <code>.executesNative()</code>'s CommandSender's <code>getLocation()</code> method returning the wrong pitch and yaw</li>
                     <li>Fixed tags showing up in the <code>BiomeArgument</code> when they shouldn't have been doing so</li>
                     <li>Fixed <code>LocationArgument</code> with <code>BLOCK_POSITION</code> not returning locations in unloaded chunks</li>
                 </ul>
@@ -694,7 +694,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                 </ul>
                 <b>Documentation changes:</b>
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/384 Fixed various particle data not being documented for the <code>ParticleArgument</code> documentation page</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/384 Fixed various particle data not being documented for the <code>ParticleArgument</code> documentation page</li>
                     <li>Fixed broken links in the documentation (using <a href="https://github.com/Michael-F-Bryan/mdbook-linkcheck">Michael-F-Bryan/mdbook-linkcheck</a>)</li>
                     <li>Refactored documentation argument page names for consistency</li>
                     <li>Added Kotlin DSL examples</li>
@@ -731,7 +731,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">February 2023</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/415 Fixed NullPointerException when the CommandAPI fixes permissions in its post-load step</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/415 Fixed NullPointerException when the CommandAPI fixes permissions in its post-load step</li>
                 </ul>
             </td>
         </tr>
@@ -758,7 +758,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">January 2023</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/397 Fixed <code>WorldArgument</code> not working in 1.16.5</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/397 Fixed <code>WorldArgument</code> not working in 1.16.5</li>
                 </ul>
             </td>
         </tr>
@@ -777,8 +777,8 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">December 2022</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/310 Hotfixed a null pointer exception with redirected commands</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/383 Fixed <code>ParticleArgument</code> not working in 1.19.3</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/310 Hotfixed a null pointer exception with redirected commands</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/383 Fixed <code>ParticleArgument</code> not working in 1.19.3</li>
                     <li>Fixed <code>EnchantmentArgument</code> not working in 1.19.3</li>
                     <li>Fixed JavaDocs in IDEs not working when using <code>commandapi-shade</code></li>
                     <li>Hotfixed permission check failing when permissions have been incorrectly initialized</li>
@@ -801,17 +801,17 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">December 2022</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/307 Adds a <code>CommandArgument</code> to let users submit commands as an argument</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/330 Improve the documentation for disabling the CommandAPI gracefully with <code>CommandAPI.onDisable()</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/334 Adds support for chat components in <code>CommandAPI.fail()</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/338 Adds a way to clone a <code>CommandAPICommand</code> instance using <code>instance.copy()</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/340 Adds Kotlin examples in the documentation</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/341 Fix incorrect code block in normal executors documentation page</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/351 Adds support for a ListArgument with the TextArgument backend, to allow inline lists</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/358 Adds a new WorldArgument argument that lets you get a list of Minecraft dimensions</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/307 Adds a <code>CommandArgument</code> to let users submit commands as an argument</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/330 Improve the documentation for disabling the CommandAPI gracefully with <code>CommandAPI.onDisable()</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/334 Adds support for chat components in <code>CommandAPI.fail()</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/338 Adds a way to clone a <code>CommandAPICommand</code> instance using <code>instance.copy()</code></li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/340 Adds Kotlin examples in the documentation</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/341 Fix incorrect code block in normal executors documentation page</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/351 Adds support for a ListArgument with the TextArgument backend, to allow inline lists</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/358 Adds a new WorldArgument argument that lets you get a list of Minecraft dimensions</li>
                     <li>Adds support for <code>SoundArgument</code> to return string-based sounds via the <code>NamespacedKey</code></li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/352 Adds some helper methods to the LiteralArgument to make it easier to use via a static import</li>
-                    <li>https://github.com/JorelAli/CommandAPI/pull/357 Adds a Kotlin DSL to register commands in Kotlin!</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/352 Adds some helper methods to the LiteralArgument to make it easier to use via a static import</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/pull/357 Adds a Kotlin DSL to register commands in Kotlin!</li>
                 </ul>
             </td>
         </tr>
@@ -820,12 +820,12 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
             <td valign="top">August 2022</td>
             <td valign="top">
                 <ul>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/311 Fix packets with invalid signatures kicking the client when sending certain commands with a chat preview enabled argument</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/312 Safeguards against command paths with duplicate node names which could cause the client to crash</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/313 Fix subcommand information being overwritten after a command has been registered</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/314 Fix <code>TimeArgument</code> not working as intended</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/316 Fix server reloading on Spigot throwing asynchronous-related exceptions in the console</li>
-                    <li>https://github.com/JorelAli/CommandAPI/issues/323 Fix <code>NamespacedKeyArgument</code> not working in 1.17</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/311 Fix packets with invalid signatures kicking the client when sending certain commands with a chat preview enabled argument</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/312 Safeguards against command paths with duplicate node names which could cause the client to crash</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/313 Fix subcommand information being overwritten after a command has been registered</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/314 Fix <code>TimeArgument</code> not working as intended</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/316 Fix server reloading on Spigot throwing asynchronous-related exceptions in the console</li>
+                    <li>https://github.com/CommandAPI/CommandAPI/issues/323 Fix <code>NamespacedKeyArgument</code> not working in 1.17</li>
                     <li>Fix various command issues with Minecraft versions before 1.19</li>
                     <li>Fix argument suggestions not working if a subcommand's node name is the same as the argument's node name</li>
                     <li>Improves the underlying implementation of chatcolor, enchantment and potion arguments in 1.17+</li>
@@ -1417,7 +1417,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                     <li>Adds multi-literal arguments</li>
                     <li>Adds a logo!</li>
                     <li>Adds a new method to the CommandAPI/Brigadier system to easily create Brigadier arguments from CommandAPI arguments</li>
-                    <li><b>Rename maven modules</b> You can view more information about this on the <a href="https://github.com/JorelAli/CommandAPI/tree/mvn-repo">public maven repository</a></li>
+                    <li><b>Rename maven modules</b> You can view more information about this on the <a href="https://github.com/CommandAPI/CommandAPI/tree/mvn-repo">public maven repository</a></li>
                 </ul>
             </td>
         </tr>
@@ -1578,7 +1578,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                     <li>Adds support for Minecraft 1.13 and 1.13.1 <i>(Funny isn't it? It's called the 1.13 CommandAPI but never supported Minecraft 1.13 until now)</i></li>
                     <li>Improves support for different versions</li>
                     <li>Adds pointless witty comments into changelog notes</li>
-                    <li>Adds <a href="https://github.com/JorelAli/1.13-Command-API-SafeReflection">1.13-Command-API-SafeReflection</a> library to greatly improve reliability of reflection calls</li>
+                    <li>Adds <a href="https://github.com/CommandAPI/1.13-Command-API-SafeReflection">1.13-Command-API-SafeReflection</a> library to greatly improve reliability of reflection calls</li>
                 </ul>
             </td>
         </tr>
@@ -1592,7 +1592,7 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                     <li>Adds AdvancementArgument</li>
                     <li>Adds LootTableArgument</li>
                     <li>Adds support for 1.14.3 and 1.14.4</li>
-                    <li>Fixes bug where aliases weren't registering properly (<a href="https://github.com/JorelAli/CommandAPI/issues/43">#43</a>)</li>
+                    <li>Fixes bug where aliases weren't registering properly (<a href="https://github.com/CommandAPI/CommandAPI/issues/43">#43</a>)</li>
                     <li>Fix documentation for tooltips</li>
                     <li>Improve documentation for dependencies and repositories</li>
                 </ul>
@@ -1616,9 +1616,9 @@ This is the current roadmap for the CommandAPI (as of 30th April 2024):
                     <li>Major overhaul of the CommandAPI's internals - greatly improves performance</li>
                     <li>Deprecates SuggestedStringArgument, adding overrideSuggestions as an alternative for any argument type </li>
                     <li>Adds CustomArguments, allowing you to create your own ... custom arguments</li>
-                    <li>Excludes dependencies from final jar (<a href="https://github.com/JorelAli/CommandAPI/issues/40">#40</a>)</li>
+                    <li>Excludes dependencies from final jar (<a href="https://github.com/CommandAPI/CommandAPI/issues/40">#40</a>)</li>
                     <li>Adds DefinedCustomArguments - CustomArguments that have been created by yours truly</li>
-                    <li>DynamicSuggestedArguments now have access to the CommandSender (<a href="https://github.com/JorelAli/CommandAPI/issues/41">#41</a>)</li>
+                    <li>DynamicSuggestedArguments now have access to the CommandSender (<a href="https://github.com/CommandAPI/CommandAPI/issues/41">#41</a>)</li>
                     <li>Adds Loot Table support</li>
                 </ul>
             </td>
