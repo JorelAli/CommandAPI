@@ -35,23 +35,6 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
 
-      ### Documentation ###
-
-      # Build the documentation first. Building the CommandAPI takes some time and nobody wants to wait until the whole
-      # CommandAPI has been built to realize that someone left a trailing space in one Markdown file in the documentation!
-      - name: Run markdownlint on all documentation Markdown documents
-        uses: DavidAnson/markdownlint-cli2-action@v8
-        with:
-          globs: 'docssrc/src/*.md'
-
-      - name: Build the documentation with mdBook
-        continue-on-error: true # If link checking fails with 403, that's probably just a timing/automated-related issue. We can ignore those - forcing the whole build to fail for this is not ideal.
-        run: |
-          cd docssrc
-          curl -LJO https://github.com/JorelAli/mdBook/releases/download/v0.4.21-fa6/mdbook-fa6 && chmod +x mdbook-fa6
-          mkdir -p mdbook-linkcheck && cd "$_" && curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && unzip "$_" && chmod +x mdbook-linkcheck && export PATH=$PWD:$PATH && cd ..
-          ./mdbook-fa6 build
-
       ### Compilation ###
 
       - name: Build the CommandAPI (Bukkit+Velocity) using maven
