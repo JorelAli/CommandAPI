@@ -76,10 +76,14 @@ class ArgumentLootTableTests extends TestBase {
 		PlayerMock player = server.addPlayer();
 
 		if (version.greaterThanOrEqualTo(MCVersion.V1_19_4)) {
+			// Bukkit's LootTables doesn't have the loot tables of these entities
+			Stream<String> missingEntityLootTables = version.greaterThanOrEqualTo(MCVersion.V1_20_5)
+				? Stream.of("minecraft:entities/camel", "minecraft:entities/sniffer", "minecraft:entities/armadillo", "minecraft:entities/bogged", "minecraft:entities/breeze")
+				: Stream.of("minecraft:entities/camel", "minecraft:entities/sniffer");
 			Stream<String> expected = Stream.concat(
 				Arrays.stream(MockPlatform.getInstance().getLootTables())
 					.map(lt -> lt.getKey().toString()),
-				Stream.of("minecraft:entities/camel", "minecraft:entities/sniffer")
+				missingEntityLootTables
 			);
 			assertEquals(expected.sorted().toList(), server.getSuggestions(player, "test "));
 		} else {

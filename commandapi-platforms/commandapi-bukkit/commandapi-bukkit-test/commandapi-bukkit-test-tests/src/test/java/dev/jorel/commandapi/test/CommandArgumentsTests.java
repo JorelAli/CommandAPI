@@ -41,6 +41,8 @@ public class CommandArgumentsTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 
 		server.dispatchCommand(player, "test @e");
 		assertEquals("@e", results.get());
@@ -89,6 +91,8 @@ public class CommandArgumentsTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 
 		server.dispatchCommand(player, "test 15.34 \"This is interesting text\"");
 		assertEquals("15.34", results.get());
@@ -121,6 +125,8 @@ public class CommandArgumentsTests extends TestBase {
 			.register();
 
 		PlayerMock player = server.addPlayer();
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 
 		server.dispatchCommand(player, "test 15.34 \"This is interesting text\"");
 		assertEquals("15.34", results.get());

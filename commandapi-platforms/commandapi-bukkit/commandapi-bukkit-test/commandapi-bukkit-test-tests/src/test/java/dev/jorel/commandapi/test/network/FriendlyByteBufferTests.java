@@ -353,13 +353,13 @@ class FriendlyByteBufferTests extends TestBase {
 		//  preceded by the length of that byte array as a VarInt
 
 		// Ascii chars are nice because they are directly encoded
-		buffer.writeString("Hello World");
+		buffer.writeString("Hello World", Short.MAX_VALUE);
 		assertArrayEquals(new byte[]{11, 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'}, buffer.getRemainingBytes());
-		assertEquals("Hello World", buffer.readString());
+		assertEquals("Hello World", buffer.readString(Short.MAX_VALUE));
 
 		// Larger Unicode chars take up more bytes
 		//  Example characters from https://en.wikipedia.org/wiki/UTF-8#Encoding_process
-		buffer.writeString("$£€\uD800\uDF48");
+		buffer.writeString("$£€\uD800\uDF48", Short.MAX_VALUE);
 		assertArrayEquals(new byte[]{10,
 			/*$*/ 0x24,
 			/*£*/ (byte) 0xc2, (byte) 0xa3,
@@ -367,7 +367,7 @@ class FriendlyByteBufferTests extends TestBase {
 			/*𐍈*/ (byte) 0xf0, (byte) 0x90, (byte) 0x8d, (byte) 0x88},
 			buffer.getRemainingBytes()
 		);
-		assertEquals("$£€\uD800\uDF48", buffer.readString());
+		assertEquals("$£€\uD800\uDF48", buffer.readString(Short.MAX_VALUE));
 
 		// Long strings use multiple bytes for their length
 		String long128String = " ".repeat(128);
@@ -377,9 +377,9 @@ class FriendlyByteBufferTests extends TestBase {
 		long128Bytes[0] = (byte) 0x80;
 		long128Bytes[1] = 0x01;
 
-		buffer.writeString(long128String);
+		buffer.writeString(long128String, Short.MAX_VALUE);
 		assertArrayEquals(long128Bytes, buffer.getRemainingBytes());
-		assertEquals(long128String, buffer.readString());
+		assertEquals(long128String, buffer.readString(Short.MAX_VALUE));
 
 		// Nothing left in the buffer
 		assertEquals(0, buffer.countReadableBytes());
@@ -388,11 +388,12 @@ class FriendlyByteBufferTests extends TestBase {
 		buffer.resetIndices();
 
 		// Reading goes out of bounds if the length byte is larger than actual number of bytes
+		//  The bounds are checked before reading, so the index of the last byte (1 + 5 - 1) is reported
 		buffer.writeBytes(new byte[]{5, 1, 2, 3});
 		assertThrowsWithMessage(
 			IllegalStateException.class,
-			"Read index (4) cannot be greater than or equal to write index (4)",
-			buffer::readString
+			"Read index (5) cannot be greater than or equal to write index (4)",
+			() -> buffer.readString(Short.MAX_VALUE)
 		);
 	}
 }

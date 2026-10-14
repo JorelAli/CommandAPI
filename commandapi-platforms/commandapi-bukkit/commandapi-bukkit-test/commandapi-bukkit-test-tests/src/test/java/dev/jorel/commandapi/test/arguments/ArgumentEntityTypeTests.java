@@ -47,7 +47,8 @@ class ArgumentEntityTypeTests extends TestBase {
 		return Arrays.stream(MockPlatform.getInstance().getEntityTypes())
 			.filter(e -> e != EntityType.UNKNOWN)
 			.filter(e -> e != EntityType.PLAYER)
-			.filter(e -> e != EntityType.FISHING_HOOK)
+			// Renamed from FISHING_HOOK to FISHING_BOBBER in 1.20.5
+			.filter(e -> !e.name().equals("FISHING_HOOK") && !e.name().equals("FISHING_BOBBER"))
 			.filter(e -> { 
 				if (version.equals(MCVersion.V1_19_4)) {
 					return !e.name().equals("CAMEL") && !e.name().equals("SNIFFER");
@@ -57,6 +58,20 @@ class ArgumentEntityTypeTests extends TestBase {
 			})
 			.map(e -> e.getKey().toString())
 			.sorted()
+			.toList();
+	}
+
+	/**
+	 * @return all entity types that are suggested. Entities that need an experimental feature flag can be used,
+	 * but aren't suggested.
+	 */
+	private List<String> getSuggestedEntityTypes() {
+		// These 1.21 entities need the update_1_21 feature flag in 1.20.5 and 1.20.6
+		List<String> experimentalEntityTypes = version.equals(MCVersion.V1_20_5)
+			? List.of("minecraft:bogged", "minecraft:breeze", "minecraft:breeze_wind_charge", "minecraft:ominous_item_spawner", "minecraft:wind_charge")
+			: List.of();
+		return getAllEntityTypes().stream()
+			.filter(e -> !experimentalEntityTypes.contains(e))
 			.toList();
 	}
 
@@ -135,13 +150,13 @@ class ArgumentEntityTypeTests extends TestBase {
 		assumeTrue(version.greaterThanOrEqualTo(MCVersion.V1_19)); // TODO: Can't figure out how to fix in 1.18
 
 		// /test
-		// All entities should be suggested
-		assertEquals(getAllEntityTypes(), server.getSuggestions(player, "test "));
+		// All entities (that aren't experimental) should be suggested
+		assertEquals(getSuggestedEntityTypes(), server.getSuggestions(player, "test "));
 
 		// /test p
 		// All entities starting with 'p' should be suggested as well as entities which
 		// are underscore-separated and start with 'p', such as 'ender_pearl'
-		assertEquals(getAllEntityTypes().stream().filter(s -> s.contains(":p") || s.contains("_p")).toList(), server.getSuggestions(player, "test p"));
+		assertEquals(getSuggestedEntityTypes().stream().filter(s -> s.contains(":p") || s.contains("_p")).toList(), server.getSuggestions(player, "test p"));
 		
 		// /test x
 		// No entities should be suggested

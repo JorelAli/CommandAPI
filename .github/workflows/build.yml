@@ -96,56 +96,45 @@ jobs:
             chmod +x BytecodeAnalyser*.jar
             java -jar BytecodeAnalyser*.jar
 
-      # - name: validate version-specific dependencies (nms-common)
-      #   run: |
-      #     nms_common_path="commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/target/classes/dev/jorel/commandapi/nms/NMS_Common.class"
-      #     if ! command -v javap &> /dev/null
-      #     then
-      #         echo "javap could not be found, skipping NMS Common validation check"
-      #         exit
-      #     else
-      #         javapcommand=$(javap -v $nms_common_path | grep -E '#[0-9]+ = Class ' | cut -c 46- | sort | grep 'org/bukkit/craftbukkit')
-      #         if [[ -n "$javapcommand" ]]; then
-      #             echo "NMS Common has version-specific dependencies!"
-      #             echo $javapcommand
-      #             exit 1
-      #         else
-      #             echo "NMS Common has no version-specific dependencies :)"
-      #         fi
-      #     fi
-
       ### Bukkit tests across all NMS versions ###
       # Dev note: Yes, I know I could put this under one run section, but it's a million times easier
       # to see which version failed when it's got the version name and subsection in GitHub Actions
 
-#      - name: Run Bukkit unit tests across all versions (1.20.5 - 1.20.6)
-#        continue-on-error: true
-#        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_5
-#
-#      - name: Run Bukkit unit tests across all versions (Mojang Mapped 1.20.5 - 1.20.6)
-#        continue-on-error: true
-#        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_5_Mojang
-#
-#      - name: Run Bukkit unit tests across all versions (1.20.3 - 1.20.4)
-#        continue-on-error: true
-#        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_3
-#
-#      - name: Run Bukkit unit tests across all versions (1.20.2)
-#        continue-on-error: true
-#        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_2
-#
-#      - name: Run Bukkit unit tests across all versions (1.20 - 1.20.1)
-#        continue-on-error: true
-#        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20
-#
-#      - name: Run Bukkit unit tests across all versions (Mojang Mapped 1.20 - 1.20.1)
-#        continue-on-error: true
-#        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_Mojang
-#
-#      # It doesn't matter which version the Kotlin DSL uses. It should be version independent
-#      - name: Run Bukkit Kotlin DSL unit tests
-#        continue-on-error: true
-#        run: mvn clean package -pl :commandapi-bukkit-kotlin-test -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20
+      - name: Run Paper unit tests across all versions (1.20.5 - 1.20.6)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-paper-test-tests:clean :commandapi-paper-test-tests:test
+
+      - name: Run Spigot unit tests across all versions (1.20.5 - 1.20.6)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_5
+
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20.5 - 1.20.6)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_5_Mojang
+
+      - name: Run Spigot unit tests across all versions (1.20.3 - 1.20.4)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_3
+
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20.3 - 1.20.4)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_3_Mojang
+
+      - name: Run Spigot unit tests across all versions (1.20.2)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_2
+
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20.2)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_2_Mojang
+
+      - name: Run Spigot unit tests across all versions (1.20 - 1.20.1)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20
+
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20 - 1.20.1)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_Mojang
 
       ### Upload .jar artifacts ###
 

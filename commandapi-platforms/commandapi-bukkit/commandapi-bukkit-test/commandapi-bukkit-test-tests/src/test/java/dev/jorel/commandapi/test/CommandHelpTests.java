@@ -2,6 +2,7 @@ package dev.jorel.commandapi.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -47,6 +49,19 @@ class CommandHelpTests extends TestBase {
 
 		// Check the full description
 		assertEquals(ChatColor.translateAlternateColorCodes('&', fullDescription), helpTopic.getFullText(forWho));
+	}
+
+	/**
+	 * On Paper, commands without a full description, usage or help topic get their help topic from Paper's server
+	 * instead of the CommandAPI (see {@code CommandAPIBukkit#updateHelpForCommands}). MockBukkit doesn't generate
+	 * help topics, so for these commands the CommandAPI's help topic can only be checked on Spigot.
+	 */
+	private void assertHelpTopicCreatedOnSpigot(String name, String shortDescription, String fullDescription, CommandSender forWho) {
+		if (CommandAPIVersionHandler.IS_PAPER) {
+			assertNull(server.getHelpMap().getHelpTopic(name), "Expected the help topic <" + name + "> to be left to Paper");
+		} else {
+			assertHelpTopicCreated(name, shortDescription, fullDescription, forWho);
+		}
 	}
 
 	/*********
@@ -88,7 +103,7 @@ class CommandHelpTests extends TestBase {
 		Player player = server.addPlayer("APlayer");
 
 		// Short description appears at the start of full text because that's how `CustomHelpTopic` works
-		assertHelpTopicCreated(
+		assertHelpTopicCreatedOnSpigot(
 			"/test", 
 			"short description", 
 			"""
@@ -132,7 +147,7 @@ class CommandHelpTests extends TestBase {
 		Player player = server.addPlayer("APlayer");
 
 		// Check default message
-		assertHelpTopicCreated(
+		assertHelpTopicCreatedOnSpigot(
 			"/test", 
 			"A command by the CommandAPITest plugin.", 
 			"""
@@ -348,7 +363,7 @@ class CommandHelpTests extends TestBase {
 		Player player = server.addPlayer("APlayer");
 
 		// Each executable node should appear in the usage
-		assertHelpTopicCreated(
+		assertHelpTopicCreatedOnSpigot(
 			"/test", 
 			"A command by the CommandAPITest plugin.", 
 			"""
@@ -380,7 +395,7 @@ class CommandHelpTests extends TestBase {
 
 		// MultiLiteralArgument unpacks to multiple LiteralArguments
 		// LiteralArgument has a differnt help string, using its literal rather than its node name
-		assertHelpTopicCreated(
+		assertHelpTopicCreatedOnSpigot(
 			"/test", 
 			"A command by the CommandAPITest plugin.", 
 			"""

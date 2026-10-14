@@ -666,7 +666,7 @@ public class NMS_1_21_R1 extends NMS_Common {
 	public RegistryParser<PotionEffectType> getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return new RegistryParser<>(
 			() -> CraftPotionEffectType.minecraftToBukkit(ResourceArgument.getMobEffect(cmdCtx, key).value()),
-			() -> fromResourceLocation(ResourceLocationArgument.getId(cmdCtx, key))
+			() -> fromResourceLocation(ResourceArgument.getMobEffect(cmdCtx, key).key().location())
 		);
 	}
 

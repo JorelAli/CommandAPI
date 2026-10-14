@@ -1,19 +1,21 @@
 plugins {
 	id("buildlogic.java-conventions")
+	kotlin("jvm")
 }
 
-description = "null"
+description = "CommandAPI - Bukkit Kotlin DSL tests shared between the platforms"
 
-dependencies {
-	compileOnly(libs.spigot.version.v1201)
-	implementation(libs.dev.jorel.commandapi.bukkit.shade)
-	testImplementation(libs.org.mockito.mockito.core)
-	implementation(libs.paper.version.v1201)
-	testImplementation(libs.org.junit.jupiter.junit.jupiter.engine)
-	implementation(libs.org.jetbrains.kotlin.kotlin.stdlib)
-	implementation(libs.dev.jorel.commandapi.bukkit.kotlin)
-	testImplementation(libs.org.junit.jupiter.junit.jupiter.api)
-	testImplementation(libs.dev.jorel.commandapi.bukkit.test.impl.v120)
-	implementation(libs.com.github.seeseemelk.MockBukkit.v120)
-	implementation(libs.com.mojang.brigadier)
+/*
+   The Kotlin DSL tests in this module are shared between the Bukkit platforms, like the tests in
+   commandapi-bukkit-test-tests. They are compiled and run by commandapi-paper-test-tests and
+   commandapi-spigot-test-tests, which provide the test setup (TestBase, Main, CommandAPIVersionHandler, etc.).
+
+   This module has no test setup of its own, so the tests aren't compiled here.
+*/
+tasks.named("compileTestKotlin") {
+	enabled = false
+}
+
+tasks.named("test") {
+	enabled = false
 }

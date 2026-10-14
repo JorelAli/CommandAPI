@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.Converter;
 
 /**
@@ -38,7 +39,7 @@ class CommandConvertedTests extends TestBase {
 	void test1() {
 		JavaPlugin plugin = MockBukkit.loadWith(CommandConvertedTestsPlugin.class, CommandConvertedTestsPlugin.pluginYaml());
 		
-		Converter.convert(plugin, "mycommand");
+		Converter.convert(plugin, "mycommand", CommandAPICommand::register);
 		
 		PlayerMock player = server.addPlayer();
 

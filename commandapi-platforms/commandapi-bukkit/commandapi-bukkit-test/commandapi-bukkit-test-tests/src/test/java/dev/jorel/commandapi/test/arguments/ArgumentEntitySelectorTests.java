@@ -52,6 +52,8 @@ class ArgumentEntitySelectorTests extends TestBase {
 			.register();
 		
 		PlayerMock player = server.addPlayer("APlayer");
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 		
 		// /test APlayer
 		server.dispatchCommand(player, "test APlayer");
@@ -94,6 +96,8 @@ class ArgumentEntitySelectorTests extends TestBase {
 			.register();
 		
 		PlayerMock player = server.addPlayer("APlayer");
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 		server.addPlayer("APlayer1");
 		server.addPlayer("APlayer2");
 		server.addPlayer("APlayer3");
@@ -119,6 +123,8 @@ class ArgumentEntitySelectorTests extends TestBase {
 			.register();
 		
 		PlayerMock player = server.addPlayer("APlayer");
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 		
 		// /test @e[gamemode=creative]
 		assertCommandFailsWith(player, "test @e[gamemode=creative]", "No player was found");
@@ -138,6 +144,8 @@ class ArgumentEntitySelectorTests extends TestBase {
 			.register();
 		
 		PlayerMock player = server.addPlayer("APlayer");
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 		
 		// /test APlayer
 		server.dispatchCommand(player, "test APlayer");
@@ -176,6 +184,8 @@ class ArgumentEntitySelectorTests extends TestBase {
 			.register();
 		
 		PlayerMock player = server.addPlayer("APlayer");
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 		server.addPlayer("APlayer1");
 		server.addPlayer("APlayer2");
 		server.addPlayer("APlayer3");
@@ -209,6 +219,8 @@ class ArgumentEntitySelectorTests extends TestBase {
 			.register();
 		
 		PlayerMock player = server.addPlayer("APlayer");
+		// Paper checks the minecraft.command.selector permission when selectors are used (Spigot doesn't)
+		player.setOp(true);
 		
 		// /test @e[type=pig]
 		assertCommandFailsWith(player, "test @e[type=pig]", "No entity was found");

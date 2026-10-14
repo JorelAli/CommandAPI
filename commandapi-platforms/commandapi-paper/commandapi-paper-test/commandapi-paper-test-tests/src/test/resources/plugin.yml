@@ -1,0 +1,5 @@
+name: CommandAPITest
+main: dev.jorel.commandapi.test.Main
+version: 0.0.1
+description: A mock Paper plugin for CommandAPI testing
+api-version: 1.20

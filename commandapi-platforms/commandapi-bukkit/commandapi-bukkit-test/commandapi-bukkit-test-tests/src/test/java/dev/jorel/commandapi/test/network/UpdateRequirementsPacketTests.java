@@ -41,8 +41,8 @@ class UpdateRequirementsPacketTests extends NetworkTestBase {
 		assertThrowsWithMessage(
 			ProtocolVersionTooOldException.class,
 			"Tried to send a packet to " + player + ", which is using protocol version 0. " +
-				"This system is using version 1. That version is too old to receive the packet. " +
-				"CommandAPI version 10.0.0 or greater is required to receive UpdateRequirementsPacket",
+				"This system is using version 1. That version is too old to receive the packet, or CommandAPI networking is not enabled. " +
+				"CommandAPI version 10.0.0 or greater is required to receive UpdateRequirementsPacket.",
 			() -> getSentBytes(player, new UpdateRequirementsPacket())
 		);
 

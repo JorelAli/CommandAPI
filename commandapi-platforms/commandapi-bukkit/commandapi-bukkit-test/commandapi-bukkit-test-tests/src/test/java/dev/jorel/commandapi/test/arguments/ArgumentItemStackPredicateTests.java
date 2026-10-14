@@ -57,17 +57,9 @@ class ArgumentItemStackPredicateTests extends TestBase {
 
 		PlayerMock player = server.addPlayer();
 
-		// I don't know why, but for some reason, in 1.20.5 you can't have
-		// an item predicate that doesn't contain a # character?
-		if (version.lessThan(MCVersion.V1_20_5)) {
-			// /test dirt
-			server.dispatchCommand(player, "test dirt");
-			assertTrue(results.get().test(new ItemStack(Material.DIRT)));
-		} else {
-			// /test #axes
-			server.dispatchCommand(player, "test #axes");
-			assertTrue(results.get().test(new ItemStack(Material.DIAMOND_AXE)));
-		}
+		// /test dirt
+		server.dispatchCommand(player, "test dirt");
+		assertTrue(results.get().test(new ItemStack(Material.DIRT)));
 
 		// TODO: Not sure why this fails, but it does!
 		// /test dirt
@@ -129,16 +121,19 @@ class ArgumentItemStackPredicateTests extends TestBase {
 		
 		// /test dirt{
 		// /test dirt[ (1.20.5+)
-		// NBT has no suggestions
 		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
-			assertEquals(List.of(), server.getSuggestions(player, "test dirt["));
+			// Components (and component predicates) are suggested, as well as ! to negate one and ] to close the list
+			List<String> suggestions = server.getSuggestions(player, "test dirt[");
+			assertEquals(List.of("!", "]"), suggestions.subList(0, 2));
+			assertTrue(suggestions.contains("minecraft:damage"));
 		} else {
+			// NBT has no suggestions
 			assertEquals(List.of(), server.getSuggestions(player, "test dirt{"));
 		}
 		
 		// /test dirt{}
 		// /test dirt[] (1.20.5+)
-		// NBT has no suggestions
+		// Nothing is suggested after the NBT or component list
 		if (version.greaterThanOrEqualTo(MCVersion.V1_20_5)) {
 			assertEquals(List.of(), server.getSuggestions(player, "test dirt[]"));
 		} else {

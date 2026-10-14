@@ -11,6 +11,7 @@ import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
@@ -71,6 +72,11 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static org.mockito.ArgumentMatchers.*;
+import net.minecraft.server.ReloadableServerRegistries;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import org.bukkit.entity.EntityType;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class MockNMS extends Enums {
 	private static final SafeVarHandle<HelpMapMock, Map<String, HelpTopic>> helpMapTopics =
@@ -93,10 +99,10 @@ public class MockNMS extends Enums {
 	Map<ResourceLocation, Collection<CommandFunction>> tags = new HashMap<>();
 	Stack<Integer> functionCallbackResults = new Stack<>();
 
-	public MockNMS(CommandAPIBukkit<?> baseNMS) {
+	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
 
-		CommandAPIBukkit<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
+		NMS<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
 		// Stub in our getMinecraftServer implementation
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		// Stub in our getSimpleCommandMap implementation
@@ -105,10 +111,6 @@ public class MockNMS extends Enums {
 		//  so we have to mock with `doAnswer` instead of `when`
 		Mockito.doAnswer(i -> getSimpleCommandMap()).when(nms).getSimpleCommandMap();
 		super.baseNMS = nms;
-
-		// Initialize baseNMS's paper field (with paper specific implementations disabled)
-		MockPlatform.setField(CommandAPIBukkit.class, "paper",
-			super.baseNMS, new PaperImplementations(false, false, super.baseNMS));
 
 //		initializeArgumentsInArgumentTypeInfos();
 
@@ -146,24 +148,10 @@ public class MockNMS extends Enums {
 			return null;
 		});
 		
-		// CraftBukkit's registry is shared across all instances of a test (or all tests?)
-		// Idk if we need to actually implement this, but it seems to make certain issues
-		// a little calmer
+		// CraftBukkit looks up particles, sounds, potion effects, etc. in this registry. It's normally the server's
+		//  registry, so use the built-in registries instead. The registry is shared across all tests.
 		if (CraftRegistry.getMinecraftRegistry() == null) {
-			RegistryAccess registry = Mockito.mock(RegistryAccess.class);
-			Mockito.when(registry.registry(any())).thenAnswer(args -> {
-				ResourceKey key = args.getArgument(0);
-//				System.out.println("Trying to access registry: " + key.registry());
-//				Thread.currentThread().dumpStack();
-				return Optional.ofNullable(null);
-			});
-			Mockito.when(registry.registryOrThrow(any())).thenAnswer(args -> {
-				ResourceKey key = args.getArgument(0);
-//				System.out.println("Trying to access registry: " + key.registry());
-//				Thread.currentThread().dumpStack();
-				return null;
-			});
-			CraftRegistry.setMinecraftRegistry(registry);
+			CraftRegistry.setMinecraftRegistry(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY));
 		}
 	}
 
@@ -172,7 +160,11 @@ public class MockNMS extends Enums {
 	 *************************/
 
 	private void unregisterAllPotionEffects() {
+		// Since 1.20.5, potion effects are registry-backed and these fields no longer exist
 		PotionEffectType[] byId = getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);
+		if (byId == null) {
+			return;
+		}
 		for (int i = 0; i < byId.length; i++) {
 			byId[i] = null;
 		}
@@ -231,7 +223,12 @@ public class MockNMS extends Enums {
 	}
 
 	private void unregisterAllEnchantments() {
-		getFieldAs(Enchantment.class, "byName", null, Map.class).clear();
+		// Since 1.20.5, enchantments are registry-backed and these fields no longer exist
+		Map<?, ?> byName = getFieldAs(Enchantment.class, "byName", null, Map.class);
+		if (byName == null) {
+			return;
+		}
+		byName.clear();
 		getFieldAs(Enchantment.class, "byKey", null, Map.class).clear();
 		setField(Enchantment.class, "acceptingNew", null, true);
 	}
@@ -568,38 +565,24 @@ public class MockNMS extends Enums {
 		}
 		minecraftServerMock = Mockito.mock(MinecraftServer.class);
 
-		// LootTableArgument
-//		Mockito.when(minecraftServerMock.getLootData()).thenAnswer(invocation -> {
-//			//.getKeys(LootDataType.TABLE)
-//			LootDataManager lootDataManager = Mockito.mock(LootDataManager.class);
-//			
-//			Mockito.when(lootDataManager.getLootTable(any(ResourceLocation.class))).thenAnswer(i -> {
-//				if (BuiltInLootTables.all().contains(i.getArgument(0))) {
-//					return net.minecraft.world.level.storage.loot.LootTable.EMPTY;
-//				} else {
-//					return null;
-//				}
-//			});
-//			
-//			Mockito.when(lootDataManager.getKeys(any())).thenAnswer(i -> {
-//				return Streams
-//					.concat(
-//						Arrays.stream(getEntityTypes())
-//							.filter(e -> !e.equals(EntityType.UNKNOWN))
-//							// TODO? These entity types don't have corresponding
-//							// loot table entries! Did Spigot miss them out?
-//							.filter(e -> !e.equals(EntityType.ALLAY))
-//							.filter(e -> !e.equals(EntityType.FROG))
-//							.filter(e -> !e.equals(EntityType.TADPOLE))
-//							.filter(e -> !e.equals(EntityType.WARDEN))
-//							.filter(e -> e.isAlive())
-//							.map(EntityType::getKey)
-//							.map(k -> new ResourceLocation("minecraft", "entities/" + k.getKey())),
-//						BuiltInLootTables.all().stream())
-//					.collect(Collectors.toSet());
-//			});
-//			return lootDataManager;
-//		});
+		// LootTableArgument. Since 1.20.5, loot tables are in the server's reloadable registries
+		ReloadableServerRegistries.Holder reloadableRegistries = Mockito.mock(ReloadableServerRegistries.Holder.class);
+		Mockito.when(reloadableRegistries.getKeys(any())).thenAnswer(i -> Stream
+			.concat(
+				Arrays.stream(getEntityTypes())
+					.filter(e -> !e.equals(EntityType.UNKNOWN))
+					// TODO? These entity types don't have corresponding
+					// loot table entries! Did Spigot miss them out?
+					.filter(e -> !e.equals(EntityType.ALLAY))
+					.filter(e -> !e.equals(EntityType.FROG))
+					.filter(e -> !e.equals(EntityType.TADPOLE))
+					.filter(e -> !e.equals(EntityType.WARDEN))
+					.filter(e -> e.isAlive())
+					.map(EntityType::getKey)
+					.map(k -> new ResourceLocation("minecraft", "entities/" + k.getKey())),
+				BuiltInLootTables.all().stream().map(ResourceKey::location))
+			.collect(Collectors.toSet()));
+		Mockito.when(minecraftServerMock.reloadableRegistries()).thenReturn(reloadableRegistries);
 
 		// AdvancementArgument
 		Mockito.when(minecraftServerMock.getAdvancements()).thenAnswer(i -> advancementDataWorld);
@@ -703,7 +686,19 @@ public class MockNMS extends Enums {
 		Mockito.when(minecraftServerMock.getGameRules()).thenAnswer(i -> new GameRules());
 		Mockito.when(minecraftServerMock.getProfiler()).thenAnswer(i -> InactiveMetricsRecorder.INSTANCE.getProfiler());
 
-		// Brigadier and resources dispatcher, used in `NMS#createCommandRegistrationStrategy`
+		setupCommandDispatchers(minecraftServerMock);
+
+		return (T) minecraftServerMock;
+	}
+
+	/**
+	 * Sets up the Brigadier and resources dispatchers, used in the platform's {@code createCommandRegistrationStrategy}.
+	 * This is Spigot-specific ({@code MinecraftServer#vanillaCommandDispatcher} and the no-argument {@link Commands}
+	 * constructor don't exist on Paper), so other platforms can override this.
+	 *
+	 * @param minecraftServerMock the mocked {@link MinecraftServer} to attach the dispatchers to
+	 */
+	protected void setupCommandDispatchers(MinecraftServer minecraftServerMock) {
 		Commands brigadierCommands = new Commands();
 		MockPlatform.setField(brigadierCommands.getClass(), "h", "dispatcher",
 			brigadierCommands, getMockBrigadierDispatcher());
@@ -713,8 +708,6 @@ public class MockNMS extends Enums {
 		MockPlatform.setField(resourcesCommands.getClass(), "h", "dispatcher",
 			resourcesCommands, getMockResourcesDispatcher());
 		Mockito.when(minecraftServerMock.getCommands()).thenReturn(resourcesCommands);
-
-		return (T) minecraftServerMock;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -763,7 +756,7 @@ public class MockNMS extends Enums {
 		Mockito.when(player.getWorld()).thenReturn(world);
 
 		// Provide proper handle as VanillaCommandWrapper expects
-		CommandSourceStack css = getBrigadierSourceFromCommandSender(wrapCommandSender(player));
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(CommandAPIBukkit.get().wrapCommandSender(player));
 
 		ServerPlayer handle = Mockito.mock(ServerPlayer.class);
 		Mockito.when(handle.createCommandSourceStack()).thenReturn(css);
@@ -838,7 +831,7 @@ public class MockNMS extends Enums {
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack clw) {
 		try {
-			return wrapCommandSender(clw.getBukkitSender());
+			return CommandAPIBukkit.get().wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -1040,10 +1033,5 @@ public class MockNMS extends Enums {
 	@Override
 	public Map<String, HelpTopic> getHelpMap() {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
-	}
-
-	@Override
-	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
-		return baseNMS.createCommandRegistrationStrategy();
 	}
 }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
 import dev.jorel.commandapi.arguments.RecipeArgument;
 import dev.jorel.commandapi.test.MockPlatform;
@@ -39,12 +40,21 @@ class ArgumentRecipeTests extends TestBase {
 		super.tearDown();
 	}
 
+	private void assumeBukkitRecipesWork() {
+		// MockBukkit 3.93.2's paper-api has an ItemStack#isEmpty that reads fields Spigot's CraftItemStack doesn't set,
+		//  so on Spigot 1.20.5 every recipe result looks empty and converting recipes to Bukkit recipes fails
+		assumeTrue(CommandAPIVersionHandler.IS_PAPER || version.lessThan(MCVersion.V1_20_5),
+			"Bukkit recipes can't be created on Spigot 1.20.5 with paper-api's ItemStack");
+	}
+
 	/*********
 	 * Tests *
 	 *********/
 
 	@Test
 	void executionTestWithRecipeArgument() {
+		assumeBukkitRecipesWork();
+
 		Mut<Recipe> results = Mut.of();
 
 		new CommandAPICommand("test")
@@ -68,6 +78,8 @@ class ArgumentRecipeTests extends TestBase {
 
 	@Test
 	void executionTestWithRecipeArgumentKeyed() {
+		assumeBukkitRecipesWork();
+
 		Mut<Keyed> results = Mut.of();
 
 		new CommandAPICommand("test")

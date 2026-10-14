@@ -12,6 +12,7 @@ import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
@@ -91,10 +92,10 @@ public class MockNMS extends Enums {
 	Map<ResourceLocation, CommandFunction> functions = new HashMap<>();
 	Map<ResourceLocation, Collection<CommandFunction>> tags = new HashMap<>();
 
-	public MockNMS(CommandAPIBukkit<?> baseNMS) {
+	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
 
-		CommandAPIBukkit<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
+		NMS<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
 		// Stub in our getMinecraftServer implementation
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		// Stub in our getSimpleCommandMap implementation
@@ -103,10 +104,6 @@ public class MockNMS extends Enums {
 		//  so we have to mock with `doAnswer` instead of `when`
 		Mockito.doAnswer(i -> getSimpleCommandMap()).when(nms).getSimpleCommandMap();
 		super.baseNMS = nms;
-
-		// Initialize baseNMS's paper field (with paper specific implementations disabled)
-		MockPlatform.setField(CommandAPIBukkit.class, "paper",
-			super.baseNMS, new PaperImplementations(false, false, super.baseNMS));
 
 //		initializeArgumentsInArgumentTypeInfos();
 
@@ -622,7 +619,7 @@ public class MockNMS extends Enums {
 		Mockito.when(player.getWorld()).thenReturn(world);
 
 		// Provide proper handle as VanillaCommandWrapper expects
-		CommandSourceStack css = getBrigadierSourceFromCommandSender(wrapCommandSender(player));
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(CommandAPIBukkit.get().wrapCommandSender(player));
 
 		ServerPlayer handle = Mockito.mock(ServerPlayer.class);
 		Mockito.when(handle.createCommandSourceStack()).thenReturn(css);
@@ -694,7 +691,7 @@ public class MockNMS extends Enums {
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack clw) {
 		try {
-			return wrapCommandSender(clw.getBukkitSender());
+			return CommandAPIBukkit.get().wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -893,8 +890,4 @@ public class MockNMS extends Enums {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
 	}
 
-	@Override
-	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
-		return baseNMS.createCommandRegistrationStrategy();
-	}
 }

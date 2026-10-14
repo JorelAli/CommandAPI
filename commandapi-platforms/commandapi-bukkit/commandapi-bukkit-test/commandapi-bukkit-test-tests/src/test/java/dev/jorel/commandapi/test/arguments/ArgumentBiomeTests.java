@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.arguments.BiomeArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -61,8 +62,13 @@ class ArgumentBiomeTests extends TestBase {
 		assertEquals(Biome.PLAINS, results.get());
 		
 		// /test unknownbiome
-		server.dispatchCommand(player, "test unknownbiome");
-		assertNull(results.get());
+		if (CommandAPIVersionHandler.IS_PAPER) {
+			// Paper's biome argument only accepts biomes that exist
+			assertCommandFailsWith(player, "test unknownbiome", "Can't find element 'minecraft:unknownbiome' of type 'minecraft:worldgen/biome' at position 17: ...knownbiome<--[HERE]");
+		} else {
+			server.dispatchCommand(player, "test unknownbiome");
+			assertNull(results.get());
+		}
 
 		assertNoMoreResults(results);
 	}
@@ -111,13 +117,19 @@ class ArgumentBiomeTests extends TestBase {
 		server.dispatchCommand(player, "test minecraft:plains");
 		assertEquals(NamespacedKey.minecraft("plains"), results.get());
 		
-		// /test unknownbiome
-		server.dispatchCommand(player, "test unknownbiome");
-		assertEquals(NamespacedKey.minecraft("unknownbiome"), results.get());
-		
-		// /test mynamespace:unknownbiome
-		server.dispatchCommand(player, "test mynamespace:unknownbiome");
-		assertEquals(new NamespacedKey("mynamespace", "unknownbiome"), results.get());
+		if (CommandAPIVersionHandler.IS_PAPER) {
+			// Paper's biome argument only accepts biomes that exist
+			assertCommandFailsWith(player, "test unknownbiome", "Can't find element 'minecraft:unknownbiome' of type 'minecraft:worldgen/biome' at position 17: ...knownbiome<--[HERE]");
+			assertCommandFailsWith(player, "test mynamespace:unknownbiome", "Can't find element 'mynamespace:unknownbiome' of type 'minecraft:worldgen/biome' at position 29: ...knownbiome<--[HERE]");
+		} else {
+			// /test unknownbiome
+			server.dispatchCommand(player, "test unknownbiome");
+			assertEquals(NamespacedKey.minecraft("unknownbiome"), results.get());
+
+			// /test mynamespace:unknownbiome
+			server.dispatchCommand(player, "test mynamespace:unknownbiome");
+			assertEquals(new NamespacedKey("mynamespace", "unknownbiome"), results.get());
+		}
 
 		assertNoMoreResults(results);
 	}
