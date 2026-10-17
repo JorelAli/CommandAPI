@@ -86,7 +86,7 @@ sed -i "s/dev\.jorel:commandapi-velocity-core:$oldVer/dev\.jorel:commandapi-velo
 # CommandAPI project gradle build #
 ###################################
 
-sed -i "s/version = \"$oldVer\"/version = \"$newVer\"/" buildSrc/src/main/kotlin/buildlogic.java-conventions.gradle.kts
+sed -i "s/^version=$oldVer$/version=$newVer/" gradle.properties
 
 #############################
 # Print manual update notes #

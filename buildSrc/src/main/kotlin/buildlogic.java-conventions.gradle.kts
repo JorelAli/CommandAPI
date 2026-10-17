@@ -29,9 +29,6 @@ repositories {
 	}
 }
 
-group = "dev.jorel"
-version = "12.2.0-SNAPSHOT"
-
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(25)
