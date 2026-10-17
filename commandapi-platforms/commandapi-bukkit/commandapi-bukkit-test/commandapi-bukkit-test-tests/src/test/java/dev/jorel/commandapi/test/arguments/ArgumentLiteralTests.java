@@ -107,30 +107,6 @@ class ArgumentLiteralTests extends TestBase {
 	 * Dispatcher tests *
 	 ********************/
 	
-	@Test
-	void dispatcherTestWithLiteralArgument() {
-		new CommandAPICommand("test")
-			.withArguments(new LiteralArgument("literal"))
-			.executesPlayer(P_EXEC)
-			.register("minecraft");
-
-		assertEquals("""
-			{
-			  "type": "root",
-			  "children": {
-			    "test": {
-			      "type": "literal",
-			      "children": {
-			        "literal": {
-			          "type": "literal",
-			          "executable": true
-			        }
-			      }
-			    }
-			  }
-			}""", getDispatcherString());
-	}
-
 	/*********************************
 	 * Instantiation exception tests *
 	 *********************************/

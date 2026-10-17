@@ -3,7 +3,7 @@ package dev.jorel.commandapi.test.arguments;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
-import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -77,7 +77,7 @@ class ArgumentGreedyStringTests extends TestBase {
 
 		assertThrows(GreedyArgumentException.class, () -> new CommandAPICommand("test")
 			.withArguments(new GreedyStringArgument("greedy"))
-			.withArguments(new PlayerArgument("player"))
+			.withArguments(new EntitySelectorArgument.OnePlayer("player"))
 			.executesPlayer(P_EXEC)
 			.register());
 

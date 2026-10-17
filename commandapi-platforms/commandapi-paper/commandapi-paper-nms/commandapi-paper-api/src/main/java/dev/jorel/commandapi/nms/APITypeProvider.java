@@ -56,6 +56,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
@@ -449,7 +450,8 @@ public class APITypeProvider implements BundledNMS<CommandSourceStack> {
 	public RegistryParser<Biome> getBiome(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return new RegistryParser<>(
 			() -> cmdCtx.getArgument(key, Biome.class),
-			() -> cmdCtx.getArgument(key, Biome.class).getKey()
+			// Biome is an enum before 1.21.3, so call getKey through Keyed, which works for both
+			() -> ((Keyed) cmdCtx.getArgument(key, Biome.class)).getKey()
 		);
 	}
 
@@ -707,13 +709,23 @@ public class APITypeProvider implements BundledNMS<CommandSourceStack> {
 		return paperNMS.bukkitNMS().getSimpleCommandMap();
 	}
 
+	@SuppressWarnings("deprecation")
+	private static Registry<Sound> getSoundRegistry() {
+		try {
+			return Registry.SOUND_EVENT;
+		} catch (NoSuchFieldError e) {
+			// Older Paper versions only have the (now deprecated) Registry#SOUNDS
+			return Registry.SOUNDS;
+		}
+	}
+
 	@Override
 	public RegistryParser<Sound> getSound(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return parse(cmdCtx, key,
 			(ctx, name) -> {
 				NamespacedKey namespace = ctx.getArgument(name, NamespacedKey.class);
 				return new RegistryParser<>(
-					() -> Registry.SOUND_EVENT.get(namespace),
+					() -> getSoundRegistry().get(namespace),
 					() -> namespace
 				);
 			},

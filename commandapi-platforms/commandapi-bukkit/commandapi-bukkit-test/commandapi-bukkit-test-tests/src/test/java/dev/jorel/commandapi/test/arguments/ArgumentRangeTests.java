@@ -3,10 +3,10 @@ package dev.jorel.commandapi.test.arguments;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.IntegerRangeArgument;
-import dev.jorel.commandapi.arguments.FloatRangeArgument;
+import dev.jorel.commandapi.arguments.DoubleRangeArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
-import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.DoubleRange;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests for the range arguments {@link IntegerRangeArgument} and {@link FloatRangeArgument}
+ * Tests for the range arguments {@link IntegerRangeArgument} and {@link DoubleRangeArgument}
  */
 class ArgumentRangeTests extends TestBase {
 
@@ -99,50 +99,50 @@ class ArgumentRangeTests extends TestBase {
 	}
 
 	@Test
-	void executionTestWithFloatRangeArgument() {
-		Mut<FloatRange> results = Mut.of();
+	void executionTestWithDoubleRangeArgument() {
+		Mut<DoubleRange> results = Mut.of();
 
 		new CommandAPICommand("test")
-			.withArguments(new FloatRangeArgument("value"))
+			.withArguments(new DoubleRangeArgument("value"))
 			.executesPlayer((player, args) -> {
-				results.set((FloatRange) args.get(0));
+				results.set((DoubleRange) args.get(0));
 			})
 			.register();
 
 		PlayerMock player = server.addPlayer();
 
-		String floatMinValue = String.format(Locale.ENGLISH, "%f", -Float.MAX_VALUE);
-		String floatMaxValue = String.format(Locale.ENGLISH, "%f", Float.MAX_VALUE);
+		String floatMinValue = String.format(Locale.ENGLISH, "%f", -Double.MAX_VALUE);
+		String floatMaxValue = String.format(Locale.ENGLISH, "%f", Double.MAX_VALUE);
 
 		// /test 0.0..10.0
-		FloatRange testZeroToTen = new FloatRange(0.0F, 10.0F);
+		DoubleRange testZeroToTen = new DoubleRange(0.0, 10.0);
 		server.dispatchCommand(player, "test 0.0..10.0");
 		assertEquals(testZeroToTen, results.get());
 
 		// /test -10.0..0.0
-		FloatRange testMinusTenToZero = new FloatRange(-10.0F, 0.0F);
+		DoubleRange testMinusTenToZero = new DoubleRange(-10.0, 0.0);
 		server.dispatchCommand(player, "test -10.0..0.0");
 		assertEquals(testMinusTenToZero, results.get());
 
 		// /test 10.0
-		FloatRange testTenToTen = new FloatRange(10.0F, 10.0F);
+		DoubleRange testTenToTen = new DoubleRange(10.0, 10.0);
 		server.dispatchCommand(player, "test 10.0");
 		assertEquals(testTenToTen, results.get());
 
-		// /test -Float.MAX_VALUE..Float.MAX_VALUE
-		FloatRange testMinIntToMaxInt = new FloatRange(-Float.MAX_VALUE, Float.MAX_VALUE);
+		// /test -Double.MAX_VALUE..Double.MAX_VALUE
+		DoubleRange testMinIntToMaxInt = new DoubleRange(-Double.MAX_VALUE, Double.MAX_VALUE);
 		String floatMinToMax = "test " + floatMinValue + ".." + floatMaxValue;
 		server.dispatchCommand(player, floatMinToMax);
 		assertEquals(testMinIntToMaxInt, results.get());
 
-		// /test ..Float.MAX_VALUE
-		FloatRange testMinIntToMaxIntWithoutLower = FloatRange.floatRangeLessThanOrEq(Float.MAX_VALUE);
+		// /test ..Double.MAX_VALUE
+		DoubleRange testMinIntToMaxIntWithoutLower = DoubleRange.doubleRangeLessThanOrEq(Double.MAX_VALUE);
 		String floatUntilMax = "test .." + floatMaxValue;
 		server.dispatchCommand(player, floatUntilMax);
 		assertEquals(testMinIntToMaxIntWithoutLower, results.get());
 
 		// /test -2147483648..
-		FloatRange testMinIntToMaxIntWithoutUpper = FloatRange.floatRangeGreaterThanOrEq(-Float.MAX_VALUE);
+		DoubleRange testMinIntToMaxIntWithoutUpper = DoubleRange.doubleRangeGreaterThanOrEq(-Double.MAX_VALUE);
 		String floatFromMin = "test " + floatMinValue + "..";
 		server.dispatchCommand(player, floatFromMin);
 		assertEquals(testMinIntToMaxIntWithoutUpper, results.get());
@@ -174,9 +174,9 @@ class ArgumentRangeTests extends TestBase {
 	}
 
 	@Test
-	void suggestionTestWithFloatRangeArgument() {
+	void suggestionTestWithDoubleRangeArgument() {
 		new CommandAPICommand("test")
-			.withArguments(new FloatRangeArgument("value"))
+			.withArguments(new DoubleRangeArgument("value"))
 			.executesPlayer(P_EXEC)
 			.register();
 

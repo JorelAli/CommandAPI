@@ -55,7 +55,7 @@ class ArgumentCommandTests extends TestBase {
 				results.set((CommandResult) args.get(0));
 			}).register();
 
-		CommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
+		CommandMap commandMap = CommandAPIBukkit.get().getNMS().getSimpleCommandMap();
 
 		PlayerMock player = server.addPlayer("APlayer");
 		
@@ -87,7 +87,7 @@ class ArgumentCommandTests extends TestBase {
 				results.set((CommandResult) args.get(0));
 			}).register();
 
-		CommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
+		CommandMap commandMap = CommandAPIBukkit.get().getNMS().getSimpleCommandMap();
 		registerDummyCommands(commandMap, "give", "data", "tp");
 
 		PlayerMock player = server.addPlayer("APlayer");
@@ -165,7 +165,7 @@ class ArgumentCommandTests extends TestBase {
 				results.set((CommandResult) args.get(0));
 			}).register();
 
-		CommandMap commandMap = CommandAPIBukkit.get().getSimpleCommandMap();
+		CommandMap commandMap = CommandAPIBukkit.get().getNMS().getSimpleCommandMap();
 		registerDummyCommands(commandMap, "give", "data", "tp");
 
 		PlayerMock player = server.addPlayer("APlayer");

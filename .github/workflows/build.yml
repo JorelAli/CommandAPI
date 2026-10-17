@@ -33,7 +33,7 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ matrix.java }}
-          cache: maven
+          cache: gradle
 
       - name: Checkout the BytecodeAnalyser repository
         run: |
@@ -54,98 +54,87 @@ jobs:
 
       ### Check NMS_Common compiles against all compatible Minecraft versions
 
-#      - name: Compile NMS_Common for 1.20 and 1.20.1
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_20_R1
-#
-#      - name: Compile NMS_Common for 1.20.2
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_20_R2
-#
-#      - name: Compile NMS_Common for 1.20.3 and 1.20.4
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_20_R3
-#
-#      - name: Compile NMS_Common for 1.20.5 and 1.20.6
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_20_R4
-#
-#      - name: Compile NMS_Common for 1.21 and 1.21.1
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_21_R1
-#
-#      - name: Compile NMS_Common for 1.21.2 and 1.21.3
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_21_R2
-#
-#      - name: Compile NMS_Common for 1.21.4
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_21_R3
-#
-#      - name: Compile NMS_Common for 1.21.5
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_21_R4
-#
-#      - name: Compile NMS_Common for 1.21.6 and 1.21.7 and 1.21.8
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_21_R5
-#
-#      - name: Compile NMS_Common for 1.21.9 and 1.21.10
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_21_R6
-#
-#      - name: Compile NMS_Common for 1.21.11
-#        run: mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,Spigot_1_21_R7
-#
-#      - name: Copy BytecodeAnalyser to nms-common target folder
-#        run: mv BytecodeAnalyser/build/libs/BytecodeAnalyser*.jar commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/target
-#
-#      - name: Run BytecodeAnalyser
-#        run: |
-#            cd commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/target
-#            chmod +x BytecodeAnalyser*.jar
-#            java -jar BytecodeAnalyser*.jar
+      - name: Compile NMS_Common for 1.20 and 1.20.1
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.20.1
 
-      # - name: validate version-specific dependencies (nms-common)
-      #   run: |
-      #     nms_common_path="commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/target/classes/dev/jorel/commandapi/nms/NMS_Common.class"
-      #     if ! command -v javap &> /dev/null
-      #     then
-      #         echo "javap could not be found, skipping NMS Common validation check"
-      #         exit
-      #     else
-      #         javapcommand=$(javap -v $nms_common_path | grep -E '#[0-9]+ = Class ' | cut -c 46- | sort | grep 'org/bukkit/craftbukkit')
-      #         if [[ -n "$javapcommand" ]]; then
-      #             echo "NMS Common has version-specific dependencies!"
-      #             echo $javapcommand
-      #             exit 1
-      #         else
-      #             echo "NMS Common has no version-specific dependencies :)"
-      #         fi
-      #     fi
+      - name: Compile NMS_Common for 1.20.2
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.20.2
+
+      - name: Compile NMS_Common for 1.20.3 and 1.20.4
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.20.4
+
+      - name: Compile NMS_Common for 1.20.5 and 1.20.6
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.20.6
+
+      - name: Compile NMS_Common for 1.21 and 1.21.1
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.21.1
+
+      - name: Compile NMS_Common for 1.21.2 and 1.21.3
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.21.3
+
+      - name: Compile NMS_Common for 1.21.4
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.21.4
+
+      - name: Compile NMS_Common for 1.21.5
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.21.5
+
+      - name: Compile NMS_Common for 1.21.6 and 1.21.7 and 1.21.8
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.21.6
+
+      - name: Compile NMS_Common for 1.21.9 and 1.21.10
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.21.9
+
+      - name: Compile NMS_Common for 1.21.11
+        run: ./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion=1.21.11
+
+      - name: Copy BytecodeAnalyser to nms-common build folder
+        run: mv BytecodeAnalyser/build/libs/BytecodeAnalyser*.jar commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/build
+
+      - name: Run BytecodeAnalyser
+        run: |
+            cd commandapi-platforms/commandapi-bukkit/commandapi-bukkit-nms/commandapi-bukkit-nms-common/build
+            chmod +x BytecodeAnalyser*.jar
+            java -jar BytecodeAnalyser*.jar
 
       ### Bukkit tests across all NMS versions ###
       # Dev note: Yes, I know I could put this under one run section, but it's a million times easier
       # to see which version failed when it's got the version name and subsection in GitHub Actions
 
-      - name: Run Bukkit unit tests across all versions (1.20.5 - 1.20.6)
-        continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_5
+      - name: Run Paper unit tests across all versions (1.20.5 - 1.20.6)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-paper-test-tests:clean :commandapi-paper-test-tests:test
 
-      - name: Run Bukkit unit tests across all versions (Mojang Mapped 1.20.5 - 1.20.6)
-        continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_5_Mojang
+      - name: Run Spigot unit tests across all versions (1.20.5 - 1.20.6)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_5
 
-      - name: Run Bukkit unit tests across all versions (1.20.3 - 1.20.4)
-        continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_3
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20.5 - 1.20.6)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_5_Mojang
 
-      - name: Run Bukkit unit tests across all versions (1.20.2)
-        continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_2
+      - name: Run Spigot unit tests across all versions (1.20.3 - 1.20.4)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_3
 
-      - name: Run Bukkit unit tests across all versions (1.20 - 1.20.1)
-        continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20.3 - 1.20.4)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_3_Mojang
 
-      - name: Run Bukkit unit tests across all versions (Mojang Mapped 1.20 - 1.20.1)
-        continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-test-tests -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20_Mojang
+      - name: Run Spigot unit tests across all versions (1.20.2)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_2
 
-      # It doesn't matter which version the Kotlin DSL uses. It should be version independent
-      - name: Run Bukkit Kotlin DSL unit tests
-        continue-on-error: true
-        run: mvn clean package -pl :commandapi-bukkit-kotlin-test -P Platform.Bukkit -Dmaven.javadoc.skip=true -P Minecraft_1_20
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20.2)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_2_Mojang
+
+      - name: Run Spigot unit tests across all versions (1.20 - 1.20.1)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20
+
+      - name: Run Spigot unit tests across all versions (Mojang Mapped 1.20 - 1.20.1)
+        # continue-on-error: true
+        run: ./gradlew :commandapi-spigot-test-tests:clean :commandapi-spigot-test-tests:test -PtestProfile=Minecraft_1_20_Mojang
 
       ### Upload .jar artifacts ###
 
@@ -155,7 +144,7 @@ jobs:
         with:
           name: CommandAPI (Spigot plugin)
           path: |
-            commandapi-platforms/commandapi-spigot/commandapi-spigot-plugin/build/libs/commandapi-spigot-plugin-*-all.jar
+            commandapi-platforms/commandapi-spigot/commandapi-spigot-plugin/build/libs/commandapi-spigot-plugin-*.jar
 
       - name: Upload CommandAPI (Paper) plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '25' }} # Only upload artifacts built from latest java on one OS
@@ -163,7 +152,7 @@ jobs:
         with:
             name: CommandAPI (Paper plugin)
             path: |
-              commandapi-platforms/commandapi-paper/commandapi-paper-plugin/build/libs/commandapi-paper-plugin-*-all.jar
+              commandapi-platforms/commandapi-paper/commandapi-paper-plugin/build/libs/commandapi-paper-plugin-*.jar
 
       - name: Upload CommandAPI (Velocity) plugin artifact
         if: ${{ runner.os == 'Linux' && matrix.java == '25' }} # Only upload artifacts built from latest java on one OS
@@ -171,7 +160,7 @@ jobs:
         with:
           name: CommandAPI (Velocity plugin)
           path: |
-            commandapi-platforms/commandapi-velocity/commandapi-velocity-plugin/build/libs/commandapi-velocity-plugin-*-all.jar
+            commandapi-platforms/commandapi-velocity/commandapi-velocity-plugin/build/libs/commandapi-velocity-plugin-*.jar
 
       ### Examples ###
 

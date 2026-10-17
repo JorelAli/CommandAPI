@@ -27,7 +27,6 @@ public class NetworkTestBase extends TestBase {
 	public void setUp() {
 		// Load and enable
 		super.setUp();
-		disablePaperImplementations();
 		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
 
 		// Mock messenger

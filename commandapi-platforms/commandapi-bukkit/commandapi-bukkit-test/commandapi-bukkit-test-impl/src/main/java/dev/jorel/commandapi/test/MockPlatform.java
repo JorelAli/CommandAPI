@@ -5,8 +5,8 @@ import com.google.gson.JsonParser;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
-import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.SafeVarHandle;
+import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -35,7 +35,7 @@ import org.bukkit.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
+public abstract class MockPlatform<CLW> implements NMS<CLW> {
 	/*****************
 	 * Instantiation *
 	 *****************/
@@ -92,11 +92,6 @@ public abstract class MockPlatform<CLW> extends CommandAPIBukkit<CLW> {
 	@Override
 	public final String convert(Sound sound) {
 		throw new UnimplementedError();
-	}
-
-	@Override
-	public final void reloadDataPacks() {
-		assert true; // Nothing to do here
 	}
 
 	/******************

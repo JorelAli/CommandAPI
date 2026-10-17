@@ -2,15 +2,19 @@ plugins {
 	id("buildlogic.java-conventions")
 }
 
-description = "null"
+description = "CommandAPI - Bukkit tests shared between the platforms"
 
-dependencies {
-	implementation(libs.org.mockito.mockito.core)
-	implementation(libs.dev.jorel.commandapi.bukkit.test.impl)
-	implementation(libs.dev.jorel.commandapi.bukkit.plugin.common)
-	compileOnly(libs.com.mojang.brigadier)
-	compileOnly(libs.de.tr7zw.item.nbt.api)
-	compileOnly(libs.com.saicone.rtag.rtag)
-	testImplementation(libs.org.junit.jupiter.junit.jupiter.engine)
-	implementation(libs.com.github.zafarkhaja.java.semver)
+/*
+   The tests in this module are shared between the Bukkit platforms. They are compiled and run by
+   commandapi-paper-test-tests and commandapi-spigot-test-tests, which provide the platform's
+   CommandAPIVersionHandler and Main, and exclude the tests that need another platform's implementation.
+
+   This module's own CommandAPIVersionHandler and Main are no longer used, so the tests aren't compiled here.
+*/
+tasks.named("compileTestJava") {
+	enabled = false
+}
+
+tasks.named("test") {
+	enabled = false
 }

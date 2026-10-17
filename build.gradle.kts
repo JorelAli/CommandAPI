@@ -1,12 +1,12 @@
 import io.papermc.hangarpublishplugin.model.Platforms
 
 plugins {
+	base
 	id("io.papermc.paperweight.userdev") version "2.0.0-beta.21" apply false
 	id("com.gradleup.shadow") version "9.6.1" apply false
 	id("buildlogic.spigot-remap") apply false
 	id("com.modrinth.minotaur") version "2.+" apply false
 	id("io.papermc.hangar-publish-plugin") version "0.1.5-SNAPSHOT"
-	id("buildlogic.java-conventions")
 	id("buildlogic.github-publish")
 	id("com.vanniktech.maven.publish") version "0.37.0" apply false
 }

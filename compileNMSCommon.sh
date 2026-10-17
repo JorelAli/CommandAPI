@@ -1,16 +1,16 @@
 compileVersion() {
 	echo "Compiling NMS_Common for Spigot $1..."
-	mvn clean package -Dmaven.source.skip=true -Dmaven.javadoc.skip=true -pl :commandapi-bukkit-nms-common -am -P Platform.Bukkit,"$2" --quiet
+	./gradlew :commandapi-bukkit-nms-common:clean :commandapi-bukkit-nms-common:build -PnmsCommonVersion="$2" --quiet
 }
 
-compileVersion "1.20 and 1.20.1" "Spigot_1_20_R1"
-compileVersion "1.20.2" "Spigot_1_20_R2"
-compileVersion "1.20.3 and 1.20.4" "Spigot_1_20_R3"
-compileVersion "1.20.5 and 1.20.6" "Spigot_1_20_R4"
-compileVersion "1.21 and 1.21.1" "Spigot_1_21_R1"
-compileVersion "1.21.2 and 1.21.3" "Spigot_1_21_R2"
-compileVersion "1.21.4" "Spigot_1_21_R3"
-compileVersion "1.21.5" "Spigot_1_21_R4"
-compileVersion "1.21.6 and 1.21.7 and 1.21.8" "Spigot_1_21_R5"
-compileVersion "1.21.9 and 1.21.10" "Spigot_1_21_R6"
-compileVersion "1.21.11" "Spigot_1_21_R7"
+compileVersion "1.20 and 1.20.1" "1.20.1"
+compileVersion "1.20.2" "1.20.2"
+compileVersion "1.20.3 and 1.20.4" "1.20.4"
+compileVersion "1.20.5 and 1.20.6" "1.20.6"
+compileVersion "1.21 and 1.21.1" "1.21.1"
+compileVersion "1.21.2 and 1.21.3" "1.21.3"
+compileVersion "1.21.4" "1.21.4"
+compileVersion "1.21.5" "1.21.5"
+compileVersion "1.21.6 and 1.21.7 and 1.21.8" "1.21.6"
+compileVersion "1.21.9 and 1.21.10" "1.21.9"
+compileVersion "1.21.11" "1.21.11"

@@ -938,7 +938,7 @@ public abstract class NMS_26_Common implements NMS<CommandSourceStack> {
 	public RegistryParser<PotionEffectType> getPotionEffect(CommandContext<CommandSourceStack> cmdCtx, String key) {
 		return new RegistryParser<>(
 			() -> CraftPotionEffectType.minecraftToBukkit(ResourceArgument.getMobEffect(cmdCtx, key).value()),
-			() -> fromResourceLocation(IdentifierArgument.getId(cmdCtx, key))
+			() -> fromResourceLocation(ResourceArgument.getMobEffect(cmdCtx, key).key().identifier())
 		);
 	}
 

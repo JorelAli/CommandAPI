@@ -5,8 +5,10 @@ plugins {
 description = "CommandAPI - Bukkit support test library implementation"
 
 dependencies {
-	implementation(libs.dev.jorel.commandapi.bukkit.shade)
 	compileOnly(libs.com.mojang.brigadier)
-	compileOnly(libs.spigot.version.common)
-	compileOnly(libs.paper.version.bukkit.common)
+	compileOnly(spigot.version.common)
+	compileOnly(paper.version.bukkit.common)
+
+	// Previously commandapi-bukkit-shade
+	api(project(":commandapi-bukkit-core"))
 }

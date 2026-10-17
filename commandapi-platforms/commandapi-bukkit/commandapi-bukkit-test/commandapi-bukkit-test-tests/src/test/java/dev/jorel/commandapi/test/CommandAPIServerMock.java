@@ -21,6 +21,7 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemFactory;
+import org.bukkit.loot.LootTable;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.permissions.Permissible;
@@ -169,8 +170,18 @@ public class CommandAPIServerMock extends ServerMock {
 //		}
 	}
 	
+	// Loot tables
+
+	@Override
+	public LootTable getLootTable(@NotNull NamespacedKey key) {
+		// MockBukkit doesn't implement this, but Paper's LootTableArgument uses it to look up the loot table
+		LootTable lootTable = Mockito.mock(LootTable.class);
+		Mockito.when(lootTable.getKey()).thenReturn(key);
+		return lootTable;
+	}
+
 	// World mocking
-	
+
 	static class CustomWorldMock extends WorldMock {
 		
 		@Override

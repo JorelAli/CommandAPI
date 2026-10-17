@@ -6,11 +6,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 
-import dev.jorel.commandapi.CommandAPIBukkit;
+import dev.jorel.commandapi.nms.NMS;
 
 public abstract class Enums extends ArgumentNMS {
 
-	protected Enums(CommandAPIBukkit<?> baseNMS) {
+	protected Enums(NMS<?> baseNMS) {
 		super(baseNMS);
 	}
 

@@ -20,7 +20,7 @@ rootProject.name = "commandapi"
 
 val profile = providers.gradleProperty("profile").getOrElse("default")
 
-val permanentlyExcluded = listOf("sponge", "bukkit-test:")
+val permanentlyExcluded = listOf("sponge")
 val excludedModules = mapOf(
 	"default" to setOf(),
 	"bukkit" to setOf("velocity"),

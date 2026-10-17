@@ -63,45 +63,52 @@ class CommandAPIMessengerTests extends NetworkTestBase {
 		assertDoesNotThrow(() -> assertNull(getHandledPacket(player, "commandapi:play", new byte[0])));
 
 
+		// Exceptions while reading are wrapped to say who sent the data and what it was
 		// Invalid packet ids are unknown
-		assertThrowsWithMessage(
-			IllegalStateException.class,
-			"Unknown packet id: -1",
+		assertReadingPacketFails(player, "commandapi:play",
 			// ID is a VarInt, which encodes -1 as {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x0f}
 			//  Also added some data after the id here
-			() -> getHandledPacket(player, "commandapi:play",
-				new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x0f, 0, 0})
+			new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x0f, 0, 0},
+			"FF, FF, FF, FF, 0F, 00, 00",
+			"Unknown packet id: -1 for channel: commandapi:play"
 		);
-		assertThrowsWithMessage(
-			IllegalStateException.class,
-			"Unknown packet id: 2147483647",
+		assertReadingPacketFails(player, "commandapi:play",
 			// ID is a VarInt, which encodes 2147483647 as {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x07}
 			//  Also added some data after the id here
-			() -> getHandledPacket(player, "commandapi:play",
-				new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x07, 0, 0})
+			new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x07, 0, 0},
+			"FF, FF, FF, FF, 07, 00, 00",
+			"Unknown packet id: 2147483647 for channel: commandapi:play"
 		);
 
 
 		// Packet expected more bytes after given data
-		IllegalStateException exception = assertThrowsWithMessage(
-			IllegalStateException.class,
-			"Exception while reading packet",
+		assertReadingPacketFails(player, "commandapi:handshake",
 			// SetVersionPacket reads a VarInt, so setting the continue bit with nothing after goes out of bounds
-			() -> getHandledPacket(player, "commandapi:handshake", new byte[]{0, (byte) 0x80})
+			new byte[]{0, (byte) 0x80},
+			"00, 80",
+			"Read index (2) cannot be greater than or equal to write index (2)"
 		);
-		Throwable cause = exception.getCause();
-		assertTrue(cause instanceof IllegalStateException);
-		assertEquals("Read index (2) cannot be greater than or equal to write index (2)", cause.getMessage());
 
 
 		// Extra bytes found after expected packet data
-		assertThrowsWithMessage(
-			IllegalStateException.class,
-			"Packet was larger than expected! 2 extra byte(s) found after deserializing.\n" +
-				"Given: [0, 0, 0], Read: UpdateRequirementsPacket[]",
+		assertReadingPacketFails(player, "commandapi:play",
 			// UpdateRequirementsPacket expects no data after id (0)
-			() -> getHandledPacket(player, "commandapi:play", new byte[]{0, 0, 0})
+			new byte[]{0, 0, 0},
+			"00, 00, 00",
+			"Packet was larger than expected! 2 extra byte(s) found after deserializing.\n" +
+				"Read: UpdateRequirementsPacket[]"
 		);
+	}
+
+	private void assertReadingPacketFails(Player player, String channel, byte[] message, String hexMessage, String causeMessage) {
+		IllegalStateException exception = assertThrowsWithMessage(
+			IllegalStateException.class,
+			"Exception while reading packet sent by " + player + " [" + hexMessage + "]",
+			() -> getHandledPacket(player, channel, message)
+		);
+		Throwable cause = exception.getCause();
+		assertInstanceOf(IllegalStateException.class, cause);
+		assertEquals(causeMessage, cause.getMessage());
 	}
 
 	@Test

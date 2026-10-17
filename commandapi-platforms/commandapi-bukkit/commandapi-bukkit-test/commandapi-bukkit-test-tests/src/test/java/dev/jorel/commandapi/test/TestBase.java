@@ -40,7 +40,6 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.MCVersion;
-import dev.jorel.commandapi.PaperImplementations;
 import dev.jorel.commandapi.SafeVarHandle;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
 
@@ -75,11 +74,12 @@ public abstract class TestBase {
 	}
 
 	public void tearDown() {
-		if(server != null) {
+		if (server != null && plugin != null) {
 			Bukkit.getScheduler().cancelTasks(plugin);
-			if (plugin != null) {
-				plugin.onDisable();
-			}
+			plugin.onDisable();
+		}
+		// Always unmock, so a failure while setting up doesn't make every following test fail with "Already mocking"
+		if (MockBukkit.isMocked()) {
 			MockBukkit.unmock();
 		}
 		server = null;
@@ -90,7 +90,6 @@ public abstract class TestBase {
 	public void enableServer() {
 		// Run the CommandAPI's enable tasks
 		assertTrue(CommandAPI.canRegister(), "Server was already enabled! Cannot enable twice!");
-		disablePaperImplementations();
 		Bukkit.getPluginManager().callEvent(new ServerLoadEvent(ServerLoadEvent.LoadType.STARTUP));
 		assertDoesNotThrow(() -> server.getScheduler().performOneTick());
 		assertFalse(CommandAPI.canRegister());
@@ -177,9 +176,6 @@ public abstract class TestBase {
 		System.out.println("List 2 has the following extra items: " + s2_2);
 	}
 	
-	public static void disablePaperImplementations() {
-		MockPlatform.setField(PaperImplementations.class, "isPaperPresent", MockPlatform.get().getPaper(), false);
-	}
 	
 	/***************
 	 * Suggestions *

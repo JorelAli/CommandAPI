@@ -1,44 +1,16 @@
 package dev.jorel.commandapi.test;
 
-import static org.mockito.ArgumentMatchers.any;
-
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
-import org.bukkit.Axis;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.loot.LootTable;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Team;
-import org.mockito.Mockito;
-
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-
-import dev.jorel.commandapi.CommandAPIBukkit;
 import dev.jorel.commandapi.arguments.ArgumentSubType;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.arguments.parser.EntitySelectorParser;
+import dev.jorel.commandapi.arguments.parser.RegistryParser;
+import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.wrappers.DoubleRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 import dev.jorel.commandapi.wrappers.Location2D;
@@ -47,9 +19,6 @@ import dev.jorel.commandapi.wrappers.ParticleData;
 import dev.jorel.commandapi.wrappers.Rotation;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ParticleArgument;
@@ -64,6 +33,34 @@ import net.minecraft.core.HolderOwner;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import org.bukkit.Axis;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.loot.LootTable;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
+import org.mockito.Mockito;
+
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Argument related method implementations
@@ -71,10 +68,10 @@ import net.minecraft.resources.ResourceKey;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 
-	CommandAPIBukkit<CommandSourceStack> baseNMS;
+	NMS<CommandSourceStack> baseNMS;
 
-	protected ArgumentNMS(CommandAPIBukkit<?> baseNMS) {
-		this.baseNMS = (CommandAPIBukkit<CommandSourceStack>) baseNMS;
+	protected ArgumentNMS(NMS<?> baseNMS) {
+		this.baseNMS = (NMS<CommandSourceStack>) baseNMS;
 	}
 
 	@Override
@@ -343,23 +340,7 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public Component getAdventureChat(CommandContext cmdCtx, String key)
-		throws CommandSyntaxException {
-		return baseNMS.getAdventureChat(cmdCtx, key);
-	}
-
-	@Override
-	public NamedTextColor getAdventureChatColor(CommandContext cmdCtx, String key) {
-		return baseNMS.getAdventureChatColor(cmdCtx, key);
-	}
-
-	@Override
-	public Component getAdventureChatComponent(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getAdventureChatComponent(cmdCtx, key);
-	}
-
-	@Override
-	public float getAngle(CommandContext cmdCtx, String key) {
+	public float getAngle(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return baseNMS.getAngle(cmdCtx, key);
 	}
 
@@ -369,8 +350,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public Object getBiome(CommandContext cmdCtx, String key, ArgumentSubType subType) throws CommandSyntaxException {
-		return baseNMS.getBiome(cmdCtx, key, subType);
+	public RegistryParser<Biome> getBiome(CommandContext cmdCtx, String key) throws CommandSyntaxException {
+		return baseNMS.getBiome(cmdCtx, key);
 	}
 
 	@Override
@@ -380,23 +361,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public BlockData getBlockState(CommandContext cmdCtx, String key) {
+	public BlockState getBlockState(CommandContext cmdCtx, String key) {
 		return baseNMS.getBlockState(cmdCtx, key);
-	}
-
-	@Override
-	public BaseComponent[] getChat(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getChat(cmdCtx, key);
-	}
-
-	@Override
-	public ChatColor getChatColor(CommandContext cmdCtx, String key) {
-		return baseNMS.getChatColor(cmdCtx, key);
-	}
-
-	@Override
-	public BaseComponent[] getChatComponent(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getChatComponent(cmdCtx, key);
 	}
 
 	@Override
@@ -410,8 +376,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public Object getEntitySelector(CommandContext cmdCtx, String key, ArgumentSubType subType, boolean allowEmpty) throws CommandSyntaxException {
-		return baseNMS.getEntitySelector(cmdCtx, key, subType, allowEmpty);
+	public EntitySelectorParser getEntitySelector(CommandContext cmdCtx, String key) {
+		return baseNMS.getEntitySelector(cmdCtx, key);
 	}
 
 	@Override
@@ -421,8 +387,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public FloatRange getFloatRange(CommandContext cmdCtx, String key) {
-		return baseNMS.getFloatRange(cmdCtx, key);
+	public DoubleRange getDoubleRange(CommandContext cmdCtx, String key) {
+		return baseNMS.getDoubleRange(cmdCtx, key);
 	}
 
 	@Override
@@ -511,33 +477,22 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public OfflinePlayer getOfflinePlayer(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getOfflinePlayer(cmdCtx, key);
-	}
-
-	@Override
 	public ParticleData<?> getParticle(CommandContext cmdCtx, String key) {
 		return baseNMS.getParticle(cmdCtx, key);
 	}
 
 	@Override
-	public Player getPlayer(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getPlayer(cmdCtx, key);
+	public RegistryParser<PotionEffectType> getPotionEffect(CommandContext cmdCtx, String key) {
+		return baseNMS.getPotionEffect(cmdCtx, key);
 	}
 
 	@Override
-	public Object getPotionEffect(CommandContext cmdCtx, String key, ArgumentSubType subType)
-		throws CommandSyntaxException {
-		return baseNMS.getPotionEffect(cmdCtx, key, subType);
+	public <T extends Recipe> T getRecipe(CommandContext<CommandSourceStack> cmdCtx, String key, BiFunction<NamespacedKey, Recipe, T> result) throws CommandSyntaxException {
+		return baseNMS.getRecipe(cmdCtx, key, result);
 	}
 
 	@Override
-	public Recipe getRecipe(CommandContext cmdCtx, String key) throws CommandSyntaxException {
-		return baseNMS.getRecipe(cmdCtx, key);
-	}
-
-	@Override
-	public Rotation getRotation(CommandContext cmdCtx, String key) {
+	public Rotation getRotation(CommandContext cmdCtx, String key) throws CommandSyntaxException {
 		return baseNMS.getRotation(cmdCtx, key);
 	}
 
@@ -557,8 +512,8 @@ public abstract class ArgumentNMS extends MockPlatform<CommandSourceStack> {
 	}
 
 	@Override
-	public Object getSound(CommandContext cmdCtx, String key, ArgumentSubType subType) {
-		return baseNMS.getSound(cmdCtx, key, subType);
+	public RegistryParser<Sound> getSound(CommandContext cmdCtx, String key) {
+		return baseNMS.getSound(cmdCtx, key);
 	}
 
 	@Override

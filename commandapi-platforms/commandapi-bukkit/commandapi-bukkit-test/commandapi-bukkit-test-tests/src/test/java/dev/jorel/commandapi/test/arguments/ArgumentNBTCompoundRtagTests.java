@@ -18,6 +18,7 @@ import com.saicone.rtag.tag.TagCompound;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.arguments.NBTCompoundArgument;
 import dev.jorel.commandapi.test.MockPlatform;
 import dev.jorel.commandapi.test.Mut;
@@ -66,7 +67,8 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 			// Store current mocked server
 			Object oldServer = MockPlatform.getField(Bukkit.class, "server", null);
 			
-			String craftServerVersion = switch (version) {
+			// Paper doesn't have the version in CraftBukkit's package names, so Rtag gets the version another way
+			String craftServerPackage = CommandAPIVersionHandler.IS_PAPER ? "org.bukkit.craftbukkit" : "org.bukkit.craftbukkit." + switch (version) {
 				case V1_16_5 -> "v1_16_R3";
 				case V1_17 -> "v1_17_R1";
 				case V1_18 -> "v1_18_R1";
@@ -78,8 +80,8 @@ class ArgumentNBTCompoundRtagTests extends TestBase {
 				case V1_20_5 -> "v1_20_R4";
 				default -> throw new IllegalArgumentException("Unexpected value: " + version);
 			};
-			
-			Object craftServer = Mockito.mock(Class.forName("org.bukkit.craftbukkit." + craftServerVersion + ".CraftServer"));
+
+			Object craftServer = Mockito.mock(Class.forName(craftServerPackage + ".CraftServer"));
 			MockPlatform.setField(Bukkit.class, "server", null, craftServer);
 			
 			// Instantiate Rtag, which instantiates ServerInstance

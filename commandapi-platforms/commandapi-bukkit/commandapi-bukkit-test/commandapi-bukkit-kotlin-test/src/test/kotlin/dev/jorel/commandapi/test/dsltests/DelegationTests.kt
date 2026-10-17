@@ -39,7 +39,7 @@ class DelegationTests : TestBase() {
 
 		commandAPICommand("test") {
 			stringArgument("string")
-			playerArgument("target")
+			entitySelectorArgumentOnePlayer("target")
 			playerExecutor { _, args ->
 				val string: String by args
 				val player: Player by args
@@ -64,7 +64,7 @@ class DelegationTests : TestBase() {
 
 		commandAPICommand("test") {
 			stringArgument("string")
-			playerArgument("target")
+			entitySelectorArgumentOnePlayer("target")
 			playerExecutor { _, args ->
 				val string: String by args
 				val target: Player by args
@@ -80,7 +80,8 @@ class DelegationTests : TestBase() {
 		}
 
 		assertEquals("testString", results.get())
-		assertEquals(player, results.get())
+		// The entity selector finds the CraftPlayer for this player, so compare names
+		assertEquals(player.name, (results.get() as Player).name)
 
 		assertNoMoreResults(results)
 	}

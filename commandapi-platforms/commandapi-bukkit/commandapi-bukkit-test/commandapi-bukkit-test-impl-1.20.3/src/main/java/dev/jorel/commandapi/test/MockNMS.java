@@ -13,6 +13,7 @@ import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.commandsenders.AbstractCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitCommandSender;
 import dev.jorel.commandapi.commandsenders.BukkitPlayer;
+import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.Advancement;
@@ -22,6 +23,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.commands.functions.CommandFunction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.numbers.BlankFormat;
@@ -50,6 +52,7 @@ import net.minecraft.world.scores.criteria.ObjectiveCriteria.RenderType;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.v1_20_R3.CraftRegistry;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemFactory;
@@ -73,6 +76,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.mockito.ArgumentMatchers.*;
+import org.bukkit.Keyed;
+import org.bukkit.Registry;
 
 public class MockNMS extends Enums {
 	private static final SafeVarHandle<HelpMapMock, Map<String, HelpTopic>> helpMapTopics =
@@ -95,10 +100,10 @@ public class MockNMS extends Enums {
 	Map<ResourceLocation, Collection<CommandFunction>> tags = new HashMap<>();
 	Stack<Integer> functionCallbackResults = new Stack<>();
 
-	public MockNMS(CommandAPIBukkit<?> baseNMS) {
+	public MockNMS(NMS<?> baseNMS) {
 		super(baseNMS);
 
-		CommandAPIBukkit<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
+		NMS<CommandSourceStack> nms = Mockito.spy(super.baseNMS);
 		// Stub in our getMinecraftServer implementation
 		Mockito.when(nms.getMinecraftServer()).thenAnswer(i -> getMinecraftServer());
 		// Stub in our getSimpleCommandMap implementation
@@ -107,10 +112,6 @@ public class MockNMS extends Enums {
 		//  so we have to mock with `doAnswer` instead of `when`
 		Mockito.doAnswer(i -> getSimpleCommandMap()).when(nms).getSimpleCommandMap();
 		super.baseNMS = nms;
-
-		// Initialize baseNMS's paper field (with paper specific implementations disabled)
-		MockPlatform.setField(CommandAPIBukkit.class, "paper",
-			super.baseNMS, new PaperImplementations(false, false, super.baseNMS));
 
 //		initializeArgumentsInArgumentTypeInfos();
 
@@ -125,6 +126,12 @@ public class MockNMS extends Enums {
 
 		// Invoke Minecraft's registry
 		Bootstrap.bootStrap();
+
+		// CraftBukkit looks up particles, sounds, potion effects, etc. in this registry. It's normally the server's
+		//  registry, so use the built-in registries instead
+		if (CraftRegistry.getMinecraftRegistry() == null) {
+			CraftRegistry.setMinecraftRegistry(getBuiltInRegistryAccess());
+		}
 
 		// Don't use EnchantmentMock.registerDefaultEnchantments because we want
 		// to specify what enchantments to mock (i.e. only 1.18 ones, and not any
@@ -153,8 +160,44 @@ public class MockNMS extends Enums {
 	 * Registry manipulation *
 	 *************************/
 
+	// Bukkit's registries, created like CraftServer#getRegistry. This can't have an initializer, because Bukkit
+	//  registries may be looked up while MockNMS is being constructed.
+	private Map<Class<?>, Registry<?>> craftRegistries;
+
+	// Shared by all tests. This is created when first used, which must be after Minecraft is bootstrapped.
+	private static RegistryAccess builtInRegistryAccess;
+
+	private static RegistryAccess getBuiltInRegistryAccess() {
+		if (builtInRegistryAccess == null) {
+			builtInRegistryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+		}
+		return builtInRegistryAccess;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Keyed> Registry<T> getRegistry(Class<T> className) {
+		// Since paper-api 1.20.3, potion effects, enchantments, etc. are backed by CraftBukkit's registries
+		if (craftRegistries == null) {
+			craftRegistries = new HashMap<>();
+		}
+		Registry<T> craftRegistry = (Registry<T>) craftRegistries.computeIfAbsent(className, c -> {
+			try {
+				return CraftRegistry.createRegistry(className, getBuiltInRegistryAccess());
+			} catch (IllegalStateException missingRegistry) {
+				// Registries that are loaded from data packs (structures, trim patterns, etc.) aren't built-in
+				return null;
+			}
+		});
+		return craftRegistry == null ? super.getRegistry(className) : craftRegistry;
+	}
+
 	private void unregisterAllPotionEffects() {
+		// Since paper-api 1.20.3, potion effects are registry-backed and these fields no longer exist
 		PotionEffectType[] byId = getFieldAs(PotionEffectType.class, "byId", null, PotionEffectType[].class);
+		if (byId == null) {
+			return;
+		}
 		for (int i = 0; i < byId.length; i++) {
 			byId[i] = null;
 		}
@@ -213,7 +256,12 @@ public class MockNMS extends Enums {
 	}
 
 	private void unregisterAllEnchantments() {
-		getFieldAs(Enchantment.class, "byName", null, Map.class).clear();
+		// Since paper-api 1.20.3, enchantments are registry-backed and these fields no longer exist
+		Map<?, ?> byName = getFieldAs(Enchantment.class, "byName", null, Map.class);
+		if (byName == null) {
+			return;
+		}
+		byName.clear();
 		getFieldAs(Enchantment.class, "byKey", null, Map.class).clear();
 		setField(Enchantment.class, "acceptingNew", null, true);
 	}
@@ -634,7 +682,7 @@ public class MockNMS extends Enums {
 		Mockito.when(player.getWorld()).thenReturn(world);
 
 		// Provide proper handle as VanillaCommandWrapper expects
-		CommandSourceStack css = getBrigadierSourceFromCommandSender(wrapCommandSender(player));
+		CommandSourceStack css = getBrigadierSourceFromCommandSender(CommandAPIBukkit.get().wrapCommandSender(player));
 
 		ServerPlayer handle = Mockito.mock(ServerPlayer.class);
 		Mockito.when(handle.createCommandSourceStack()).thenReturn(css);
@@ -709,7 +757,7 @@ public class MockNMS extends Enums {
 	@Override
 	public BukkitCommandSender<? extends CommandSender> getCommandSenderFromCommandSource(CommandSourceStack clw) {
 		try {
-			return wrapCommandSender(clw.getBukkitSender());
+			return CommandAPIBukkit.get().wrapCommandSender(clw.getBukkitSender());
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
@@ -913,8 +961,4 @@ public class MockNMS extends Enums {
 		return helpMapTopics.get((HelpMapMock) Bukkit.getHelpMap());
 	}
 
-	@Override
-	public CommandRegistrationStrategy<CommandSourceStack> createCommandRegistrationStrategy() {
-		return baseNMS.createCommandRegistrationStrategy();
-	}
 }

@@ -117,11 +117,9 @@ class ArgumentPotionTests extends TestBase {
 		server.dispatchCommand(player, "test minecraft:speed");
 		assertEquals(NamespacedKey.minecraft("speed"), results.get());
 
-		server.dispatchCommand(player, "test unknowneffect");
-		assertEquals(NamespacedKey.minecraft("unknowneffect"), results.get());
-
-		server.dispatchCommand(player, "test custom:unknowneffect");
-		assertEquals(NamespacedKey.fromString("custom:unknowneffect"), results.get());
+		// Only existing potion effects can be given, like the PotionEffectType variant
+		assertCommandFailsWith(player, "test unknowneffect", "Can't find element 'minecraft:unknowneffect' of type 'minecraft:mob_effect'");
+		assertCommandFailsWith(player, "test custom:unknowneffect", "Can't find element 'custom:unknowneffect' of type 'minecraft:mob_effect'");
 
 		assertNoMoreResults(results);
 	}

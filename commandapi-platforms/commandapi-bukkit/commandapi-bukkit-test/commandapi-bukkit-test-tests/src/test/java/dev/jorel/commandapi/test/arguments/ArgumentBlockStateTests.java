@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.EndPortalFrame;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPIVersionHandler;
 import dev.jorel.commandapi.arguments.BlockStateArgument;
 import dev.jorel.commandapi.test.Mut;
 import dev.jorel.commandapi.test.TestBase;
@@ -45,7 +47,7 @@ class ArgumentBlockStateTests extends TestBase {
 
 	@Test
 	void executionTestWithBlockStateArgument() {
-		Mut<BlockData> results = Mut.of();
+		Mut<BlockState> results = Mut.of();
 
 		new CommandAPICommand("test")
 		.withArguments(new BlockStateArgument("blockstate"))
@@ -58,13 +60,13 @@ class ArgumentBlockStateTests extends TestBase {
 
 		// /test dirt
 		server.dispatchCommand(player, "test dirt");
-		assertEquals(Material.DIRT, results.get().getMaterial());
+		assertEquals(Material.DIRT, results.get().getType());
 
 		// /test end_portal_frame[eye=true,facing=north]
 		// This tests block data metadata which is accessible via BlockData and
 		// its instances
 		server.dispatchCommand(player, "test end_portal_frame[eye=true,facing=north]");
-		BlockData endPortalFrameBlockData = results.get();
+		BlockData endPortalFrameBlockData = results.get().getBlockData();
 		assertEquals(Material.END_PORTAL_FRAME, endPortalFrameBlockData.getMaterial());
 		assertInstanceOf(EndPortalFrame.class, endPortalFrameBlockData);
 		EndPortalFrame frame = (EndPortalFrame) endPortalFrameBlockData;
@@ -74,8 +76,12 @@ class ArgumentBlockStateTests extends TestBase {
 		// /test chest{CustomName:"\"Custom Name\""}
 		// TODO: Not overly important, but we don't actually set any NBT, so it's
 		// impossible to look up any NBT info
-		server.dispatchCommand(player, "test chest{CustomName:\"\\\"Custom Name\\\"\"}");
-		assertEquals("minecraft:chest[facing=north,type=single,waterlogged=false]", results.get().getAsString());
+		// On Spigot, creating the chest's block entity initializes CraftBukkit's SpigotTimings, which needs a
+		//  field that only Spigot's JavaPluginLoader has. MockBukkit puts paper-api's version on the classpath.
+		if (CommandAPIVersionHandler.IS_PAPER) {
+			server.dispatchCommand(player, "test chest{CustomName:\"\\\"Custom Name\\\"\"}");
+			assertEquals("minecraft:chest[facing=north,type=single,waterlogged=false]", results.get().getBlockData().getAsString());
+		}
 
 		assertNoMoreResults(results);
 	}
