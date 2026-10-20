@@ -33,7 +33,12 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ matrix.java }}
-          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          # By default, only the default branch (master) writes to the cache, but development happens on other branches
+          cache-read-only: false
 
       - name: Checkout the BytecodeAnalyser repository
         run: |
@@ -192,7 +197,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 25
-          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
 
       - name: Publish snapshot version of the CommandAPI (Bukkit+Velocity) to the Sonatype snapshot repository
         run: |
