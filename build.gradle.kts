@@ -8,6 +8,7 @@ plugins {
 	id("com.modrinth.minotaur") version "2.10.0" apply false
 	id("io.papermc.hangar-publish-plugin") version "0.1.5-SNAPSHOT"
 	id("buildlogic.github-publish")
+	id("org.sonarqube") version "7.5.0.8588"
 }
 
 val changelogText = file("changelog.md").readLines().joinToString("\n")
@@ -55,4 +56,12 @@ github {
 	changelog = changelogText
 	preRelease = project.version.toString().endsWith("-SNAPSHOT")
 	files.from(collectPlugins)
+}
+
+sonar {
+	properties {
+		property("sonar.projectKey", "JorelAli_CommandAPI")
+		property("sonar.organization", "jorel-ali")
+		property("sonar.host.url", "https://sonarcloud.io")
+	}
 }
